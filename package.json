@@ -1,0 +1,14 @@
+{
+  "name": "gta-6-bench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Synthetic retailer environment for benchmarking AI agents on pre-ordering GTA 6",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
