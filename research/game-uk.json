@@ -1,0 +1,286 @@
+{
+  "slug": "game-uk",
+  "name": "GAME (UK)",
+  "country": "UK",
+  "currency": "GBP",
+  "base_url": "https://www.game.co.uk",
+  "confirmed_preorder_live": true,
+  "confidence": "medium",
+  "browser_worked": true,
+  "sources": [
+    "https://www.game.co.uk/search?q=grand+theft+auto+vi",
+    "https://www.game.co.uk/searchresults?descriptionfilter=grand+theft+auto+vi",
+    "https://www.game.co.uk/searchresults?descriptionfilter=gta+6",
+    "https://www.game.co.uk/rockstar-games-grand-theft-auto-vi-756802#colcode=75680269",
+    "https://www.game.co.uk/rockstar-games-grand-theft-auto-vi-400064#colcode=40006469",
+    "https://www.game.co.uk/cart",
+    "https://www.game.co.uk/checkout",
+    "https://www.game.co.uk/login?returnurl=cart",
+    "https://auth.game.co.uk/account/login",
+    "https://www.game.co.uk/",
+    "https://www.game.co.uk/frasersplus",
+    "https://www.game.co.uk/terms-and-conditions",
+    "https://help.game.co.uk/hc/en-gb",
+    "https://help.game.co.uk/hc/en-gb/categories/6009547425951-Delivery-Collection",
+    "https://help.game.co.uk/hc/en-gb/categories/6009563563807-Orders-Payments",
+    "https://help.game.co.uk/hc/en-gb/categories/6009601867039-Stores-Services",
+    "https://help.game.co.uk/hc/en-gb/categories/6009548119199-My-Account",
+    "https://help.game.co.uk/hc/en-gb/sections/6009680331551-Placing-Orders",
+    "https://help.game.co.uk/hc/en-gb/sections/6009726050207-Terms-Conditions",
+    "https://help.game.co.uk/hc/en-gb/articles/6018163455007-Click-and-Collect",
+    "https://help.game.co.uk/hc/en-gb/articles/6018366443423-Click-Collect-Exceptions",
+    "https://help.game.co.uk/hc/en-gb/articles/6017076415775-Delivery-Options",
+    "https://help.game.co.uk/hc/en-gb/articles/6018167297951-How-do-I-buy-online",
+    "https://help.game.co.uk/hc/en-gb/articles/6018291082783-Payment-issues",
+    "https://help.game.co.uk/hc/en-gb/articles/6018203885087-Why-is-my-bank-showing-two-charges-for-my-order",
+    "https://help.game.co.uk/hc/en-gb/articles/6018211377311-I-want-to-cancel-my-order",
+    "https://help.game.co.uk/hc/en-gb/articles/6018292086175-Product-Information",
+    "https://help.game.co.uk/hc/en-gb/articles/6018256055327-How-do-I-register-for-an-account",
+    "https://help.game.co.uk/hc/en-gb/articles/6018151010591-What-payment-options-are-accepted",
+    "https://help.game.co.uk/hc/en-gb/articles/6018054113951-How-can-I-cancel-or-amend-a-pre-order",
+    "https://help.game.co.uk/hc/en-gb/articles/6018242775327-PLACING-AN-ORDER",
+    "https://help.game.co.uk/hc/en-gb/articles/6018073554719-DELIVERY-AND-RETURNS",
+    "https://help.game.co.uk/hc/en-gb/articles/6018163468447-What-is-payment-authentication",
+    "https://help.game.co.uk/hc/en-gb/articles/6018052917535-Apply-Gift-Card-eVoucher-or-Credit-Note",
+    "https://help.game.co.uk/hc/en-gb/articles/6018171526943-Is-there-a-limit-to-how-many-products-I-can-buy",
+    "https://help.game.co.uk/hc/en-gb/articles/6018145469983-I-m-having-problems-signing-in-What-can-I-do",
+    "https://www.purexbox.com/news/2024/07/report-uk-retailer-game-ending-in-store-pre-orders-this-month",
+    "https://www.gtabase.com/articles/gta-6/gta-6-editions-guide-pre-order-bonus-special-editions-content",
+    "https://coolcuration.com/gta-6-pre-order-uk",
+    "https://www.gamesradar.com/news/live/gta-6-pre-orders-live-june-25/",
+    "https://www.techradar.com/gaming/uk-high-street-video-game-retailer-game-set-to-end-in-store-pre-orders",
+    "https://www.scotsman.com/arts-and-culture/grand-theft-auto-vi-prices-uk-8758722",
+    "https://helps.game.co.uk/support/home"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI",
+        "url": "https://www.game.co.uk/rockstar-games-grand-theft-auto-vi-756802#colcode=75680269",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 69.99,
+        "list_price": 69.99,
+        "member_price": null,
+        "sku_or_id": "756802 (colcode 75680269)",
+        "release_date": "2026-11-19",
+        "availability_label": "PRE-ORDER",
+        "delivery_estimate_text": "This item will be available for delivery from: 19 November 2026"
+      },
+      {
+        "title": "Grand Theft Auto VI",
+        "url": "https://www.game.co.uk/rockstar-games-grand-theft-auto-vi-400064#colcode=40006469",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 69.99,
+        "list_price": 69.99,
+        "member_price": null,
+        "sku_or_id": "400064 (colcode 40006469)",
+        "release_date": "2026-11-19",
+        "availability_label": "PRE-ORDER",
+        "delivery_estimate_text": "This item will be available for delivery from: 19 November 2026"
+      }
+    ],
+    "preorder_bonus_text": "Pre-order to receive the Vintage Vice City Pack. Flash back to when the neon burned brightest with the Vintage Vice City Pack, featuring the timeless two-tone '55 Vapid Stanier sedan and garage alongside the world-famous Ocean Beach, decadent outfits and hairstyles for both Jason and Lucia, and an iconic weapon pattern that echoes the excess of the past.",
+    "description_snippet": "Grand Theft Auto VI is a single-player experience."
+  },
+  "branding": {
+    "logo_text": "GAME",
+    "primary_color": "#CC3083",
+    "secondary_color": "#000000",
+    "background": "#FFFFFF",
+    "font_note": "Montserrat (fallback Arial/Helvetica, sans-serif) everywhere. Body base 11px; product h1 18px/700; prices 15px/700 black; nav links black, ~13-14px; CTA buttons white text on pink #CC3083, bold; secondary buttons black #000 with white text; muted grey text #636363; red #ED0000 used for discount/sale accents.",
+    "header_layout": "Row 1 (white): black 'GAME' wordmark SVG (93x27) far left | wide search box with magnifier icon and placeholder 'Search product or brand' centre | right icon cluster: store-finder pin (/stores), account/person icon 'Sign In' (/login), heart 'My Wish List' (/wishlist), bag 'My Bag' (/cart). Row 2 (white): 7 text nav items, black, centred. Row 3: full-width pink (#CC3083) promo strip with white bold text that rotates between three messages: 'FC27 - Out now! Get in the game', 'Coming Soon - Shop upcoming releases on games and more', 'Spread the cost of gifting with Frasers Plus: Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable)'. A hidden 'MY WISH LIST' hover panel and a 'My Bag' mini-bag flyout hang off the icons.",
+    "nav_items": [
+      "Consoles & Video Games",
+      "Digital Gift Cards",
+      "PC Gaming",
+      "Tech",
+      "LEGO",
+      "Toys & Games",
+      "Trading Cards"
+    ]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search product or brand",
+      "search_url_pattern": "/searchresults?descriptionfilter={q}  (note: /search?q={q} returns the 'Sorry – This Page Could Not Be Found' 404 page; pressing Enter in the header box did not navigate in the automated browser)",
+      "search_results_layout": "Header line 'Search Results' + 'We found 8 products for grand theft auto vi'. Left filter rail: Platform (PS5 1, Xbox 1), Category (Video Games 4, Digital Downloads 2, Unclassified 2), Style, Price bands. Top bar: 'Hide Filters', '8 Products', 'Sort By' radio list (Most Popular, New In, Discount £ GBP (High to Low), Discount % (High To Low), Price (Low To High), Price (High To Low), Brand (A To Z), Brand (Z To A)). Each tile: black badge flags in the top-left corner ('PRE-ORDER', 'TRENDING', 'UP TO 50% OFF', 'FAST FREE DELIVERY'), box-art image, wishlist heart, brand line 'Rockstar Games' (grey), product name 'Grand Theft Auto VI', price '£69.99' bold (struck-through ticket price shown when discounted, e.g. '£17.99 £29.99'). No star ratings, no release date, no platform label on the tile (platform is only visible from the box art). A 'FRASERSPLUS Buy now. Pay later. Earn rewards' banner sits under the grid.",
+      "category_path": "Home / PlayStation Gaming / PlayStation Games / Coming Soon / Rockstar Games Grand Theft Auto VI  (Xbox: Home / Xbox Gaming / Xbox Games / Coming Soon / Rockstar Games Grand Theft Auto VI). Also reachable from the mega-menu 'Consoles & Video Games' > Trending > 'GTA VI Pre-Order' and the homepage 'Trending' tile 'Grand Theft Auto VI'."
+    },
+    "product_page": {
+      "url_pattern": "/{brand-slug}-{product-name-slug}-{6-digit product code}#colcode={8-digit variant code}  e.g. /rockstar-games-grand-theft-auto-vi-756802#colcode=75680269 (canonical drops the hash)",
+      "headline": "Grand Theft Auto VI (brand line 'Rockstar Games' shown above it; the h1 text is 'Rockstar Games Grand Theft Auto VI'; page title 'Grand Theft Auto VI | Rockstar Games | GAME')",
+      "variant_selectors": [
+        {
+          "label": "Format (rendered label; the DOM field is the Frasers 'Colour' swatch)",
+          "type": "separate-listings",
+          "options": ["PS5", "XBS"]
+        },
+        {
+          "label": "Size (hidden select #sizeDdl, platform boilerplate)",
+          "type": "dropdown",
+          "options": ["Please Select", "One Size"]
+        }
+      ],
+      "price_display": "Single bold black price '£69.99' under the title; a ticket/original price element exists but equals the selling price so nothing is struck through. No member price. A sticky add-to-bag bar ('Grand Theft Auto VI  £69.99  Pre-order now') appears at the top when scrolling.",
+      "fulfillment_options": [
+        { "label": "Standard Delivery", "detail": "Delivered within 3 - 7 days (excludes Public holidays). £4.99", "default": true },
+        { "label": "Express Delivery - 48 Hours", "detail": "Order before 9pm (excludes Public holidays) £7.99", "default": false },
+        { "label": "Next Day Delivery by Evri", "detail": "Order by 9pm for Next Day Delivery £9.99", "default": false },
+        { "label": "Next Day Delivery by DPD", "detail": "Order by 9pm (excludes Public holidays) £11.99", "default": false },
+        { "label": "International Delivery", "detail": "International Delivery is available for this product. The cost and delivery time depend on the country.", "default": false },
+        { "label": "Click & Collect (Store Delivery)", "detail": "£4.99, 3-7 days to store — NOT offered for this product: help centre 'Click & Collect Exceptions' says Click and Collect is unavailable when 'the item ordered is a pre-order item'.", "default": false }
+      ],
+      "cta_buttons": [
+        { "label": "Pre-order now", "behavior": "Opens a 'Pre-order' modal (product image + 'This item is currently on pre-order and not available for immediate dispatch. This item will be available for delivery from: 19 November 2026' + 'If added to your bag, please note your entire order will be held until all items are available.') with buttons 'Cancel' (black) and 'Add to bag' (pink). Button text changes to 'Adding...' while the modal is open." },
+        { "label": "Add to bag", "behavior": "(inside the Pre-order modal) Closes the modal and opens an 'Age Verification' modal: 'You must be 18 years old or older to purchase this item.' with 'I'm Old Enough' (pink) and 'Cancel'." },
+        { "label": "I'm Old Enough", "behavior": "(inside the Age Verification modal) Closes the modal, fires the add-to-bag request; the header bag count increments and the 'My Bag' flyout becomes available with 'View Bag' / 'Checkout'. In this automated session the request never completed (button stuck on 'Adding...')." },
+        { "label": "Add to wish list", "behavior": "Heart icon next to the title; wish list held 30 days, prompts sign-in to sync." },
+        { "label": "Copy link", "behavior": "Share icon under the heart; copies the product URL." }
+      ],
+      "quantity_selector": true,
+      "upsells": [
+        "Pink header strip: 'Spread the cost of gifting with Frasers Plus: Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable)' (links to /frasersplus)",
+        "Frasers Plus banner on listing pages: 'FRASERSPLUS Buy now. Pay later. Earn rewards. Representative APR: 29.9% (variable). Credit subject to status. Terms apply.'",
+        "No protection plan, no paid membership, no 'frequently bought together' block on the GTA VI pages"
+      ],
+      "notable_text": [
+        "Badge: PRE-ORDER (black box, top-right of the buy column); PS5 listing also carries TRENDING",
+        "Release Date: 19/11/26",
+        "49 days 22 hours left to pre-order  (live countdown in a black box under the CTA)",
+        "Pegi Rating: Suitable for people aged 18 and over. Read More...",
+        "This item is currently on pre-order and not available for immediate dispatch. This item will be available for delivery from: 19 November 2026. If added to your bag, please note your entire order will be held until all items are available.",
+        "Product code: 756802 (PS5) / Product code: 400064 (Xbox)",
+        "This product will only contain a download code inside the box to support pre-load starting on November 12. A disc will not be included in the box.",
+        "Code is intended for use by users holding an account for PlayStation® registered to the United Kingdom. Attempts to use the code by an account registered in other countries might be unsuccessful. (PS5 listing only)",
+        "Pre-order to receive the Vintage Vice City Pack.",
+        "Grand Theft Auto VI is a single-player experience.",
+        "Two collapsible tabs below the gallery: 'Description' and 'Delivery & Returns'",
+        "Long Rockstar/Take-Two LEGAL block at the end of the description"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "modal",
+      "contents": "Two modals in sequence. (1) 'Pre-order' modal: box-art thumbnail on the left; text 'This item is currently on pre-order and not available for immediate dispatch. This item will be available for delivery from:' + bold '19 November 2026' + 'If added to your bag, please note your entire order will be held until all items are available.' (2) 'Age Verification' modal: 'You must be 18 years old or older to purchase this item.' After both, the item is added silently (no drawer); the header bag icon count updates and hovering it shows the 'My Bag' flyout: item card (image, brand, name, 'Colour:', 'Size:', qty − / +, 'Price:', 'Total:', 'Remove', 'Move to wish list'), 'Hurry! Items in bag aren't reserved! Don't miss out and checkout now!', 'Discount: £0.00', 'Total: £x.xx', buttons 'View Bag' and 'Checkout'.",
+      "buttons": ["Cancel", "Add to bag", "I'm Old Enough", "Cancel", "View Bag", "Checkout"]
+    },
+    "cart": {
+      "url": "https://www.game.co.uk/cart",
+      "line_item_fields": ["image", "brand (Rockstar Games)", "product name", "Colour: PS5 / XBS (platform)", "Size: One Size", "quantity − / + stepper", "Price:", "Total:", "Remove", "Move to wish list", "delivery note 'This product will be delivered by {carrier}, and may arrive separately to other items in your basket.'"],
+      "summary_fields": ["Total (items)", "Discount: £0.00", "Total: £x.xx", "delivery charge is added at the checkout delivery step (not shown in bag)"],
+      "promo_code_field": false,
+      "checkout_button_label": "Continue Securely",
+      "express_options": [],
+      "upsells": ["'Hurry! Items in bag aren't reserved! Don't miss out and checkout now!' urgency line", "Empty state: 'Your Bag Is Empty' / 'We'll hold your bag for 30 days. Sign in or register to sync your bag to any device.' with a pink 'Sign In' button (-> /login?returnurl=cart)", "Frasers Plus messaging in header strip"]
+    },
+    "checkout": {
+      "url": "https://www.game.co.uk/checkout  (with an empty bag it redirects to /cart; when not signed in it hands off to https://auth.game.co.uk/account/login?returnUrl=/connect/authorize/callback?client_id=...&scope=openid offline_access email&redirect_uri=https://www.game.co.uk/auth-callback)",
+      "auth": {
+        "guest_allowed": true,
+        "account_required": false,
+        "screen_text": "Header: GAME wordmark only (no nav). Three benefit icons: 'Personalised experience', 'Speedy checkout', 'Offers and promotions'. Box titled 'Sign in or register' with one field 'Email address' (placeholder 'Enter email address') and a full-width pink button 'Continue securely'. Google reCAPTCHA badge bottom-right. Per GAME's terms: 'Enter your email address. If you already have an account, you will be asked to enter your password to log in, or you can choose to continue as a guest without logging in. If you do not have an account, you will be given the opportunity to register for an account or to continue as a guest.'",
+        "guest_button_label": "Continue as guest",
+        "signin_fields": ["Email address", "Password"]
+      },
+      "steps": [
+        {
+          "name": "Sign in or register (email first)",
+          "fields": [
+            { "label": "Email address", "type": "email", "required": true }
+          ],
+          "options": ["Existing account -> enter Password", "New email -> Register (create password) or Continue as guest"],
+          "button_label": "Continue securely",
+          "notes": "Hosted on auth.game.co.uk (OpenID Connect). reCAPTCHA v3 runs invisibly. Email autocomplete='email'."
+        },
+        {
+          "name": "Delivery",
+          "fields": [
+            { "label": "First name", "type": "text", "required": true },
+            { "label": "Last name", "type": "text", "required": true },
+            { "label": "Postcode (address lookup) / Enter address manually", "type": "text", "required": true },
+            { "label": "Address line 1", "type": "text", "required": true },
+            { "label": "Address line 2", "type": "text", "required": false },
+            { "label": "Town/City", "type": "text", "required": true },
+            { "label": "County", "type": "text", "required": false },
+            { "label": "Country", "type": "select", "required": true },
+            { "label": "Mobile number", "type": "tel", "required": true }
+          ],
+          "options": ["Standard Delivery — 3 to 7 Days — £4.99", "Express Delivery — 48 Hours — £7.99", "Next Day Delivery — £9.99", "Next Day Delivery by DPD — £11.99", "Store Delivery / Click & Collect — £4.99 — hidden for pre-order items"],
+          "button_label": "Continue to payment",
+          "notes": "LOW CONFIDENCE (not reached in this session): field set and button label inferred from the Frasers Group shared checkout used by GAME/Sports Direct. GAME's help says 'Delivery options are presented at the checkout stage, not all delivery options may be available depending on your chosen product'. Cheapest option is normally preselected."
+        },
+        {
+          "name": "Payment",
+          "fields": [
+            { "label": "Card number", "type": "text", "required": true },
+            { "label": "Expiry date (MM/YY)", "type": "text", "required": true },
+            { "label": "Security code (CVV)", "type": "text", "required": true },
+            { "label": "Name on card", "type": "text", "required": true },
+            { "label": "Billing address same as delivery address", "type": "checkbox", "required": false },
+            { "label": "Gift card / eVoucher code (via 'use Gift Card/eVoucher' link)", "type": "text", "required": false },
+            { "label": "Promo code", "type": "text", "required": false }
+          ],
+          "options": ["Credit/Debit card (VISA, VISA Debit, Mastercard, Maestro)", "Apple Pay", "Frasers Plus (pay in 3 / instalments)", "Gift Card / eVoucher / Credit Note", "PayPal — NOT available for pre-orders"],
+          "button_label": "Pay now",
+          "notes": "LOW CONFIDENCE on exact labels. Terms: 'Select your preferred payment type on our secure payment page... You should also enter any gift card/vouchers/promo codes on this page.' 3D Secure / payment authentication may pop up. Order summary shown alongside."
+        }
+      ],
+      "payment_methods": ["Apple Pay", "Gift Cards", "Maestro", "Mastercard", "PayPal (not for pre-orders)", "VISA", "VISA Debit", "Frasers+ (Frasers Plus)"],
+      "card_fields": ["Card number", "Expiry date (MM/YY)", "Security code", "Name on card", "Billing address (same as delivery by default)"],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "Authorisation (reservation of funds) at order; the card is actually debited when the order is picked and processed for dispatch — for pre-orders that is the day before the launch date, when GAME dispatches via Express Delivery. No deposit.",
+      "charge_policy_text": "On receipt of your order, an authorisation will be created on your account which will refer to the Website brand. This will show on your bank statement as a reservation of funds which allocates the money to your order but will not be taken until your order has been picked and processed. ... If you pre-order goods with a launch date, then we will reserve your goods and hold the whole order until the day before the launch date. We will dispatch the pre-ordered goods via Express Delivery the day before the launch date, if delivery is within the UK.",
+      "review_step": {
+        "exists": false,
+        "place_order_label": "Pay now",
+        "shows": ["order summary sidebar on the payment page: items, delivery address, delivery method, subtotal, delivery, total"]
+      },
+      "confirmation": {
+        "headline": "Thank you for your order",
+        "order_number_format": null,
+        "contents": ["order number", "items ordered", "delivery address and method", "totals", "note that an order acknowledgement email has been sent"],
+        "email_sent_text": "Following submission of your order you will be sent an automated order acknowledgement to the email address used to place the order. An order acknowledgement does not mean that your order has been accepted. ... When your order has been picked, packed and is ready for delivery, you will receive an email confirming that the Seller has accepted your order."
+      }
+    },
+    "account": {
+      "required_for_purchase": false,
+      "signup_fields": ["Email address (entered first on auth.game.co.uk)", "Password", "First name", "Last name", "Marketing opt-in checkbox"],
+      "login_fields": ["Email address", "Password (second screen)"],
+      "membership_program": null
+    },
+    "quirks": [
+      "Search URL is /searchresults?descriptionfilter={q}; the intuitive /search?q= returns a 404 page.",
+      "Platform is modelled as a 'Colour' swatch (PS5 / XBS) and there is a hidden 'One Size' size dropdown — GAME runs on the shared Frasers Group (Sports Direct) commerce platform.",
+      "Each platform is its own product code and URL (756802 PS5, 400064 Xbox); there is no platform toggle on one page and no Ultimate edition listing (Ultimate is digital-only; GAME sells no digital GTA VI).",
+      "Physical product is code-in-box: 'A disc will not be included in the box.'",
+      "Add-to-bag is a two-modal sequence: 'Pre-order' confirmation, then an 'Age Verification' PEGI-18 gate ('I'm Old Enough').",
+      "Live countdown on the PDP: 'N days N hours left to pre-order'.",
+      "Whole order is held until every item is available; pre-orders are dispatched via Express Delivery the day before launch.",
+      "Click & Collect exists (£4.99, 3-14 days to store, needs the 'Collection ready' email + order number + ID) but is NOT available for pre-order items — home delivery only for GTA VI.",
+      "PayPal is listed as accepted but 'pre-orders can't be paid with PayPal'.",
+      "Card is authorised at order and debited only at dispatch; no deposit.",
+      "Pre-orders cannot be amended (payment or delivery details); cancel via Customer Service.",
+      "Sign-in is email-first on a separate domain (auth.game.co.uk, OpenID Connect) with invisible reCAPTCHA; guest checkout is offered after the email step.",
+      "Bag is held 30 days but 'Items in bag aren't reserved'.",
+      "Akamai Bot Manager (_abck / bm_sz cookies) protects the site; the add-to-bag XHR never completed for the automated browser — relevant for an agent benchmark.",
+      "In-store pre-orders and deposits ended 1 Aug 2024; the old GAME Reward/Elite loyalty schemes closed 31 Jul 2024. Only online pre-order remains.",
+      "Frasers Plus buy-now-pay-later is pushed in the header strip, listing pages and homepage; it is a credit product (29.9% APR rep., 1 point per £1), not a paid membership.",
+      "Rotating pink promo strip under the nav; footer has a '£ GBP  Edit' currency/country selector and a geo prompt ('Go to our website' / 'Stay on the website') can appear for non-UK visitors.",
+      "Quantity default 1, max 99 per item (terms).",
+      "Cookie banner (OneTrust): 'Our cookies ... Manage cookies / Reject all / Allow all'."
+    ]
+  },
+  "gaps": [
+    "Populated cart page not observed: the add-to-bag request never completed in the automated browser (button stuck on 'Adding...', bag stayed at 0; Akamai bot-manager cookies present). Two attempts on the Xbox listing, then stopped per the no-retry rule. Line-item fields come from the hidden mini-bag DOM template, not a rendered bag.",
+    "Checkout Delivery and Payment form fields, button labels ('Continue to payment', 'Pay now'), default delivery selection and billing-same-as-delivery default are LOW confidence — inferred from GAME's 'PLACING AN ORDER' terms plus the shared Frasers Group checkout; not seen live.",
+    "Exact guest button label unknown; terms say you can 'continue as a guest' after entering an email. Could not test because typing an email is disallowed.",
+    "Cart checkout button label: terms say click 'Continue Securely'; the mini-bag flyout template says 'Checkout'. Not seen on a populated bag.",
+    "Confirmation page headline and order-number format not verified (no order placed). Email flow (acknowledgement then confirmation) is from the terms.",
+    "Account sign-up field list not verified (registration lives behind the email step on auth.game.co.uk).",
+    "WebSearch budget for this session was already exhausted (200/200) after a handful of queries, so Reddit threads and YouTube checkout walkthroughs were not consulted. WebFetch to game.co.uk timed out and help.game.co.uk returned 403, so all help articles were read through the browser instead.",
+    "The mega-menu 'Trending > GTA VI Pre-Order' link target was seen in menu text but its href was not captured."
+  ]
+}

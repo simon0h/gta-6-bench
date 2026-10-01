@@ -1,0 +1,291 @@
+{
+  "slug": "jb-hifi",
+  "name": "JB Hi-Fi",
+  "country": "AU",
+  "currency": "AUD",
+  "base_url": "https://www.jbhifi.com.au",
+  "confirmed_preorder_live": true,
+  "confidence": "high",
+  "browser_worked": true,
+  "sources": [
+    "https://www.jbhifi.com.au/search?query=grand%20theft%20auto%20vi",
+    "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+    "https://www.jbhifi.com.au/products/xbox-series-x-grand-theft-auto-vi",
+    "https://www.jbhifi.com.au/cart",
+    "https://www.jbhifi.com.au/checkouts/cn/<token>/en-us/information",
+    "https://www.jbhifi.com.au/pages/help-and-support",
+    "https://www.jbhifi.com.au/pages/help-and-support/payments",
+    "https://www.jbhifi.com.au/pages/help-and-support/online-payment-methods",
+    "https://www.jbhifi.com.au/pages/help-and-support/orders",
+    "https://www.jbhifi.com.au/pages/help-and-support/how-do-pre-orders-work",
+    "https://www.jbhifi.com.au/pages/help-and-support/why-cant-i-order-multiple-copies-of-the-same-item",
+    "https://www.jbhifi.com.au/pages/help-and-support/delivery-and-collection",
+    "https://www.jbhifi.com.au/pages/help-and-support/what-are-the-delivery-options-for-online-purchases",
+    "https://www.jbhifi.com.au/pages/help-and-support/when-will-i-get-my-pre-order",
+    "https://www.jbhifi.com.au/pages/help-and-support/what-is-click-and-collect",
+    "https://www.jbhifi.com.au/pages/help-and-support/click-and-collect-pre-orders",
+    "https://www.jbhifi.com.au/pages/help-and-support/my-account",
+    "https://www.jbhifi.com.au/pages/help-and-support/jb-perks",
+    "https://www.jbhifi.com.au/pages/help-and-support/afterpay",
+    "https://www.jbhifi.com.au/pages/help-and-support/zip",
+    "https://www.jbhifi.com.au/pages/help-and-support/paypal-pay-in-4"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI",
+        "url": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 129.0,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "SKU 903000 (MODEL/PLU 5026555439930)",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-order",
+        "delivery_estimate_text": "Available 19 November. Pick up your copy instore to preload from 12 November."
+      },
+      {
+        "title": "Grand Theft Auto VI",
+        "url": "https://www.jbhifi.com.au/products/xbox-series-x-grand-theft-auto-vi",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 129.0,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "SKU 903001 (MODEL/PLU 5026555370219)",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-order",
+        "delivery_estimate_text": "Available 19 November. Pick up your copy instore to preload from 12 November."
+      }
+    ],
+    "preorder_bonus_text": "DON'T MISS OUT ON THIS! Pre-Order DLC! Flash back to when the neon burned brightest with the Vintage Vice City Pack, featuring the timeless two-tone ’55 Vapid Stanier sedan and garage alongside the world-famous Ocean Beach, decadent outfits and hairstyles for both Jason and Lucia, and an iconic weapon pattern that echoes the excess of the past. Offer ends 18 Nov 2026",
+    "description_snippet": "Delivery and pickup starts November 12, allowing the game to be downloaded and installed in advance. Grand Theft Auto VI is releasing and becomes playable on November 19."
+  },
+  "branding": {
+    "logo_text": "JB HI-FI (black italic bold wordmark with tagline ALWAYS CHEAP PRICES underneath)",
+    "primary_color": "#FFEC0F",
+    "secondary_color": "#000000",
+    "background": "#FFFFFF",
+    "font_note": "Roboto, arial, sans-serif everywhere (checkout too). Bold 700 headings; product h1 24px/700; section headings are uppercase condensed display type (DESCRIPTION, AVAILABILITY, FREQUENTLY BOUGHT TOGETHER). CTA buttons are square-cornered (0px radius) green #028702 with white 700 18px text ('Pre-order', 'Add to cart', 'Checkout', 'Continue to shipping'); secondary buttons black #000000 with white text ('Review cart', 'Use my location'). Price is shown inside a yellow #FFEC0F price-tag shape with red #E02020 digits. Corner badges: PRE-ORDER purple #812990/white; PRE-ORDER DLC white/black; RED HOT DEAL red; ON SALE, ONLINE ONLY, JB EXCLUSIVE, COMING SOON, IN-STORE ONLY, NEW AT JB!. Panels/modals use light grey #F5F5F5.",
+    "header_layout": "Row 1: thin black promo strip, white text, rotating messages ('Seen it cheaper? Ask for a JB Deal! Live chat or call 13 52 44' / 'iPhone 18 Pro Out Now! Trade-in & Upgrade! Learn more') with an X close on the right. Row 2: yellow #FFEC0F bar — JB HI-FI logo (links to /) at left; centred white pill search box with magnifier icon and placeholder 'Search products, brands, and more…'; at right four icon+label buttons: Track order, Stores, Log in, Cart (cart icon gets a small count badge after adding). Row 3: black nav bar, white labels, dropdown buttons. On the product page a sticky mini-bar appears on scroll: thumbnail, title, yellow price tag, green Pre-order button. Checkout pages use a stripped header: yellow bar with only the JB HI-FI logo centred, then a breadcrumb Cart › Customer and Shipping Information › Shipping › Payment.",
+    "nav_items": ["New", "Products", "Brands", "Deals & Catalogues", "Clearance", "Services", "Gift Cards", "Join JB Perks", "News & Reviews"]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search products, brands, and more…",
+      "search_url_pattern": "/search?query={q} (spaces become +; page title: Search results: '{q}' | JB Hi-Fi)",
+      "search_results_layout": "Breadcrumb Home › Search results: 'grand theft auto vi'. h1 '20 results for \"grand theft auto vi\"'. Toolbar: Show: 36 / 72 / 100; Sort by dropdown (Best Match, Price: Low - High, Price: High - Low, New - Old, Old - New, Title: A - Z, Title: Z - A, Highest rated). Left filter rail with expandable checkbox groups: Brand, Price, Category, Primary Format - Games, Console compatibility, Game Genre, Game publisher, Game developer, Primary Format - Music. 3-column tile grid. Each tile: corner badges (PRE-ORDER, PRE-ORDER DLC, ONLINE ONLY, JB EXCLUSIVE, COMING SOON, IN-STORE ONLY, RED HOT DEAL, ON SALE, NEW AT JB!), heart wishlist icon (guest click shows 'You're one step away from having this in your wishlist!' with 'Create account' / 'Log in'), box art, title, platform subtitle ('PlayStation 5' / 'Xbox Series X'), star rating + review count if any, yellow price tag with whole-dollar price ('$129'), optional '+ DELIVERY FROM $4.99' line, optional 'TICKET $99' strikethrough with '$10 OFF^' chip, and a full-width green button 'Pre-order' (or 'Add to cart' for released items; flips to 'Added') or grey 'In-store only' / 'Coming soon'. Footer line 'Showing 20 of 20 results' and price-discount disclaimer '^Discounts apply to previous ticketed / advertised price…'.",
+      "category_path": "Home › Gaming › PlayStation › PS5 games › Grand Theft Auto VI (Xbox: Home › Gaming › Xbox › Xbox Series X|S games › Grand Theft Auto VI)"
+    },
+    "product_page": {
+      "url_pattern": "/products/<platform-slug>-<title-slug> (e.g. /products/playstation-5-grand-theft-auto-vi, /products/xbox-series-x-grand-theft-auto-vi); page title 'Grand Theft Auto VI Standard Edition on PS5 - Pre-Order Now - JB Hi-Fi'",
+      "headline": "Grand Theft Auto VI",
+      "variant_selectors": [
+        {
+          "label": "Primary Format - Games",
+          "type": "separate-listings",
+          "options": ["The Goodtime State - Vice City Collection $699", "PS5 $129", "XBOX $129"]
+        }
+      ],
+      "price_display": "Large yellow price-tag shaped badge with red digits '$129' (no cents) directly under the title/IDs; no strikethrough, ticket price or member price on GTA VI. Under it a row of Afterpay, Zip and PayPal logos (each links to its help page) and a grey coupon row with a coupon icon: 'Log in to see if you have coupons.' Sale items elsewhere show 'TICKET $1699' struck through, the sale price, and a '$400 OFF^' chip.",
+      "fulfillment_options": [
+        {
+          "label": "Delivery",
+          "detail": "Not chosen on the PDP; the notice box says 'Available 19 November. Pick up your copy instore to preload from 12 November.' Delivery vs Click & Collect is chosen in checkout.",
+          "default": true
+        },
+        {
+          "label": "Click & Collect / store availability",
+          "detail": "AVAILABILITY module: text box 'Enter postcode or suburb' plus 'Use my location' link. It opens a store panel titled 'Your store' / 'Click & Collect' / 'Check store availability'; for this item (from a non-AU location) it read 'Sorry, there are no in-store options available for this product.'",
+          "default": false
+        }
+      ],
+      "cta_buttons": [
+        { "label": "Pre-order", "behavior": "Adds one unit to the cart; the button flashes 'Added!', the header Cart badge shows 1, and a full-screen modal 'Item added to your cart!' opens with Review cart / Checkout." },
+        { "label": "Add to wishlist (heart icon)", "behavior": "For guests, shows 'You're one step away from having this in your wishlist!' with buttons 'Create account' and 'Log in'." },
+        { "label": "Use my location", "behavior": "Geolocates to check store availability." },
+        { "label": "Live chat / Call 13 52 44", "behavior": "Inside the 'SEEN IT CHEAPER? ASK FOR A JB DEAL!' price-match box; opens chat or dials." },
+        { "label": "Log in", "behavior": "In the coupon row; goes to auth.jbhifi.com.au/account/login and returns to the product." }
+      ],
+      "quantity_selector": false,
+      "upsells": [
+        "JB Perks popup on first visit: 'WANT A $10 WELCOME COUPON*? JOIN FOR FREE MEMBER BENEFITS! Valid for 28 days from issue. T&Cs apply.' with button 'Join & get my $10' (closable).",
+        "'SEEN IT CHEAPER? ASK FOR A JB DEAL! INSTORE | ONLINE — Excludes JB Hi-Fi Marketplace products' box with Live chat and Call 13 52 44 (4pm – 3am (GMT-7) shown in our timezone).",
+        "'DON'T MISS OUT ON THIS! Pre-Order DLC!' banner with Vice City key art and the Vintage Vice City Pack text, 'Offer ends 18 Nov 2026'.",
+        "FREQUENTLY BOUGHT TOGETHER carousel: Logitech G Astro A20X headset $249 (RED HOT DEAL), Legion Pro 32\" OLED monitor TICKET $1699 → $1299 $400 OFF^, DualSense Edge $329, Marvel's Wolverine $109, PS5 Slim Console $999, EA Sports FC 27 $99, Call of Duty: Modern Warfare 4 - 2XP Edition $89 (Pre-order), NBA 2K27 $99, DualSense Charging Station $49, Zelda: Ocarina of Time (Day One Edition) $109 (Pre-order). Each tile has 'Add to cart' and 'View alternatives'.",
+        "RECOMMENDED FOR YOU carousel at the bottom.",
+        "'Similar items' link and 'PRE-ORDER DLC' tab label near the image gallery.",
+        "Afterpay / Zip / PayPal Pay in 4 logos under the price."
+      ],
+      "notable_text": [
+        "PRE-ORDER (purple badge above the title)",
+        "MODEL: 5026555439930  SKU: 903000  PLU: 5026555439930 (PS5) / MODEL: 5026555370219  SKU: 903001  PLU: 5026555370219 (Xbox)",
+        "No Disc Included (Code in Box).",
+        "Choose carefully as we do not accept change of mind returns for video games distributed by digital redemption code.",
+        "Download Code is single-use, non-transferable and subject to Rockstar Games, and PlayStation Terms of Service. (Xbox page says '…and Xbox Terms of Service.')",
+        "Available 19 November. Pick up your copy instore to preload from 12 November.",
+        "Rating: CTC   Consumer Advice: CTC",
+        "Release date 19 Nov 26",
+        "Pre-order price guarantee — If the price of your pre-order drops before release day, we'll refund you the difference shortly after release.",
+        "Product overview (anchor link)",
+        "This box contains a download code (no disc). The PlayStation 5 version can only be used by users holding an account for PlayStation® registered to Australia",
+        "Grand Theft Auto VI is a single-player experience.",
+        "Genre Action & Adventure · Game developer Rockstar Games · Game publisher Rockstar Games · Console compatibility PlayStation 5"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "modal",
+      "contents": "Full-viewport light-grey (#F5F5F5) panel over the page with an X at top right. Top row: green check icon + heading 'Item added to your cart!', then the product thumbnail and title 'Grand Theft Auto VI' with two buttons on the right: 'Review cart' (black) and 'Checkout' (green). Below: heading 'ENHANCE YOUR PRODUCT' with a horizontal carousel of product tiles (title, stars, badge, yellow price tag, green 'Add to cart', heart) and dots/arrow; the two buttons 'Review cart' / 'Checkout' repeat at the bottom. The header Cart icon shows a badge '1'. The page URL does not change.",
+      "buttons": ["Review cart", "Checkout", "Add to cart", "Close"]
+    },
+    "cart": {
+      "url": "https://www.jbhifi.com.au/cart",
+      "line_item_fields": [
+        "Box-art thumbnail",
+        "Title link 'Grand Theft Auto VI'",
+        "Info-icon note 'Pre-order release date 19 Nov 2026'",
+        "Quantity dropdown (options 1, 2, 3, 4, 5)",
+        "Line price '$129.00'",
+        "'Remove' with trash icon"
+      ],
+      "summary_fields": [
+        "Coupon code text box + 'Apply' button",
+        "'Availability' — 'Enter postcode or suburb' text box + 'Use my location' link",
+        "Subtotal $129.00",
+        "'Includes GST. Shipping calculated at checkout.'"
+      ],
+      "promo_code_field": true,
+      "checkout_button_label": "Checkout",
+      "express_options": [],
+      "upsells": ["'Don’t forget these' carousel under the cart (Logitech G Astro A20X headset, Legion Pro OLED monitor, DualSense Edge, Marvel's Wolverine…) with Add to cart buttons"]
+    },
+    "checkout": {
+      "url": "https://www.jbhifi.com.au/checkouts/cn/<token>/en-us/information (Shopify checkout served on the JB domain; step URLs continue …/shipping and …/payment)",
+      "auth": {
+        "guest_allowed": true,
+        "account_required": false,
+        "screen_text": "There is no sign-in / guest chooser. Clicking Checkout lands directly on 'Customer and Shipping Information' with a 'Your details' Email field ('Used for your order confirmation and cart reminders'). The only login entry points are the header 'Log in' (auth.jbhifi.com.au) and the PDP coupon row.",
+        "guest_button_label": null,
+        "signin_fields": ["Email", "Password"]
+      },
+      "steps": [
+        {
+          "name": "Customer and Shipping Information",
+          "fields": [
+            { "label": "Email", "type": "email", "required": true },
+            { "label": "Keep me in the loop on hot news and offers!", "type": "checkbox", "required": false },
+            { "label": "Delivery method (Delivery / Click & Collect / Ship to collection point)", "type": "radio", "required": true },
+            { "label": "Country/Region", "type": "select", "required": true },
+            { "label": "First name", "type": "text", "required": true },
+            { "label": "Last name", "type": "text", "required": true },
+            { "label": "Company (optional)", "type": "text", "required": false },
+            { "label": "Address", "type": "text", "required": true },
+            { "label": "Address line 2 (optional)", "type": "text", "required": false },
+            { "label": "Suburb", "type": "text", "required": true },
+            { "label": "State/territory", "type": "select", "required": true },
+            { "label": "Postcode", "type": "text", "required": true },
+            { "label": "Mobile phone", "type": "tel", "required": true },
+            { "label": "Save this information for next time", "type": "checkbox", "required": false }
+          ],
+          "options": [
+            "Delivery (default, highlighted yellow) — shows the 'Shipping address' form; cost 'Calculated at next step'.",
+            "Click & Collect — replaces the address form with 'Pickup locations' + detected location ('United States' in our session) and a 'Change location' button. With no stores: red box 'No stores available with your item' and links 'Ship your items' or 'search elsewhere'. 'search elsewhere' shows: 'Cancel', black 'Use my location' button, 'OR', 'Country/region' select (Australia), 'Suburb or postcode' text box, 'Find stores' button. 'Continue to shipping' is disabled until a store is chosen.",
+            "Ship to collection point — shows 'Collection point': black 'Use my location' button, 'or', 'Country/region' select, 'Address, suburb or postcode' text box, 'Search' button."
+          ],
+          "button_label": "Continue to shipping",
+          "notes": "Secondary link '‹ Return to cart'. Country/Region defaults to Australia; State/territory options: Australian Capital Territory, New South Wales, Northern Territory, Queensland, South Australia, Tasmania, Victoria, Western Australia. Address field has a search icon (address autocomplete). Mobile phone has an info tooltip. An 'Express checkout' block with an 'OR' divider sits above 'Your details' but stayed a grey loading skeleton in our session (wallet buttons never rendered). Right column 'Order summary': thumbnail with quantity badge, 'Grand Theft Auto VI', '$129.00'; a discount-code area (skeleton); Subtotal $129.00; Shipping 'Calculated at next step'; Total 'AUD $129.00'. Fields are floating-label inputs with light grey borders."
+        },
+        {
+          "name": "Shipping",
+          "fields": [
+            { "label": "Shipping method", "type": "radio", "required": true }
+          ],
+          "options": [
+            "Standard Delivery (2 – 12 days) via Australia Post Mail (untracked, used for games) / Australia Post eParcel / Team Global Express Priority (2 – 4 days)",
+            "Express Delivery (1 – 2 business days) where eligible",
+            "Courier Delivery (next business day) — help page says pre-order products are NOT eligible",
+            "Uber ASAP / Scheduled — metro store deliveries, not expected for pre-orders"
+          ],
+          "button_label": "Continue to payment",
+          "notes": "NOT OBSERVED (confidence: low) — requires entering an address. Content taken from JB's 'What are the delivery options for online purchases?' help page and the standard Shopify shipping step (contact + ship-to summary with 'Change' links, then a radio list of methods with prices). Help says extra delivery time for pre-orders 'is highlighted during the checkout process'."
+        },
+        {
+          "name": "Payment",
+          "fields": [
+            { "label": "Card number", "type": "text", "required": true },
+            { "label": "Expiration date (MM / YY)", "type": "text", "required": true },
+            { "label": "Security code", "type": "text", "required": true },
+            { "label": "Name on card", "type": "text", "required": true },
+            { "label": "Billing address: Same as shipping address / Use a different billing address", "type": "radio", "required": true },
+            { "label": "Gift card or discount code", "type": "text", "required": false }
+          ],
+          "options": [
+            "Credit card (Visa, Mastercard, American Express, UnionPay, debit cards)",
+            "PayPal (incl. PayPal Pay in 4; Diners Club accepted via PayPal)",
+            "Apple Pay (compatible Apple devices in Safari)",
+            "Afterpay",
+            "Zip",
+            "Latitude Interest Free",
+            "JB Hi-Fi Gift Card"
+          ],
+          "button_label": "Pay now",
+          "notes": "NOT OBSERVED (confidence: low) — payment methods come from JB's 'What payment methods do you accept for online orders?' help page; field labels and 'Pay now' are the Shopify defaults. Help note: 'Buy now, pay later options such as Afterpay, Zip and PayPal cannot be used together when checking out.'"
+        }
+      ],
+      "payment_methods": ["Visa", "Mastercard", "American Express", "UnionPay", "Debit cards", "PayPal", "PayPal Pay in 4", "Diners Club (via PayPal)", "Apple Pay (Safari only)", "Afterpay", "Zip", "Latitude Interest Free", "JB Hi-Fi Gift Cards"],
+      "card_fields": ["Card number", "Expiration date (MM / YY)", "Security code", "Name on card"],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "at order (pre-orders are paid in full when placed)",
+      "charge_policy_text": "Pre-orders allow you to pay for an item you want ahead of its release day. Pre-order deliveries generally get dispatched just before the day of release to ensure you get the item as soon as possible after the official release. Click & Collect pre-orders will be ready for collection from your nominated store on the morning of release. — PDP: Pre-order price guarantee: If the price of your pre-order drops before release day, we'll refund you the difference shortly after release.",
+      "review_step": {
+        "exists": false,
+        "place_order_label": "Pay now",
+        "shows": ["Right-hand Order summary persists on every step: item thumbnail + qty, title, price, discount code box, Subtotal, Shipping, Total AUD", "Payment step shows contact / ship-to / method summary with Change links above the payment methods (Shopify default; low confidence)"]
+      },
+      "confirmation": {
+        "headline": "Thank you, <first name>! / Your order is confirmed (Shopify default wording; not observed — low confidence)",
+        "order_number_format": "Unknown; Shopify-style 'Order #<digits>'. Click & Collect help says the confirmation email/SMS carries an order number or barcode to scan in store.",
+        "contents": ["Order confirmed message", "Order number", "Customer information: contact, shipping address, shipping method, payment method, billing address", "Order summary with totals", "Continue shopping button"],
+        "email_sent_text": "Not observed. Help pages: order confirmation is emailed; Click & Collect sends an email and SMS when the order is ready; pre-order collections are notified by SMS and email before release day."
+      }
+    },
+    "account": {
+      "required_for_purchase": false,
+      "signup_fields": ["Email", "Password", "First name", "Last name", "Mobile number"],
+      "login_fields": ["Email", "Password"],
+      "membership_program": "JB Hi-Fi Perks — free membership program (no fee). Help page: '$10 welcome coupon', 'Exclusive member discounts', 'Early sales notifications', 'Birthday Perk', 'Go receipt free'; to join you need 'A JB Hi-Fi account' and 'An Australian mobile phone number'. PDP popup: 'WANT A $10 WELCOME COUPON*? JOIN FOR FREE MEMBER BENEFITS! Valid for 28 days from issue.'; PDP coupon row 'Log in to see if you have coupons.'; some products are 'JB PERKS EXCLUSIVE' (e.g. the $699 GTA VI Vice City Collection). Nav item 'Join JB Perks'."
+    },
+    "quirks": [
+      "Both GTA VI game listings are 'Code in Box' (no disc) at $129 each; JB shows whole dollars ($129) on tiles/PDP and $129.00 in the cart, which is below the AU RRP of $129.95.",
+      "There is no Ultimate edition. Other GTA VI SKUs in search: 'Grand Theft Auto VI: The Goodtime State – Vice City Collection' $699 (COMING SOON, JB PERKS EXCLUSIVE, ONLINE ONLY, + DELIVERY FROM $22.99, grey 'Coming soon' button — not orderable yet), 'PS5 DualSense Wireless Controller Grand Theft Auto VI White Limited Edition' $134 (PRE-ORDER, ONLINE ONLY), and the soundtrack on CD $36.99 / vinyl $120 / JB-exclusive pink-blue vinyl $140.",
+      "Platform is not a dropdown: PS5 and Xbox are separate product URLs. The PDP 'Primary Format - Games' strip is a carousel of tiles (Vice City Collection $699 / PS5 $129 / XBOX $129) that link between listings.",
+      "No quantity selector on the PDP (Pre-order adds 1). The cart quantity dropdown is capped at 5; help explains per-transaction limits to stop resellers.",
+      "Adding to cart opens a full-screen modal (not a side drawer) with an 'ENHANCE YOUR PRODUCT' upsell carousel. A separate hidden mini-cart panel ('My Cart' / 'Your cart is empty' / 'Includes GST. Shipping calculated at checkout.' / 'Checkout') exists behind the header Cart icon.",
+      "Checkout is Shopify, hosted at jbhifi.com.au/checkouts/cn/<token>/en-us/information. It is guest-first: no account wall, no 'continue as guest' button. Email is asked first, then a Delivery method radio (Delivery / Click & Collect / Ship to collection point) BEFORE the address block.",
+      "Click & Collect is chosen inside checkout, not on the PDP. The store picker geolocates (showed 'United States' for our session → 'No stores available with your item'); 'Continue to shipping' is disabled until a store is selected. Click & Collect is free and needs the confirmation email/SMS plus physical/digital photo ID (proof of age for MA15+/R18+).",
+      "A third fulfilment option, 'Ship to collection point', searches Australia Post collection points/parcel lockers by 'Address, suburb or postcode'.",
+      "Pre-order money is taken at order time. Pre-orders ship from the Victorian warehouse 1 day before release (orders inside 3 business days of release may ship after release), are not eligible for Courier Delivery, and Click & Collect pre-orders are ready from store opening on release day. Help warns pre-order bonuses may only apply to online delivery.",
+      "Pre-order price guarantee: if the price drops before release, the difference is refunded after release.",
+      "Preload: 'Pick up your copy instore to preload from 12 November' / 'Delivery and pickup starts November 12'.",
+      "Strong no-returns messaging on the PDP for code-in-box games ('we do not accept change of mind returns for video games distributed by digital redemption code').",
+      "Rating shows 'CTC' (Check the Classification) — not yet classified in Australia.",
+      "A JB Perks '$10 welcome coupon' popup appears on the first product page visit and must be closed. Rotating black promo strip above the header. 'Seen it cheaper? Ask for a JB Deal' price-match box on every PDP.",
+      "Wishlist hearts on tiles and the PDP require an account ('You're one step away from having this in your wishlist!').",
+      "BNPL methods (Afterpay, Zip, PayPal) cannot be combined; Apple Pay only appears in Safari on Apple devices.",
+      "Cart shows 'Pre-order release date 19 Nov 2026' next to the line item and 'Includes GST. Shipping calculated at checkout.' No express wallets on the cart page."
+    ]
+  },
+  "gaps": [
+    "Shipping step (method names, prices, ETAs for this item) and Payment step UI were not observed: reaching them requires entering an email/address, which the rules forbid. Documented from JB help pages plus standard Shopify checkout (marked low confidence).",
+    "The 'Express checkout' wallet block on the information page never rendered (grey skeleton the whole session), so the express options (likely Shop Pay / PayPal / Google Pay) are unconfirmed; the cart page had none.",
+    "Order confirmation page headline, order-number format and confirmation-email wording not observed.",
+    "Login/registration form fields at auth.jbhifi.com.au were not opened (no sign-in rule); listed from general knowledge.",
+    "Click & Collect store availability for an Australian postcode not tested (no data entry); the picker geolocated to the US and returned 'No stores available with your item'.",
+    "Delivery cost for the game is unknown: neither tile nor PDP nor cart shows a shipping price for GTA VI (other tiles show '+ DELIVERY FROM $4.99'); cart says 'Shipping calculated at checkout'.",
+    "No third-party sources (GamesRadar, IGN, Reddit, YouTube): the session's WebSearch quota was exhausted before this task and WebFetch cannot render jbhifi.com.au (JavaScript-only pages, including /policies/ and the Zendesk redirect), so everything comes from live browsing of jbhifi.com.au.",
+    "The $699 'Vice City Collection' product page and the Afterpay / Zip / PayPal Pay in 4 help pages were not opened."
+  ]
+}

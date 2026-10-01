@@ -1,0 +1,515 @@
+{
+  "slug": "rockstar-store",
+  "name": "Rockstar Store",
+  "country": "US",
+  "currency": "USD",
+  "base_url": "https://store.rockstargames.com",
+  "confirmed_preorder_live": true,
+  "confidence": "high",
+  "browser_worked": true,
+  "sources": [
+    "https://store.rockstargames.com/",
+    "https://store.rockstargames.com/game/buy-gta-vi",
+    "https://store.rockstargames.com/search?q=grand%20theft%20auto%20vi",
+    "https://store.rockstargames.com/cart",
+    "https://store.rockstargames.com/merchandise/buy-loneliest-robot-greeting-card",
+    "https://store.rockstargames.com/merchandise/gtavi-goodtime-state-vice-city-collection",
+    "https://store.rockstargames.com/game/gta-plus",
+    "https://store.rockstargames.com/refund-and-return-policy",
+    "https://store.xsolla.com/pages/cart?cart_id=current&project_id=100851 (redirects to https://purchase.xsolla.com/pages/cart)",
+    "https://signin.rockstargames.com/connect/authorize/t2gp-rs?returnUrl=%2Fconnect%2Fgateway%3Forigin%3Dhttps%3A%2F%2Fstore.rockstargames.com&lang=en",
+    "https://support.rockstargames.com/articles/40DHWEDBnq5jUuWJqKcH02/grand-theft-auto-vi-pre-order-purchase-support-faq",
+    "https://support.rockstargames.com/store",
+    "https://help.xsolla.com/pre-orders",
+    "https://help.xsolla.com/en/pre-orders/cancel-pre-order",
+    "https://help.xsolla.com/en/pre-orders/when-i-will-be-charged-for-my-pre-order",
+    "https://help.xsolla.com/en/pre-orders/change-pre-order-information",
+    "https://xsolla.com/products/paystation/accept-payments",
+    "https://xsolla.com/refund-policy-ps?language=en&project_id=100851&policy_version_id=5",
+    "https://www.rockstargames.com/VI",
+    "https://www.gamedeveloper.com/press-release/rockstar-games-announces-pre-orders-for-grand-theft-auto-vi",
+    "https://www.pushsquare.com/guides/where-to-pre-order-gta-6-on-ps5",
+    "https://www.t3.com/tech/gaming/its-official-exact-time-gta-vi-pre-orders-go-live-and-two-price-options",
+    "https://www.pushsquare.com/news/2026/06/gta-6-physical-edition-doesnt-come-with-discs-its-a-code-in-the-box",
+    "https://www.videogameschronicle.com/news/rockstar-confirms-there-will-be-no-disc-version-of-gta6-at-launch/",
+    "https://www.digitalcitizen.life/gta-6-preloads-begin-on-november-12-for-digital-and-physical-code-copies/",
+    "https://www.igeeksblog.com/how-to-pre-order-gta-6-on-ps5-and-xbox/",
+    "https://insider-gaming.com/how-to-pre-order-gta-6-date/",
+    "https://support.rockstargames.com/articles/1v0gPkZJ8IiKarabrFPHZU/rockstar-store-order-receipts",
+    "https://support.rockstargames.com/articles/46YkMi4rHxYXMeIHtZiKaE/grand-theft-auto-vi-pre-order-details",
+    "https://support.rockstargames.com/articles/2ptsKYrubNAxsZUL8OXyd9/rockstar-store-errors-2001-2002 (search snippet only; fetch timed out)",
+    "https://help.xsolla.com/",
+    "https://help.xsolla.com/en/payments/supported-card-types",
+    "https://help.xsolla.com/en/payments/card-verification",
+    "https://help.xsolla.com/en/receipts/where-can-i-find-my-receipts",
+    "https://help.xsolla.com/en/refunds/refund-physical-product",
+    "https://help.xsolla.com/physical-products",
+    "https://xsolla.com/refund-policy",
+    "https://developers.xsolla.com/payment-ui-and-flow/payment-ui/",
+    "https://developers.xsolla.com/payment-ui-and-flow/payment-ui/ui-theme-customization/",
+    "https://developers.xsolla.com/payment-ui-and-flow/payment-ui/how-to-configure-redirects/",
+    "https://developers.xsolla.com/payment-ui-and-flow/payment-ui/how-to-customize-emails-to-users/",
+    "https://drimage.oqupie.com/portals/2252/articles/58350 (search snippet only; page 404s — says Xsolla receipts carry a 9–10-digit transaction number)"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI",
+        "url": "https://store.rockstargames.com/game/buy-gta-vi",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": 79.99,
+        "member_price": null,
+        "sku_or_id": "itemSkuId 357725-US (skuId 488TWnWn7JVTNGGAPZXAHF, productId 7vd811uTmSX8EDIUYS5ewE, Xsolla project 100851)",
+        "release_date": "2026-11-19",
+        "availability_label": "COMING SOON (button: Pre-Order Now $79.99)",
+        "delivery_estimate_text": "Shipping will be available starting November 12, 2026. After game launch, physical orders will ship in an estimated 1–7 days, depending on shipping selection."
+      },
+      {
+        "title": "Grand Theft Auto VI",
+        "url": "https://store.rockstargames.com/game/buy-gta-vi",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": 79.99,
+        "member_price": null,
+        "sku_or_id": "itemSkuId 357733-US (skuId W3PyKU3OEFmceLthBkRo4, productId 7vd811uTmSX8EDIUYS5ewE, Xsolla project 100851)",
+        "release_date": "2026-11-19",
+        "availability_label": "COMING SOON (button: Pre-Order Now $79.99)",
+        "delivery_estimate_text": "Shipping will be available starting November 12, 2026. After game launch, physical orders will ship in an estimated 1–7 days, depending on shipping selection."
+      },
+      {
+        "title": "Grand Theft Auto VI — Standard Edition (Digital)",
+        "url": "https://store.rockstargames.com/game/buy-gta-vi#compare-editions",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "digital",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "Rockstar skuId 7Kw5cmiiWlfvDje2JFgAfo ('PlayStation First Party Link Out SKU'); links out to https://store.playstation.com/product/EP1004-PPSA01547_00-GTAVISTANDARD001",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-Order Now (opens PlayStation Store in a new tab; no price shown on Rockstar Store)",
+        "delivery_estimate_text": "Pre-load begins November 12, 2026"
+      },
+      {
+        "title": "Grand Theft Auto VI — Standard Edition (Digital)",
+        "url": "https://store.rockstargames.com/game/buy-gta-vi#compare-editions",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "digital",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "Rockstar skuId 61VDNENfCyijvOimxjyCFe ('Xbox First Party Link Out SKU'); links out to https://www.xbox.com/games/store/grand-theft-auto-vi/9P3H4968GRSM/0017/9PWFKCT9JGKL",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-Order Now (opens Microsoft Store/xbox.com in a new tab; no price shown on Rockstar Store)",
+        "delivery_estimate_text": "Pre-load begins November 12, 2026"
+      },
+      {
+        "title": "Grand Theft Auto VI — Ultimate Edition (Digital)",
+        "url": "https://store.rockstargames.com/game/buy-gta-vi#compare-editions",
+        "platform": "PS5",
+        "edition": "Ultimate",
+        "format": "digital",
+        "price": 99.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "Rockstar skuId 1k94fAGkvqcSNOS6PczG4Y ('PlayStation First Party Link Out SKU 2'); links out to https://store.playstation.com/product/EP1004-PPSA01547_00-GTAVIULTIMATE001",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-Order Now (opens PlayStation Store in a new tab; no price shown on Rockstar Store — $99.99 is the platform-store price)",
+        "delivery_estimate_text": "Pre-load begins November 12, 2026"
+      },
+      {
+        "title": "Grand Theft Auto VI — Ultimate Edition (Digital)",
+        "url": "https://store.rockstargames.com/game/buy-gta-vi#compare-editions",
+        "platform": "Xbox Series X|S",
+        "edition": "Ultimate",
+        "format": "digital",
+        "price": 99.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "Rockstar skuId 5RyqR1Lk56PH9OgVD3haBY ('Xbox First Party Link Out SKU 2'); links out to https://www.xbox.com/games/store/grand-theft-auto-vi-ultimate-edition/9NNZSNHLR63L/0017/9W0CVZDS9RZF",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-Order Now (opens Microsoft Store/xbox.com in a new tab; no price shown on Rockstar Store — $99.99 is the platform-store price)",
+        "delivery_estimate_text": "Pre-load begins November 12, 2026"
+      }
+    ],
+    "preorder_bonus_text": "Order before November 20 to get the Vintage Vice City Pack at no additional cost*",
+    "description_snippet": "Jason and Lucia have always known the deck is stacked against them."
+  },
+  "branding": {
+    "logo_text": "R* Store (white Rockstar 'R*' logo image followed by the word 'Store'; link aria-label 'Rockstar Store Home')",
+    "primary_color": "#FFAB00",
+    "secondary_color": "#CC0000",
+    "background": "#161616",
+    "font_note": "Body 'Helvetica Now Text', headings 'Helvetica Now Display' (fallback Arial). Nav items 13.5px bold uppercase. Product h1 22.5px bold. Body text rgba(255,255,255,0.8) on near-black. Product-page CTAs are pill buttons (border-radius 1000px, 18px bold, 54px tall) in a per-game accent — on the GTA VI page the accent is peach #FFD4A8 with black text; the site default accent (--color-primary) is amber #FFAB00 used on PROCEED TO CHECKOUT / SIGN IN (6px radius, uppercase bold 16px). Nav bar is pure black #000000; 'COMING SOON' badge is small bold uppercase 13.5px black text on a light pill. Xsolla checkout iframe uses Arial, black background, inputs #1A1A1A 32px tall 4px radius, gold CONTINUE button #FCAF17.",
+    "header_layout": "Fixed black bar (~90px tall at 1024px). Left to right: hamburger 'Open menu' button (collapsed menubar) · R* logo + 'Store' wordmark (link to /) · [menubar: GAMES ▾, GAME ADD-ONS ▾, GTA+, MERCHANDISE ▾, FEATURED ▾ — rendered inline on wide desktop, inside the hamburger drawer at ≤1024px] · pill search box with magnifier icon and placeholder 'Search' (submits to /search?q=) · user icon button 'Sign In' · cart icon button (href /cart) with numeric badge when cart has items. Footer: Rockstar eagle logo, links Rockstar Support · Privacy Policy · Cookie Policy · Terms of Service · Do Not Sell or Share My Personal Information · Refunds · Cookie Settings, legal line, language selector 'English', 'Back to top'.",
+    "nav_items": [
+      "Games (View All Games, Grand Theft Auto VI, Grand Theft Auto V, Red Dead Redemption 2, Red Dead Redemption, Bully: Scholarship Edition)",
+      "Game Add-Ons (Grand Theft Auto Online: Shark Cash Cards, Red Dead Online: Gold Bars)",
+      "GTA+",
+      "Merchandise (View All Merchandise, Apparel, Accessories, Collectibles)",
+      "Featured (New Arrivals, Shop by Grand Theft Auto, Shop by Red Dead Redemption, Shop by Rockstar Games)"
+    ]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search",
+      "search_url_pattern": "/search?q={q}",
+      "search_results_layout": "Page title 'My Search', h1 'Search for:', count line ('120 results'), 'Sort by... Relevance' dropdown and 'Filters' button. Left facet rail: CATEGORIES (Bundle, Console Game, Full Digital Game, Gear), GAME COLLECTIONS (Bully, Grand Theft Auto, L.A. Noire, More), PLATFORM (apple store, google play, Nintendo Switch, More), GEAR (Game, Accessories, Apparel, Collectibles). Results are grouped under 'Games' then 'Gear' headings as a grid of 208px-wide tiles: box art (208×257, square corners), title, optional 'COMING SOON' badge, price ('$79.99'). No ratings or release dates on tiles. Homepage 'Games' carousel tiles also show platform chips ('PlayStation 5', 'Xbox Series X').",
+      "category_path": "Header nav: Games ▾ → Grand Theft Auto VI (/game/buy-gta-vi). Also: homepage hero slide 'COMING SOON / Grand Theft Auto VI / Reserve today to unlock exclusive benefits and be ready to play at launch. / Pre-Order Now', homepage 'Games' carousel tile, or /view-all-games. No breadcrumb on the product page."
+    },
+    "product_page": {
+      "url_pattern": "/game/buy-gta-vi (games are /game/buy-<slug>; merchandise is /merchandise/<slug>)",
+      "headline": "Grand Theft Auto VI",
+      "variant_selectors": [
+        {
+          "label": "Select Platform",
+          "type": "buttons",
+          "options": [
+            "PS5",
+            "Xbox Series X|S"
+          ]
+        },
+        {
+          "label": "Compare Editions (separate cards, each with its own Pre-Order Now button)",
+          "type": "separate-listings",
+          "options": [
+            "Ultimate Edition (digital, link-out to platform store)",
+            "Standard Edition (digital, link-out to platform store)",
+            "Physical (Code-in-Box) Version — $79.99, sold by Rockstar Store via Xsolla"
+          ]
+        }
+      ],
+      "price_display": "Only the code-in-box price is shown, inside its button: 'Pre-Order Now' with '$79.99' stacked under it. No strikethrough, no list/sale split, no member price. The digital Standard/Ultimate cards show no price at all (they link out to PlayStation Store / Microsoft Store). Search/home tiles show '$79.99' under a 'COMING SOON' badge.",
+      "fulfillment_options": [
+        {
+          "label": "Ship to Home (physical code-in-box)",
+          "detail": "Only fulfillment method; no store pickup. Ships to 20 countries (US, CA, UK, and 17 European countries). Cart shows 'Get FREE shipping with orders over $74.99' so the $79.99 game qualifies for free standard shipping. Shipping starts November 12, 2026; after launch orders ship in an estimated 1–7 days depending on the shipping option chosen at checkout. Shipping cost/options are presented in the Xsolla checkout window.",
+          "default": true
+        },
+        {
+          "label": "Digital (link-out)",
+          "detail": "Standard and Ultimate digital editions are not sold on the Rockstar Store; the buttons open store.playstation.com or xbox.com in a new tab.",
+          "default": false
+        }
+      ],
+      "cta_buttons": [
+        {
+          "label": "PS5",
+          "behavior": "Platform toggle (icon button, 8px radius). Selected state = white background, dark text; unselected = transparent with 1px rgba(255,255,255,0.2) border. Nothing is selected on load. Selecting changes the platform icon on every Pre-Order Now button, which store the digital buttons open, the box-art image (Sony vs Xbox) and the 'Upgrade' text (PlayStation Store vs Microsoft Store)."
+        },
+        {
+          "label": "Xbox Series X|S",
+          "behavior": "Platform toggle, same as PS5."
+        },
+        {
+          "label": "Pre-Order Now",
+          "behavior": "Hero button (peach pill). Does NOT add to cart — it scrolls the page to the #compare-editions section."
+        },
+        {
+          "label": "Pre-Order Now",
+          "behavior": "Sticky sub-nav button (appears in the 'Game Details / Trailers / Screenshots / Compare Editions / FAQ' bar). Same as hero: scrolls to Compare Editions."
+        },
+        {
+          "label": "Pre-Order Now",
+          "behavior": "On the 'Ultimate Edition' compare card: window.open() to https://store.playstation.com/product/EP1004-PPSA01547_00-GTAVIULTIMATE001 (PS5 selected) or https://www.xbox.com/games/store/grand-theft-auto-vi-ultimate-edition/9NNZSNHLR63L/0017/9W0CVZDS9RZF (Xbox selected) in a new tab."
+        },
+        {
+          "label": "Pre-Order Now",
+          "behavior": "On the 'Standard Edition' compare card: window.open() to https://store.playstation.com/product/EP1004-PPSA01547_00-GTAVISTANDARD001 or https://www.xbox.com/games/store/grand-theft-auto-vi/9P3H4968GRSM/0017/9PWFKCT9JGKL in a new tab."
+        },
+        {
+          "label": "Pre-Order Now $79.99",
+          "behavior": "In the 'Physical (Code-in-Box) Version Available' section. This is the real purchase button, but it is direct-to-checkout, not add-to-cart (verified 2026-09-30 with PS5 selected). Click opens the age-gate modal ('Verify your age' / 'Enter your date of birth' / Month / Day / Year dropdowns / OK, disabled until all three are set). Passing the gate immediately opens the 'Sign In or Continue as Guest' modal on the product page itself; CONTINUE AS GUEST then opens the Xsolla checkout lightbox (Shipping Address step) over the product page. Nothing is added to the Rockstar cart: the header cart icon keeps its plain 'cart' name with no badge and /cart still says 'Your cart is empty' afterwards. No 'Added to Cart' popover appears."
+        },
+        {
+          "label": "Upgrade Now",
+          "behavior": "In 'Upgrade to the Ultimate Edition' section ('Purchased the game? Upgrade to the Ultimate Edition on PlayStation Store at any time.'). External-link icon; opens the platform store."
+        }
+      ],
+      "quantity_selector": false,
+      "upsells": [
+        "Compare Editions carousel pushing the Ultimate Edition (list of extra content) — but it links out to platform stores",
+        "'Upgrade to the Ultimate Edition' section with 'Upgrade Now' link-out",
+        "Homepage hero slide for 'Grand Theft Auto VI: The Goodtime State – Vice City Collection' ($399.99 collector's box, 'Grand Theft Auto VI game sold separately', Ages 18+) — not shown on the GTA VI product page itself",
+        "'Free Month of GTA+' listed as a 'Digital Store Pre-Order Bonus' in both edition cards (GTA+ is $7.99/Month; redeemed on PlayStation Store / Microsoft Store)"
+      ],
+      "notable_text": [
+        "COMING SOON (badge above the title)",
+        "Order before November 20 to get the Vintage Vice City Pack at no additional cost*",
+        "ESRB: Rating Pending Likely Mature 17+ (badge, links to esrb.org)",
+        "Release Date: November 19, 2026 · Developer: Rockstar Games · Publisher: Rockstar Games",
+        "Pre-load begins November 12, 2026 (info line on each edition card)",
+        "Physical (Code-in-Box) Version Available — Physical versions will only contain a download code inside the box to support pre-load on November 12. A disc will not be included in the box. *While supplies last, further details below.",
+        "Compare Editions lists (both cards): Digital Standard Edition · ’95 Grotti Cheetah · Hawk and Little Morgan Revolvers · Personalized Weapon Variants · Vice City Styles · Jason’s Safehouse Vehicles · Ganado Retro Build · Rideout Customs Mod Shop · Sara’s Unisex Salon · Shitzu Squalo · Stock 305 Clothing Store · ’67 Vapid Dominator Buggy · Electric Fang Tattoo Parlor · One-Eyed Willie’s Mod Shop · Goodtime Gear · PTT Youngin$ Compound · Classic Car Collection · Vintage Vice City Pack Pre-Order Bonuses · ’55 Vapid Stanier Sedan and Garage · Outfits and Hairstyles · Exclusive Weapon Pattern · Digital Store Pre-Order Bonus · Free Month of GTA+",
+        "FAQ (accordion): What is a code-in-box? · When does the code-in-box ship? · How can I track the shipping status of my physical purchase? · How do I cancel a pre-order on the Rockstar Store? · What bonuses come with the Ultimate Edition Upgrade and how do I get them? · What regions does the Rockstar Store ship to? · How do I redeem my free month of GTA+? · Where can I find the Rockstar Store refund policy? · Where can I find the receipt for my order?",
+        "FAQ answer (receipt): Receipts for all purchases are sent to the email address associated with your Rockstar Games account or specified during Guest checkout.",
+        "FAQ answer (cancel): To cancel a pre-order from the Rockstar Store, please contact our fulfillment partner, Xsolla, directly to cancel your pre-order using the physical item form: https://help.xsolla.com/pre-orders/cancel-pre-order. Please note that you will need your order number and the email from which you ordered.",
+        "FAQ answer (regions): Austria, Belgium, Canada, Czechia, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Poland, Portugal, Spain, Sweden, Switzerland, United Kingdom, United States. Costs of shipping for your order will be presented at checkout.",
+        "FAQ answer (code-in-box): An internet connection and platform account are required to download the game. PlayStation codes are region-locked (US/CA shipments work only on US/CA PlayStation accounts).",
+        "Supported Languages: English, French, Italian, German, Russian, Japanese, Polish, Korean, Simplified Chinese, Traditional Chinese, Spanish (Mexico), Spanish (Spain), Portuguese (Brazil)",
+        "Legal Disclosure paragraph: 'Purchase grants a license to the digital product subject to the Terms of Service…'"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "direct-to-checkout (no cart step and no popover for the GTA VI code-in-box)",
+      "contents": "Verified 2026-09-30: 'Pre-Order Now $79.99' opens a centered 680px age-gate lightbox (#161616) 'Verify your age' / 'Enter your date of birth' with three dropdown buttons 'Month', 'Day', 'Year' (menus: January–December, 1–31, years descending from the current year) and a disabled 'OK' submit that enables once all three are chosen; close 'X' top-right. On OK the age gate closes and the 'Sign In or Continue as Guest' modal opens right on the product page (same modal the cart page uses: 'Sign In' / 'Sign in to keep track of your previous purchases and payment information.' / SIGN IN (amber) and 'Continue as Guest' / 'A valid email and shipping address are required for your order.' / CONTINUE AS GUEST (white outline), close X). CONTINUE AS GUEST shows a spinner ('Entering checkout window') and then the 680×650 Xsolla lightbox at the Shipping Address step, still on /game/buy-gta-vi. There is no 'Added to Cart' popover, no cart badge and no cart line item for the game — the item lives only in the Xsolla cart (cart_id=current, project 100851). The 'Added to Cart' popover (dark #222222 dialog under the cart icon: heading 'Added to Cart', thumbnail, title, price, 'Go To Cart') exists only for merchandise 'Add to Cart' buttons.",
+      "buttons": [
+        "(age gate) Month",
+        "(age gate) Day",
+        "(age gate) Year",
+        "(age gate) OK",
+        "(age gate) Close (X)",
+        "(guest gate) SIGN IN",
+        "(guest gate) CONTINUE AS GUEST",
+        "(guest gate) Close (X)"
+      ]
+    },
+    "cart": {
+      "url": "https://store.rockstargames.com/cart",
+      "line_item_fields": [
+        "Product image (160px, left)",
+        "Product title (link to product page)",
+        "Price ($3.99 / $79.99)",
+        "Qty: 1 (dropdown menu button; max 4 per SKU)",
+        "Stock label (e.g. 'Low stock')",
+        "Remove (underlined text button)",
+        "Below the list: 'Subtotal (1 item): $3.99'",
+        "Note: the GTA VI code-in-box never appears here — its Pre-Order Now button goes straight to the Xsolla checkout and the Rockstar cart stays empty (verified 2026-09-30). The fields above come from a merchandise item."
+      ],
+      "summary_fields": [
+        "Order Summary (heading)",
+        "Total for Items — $3.99",
+        "Subtotal (1 item) — $3.99",
+        "Free-shipping message: 'Add $71.00 to this order to qualify for FREE standard shipping.' (empty cart: 'Get FREE shipping with orders over $74.99')",
+        "PROCEED TO CHECKOUT (button; disabled when cart is empty)",
+        "'Taxes and shipping will be calculated in the checkout window.'"
+      ],
+      "promo_code_field": false,
+      "checkout_button_label": "PROCEED TO CHECKOUT",
+      "express_options": [],
+      "upsells": []
+    },
+    "checkout": {
+      "url": "GTA VI: the Xsolla lightbox opens directly over the product page https://store.rockstargames.com/game/buy-gta-vi (age gate → 'Sign In or Continue as Guest' modal → lightbox). Merchandise: /cart → PROCEED TO CHECKOUT → same modal → lightbox over /cart. Lightbox iframe src: https://store.xsolla.com/pages/cart?cart_id=current&project_id=100851&auth=<guest token>&access_data=<base64 JSON>, which redirects to https://purchase.xsolla.com/pages/cart?…",
+      "auth": {
+        "guest_allowed": true,
+        "account_required": false,
+        "screen_text": "Modal on /cart titled 'Sign In or Continue as Guest' — 'Choose to sign in or checkout as guest'. Left block: h4 'Sign In', 'Sign in to keep track of your previous purchases and payment information.', button SIGN IN. Right block: h4 'Continue as Guest', 'A valid email and shipping address are required for your order.', button CONTINUE AS GUEST. Close 'X' top-right. SIGN IN opens signin.rockstargames.com (Rockstar Games Account OAuth) in a popup/new window. For the GTA VI code-in-box this modal appears on the product page immediately after the age gate (verified 2026-09-30); for merchandise it appears on /cart after PROCEED TO CHECKOUT.",
+        "guest_button_label": "CONTINUE AS GUEST",
+        "signin_fields": [
+          "Email (or Rockstar Games nickname)",
+          "Password"
+        ]
+      },
+      "steps": [
+        {
+          "name": "Shipping Address (Xsolla Pay Station, step 1 — observed; empty-form validation observed 2026-09-30)",
+          "fields": [
+            {
+              "label": "Country",
+              "type": "select",
+              "required": true
+            },
+            {
+              "label": "First Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Last Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "City",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Region/State",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Postal Code",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Street Address",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Apartment",
+              "type": "text",
+              "required": false
+            },
+            {
+              "label": "Phone",
+              "type": "tel",
+              "required": true
+            },
+            {
+              "label": "Email",
+              "type": "email",
+              "required": true
+            }
+          ],
+          "options": [
+            "Country is pre-filled 'USA' (grey selector row; not flagged on validation).",
+            "Phone has a US-flag + '+' country-code prefix and IS required for guest checkout.",
+            "Apartment is the only optional field (shows a green check mark when the empty form is validated)."
+          ],
+          "button_label": "CONTINUE",
+          "notes": "Page heading 'Shipping Address'; blue info banner reads 'You cannot change your shipping address once you submit your pre-order.' for the GTA VI code-in-box (the merchandise flow's banner says '…submit your order.'). Field order: Country · First Name · Last Name · City · Region/State · Postal Code · Street Address · Apartment · Phone · Email, then the gold CONTINUE button (bottom right). Validation, observed by pressing CONTINUE on the empty form: no page-level error; every required input gets a red 4px bar on its left edge; the first invalid field (First Name) is focused with a gold border and a small red tooltip 'Required' appears under it; clicking into another empty required field (e.g. Phone) moves the 'Required' tooltip to that field; Apartment shows a green check. 'Required' is the only message text seen — format errors (bad email/phone/ZIP) were not observed because no data was typed. Xsolla's consent bar ('I give my consent for Xsolla to use my personal data to offer and/or market customized services to me.' / 'I consent to enable all cookies listed within the Cookie Policy.' / 'Agree to all' / X) overlays the CONTINUE button until dismissed with its X. Footer: 'Xsolla is an authorized video game software distributor…', '© 2006-2026 Xsolla', 'Secure Connection', Privacy Policy | EULA | Refund Policy | Legal Agreements. No order summary, price, shipping or charge-timing text on this step. The iframe is cross-origin (the parent page's accessibility tree only exposes an 'Entering checkout window' placeholder), so it was read from screenshots. Lightbox 680×650, theme 'rockstar-dark', currency USD, language en."
+        },
+        {
+          "name": "Shipping Method (not observed — inferred, low confidence)",
+          "fields": [
+            {
+              "label": "Shipping option",
+              "type": "radio",
+              "required": true
+            }
+          ],
+          "options": [
+            "Standard shipping (free on orders over $74.99; otherwise a fee)",
+            "Faster/expedited options with a fee (FAQ: 'Shipping duration may vary depending on the shipping option you choose when checking out')"
+          ],
+          "button_label": "CONTINUE",
+          "notes": "Still not reached (submitting the address form requires typing personal data). Rockstar's product-page FAQ and Support FAQ only say 'Costs of shipping for your order will be presented at checkout' and 'Shipping duration may vary depending on the shipping option you choose when checking out'; the cart page promises free standard shipping over $74.99. Exact option labels, carriers, prices and ETAs remain unverified. Xsolla's Pay Station docs describe a two-column payment UI (order information — item name, VAT amount, Total — beside the payment methods/card form), so the order summary is most likely shown alongside the payment form rather than on a separate review page; whether shipping method is its own step or a picker inside that summary is unverified — low confidence."
+        },
+        {
+          "name": "Payment (Xsolla Pay Station — not observed, low confidence)",
+          "fields": [
+            {
+              "label": "Payment method (Google Pay quick button at top when available, then the list/tiles of methods)",
+              "type": "radio",
+              "required": true
+            },
+            {
+              "label": "Card number",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "MM/YY (expiration)",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "CVV / CVC",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "ZIP / Postal code (US cards; low confidence)",
+              "type": "text",
+              "required": false
+            },
+            {
+              "label": "Save payment account (disabled for guests)",
+              "type": "checkbox",
+              "required": false
+            }
+          ],
+          "options": [
+            "Cards: Visa, Mastercard, Maestro, American Express, Discover, Cash App Card (credit, debit, prepaid, gift) — Xsolla's generic 'Supported card types' help page, not project-specific",
+            "PayPal — Rockstar Support's 'Rockstar Store Errors 2001/2002' article references PayPal payments through Xsolla on the Rockstar Store",
+            "Google Pay — Pay Station shows a Google Pay quick-payment button at the top of the payment UI by default on non-Safari browsers unless the merchant turns it off (Xsolla docs); not confirmed for project 100851",
+            "Apple Pay — supported by Pay Station (in the method list, or as the first screen only if the merchant configures it); not confirmed for project 100851"
+          ],
+          "button_label": "not verified — Pay Station's card section is headed 'Payment via card' and has a single primary pay button under the Total; best knowledge is 'Pay' (possibly with the amount), low confidence",
+          "notes": "Not reached. Per Xsolla's Pay Station UI docs the payment screen is two columns: order information (item name, VAT/tax line, 'Total' amount) on one side and the payment-method list / card form ('Payment via card') on the other — i.e. the summary sits alongside the payment form rather than on a separate review step. Xsolla normally asks for an email on the payment page when the token has no user.email, but here the email is already collected in the Shipping Address step. Guest checkout has saved payment accounts disabled (access_data ui.user_account.payment_accounts.enable=false). Billing address: Pay Station does not collect a separate billing address for cards in other Xsolla stores — at most a ZIP/postal code for US cards — so billing is effectively the shipping address; low confidence for this project."
+        }
+      ],
+      "payment_methods": [
+        "Credit/debit/prepaid/gift cards: Visa, Mastercard, Maestro, American Express, Discover, Cash App Card (Xsolla 'Supported card types' help page — generic Xsolla list, medium confidence for this project)",
+        "PayPal (Rockstar Support 'Rockstar Store Errors 2001/2002' article references PayPal on the Rockstar Store via Xsolla — medium confidence)",
+        "Google Pay (Pay Station's default quick-pay button on non-Safari browsers per Xsolla docs — unverified for project 100851, low confidence)",
+        "Apple Pay (Pay Station-supported — unverified for project 100851, low confidence)"
+      ],
+      "card_fields": [
+        "Card number",
+        "MM/YY",
+        "CVV / CVC",
+        "ZIP / Postal code (US cards) — all low confidence: payment step not reached; Xsolla's help pages do not list the field labels, only that the card section is headed 'Payment via card'"
+      ],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "when shipped, per Xsolla's physical pre-order help page (charged when the pre-order is ready to ship; notice email about two weeks before; pre-order cancelled if the charge fails at release). Verified 2026-09-30 that NO charge-timing text is shown anywhere in the Rockstar Store UI up to and including the Xsolla Shipping Address step — the product page, age gate, guest modal and address form only say 'Taxes and shipping will be calculated in the checkout window.' (cart) and 'You cannot change your shipping address once you submit your pre-order.' (Xsolla banner). The payment step was not reached, so a notice there cannot be ruled out. Conflict to note: Xsolla's general Refund Policy says 'When you place a Pre-Order, your payment is taken at the time of purchase', while its physical-pre-order help page says the card is not charged until the item is ready to ship; the help page is the physical-goods-specific statement. Medium confidence.",
+      "charge_policy_text": "help.xsolla.com 'When will I be charged for my pre-order?': 'Your payment account will not be charged until the physical pre-order is ready to be shipped.' · 'You will receive a notification email about two weeks prior to your payment method being charged for a pre-order.' · 'Pre-orders will be canceled if your payment method cannot successfully be charged at the time of the product's release.' (Only on Xsolla's help site; not shown in the store UI.)",
+      "review_step": {
+        "exists": false,
+        "place_order_label": "not verified — no separate review page is expected: Xsolla Pay Station shows the order summary (item, VAT/tax, Total) in a column beside the payment-method/card form and the pay button sits in that form; Pay Station's default pay button is best-known as 'Pay' (low confidence). The address is locked after the Shipping Address step.",
+        "shows": [
+          "Item name and price (order-information column)",
+          "VAT/tax line",
+          "Total in USD",
+          "Shipping address (locked after submit — 'You cannot change your shipping address once you submit your pre-order.')",
+          "Shipping method (label/price unverified)",
+          "Payment method list / card form ('Payment via card')"
+        ]
+      },
+      "confirmation": {
+        "headline": "not verified — Xsolla Pay Station 'payment status page' with a heading (Title 1 in the theme docs), a status message (Body M) and a return button whose default copy is 'Back to the Game' (merchants can rename it, e.g. 'Back to Store'); the exact heading for project 100851 was not observed. Best knowledge: a 'Thank you for your purchase' / 'Payment successful' style message — low confidence.",
+        "order_number_format": "Numeric Xsolla transaction ID (invoice_id) with no letters or prefix. Third-party game-support pages describe Xsolla receipts as carrying a 9–10-digit transaction number shown as a plain number; Xsolla's docs say that from June 1, 2026 transaction IDs are int64, so newer IDs may be longer. The same number is the 'Order number' that Xsolla's cancel-pre-order and physical-refund forms ask for ('from the Pre-Order Confirmation email'). Not directly observed — medium confidence.",
+        "contents": [
+          "Status heading + message",
+          "Transaction/order number (numeric)",
+          "Item(s) and total",
+          "Return/close button (default 'Back to the Game'; may be customized)",
+          "Receipt emailed by mailer@xsolla.com to the guest email"
+        ],
+        "email_sent_text": "Rockstar Support: 'Receipts for all purchases are sent to the email address associated with your Rockstar Games account or specified during Guest checkout.' Xsolla: 'If you enter an email address while making a payment, all receipts will be emailed to you.' (sender mailer@xsolla.com); Xsolla's refund policy calls the confirmation email the 'electronic purchase receipt' that 'will contain information about your Order'. Xsolla's cancel form refers to a 'Pre-Order Confirmation' email carrying the order number. Later emails: a notice about two weeks before the card is charged, then a shipping-confirmation email with a tracking link (one tracking number per box)."
+      }
+    },
+    "account": {
+      "required_for_purchase": false,
+      "signup_fields": [
+        "Email",
+        "Password",
+        "Nickname",
+        "Date of birth",
+        "Country (Rockstar Games Account sign-up at signin.rockstargames.com — fields not verified in this session, low confidence)"
+      ],
+      "login_fields": [
+        "Email / Nickname",
+        "Password"
+      ],
+      "membership_program": "None for the store itself. GTA+ ($7.99/Month) is a GTA Online subscription sold on the store; digital pre-orders of GTA VI get a free month via the platform stores."
+    },
+    "quirks": [
+      "The Rockstar Store only sells the Standard Edition code-in-box ($79.99) directly. The digital Standard and Ultimate editions are 'First Party Link Out SKUs' — their Pre-Order Now buttons window.open() the PlayStation Store or Microsoft Store in a new tab. Ultimate Edition is not sold as code-in-box here.",
+      "A platform (PS5 / Xbox Series X|S) must be picked on the product page; the picker is unselected on load and drives which store the digital buttons open and which code-in-box SKU (357725-US vs 357733-US) is added.",
+      "The hero 'Pre-Order Now' and sub-nav 'Pre-Order Now' buttons only scroll to Compare Editions; the real add-to-cart is the 'Pre-Order Now $79.99' button in the 'Physical (Code-in-Box) Version Available' section.",
+      "Age gate on the code-in-box button: 'Verify your age' modal with Month/Day/Year dropdowns and a disabled 'OK' until filled (JSON-LD declares requiredMinAge 18). Passing it does NOT add to the cart — it goes straight to the 'Sign In or Continue as Guest' modal and then the Xsolla lightbox on the product page; the Rockstar cart stays empty and there is no 'Added to Cart' popover for the game.",
+      "No disc: physical box contains only a download code; PlayStation codes are region-locked; shipping starts November 12, 2026 (pre-load date), one week before the November 19 release.",
+      "Checkout is handled by Xsolla (merchant of record for physical items) inside a 680×650 lightbox iframe — over /cart for merchandise, but directly over the product page for the GTA VI code-in-box; the URL is store.xsolla.com/pages/cart → purchase.xsolla.com with a guest auth token and a base64 access_data blob (project_id 100851, theme 'rockstar-dark').",
+      "Guest checkout is offered via a 'Sign In or Continue as Guest' modal; signing in uses a Rockstar Games Account OAuth popup at signin.rockstargames.com. No account is required.",
+      "Shipping address is entered first; the GTA VI banner says 'You cannot change your shipping address once you submit your pre-order.' Every address field except Apartment is required (Phone included); empty required fields get a red left bar and a 'Required' tooltip on the focused field.",
+      "Max quantity 4 per SKU; cart quantity is a 'Qty: 1' dropdown menu button.",
+      "Free standard shipping over $74.99 (the $79.99 game qualifies); cart shows a dollar-amount-to-free-shipping progress message.",
+      "No promo-code field, no express pay buttons, no store pickup, no protection plan or membership upsell in cart.",
+      "Two separate cookie consents: OneTrust banner on store.rockstargames.com (ACCEPT ALL COOKIES / REJECT ALL / COOKIE SETTINGS) and Xsolla's own consent checkboxes inside the checkout iframe.",
+      "Cancelling a pre-order is not possible in the store UI — shoppers must use Xsolla's cancel-pre-order form with order number + email.",
+      "Page titles are 'My Cart' and 'My Search'; the site is a Next.js app (product/SKU data is embedded in __NEXT_DATA__ and schema.org JSON-LD with availability 'PreOrder' and availabilityStarts 2026-11-19)."
+    ]
+  },
+  "gaps": [
+    "Xsolla checkout was observed through step 1 (Shipping Address) including its empty-form validation; shipping-method options/prices/ETAs, the payment-method list for project 100851, card field labels, the pay-button label, the confirmation headline and the exact order-number length are still not observed (submitting the address form requires typing personal data). They are filled from Xsolla help/developer pages and best knowledge — marked low/medium confidence.",
+    "Format-level validation messages on the Xsolla address form (invalid email/phone/ZIP) were not observed because no data was typed; only the empty-field 'Required' state was seen. The age gate has no messages (OK stays disabled) and the guest modal has no inputs.",
+    "Charge timing ('charged when ready to ship') is confirmed absent from the store UI through the Shipping Address step, but the payment step was not reached, so whether Pay Station shows a pre-order/charge notice there is unverified. Xsolla's general refund policy ('payment is taken at the time of purchase' for pre-orders) conflicts with its physical-pre-order help page.",
+    "Rockstar Games Account sign-up fields were not verified (never signed in or created an account).",
+    "Page data shows stockAvailable: 0 for both physical SKUs while the Pre-Order Now $79.99 button is enabled and the page says 'While supplies last' — unclear whether stock is untracked for pre-orders or actually limited.",
+    "The Xsolla project-specific refund policy page (project_id 100851) did not render via fetch; relied on store.rockstargames.com/refund-and-return-policy and Xsolla's generic refund policy.",
+    "Header at widths above 1024px (inline menubar vs hamburger) inferred from the DOM (both a menubar and an 'Open menu' button exist); not visually verified at wider viewports.",
+    "No Reddit threads, YouTube walkthroughs or screenshots specific to checking out on the Rockstar Store were found (searched again 2026-09-30); pre-order guides cover platform stores and big-box retailers, not this flow. Xsolla's developer docs block plain fetches and there is no public Pay Station demo (a token is required), so the payment/status screens could not be inspected there either."
+  ]
+}

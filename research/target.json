@@ -1,0 +1,370 @@
+{
+  "slug": "target",
+  "name": "Target",
+  "country": "US",
+  "currency": "USD",
+  "base_url": "https://www.target.com",
+  "confirmed_preorder_live": true,
+  "confidence": "high",
+  "browser_worked": true,
+  "sources": [
+    "https://www.target.com/s?searchTerm=grand+theft+auto+vi",
+    "https://www.target.com/p/grand-theft-auto-vi-playstation-5/-/A-1011529119",
+    "https://www.target.com/p/grand-theft-auto-vi-xbox-series-x-s/-/A-1011545811",
+    "https://www.target.com/p/playstation-5-dualsense-controller-grand-theft-auto-vi-le/-/A-1013468584",
+    "https://www.target.com/s/gta+6",
+    "https://www.target.com/cart",
+    "https://www.target.com/checkout",
+    "https://www.target.com/checkout/start",
+    "https://www.target.com/login",
+    "https://www.target.com/order-confirmation",
+    "https://redsky.target.com/redsky_aggregations/v1/web/product_fulfillment_v1 (tcin=1011529119, store_id=3410, zip=95065; public web key from the page config)",
+    "https://redsky.target.com/redsky_aggregations/v1/web/pdp_client_v1 (tcin=1011529119, pricing_store_id=3410)",
+    "https://redsky.target.com/redsky_aggregations/v1/web/product_summary_with_fulfillment_v1 (tcins=1011529119)",
+    "https://assets.targetimg1.com/webui/top-of-funnel/_next/static/chunks/module-component-product-detail-add-to-cart.10ee02544b89f20d.js (+ lazily loaded chunks incl. 52611.7131e0a230e9362b.js added-to-cart modal, 74752.f65b9b9b79375395.js fulfillment cell, module-component-product-detail-price-v2.38876a5339f19da2.js, module-component-product-detail-finance.085f3524957d1ea0.js)",
+    "https://assets.targetimg1.com/webui/cart/_next/static/chunks/pages/cart-5bc7bc6828ae61b1.js (+ lazily loaded chunks incl. pages/order-confirmation-6164f4d0f9b1de29.js)",
+    "https://assets.targetimg1.com/webui/commerce/checkout/_next/static/chunks/pages/checkout-6bf70d7a72f3a45a.js (+ lazily loaded chunks; build manifest lists /checkout, /checkout/start, /checkout/shipping, /checkout/payment, /checkout/review, /checkout/schedule-delivery, /checkout/paypal, /checkout/digital-delivery, /checkout/gift-option, /checkout/buy-now/checkout)",
+    "https://www.target.com/help/articles/orders-purchases/create-an-order",
+    "https://www.target.com/help/articles/orders-purchases/pre-orders",
+    "https://www.target.com/help/articles/orders-purchases/pre-authorization-charges",
+    "https://www.target.com/help/articles/orders-purchases/track-order",
+    "https://www.target.com/help/articles/orders-purchases/edit-or-cancel-your-order",
+    "https://www.target.com/help/article/000063898",
+    "https://www.target.com/help/articles/payment-options/accepted-payment-options",
+    "https://www.target.com/help/articles/target-account/create-account",
+    "https://www.target.com/help/articles/target-account/manage-account",
+    "https://www.target.com/help/article/000057407",
+    "https://www.target.com/help/articles/target-circle/about-target-circle-360",
+    "https://www.target.com/help/article/000062733",
+    "https://www.target.com/help/articles/delivery-options/drive-up-order-pickup",
+    "https://www.target.com/help/articles/delivery-options/same-day-delivery",
+    "https://www.target.com/circlecard",
+    "https://help.target.com/help/subcategoryarticle?childcat=Pre-orders&parentcat=Orders+&+Purchases=&searchQuery=search+help",
+    "https://help.target.com/help/TargetGuestHelpArticleDetail?articleId=ka95d000000gMevAAE&articleTitle=How+do+I+check+out%3F",
+    "https://help.target.com/help/TargetGuestHelpArticleDetail?articleId=ka91Y000000g0TcQAI&articleTitle=When+will+I+be+charged+for+a+Pre-order+item%3F",
+    "https://help.target.com/help/TargetGuestHelpArticleDetail?articleId=ka95d000000wpXRAAY&articleTitle=Do+you+price+adjust+Pre-order+items?",
+    "https://www.dekudeals.com/articles/pre-order-video-games",
+    "https://www.dekudeals.com/items/grand-theft-auto-vi",
+    "https://slickdeals.net/f/19863597-target-circle-student-offer-grand-theft-auto-vi-playstation-5-or-xbox-series-x-preorder-63-99",
+    "https://www.gtabase.com/articles/gta-6/gta-6-editions-guide-pre-order-bonus-special-editions-content",
+    "https://www.tomsguide.com/news/live/gta-6-pre-orders-news-and-live-updates",
+    "https://windowscentral.com/gta6-faq-how-to-preorder",
+    "https://www.digitalcitizen.life/gta-6-preloads-begin-on-november-12-for-digital-and-physical-code-copies/",
+    "https://www.imore.com/how-order-groceries-target-online-pickup-or-delivery",
+    "https://www.forward2me.com/retailers/target/review/",
+    "https://www.zinc.com/integrations/target",
+    "https://baymard.com/checkout-usability/benchmark/step-type/receipt/17625-target",
+    "https://baymard.com/checkout-usability/benchmark/step-type/payment/106-target-step-4",
+    "https://baymard.com/checkout-usability/benchmark/step-type/delivery-options/4157-target-step-3",
+    "https://baymard.com/checkout-usability/benchmark/step-type/order-review/2211-target-step-9",
+    "https://racklify.com/encyclopedia/query/target-guest/",
+    "https://www.scribd.com/document/848191712/Order-confirmation-Target (public upload of a Target order confirmation: \"Thanks for your order!\", \"Order # 902001863311107\")",
+    "https://assets.targetimg1.com/webui/top-of-funnel/_next/static/chunks/_app-caf4a0027094e71e.js (2026-09-30 PDP app: PREORDER_BUYABLE button map, QuantityPicker with label \"Qty\", ModalHeadingAddedToCart, AddToCartDrawerContent, pickup/arrival strings) + 68009.64f11a0ac815ff64.js (Pickup/Delivery/Shipping tab subtitle logic), 74752.f65b9b9b79375395.js (fulfillment cell: \"Preorder for\", \"Release date: \", \"Delivered on or shortly after release date\", ships-free variants), component-add-to-cart-ModalContentAddToCartSuccess*.js (drawer body and buttons); all 236 chunks listed by the PDP HTML and webpack-175fa07a1d18b59c.js were grepped for Circle Card / 5% price strings",
+    "https://assets.targetimg1.com/webui/cart/_next/static/chunks/pages/cart-5bc7bc6828ae61b1.js (2026-09-30: CheckoutButton with the PayPal / Apple Pay row, checkout button labels) + 5368.292cd36b7f3efb3f.js (Order summary rows + Promo code cell), 7557.73e9d67123c2edcb.js (Save for later / Remove item / Circle Card banner), 3131-db27be76ed992204.js (ProductCardPreorderReleaseDate + ships-free note), pages/order-confirmation-6164f4d0f9b1de29.js (\"Thanks for your order!\", \"Order # \", \"View order details\")",
+    "https://assets.targetimg1.com/webui/commerce/checkout/_next/static/chunks/ (2026-09-30 build ff4ee58b…: pages/checkout-6bf70d7a72f3a45a.js step headings, 667-dcd4dd9635d75e4b.js address fields, 6793-f0c6d075428bc02e.js \"Save & continue\" / \"Save and continue\", 1949-066205ee68ab1fcc.js \"Place your order\", 5687-e941e372a5f99769.js order-summary rows and Circle Card copy)"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI - PlayStation 5 (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+        "url": "https://www.target.com/p/grand-theft-auto-vi-playstation-5/-/A-1011529119",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "1011529119 (TCIN); UPC 710425673795; DPCI 207-44-8488; variation parent TCIN 1012260588",
+        "release_date": "2026-11-12",
+        "availability_label": "Preorder",
+        "delivery_estimate_text": "Search tile: \"Release date Thu, Nov 12\" / \"Ships free - exclusions apply\". Fulfillment API: shipping PRE_ORDER_SELLABLE, Standard Shipping, min/max delivery date 2026-11-12; PDP shipping message \"Arrives on or shortly after release date\"."
+      },
+      {
+        "title": "Grand Theft Auto VI - Xbox Series X|S (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+        "url": "https://www.target.com/p/grand-theft-auto-vi-xbox-series-x-s/-/A-1011545811",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "1011545811 (TCIN); UPC 710425693809; DPCI 207-42-6236; variation parent TCIN 1012260588",
+        "release_date": "2026-11-12",
+        "availability_label": "Preorder",
+        "delivery_estimate_text": "Search tile: \"Release date Thu, Nov 12\" / \"Ships free - exclusions apply\"."
+      }
+    ],
+    "preorder_bonus_text": "Pre-order to receive the Vintage Vice City Pack.",
+    "description_snippet": "Vice City, USA. Jason and Lucia have always known the deck is stacked against them."
+  },
+  "branding": {
+    "logo_text": "Target (red bullseye icon only in the header, link aria-label \"Target home\"; no text wordmark next to it)",
+    "primary_color": "#CC0000",
+    "secondary_color": "#333333",
+    "background": "#FFFFFF",
+    "font_note": "Font stack \"Helvetica for Target\", HelveticaForTarget, Targetica, \"HelveticaNeue for Target\", \"Helvetica Neue\", Helvetica, Arial, sans-serif. Body text #333333 on white. Headings bold; search-results h1 is the query in lowercase. Primary CTA (Preorder / Add to cart) is bold white text on #CC0000 with a fully rounded 999px pill radius, full width of the buy box. Secondary buttons (\"View cart & check out\", \"Save for later\", PayPal) are white pills with a dark gray border (variant \"outlined\"). Search field sits in a light gray #F7F7F7 rounded bar with a red circular search button. Logo link color #666666 (icon fill rendered black/red). Success states use a green checkmark icon (Added to cart, Free shipping row); warnings use orange-dark text (\"Preorders sold out\").",
+    "header_layout": "Row 1 (utility, white): left = location pin button \"Ship to 95065\" (ZIP) and store button \"Scotts Valley\"; right = links Target Circle™, Target Circle™ Card, Target Circle 360™, Registry & Wish List, Weekly Ad, Find Stores. Row 2 (main): red bullseye logo (link \"Target home\") | primary nav \"Categories\" (hamburger / Main menu link to /c/shop-all-categories/-/N-5xsxf), \"Deals\", \"Pickup & delivery\" | centered search box placeholder \"What can we help you find?\" with mic icon (\"search by voice\"), clear (\"reset\") and red round submit (\"search\"), plus an \"Ask Target\" button | right: person icon \"Account, sign in\" (link /account) and cart icon with count badge \"cart 0 items\" (link /cart). Footer email capture: \"Get top deals, latest trends, and more.\" with a \"Sign up\" button. Checkout pages use a reduced header (logo only, data-test header-tgtLogo).",
+    "nav_items": [
+      "Categories",
+      "Deals",
+      "Pickup & delivery",
+      "Target Circle™",
+      "Target Circle™ Card",
+      "Target Circle 360™",
+      "Registry & Wish List",
+      "Weekly Ad",
+      "Find Stores"
+    ]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "What can we help you find?",
+      "search_url_pattern": "/s?searchTerm={q} (spaces as +; paging adds &newSearch=false&Nao=24; facet chips add &facetedValue=<code>)",
+      "search_results_layout": "h1 = query text in lowercase (\"grand theft auto vi\"); count line \"1,000+ results for “grand theft auto vi”\"; toolbar: \"Filter\" (aria \"Filters Menu. 0 applied\"), \"Sort\", chips \"Pickup\" (subtitle \"Ready within 2 hours\"), \"Same-day Delivery\" (\"Get it as soon as today with Shipt\"), \"Shipping\" (\"Free with Target Circle™ Card or $35 orders\"), \"Shop in store\" (\"Find items in stock\"), \"Deals\", \"Compatibility\" (expands to Xbox Series X / Nintendo Switch / Playstation 5 / Playstation 4 / Xbox One). Grid of tiles, each: image with heart button (\"sign in to favorite …\"), optional badge (\"Highly rated\", \"Sponsored\", \"New at ▾\", \"Sale\", \"Rarely returned\", \"New lower price\"), bold price (\"$79.99\"; sale tiles show \"$34.99 reg $39.99\" or \"was $29.49\"), optional \"When purchased online\", brand + title (\"Rockstar Games™ Grand Theft Auto VI - PlayStation 5 (Code in Box, Delivers 11/12/26, Playable 11/19/26)\"), star rating + count + \"Loved for: …\" when reviews exist, fulfillment line (\"Release date Thu, Nov 12\" for pre-orders, otherwise \"Shipping arrives Thu, Oct 1\"), \"Ships free - exclusions apply\", then a red pill CTA: \"Preorder\" (pre-orders; aria \"Preorder <title>\"), \"Choose Options\" (multi-variant), or \"Add to cart\". Sponsored ad slots interleave. Pagination \"page 1 of 50\" with \"Next Page\". A \"Recommended for you\" carousel follows with \"Add to cart\" buttons.",
+      "category_path": "Target › Video Games › PlayStation 5 › PlayStation 5 Games (PDP breadcrumb; links /c/video-games/-/N-5xtg5, /c/playstation-5/-/N-hj96d, /c/playstation-5-games-video/-/N-n19np). Xbox listing breadcrumb assumed Target › Video Games › Xbox Series X|S › Xbox Series X|S Games (not observed)."
+    },
+    "product_page": {
+      "url_pattern": "/p/<slug>/-/A-<TCIN> (e.g. /p/grand-theft-auto-vi-playstation-5/-/A-1011529119); variant buttons link to /p/-/-/A-<TCIN>",
+      "headline": "Grand Theft Auto VI - PlayStation 5 (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+      "variant_selectors": [
+        {
+          "label": "Platform",
+          "type": "buttons",
+          "options": ["PlayStation 5", "Xbox Series X | S"]
+        },
+        {
+          "label": "Edition",
+          "type": "buttons",
+          "options": ["Standard"]
+        }
+      ],
+      "price_display": "Single bold price \"$79.99\" in the price module under the rating row; no strikethrough, no list price, no member price. Target's price API (pdp_client_v1) returns only formatted_current_price \"$79.99\" with price type \"reg\" for both TCINs, and the price module (price-v2) renders server-supplied rows only — so there is NO Target Circle Card 5% line under the price for this item. Re-verified 2026-09-30: the price-v2 chunk contains only \"More info about pricing\" / \"Pricing details\", and none of the 236 JS chunks of the product-page app contain a \"Save 5%\" / \"with Target Circle Card\" price string (the only 5% strings are the birthday-gift and Circle 360 subscription copy). The only Circle Card wording in the buy box is the Shipping tab's ships-free line, which for cardholders renders \"Ships free with your\" + the Target Circle™ Card logo. What the API does supply for the buy box: financing cells — Affirm \"4 interest-free payments or as low as $15/mo\" / \"With Affirm\" and PayPal \"Pay in 4\" / \"Pay in 4 interest-free payments of $20.00\" (is_finance_eligible true; note Target's Affirm details drawer lists \"Preorders\" among items not eligible for Affirm) — plus an add-on \"2 Year Video Games Protection Plan ($75-$99.99) - Allstate\" at $13.00. A \"More info about pricing\" / \"Pricing details\" info link belongs to the price module.",
+      "fulfillment_options": [
+        {
+          "label": "Pickup",
+          "detail": "Fulfillment API (store 3410 Scotts Valley, ZIP 95065): order_pickup UNAVAILABLE, in_store_only UNAVAILABLE, ship_to_store UNAVAILABLE at the selected store; backup store Marina (2306) reports order_pickup PRE_ORDER_SELLABLE with pickup_date 2026-11-12 and a 120-minute pick SLA. Target help: \"We're testing Order Pickup and Drive Up options for select preorder items and at select stores for release date pickup.\" Tab strings in Target's code: unavailable store → \"Not available\" with a \"Check other stores\" link; available pre-order store → green \"Ready on release date\" (or \"Ready on <date>\") under \"Pick up at <store>\" + \"Change\"; excluded items → \"Not eligible for Order Pickup\"; store status labels \"In stock\", \"Limited stock\", \"Out of stock\", \"Not sold at this store\". Tab-subtitle logic verified 2026-09-30 from chunk 68009 of the PDP app: the Pickup tab's subtitle is the pickup promise (\"Ready on release date\" / \"Ready on <date>\" for pre-orders, \"Ready within 2 hours\" for stock items) when the selected store can fulfil, \"Pick it up <date>\" for in-store-only items, otherwise \"Not available\" — so at Scotts Valley this item's Pickup tab reads \"Not available\" (medium-high confidence: API data from 2026-09-29 plus current code, not seen rendered). Release-date Order Pickup / Drive Up for this pre-order is therefore offered only at select stores (e.g. Marina: \"Ready on release date\").",
+          "default": false
+        },
+        {
+          "label": "Delivery",
+          "detail": "Same Day Delivery (Shipt). Fulfillment API: scheduled_delivery UNAVAILABLE at store 3410 for this item; Target help lists \"Select electronics & video games\" among items not available for Same Day Delivery. Tab-subtitle logic verified 2026-09-30 (chunk 68009): with a delivery address set, the subtitle is \"As soon as <first window>\" when Same Day Delivery is available, otherwise \"Find it nearby\" (a nearby store has it) or \"Not available\"; with no delivery address (a typical guest) it reads \"Check availability\". For this item the guest sees \"Check availability\" or, after entering an address, \"Not available\" (medium-high confidence). Same Day Delivery is not offered for this pre-order. Fee from API pay_per_order_charges: scheduled_delivery $9.99 (one_day $7.99); free with Target Circle 360 on $35+.",
+          "default": false
+        },
+        {
+          "label": "Shipping",
+          "detail": "Fulfillment API: shipping_options availability_status PRE_ORDER_SELLABLE, service STANDARD (\"Standard Shipping\"), min/max delivery date 2026-11-12, cutoff 2026-09-30T14:00Z. Verified 2026-09-30 from the PDP bundles: the Shipping tab's subtitle reads \"Preorder\" for a PRE_ORDER_SELLABLE item (chunk 68009 returns \"Preorder\" before any arrival-date text; other items get \"Arrives <date>\" / \"Not available\"). The selected Shipping cell (data-test @web/AddToCart/Fulfillment/PreorderSellable) shows the heading \"Preorder for 95065\" with an \"Edit ZIP code\" link, then in green \"Release date: <date>\" and in gray \"Delivered on or shortly after release date\" (when no release date is known the green line itself reads \"Delivered on or shortly after release date\"), then the ships-free line: \"Ships free with [Target Circle 360 logo] or $35 orders\" for guests, \"Ships free with $35 orders\", \"Ships free with your [Target Circle™ Card logo]\" for cardholders or \"Ships free with your [Circle 360 logo] membership\" for members. \"Arrives on or shortly after release date\" is the pre-order arrival string used for cart/checkout item groups. Free standard shipping on $35+ (or with Target Circle Card / Circle 360), otherwise $5.99. Item cannot ship to PO Boxes, Alaska, Hawaii or US territories.",
+          "default": true
+        }
+      ],
+      "cta_buttons": [
+        {
+          "label": "Preorder",
+          "behavior": "Verified from Target's production add-to-cart bundle: pre-order items render the PREORDER_BUYABLE button — text \"Preorder\", aria-label \"Preorder <title>\", data-test preorderButton, primary red filled pill, full width — with the Pickup intent using PREORDER_ORDER_PICKUP_BUYABLE (same \"Preorder\" text). Clicking adds the item to the cart and opens the \"Added to cart\" modal; the header badge becomes \"cart 1 item\". Disabled variant keeps the text \"Preorder\". Sold-out variant is plain orange text \"Preorders sold out\" with \"Check back on release date\" under a \"Coming Thu, Nov 12\" / \"Coming soon\" heading and a \"Sign in to get notified\" option (notify_me_eligible true). Non-pre-order items read \"Add to cart\". Re-verified 2026-09-30 in the PDP app chunk _app-caf4a0027094e71e.js (PREORDER_BUYABLE → text \"Preorder\", aria \"Preorder {title}\", data-test preorderButton; PREORDER_ORDER_PICKUP_BUYABLE → data-test preorderOrderPickupButton). The PDP renders it through AddToCartButtonForProductContext with isQuantityPicker: true, i.e. the Qty dropdown sits in the same flex row to the left of the button. Still not seen rendered (press-and-hold bot check on 2026-09-30 too)."
+        },
+        {
+          "label": "Qty",
+          "behavior": "Dropdown labeled \"Qty\" rendered inline to the left of the CTA (verified 2026-09-30 in the add-to-cart button code: label \"Qty\", bold value, default the first option, options \"1\"..purchase limit, native <select> on small screens; the picker is shown only while the button is enabled). This item's purchase_limit is 2, so the options are 1 and 2. Feature flag GLOBAL_ADD_TO_CART_QUANTITY_STEPPER_ENABLED is true, so after adding, the button can turn into a −/+ quantity stepper (observed in code, not rendered)."
+        },
+        {
+          "label": "Buy now",
+          "behavior": "Outlined pill (data-test buy-now-button) present in the add-to-cart bundle for signed-in guests (\"Sign in to buy now\" otherwise); opens a nested one-click checkout drawer (\"Confirm your order\" → \"Order confirmed\" → \"Thank you for your order!\" with \"View order details\" and \"Continue shopping\"). Whether it is shown for this pre-order was not observed (low confidence)."
+        },
+        {
+          "label": "Add to list",
+          "behavior": "Registry / wish list; preceded by \"Eligible for registries and wish lists\" and a \"Sign in\" button (requires account)."
+        },
+        {
+          "label": "sign in to favorite … to keep tabs on it",
+          "behavior": "Heart icon on the image gallery; prompts sign-in."
+        },
+        {
+          "label": "Show more images",
+          "behavior": "Expands the 13-image stacked gallery; each image has a \"view full screen\" button."
+        }
+      ],
+      "quantity_selector": true,
+      "upsells": [
+        "Financing cells under the price: Affirm \"4 interest-free payments or as low as $15/mo\" / \"With Affirm\" and PayPal \"Pay in 4\" / \"Pay in 4 interest-free payments of $20.00\" (from pdp_client_v1; Affirm's details drawer excludes \"Preorders\")",
+        "Product add-on: \"2 Year Video Games Protection Plan ($75-$99.99) - Allstate\" for $13.00 (ProductAddOns module)",
+        "Registry/wish-list block: \"Eligible for registries and wish lists\" with \"Sign in\" and \"Add to list\" buttons",
+        "Sponsored product carousel and multiple recommendation carousels (pdp_mix_match, pdp_complimentary_visual, bundle, sponsored_items) below the buy box",
+        "\"Shop all Rockstar Games\" brand link above the title",
+        "No Target Circle Card 5% line under the price for this item (price API returns a plain regular price)"
+      ],
+      "notable_text": [
+        "Title suffix: (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+        "Search tile: \"Release date Thu, Nov 12\" and \"Ships free - exclusions apply\"",
+        "\"0 out of 5 stars\" / \"be the first!\" / \"12 Questions\"",
+        "At a glance: \"Compatible with PS5\"",
+        "Highlights: \"This product will only contain a download code inside the box to support pre-load starting on November 12. A disc will not be included in the box. Code can only be used by users holding an account for PlayStation® registered to the US or Canada.\"",
+        "Highlights: \"Pre-order to receive the Vintage Vice City Pack.\"",
+        "Highlights: \"Grand Theft Auto VI is a single-player experience.\"",
+        "Specifications: Format \"Download Code in Box\"; Street Date \"November 12, 2026\"; Multiplayer \"Single Player Only\"; ESRB \"RP - rating pending\"; TCIN 1011529119; UPC 710425673795",
+        "Shipping & Returns: item cannot be shipped to PO Boxes, Alaska, Hawaii or US territories; \"This item must be returned within 30 days of the date it was purchased in store, delivered to the guest, delivered by a Shipt shopper, or picked up by the guest.\"",
+        "Accordion sections in order: Details (Highlights + Description), Specifications, Shipping & Returns, Q&A (12); then \"Guest ratings & reviews (0)\" and \"Disclaimer\"",
+        "Xbox listing: Model Compatibility \"Xbox Series S, Xbox Series X\"; UPC 710425693809; \"We regret that this item cannot be shipped to PO Boxes.\"",
+        "Product data: purchase_limit 2; is_gift_wrap_eligible true; cart_add_on_threshold 35; street_date 2026-11-12; free_shipping.enabled true; eligibility_rules {hold: {is_active: true}}",
+        "Fulfillment API (store 3410 / ZIP 95065): shipping PRE_ORDER_SELLABLE (Standard, 2026-11-12); order_pickup UNAVAILABLE at Scotts Valley, PRE_ORDER_SELLABLE at backup store Marina (pickup_date 2026-11-12); scheduled_delivery UNAVAILABLE; pay_per_order_charges one_day 7.99 / scheduled_delivery 9.99"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "drawer",
+      "contents": "Verified 2026-09-30 from Target's production PDP bundles (_app chunk: AddToCartDrawerContent + ModalHeadingAddedToCart; lazy chunks component-add-to-cart-ModalContentAddToCartSuccess and …SuccessV1): clicking \"Preorder\" opens Target's add-to-cart drawer (the code consistently calls the container a drawer — closeAddToCartDrawer, SUPPRESS_CART_SUCCESS_DRAWER, nicollet type \"drawer\" — i.e. a panel that slides in from the right on desktop and up from the bottom on small screens; geometry medium confidence, contents high). Heading: a 24px green checkmark icon followed by \"Added to cart\". Body, in order: the added item card (image + title), a gray line \"Edit delivery method in cart\", an orange \"This item only ships with $35 orders.\" line for add-on items only, an \"Available deals\" block with Target Circle offer checkboxes when offers apply (toast \"Check the box to get the savings!\"), a protection-plan (Allstate) offer card when the item is ESP-eligible (this game is: the $13.00 2-year plan), then two stacked full-width pills — primary (red) \"Continue shopping\", which closes the drawer, and outlined \"View cart & check out\", which links to /cart — followed by a recommendations carousel keyed to the added TCIN. Target help confirms the two choices as \"view cart & check out\" or \"continue shopping\". Error heading: \"Item not added to cart\". The header cart badge increments (\"cart 1 item\").",
+      "buttons": ["Continue shopping", "View cart & check out"]
+    },
+    "cart": {
+      "url": "https://www.target.com/cart",
+      "line_item_fields": [
+        "image",
+        "title (link to PDP); marketplace items add \"Sold & shipped by <partner>\"",
+        "fulfillment group heading per delivery method with a change-delivery-method radio group: \"Shipping\" / \"Order Pickup\" (\"Pick it up inside the store\") / \"Drive Up\" (\"We bring it out to your car\") / Same Day Delivery, each with an availability count and \"Free\" price note; \"Change store\" link for pickup",
+        "price",
+        "Qty dropdown (label \"Qty\", options 1..purchase limit; \"Max quantity reached\" when capped)",
+        "\"Save for later\" (outlined pill or text button, aria \"Save for later <title>\")",
+        "remove (\"Remove\" / \"Remove item\"; Target help: the X in the upper right of the item tile or reduce the qty to 0)",
+        "pre-order note (verified 2026-09-30, cart chunk 3131 ProductCardPreorderReleaseDate): a line under the title reading \"Release date Thu, Nov 12\" (data-test preorderStreetDate; \"Release date to be announced\" when no date; date format iii, MMM d), immediately followed by the shipping note — \"Ships free - exclusions apply\" (link) for guests, \"Ships free with $35 orders\", \"Ships free with [Circle 360 / Circle Card logo]\" for members, or \"Shipping dates may vary\"; add-on items show \"Only ships with $35 orders\""
+      ],
+      "summary_fields": ["Order summary", "Subtotal", "Discounts (when applicable)", "Estimated taxes", "Regional fees / Handling fee (when applicable)", "Total", "Free shipping row with green checkmark (or \"Unlimited Same Day Delivery\" for Circle 360 members) and an info link to the shipping-exclusions drawer", "Sticky header line \"$79.99 est. total · 1 item\" (reads \"subtotal\" while a $35 threshold is unmet)"],
+      "promo_code_field": true,
+      "checkout_button_label": "Check out (signed in; \"Check out ($35 minimum)\" for Same Day Delivery carts under the threshold, \"Check out all\" for mixed carts, per-group \"Check out N items\" rows). Guests see \"Sign in to check out\" (A/B variants \"Secure checkout\" / \"Continue to checkout\"). Target help's \"I'm ready to check out\" is outdated.",
+      "express_options": ["PayPal (verified 2026-09-30, cart page chunk CheckoutButton: an outlined full-width pill showing the PayPal logo, aria \"Pay with PayPal\", data-test paypalButton, rendered in the grid row directly under the red \"Check out\" button inside the order-summary column; guests get \"Check out with PayPal — Sign in to your Target account to use PayPal.\")", "Apple Pay (native <apple-pay-button>, data-test applePayButton, shown only where Apple Pay is available, e.g. Safari; sits beside PayPal in the same row under \"Check out\" — each half width when both show, full width otherwise; Apple Pay sheet lines \"Subtotal\", \"Estimated tax\", \"Target\"; same sign-in requirement)", "Affirm messaging (\"Pay with Affirm\" info)"],
+      "upsells": [
+        "Target Circle Card banner (\"Learn more about Target Circle Card offer\" → \"Learn more\") and the footnote \"*Total savings may differ at checkout based on Target Circle™ Card savings and other discounts\"",
+        "Free-shipping row: threshold text \"Spend $35 or more using any payment method (excludes AK, HI and U.S. protectorates).\" (this order is over $35 so it reads as free)",
+        "Promo code cell (verified 2026-09-30, cart chunk 5368 — the same module that renders \"Order summary\" / Subtotal / Discounts / Estimated taxes / Regional fees / Handling fee / Total): a row in the order-summary column with a promo-tag icon, h3 \"Promo code\" and a trailing \"Add\" link (aria \"Add for promo code\", data-test add-promo-code-btn; becomes \"Edit\" once a code is applied) that opens the \"Add promo code\" modal-drawer (data-test promo-code-modal-drawer) with a single \"Promo code\" input (4–36 chars) and a full-width \"Apply\" button; toasts \"Promo code applied.\" / \"Promo code removed.\"; errors \"Promo code doesn't apply to any item in your cart\", \"Promo code is already applied\"",
+        "Save-for-later section (empty state \"Save your items for later\" / \"If you aren't ready to buy, select Save for later. We'll keep the item safe here.\"; max 50 saved items)",
+        "Recommendation carousel under the cart; Target Circle 360 banner (\"Skip the $9.99 delivery fee all season long.\")",
+        "Empty-cart page (lazy EmptyCartPage) shows only the header, an email sign-up box (\"Get top deals, latest trends, and more.\" / \"Sign up\"), an ad slot and the footer"
+      ]
+    },
+    "checkout": {
+      "url": "https://www.target.com/checkout (page title \"Checkout : Target\"; indexed entry https://www.target.com/checkout/start; per-step routes /checkout/shipping, /checkout/payment, /checkout/review, /checkout/schedule-delivery, /checkout/paypal, /checkout/digital-delivery, /checkout/gift-option; unauthenticated visitors are sent to https://www.target.com/login and returned after sign-in)",
+      "auth": {
+        "guest_allowed": false,
+        "account_required": true,
+        "screen_text": "Target help: \"You'll need to sign in to a Target account in order to proceed with checkout.\" and \"A Target account is required to place an order in the Target app or on Target.com.\" The sign-in page (title \"Login: Target\") offers email + password, \"Sign in with passkey\" (Face ID / fingerprint / device PIN) or a phone-number verification code, and a \"Create your Target account\" link. No guest option. The cart's own button for guests reads \"Sign in to check out\".",
+        "guest_button_label": null,
+        "signin_fields": ["Email address", "Password"]
+      },
+      "steps": [
+        {
+          "name": "Sign in",
+          "fields": [
+            { "label": "Email address", "type": "email", "required": true },
+            { "label": "Password", "type": "text", "required": true },
+            { "label": "Keep me signed in", "type": "checkbox", "required": false }
+          ],
+          "options": ["Sign in with password", "Sign in with passkey", "Get a verification code by phone", "Create your Target account"],
+          "button_label": "Sign in",
+          "notes": "Mandatory; there is no guest path. Password rules for new accounts: 8–20 characters with 2 of lowercase/uppercase/numbers/special (no <>)."
+        },
+        {
+          "name": "Shipping address",
+          "fields": [
+            { "label": "First name", "type": "text", "required": true },
+            { "label": "Last name", "type": "text", "required": true },
+            { "label": "Address line 1", "type": "text", "required": true },
+            { "label": "Address line 2 (optional) — revealed by a \"+ Address line 2\" link", "type": "text", "required": false },
+            { "label": "Zip code", "type": "tel", "required": true },
+            { "label": "City", "type": "text", "required": true },
+            { "label": "State", "type": "select", "required": true },
+            { "label": "Phone number", "type": "tel", "required": true },
+            { "label": "Set as default address", "type": "checkbox", "required": false },
+            { "label": "Delivery instructions (optional)", "type": "text", "required": false }
+          ],
+          "options": [
+            "Shipping (step heading \"Shipping address\"; variants \"Home address\" with subheading \"Used to calculate any applicable tax\", or \"Address\"; service \"Standard Shipping\", pre-order line shows the release date instead of an arrival date)",
+            "Order Pickup / Drive Up cell (\"Order Pickup\" or \"Drive Up\" heading; \"Pickup person\" section with an \"Add\" link for an alternate pickup person)",
+            "Same Day Delivery step (\"Delivery window\", \"Delivery date\", \"Substitution preferences\" incl. \"Text me\", \"Delivery instructions (optional)\", \"Bag preferences\", \"Leave my delivery order at the door\")"
+          ],
+          "button_label": "Save & continue",
+          "notes": "Field labels, headings and the \"Save & continue\" label verified from Target's checkout bundle and re-verified 2026-09-30 from the current build (chunks 667, 6793, pages/checkout): the step heading is \"Shipping address\" (or \"Address\" when Target's single-address drawer flag is on; \"Home address\" with \"Used to calculate any applicable tax\" for digital-only orders); fields First name / Last name / Address line 1 / Address line 2 (optional) / Zip code / City / State / Phone number / Set as default address / Delivery instructions (optional); the address form's submit button is \"Save & continue\" (\"Save\" when editing an existing address). Checkout is one page: each step is a container with active/pending states (data-test STEP_SHIPPING_CONTAINER etc.) that pushes its own /checkout/<step> URL. Address line 1 has typeahead suggestions; validation shows \"Verify your address\" with \"Use verified address\" / \"Use unverified address\" / \"Use selected address\", or errors such as \"Check your ZIP code and try again.\", \"Double-check your unit info and try again.\", \"Can't ship to your address\". Toasts: \"Shipping address added\" / \"updated\" / \"removed\". Changing the shipping address during checkout forces CVV re-entry (Target help). A collapsed \"Cart\" items accordion sits above the steps."
+        },
+        {
+          "name": "Payment",
+          "fields": [
+            { "label": "Card number", "type": "text", "required": true },
+            { "label": "Exp MM/YY", "type": "text", "required": true },
+            { "label": "Security code (placeholder \"Enter CVV\"; help \"This 3-digit code can be found on the back of your card.\" / Amex \"This 4-digit code can be found on the front of your card.\")", "type": "text", "required": true },
+            { "label": "Name on card", "type": "text", "required": true },
+            { "label": "Billing address (h3; defaults to the shipping address; \"Add a new billing address\")", "type": "text", "required": true },
+            { "label": "Save as default payment card", "type": "checkbox", "required": false },
+            { "label": "Gift card: Card number / Access number (\"Pay with a Target GiftCard\", button \"Apply\")", "type": "text", "required": false },
+            { "label": "Promo code (drawer \"Add promo code\", button \"Apply\")", "type": "text", "required": false }
+          ],
+          "options": ["Add Credit or Debit card", "Target Circle Card", "Pay with PayPal (\"When you place your order you’ll be taken to PayPal to finalize your purchase.\")", "Pay with Apple Pay", "Pay with Cash App (\"You’ll be redirected to Cash App Pay to approve your purchase and place your order.\")", "Pay with Affirm (\"When you place your order you’ll be taken to Affirm’s website to confirm your loan and complete your purchase.\")", "Pay with PayPal Pay in Four", "Add gift card", "Add EBT card / HRA-FSA card", "Pay with 2 credit or debit cards (split payment)", "Target Circle Rewards"],
+          "button_label": "Save and continue",
+          "notes": "Payment method list verified from Target help; form labels verified from the checkout bundle (\"Select payment type\" heading; empty state cell \"Add payment\" with an \"Add\" link, becoming \"Payment\" with \"Edit\"). Button (re-verified 2026-09-30, chunk 6793) reads \"Save and continue\" on desktop, \"Save & continue\" on small screens and \"Save\" when editing a saved card; a \"Confirm CVV\" prompt appears when a saved card needs its security code again (placeholder \"Enter CVV\", error \"CVV is required\"). Circle Card copy inside checkout: \"Target Circle™ Card holders:\" and \"Splitting this payment with a non-Target card will reduce 5% savings on this order and increase your order total.\"; Circle 360 upsell: \"*Reg. $99/year, or $49/year with a Target Circle Card\" / \"Auto-renews at $49/year with Target Circle™ Card.³ Turn off renewal anytime.\" Toasts \"Card added\" / \"Card updated\" / \"Card removed\"; error \"Card number is required\" / \"Invalid card number. Try again\"."
+        },
+        {
+          "name": "Review & place order",
+          "fields": [],
+          "options": ["Collapsible \"Order summary\" (subheading \"$<total> total\") with rows Subtotal, Discounts, Estimated taxes, Regional fees, Handling fee, Total, \"Order savings\"; an \"Order total\" cell with receipt icon; item groups by fulfillment method with address or store; payment (card brand + last 4)"],
+          "button_label": "Place your order",
+          "notes": "Single-page accordion of steps (each step has active/pending states and pushes its own /checkout/<step> URL). The place-order row is sticky and reads \"Place your order\" (data-test placeOrderButton; re-verified 2026-09-30 in chunk 1949 — choosing Affirm / PayPal / Cash App swaps it for an outlined \"Pay with Affirm\"-style button), followed by \"By placing an order, you agree to the following:\" with links \"Target terms and conditions\" and \"privacy policy\". A terms modal variant says \"Review the following terms, then select Agree to continue placing your order.\" with an \"Agree\" button. Leaving shows \"Now leaving checkout\" with \"Go to homepage\" / \"Return to cart\". Target help's older label \"Place my order\" no longer matches the bundle."
+        }
+      ],
+      "payment_methods": [
+        "Target Circle™ Card (Target Debit Card, Target Credit Card, Target™ Mastercard®, Target Circle Card Reloadable Account)",
+        "Visa®, Mastercard®, American Express®, Discover®/Novus®, Target PCard, foreign-bank credit cards",
+        "Apple Pay®",
+        "Cash App Pay",
+        "PayPal® (not for Target Plus™ Partner items)",
+        "Installment plans: Affirm, Sezzle, PayPal® Pay in 4, Afterpay, Klarna, Zip",
+        "Target GiftCards, Target eGiftCards, mobile Target GiftCards",
+        "Third-party gift cards from American Express, Discover, Visa and Mastercard",
+        "HRA / FSA / HSA healthcare cards",
+        "SNAP EBT (online; not for Target Plus items; not with split tenders)"
+      ],
+      "card_fields": ["Card number", "Exp MM/YY", "Security code", "Name on card", "Billing address (defaults to shipping; \"Add a new billing address\")"],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "Authorization hold when the order is placed and again 7 days before the street date; full charge when the item ships (pickup orders are charged when marked Ready for Pickup).",
+      "charge_policy_text": "You won't be charged for your order until it ships or is ready for pickup. A new authorization hold will be placed 7 days before the street date. At the time of shipment, we will invoice you for the exact price of the item.",
+      "review_step": {
+        "exists": true,
+        "place_order_label": "Place your order",
+        "shows": ["items grouped by fulfillment method with release/arrival date", "delivery address or pickup store", "payment method", "Order summary: Subtotal", "Discounts", "Estimated taxes", "Regional fees / Handling fee", "Total", "Order savings / Circle offers", "\"By placing an order, you agree to the following:\" + Target terms and conditions + privacy policy"]
+      },
+      "confirmation": {
+        "headline": "Thanks for your order!",
+        "order_number_format": "Displayed as \"Order # <number>\" (page title \"Order confirmation : Target\", route /order-confirmation). Target.com order numbers are 15 digits with no separators: a publicly posted Target order confirmation (Scribd document 848191712, a store-pickup order) shows \"Order # 902001863311107\" under \"Thanks for your order!\". The leading digits vary by order type — from memory, shipped Target.com orders usually start 102… (e.g. 102001234567890): prefix low confidence, 15-digit length medium-high.",
+        "contents": ["h1 \"Thanks for your order!\" preceded by a 32px green checkmark (verified 2026-09-30 in the order-confirmation chunk; Drive Up orders instead show the h1 \"Next, make sure you have the Target app\" with a \"Get the app\" button)", "\"Order # <number>\"", "\"We’ll send confirmations and order updates to <email>\" (also \"Updates will be sent to:\" / \"Via text to:\" / \"Add your number\")", "item groups per fulfillment method: \"<n> item(s)\", \"Arriving <date>\" / \"Arriving by <date>\" / \"Arrives for pickup by <date>\" (pre-orders: on or shortly after the release date), \"Sold & shipped by <partner>\" for marketplace items", "delivery address (\"<city>, <state> <zip>\") or pickup store; guest data masked \"Not displayed for guest privacy\"", "outlined button \"View order details\" (aria \"view details for order #<n>\", link /orders/<id>)", "\"Need to make changes?\" → \"Edit your order as soon as possible.\"", "pickup orders: \"We’ll let you know when it’s ready. Don’t forget to use the Target app to tell us you’re on the way.\" / \"Want Drive Up instead?\" / \"Next, make sure you have the Target app\" / \"Get the app\"", "Target Circle 360 upsell and a \"Got shopping preferences?\" survey (\"Please share your experience.\")"],
+        "email_sent_text": "We’ll send confirmations and order updates to <email> (Target help: \"You'll receive an order confirmation email after you place your order.\")"
+      }
+    },
+    "account": {
+      "required_for_purchase": true,
+      "signup_fields": ["Email address", "First name", "Last name", "Mobile phone (optional)", "Passkey (recommended) or Password (8–20 characters, 2 of lowercase/uppercase/numbers/special, no <>)"],
+      "login_fields": ["Email address", "Password (or passkey, or phone verification code)"],
+      "membership_program": "Target Circle (free loyalty, required account). Target Circle 360: $99/year ($8.25/month) or $10.99/month, $49/year for Target Circle Card holders, 14-day free trial; unlimited $35+ same-day delivery, free 2-day shipping. Target Circle™ Card (store debit/credit): 5% off, free 2-day shipping (marketing: \"Save 5% instantly, in-store and online\")."
+    },
+    "quirks": [
+      "No guest checkout: a Target account and sign-in are mandatory before the Shipping/Payment steps; the cart button itself says \"Sign in to check out\" for guests and \"Check out\" once signed in (not \"I'm ready to check out\" as Target help still says).",
+      "The \"physical\" listing is Code in Box — a download code, no disc. The title itself carries \"(Code in Box, Delivers 11/12/26, Playable 11/19/26)\": Target's street date is Nov 12 (pre-load) while the game unlocks Nov 19.",
+      "Only the Standard edition is sold; no Ultimate or Collector's edition on Target (Ultimate is digital-only through platform stores). A GTA VI limited-edition DualSense controller ($84.99, Preorder, release date Thu, Nov 19) sits beside the game in search.",
+      "PS5 and Xbox are separate TCINs under one variation parent (1012260588); the PDP \"Platform\" buttons navigate to the other listing rather than swapping in place.",
+      "Purchase limit is 2 per order (product data purchase_limit: 2), so the Qty dropdown offers 1–2.",
+      "Header carries a ZIP (\"Ship to 95065\") and a store (\"Scotts Valley\") context that drives Pickup/Delivery availability. For this pre-order at that store the fulfillment API says Pickup and Same Day Delivery are UNAVAILABLE and only Shipping is PRE_ORDER_SELLABLE; a backup store (Marina) offers release-date Order Pickup, matching Target's \"testing Order Pickup and Drive Up options for select preorder items and at select stores\" note.",
+      "Pre-order charge model: authorization hold at order, a new hold 7 days before street date, full charge on ship; price invoiced at shipment; \"Request cancellation\" is available in order details until the item processes for shipping.",
+      "Shipping restriction on this item: no PO Boxes, Alaska, Hawaii or US territories.",
+      "Bot detection (HUMAN Security / PerimeterX enforcer script): an automated browser hit a \"Quick verification — Press & hold to confirm you're a human (and not a bot)\" interstitial on the PDP on 2026-09-29 and again on 2026-09-30 (when the search page also came back degraded: empty query, \"We couldn’t find a match for your search.\"); the buy box stays as skeleton placeholders behind it. Page props expose isAiAgent/isBot flags and a GLOBAL_AGENTIC_COMMERCE_LATEST_VERSION_ENABLED feature flag. Server-rendered HTML and the static JS bundles are reachable without the check; the Redsky JSON APIs were reachable on 2026-09-29 but answered curl with HTTP 435 px-captcha on 2026-09-30.",
+      "Server-rendered fallback for the buy box is a disabled \"Add to cart\" button; the hydrated pre-order button reads \"Preorder\".",
+      "Search tile CTA reads \"Preorder\" for pre-orders versus \"Choose Options\" / \"Add to cart\" for other tiles; the heart icon is labeled \"sign in to favorite\".",
+      "Cart holds up to 99 items and adding does not reserve stock (\"Your cart is already full…\", \"The maximum quantity of this item has already been added to your cart.\"); orders mixing Target, Target Plus Partner and Same Day Delivery items split into separate order numbers and confirmation emails.",
+      "Changing the shipping address during checkout forces re-entry of the card CVV.",
+      "Signed-in Circle offers (e.g. a 20% student/teacher offer seen Aug 2026 bringing the game to $63.99) apply at checkout.",
+      "Affirm financing cells appear under the price, but Target's Affirm details list \"Preorders\" among items not eligible for Affirm.",
+      "Checkout is one page but each step (Shipping → Payment → Review) pushes its own URL (/checkout/shipping, /checkout/payment, /checkout/review); the confirmation lives in the cart app at /order-confirmation.",
+      "A signed-in \"Buy now\" one-click path (nested drawer: \"Confirm your order\" → \"Order confirmed\" → \"Thank you for your order!\") exists in the PDP code; whether it shows for pre-orders is unverified.",
+      "The add-to-cart confirmation is a drawer, not a redirect to the cart, and its red primary button is \"Continue shopping\" — \"View cart & check out\" is the outlined secondary.",
+      "The PDP Shipping tab's one-word subtitle for a pre-order is \"Preorder\" (not an arrival date); the selected cell then reads \"Preorder for <ZIP>\", \"Release date: <date>\" and \"Delivered on or shortly after release date\"."
+    ]
+  },
+  "gaps": [
+    "Nothing past the PDP shell was seen rendered: the press-and-hold bot check returned on 2026-09-30 (PDP) and the search page came back degraded, so the buy box, add-to-cart drawer, cart, checkout steps and confirmation page are documented from Target's current production JS bundles (exact label strings plus the logic that picks them) and the 2026-09-29 fulfillment API data, not from screenshots. Which variant renders in a few spots (Delivery tab \"Check availability\" vs \"Not available\"; drawer geometry on desktop; \"Shipping address\" vs \"Address\" heading, which depends on a feature flag) is inferred (medium confidence).",
+    "Order-number prefix: the 15-digit length is supported by one public example (902001863311107, a pickup order); whether shipped Target.com orders start with 102… is from memory (low confidence). No Target help page publishes the format.",
+    "Whether the \"Buy now\" button and the post-add quantity stepper (GLOBAL_ADD_TO_CART_QUANTITY_STEPPER_ENABLED) appear for this pre-order was not observed.",
+    "Baymard's Target cart/checkout/receipt pages are paywalled; YouTube walkthrough transcripts could not be retrieved.",
+    "Xbox listing breadcrumb was not observed (assumed by analogy with the PS5 listing)."
+  ]
+}

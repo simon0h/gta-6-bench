@@ -1,0 +1,328 @@
+{
+  "slug": "bestbuy",
+  "name": "Best Buy",
+  "country": "US",
+  "currency": "USD",
+  "base_url": "https://www.bestbuy.com",
+  "confirmed_preorder_live": true,
+  "confidence": "high",
+  "browser_worked": true,
+  "sources": [
+    "https://www.bestbuy.com/site/searchpage.jsp?st=grand+theft+auto+vi",
+    "https://www.bestbuy.com/site/searchpage.jsp?id=pcat17071&qp=category_facet%3DPhysical+Video+Games%7Epcmcat1487699281907&st=grand+theft+auto+vi",
+    "https://www.bestbuy.com/product/grand-theft-auto-vi-code-in-box-delivers-11-12-26-playable-11-19-26-playstation-5/JXHY5RW2JZ/sku/6684968",
+    "https://www.bestbuy.com/product/grand-theft-auto-vi-code-in-box-delivers-11-12-26-playable-11-19-26-xbox-series-x-xbox-series-s/JXHY5RKPCY",
+    "https://www.bestbuy.com/site/video-game-franchises/grand-theft-auto/pcmcat301800050002.c?id=pcmcat301800050002",
+    "https://www.bestbuy.com/cart",
+    "https://www.bestbuy.com/identity/signin?token=<checkout token>",
+    "https://www.bestbuy.com/identity/global/signin",
+    "https://www.bestbuy.com/checkout/r/fast-track",
+    "https://www.bestbuy.com/checkout/c/standard",
+    "https://www.bestbuy.com/site/help-topics/help-center/pcmcat204400050014.c?id=pcmcat204400050014",
+    "https://www.bestbuy.com/site/help-topics/shipping-delivery-store-pickup/pcmcat316000050003.c?id=pcmcat316000050003",
+    "https://www.bestbuy.com/site/help-topics/shipping-costs-and-timing/pcmcat203400050006.c?id=pcmcat203400050006",
+    "https://www.bestbuy.com/site/help-topics/free-shipping/pcmcat276800050002.c?id=pcmcat276800050002",
+    "https://www.bestbuy.com/site/help-topics/store-pickup/pcmcat204400050014.c?id=pcmcat204400050014",
+    "https://www.bestbuy.com/site/help-topics/how-to-change-shipping/pcmcat316000050009.c?id=pcmcat316000050009",
+    "https://www.bestbuy.com/site/help-topics/return-exchange-policy/pcmcat260800050014.c?id=pcmcat260800050014",
+    "https://www.bestbuy.com/site/help-topics/terms-and-conditions/pcmcat204400050067.c?id=pcmcat204400050067",
+    "https://www.bestbuy.com/site/financing-rewards/zip/pcmcat1727878406362.c?id=pcmcat1727878406362",
+    "https://www.bestbuy.com/site/electronics/best-buy-membership/pcmcat1679668833285.c?id=pcmcat1679668833285",
+    "https://slickdeals.net/f/19843152-best-buy-plus-total-members-grand-theft-auto-vi-ps5-xsx-xss-80-get-10-rewards-free-s-h",
+    "https://www.dekudeals.com/articles/pre-order-video-games",
+    "https://querysprout.com/best-buy-pre-order-policy/",
+    "https://www.gematsu.com/2026/06/grand-theft-auto-vi-pricing-ultimate-edition-and-pre-order-bonuses-announced",
+    "https://hothardware.com/news/gta-6-preorder-guide-read-carefully-before-buying",
+    "https://www.shacknews.com/article/149756/gta-6-pre-order-guide",
+    "https://manofmany.com/entertainment/gaming/gta-6-pre-order-pricing-bonuses-release-date",
+    "https://www.gfinityesports.com/article/gta-6-pre-orders-explained-where-to-buy-and-what-to-expect",
+    "https://docs.runalloy.com/best-buy/shopper-experience",
+    "https://baymard.com/checkout-usability/benchmark/step-type/receipt/8644-best-buy-step-8",
+    "https://www.videogameschronicle.com/news/best-buy-tells-affiliates-its-starting-gta-6-pre-orders-next-week-sparking-speculation-that-a-new-trailer-is-coming/",
+    "https://www.bestbuy.com/checkout/r/thank-you",
+    "https://www.bestbuy.com/profile/ss/guestorderlookup",
+    "https://github.com/UncleBen58/best-buy-sniper/blob/main/src/pages/bestbuy.ts",
+    "https://github.com/Strip3s/PhoenixBot/blob/master/sites/bestbuy.py",
+    "https://github.com/nubonics/harebot/blob/master/sites/bestbuy.py",
+    "https://github.com/eg9y/PS5bot/blob/master/BESTBUY_FLOW.md",
+    "https://github.com/kkapuria3/BestBuy-GPU-Bot/blob/main/best-buy-tm.js",
+    "https://github.com/ThreadedLinx/BestBuy_Checkout_Bots/blob/master/RTX_3080/NVIDIA_GeForce_RTX_3080.py",
+    "https://github.com/ahmedmani/Phoenix-Bot-2.0/blob/main/platforms/bestbuy.py",
+    "https://github.com/LeonShams/BestBuyBulletBot/blob/main/best_buy_bullet_bot/browser.py",
+    "https://github.com/nickconnors/RTX-3070-Best-Buy-Bot/blob/main/bot.py",
+    "https://www.bestbuy.com/~assets/bby/_com/checkout.0213d23b5b614f9df8b0d2e8f458c559.js",
+    "https://www.bestbuy.com/~assets/bby/_com/payment-component-forms/index-6.3.113.js",
+    "https://www.bestbuy.com/~assets/bby/_com/v2Runtime.e40289c2328a3b46930df7549f18f305.js",
+    "https://www.bestbuy.com/~assets/bby/_com/checkoutV2.6d9fd3aa580a8da24d26969d0a474c44.js",
+    "https://www.bestbuy.com/~assets/bby/_com/checkoutV2.9a926e243a05907f9b284ac7ff00fab7.js",
+    "https://www.bestbuy.com/~assets/bby/_com/checkoutV2.643a2da0787194a51e8254f3adc5d382.js",
+    "https://www.bestbuy.com/~assets/bby/_com/checkoutV2.0a5dd269bfaccde29a44e6788b32927f.js",
+    "https://www.bestbuy.com/~assets/bby/_com/checkoutV2.33050a9e377b2bfcb6e357869df9e027.js",
+    "https://wesupplylabs.com/bestbuy-ux-post-purchase-experience-review/",
+    "https://www.enervee.com/support/i-placed-my-order-where-are-my-order-details",
+    "https://support.ouraring.com/hc/articles/15920540453011-Purchases-from-Best-Buy-US"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI - (Code in Box, Delivers 11/12/26, Playable 11/19/26) - PlayStation 5",
+        "url": "https://www.bestbuy.com/product/grand-theft-auto-vi-code-in-box-delivers-11-12-26-playable-11-19-26-playstation-5/JXHY5RW2JZ/sku/6684968",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "SKU 6684968 (product id JXHY5RW2JZ)",
+        "release_date": "2026-11-12",
+        "availability_label": "Pre-order",
+        "delivery_estimate_text": "Pickup: Ready on Release Date / Shipping: Delivered on or shortly after Release Date"
+      },
+      {
+        "title": "Grand Theft Auto VI - (Code in Box, Delivers 11/12/26, Playable 11/19/26) - XBOX Series X, XBOX Series S",
+        "url": "https://www.bestbuy.com/product/grand-theft-auto-vi-code-in-box-delivers-11-12-26-playable-11-19-26-xbox-series-x-xbox-series-s/JXHY5RKPCY",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "SKU 6684969 (product id JXHY5RKPCY)",
+        "release_date": "2026-11-12",
+        "availability_label": "Pre-order",
+        "delivery_estimate_text": "Pickup: Ready on Release Date / Shipping: Delivered on or shortly after Release Date"
+      }
+    ],
+    "preorder_bonus_text": "Pre-order to receive the Vintage Vice City Pack.",
+    "description_snippet": "Vice City, USA. Jason and Lucia have always known the deck is stacked against them."
+  },
+  "branding": {
+    "logo_text": "Best Buy (yellow price-tag logo with 'BEST BUY' wordmark; the header logo link is labelled 'best buy home')",
+    "primary_color": "#0046BE",
+    "secondary_color": "#FFE200",
+    "background": "#FFFFFF",
+    "font_note": "Proprietary 'Human BBY Digital' (fallback Arial/Helvetica, sans-serif). Body 13px/400, text #040C13; product h1 20px/500; links #0457C8. Yellow CTA buttons (#FFE200 on product page, 8px radius; #FFE000 on cart 'Checkout', 4px radius) with dark text; blue 'Continue' button (#014FD3) in checkout; light-blue utility band #F1F8FF under the blue header.",
+    "header_layout": "Row 1 (blue #0046BE bar): Best Buy logo (left) | search box, placeholder 'Search Best Buy' (aria 'What can we help you find? Suggestions appear below'), clear + 'Submit search' magnifier | 'Your Store: Compton' store picker | account/sign-in button | cart icon 'cart, N items' (links to /cart). Row 2 (white): mega-menu buttons Shop, Deals, Support & Services, Discover, then links to Sports Hub, Top Deals, Deal of the Day, Gift Ideas, Best Buy Membership, Financing & Rewards (My Best Buy Credit Card), Gift Cards, Trade-In, Best Buy Business. Checkout pages use a stripped header: blue bar with logo only plus a 'Back to cart' link.",
+    "nav_items": ["Shop", "Deals", "Support & Services", "Discover", "Sports Hub", "Top Deals", "Deal of the Day", "Gift Ideas", "Best Buy Membership", "Financing & Rewards", "Gift Cards", "Trade-In", "Best Buy Business"]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search Best Buy",
+      "search_url_pattern": "/site/searchpage.jsp?st={q} (server appends id=pcat17071; facets are added as qp=category_facet%3D...)",
+      "search_results_layout": "h1 'grand theft auto vi search results'; left filter rail (Get it fast: 'Pickup · Ready today' / 'Shipping · Get it today' with ZIP; Sold & shipped by; Category; Compatible Platform; Format: Physical / Physical (Download Code Only) / CD / VINYL; Price; Brand; Current Deals; Genre; Upcoming and New: Pre-Order; ESRB Rating; Customer Rating; Game Franchise). Result count 'grand theft auto vi (41)'. A promo banner sits above results: 'Grand Theft Auto VI — Exclusive member offer available with pre-order. — Pre-order this game — Available to play Thursday, 11/19/26.' 'Sort by: Best Match'. Grid tiles show: 'Best Selling' badge, box-art image, title link, 'ESRB Ratings: RP (Rating Pending)', 'Publisher: Rockstar Games', 'Release Date: 11/12/2026', 'Not yet reviewed', price ($79.99), yellow 'Pre-order' button (or 'Add to cart' for released games), 'Compare' checkbox, heart 'Save' button. Footer of list: '17 of 41 products' + 'Show more' button; 'Related searches' chips (gta 6, ps5, ...). Tiles lazy-load as they scroll into view.",
+      "category_path": "Best Buy > Video Games > All Video Games > Physical Video Games (breadcrumb on the product page). Also reachable via the franchise hub /site/video-game-franchises/grand-theft-auto/pcmcat301800050002.c ('Pre-order this game' banner link)."
+    },
+    "product_page": {
+      "url_pattern": "/product/<slug>/<productId>[/sku/<skuId>] e.g. /product/grand-theft-auto-vi-code-in-box-delivers-11-12-26-playable-11-19-26-playstation-5/JXHY5RW2JZ/sku/6684968",
+      "headline": "Grand Theft Auto VI - (Code in Box, Delivers 11/12/26, Playable 11/19/26) - PlayStation 5",
+      "variant_selectors": [
+        { "label": "Compatible Platform(s)", "type": "separate-listings", "options": ["PlayStation 5", "XBOX Series X / XBOX Series S", "+ 4 more (links to other GTA titles)"] }
+      ],
+      "price_display": "Single large price '$79.99' (rendered as '$' '79' '99' superscript parts). No strikethrough, no member price. Below it: 'or 4 payments starting at $20.00 with [Zip logo] Learn more >'. No price shown in the search tile until the tile lazy-loads.",
+      "fulfillment_options": [
+        { "label": "Pickup", "detail": "Ready on Release Date — 'Order now for pickup on Release Date at Compton' (store auto-selected from location)", "default": true },
+        { "label": "Shipping", "detail": "Delivered on or shortly after Release Date — 'FREE shipping to 90001' (ZIP from location)", "default": false }
+      ],
+      "cta_buttons": [
+        { "label": "Pre-order", "behavior": "Full-width yellow button (271x48px, 8px radius). Click adds the SKU with the selected fulfillment to the cart and immediately navigates to /cart (no modal, no drawer); header cart badge increments." },
+        { "label": "Save", "behavior": "Heart icon; adds to Saved Items list (prompts sign-in)." },
+        { "label": "Deal Alert", "behavior": "Subscribe to price-drop alerts (prompts sign-in)." }
+      ],
+      "quantity_selector": false,
+      "upsells": [
+        "Finance options: '10% back in rewards on your first day of purchases when approved for the My Best Buy® Credit Card or choose financing'",
+        "'Buy now. Pay later. 4 payments starting at $20' (Zip)",
+        "Key Accessories carousel: 'Grand Theft Auto VI: The Album - Best Buy Exclusive - Clear Pink with Purple Splatter Vinyl - Includes Exclusive 12x24 poster' $49.98 [Pre-order]; 'Grand Theft Auto VI: The Album - CD' $17.98 [Pre-order]",
+        "'Related Item' (Sponsored) tile, 'Featured products' (Sponsored) carousel, 'Compare similar products' table, 'Level up your game' carousel",
+        "Search banner: 'Exclusive member offer available with pre-order.' — franchise page: 'Plus and Total members get 10x rewards with pre-order of Grand Theft Auto VI. Exclusions, terms and conditions apply.'",
+        "No protection-plan / Geek Squad modal for this SKU"
+      ],
+      "notable_text": [
+        "ESRB Rating: RP (Rating Pending)  SKU: 6684968  Release Date: 11/12/2026",
+        "Reviews coming soon",
+        "Sold by Best Buy",
+        "This product will only contain a download code inside the box to support pre-load starting on November 12. A disc will not be included in the box.",
+        "Pre-order to receive the Vintage Vice City Pack.",
+        "The Grand Theft Auto VI: Ultimate Edition Upgrade will also be available for Grand Theft Auto VI: Standard Edition owners to purchase separately at any time. Physical version buyers can upgrade at any point after their digital download code has been redeemed by purchasing the Ultimate Edition upgrade as a digital add-on through the PlayStation and Xbox storefronts.",
+        "Features: 'Download code', 'Pre order', 'Single player — Grand Theft Auto VI is a single-player experience.'",
+        "Specifications: Software Format — Physical (Download Code Only)",
+        "Gallery image alt: 'PRE-ORDER BONUS OCEAN VIEW VINTAGE VICE CITY PACK'",
+        "Badge: 'Best Selling In PS5 Games'"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "redirect-to-cart",
+      "contents": "No modal or drawer. The page navigates to /cart, where the item appears as a line with a 'Pre-order' badge and 'Final sale. Not returnable.' The header cart link updates to 'cart, 1 item'.",
+      "buttons": ["Pre-order"]
+    },
+    "cart": {
+      "url": "https://www.bestbuy.com/cart",
+      "line_item_fields": [
+        "Box-art thumbnail",
+        "Title link (e.g. 'Grand Theft Auto VI - (Code in Box, Delivers 11/12/26, Playable 11/19/26) - PlayStation 5')",
+        "'Final sale. Not returnable.' (brown text #983E00)",
+        "'Sold by' Best Buy",
+        "'Pre-order' badge",
+        "'Item Availability' radio pair: 'Pickup at Compton — Pickup on Release Date' (or 'Select a store to see availability') / 'FREE Shipping to 55423 — Delivered on or shortly after Release Date' (ZIP and store are clickable to change)",
+        "'Item Quantity' select (options 1, 2, 3)",
+        "'Save for later' link",
+        "'Remove' link",
+        "'Price' $79.99"
+      ],
+      "summary_fields": ["Subtotal", "Shipping (FREE)", "Store Pickup (FREE)", "Estimated Sales Tax", "Total"],
+      "promo_code_field": false,
+      "checkout_button_label": "Checkout",
+      "express_options": ["PayPal (PayPal Checkout button under the Checkout button: 'By using PayPal Checkout, you agree to Best Buy's Terms & Privacy Policy')"],
+      "upsells": [
+        "'My Best Buy® members enjoy exclusive offers & free shipping on eligible items with no minimum purchase. Sign in or create an account now'",
+        "'10% back in rewards on first day of purchases or flexible financing for new My Best Buy® Credit Cardmembers. Show me how >'",
+        "'Looking for a lease to own option? Enjoy the tech you want today. Learn more >' (Progressive Leasing)",
+        "'4 payments starting at $43.95 — Select Zip under 'Other payment options' when checking out.'",
+        "'Buying a gift for someone special? Gift options can be added in checkout. Learn more >'",
+        "'Saved Items — Your list is currently empty' panel",
+        "'People also bought' carousel (other GTA VI SKU, CoD MW4, Xbox cases, Game Pass...)",
+        "Blue Assist chat bubble: 'Best Buy Help. Hi, need shopping advice or product support? Let me know.' with quick chips Price Match / Change Shipping or Pickup / Payment Methods"
+      ]
+    },
+    "checkout": {
+      "url": "https://www.bestbuy.com/checkout/c/standard (cart 'Checkout' button posts to /checkout/r/fast-track, which sends a signed-out shopper to /identity/signin?token=... first)",
+      "auth": {
+        "guest_allowed": true,
+        "account_required": false,
+        "screen_text": "Page title 'Sign In to Best Buy'. Left column 'Returning Customers — Sign in for faster checkout.' with Email Address field, 'Keep me signed in.' checkbox (tooltip: We'll keep you signed in on this device.), consent line 'By continuing or signing in, you agree to our Terms and Conditions, Privacy Policy, and My Best Buy™ Terms.', 'Continue' button, 'Sign in with a Passkey', 'Sign in with Apple', 'Sign in with Google'. Divider 'or'. Right column 'New Customers — Don't have an account? No problem, you can check out as a guest. You'll have the option to create an account during checkout. By continuing as guest, you agree to our Terms and Conditions and Privacy Policy.' then 'Continue as Guest' button. Header has only the logo and a 'Return to cart' link.",
+        "guest_button_label": "Continue as Guest",
+        "signin_fields": ["Email Address", "Password (asked on the next screen after Continue — not observed)", "Keep me signed in. (checkbox)"]
+      },
+      "steps": [
+        {
+          "name": "Contact info",
+          "fields": [
+            { "label": "Email address", "type": "email", "required": true },
+            { "label": "Phone number", "type": "tel", "required": true },
+            { "label": "Opt-in for text updates — My orders, services and appointments", "type": "checkbox", "required": false }
+          ],
+          "options": [],
+          "button_label": "Continue",
+          "notes": "Consent text under phone: 'By placing your order, you agree that Best Buy or its authorized service partners may call or text you at the phone number above to fulfill your order, or with information about your purchase, including delivery and scheduling. Calls may be live or pre-recorded and may be automated. Message/data rates may apply.' Clicking Continue empty shows inline errors 'Please enter an email address.' and 'Please enter a phone number.' Inputs have autocomplete=email / tel. DOM ids used by open-source Best Buy checkout bots: 'user.emailAddress', 'user.phone', text-updates checkbox '#text-updates' (API field smsOptIn); the guest button on the interstitial is '.cia-guest-content .js-cia-guest-button'. Checkout API: PATCH /checkout/orders/{orderId} with {emailAddress, phoneNumber, smsNotifyNumber, smsOptIn}."
+        },
+        {
+          "name": "Shipping address (only present when at least one item is set to Shipping)",
+          "fields": [
+            { "label": "First name", "type": "text", "required": true },
+            { "label": "Last name", "type": "text", "required": true },
+            { "label": "Address", "type": "text", "required": true },
+            { "label": "Add Apt., Suite, Floor (Optional)", "type": "text", "required": false },
+            { "label": "City", "type": "text", "required": true },
+            { "label": "State", "type": "select", "required": true },
+            { "label": "ZIP code", "type": "text", "required": true },
+            { "label": "Use as billing address", "type": "checkbox", "required": false }
+          ],
+          "options": [],
+          "button_label": "Continue",
+          "notes": "Step is collapsed until Contact info is completed, so it was not expanded in the browser. Field set and labels are now sourced from Best Buy's 2026 checkout bundle (checkout.0213d23….js content dictionary + lazy chunk checkoutV2.33050a9e….js 'address-form'; confidence: high for labels, medium for layout): First name (maxLength 50, autocomplete given-name) / Last name (50, family-name) / Address (maxLength 35, Smarty type-ahead with 'Show Suggestions' / 'Hide Suggestions' toggle; help links 'Military' and 'Non-US Address') / link 'Add Apt., Suite, Floor (optional)' revealing 'Apt., Suite, Floor (optional)' / City / State (select, placeholder 'Select') / ZIP code, then the checkboxes 'Save this address to my profile' and 'Make this my default shipping address' (signed-in only) and 'Use as billing address' (DOM id 'useAsBillingCheckbox', form field useAsBilling; only rendered while the order has no billing address yet, and its initial value for a new address is 'checked' — so billing = shipping by default; medium-high). Notices: 'Note: If you ship to a PO BOX, it can take up to a week longer to receive your item than shipping to a residential or business address.'; standardization alert 'We are unable to verify the address, please make sure address you entered is correct.' with modal 'We’re unable to verify this address.' / 'Please make sure the address you entered is correct.' → 'Update address' / 'Keep as entered'; apartment prompt 'Please check your address — The address you entered may need an apartment, unit, or suite number.' Validation strings: 'Please enter a first name.' / 'Please enter a valid first name.', 'Please enter a last name.' / 'Please enter a valid last name.', 'Please enter address.' / 'Please enter a valid address.' / 'Delivery is unavailable to P.O. Box addresses. Please enter a physical address.', 'Please enter city name.' / 'Please enter a valid city.', 'Please enter a ZIP code.' / 'Please enter a valid ZIP code.' There is NO phone field in this block (phone lives in Contact info as 'user.phone'). Older (2020-21) bot ids for the same fields: 'consolidatedAddresses.ui_address_2.{firstName,lastName,street,street2,city,state,zipcode}' and 'save-for-billing-address-ui_address_2' (the bot un-checks it before typing a separate billing address, consistent with checked-by-default). The checkout API stores the address on the item as selectedFulfillment.shipping.address = {firstName, lastName, middleInitial, street, street2, city, state, zipcode, country, dayPhoneNumber, useAddressAsBilling, giftMessageSelected} via PATCH /checkout/orders/{orderId}."
+        },
+        {
+          "name": "Shipping details (only present when at least one item is set to Shipping)",
+          "fields": [],
+          "options": [
+            "Method rows come from items[].metadata.fulfillmentOptions.shippingDetail.levelOfServices[] (each with an id and totalPrice / offerTotalPrice; the chosen one is items[].fulfillment.levelOfService). Prices go through formatCurrency(showZeroAsFree), so a $0 row reads 'FREE'; row headings are date-based — 'Get it by {date}', 'Get it' (today), 'As soon as', 'Should ship by' — not carrier tiers. Best Buy help agrees: 'During checkout, you can choose an estimated arrival date from the options provided.' (2026 checkout bundle; medium-high)",
+            "Pre-order heading is driven by the item's displayDateType: FULFILL → 'Delivered on or shortly after Release Date' (or 'Delivered on or shortly after {date}'), IN_HAND → 'Get it by Release Date' / 'Get it by {date}', NONE → 'Release date not yet available' + 'We’ll notify you when it’s ready to ship'. The GTA VI summary line reads 'Delivered on or shortly after Release Date' (observed). IMPORTANT: the shipping-option chooser is suppressed entirely when an item has exactly one level of service and it is FREE (bundle: levelOfServices.length === 1 && price formats as 'FREE' → render null), so for this SKU the step is expected to show only the item card with 'Delivered on or shortly after Release Date' and no radio row (medium-high; step not expanded in the browser). Whether Best Buy's API also offers paid expedited levels for the pre-order — which would make rows appear — is unverified (low).",
+            "Gift options: the control is the 'Add gift options' button in the Summary panel (observed; label becomes 'Edit gift options' once saved). It opens a side sheet titled 'Gift options' (role dialog, 'Close Sheet' button) listing each item by title: shipped items get a checkbox 'Include gift message' (observed) which reveals 'Recipient email address' + 'Gift message' textarea (150 characters, 'Characters Remaining' counter); pickup items get 'Include gift receipt' with helper 'You’ll receive a gift receipt when you pick up your item.' Button 'Save gift options'; toast 'Gift options updated'. Errors: 'Please enter a gift message.', 'Edit message to remove inappropriate language.', 'Your gift message contains some special characters that we don’t recognize. Please revise your message.' No separate gift control was seen inside the collapsed step itself (medium). API: shipping item → giftMessage {emailAddress, message}; pickup item → fulfillment.giftReceipt true/false."
+          ],
+          "button_label": "Continue",
+          "notes": "Not expanded in the browser (collapsed until Contact info + Shipping address are done). In a shipping-only cart the steps are 1 Contact info → 2 Shipping address → 3 Shipping details → 4 Payment method; when a pickup item is also in the cart, Pickup details becomes step 4 and Payment method step 5 (both observed). Summary panel already shows 'Delivered on or shortly after Release Date' for the shipped item and 'Add gift options'."
+        },
+        {
+          "name": "Pickup details (only present when at least one item is set to Pickup)",
+          "fields": [
+            { "label": "Pickup person (row, defaults to the shopper: 'You (Name on billing address)' or '<name> (Name on billing address)'; button id 'changePickupPersonButton' opens the 'Pickup person' sheet)", "type": "row+button", "required": true },
+            { "label": "First name", "type": "text", "required": true },
+            { "label": "Last name", "type": "text", "required": true },
+            { "label": "Email address", "type": "email", "required": true },
+            { "label": "Phone number", "type": "tel", "required": true },
+            { "label": "Remember for future pickups (checkbox, id addToProfileCheckbox; account feature)", "type": "checkbox", "required": false }
+          ],
+          "options": ["Store: Compton (chosen on product page/cart)", "Pickup on Release Date — 'We’ll notify you when it’s available for pickup' (observed in the Summary panel)", "Checkout API fulfillment type: inStorePickup (2026 bundle) / IN_STORE_PICKUP (2021 bots) vs shipping", "Other pickup strings in the bundle: 'Pickup location', 'Pickup at', 'Method' (Counter / In-Store / Locker; 'Curbside pickup — app only'), 'Photo ID required', 'Ready for pickup', 'Items can be picked up until …', 'Only the person named on the billing address is allowed to pick up this order.' (when an alternate agent is not allowed)"],
+          "button_label": "Continue",
+          "notes": "Not expanded in the browser (collapsed until contact info is entered); wording sourced from the 2026 checkout bundle and its lazy chunks (add-pickup-person-drawer-form, add-pickup-person-modal, pickup-agent-radio-form) — confidence high for the strings, medium for layout. There is NO 'Me / Someone else' radio: the step heading is 'Pickup details' and it contains a 'Pickup person' row that defaults to the shopper (rendered '<name> (Name on billing address)' or 'You (Name on billing address)') plus a button (id 'changePickupPersonButton', the same 'card-call-to-action-button' style used for 'Edit' on address cards) that opens a sheet titled 'Pickup person'. For guests the sheet is the add-pickup-person form: 'First name', 'Last name', 'Email address', 'Phone number' (autocomplete given-name / family-name / email / tel; phone is stripped to digits), checkbox 'Remember for future pickups' (id addToProfileCheckbox), primary button 'Confirm pickup person' (older modal variant: title 'New Pickup Person', button 'Continue'); toast 'Pickup person updated'; guard 'Save your pickup person selection to continue.' Signed-in shoppers instead get a radio list: 'Name on billing address' + saved pickup persons (name, email, formatted phone, 'Edit') + 'Add new pickup person'. So the alternate person's name is TWO fields (First name / Last name); the thank-you page prints 'Make sure {{firstName}} {{lastName}} brings their photo ID and your order number to the store.' Best Buy's Store Pickup help matches: 'You'll need to provide the pickup person's name, email address and phone number.'; bring 'your government-issued photo ID' and 'Your order number'; 'We'll hold your items at the store for 5 days'; a 'Ready for pickup' email 'is a separate email from your order confirmation'; changes to the pickup person must be requested within 5 days."
+        },
+        {
+          "name": "Payment method",
+          "fields": [
+            { "label": "Card number", "type": "text", "required": true },
+            { "label": "Expiration date", "type": "text", "required": true },
+            { "label": "Security code", "type": "tel", "required": true },
+            { "label": "Billing address — First name", "type": "text", "required": true },
+            { "label": "Billing address — Last name", "type": "text", "required": true },
+            { "label": "Billing address — Address", "type": "text", "required": true },
+            { "label": "Billing address — Add Apt., Suite, Floor (Optional)", "type": "text", "required": false },
+            { "label": "Billing address — City", "type": "text", "required": true },
+            { "label": "Billing address — State", "type": "select", "required": true },
+            { "label": "Billing address — ZIP code", "type": "text", "required": true }
+          ],
+          "options": ["Credit/debit card (logos shown: My Best Buy Consumer Credit Card, My Best Buy Visa, Mastercard, Visa, Discover, Amex, Union Pay, JCB)", "'or' PayPal button (PayPal iframe; 'Finance charge may apply' = PayPal Pay Later messaging)", "'Add gift card, store credit or discount code' expander", "Zip pay-in-4 under 'Other payment options' (per cart copy)"],
+          "button_label": "Place order",
+          "notes": "The card form and billing block are present in the accessibility tree even while the step is collapsed, but off-canvas (not clickable) until the step opens. Consent line above the button: 'By clicking place order, you agree to Best Buy’s Terms & Privacy Policy.' Place order button is yellow (#FFE200) and sits under the running total. 2026 payment component (payment-component-forms/index-6.3.113.js): Card number — id 'number', inputmode number, maxLength 19, pattern [0-9]*, no placeholder; Expiration date — ONE input, id 'expirationDate', inputmode numeric, placeholder 'MM/YY' (observed in the DOM); Security code — id 'cvv', type tel / inputmode numeric, maxLength 4, pattern [0-9]*, placeholder 'CVV' (observed), icon aria-label 'the security code is the 3 digit CVC code found on the back of the card' (4 for Amex), screen-reader help 'Enter the 3- or 4-digit security code associated with your card.' Inline validation (one message per field, used for empty and malformed input alike — medium): 'Please enter a valid card number.', 'Please enter a valid expiration date.', 'Please enter a valid Security Code.'; card-type errors 'Card not accepted, please use a different card.' / 'This credit card type isn't supported for Marketplace items yet. Choose a different credit card to complete your purchase.'; billing: 'Please enter a first name.', 'Please enter a last name.', 'Please enter a valid address.', 'Please enter a city.', 'Please select a state.', 'Please enter a ZIP code.' Card-status banners: 'Your credit card is expired. Please use a different card or update the expiration date.', 'Your card expires in 15 days. Please use a different card or update the expiration date.' and the pre-order-specific 'Your credit card is expiring soon. Since one of your items won’t be charged until it’s available, we need you to use a different card for this order.' Saved-card CVV prompt: 'Confirm your security code' / 'Confirm and place order'; signed-in extras 'Save this card to my profile', 'Make this my preferred card'. Billing block: this is where you type a billing address when the cart is pickup-only (no shipping address — the observed session) or when the Shipping address step's 'Use as billing address' checkbox is unchecked. With that checkbox checked, the payment component (feature flag showBillingAddress) has two views — the blank BILLING_ADDRESS_FORM, or a BILLING_ADDRESS_LIST of read-only 'billing-info' address cards (radio only when >1; buttons 'Use saved address' / 'Add new' / 'Save'; edit flow 'Update Address' / 'Keep Address as Entered') — so the expected rendering is a summary card of the shipping address under the 'Billing address' heading rather than the form (medium-low; not observed). There is no separate 'Same as shipping address' checkbox inside the Payment step. Feature flags passed to the component: applePay, payWithPoints, giftCards, promoCodes, paypal, buyNowPayLater, threeDSecure, updateProfile. Older bot ids: '#optimized-cc-card-number', '#credit-card-cvv' (older '#cvv'), 'payment.billingAddress.{firstName,lastName,street,city,state,zipcode}'; place-order '.button--place-order button.btn-primary' (fast-track '.button__fast-track'); per-step Continue '.button--continue button'. Card data is sent via PUT /payment/api/v1/payment/{paymentId}/creditCard as {number (encrypted), expMonth, expYear, cvv, type, binNumber}; the order is submitted with POST /checkout/orders/{orderId}/."
+        }
+      ],
+      "payment_methods": ["Visa", "Mastercard", "American Express", "Discover", "UnionPay", "JCB", "My Best Buy Credit Card / My Best Buy Visa (Citi)", "PayPal (incl. PayPal Pay Later)", "Best Buy gift card / store credit / discount code", "Zip (pay in 4 / pay in 8) under Other payment options", "Progressive Leasing lease-to-own (from cart)", "Apple Pay (enabled as a feature flag on the 2026 payment component — applePay: true — but not rendered in the Chromium DOM; expect it in Safari — confidence: medium)"],
+      "card_fields": ["Card number", "Expiration date", "Security code", "Billing address: First name, Last name, Address, Add Apt., Suite, Floor (Optional), City, State, ZIP code", "(2026 ids: number / expirationDate / cvv; placeholders: none / 'MM/YY' / 'CVV'; validation 'Please enter a valid card number.' / '…expiration date.' / '…Security Code.'; older bot ids #optimized-cc-card-number, #credit-card-cvv, payment.billingAddress.*)"],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "Preauthorization at order time; card is charged when the item ships or is ready for pickup. Expired pre-order preauths are reversed and re-run closer to the availability date.",
+      "charge_policy_text": "we will preauthorize your order amount (including for pre-orders) with your payment method at the time you place the order ... If a preauthorization of a pre-order expires before fulfillment, the preauthorization will be reversed and another preauthorization will be made closer to the confirmed availability date.",
+      "review_step": {
+        "exists": false,
+        "place_order_label": "Place order",
+        "shows": ["Single-page checkout: the right-hand 'Summary' panel is the review — fulfillment line ('Pickup on Release Date — We'll notify you when it's available for pickup' or 'Delivered on or shortly after Release Date'), item title, 'Final sale. Not returnable.', 'Sold by Best Buy', item price, Subtotal, Store Pickup FREE, Shipping FREE, Est. Sales Tax, 'Apply for a tax exempt account' link, Total, 'Add gift options'"]
+      },
+      "confirmation": {
+        "headline": "Thanks for your order! (sourced from the 2026 checkout bundle's thankYouPage strings — confidence: medium-high; the page itself was not rendered because no order was placed. URL https://www.bestbuy.com/checkout/r/thank-you is sourced from checkout bots.)",
+        "order_number_format": "BBY01-XXXXXXXXXXX (BBY01 prefix + 11 digits, e.g. BBY01-80665361421)",
+        "contents": ["Page URL: /checkout/r/thank-you (sourced)", "Heading 'Thanks for your order!' and 'Order #: BBY01-…' (bundle keys thankYouPage.pageHeading / orderNumber; 'Checkout complete' and 'Transaction ID: …' strings also exist)", "Email sentence: 'We’re sending a confirmation email to <email>' (thankYouPage.emailConfirmationRedesign; classic variant 'For all your order details, check out the confirmation email we’re sending to <email>.')", "Fulfillment lines — shipped: 'Ship to' + 'Your order will arrive by Release Date: <date>.' (variants 'Your order will arrive by <date>.', 'Your order will ship by <date>.', 'We’ll send you an email when your order is ready to ship'); pickup: 'Your order will be ready for pickup on Release Date: <date> at <store>.' + 'We’ll send you an email when it’s ready for pickup.' (or 'We’ll begin prepping your order and notify you when your order is ready for pickup.'); alternate pickup person: 'Make sure <First> <Last> brings their photo ID and your order number to the store.'; 'Signature required' where applicable; 'Your purchase is split into multiple orders, because it includes items sold and shipped by a Marketplace Seller.' for mixed marketplace carts", "Guest create-account block: heading 'Create an account', checkbox 'Save your details securely for faster checkout next time.' with disclaimer 'By creating an account and saving your details, you agree to our Terms and Conditions, Privacy Policy, and My Best Buy™ Terms.'; success 'Welcome to the Club!' / 'You’ve successfully created a My Best Buy account!'; failure 'Create Your Account' / 'Sorry, but we were unable to create your account. Please try again.'", "Order totals / payment summary and the section order: not observed (low)", "SMS opt-in thank-you variant: 'Thanks for signing up!' / 'We’ll be sending you a confirmation text shortly.'"],
+        "email_sent_text": "On the page: 'We’re sending a confirmation email to <email>' (bundle key thankYouPage.emailConfirmationRedesign; the older layout used 'For all your order details, check out the confirmation email we’re sending to <email>.') — confidence medium-high. The email itself: header 'Thanks for your order' with per-fulfillment sections (Store pickup / Ship to home / Ship to store) and a 'View the order' link, per a Feb-2021 WeSupply review — medium-low; subject line and body sentence unverified. Best Buy's Store Pickup help confirms the order-confirmation email exists ('Ready for pickup' is 'a separate email from your order confirmation'); Terms: 'Our order confirmation to you does not signify our acceptance of your order'."
+      }
+    },
+    "account": {
+      "required_for_purchase": false,
+      "signup_fields": ["First name", "Last name", "Email address", "Password", "Phone number (optional)", "(confidence: low — /identity/newAccount not opened)"],
+      "login_fields": ["Email Address", "Password (second screen)", "Keep me signed in. (checkbox)", "Sign in with a Passkey", "Sign in with Apple", "Sign in with Google"],
+      "membership_program": "My Best Buy (free: free standard shipping, no $35 minimum) / My Best Buy Plus $29.99/yr (free 2-day shipping, member prices, 1% rewards, 60-day returns) / My Best Buy Total $199.99/yr (Plus benefits + protection plans, 24/7 tech support). GTA VI promo: Plus and Total members get 10x rewards (10% back in points) with the pre-order."
+    },
+    "quirks": [
+      "The 'Pre-order' button goes straight to /cart — there is no added-to-cart modal or drawer.",
+      "Both SKUs are 'Code in Box': the box ships/pre-loads 11/12/26 (listed as 'Release Date: 11/12/2026') but the game is playable 11/19/26. No disc, no Ultimate Edition, no digital SKU on bestbuy.com; the page tells you to buy the Ultimate upgrade on the console store later.",
+      "Cart and checkout flag the SKU 'Final sale. Not returnable.' even though it is a physical box (download codes are non-returnable per Best Buy's return policy).",
+      "Fulfillment is chosen per item on the product page (radio: Pickup default / Shipping) and can be changed per line in the cart; a store is auto-picked from geolocation ('Your Store: Compton'). Before location is known the shipping ZIP defaults to 55423 (Best Buy HQ, Richfield MN); the product page then showed 'FREE shipping to 90001'.",
+      "Checkout steps change with the cart's fulfillment mix: pickup-only = Contact info → Pickup details → Payment method; shipping-only = Contact info → Shipping address → Shipping details → Payment method; mixed = Contact info → Shipping address → Shipping details → Pickup details → Payment method (all three observed). Steps are numbered and collapse/expand on one page; there is no separate review page — 'Place order' sits under the running total.",
+      "Clicking the cart's 'Checkout' button first shows the 'Sign In to Best Buy' interstitial with 'Continue as Guest'; deep-linking /checkout/r/fast-track skipped it and landed directly on the guest checkout in this session.",
+      "Tax is estimated before any address is entered (from store/ZIP): $8.60 on $79.99 (10.75%, Compton CA).",
+      "Quantity is capped at 3 per line in the cart dropdown; there is no quantity selector on the product page.",
+      "Membership prompts everywhere: search banner 'Exclusive member offer available with pre-order.', franchise hub '10x rewards', cart 'Sign in or create an account now', sign-in page 'Sign in for faster checkout.'",
+      "BNPL: Zip 'Buy now. Pay later. 4 payments starting at $20' on the product page; Zip is selected under 'Other payment options' at checkout. PayPal button appears in both cart and checkout.",
+      "Search-result tiles and the cart list lazy-load only when in the viewport (a hidden/unscrolled tab renders 'Your cart is empty' and no prices); bots need to scroll.",
+      "Store pickup: bring government-issued photo ID + order number; someone else can pick up if chosen at checkout; items held 5 days then cancelled/refunded; pre-orders 'available for pickup on or after their release date'.",
+      "Order confirmation does not equal acceptance (Terms), and Best Buy may re-preauthorize the card closer to release.",
+      "The 'billing = shipping' control is the checkbox 'Use as billing address' INSIDE the Shipping address step (2026 id 'useAsBillingCheckbox'; 2021 bot id 'save-for-billing-address-ui_address_2'; API flag useAddressAsBilling), not in the Payment step; it starts checked for a new address. A pickup-only cart has no shipping address, so the Payment step always shows the full billing form (this is what the observed session saw).",
+      "Shipping method rows are labelled by estimated arrival date ('Get it by …' / 'Delivered on or shortly after …'), listed per item from levelOfServices, and the chooser is hidden when the only option is FREE — the expected case for the GTA VI pre-order. Gift options are per item — 'Include gift message' (shipped) / 'Include gift receipt' (pickup) — in a 'Gift options' sheet opened from 'Add gift options' in the Summary. Fulfillment types in the 2026 API are shipping and inStorePickup (2021 bots: SHIPPING / IN_STORE_PICKUP).",
+      "Checkout DOM/API map from open-source Best Buy checkout bots (2020-21; still matching the 2026 labels where observed): guest button '.cia-guest-content .js-cia-guest-button'; contact 'user.emailAddress' / 'user.phone' / '#text-updates'; shipping 'consolidatedAddresses.ui_address_2.{firstName,lastName,street,street2,city,state,zipcode}' + 'save-for-billing-address-ui_address_2'; payment '#optimized-cc-card-number' / '#credit-card-cvv' / 'payment.billingAddress.{firstName,lastName,street,city,state,zipcode}'; per-step Continue '.button--continue button'; place order '.button--place-order button.btn-primary' (or '.button__fast-track'); success = URL /checkout/r/thank-you. API: PATCH /checkout/orders/{orderId} (contact, fulfillment + address), PUT /payment/api/v1/payment/{paymentId}/creditCard, POST /checkout/orders/{orderId}/ (submit). Cart: shipping radio '[name=availability-selection][id*=shipping]', ZIP input '.update-zip__zip-input', checkout '.checkout-buttons__checkout button'.",
+      "A 'Road Improvement and Food Delivery Fee $0.50' line (linking to the sales-tax help page) appeared in the checkout Summary when the shipped subtotal reached $100+ with the default 55423 (Minnesota) ZIP — Minnesota's retail delivery fee; it disappeared when only one $79.99 item was shipped. The cart shows 'Estimated Sales Tax: Calculated in checkout' once an item is set to Shipping.",
+      "Pickup person: there is no 'Me / Someone else' radio — the Pickup details step shows a 'Pickup person' row defaulting to you ('You (Name on billing address)') with a button that opens a 'Pickup person' sheet (First name / Last name / Email address / Phone number, 'Remember for future pickups', 'Confirm pickup person').",
+      "Thank-you page copy lives in the checkout bundle: 'Thanks for your order!', 'Order #: …', 'We’re sending a confirmation email to …', 'Your order will arrive by Release Date: …' / 'Your order will be ready for pickup on Release Date: … at …', plus a guest 'Create an account' checkbox 'Save your details securely for faster checkout next time.'",
+      "Card expiry is policed for pre-orders: 'Your credit card is expiring soon. Since one of your items won’t be charged until it’s available, we need you to use a different card for this order.'",
+      "A random 'We'd like your feedback!' customer-satisfaction survey dialog (Yes / No) can overlay the checkout page.",
+      "Zip messaging scales with the cart: '4 payments starting at $20' on the product page, '4 payments starting at $43.95' (2 items) and '8 payments starting at $30.00' (3 items, $239.97) in the cart."
+    ]
+  },
+  "gaps": [
+    "Order confirmation page: the headline ('Thanks for your order!'), order-number line ('Order #: …'), email sentence and the guest create-account block are now sourced from the checkout bundle's thankYouPage strings, but the page was never rendered (no order placed), so the section order and the totals / payment-summary layout remain unobserved. The confirmation EMAIL's subject line and body sentence are unverified (only a 2021 third-party review describing a 'Thanks for your order' header); Baymard's receipt pages are paywalled.",
+    "Pickup details: strings come from the 2026 bundle and its lazy chunks (no 'Me / Someone else' radio; 'Pickup person' row + sheet with First name / Last name / Email address / Phone number), but the step was not expanded, so the exact label of the change-pickup-person button and whether 'Remember for future pickups' is shown to guests are unverified.",
+    "Shipping details for the GTA VI SKU: the bundle hides the method chooser when the only level of service is FREE, so no row text is expected; whether Best Buy's API offers a paid expedited level for this pre-order (which would make rows appear) is unverified, and the step was not expanded.",
+    "Payment step rendering when 'Use as billing address' is checked is inferred from the payment bundle (read-only 'billing-info' address card instead of the form) — not observed.",
+    "Card-field validation messages and ids come from the payment-component bundle rather than being triggered in the DOM (the fields are off-canvas until the step opens); the same message is assumed for empty and malformed input.",
+    "Password screen of the sign-in flow and the Create Account form (/identity/newAccount) were not opened; sign-up fields are from general knowledge (low).",
+    "Apple Pay is enabled by feature flag on the payment component but was not visible in the (Chromium) checkout DOM; Google Pay was not seen anywhere and is only claimed by third-party sources (low).",
+    "Search tiles never rendered their price module in the hidden tab; $79.99 on tiles is taken from identical tiles in the cart's 'People also bought' carousel and the product page.",
+    "Best Buy Canada's dedicated pre-order help page (403 to the fetcher) and Rockstar's editions support article (timed out) could not be read; charge timing comes from Best Buy US Terms & Conditions plus Deku Deals / QuerySprout summaries.",
+    "The cart 'Checkout' button is a <button> (no href); its /checkout/r/fast-track target is inferred from the post-click redirect chain (cart → /identity/signin?token → checkout)."
+  ]
+}

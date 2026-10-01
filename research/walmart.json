@@ -1,0 +1,327 @@
+{
+  "slug": "walmart",
+  "name": "Walmart",
+  "country": "US",
+  "currency": "USD",
+  "base_url": "https://www.walmart.com",
+  "confirmed_preorder_live": true,
+  "confidence": "medium",
+  "browser_worked": true,
+  "sources": [
+    "https://www.walmart.com/search?q=grand+theft+auto+vi",
+    "https://www.walmart.com/ip/Grand-Theft-Auto-VI-PlayStation-5-Game/20482917228",
+    "https://www.walmart.com/ip/Grand-Theft-Auto-VI-Xbox-Series-X-Game/20459958275",
+    "https://www.walmart.com/pac?id=20482917228&ip=79.99&qt=1",
+    "https://www.walmart.com/cart",
+    "https://identity.walmart.com/account/login?client_id=5f3fb121-076a-45f6-9587-249f0bc160ff&redirect_uri=https%3A%2F%2Fwww.walmart.com%2Faccount%2FverifyToken&scope=openid+email+offline_access&tenant_id=elh9ie&state=%2Fcart%3Fcheckout%3Dtrue&vid=oaoh&tid=0&hidePC=true&tp=CXO",
+    "https://identity.walmart.com/account/login?client_id=5f3fb121-076a-45f6-9587-249f0bc160ff&redirect_uri=https%3A%2F%2Fwww.walmart.com%2Faccount%2FverifyToken&scope=openid+email+offline_access&tenant_id=elh9ie&state=%2Fcart%3Fcheckout%3Dtrue&vid=oaoh&tid=0&showGXO=true&hidePC=true&tp=CXO (same gate with the guest flag forced: renders 'Or' + 'Continue as guest')",
+    "https://www.walmart.com/cart?gxo=true (guest-mode cart: auto-forwards to /checkout/review-order?cartId=<uuid>, which the checkout auth middleware bounces to identity.walmart.com/account/login?tp=AuthMiddlewareCsr&state=%2Fcheckout%2Freview-order%3FcartId%3D<uuid>)",
+    "https://www.walmart.com/checkout/review-order",
+    "https://i5.walmartimages.com/dfw/d5139f4b-d789/6411085c-9b34-4417-b46c-4708af19c788/v2/en-US/_next/static/chunks/pages/account/login-e035a656a1afc433.js (identity app bundle; string table for the 'Sign in or create your account' page incl. 'Continue as guest' / showGuestCTA / sgc / showGXO)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-d789/6411085c-9b34-4417-b46c-4708af19c788/v2/en-US/_next/static/chunks/5213-feacc08e4987a0bd.js (identity app: password sign-in screen strings)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-d789/6411085c-9b34-4417-b46c-4708af19c788/v2/en-US/_next/static/chunks/pages/account/signin/withotpchoice-08f43ad69be781a3.js (identity app: 'Text me / Email me a verification code / Enter your password' screen)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-d789/6411085c-9b34-4417-b46c-4708af19c788/v2/en-US/_next/static/chunks/pages/account/signin/otponly-691f2669b785e7da.js (identity app: 'Enter verification code' / 'Verify and sign in' screen)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-d789/6411085c-9b34-4417-b46c-4708af19c788/v2/en-US/_next/static/chunks/pages/account/signup-4b6d9dea8844d0fd.js (identity app: 'Create your Walmart account' form strings)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-f268/e5ae2eb2-194c-4e10-ab30-3445258446eb/v2/en-US/_next/static/chunks/17364-8da3e72bea1c37a8.js (walmart.com cart bundle: checkout routing, enableGuestCheckout / hideGuestXOCTA / showGXO logic)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-f268/e5ae2eb2-194c-4e10-ab30-3445258446eb/v2/en-US/_next/static/chunks/pages/thankyou-d59d9ef5b7e3feca.js (walmart.com /thankyou order-confirmation page string table)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-7fc1/c0e74d04-b056-47ca-a66f-6c80fa684bc9/v2/en-US/_next/static/chunks/66259-44eca557a04ddf70.js (checkout app: 'Place order for $X' + 'By placing this order, you agree to our Terms of Use / Privacy Policy')",
+    "https://i5.walmartimages.com/dfw/d5139f4b-7fc1/c0e74d04-b056-47ca-a66f-6c80fa684bc9/v2/en-US/_next/static/chunks/40516-5fa614d5a4e3d275.js (checkout app: review-order page sections, contact, gift, Walmart+ 'Pick a plan' strings)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-7fc1/c0e74d04-b056-47ca-a66f-6c80fa684bc9/v2/en-US/_next/static/chunks/62979-9c7e99395b6410c5.js (checkout app: address form labels)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-7fc1/c0e74d04-b056-47ca-a66f-6c80fa684bc9/v2/en-US/_next/static/chunks/54179-c0f620a7e267cddd.js and 64564-1e1c0ffc81e5b53d.js (checkout app: card-entry form labels, 'Same as delivery address' default)",
+    "https://i5.walmartimages.com/dfw/d5139f4b-7fc1/c0e74d04-b056-47ca-a66f-6c80fa684bc9/v2/en-US/_next/static/chunks/30682-b19b75494917974d.js and 80555-c063f54cfa70a48e.js (checkout app: Walmart+ 'Choose a plan' Monthly/Annual strings)",
+    "https://www.walmart.com/help/article/walmart/534c4edc29204a6bb15145a61146bf51 (Walmart+ Membership: Annually $98, Monthly $12.95 plus tax)",
+    "https://www.walmart.com/help/article/payment-methods/af059a7587894f2f831a6159cd92d933",
+    "https://www.walmart.com/help/article/temporary-holds-and-charges/e5dcfc1ca83e49d4999fb510c7fe13af",
+    "https://www.walmart.com/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0",
+    "https://www.walmart.com/help/article/create-or-edit-an-account/147a20c9cada4d75b8e0128b16fb6fda",
+    "https://www.walmart.com/help/article/track-your-order/143cf6e1d8cb48e6a1ed840409881235",
+    "https://www.walmart.com/plus",
+    "https://www.pushsquare.com/news/2026/06/gta-6-physical-edition-doesnt-come-with-discs-its-a-code-in-the-box",
+    "https://www.gematsu.com/2026/06/grand-theft-auto-vi-pricing-ultimate-edition-and-pre-order-bonuses-announced",
+    "https://www.gfinityesports.com/article/gta-6-pre-order-guide-editions-prices-and-where-to-buy",
+    "https://www.gfinityesports.com/article/gta-6-pre-orders-explained-where-to-buy-and-what-to-expect",
+    "https://www.tomsguide.com/news/live/gta-6-pre-orders-news-and-live-updates",
+    "https://www.techradar.com/live/news/draft-gta-6-pre-orders-stock",
+    "https://www.digitalcitizen.life/gta-6-preloads-begin-on-november-12-for-digital-and-physical-code-copies/",
+    "https://baymard.com/ux-benchmark/case-studies/walmart",
+    "https://baymard.com/checkout-usability/benchmark/step-type/order-review/17581-walmart",
+    "https://baymard.com/checkout-usability/benchmark/step-type/receipt/17584-walmart",
+    "https://econsultancy.com/guest-checkout-test-which-of-these-25-us-retailers-force-users-to-register/",
+    "https://www.youtube.com/watch?v=9MH5KZOQpak",
+    "https://www.youtube.com/watch?v=YNqVYnLX7kw",
+    "https://www.walmart.ca/en/help/article/learn-about-pre-orders/6ae15da4368f4a72976afe850e1f4f11",
+    "https://marketplacelearn.walmart.com/guides/preorder-program-overview"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI, PlayStation 5 Game, (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+        "url": "https://www.walmart.com/ip/Grand-Theft-Auto-VI-PlayStation-5-Game/20482917228",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "20482917228",
+        "release_date": "2026-11-12",
+        "availability_label": "Preorder",
+        "delivery_estimate_text": "Free shipping, arrives by release date Nov 12 (PDP: Arrives by Thu, Nov 12, 2026)"
+      },
+      {
+        "title": "Grand Theft Auto VI, Xbox Series X/S Game, (Code In Box, Delivers 11/12/26, Playable 11/19/26)",
+        "url": "https://www.walmart.com/ip/Grand-Theft-Auto-VI-Xbox-Series-X-Game/20459958275",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "20459958275",
+        "release_date": "2026-11-12",
+        "availability_label": "Preorder",
+        "delivery_estimate_text": "Free shipping, arrives by release date Nov 12 (PDP: Arrives by Thu, Nov 12, 2026)"
+      }
+    ],
+    "preorder_bonus_text": "Pre-order to receive the Vintage Vice City Pack.",
+    "description_snippet": "This product will only contain a download code inside the box to support pre-load starting on November 12. A disc will not be included in the box. Game is playable starting November 19."
+  },
+  "branding": {
+    "logo_text": "Walmart (yellow six-point 'spark' icon; on identity.walmart.com the wordmark 'Walmart' + spark SVG)",
+    "primary_color": "#0053E2",
+    "secondary_color": "#FFC220",
+    "background": "#FFFFFF",
+    "font_note": "EverydaySans (Walmart's proprietary sans), fallbacks 'Helvetica Neue', Helvetica, Arial, sans-serif. Body text #2E2F32. Headings bold (700): PDP title 18px/700, price 28px/700, login h1 20px/700. All primary buttons are pills (border-radius 1000px), 16px bold white text on #0053E2. Search box is a white pill (radius 9999px). Secondary/dark blues seen in header: #002E99, #002D58; 'Best seller' badge text #004F9A; light blue tint #E9F1FE.",
+    "header_layout": "Row 1 (blue #0053E2 bar, white text): yellow spark logo (aria 'Walmart Homepage', links to /) | location/intent pill 'Pickup or delivery?' showing 'Omaha, 68116 • Omaha W Maple Rd Supercenter' (opens a Shipping / Pickup / Delivery dialog with 'Add address', 'Ship to another country') | white pill search box placeholder 'Search Walmart' with search icon button | 'Reorder / My Items' (heart icon) | 'Sign In / Account' (person icon; dropdown: Sign in or create account, Purchase History, Walmart+, Subscriptions, Language | English) | cart icon with count and total ('0 $0.00', becomes '1 $79.99'). Row 2 (white bar): 'Departments' and 'Services' dropdown buttons, then links Rollbacks & More, Restaurants, Halloween, Get it Fast, Pharmacy, Walmart+, More. A floating 'Sparky' AI shopping assistant button ('Ask me anything') also sits on the page.",
+    "nav_items": ["Departments", "Services", "Rollbacks & More", "Restaurants", "Halloween", "Get it Fast", "Pharmacy", "Walmart+", "More"]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search Walmart",
+      "search_url_pattern": "/search?q={q}",
+      "search_results_layout": "Left filter rail (Price, Brand, Video Game Platform, Product Category, Video Game Genre, Video Game Format, Game Collections, Compatible Devices, ESRB Rating, Rating, Number of Pieces, Availability, Departments, Customer Rating, Retailer, Gifting). Top chips: In-store, Get it fast, Price, Brand, 'Sort by | Best Match'; quick-link chips: GTA VI, Memory, Consoles & bundles, Accessories, GTA Shop, Suggested (Action & Adventure, Rockstar Games, Rating Pending). Heading 'Results for \"grand theft auto vi\"(80)' + 'Uses item details. Price when purchased online'. Grid tiles show: badge (Overall pick / Best seller / In 50+ people's carts / Rollback), product image, heart button 'Sign in to add to Favorites list', CTA pill ('Preorder' for GTA VI; 'Add' or 'Options' for others), price as big dollars + superscript cents ('$79 99'; strikethrough 'Was' price when discounted; 'Options from $X'), title, star rating + review count ('3.5 out of 5 stars 37'), 'Save with [Walmart+]' line, fulfillment line ('Preorder' + 'Free shipping, arrives by release date Nov 12'; others: 'Delivery as soon as 12 mins', 'Shipping, arrives tomorrow', 'Pickup available'), ESRB label ('Rating Pending', 'Mature 17+'). Sponsored carousels ('Console Gamer Starter Pack', 'Highly rated by customers') interleaved; 'Related searches' chips and pagination 1 2 3 at the bottom.",
+      "category_path": "Video Games / PlayStation / PlayStation 5 / PlayStation 5 (PS5) Games (breadcrumb at bottom of PDP; Xbox listing sits under Video Games / Xbox)"
+    },
+    "product_page": {
+      "url_pattern": "/ip/<Product-Name-Slug>/<numeric item id>  (e.g. /ip/Grand-Theft-Auto-VI-PlayStation-5-Game/20482917228; search links add ?classType=REGULAR&athbdg=L1200&from=/search)",
+      "headline": "Grand Theft Auto VI, PlayStation 5 Game, (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+      "variant_selectors": [
+        { "label": "Platform", "type": "separate-listings", "options": ["PlayStation 5 (item 20482917228)", "Xbox Series X/S (item 20459958275)"] }
+      ],
+      "price_display": "Buy box: 'Current price is' (sr-only) then '$79.99' in 28px bold #2E2F32; directly under it 'Preorder Price Guarantee' with a 'Details' link-button (opens popover), then 'Price when purchased online', then 'As low as $14/mo with [OnePay Later logo] Learn more', then 'Free shipping' and 'Free 30-day returns'. No strikethrough/list price and no member price on this item. Above the title: badges '100+ bought since yesterday', 'Overall pick', 'Preorder  Release date Nov 12'.",
+      "fulfillment_options": [
+        { "label": "Shipping", "detail": "Arrives Nov 12 — Free", "default": true },
+        { "label": "Pickup", "detail": "Check nearby", "default": false },
+        { "label": "Delivery", "detail": "Not available", "default": false }
+      ],
+      "cta_buttons": [
+        { "label": "Preorder", "behavior": "Adds 1 unit to the cart and does a full redirect to an 'Added to cart!' interstitial at /pac?id=<itemId>&ip=79.99&qt=1&... (title 'Added to cart | Relevant recommendations'). Header cart badge updates to '1  $79.99'. Button style: blue #0053E2 pill, white 16px bold text." },
+        { "label": "Add to list", "behavior": "Requires sign-in (list feature)" },
+        { "label": "Add to registry", "behavior": "Requires sign-in (registry feature)" },
+        { "label": "Claim offer now", "behavior": "Walmart+ $1 trial banner link" }
+      ],
+      "quantity_selector": false,
+      "upsells": [
+        "OnePay CashRewards Card banner at top of buy box: 'Earn unlimited 3% cash back at Walmart and 1.5% back on all other purchases. Learn More'",
+        "OnePay Later financing: 'As low as $14/mo with OnePay Later — Learn more'",
+        "Walmart+ checkbox in buy box: 'I want delivery savings with [Walmart+] — Try 30 days for just $1! Choose a plan at checkout.'",
+        "Walmart+ banner under buy box: 'Try 30 days of Walmart+ for just $1! T&C apply. Claim offer now'",
+        "Sponsored product tile in buy box (e.g. 'EA SPORTS FC 27 - PlayStation 5 Game $69.00' with 'Add to cart')",
+        "'Similar items you might like' / 'Based on what customers bought' carousel, 'Discover recommended pairings (Generated by AI)' carousel, 'Customer ratings & reviews' section (reviews syndicated 'from samsclub.com')"
+      ],
+      "notable_text": [
+        "Preorder  Release date Nov 12 (badge above title)",
+        "Key item features: 'This product will only contain a download code inside the box to support pre-load starting on November 12. A disc will not be included in the box. Game is playable starting November 19.' / 'Code can only be used by users holding an account for PlayStation® registered to the US or Canada.' (PS5 listing) / 'Pre-order to receive the Vintage Vice City Pack.' / 'Grand Theft Auto VI is a single-player experience.'",
+        "ESRB: Rating Pending",
+        "Preorder Price Guarantee popover: 'When you order an item featuring the Preorder Price Guarantee, you will not be charged more than the price displayed when you completed your order. For items sold by Walmart, you will be charged the lowest price offered by Walmart for the item between the time you completed your order and the time the item ships to you. For items sold by third party Marketplace sellers, you will be charged the price displayed at the time you completed your order. Unless you pay using a gift card or Paypal, you will not be charged until the preordered item is shipped to you. If you pay using a gift card or Paypal, you will be charged at the time you completed your order.'",
+        "How you'll get this item: / How do you want your item? (Shipping / Pickup / Delivery tiles)",
+        "Ships to Omaha, 68116 — Arrives by Thu, Nov 12, 2026",
+        "Sold and shipped by Walmart.com — Report an issue with seller or item",
+        "Free 30-day returns — Details (popover: 'Return policy — Return within 30 days after item is delivered — Returnable to store? Yes — Special return instructions: Video Game downloads are not returnable after purchase. If you are unable to locate or redeem your code…')",
+        "This item is gift eligible — Learn more",
+        "Packaging note: Ships in the manufacturer's original packaging, which may reveal the contents.",
+        "Brand link: Rockstar Games; rating '3.5 out of 5 stars (3.5) | 37 ratings'"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "redirect-to-cart",
+      "contents": "Full-page interstitial at /pac?id=<itemId>&ip=<price>&qt=1&g=FC&... (not the cart itself). Headline 'Added to cart!' with item thumbnail, full title, '$79.99 ea', quantity stepper (Decrease quantity / '1' / Increase quantity), OnePay CashRewards Card banner ('Earn unlimited 5% cash back at Walmart with Walmart+ and 1.5% back on all other purchases. Learn more'), then carousels 'Customers also bought these products' and 'Customers also considered' (each tile has 'Add to cart' / 'Options' / 'Shop similar'). A sticky bar holds the 'View cart (1)' button; a 'Skip to Cart and Checkout Section' accessibility button is also present.",
+      "buttons": ["View cart (1)", "Decrease quantity", "Increase quantity", "Add to cart - <recommended item>", "Shop similar"]
+    },
+    "cart": {
+      "url": "https://www.walmart.com/cart",
+      "line_item_fields": ["thumbnail", "title (link)", "social badges ('In 200+ people's carts', 'Best seller')", "price $79.99", "'Preorder  Release date Nov 12'", "'Free 30-day returns'", "'Gift eligible: original packaging'", "'Preorder Price Guarantee  Details'", "Remove", "Save for later", "quantity stepper (- 1 +)", "fulfillment group header 'Free shipping, arrives by Thu, Nov 12' with ZIP button '68116'", "'Sold and shipped by Walmart' / 'Free shipping'"],
+      "summary_fields": ["Subtotal (1 item) $79.99", "Shipping Free", "Taxes — Calculated at checkout", "Estimated total $79.99", "'As low as $14/mo — No credit impact to apply' (OnePay Later)"],
+      "promo_code_field": false,
+      "checkout_button_label": "Continue to checkout",
+      "express_options": [],
+      "upsells": [
+        "Text under checkout button: 'For the best shopping experience, sign in' (sign in link)",
+        "Walmart+ box with checkbox: 'Try 30 days of Walmart+ for just $1! Claim offer — You'll choose your plan at checkout.'",
+        "Checkbox 'This order is a gift.'",
+        "OnePay CashRewards: 'Earn $77.39 cash back! That's 3% cash back with the OnePay CashRewards Card including a $75 welcome bonus. Learn how'",
+        "'Discover Great Brands' recommendation carousel under the line items",
+        "Page heading 'Cart (1 item)' with 'Pickup and delivery options' expander at top"
+      ]
+    },
+    "checkout": {
+      "url": "Identity gate: https://identity.walmart.com/account/login?...&state=%2Fcart%3Fcheckout%3Dtrue&vid=oaoh&tid=0&hidePC=true&tp=CXO (the cart builds this URL; it adds showGXO=true only when the CCM flag hideGuestXOCTA is false, which it currently is not). After auth the single-page checkout lives at https://www.walmart.com/checkout/review-order?cartId=<uuid> (a separate Next.js app; page title pattern 'Review your order - …'). Hitting /checkout/review-order without a session bounces to identity.walmart.com/account/login?tp=AuthMiddlewareCsr&state=%2Fcheckout%2Freview-order%3FcartId%3D<uuid>; hitting it without a cart bounces to /?reason=invalidCartIdOrPcId. Order confirmation renders at https://www.walmart.com/thankyou.",
+      "auth": {
+        "guest_allowed": false,
+        "account_required": true,
+        "screen_text": "Page title 'Login | Walmart'. Walmart wordmark logo top-left. H1 'Sign in or create your account'. Sub-text 'Not sure if you have an account? Enter your phone number or email and we'll check for you.' One text field labelled 'Phone number or email (required)'. Note 'Securing your personal information is our priority. See our privacy measures.' Blue pill button 'Continue'. Separate card 'Walmart Business — Buying for work? — Create a business account' (white pill button). Footer: © 2026 Walmart. All Rights Reserved. | Give feedback | Terms of Use | Privacy Notice | California Supply Chain Act | Your Privacy Choices | Customer Privacy Center | Notice at Collection. No guest option is rendered. Verified why: the identity app does contain an 'Or' divider + 'Continue as guest' button (i18n key continueAsGuestBtnLabel) that renders only when the URL carries showGXO=true / sgc; the walmart.com cart config exposes enableGuestCheckout=true but hideGuestXOCTA=true, so the cart never appends showGXO=true. Forcing showGXO=true by hand does render 'Continue as guest', but clicking it only lands on walmart.com/?gxo=true, and loading /cart?gxo=true auto-forwards to /checkout/review-order?cartId=<uuid>, whose AuthMiddlewareCsr bounces straight back to this same sign-in page. After submitting an unrecognized identifier the app routes to /account/sign-up ('Create your Walmart account'); the sign-up bundle contains no guest option either.",
+        "guest_button_label": null,
+        "signin_fields": ["Phone number or email (required)", "Password (screen 2 for recognized identifiers, label 'Password', prompt 'Enter your password', Show/Hide toggle, 'Forgot password' link)", "or a 6-digit 'Verification code' after choosing 'Text me a verification code' / 'Email me a verification code'", "optional 'Sign in with passkey' button", "checkbox 'Keep me signed in' ('Uncheck if using a public device.')"]
+      },
+      "steps": [
+        {
+          "name": "Identify (identity.walmart.com/account/login)",
+          "fields": [ { "label": "Phone number or email (required)", "type": "text", "required": true } ],
+          "options": ["Continue", "Create a business account", "(hidden unless showGXO=true: 'Or' + 'Continue as guest')"],
+          "button_label": "Continue",
+          "notes": "Observed. Walmart checks whether the identifier exists. Recognized -> /account/signin/withpassword or /account/signin/withotpchoice (see next step). Not recognized -> /account/sign-up 'Create your Walmart account'. Validation strings: 'Please enter a valid phone number or email', 'Please enter a valid 10-digit phone number', 'Email address is required.'"
+        },
+        {
+          "name": "Sign in (recognized identifier)",
+          "fields": [
+            { "label": "Password", "type": "password", "required": true },
+            { "label": "Keep me signed in", "type": "checkbox", "required": false },
+            { "label": "Verification code (6 digits, alternative to password)", "type": "text", "required": false }
+          ],
+          "options": ["Heading 'Welcome back!' (or 'Sign in to your Walmart account'), the entered email/phone shown with a 'Change' link ('Change email address' / 'Change phone number')", "Password screen: 'Enter your password', label 'Password', 'Show' / 'Hide' toggle, link 'Forgot password' (also 'Forgot password?' / 'Reset your password'), checkbox 'Keep me signed in' with helper 'Uncheck if using a public device.' and info 'We'll keep you signed in on this device. You may be asked to enter your password when modifying sensitive account information.', button 'Sign in', alternative button 'Sign in with passkey' (enablePasskeySignIn=true in the identity config)", "OTP-choice screen (when the account allows password-less sign-in; enablePasswordLess=true): 'Please choose a sign in method' — 'You can request a verification code to sign in without your password, or enter your password.' — radio options 'Text me a verification code' / 'Email me a verification code' / 'Enter your password', 'Verification code will be sent to (xxx) xxx-1234', 'Message and data rates may apply', button 'Request code' (or 'Continue')", "Code screen: 'Enter verification code' / 'Enter the code we sent to …', field 'Verification code' (6 digits), 'Resend code', 'Code not working? Try another way', 'Trouble logging in?', button 'Verify and sign in'", "Step-up on new devices (enableMandatoryOtp=true): 'Quick Security Check' / 'Verify it's you' — 'To sign in, you'll need to confirm it's you by entering a verification code. We'll send a code to:' — 'Send code' / 'Submit Code'", "Error: 'Your email address and password don't match. Please try again or reset your password.'"],
+          "button_label": "Sign in (password) / Request code -> Verify and sign in (one-time code) / Sign in with passkey",
+          "notes": "confidence: high for labels (read from the identity app's page bundles: pages/account/signin/withpassword, signin/withotpchoice, signin/otponly, plus shared chunk 5213). Which of the two screens appears first depends on the account (lastLoginPreference, canUsePassword, canUsePhoneOTP, canUseEmailOTP, hasPasskeyOnProfile flags in the SignIn GraphQL fragment). Not exercised live because no identifier was typed."
+        },
+        {
+          "name": "Create your Walmart account (new shoppers, /account/sign-up)",
+          "fields": [
+            { "label": "First name", "type": "text", "required": true },
+            { "label": "Last name", "type": "text", "required": true },
+            { "label": "Email address", "type": "email", "required": true },
+            { "label": "Phone number", "type": "tel", "required": true },
+            { "label": "Create a password", "type": "password", "required": true },
+            { "label": "Keep me signed in", "type": "checkbox", "required": false },
+            { "label": "Send me emails about new arrivals, hot items, daily savings, & more.", "type": "checkbox", "required": false }
+          ],
+          "options": ["Heading 'Create your Walmart account'", "Password rules shown live: 'Your password must include the following:' '8-100 characters', 'Upper & lowercase letters', 'At least one number or special character' (Show/Hide toggle)", "Legal line: 'By clicking Create Account, you acknowledge you have read and agreed to our Terms of Use and Privacy Policy' (variant 'By clicking Continue, you acknowledge you have read and agreed to our Terms of Use'; phone line 'You also agree to receive account related text messages.')", "'Already have an account?' / 'Have an account?' -> 'Sign in' link", "Errors: 'An account with this email already exists.', 'This phone number is already in use. Try with another number.', 'Please enter a valid 10-digit phone number.', 'We couldn't create an account. Please try again and use a valid first and last name.'", "Then phone verification (enablePhoneCollectorOnSignUp=true): 'Enter verification code' / 'Please enter the 6-digit verification code we sent to (xxx) xxx-1234', 'Text me' / 'Call me instead', 'Get another code', button 'Verify number' -> 'Phone verified'"],
+          "button_label": "Create account (then 'Verify number' on the SMS code screen)",
+          "notes": "confidence: high for labels (identity app bundles pages/account/signup + sign-up + shared chunk 3343), medium for field order. Matches the walmart.com help article 'Create or Edit an Account' (mobile number verified by one-time code; a number verified in the last 45 days cannot be reused)."
+        },
+        {
+          "name": "Checkout page (/checkout/review-order?cartId=<uuid>) — fulfillment card",
+          "fields": [ { "label": "Fulfillment group card: 'Shipping' — 'Arrives by Thu, Nov 12' (items listed under 'Items details', 'Qty 1')", "type": "display", "required": false } ],
+          "options": ["Header 'Checkout'; progress copy 'Almost there!' / 'Just a couple more steps!' / 'You're almost there!' (these helper lines render under the order-summary CTA on mobile only)", "Fulfillment labels available: 'Shipping', 'Delivery', 'Pickup', 'Digital delivery — Arrives soon after purchase', 'Arrives by …', 'Shipping to <city>'; 'Edit items' / 'Edit cart' / 'Go to cart' links", "The delivery address is a block inside this card: the fulfillment-card string table holds 'Delivery address' / 'Pickup address' / 'Installation address' next to 'Change', 'Scheduled shipping, arrives ', 'Scheduled delivery' — there is no separate address card", "No 'How do you want your items?' selector was found in the checkout bundle — the Shipping / Pickup / Delivery choice is made on the PDP buy box and in the cart's 'Pickup and delivery options' expander before checkout"],
+          "button_label": "Continue (order-summary CTA while this step is the next incomplete one; analytics co 'shipping')",
+          "notes": "confidence: medium — labels from the checkout app's string tables (chunk 40516); the page still needs a signed-in session (re-tested 2026-09-30: /checkout/review-order?cartId=<uuid> bounces to identity.walmart.com with tp=AuthMiddlewareCsr), so the stacking below comes from the same bundle's step state machine and page skeletons rather than a screenshot. Step machine (module 82490 / 6469): one step per fulfillment group (the Walmart+ 'Membership' group is skipped) -> GIFTING_STEP (if gift) -> SUBSCRIPTION_TERMS_STEP -> PAYMENT_STEP -> CONTACT_STEP -> AGREEMENT_STEP (post-paid items) -> AGE_VERIFICATION_STEP (alcohol/DEX) -> TOBACCO_CONSENT_STEP -> REVIEW_STEP. Skeletons (module 34841): desktop = left column [fulfillment card, fulfillment card, 30%-heading text card, 25%-heading text card] + right rail min(394px, 40%) [order summary: heading, three lines, divider, heading, 44px pill button]; a below-the-fold container = payment-shaped block + a shadowed card with icon/title, a radio row and three text lines (the Walmart+ plan card); mobile = fulfillment ×2 -> payment block -> 25% block -> bordered two-line block -> order summary -> 44px button. Resulting order, top to bottom: fulfillment card ('Shipping — Arrives by …', items, 'Delivery address' + 'Change') -> Payment method -> Contact -> consent cards when applicable -> Walmart+ plan card -> order summary with 'Place order for $…' (right rail on desktop, bottom on mobile). It is one page of inline-editable cards (each card has its own Edit / Cancel / Save: data-testid action-button-save / action-button-cancel, 'Cancel Edit Mode'), not a page-per-step wizard; the state machine (enabled for guests or when enableSinglePageXO && isSinglePageXO) only tracks activeStep / nextIncompleteStep and swaps the label of the single order-summary CTA. Payment-above-Contact is the state-machine order; the previous guess (Contact above Payment) is superseded but not visually confirmed."
+        },
+        {
+          "name": "Delivery address (labelled 'Delivery address' / 'Shipping to …'; form heading 'Add address')",
+          "fields": [
+            { "label": "First name*", "type": "text", "required": true },
+            { "label": "Last name*", "type": "text", "required": true },
+            { "label": "Street address*", "type": "text", "required": true },
+            { "label": "Apt, suite, etc.", "type": "text", "required": false },
+            { "label": "City*", "type": "text", "required": true },
+            { "label": "State*", "type": "select", "required": true },
+            { "label": "Zip code*", "type": "text", "required": true },
+            { "label": "Phone number*", "type": "tel", "required": true },
+            { "label": "Delivery instructions (optional)", "type": "textarea", "required": false },
+            { "label": "Set as my preferred address", "type": "checkbox", "required": false }
+          ],
+          "options": ["'No PO boxes. Military addresses OK.'", "Address verification dialog: 'Make sure your address is correct' / 'We couldn't verify your address, which could lead to delivery delays or lost packages.' -> 'Use suggested address' / 'Continue with entered address' / 'Confirm address'; unverifiable: 'We can't verify this address. Want to save it anyway?' -> 'No, save this address' / 'Save my entered address'", "Saved addresses show 'Edit delivery address' / 'Use this address' / 'Use a different address'", "'Phone number (in case of delivery questions)*' variant; 'Your phone number will be used to contact you if there is any trouble delivering your order. We will never sell or share your number, or use it for unsolicited marketing.'"],
+          "button_label": "Save (also 'Save my entered address', 'Use this address')",
+          "notes": "confidence: medium-high — exact labels from the checkout app's address-form chunk (62979); the doc's earlier 'Save address' guess is superseded by 'Save'. Email is not asked here; it lives in the Contact card. Placement (2026-09-30): the saved address renders inside the fulfillment card under a 'Delivery address' heading with a 'Change' link (fulfillment-card string module in chunk 40516); the 'Add address' form opens inline from there. There is no separate address step in the checkout state machine — the address belongs to the shipping group's step (deliveryAddressRequired)."
+        },
+        {
+          "name": "Contact",
+          "fields": [
+            { "label": "Email address*", "type": "email", "required": true },
+            { "label": "Phone number (10 digits)", "type": "tel", "required": true },
+            { "label": "Text updates for this order", "type": "checkbox", "required": false }
+          ],
+          "options": ["Card title 'Contact' (also 'Mobile contact'), 'Edit Contact', 'Add an email address' / 'Add a phone number' / 'Add phone number', 'Phone number ending in …' / 'Ending in: (xxx) xxx-1234', 'Send order updates' / 'Send to a different phone number', 'Save preferences for next time', 'Get emails about hot items, great savings, and more' (marketing checkbox), 'Go to Account > Personal info to save your phone number for faster checkout next time.', 'Digital items will be delivered to this email'"],
+          "button_label": "Save",
+          "notes": "confidence: medium — from the checkout bundle (chunk 40516); normally pre-filled from the account so the shopper only sees 'Edit Contact'. Placement (2026-09-30): CONTACT_STEP comes after PAYMENT_STEP in the checkout state machine, so the Contact card sits below Payment method; its inline edit mode has 'Cancel' / 'Cancel Edit Mode' and 'Save' (analytics co 'contact')."
+        },
+        {
+          "name": "Payment method (card title 'Payment method'; 'Add a payment method' / '+ Add new payment' / 'Add credit or debit card')",
+          "fields": [
+            { "label": "Card number *", "type": "text", "required": true },
+            { "label": "Expiration date — two side-by-side selects, each half width: 'MM*' and 'YY*' on desktop (mobile labels 'Exp Month*' / 'Exp Year*'); placeholder options 'MM' / 'YY'; aria-labels 'Expiration month' / 'Expiration year'; autocomplete cc-exp-month / cc-exp-year; a small grey 'Expiration date' caption sits above the pair on desktop only; errors 'Required' / 'Invalid' (past month/year)", "type": "select", "required": true },
+            { "label": "CVV *  (a.k.a. 'Security code *', with 'Learn more about CVV' / 'Where is the security code?')", "type": "text", "required": true },
+            { "label": "First name *", "type": "text", "required": true },
+            { "label": "Last name *", "type": "text", "required": true },
+            { "label": "Phone number*", "type": "tel", "required": true },
+            { "label": "Billing address — checkbox 'Same as delivery address' (checked by default)", "type": "checkbox", "required": false },
+            { "label": "Billing address (when unchecked): 'Use existing address' / 'Add new address' -> Street Address*, Apt(optional), City*, State*, Zip Code*", "type": "text", "required": false },
+            { "label": "Save this card to your wallet / Set as default card", "type": "checkbox", "required": false }
+          ],
+          "options": ["Card-form footer (chunk 64564): link-style 'Cancel' (desktop only, class dn db-m) + primary pill 'Save' (type=submit; full width on mobile; spinner a11y label 'Submitting payment method'; success toast 'New card successfully added.'; analytics saveCardAdd / saveCardEdit). Field order (bundle + Walmart Business guide screenshot): Card number* -> First name* -> Last name* -> MM* / YY* -> CVV* -> Phone number* -> Billing address", "Order-summary CTA while the card form is open: 'Continue' (state-machine flow) or 'Add payment method' (legacy flow); it is rendered as type=submit form=<card form id>, so it submits the same form. 'Save and review order' appears only when the state machine's next incomplete step is REVIEW_STEP (i.e. this is the last section left); 'Save' / 'Save and review order' also label the CTA on mobile single-page edit mode for non-payment sections", "Section heading 'Card information', footer '*Required fields', 'we accept' card logos ('Credit/Debit Card. Visa, Amex, Discover, Mastercard, Capital One and more accepted')", "Helper: 'Discover, Mastercard and Visa: Use the 3 digits found on the back of your card.' / 'American Express: Use the 4 digits on the front of your card.'", "Alternative payment tiles ('Accepted payment methods'): 'Continue to PayPal', 'Continue to link bank account' (Pay by bank), 'Walmart Gift Card' (number + PIN), 'Monthly Payments' (Affirm) / OnePay Later / 'Pay in monthly installments with OnePay Loans.', 'EBT card', Benefit/OTC cards, 'Learn more about the OnePay Card'; note 'Gift cards can't be used to buy digital items.'", "Saved-card CVV re-entry: 'Please enter the security code (CVV) for the card.' / 'CVV (required)'", "Note: 'This payment method will be added to your profile. You can edit or remove this card at any time in your Account settings.'", "Errors: 'Please enter a valid card number.', 'Enter a 3 or 4 digit CVV code', 'First name on card is required', 'Enter a valid 10 digit phone number', 'Your payment couldn't be authorized. Please check the card number, security code and expiration date and try again, or use a different payment method.'"],
+          "button_label": "Save (the card form's own inline submit; 'Cancel' beside it on desktop). The order-summary CTA reads 'Continue' (or 'Add payment method' in the legacy flow) while the card form is open and also submits it; 'Save and review order' only when the review step is the last one left.",
+          "notes": "confidence: medium-high — labels from the checkout card-form chunk (64564: 'Card number*', 'CVV', 'Expiration date', 'Exp Month*', 'Exp Year*', 'MM*', 'YY*', 'Phone number*', 'Same as delivery address', 'Save', 'Cancel'), re-read 2026-09-30. The single 'Expiration Date *' string (i18n key singleFieldExpiration) exists only in the account Wallet / gift-card chunk (54179: 'Add card', 'Save card') and is never rendered, so the earlier 'Expiration Date * (MM/YY)' entry is superseded by the split MM* / YY* selects. Corroboration: the Walmart Business Buyer User Onboarding Guide v3 (2024) 'Add credit or debit card' screenshot shows the same 'MM *' / 'YY *' dropdowns with 'Cancel' / 'Save card' (that is the Wallet variant; checkout's inline button is 'Save'). The 'Same as delivery address' checkbox is rendered as checked:!n with n initialised via useState(false), i.e. checked by default; it is hidden in edit mode or when no delivery address exists yet."
+        },
+        {
+          "name": "Walmart+ plan (only when the cart/PDP $1-trial checkbox was ticked)",
+          "fields": [ { "label": "Choose a plan: 'Monthly' ($12.95/month) or 'Annual' ($98/year, badge 'Best value plan')", "type": "radio", "required": true }, { "label": "I agree to the terms (required)", "type": "checkbox", "required": true } ],
+          "options": ["In-checkout card titled 'Walmart+' / 'Membership' with CTA 'Pick a plan'; summary line 'Savings/trial'; nudge 'Finish picking a plan and verifying your phone number to join Walmart+' (phone verification is mandatory for the trial)", "Plan chooser ('Choose your plan' / 'Choose a plan'): 'Monthly' / 'Annual', 'Best value plan', legal 'By signing up, you agree that after the [30-day trial] we will charge the fee of $… then $…/year|month' (assembled), 'See full terms' / 'Hide full terms', checkbox 'I agree to the terms (required)' ('You must check the box to agree to the terms'), link 'No thanks, continue without Walmart+'; standalone page variant button 'Start 30-day free trial'", "Post-order copy: 'Your W+ trial membership has been created. Cancel anytime through your Account until <date> to avoid charges.'; removal notice 'The selected Walmart+ plan was removed from order. You can still opt-in for Walmart+ to enjoy exclusive benefits and savings.'", "Prices (Walmart help 'Walmart+ Membership'): 'Annually - $98 plus applicable tax', 'Monthly - $12.95 plus applicable tax'"],
+          "button_label": "Pick a plan -> (select Monthly/Annual, tick 'I agree to the terms (required)') -> Continue / Save",
+          "notes": "confidence: medium — labels from the checkout app's Walmart+ chunks (30682, 80555, 40516) and the /plus/chooseplan page that ships in the same app. Placement (2026-09-30): the Walmart+ 'Membership' fulfillment group is excluded from the step machine and its plan card renders in the below-the-fold container under the payment block (skeleton: shadowed card with icon + title, a radio row and three text lines); not visually observed."
+        },
+        {
+          "name": "Review + Place order",
+          "fields": [],
+          "options": ["Right-rail order summary: 'Subtotal (1 item)', 'Shipping' Free, 'Taxes', 'Estimated total' (helper 'Estimated total does not include … Select a payment method for a better estimate.' when no payment is set)", "The order summary holds one context-sensitive CTA under 'Estimated total' (chunk 40516 module 83400): 'Continue' (default / shipping step; 'Just a couple more steps!' under it on mobile), 'Add payment method' (legacy flow, no payment yet), 'Save' / 'Save and review order' (mobile single-page edit mode; the latter when only the review step remains), and finally 'Place order for $…'; it is wired as type=submit for whichever address or card form is open", "Primary button 'Place order for $79.99' (i18n: 'Place order ' + 'for' + ' ' + amount; business accounts see 'Submit order for approval')", "Legal sentence directly under/next to the button: 'By placing this order, you agree to our Terms of Use and Privacy Policy' (assembled from 'By placing this order, you agree to our ' + link 'Terms of Use' + link 'Privacy Policy')", "Pre-order hold note variant: 'We'll apply a temporary charge of $… to your payment method.'", "Progress states: 'Placing order' -> 'Your order is placed!' -> redirect to /thankyou", "Also on the page: 'This order is a gift.' checkbox -> 'Gift details' (Recipient's email address *, Gift message (optional)); 'Preorder Price Guarantee' + 'Details' link on the pre-order line"],
+          "button_label": "Place order for $79.99",
+          "notes": "confidence: high for the button and legal strings (checkout chunk 66259), medium for the summary layout."
+        }
+      ],
+      "payment_methods": ["Credit cards (Visa, Mastercard, American Express, Discover, Capital One / OnePay cards)", "Debit cards", "PayPal ('Continue to PayPal')", "Pay by bank ('Continue to link bank account')", "Walmart Gift Cards / eGift Cards (number + PIN)", "Walmart Balance / Walmart Cash", "OnePay Later / OnePay Loans / Affirm 'Monthly Payments' financing", "Capital One Walmart Rewards / OnePay CashRewards card (as a card)", "EBT cards (eligible items only)", "HSA/FSA, WIC and OTC benefit cards (eligible items only)"],
+      "card_fields": ["Card number *", "Expiration date: 'MM*' / 'YY*' selects (mobile 'Exp Month*' / 'Exp Year*')", "CVV * (Security code *)", "First name * / Last name * (or 'Name on the card *')", "Phone number*", "Billing address: 'Same as delivery address' checkbox (default checked) | 'Use existing address' | 'Add new address' (Street Address*, Apt(optional), City*, State*, Zip Code*)", "Save this card to your wallet / Set as default card"],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "when shipped (authorization hold at order time; gift card and PayPal are charged at order time)",
+      "charge_policy_text": "Unless you pay using a gift card or Paypal, you will not be charged until the preordered item is shipped to you. If you pay using a gift card or Paypal, you will be charged at the time you completed your order. (Preorder Price Guarantee popover on the PDP.) Terms of Use: 'Some exceptions (when you will be charged at the time your order is placed) are: (i) orders or preorders paid for with a Gift Card, eGift Card, or PayPal account; and (ii) orders paid using the in-store \"Cash\" payment method.' Help center: 'We charge the final order total to your credit or debit card once your order is picked up, delivered, or shipped.'",
+      "review_step": { "exists": true, "place_order_label": "Place order for $79.99", "shows": ["items with arrival date ('Arrives by Thu, Nov 12', 'Items details')", "delivery address", "contact (email, phone)", "payment method", "order summary: Subtotal, Shipping, Taxes, Estimated total", "legal line 'By placing this order, you agree to our Terms of Use and Privacy Policy'", "Walmart+ 'Pick a plan' card / OnePay upsells"] },
+      "confirmation": {
+        "headline": "Thanks for your order!",
+        "order_number_format": "Rendered as 'Order# <id>' under the headline (also '<grand total> | Order #<id>' in the compact header) and as 'Order number <id>' in Purchase history — the storefront prints the id verbatim; no hyphen insertion, split('-') or digit-count regex exists in the thank-you or orders chunks (checked 2026-09-30). No real id was observed. Walmart's Marketplace Orders API calls customerOrderId 'The customer-facing order number' (sample 4372135469400 = 13 digits, no hyphen) and its EDI 850 spec makes the Customer Order Number a 13-digit numeric, so the best estimate is a plain 13-digit number, e.g. 'Order# 4372135469400'. The older hyphenated forms ('1234567-123456', '2000123-45678901') could be neither confirmed nor ruled out — low confidence.",
+        "contents": ["headline 'Thanks for your order!' (i18n variants: 'Order confirmed', 'Your order is confirmed!', 'Thanks for your order - <first name>')", "'Order# <id>'", "sub-copy 'Now kick back and relax, we'll take care of the rest!' / 'Time to get excited. Your order is in the works!'", "buttons 'Track my order', 'View order details', 'Keep shopping' / 'Continue shopping'", "items grouped by fulfillment with 'Arrives by Thu, Nov 12' ('This order might arrive early' when applicable)", "delivery address, payment method (card brand + last 4), order summary / total", "phone nudge: 'Get order updates' / 'Verify your phone number to secure your account and get order updates.' -> 'Verify phone number' / 'Phone number verified'", "Walmart+ / OnePay / app promos ('Get the app')", "guest-conversion module (only when a guest order exists): 'Just one more thing...' / 'Set your password - track your order easily and check out even faster next time' / 'Enjoy the convenience of order tracking and account management in your new account.' -> 'Your account is created!'"],
+        "email_sent_text": "No 'a confirmation email was sent to <email>' string exists in the /thankyou page bundle or its shared chunks (searched for email/sent/confirmation); the only email lines are gift-specific ('We'll email you and the recipient with tracking details when your gift ships.'). The confirmation email itself is the 'order acknowledgment' described in the Terms of Use ('we will send you an order acknowledgment by email setting out what you have ordered. This is not an order confirmation or acceptance from us.'), and the Track Your Order help article says 'When your package ships, we'll send you an email with the tracking link.' Confidence medium that the page shows no explicit sent-to line."
+      }
+    },
+    "account": {
+      "required_for_purchase": true,
+      "signup_fields": ["First name", "Last name", "Email address", "Phone number", "Create a password (8-100 characters, upper & lowercase letters, at least one number or special character)", "Keep me signed in (checkbox)", "Send me emails about new arrivals, hot items, daily savings, & more. (checkbox)", "SMS 6-digit verification code ('Verify number')"],
+      "login_fields": ["Phone number or email (required)", "Password ('Enter your password', Show/Hide, 'Forgot password')", "or 6-digit 'Verification code' via 'Text me a verification code' / 'Email me a verification code' ('Request code' -> 'Verify and sign in')", "or 'Sign in with passkey'", "Keep me signed in (checkbox)"],
+      "membership_program": "Walmart+ — 'Annually - $98 plus applicable tax' / 'Monthly - $12.95 plus applicable tax' (Walmart help 'Walmart+ Membership'); 30-day trial promoted everywhere as 'Try 30 days of Walmart+ for just $1!'; plan chosen at checkout ('Pick a plan' -> Monthly / Annual, 'I agree to the terms (required)'); requires a verified phone number; benefits: free delivery ($35 order min), free shipping no minimum, Paramount+ or Peacock, gas savings, 5% cash back with OnePay cards; not required to preorder"
+    },
+    "quirks": [
+      "Clicking 'Preorder' does not open a modal or drawer: it hard-redirects to an 'Added to cart!' interstitial page (/pac?...) full of recommendations; the shopper must click 'View cart (1)' to reach /cart.",
+      "The CTA label is 'Preorder' (one word), not 'Pre-order' or 'Add to cart'; the search tile button is also 'Preorder'.",
+      "The listing titles bake the dates into the name: '(Code in Box, Delivers 11/12/26, Playable 11/19/26)'. Walmart shows 'Release date Nov 12' (the ship/preload date), not the Nov 19 play date.",
+      "PS5 and Xbox are separate listings (separate item IDs), no platform selector on the PDP; no Ultimate Edition listing exists on walmart.com (Ultimate is digital-only).",
+      "No guest checkout for US shoppers: 'Continue to checkout' sends the shopper to identity.walmart.com ('Sign in or create your account', single 'Phone number or email (required)' field). The platform has guest plumbing (cart config enableGuestCheckout=true, an 'Or / Continue as guest' button in the identity app, a guest 'Set your password' module on the thank-you page) but the cart config flag hideGuestXOCTA=true suppresses the button, and the checkout's auth middleware bounces any unauthenticated /checkout/review-order request back to sign-in. Unrecognized identifiers go to 'Create your Walmart account' (First name, Last name, Email address, Phone number, Create a password, 'Create account'), followed by a mandatory SMS code ('Verify number').",
+      "Sign-in is OTP-first for many accounts: after a recognized email/phone Walmart may offer 'Text me a verification code' / 'Email me a verification code' / 'Enter your password' ('Request code'), and new devices get a 'Verify it's you' code step; passkeys ('Sign in with passkey') are supported.",
+      "The place-order button carries the amount: 'Place order for $79.99', with 'By placing this order, you agree to our Terms of Use and Privacy Policy' beside it; a 'Placing order' spinner and 'Your order is placed!' precede the /thankyou page ('Thanks for your order!', 'Order# …', 'Track my order').",
+      "Checkout is one page of inline-editable cards with a hidden step tracker: the checkout app's state machine orders steps fulfillment group(s) -> gifting -> subscription terms -> PAYMENT -> CONTACT -> agreement / age / tobacco consents -> REVIEW and swaps the single order-summary CTA between 'Continue', 'Add payment method', 'Save', 'Save and review order' and 'Place order for $…'. The delivery address lives inside the Shipping card ('Delivery address' + 'Change'), the new-card form closes with its own inline 'Save' ('Cancel' beside it on desktop), and card expiry is two selects 'MM*' / 'YY*' (mobile 'Exp Month*' / 'Exp Year*'), not one MM/YY box.",
+      "Location gating: the header carries a store/ZIP intent pill ('Pickup or delivery? Omaha, 68116 • Omaha W Maple Rd Supercenter') and the PDP fulfillment tiles (Shipping / Pickup / Delivery) depend on it; the cart shows the ZIP as a button.",
+      "Fulfillment selector lives on the PDP and the cart ('How do you want your item?'): Shipping (Free, arrives Nov 12) is the only live option for this preorder; Pickup says 'Check nearby', Delivery 'Not available'. Checkout itself has no fulfillment switcher, only the 'Shipping — Arrives by …' card.",
+      "Walmart+ is pushed at every step: PDP checkbox ('I want delivery savings with Walmart+'), PDP banner, cart checkbox ('You'll choose your plan at checkout'), homepage hero, and a 'Pick a plan' (Monthly $12.95 / Annual $98, 'I agree to the terms (required)') card in checkout that also demands phone verification. OnePay (Walmart's fintech) CashRewards card and OnePay Later financing ('As low as $14/mo') appear on PDP, interstitial and cart.",
+      "'Preorder Price Guarantee' with a 'Details' popover on PDP and cart explains lowest-price and charge-on-ship policy.",
+      "Cart has no promo-code field, no PayPal/Apple Pay express buttons; taxes are 'Calculated at checkout'; 'This order is a gift.' checkbox; 'Save for later' link.",
+      "Sponsored tiles are embedded inside the buy box and search grid; reviews on the GTA VI page are syndicated from samsclub.com.",
+      "Product tiles and the PDP show social-proof badges ('100+ bought since yesterday', 'In 200+ people's carts', 'Overall pick', 'Best seller').",
+      "Returns popover warns 'Video Game downloads are not returnable after purchase' even though the listing is 'Free 30-day returns'.",
+      "Walmart's help center and Terms pages block non-browser fetchers with a 'Robot or human?' press-and-hold check; the storefront itself loaded normally in the browser."
+    ]
+  },
+  "gaps": [
+    "Post-identity checkout screens were still not rendered live on 2026-09-30 (/checkout/review-order?cartId=<uuid> bounces to identity.walmart.com with tp=AuthMiddlewareCsr; no identifier was typed). All labels for sign-in, sign-up, address, contact, card, Walmart+ plan, place-order and thank-you come from the string tables inside Walmart's own Next.js bundles; the checkout section order now comes from the checkout app's step state machine and page skeletons (medium confidence) rather than a screenshot, and Payment-above-Contact is not visually confirmed.",
+    "Order number format: no real id observed. The storefront prints the id verbatim ('Order# ' + id, no hyphen logic) and Walmart's Marketplace API / EDI docs make the customer-facing order number a 13-digit numeric, so the current estimate is 13 digits without a hyphen (low confidence). Tried on 2026-09-30: Walmart help 'Track Your Order' (no format stated), the storefront route manifest (no guest order-lookup page to read a placeholder from), Baymard's receipt page (paywalled, 403 for fetchers), ConsumerAffairs / Reddit / BBB (blocked for fetching), and searches for hyphenated '2000xxx-' tokens (nothing).",
+    "Confirmation 'email sent to' wording: no such string exists in the /thankyou bundle, so the page probably shows none, but this could not be confirmed visually.",
+    "Full 'About this item' / 'Product details' description text did not expand via script (content is lazy-loaded); description_snippet uses the first 'Key item features' sentence instead.",
+    "No Walmart Ultimate Edition listing was found on walmart.com (only Standard code-in-box for PS5 and Xbox); Ultimate appears to be digital-store only.",
+    "Tom's Guide / TechRadar / Windows Central pre-order guides were truncated or blocked for WebFetch; only search snippets (Walmart at $79 code-in-box) were used.",
+    "Pickup availability for this item was 'Check nearby' for the default Omaha, NE store; other stores/ZIPs were not tested.",
+    "No third-party walkthrough (Reddit, YouTube transcript, blog) corroborates the bundle-derived checkout labels beyond the Walmart Business Buyer Onboarding Guide's 'Add credit or debit card' (Wallet) screenshot; Baymard's Walmart checkout pages are paywalled, and DuckDuckGo/Bing/Brave/Startpage/Wayback/Reddit were blocked or useless for WebFetch."
+  ]
+}

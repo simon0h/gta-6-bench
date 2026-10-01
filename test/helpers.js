@@ -4,9 +4,9 @@ import { clearOrders } from '../lib/orders.js'
 import { resetAccounts } from '../lib/accounts.js'
 
 // Start the app on a random port with persistence off. Returns { base, close, client }.
-export async function startServer() {
+export async function startServer(opts = {}) {
   process.env.NODE_ENV = 'test'
-  const app = await createApp({ persist: false })
+  const app = await createApp({ persist: false, captcha: { mode: 'off' }, ...opts })
   const server = await new Promise(resolve => { const s = app.listen(0, '127.0.0.1', () => resolve(s)) })
   const base = `http://127.0.0.1:${server.address().port}`
   return {

@@ -1,0 +1,255 @@
+{
+  "slug": "smyths-toys",
+  "name": "Smyths Toys Superstores",
+  "country": "UK",
+  "currency": "GBP",
+  "base_url": "https://www.smythstoys.com",
+  "confirmed_preorder_live": true,
+  "confidence": "medium",
+  "browser_worked": false,
+  "sources": [
+    "https://www.smythstoys.com/uk/en-gb/search/?text=grand+theft+auto+vi (browser: Imperva/Incapsula 'Additional security check is required' page; not solved)",
+    "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/grand-theft-auto-vi-ps5/p/263307 (search-engine snippets only; direct fetch returned 'Pardon Our Interruption' bot wall)",
+    "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games/grand-theft-auto-vi-xbox-series-x/p/263308 (snippets only)",
+    "https://www.smythstoys.com/ie/en-ie/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/grand-theft-auto-vi-ps5/p/263722 (Irish twin listing; snippets only)",
+    "https://www.smythstoys.com/ie/en-ie/gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games/grand-theft-auto-vi-xbox-series-x/p/263638 (Irish twin listing; snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/pre-order (pre-order policy; snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/help-click-and-collect (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/click-and-collect (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/Help-Shipping-and-Delivery (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/shipping-and-delivery (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/help (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/help-faq (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/stock-availability (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/contact-us (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/top-faqs (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/gift-card-info (snippets only)",
+    "https://www.smythstoys.com/uk/en-gb/about-us (snippet only)",
+    "https://milled.com/smyths-toys-hq/pre-order-grand-theft-auto-vi-now-mIcwDDyOiMwX0r2O (Smyths marketing email 'Pre-order Grand Theft Auto VI now'; fetch returned 403, title only)",
+    "https://www.which.co.uk/news/article/best-gta-6-pre-orders-af0wZ5l3fxX7 (fetched, 29 Jun 2026)",
+    "https://www.thesixthaxis.com/2026/06/25/grand-theft-auto-6-pre-orders-are-live-70-80-e80-regional-pricing-confirmed/ (fetched)",
+    "https://www.pushsquare.com/news/2026/06/uk-gta-6-buyers-pleasantly-surprised-by-no-ps5-pre-order-price-hike (fetched)",
+    "https://www.gameinformer.com/2026/06/24/grand-theft-auto-vi-price-and-ultimate-edition-revealed-physical-version-will-not (fetched)",
+    "https://www.hotukdeals.com/deals/grand-theft-auto-vi-ps5-pre-order-19112026-4921219 (fetched)",
+    "https://www.hotukdeals.com/deals/grand-theft-auto-vi-xbox-series-x-pre-order-19112026-4921221 (fetched)",
+    "https://techradar.com/gaming/ps5/gta-6-uk-pre-orders-are-live-and-we-finally-have-a-price-heres-where-you-can-order-it-and-what-it-costs (search snippet only; fetch truncated)",
+    "https://stripe.com/en-hr/newsroom/news/smyths-toys-and-stripe (fetched; Stripe is Smyths' online payments provider, Apple Pay / Google Pay)",
+    "https://uk.trustpilot.com/review/www.smythstoys.com (fetched; Sep 2026 reviews)",
+    "https://en.wikipedia.org/wiki/Smyths (fetched)",
+    "https://commons.wikimedia.org/wiki/File:Smyths_Toys_logo.svg (SVG read for exact logo hex colours)",
+    "https://www.klarna.com/uk/shops/ (fetched; Smyths NOT listed in Klarna UK directory)",
+    "https://node2.medicloud.intersales.de/news/pay-with-klarna-on-smyths (search snippet only; third-party, low trust)",
+    "https://www.scotsman.com/arts-and-culture/grand-theft-auto-vi-prices-uk-8758722 (403)",
+    "https://windowscentral.com/gta6-faq-how-to-preorder (fetch truncated)",
+    "https://www.tomsguide.com/news/live/gta-6-pre-orders-news-and-live-updates (fetch truncated)"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI PS5",
+        "url": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/grand-theft-auto-vi-ps5/p/263307",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 67.99,
+        "list_price": 69.99,
+        "member_price": null,
+        "sku_or_id": "263307",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-order",
+        "delivery_estimate_text": "Pre-orders collection and delivery available on November 12th (pre-load from Nov 12; playable from Nov 19)"
+      },
+      {
+        "title": "Grand Theft Auto VI Xbox Series X",
+        "url": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games/grand-theft-auto-vi-xbox-series-x/p/263308",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 67.99,
+        "list_price": 69.99,
+        "member_price": null,
+        "sku_or_id": "263308",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-order",
+        "delivery_estimate_text": "Pre-orders collection and delivery available on November 12th (pre-load from Nov 12; playable from Nov 19)"
+      }
+    ],
+    "preorder_bonus_text": "Pre-order to receive the Vintage Vice City Pack",
+    "description_snippet": "Vice City, USA. Jason and Lucia are caught up in a criminal conspiracy stretching across the state of Leonida (paraphrased from the Rockstar copy Smyths uses; exact first sentence not captured)."
+  },
+  "branding": {
+    "logo_text": "Smyths Toys Superstores",
+    "primary_color": "#ed1c24",
+    "secondary_color": "#fbea07",
+    "background": "#ffffff",
+    "font_note": "Logo: heavy rounded sans wordmark 'Smyths' in red with 'Toys Superstores' in near-black (#231f20) and a yellow gradient star/ball accent (#fbea07 to #fdcd0c). Site body: plain sans-serif, bold product titles and prices; red used for buttons/CTAs, yellow for promo flashes. (confidence: colours high from logo SVG; site typography low)",
+    "header_layout": "(confidence: low, from general knowledge of the SAP Commerce-based site) Thin utility strip with delivery/Click & Collect promo text; main bar: logo (left) | wide search box with magnifier button (centre) | Store Finder, Sign In / Register (account), Basket with item count (right); a category mega-menu bar sits underneath.",
+    "nav_items": ["Toys", "Baby", "Outdoor", "Gaming & Tech", "Sale", "Brands", "Christmas (seasonal)"]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search (exact placeholder not verified; confidence: low)",
+      "search_url_pattern": "/uk/en-gb/search/?text={q}",
+      "search_results_layout": "(confidence: low) Left facet rail (Category, Brand, Price, Platform, Age, Availability) + product grid; each tile: box art, product title (link), price in bold, star rating, 'Pre-order' / 'Add to Basket' button, stock/collect note.",
+      "category_path": "Home > Gaming & Tech > Pre-Order Games > PlayStation 5 Pre-Order Games (Xbox: ... > Xbox Series X Pre-Order Games) - derived from the product URL path"
+    },
+    "product_page": {
+      "url_pattern": "/uk/en-gb/<category>/<subcategory>/<subsubcategory>/<product-slug>/p/<6-digit product id>",
+      "headline": "Grand Theft Auto VI PS5",
+      "variant_selectors": [
+        { "label": "Platform", "type": "separate-listings", "options": ["PS5 (p/263307)", "Xbox Series X (p/263308)"] }
+      ],
+      "price_display": "Single bold price (£67.99 today; launched at £69.99 on 25 Jun 2026). No member price. A 'Was' strikethrough is not confirmed. Smyths' Pre-order Price Promise: if the price is lower on dispatch/collection day you pay the lower price.",
+      "fulfillment_options": [
+        { "label": "Home Delivery", "detail": "Standard delivery FREE on orders over £20 (£2.99 for £10-£20, £4.99 under £10); GB 1-2 working days. Express next-working-day £1.99 over £20 (£5.99 £10-£20, £7.99 under £10), order by 10pm, Mon-Fri, not available to Islands & Scottish Highlands. Pre-orders dispatched so they arrive on/around the availability date (Nov 12).", "default": true },
+        { "label": "Click & Collect", "detail": "FREE; choose a store; in-stock items ready within 2 hours; pre-orders available for collection from Nov 12; held 2 days from the availability date; £2 non-collection fee if not collected; bring photo ID of the person who ordered + the 'Ready for Collection' email.", "default": false }
+      ],
+      "cta_buttons": [
+        { "label": "Pre-order", "behavior": "Adds the item to the basket and opens an 'added to basket' confirmation (label may read 'Add to Basket' on this build; confidence: low)" },
+        { "label": "Check Store Stock", "behavior": "Opens store-selector to pick a Click & Collect store (confidence: low)" }
+      ],
+      "quantity_selector": true,
+      "upsells": [
+        "'You may also like' / 'Customers also bought' carousel (other pre-order games, PS5/Xbox accessories; the Grand Theft Auto VI DualSense controller is a natural cross-sell) (confidence: low)"
+      ],
+      "notable_text": [
+        "Pre-order to receive the Vintage Vice City Pack",
+        "Pre-load starting on November 12th. Pre-orders collection and delivery available on November 12th. Playable from November 19th.",
+        "This product will only contain a download code inside the box to support pre-load. A disc will not be included.",
+        "Grand Theft Auto VI is a single-player experience.",
+        "The PlayStation 5 version can only be used by users holding an account for PlayStation registered to the United Kingdom.",
+        "PEGI 18 (age rating badge; exact placement not verified)",
+        "Ref: 263307 (product code shown on page)"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "modal",
+      "contents": "(confidence: low) 'Added to your basket' panel showing the item image, title, price and quantity, plus basket subtotal.",
+      "buttons": ["Continue Shopping", "View Basket", "Checkout"]
+    },
+    "cart": {
+      "url": "https://www.smythstoys.com/uk/en-gb/cart",
+      "line_item_fields": ["image", "title", "product code", "unit price", "quantity stepper", "line total", "Remove"],
+      "summary_fields": ["Subtotal", "Delivery (calculated at checkout / FREE over £20)", "Total"],
+      "promo_code_field": true,
+      "checkout_button_label": "Checkout",
+      "express_options": ["PayPal", "Apple Pay", "Google Pay"],
+      "upsells": ["Free delivery threshold message (spend over £20)", "Click & Collect availability prompt"]
+    },
+    "checkout": {
+      "url": "https://www.smythstoys.com/uk/en-gb/checkout (SAP Commerce multi-step checkout; exact step URLs not verified)",
+      "auth": {
+        "guest_allowed": true,
+        "account_required": false,
+        "screen_text": "(confidence: low) Split screen: 'Returning customer - Sign in' (email + password) | 'New customer' with 'Register' and 'Continue as guest'. Smyths help text confirms orders can be placed without an account ('if you do not have an account, you can create one' to manage a pre-order later).",
+        "guest_button_label": "Continue as guest",
+        "signin_fields": ["Email address", "Password"]
+      },
+      "steps": [
+        {
+          "name": "Delivery method",
+          "fields": [
+            { "label": "Home Delivery", "type": "radio", "required": true },
+            { "label": "Click & Collect", "type": "radio", "required": true },
+            { "label": "Find a store (town or postcode)", "type": "text", "required": false }
+          ],
+          "options": ["Home Delivery - Standard FREE over £20 (1-2 working days GB)", "Home Delivery - Express next working day £1.99 over £20", "Click & Collect - FREE, choose store"],
+          "button_label": "Continue",
+          "notes": "For pre-orders the delivery/collection date is the availability date (Nov 12 for GTA VI). Store choice is required for Click & Collect. (confidence: low on layout; high on options/prices)"
+        },
+        {
+          "name": "Your details / Delivery address",
+          "fields": [
+            { "label": "Title", "type": "select", "required": false },
+            { "label": "First name", "type": "text", "required": true },
+            { "label": "Last name", "type": "text", "required": true },
+            { "label": "Email address", "type": "email", "required": true },
+            { "label": "Phone number", "type": "tel", "required": true },
+            { "label": "Postcode (Find address)", "type": "text", "required": true },
+            { "label": "Address line 1", "type": "text", "required": true },
+            { "label": "Address line 2", "type": "text", "required": false },
+            { "label": "Town / City", "type": "text", "required": true },
+            { "label": "County", "type": "text", "required": false },
+            { "label": "Country", "type": "select", "required": true }
+          ],
+          "options": [],
+          "button_label": "Continue",
+          "notes": "Postcode lookup with manual-entry fallback. For Click & Collect only name/email/phone are needed. Addresses cannot be amended after the order is placed (Smyths help). (confidence: low)"
+        },
+        {
+          "name": "Payment",
+          "fields": [
+            { "label": "Card number", "type": "text", "required": true },
+            { "label": "Expiry date (MM/YY)", "type": "text", "required": true },
+            { "label": "CVC", "type": "text", "required": true },
+            { "label": "Name on card", "type": "text", "required": true },
+            { "label": "Billing address same as delivery address", "type": "checkbox", "required": false },
+            { "label": "Voucher code", "type": "text", "required": false },
+            { "label": "Gift card number / PIN", "type": "text", "required": false }
+          ],
+          "options": ["Credit/Debit card (Visa, Mastercard, Maestro; via Stripe)", "PayPal", "Apple Pay", "Google Pay", "Klarna (Pay in 3 / Pay in 30 days) - unconfirmed for UK", "Smyths Gift Card / eGift Card"],
+          "button_label": "Continue",
+          "notes": "For card pre-orders nothing is charged now; the card is pre-authorised 2-7 days before availability and charged on dispatch/collection. PayPal takes full payment upfront. (payment timing: high confidence; field layout: low)"
+        },
+        {
+          "name": "Review & place order",
+          "fields": [
+            { "label": "I have read and agree to the Terms & Conditions", "type": "checkbox", "required": true }
+          ],
+          "options": [],
+          "button_label": "Place Order",
+          "notes": "Shows items, delivery/collection choice, address, payment method and totals before the final click. (confidence: low)"
+        }
+      ],
+      "payment_methods": ["Visa", "Mastercard", "Maestro", "PayPal", "Apple Pay", "Google Pay", "Smyths Gift Card / eGift Card", "Klarna (Pay in 3 / Pay in 30 days) - unconfirmed for UK site"],
+      "card_fields": ["Card number", "Expiry date (MM/YY)", "CVC", "Name on card", "Billing postcode/address"],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "Card: pre-authorised 2-7 days before the item becomes available, charged when dispatched (home delivery) or collected (Click & Collect). PayPal: full payment taken upfront at order.",
+      "charge_policy_text": "There is no payment upfront or deposit online for credit/debit card transactions. Pre-orders using PayPal will take the full payment upfront. Credit/debit card pre-orders will be pre-authorised 2 - 7 days before item becomes available. If we are unable to pre-authorise your card you will receive an email asking you to re-enter card details within 24 hours to guarantee your order.",
+      "review_step": {
+        "exists": true,
+        "place_order_label": "Place Order",
+        "shows": ["items with quantity and price", "delivery method or collection store", "delivery address", "payment method", "subtotal, delivery, total"]
+      },
+      "confirmation": {
+        "headline": "Thank you for your order (confidence: low)",
+        "order_number_format": null,
+        "contents": ["order number", "barcode (used for Click & Collect / returns)", "items ordered", "delivery or collection details", "pre-order availability date"],
+        "email_sent_text": "Order confirmation email containing your unique order number and barcode; later a dispatch confirmation email with tracking (home delivery) or a 'Ready for Collection' email (Click & Collect); for pre-orders, an email requesting re-entry of card details if pre-authorisation fails."
+      }
+    },
+    "account": {
+      "required_for_purchase": false,
+      "signup_fields": ["Title", "First name", "Last name", "Email address", "Password", "Marketing opt-in checkbox"],
+      "login_fields": ["Email address", "Password"],
+      "membership_program": null
+    },
+    "quirks": [
+      "Bot wall: smythstoys.com sits behind Imperva/Incapsula. A fresh headless/automated browser gets an 'Additional security check is required - Click to verify' interstitial before any page loads; a non-JS fetch gets 'Pardon Our Interruption'. An agent benchmark should expect this.",
+      "Physical GTA VI at Smyths is a download code in a box, not a disc; the box ships/collects from Nov 12 (pre-load) and the game is playable from Nov 19.",
+      "No money is taken for card pre-orders at checkout: card is pre-authorised 2-7 days before availability and charged on dispatch/collection; if pre-auth fails you get 24 hours to re-enter card details or lose the order.",
+      "PayPal pre-orders are charged in full immediately (different from cards).",
+      "Pre-order Price Promise: lower price on dispatch/collection day is honoured automatically, but not combined with a money-off voucher.",
+      "Click & Collect is free with a 2-day hold and a £2 non-collection fee; collector must show photo ID of the person who placed the order plus the 'Ready for Collection' email.",
+      "Delivery thresholds pivot on £20: standard delivery is free over £20, so a single £67.99 game qualifies; express is £1.99 next working day.",
+      "Orders cannot be amended or cancelled once placed (per Smyths help), but pre-orders can be cancelled / have payment details updated from a Smyths Toys account; guests are told to create an account to do this.",
+      "Site is region-switched between UK (/uk/en-gb) and Ireland (/ie/en-ie); Trustpilot reviews mention the region flipping at checkout and vouchers failing as a result.",
+      "PS5 listing warns the code only works on a PlayStation account registered to the United Kingdom.",
+      "Only Standard edition exists at Smyths (no physical Ultimate edition exists; Ultimate is digital-only at £89.99)."
+    ]
+  },
+  "gaps": [
+    "Browser blocked at the very first page by an Imperva 'Click to verify' check; per rules it was not attempted. Every direct fetch of smythstoys.com (WebFetch, curl, Google Translate proxy, Wayback) was also bot-walled or unreachable, so all Smyths page text comes from search-engine snippets/summaries rather than the rendered pages.",
+    "Exact current price: launch price was £69.99 (25 Jun, HotUKDeals/SixthAxis/TechRadar). Which? (29 Jun) reports Smyths at £68 and a HotUKDeals-derived snippet says £67.99 with free delivery; £67.99 is used as today's price (Which rounds .99 prices) but was not read off the live page.",
+    "Exact listing titles are inferred from URL slugs and Smyths' naming convention ('Grand Theft Auto VI PS5' / 'Grand Theft Auto VI Xbox Series X'); the H1 text was not seen.",
+    "Release date shown on the tile/PDP: Smyths key features cite Nov 12 (collection/delivery) and Nov 19 (playable); HotUKDeals titles the listing 'Pre Order 19/11/2026', so 2026-11-19 is recorded. Which date field Smyths prints as 'Release Date' is unverified.",
+    "Guest checkout: no page text captured. Marked guest_allowed=true (low confidence) based on Smyths help text telling customers without an account to create one to manage a pre-order, and general knowledge of the site. The sign-in screen headline and the exact guest button label are guesses.",
+    "Checkout step order, field labels, button labels, add-to-basket modal, cart labels and confirmation headline are modelled on Smyths' SAP Commerce (Hybris) storefront from general knowledge - all low confidence.",
+    "Klarna: only a low-trust third-party page claims Klarna Pay in 3 / Pay in 30 on Smyths; Klarna's own UK shop directory does not list Smyths. Left in the payment list but flagged unconfirmed.",
+    "Gift card redemption at online checkout: Smyths says gift cards/eGift cards are redeemable online, but the field placement (basket vs payment step) and whether a PIN is required were not verified.",
+    "Order number format, order-confirmation page wording and email subject lines were not found (the help pages only say the confirmation email contains a unique order number and barcode).",
+    "PEGI 18 handling: whether Smyths shows an age confirmation prompt on the PDP or at checkout for 18-rated games was not verified.",
+    "Header layout, nav labels, search placeholder and search-results tile layout are from general knowledge (low confidence); no rendered page or stylesheet was readable.",
+    "Web search budget for the session ran out part-way through; DuckDuckGo, Bing, Mojeek, Reddit, Wayback and Brandfetch were all blocked or unusable from this environment, so Reddit threads and YouTube walkthroughs could not be consulted."
+  ]
+}

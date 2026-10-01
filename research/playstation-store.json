@@ -1,0 +1,465 @@
+{
+  "slug": "playstation-store",
+  "name": "PlayStation Store",
+  "country": "US",
+  "currency": "USD",
+  "base_url": "https://store.playstation.com",
+  "confirmed_preorder_live": true,
+  "confidence": "medium-high",
+  "browser_worked": true,
+  "sources": [
+    "https://store.playstation.com/en-us/concept/10000730/",
+    "https://store.playstation.com/en-us/product/EP1004-PPSA01547_00-GTAVISTANDARD001",
+    "https://store.playstation.com/en-us/product/EP1004-PPSA01547_00-GTAVIULTIMATE001",
+    "https://store.playstation.com/en-us/product/EP1004-PPSA01547_00-ULTEDTIONUPGRADE",
+    "https://store.playstation.com/en-us/search/grand%20theft%20auto%20vi",
+    "https://www.playstation.com/support/games/gta-vi-offer-terms/",
+    "https://www.playstation.com/en-us/support/games/pre-order-games-automatic-download-ps-store/",
+    "https://www.playstation.com/en-us/support/store/payment-methods-accepted-on-ps-store/",
+    "https://www.playstation.com/en-us/support/store/purchase-games-apps-ps-store/",
+    "https://www.playstation.com/en-us/support/store/ps-store-add-remove-change-payment/",
+    "https://www.playstation.com/en-us/legal/playstation-store-cancellation-policy/",
+    "https://www.playstation.com/en-us/support/store/cancel-ps-store-pre-order/",
+    "https://www.playstation.com/en-us/support/store/ps-store-refund-request/",
+    "https://manuals.playstation.net/document/en/store/purchase.html",
+    "https://www.pushsquare.com/guides/where-to-pre-order-gta-6-on-ps5",
+    "https://www.igrandtheftauto.com/gta6/news/what-happens-if-you-pre-order-gta-vi-on-playstation",
+    "https://www.igeeksblog.com/how-to-pre-order-gta-6-on-ps5-and-xbox/",
+    "https://www.tomsguide.com/news/live/gta-6-pre-orders-news-and-live-updates",
+    "https://techradar.com/gaming/the-ps5-homepage-ps-store-and-ps-app-have-all-been-updated-with-a-new-gta-6-ui-as-pre-orders-begin",
+    "https://www.sony.co.jp/en/united/acm_account/supports/en_ww/basic300.html",
+    "https://www.niksula.hut.fi/~atiainen/sony.html",
+    "https://store.playstation.com/en-us/pages/cart/",
+    "https://checkout.playstation.com/error?cartAction=%2Ferror",
+    "https://www.playstation.com/en-us/support/store/ps-store-credit-debit-card/",
+    "https://www.playstation.com/en-us/support/store/ps-store-paypal-payment/",
+    "https://www.playstation.com/en-us/support/store/ps-store-top-up-wallet/",
+    "https://www.playstation.com/en-us/support/store/check-ps-store-transaction-subscription-service/",
+    "https://www.playstation.com/en-us/support/store/ps-store-checkout-password/",
+    "https://www.playstation.com/en-us/support/account/password-reset/",
+    "https://www.playstation.com/en-us/support/account/create-account/",
+    "https://www.playstation.com/en-us/support/games/find-download-games-ps-store/",
+    "https://www.wikihow.com/Buy-Games-from-the-PlayStation-Store",
+    "https://checkout.playstation.com/ (web-checkout client: route manifest, page chunks and the English msgid table in __NEXT_DATA__, read 2026-09-30)",
+    "https://transact.playstation.com/ (hosted payment-method iframe used inside the drawer)",
+    "https://transact.playstation.com/i18n/en-us.json (the payment iframe's English string table)",
+    "https://web-toolbar.playstation.com/ (store header/cart toolbar bundle: sign-in endpoint and cart config)",
+    "https://static.playstation.com/wca/v2/js/ (store CTA bundle: PREORDER CTA -> BUY_NOW action)",
+    "https://www.playstation.com/support/store/taxes-information/",
+    "https://www.playstation.com/en-us/support/games/pre-order-games-automatic-download-ps-store/ (re-read: 'You'll be charged when you select Pre-order')"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI",
+        "url": "https://store.playstation.com/en-us/product/EP1004-PPSA01547_00-GTAVISTANDARD001",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "digital",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "EP1004-PPSA01547_00-GTAVISTANDARD001",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-Order",
+        "delivery_estimate_text": "11/18/2026 09:00 PM PST (unlock time shown under the title; Game Info row says 'Release: 11/18/2026'); edition card lists '7-Day Pre-load'"
+      },
+      {
+        "title": "Grand Theft Auto VI: Ultimate Edition",
+        "url": "https://store.playstation.com/en-us/product/EP1004-PPSA01547_00-GTAVIULTIMATE001",
+        "platform": "PS5",
+        "edition": "Ultimate",
+        "format": "digital",
+        "price": 99.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "EP1004-PPSA01547_00-GTAVIULTIMATE001",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-Order",
+        "delivery_estimate_text": "11/18/2026 09:00 PM PST (unlock time shown under the title; Game Info row says 'Release: 11/18/2026'); edition card lists '7-Day Pre-load'"
+      },
+      {
+        "title": "Grand Theft Auto VI: Ultimate Edition Upgrade",
+        "url": "https://store.playstation.com/en-us/product/EP1004-PPSA01547_00-ULTEDTIONUPGRADE",
+        "platform": "PS5",
+        "edition": "Ultimate",
+        "format": "digital",
+        "price": null,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "EP1004-PPSA01547_00-ULTEDTIONUPGRADE",
+        "release_date": "2026-11-19",
+        "availability_label": "PRE-ORDER / Unavailable",
+        "delivery_estimate_text": "Add-on tile in the 'Add-Ons' grid; shows 'PRE-ORDER' tag and price slot reads 'Unavailable' (cannot be bought yet)"
+      }
+    ],
+    "preorder_bonus_text": "1-month GTA+ subscription with pre-order. Auto-renews. Check Game and Legal Info* below. | Purchase prior to 19 November 2026 at 23:59:59 to receive: -The Vintage Vice City Pack -One Month of GTA+ | Pre-order Grand Theft Auto VI and get one month of GTA+ on PlayStation 5 at no extra cost. Subscription continues until canceled. Offer ends November 19th 2026.",
+    "description_snippet": "Vice City, USA. Jason and Lucia have always known the deck is stacked against them. (meta description: 'Experience the biggest, most immersive evolution of the GTA series yet.')"
+  },
+  "branding": {
+    "logo_text": "PlayStation Store (wordmark image at left of the store nav; PlayStation 'PS' logo top-left of the global nav; 'SONY' wordmark top-right)",
+    "primary_color": "#0070CC",
+    "secondary_color": "#D63D00",
+    "background": "#FFFFFF",
+    "font_note": "Font family 'SST' (Sony's proprietary sans; computed: sst, helvetica, arial, sans-serif). Body text #363636 on white. Product hero/edition cards are dark-themed (#1F2024 at 97% over the key art; page section bg #121314): H1 34px weight 300 white, price 22px weight 300 white, tag chips small uppercase white. Buttons 14px weight 700, fully rounded pills (border-radius 999px, 34px tall). Search tiles: title 14px/400 black, price 14px/400 #363636, type label 8px/700 uppercase #6B6B6B. Footer is PlayStation blue #003697 with white text.",
+    "header_layout": "Two-tier white header. Tier 1 (global PlayStation nav, text #363636): PS logo icon (links to playstation.com/en-us) | mega-menu buttons 'Store', 'PS5', 'Games', 'PS Plus', 'Accessories', 'News', 'Support' | far right: 'SONY' wordmark (links to sony.com), then a blue pill 'Sign In' button (#0070CC, white 14px/500 text; replaced by avatar + cart icon when signed in) and a magnifier 'Search' button that opens an inline search field with placeholder 'Search PS Store' and a 'Cancel search' control. Tier 2 (store nav): 'PlayStation Store' wordmark link (to /en-us/pages/latest) | links 'Latest', 'Collections', 'Deals', 'Subscriptions', 'Browse' (14px/500 black). No breadcrumb anywhere.",
+    "nav_items": [
+      "Store",
+      "PS5",
+      "Games",
+      "PS Plus",
+      "Accessories",
+      "News",
+      "Support",
+      "Latest",
+      "Collections",
+      "Deals",
+      "Subscriptions",
+      "Browse"
+    ]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search PS Store",
+      "search_url_pattern": "/en-us/search/{q}  (spaces encoded as %20, e.g. /en-us/search/grand%20theft%20auto%20vi)",
+      "search_results_layout": "Page title 'PlayStation Store | Search | grand theft auto vi'. H1 'You searched for: grand theft auto vi' (query in italics). Result count line '1 - 24 of 128' (screen-reader text: '128 total results, displaying 1 to 24'). A 'Filter' button. 6-column grid of product tiles, each ~145x207px: square cover art with a small translucent-dark 'PS5' platform chip overlaid on the art (rgba(18,19,20,0.6), white text; multi-platform items show 'PS5' and 'PS4'); below the art an 8px uppercase grey type label ('PRE-ORDER', 'GAME BUNDLE', 'VIRTUAL CURRENCY', 'ADD-ON PACK'); title in 14px black; optional PS Plus service tag ('Included', 'Extra', 'Exclusive' with a PS Plus icon); price in 14px #363636 ('$79.99') or the word 'Unavailable'. Whole tile links to /en-us/product/{id}. Pagination at the bottom: '1 2 3 … 6'. First three results are the GTA VI Standard ($79.99), Ultimate ($99.99) and Ultimate Edition Upgrade (Unavailable).",
+      "category_path": "No breadcrumb on PlayStation Store. Path: PlayStation Store home (Latest) > search icon > 'grand theft auto vi' > tile > product page. Alternative: Browse > Games > filter; or direct concept URL /en-us/concept/10000730/ (redirects to the featured edition, currently the Ultimate Edition)."
+    },
+    "product_page": {
+      "url_pattern": "/en-us/concept/{conceptId}/  (edition-agnostic 'concept' page, e.g. /en-us/concept/10000730/ — renders the featured edition) and /en-us/product/{productId} per edition (e.g. /en-us/product/EP1004-PPSA01547_00-GTAVISTANDARD001). Product IDs follow {publisherCode}-{titleId}_00-{sku}.",
+      "headline": "Grand Theft Auto VI (Standard product page) / Grand Theft Auto VI: Ultimate Edition (Ultimate product page and the concept page)",
+      "variant_selectors": [
+        {
+          "label": "Editions:",
+          "type": "separate-listings",
+          "options": [
+            "Standard Edition",
+            "Ultimate Edition"
+          ]
+        },
+        {
+          "label": "Platform (shown only as a 'PS5' tag chip under the title; no selector — the game is PS5-only on this store)",
+          "type": "separate-listings",
+          "options": [
+            "PS5"
+          ]
+        }
+      ],
+      "price_display": "One price only, no strikethrough, no member price. In the dark hero card: '$99.99' (or '$79.99') in 22px light white text directly above the CTA, followed by a small promo line '1-month GTA+ subscription with pre-order. Auto-renews. Check Game and Legal Info* below.' Each edition card in the 'Editions:' section repeats its own price + the same promo line + its own 'Pre-Order' button. Sales tax is not shown on the product page (added at checkout).",
+      "fulfillment_options": [
+        {
+          "label": "Digital download (PS5)",
+          "detail": "No shipping or pickup. After purchase the game appears in the PSN account's Library, PS Store and PS App; '7-Day Pre-load' before the 11/18/2026 09:00 PM PST unlock; 'You can download and play this content on the main PS5 console associated with your account ... and on any other PS5 consoles when you login with your same account.'",
+          "default": true
+        }
+      ],
+      "cta_buttons": [
+        {
+          "label": "Pre-Order",
+          "behavior": "Orange pill button (#D63D00 bg, white 14px bold, 260x34px, full width of the hero card). The page data defines it as a GameCTA of type PREORDER whose action is BUY_NOW with skuId EP1004-PPSA01547_00-GTAVISTANDARD001-U001 (Standard) / EP1004-PPSA01547_00-GTAVIULTIMATE001-U001 (Ultimate), rewardId OUTRIGHT. Signed out: redirects to Sony sign-in (my.account.sony.com) via https://web.np.playstation.com/api/session/v1/signin?redirect_uri=<product url>; it does NOT open the drawer (observed: the cross-origin navigation is blocked in the sandbox, so the page stays put). Signed in: opens the right-side checkout drawer (checkout.playstation.com) directly on its buy-now view for that SKU, headed 'Confirm Pre-Order', with the item, payment method, Subtotal/Tax/Total and a 'Pre-Order & Pay' button; there is no intermediate cart view and no 'Checkout' button. Repeated on each edition card."
+        },
+        {
+          "label": "Add to Wishlist",
+          "behavior": "Outlined translucent pill with a heart icon next to the Pre-Order button; requires sign-in; toggles the item in the account wishlist and shows an inline toast in the CTA slot."
+        },
+        {
+          "label": "Show More",
+          "behavior": "Expands the 'Add-Ons' grid below the editions."
+        }
+      ],
+      "quantity_selector": false,
+      "upsells": [
+        "'Editions:' section with two dark cards (Standard Edition / Ultimate Edition), each listing feature bullets — Standard: 'Grand Theft Auto VI', 'Vintage Vice City Pack', 'One Month of GTA+', '7-Day Pre-load'; Ultimate adds 'Ultimate Edition Upgrade' — with price and its own 'Pre-Order' + 'Add to Wishlist' buttons",
+        "'Add-Ons' grid: 'Grand Theft Auto VI: Ultimate Edition Upgrade' tile (PS5, PRE-ORDER, 'Unavailable')",
+        "GTA+ subscription promo line under every price ('1-month GTA+ subscription with pre-order. Auto-renews.')",
+        "Global nav promos: 'Subscribe to PS Plus', 'PS Credit Card', 'Buy gift card' links in the Store mega-menu"
+      ],
+      "notable_text": [
+        "Rockstar Games (publisher line under the H1)",
+        "11/18/2026 09:00 PM PST (release/unlock line under the publisher)",
+        "Tag chips: PS5 | ULTIMATE EDITION (or STANDARD EDITION) | PS5 PRO ENHANCED",
+        "1-month GTA+ subscription with pre-order. Auto-renews. Check Game and Legal Info* below.",
+        "ESRB 'RP' badge with 'May contain content inappropriate for children'",
+        "Compatibility notices: 'In-game purchases optional', 'Offline play enabled', '1 player', 'Remote Play supported', 'PS5 Version', 'Vibration function and trigger effect supported (DualSense wireless controller)', 'PS5 Pro Enhanced'",
+        "Game and Legal Info: 'Pre-order Grand Theft Auto VI and get one month of GTA+ on PlayStation 5 at no extra cost. Subscription continues until canceled.' 'Offer ends November 19th 2026.' 'You'll receive a confirmation email with redemption instructions. Your GTA+ subscription is non-transferable, and can only be redeemed on the account used to pre-order the game.' 'Must be redeemed by March 31st 2027.'",
+        "'Purchase prior to 19 November 2026 at 23:59:59 to receive: -The Vintage Vice City Pack -One Month of GTA+'",
+        "'Grand Theft Auto VI is a single-player experience.'",
+        "Game Info rows: Platform: PS5 | Release: 11/18/2026 | Publisher: Rockstar Games | Genres: Action",
+        "Legal: 'Online features require an account for PlayStation and are subject to terms of service...' 'Software subject to license (us.playstation.com/softwarelicense).' 'Purchase grants a license to the digital product subject to the Terms of Service...'",
+        "No charge-timing text on the product page itself; the footer links 'PS Store Cancellation Policy'"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "side-drawer",
+      "contents": "Definite path: clicking 'Pre-Order' while signed in slides the checkout drawer in from the right over the dimmed, blurred page (about 40% of the viewport wide, white, round outlined 'X' close button top-right). The drawer is the checkout.playstation.com web-checkout client in a cross-origin iframe (observed signed out: it shows the client's /login view, heading 'Sign in to proceed' rendered in title case as 'Sign In To Proceed', plus a blue 'Sign In' pill). Because the Pre-Order CTA's action is BUY_NOW (page data), the signed-in drawer opens on the client's /buynow/{sku} view rather than on a cart: header 'Confirm Pre-Order' (the client's HEADER_CONFIRM_PREORDER string; a non-pre-order Buy Now shows 'Confirm Purchase'), then the item tile (80x80 cover art, 'Grand Theft Auto VI' / 'Grand Theft Auto VI: Ultimate Edition', ESRB rating image, pre-order dates such as 'Release Date: 11/18/2026' / 'Expected download date: ...'), price, the 'Payment method' section (hosted transact.playstation.com iframe showing the default instrument, wallet funds and a change/add control), an optional 'Redeem Code' discount box ('Enter discount code' + 'Apply'; present in the bundle, rendering not verified for US digital carts), the summary rows 'Subtotal' / 'Tax' / 'Total (1 item)', the pre-order legal line, and the orange 'Pre-Order & Pay' button, with a 'Learn more about taxes and fees' link (US only) and 'Continue Shopping'. Labels come from the client's English msgid table and route/chunk code (not seen rendered signed in). The header 'Cart' icon opens the same drawer on the cart view instead ('Cart (1 Item)' / 'Cart (N Items)'), which has the same payment + summary + confirm layout and also no separate 'Checkout' step. Official web wording remains only 'Select Add to Cart (or Pre-Order) and then follow the on-screen instructions to complete your purchase.'",
+      "buttons": [
+        "Pre-Order (product page; BUY_NOW action)",
+        "Add to Wishlist",
+        "Cart (header icon, opens the drawer on the cart view; present even when signed out)",
+        "Sign in to proceed / Sign In (drawer /login view, signed out)",
+        "Pre-Order & Pay (drawer confirm button for a cart or buy-now containing a pre-order; 'Confirm Purchase' for regular digital items)",
+        "Continue Shopping",
+        "Close (X)"
+      ]
+    },
+    "cart": {
+      "url": "Drawer, not a page: the header 'Cart' button opens the checkout.playstation.com client on its cart view ('/' route, document title 'Cart | Checkout') inside a right-side panel; the store URL does not change. Empty cart view: 'Your Cart' + 'Your cart is empty.' + 'Continue Shopping'. A store route also exists: https://store.playstation.com/en-us/cart redirects (observed) to https://store.playstation.com/en-us/pages/cart/ ; signed out that page renders the store's fallback (heading 'This probably isn't what you're looking for...' with 'Back to Store or Home.' links). The client's /unified/cart route (header 'Continue to Checkout') is the one-commerce cart for PS Direct hardware; the digital store session has isUnifiedCart=false, so it is not used here.",
+      "line_item_fields": [
+        "cover art (80x80)",
+        "title",
+        "ESRB rating image",
+        "pre-order dates ('Release Date: %date%' / 'Expected download date: %date% %time%')",
+        "price (with strikethrough original price if discounted)",
+        "Remove (screen-reader label 'Remove %productname% from cart')"
+      ],
+      "summary_fields": [
+        "Subtotal",
+        "Tax",
+        "Discount (only when a code is applied)",
+        "Total (1 item) / Total (%num% items)"
+      ],
+      "promo_code_field": false,
+      "checkout_button_label": "No separate Checkout button: the cart view itself holds the payment method, the summary and the confirm button ('Confirm Purchase', or 'Pre-Order & Pay' when the cart contains a pre-order)",
+      "express_options": [],
+      "upsells": [
+        "Header 'Cart (1 Item)' / 'Cart (%num% Items)'; close 'X' / 'Continue Shopping' returns to the page underneath",
+        "Payment-method section is the hosted transact.playstation.com iframe: shows the default instrument (e.g. 'Card ending in %num%'), 'Wallet Balance' / 'Wallet funds', and 'Change Payment Method' > 'Please select a payment method.' with a 'Default' tag and 'Add Payment Method'; official rule: 'your wallet funds are used first' and any shortfall is settled with the selected payment method",
+        "PlayStation Visa promo strip: 'Earn points and get rewarded when you use the PlayStation® Credit Card.' (links to playstation.com/en-us/playstation-credit-card/)",
+        "'Redeem Code' box with placeholder 'Enter discount code' and an 'Apply' button exists in the drawer code (rendering for US digital carts not verified)",
+        "US-only link 'Learn more about taxes and fees' (playstation.com/support/store/taxes-information/)",
+        "'Add Funds' lives under avatar > Payment Management (official), not in the drawer"
+      ]
+    },
+    "checkout": {
+      "url": "Right-side drawer (cross-origin iframe) served from https://checkout.playstation.com and shown on top of the store page; the store URL does not change. Client routes seen in its build manifest: /buynow/[sku] (what the Pre-Order CTA opens; page id BUY_NOW), / (cart view, page id PURCHASE, title 'Cart | Checkout'), /login ('Sign in to proceed'), /thankyou ('Thank You | Checkout'), /error ('Error | Checkout'), /transaction-history, /post-purchase/order-history, /unified/* (PS Direct one-commerce). Observed: loading https://checkout.playstation.com/ or /cart directly (no store session) redirects to https://checkout.playstation.com/error?cartAction=%2Ferror — a bare white page titled 'Error | Checkout' with the heading 'Something went wrong.' and a single 'Close' button. The payment-method and add-card screens inside the drawer are a second hosted iframe from https://transact.playstation.com (Sony's 'transact' app, strings at /i18n/en-us.json).",
+      "auth": {
+        "guest_allowed": false,
+        "account_required": true,
+        "screen_text": "Sony/PlayStation sign-in page: the store's header 'Sign In' pill, the drawer's 'Sign In' button and the signed-out 'Pre-Order' click all go to https://web.np.playstation.com/api/session/v1/signin?redirect_uri=<store url> (web-toolbar config; sets the isSignedIn cookie on return), which forwards to my.account.sony.com/central/signin/ with a return URL. Per Sony's account help (basic300): headline 'Sign In'; step 1 field 'Sign-in ID (Email address)' with 'Next'; step 2 'Password' with 'Sign In'; optional 'Sign in with Passkey'; if 2-step verification is on, a 'confirmation code' field with 'Verify' (or a backup code); links 'Trouble Signing In?', 'reset your password', 'create a new account' (PlayStation help labels it 'Create New Account'). No guest option. The page itself was not observed: the sandbox browser refuses my.account.sony.com and the session sign-in endpoint, and WebFetch is blocked for that domain, so exact casing/layout is unverified (confidence medium). Observed instead: the signed-out drawer shows the client's /login view — heading 'Sign in to proceed' (displayed as 'Sign In To Proceed') and a blue 'Sign In' pill — and the store header has a blue 'Sign In' pill.",
+        "guest_button_label": null,
+        "signin_fields": [
+          "Sign-in ID (Email address)",
+          "Password",
+          "Confirmation code (only if 2-step verification is enabled)"
+        ]
+      },
+      "steps": [
+        {
+          "name": "Sign in (PSN account)",
+          "fields": [
+            {
+              "label": "Sign-in ID (Email address)",
+              "type": "email",
+              "required": true
+            },
+            {
+              "label": "Password",
+              "type": "text",
+              "required": true
+            }
+          ],
+          "options": [
+            "Sign in with Passkey",
+            "Trouble Signing In?",
+            "Create New Account",
+            "Verify (2-step verification code, if enabled)"
+          ],
+          "button_label": "Next (email step) then Sign In (password step)",
+          "notes": "Reached from the store header 'Sign In' pill, the drawer's 'Sign In' button, or the 'Pre-Order' / 'Add to Wishlist' redirect, all via https://web.np.playstation.com/api/session/v1/signin?redirect_uri=... which forwards to my.account.sony.com. Two-step Sony account sign-in ('Sign In' headline; email > Next; password > Sign In; optional passkey; optional 2-step verification code > Verify). Returns to the store page after success, where the header shows the avatar and the 'Cart' icon. Labels from Sony's account help; the page was not observed (confidence medium)."
+        },
+        {
+          "name": "Checkout drawer — 'Confirm Pre-Order' view (buy-now for the clicked SKU)",
+          "fields": [
+            {
+              "label": "Payment method",
+              "type": "radio",
+              "required": true
+            },
+            {
+              "label": "Redeem Code (discount code; optional, rendering unverified)",
+              "type": "text",
+              "required": false
+            },
+            {
+              "label": "Password (only if 'Require Password at Checkout' is on: 'Enter your password')",
+              "type": "text",
+              "required": false
+            }
+          ],
+          "options": [
+            "Wallet funds ('Wallet Balance' / 'Wallet funds')",
+            "Saved credit/debit card ('Card ending in %num%'; Visa, Mastercard, American Express, Discover; up to 3 saved)",
+            "PayPal / Venmo / Apple Pay / Cash App Pay (1 payment service saved per account)",
+            "Change Payment Method > 'Please select a payment method.' > Add Payment Method (opens the add-card / add-service screens)"
+          ],
+          "button_label": "Pre-Order & Pay",
+          "notes": "Inside the same right-side drawer, all on one panel: header 'Confirm Pre-Order' (the client uses HEADER_CONFIRM_PREORDER when the buy-now item is a pre-order; a plain item says 'Confirm Purchase'); item tile with cover art, 'Grand Theft Auto VI' (or ': Ultimate Edition'), rating image and pre-order dates; 'Payment method' (hosted transact iframe; default instrument preselected; wallet funds are used first and any shortfall goes to the selected card/service, official); summary rows 'Subtotal', 'Tax' (sales tax from the account's US address; the client inserts the Tax row for tax-exclusive countries like the US), optional 'Discount', 'Total (1 item)'; then the legal line and the button. Button label logic in the client: 'Processing...' while submitting; otherwise 'Pre-Order & Pay' when the cart/buy-now contains a pre-order (US), 'Order & Pay' in SCEE/LatAm for regular items, 'Confirm Purchase' for regular US items and Brazil. US pre-order legal line (verbatim from the client): 'You'll be charged for your pre-order when you select [Pre-Order & Pay]. If the price drops before the product is released, we'll refund you the difference. When you select [Pre-Order & Pay], you agree the purchase is governed by the PlayStation Terms of Service. You also acknowledge that your purchase of any digital content amounts to a license, subject to the PlayStation End User License Agreement.' Regular US digital items instead get 'By selecting [Confirm Purchase], you agree to complete the purchase in accordance with the PlayStation Terms of Service before using this content. You also acknowledge ... End User License Agreement.' If 'Require Password at Checkout' is on, a 'Password' prompt ('Enter your password'; error 'Incorrect password') appears above the button and the drawer notes '[Require Password at Checkout] setting is turned on.' Extras: 'Learn more about taxes and fees' link (US), PlayStation Visa promo strip, 'Continue Shopping'. Source: the live checkout client's route/chunk code and msgid table (not seen rendered signed in; confidence medium-high for labels, medium for layout order)."
+        },
+        {
+          "name": "Add Payment Method — credit/debit card (hosted transact.playstation.com screens; only when adding a card)",
+          "fields": [
+            {
+              "label": "Credit/Debit Card Number",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Cardholder's Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Expiration: Month / Year (two selects under 'Expires On')",
+              "type": "select",
+              "required": true
+            },
+            {
+              "label": "CVV ('This is the 3- or 4-digit code on your credit/debit card.')",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Billing Information (second screen): First name, Last name, Street address, Address 2 (optional), City, State, ZIP Code, Country or region (United States), Phone number",
+              "type": "text",
+              "required": true
+            }
+          ],
+          "options": [
+            "Add Payment Method > Add a Credit/Debit Card ('Add your payment method (maximum 3 credit/debit cards).')",
+            "Add a PayPal Account",
+            "Set as Default Payment Method (checkbox/option)",
+            "Search (address lookup) / Use Residential Address"
+          ],
+          "button_label": "Next (card screen) then Save (billing screen)",
+          "notes": "Official (PlayStation Support, 'How to use credit or debit cards on PlayStation Store'): 'Select Add Payment Method > Add a Credit/Debit Card. Enter your card information and select Next. Enter your billing address and select Save.' The screens are rendered by Sony's hosted 'transact' iframe (transact.playstation.com); its English string file (/i18n/en-us.json) and compiled add-card template give the labels: screen 'Add a Credit/Debit Card'; card form 'Credit/Debit Card Number' (card type auto-detected, fallback '- Select credit/debit card type -'), 'Cardholder's Name', expiry 'Month' / 'Year' selects ('Expires On'), 'CVV' with helper 'This is the 3- or 4-digit code on your credit/debit card.'; billing screen 'Billing Information' with 'First name', 'Last name', 'Street address', 'Address 2 (optional)', 'City', 'State' (or 'State or province'), 'ZIP Code' (also 'Postal Code' in the newer template), 'Country or region', 'Phone number'; buttons 'Next' / 'Save' / 'Back' / 'Cancel'; success 'Credit/debit card has been successfully added.' / 'Your credit/debit card has been saved.'; 'Set as Default Payment Method' and the note 'Your default payment method is used to complete your purchase when your wallet doesn't have enough funds.' Maximum 3 cards ('You have reached the maximum of three credit/debit cards on file.'). The string file also carries a newer label set ('Card number', 'Expiration date', 'CVV number', 'Cardholder's name'), so exact casing may differ by screen version; the form was not seen rendered (confidence medium)."
+        },
+        {
+          "name": "Confirmation ('Thank You | Checkout')",
+          "fields": [],
+          "options": [
+            "Download from Library (primary button, opens library.playstation.com)",
+            "Continue Shopping",
+            "Close (X)"
+          ],
+          "button_label": "Download from Library / Continue Shopping",
+          "notes": "The drawer's /thankyou view (document title 'Thank You | Checkout'): H2 'Thank you for your purchase!' with the buyer's Online ID on the line below; the purchased item tile (cover art) with, for pre-orders, 'This game will be released on %date%.' (single item) or 'Releases on: %date%'; a download hint box headed 'Download to Console' with 'Start downloading to your console from your game library.' (mobile: 'Start Downloading' / 'Select Library in PlayStation App, and then select the game you want to download to your console.'); buttons 'Download from Library' (primary) and 'Continue Shopping'; legal footer. No order number is shown on this screen (the client's thank-you code has no order-number strings; 'ORDER NUMBER' appears only on the one-commerce order-confirmation/order-history pages used for PS Direct hardware). Purchase is charged immediately — official: 'You are charged and the pre-order appears in your Library, PlayStation Store, and PlayStation App.' Receipt email is sent to the sign-in ID email. Remote download afterwards (official): avatar > Game Library > Purchased > select the game > Download. Source: the live client's thank-you chunk and msgid table (not observed rendered; confidence medium-high)."
+        }
+      ],
+      "payment_methods": [
+        "Visa",
+        "Mastercard",
+        "American Express",
+        "Discover",
+        "PayPal",
+        "Venmo",
+        "Apple Pay",
+        "Cash App Pay",
+        "PSN wallet funds",
+        "PlayStation Store gift card (redeemed as a voucher code into the wallet, not entered at checkout)"
+      ],
+      "card_fields": [
+        "Credit/Debit Card Number",
+        "Cardholder's Name",
+        "Expires On: Month / Year",
+        "CVV",
+        "First name",
+        "Last name",
+        "Street address",
+        "Address 2 (optional)",
+        "City",
+        "State",
+        "ZIP Code",
+        "Country or region",
+        "Phone number",
+        "Set as Default Payment Method"
+      ],
+      "billing_same_as_shipping_default": null,
+      "charge_timing": "at order",
+      "charge_policy_text": "You'll be charged when you select Pre-order for a game on PlayStation Store. (PlayStation Support: 'How to pre-order and auto-download games from PlayStation Store'.) Cancellation policy: paid 14+ days before release — cancel any time before release if download/pre-load has not started; paid within 14 days of release — cancel up to 14 days after payment; refunds to original payment method where possible.",
+      "review_step": {
+        "exists": true,
+        "place_order_label": "Pre-Order & Pay",
+        "shows": [
+          "header 'Confirm Pre-Order'",
+          "item cover art, title, rating image and pre-order dates",
+          "price",
+          "Subtotal",
+          "Tax (sales tax line shown above the button)",
+          "Total (1 item)",
+          "selected payment method with change/add option (hosted transact iframe)",
+          "wallet balance (inside the payment-method section)",
+          "pre-order legal line: 'You'll be charged for your pre-order when you select [Pre-Order & Pay]. If the price drops before the product is released, we'll refund you the difference. ...'",
+          "'Learn more about taxes and fees' link (US)",
+          "Continue Shopping"
+        ]
+      },
+      "confirmation": {
+        "headline": "Thank you for your purchase!",
+        "order_number_format": "No order number on the on-screen confirmation (the client's thank-you view shows only the tagline, Online ID, item tile, download hint and buttons). The emailed receipt lists an 'Order Number' — 11-digit numeric in the one example seen (14476045674); the format is otherwise unverified. Order history is at checkout.playstation.com/post-purchase/order-history and Account Management > Transaction History.",
+        "contents": [
+          "'Thank you for your purchase!' + Online ID",
+          "purchased item tile with cover art and 'This game will be released on %date%.'",
+          "download hint 'Download to Console' — 'Start downloading to your console from your game library.'",
+          "'Download from Library' (primary) and 'Continue Shopping' buttons",
+          "pre-order appears in Library / PS App with a countdown to release",
+          "GTA+ month must be claimed separately on the GTA+ product page"
+        ],
+        "email_sent_text": "Thank you for your purchase from PlayStation®Store (receipt email sent to the sign-in ID email; lists Order Number, Online ID, date/time, items and amounts)"
+      }
+    },
+    "account": {
+      "required_for_purchase": true,
+      "signup_fields": [
+        "Date of Birth",
+        "Country/Region",
+        "State/Province",
+        "Language",
+        "Sign-In ID (Email Address)",
+        "Password",
+        "Online ID",
+        "First Name",
+        "Last Name",
+        "Marketing email opt-in (checkbox)",
+        "Terms of Service / Privacy Policy acceptance"
+      ],
+      "login_fields": [
+        "Sign-In ID (Email Address)",
+        "Password"
+      ],
+      "membership_program": "Not required. PlayStation Plus is promoted in the nav (Essential $9.99/mo, Extra $14.99/mo, Premium $17.99/mo) but gives no discount on this title. The pre-order bundles one month of Rockstar's GTA+ ($7.99/mo after, auto-renews) which must be redeemed separately by March 31, 2027."
+    },
+    "quirks": [
+      "Digital-only storefront: no shipping, pickup, quantity or physical/code-in-box options; the license is tied to the PSN account used to buy.",
+      "A PSN (Sony) account is mandatory — no guest checkout. Both 'Pre-Order' and 'Add to Wishlist' send signed-out shoppers to Sony's sign-in domain (my.account.sony.com) and back.",
+      "Two page types: /concept/{id}/ (edition-agnostic, shows the featured edition — currently the Ultimate Edition — plus an 'Editions:' comparison section) and /product/{productId} per edition. Both look identical apart from the headline and price.",
+      "Editions are 'separate listings' on one page: each edition card carries its own price and its own Pre-Order button; there is no dropdown.",
+      "Release is displayed as an unlock timestamp '11/18/2026 09:00 PM PST' (midnight Eastern on Nov 19) and edition cards advertise '7-Day Pre-load'.",
+      "You are charged immediately when you confirm the pre-order; cancellation is by contacting PlayStation Support (no self-serve cancel button), subject to the 14-day / pre-load rules.",
+      "Checkout is an overlay from a separate domain (checkout.playstation.com) rather than a page, and the payment-method/add-card screens inside it are a second hosted iframe (transact.playstation.com); sales tax is added there as a 'Tax' row based on the account address.",
+      "Wallet-first payment model: purchases can be funded from PSN wallet balance (topped up by cards, payment services or gift-card codes); any shortfall goes to the selected card/service.",
+      "GTA+ pre-order bonus is not auto-applied — the shopper must visit the GTA+ product page after purchase and 'follow the on-screen instructions' to claim the free month, which then auto-renews.",
+      "ESRB rating is 'RP' (Rating Pending) with 'May contain content inappropriate for children'; there is no age gate on the page.",
+      "The 'Ultimate Edition Upgrade' add-on is listed but 'Unavailable' until launch.",
+      "OneTrust cookie 'Privacy Preference Center' is present on every page (was collapsed in the sandbox).",
+      "Header search is an expanding field ('Search PS Store' placeholder, 'Cancel search' control) that navigates to /en-us/search/{q}; results are a 6-up tile grid with a 'Filter' button and numbered pagination.",
+      "Light chrome / dark product area: white header and search pages, but the product hero, edition cards and add-on tiles use a dark (#1F2024 / #121314) theme with white text and an orange (#D63D00) pill CTA; footer is PlayStation blue (#003697).",
+      "Cart is a right-hand drawer, not a page: the header 'Cart' button (present in the global header even when signed out) slides a white panel over the dimmed page; signed out it shows the drawer's login view 'Sign in to proceed' (displayed 'Sign In To Proceed') with a blue 'Sign In' pill; signed in it shows 'Cart (N Items)'. /en-us/cart redirects to /en-us/pages/cart/, which signed out shows the store's 'This probably isn't what you're looking for...' fallback.",
+      "The drawer's content is the checkout.playstation.com client in a cross-origin iframe; hitting that domain directly gives a bare 'Error | Checkout' page ('Something went wrong.' + 'Close').",
+      "Signed out, 'Pre-Order' does not open the drawer — it redirects to Sony sign-in; only the 'Cart' icon opens the drawer. Signed in, the Pre-Order CTA is a BUY_NOW action, so the drawer opens straight on a 'Confirm Pre-Order' view for that SKU (item + payment method + Subtotal/Tax/Total + 'Pre-Order & Pay'); there is no cart step and no 'Checkout' button.",
+      "Optional account setting 'Require Password at Checkout' inserts a password prompt before every purchase (not when funding the wallet).",
+      "Signed-in header shows an avatar whose menu includes Game Library > Purchased (with 'Download') and Payment Management (wallet balance at the top, 'Add Funds').",
+      "The confirm button is not 'Confirm Purchase' for this title: because the item is a pre-order the client labels it 'Pre-Order & Pay' (US), with the legal line 'You'll be charged for your pre-order when you select [Pre-Order & Pay]. If the price drops before the product is released, we'll refund you the difference.' ('Confirm Purchase' is used for regular digital items.)",
+      "The on-screen confirmation ('Thank you for your purchase!' + Online ID, 'Download from Library', 'Continue Shopping') shows no order number; the order number only appears in the receipt email / Transaction History.",
+      "US carts show a 'Learn more about taxes and fees' link (the client shows it only for country US) pointing to playstation.com/support/store/taxes-information/."
+    ]
+  },
+  "gaps": [
+    "Sign-in screen still not observed: the sandbox browser refuses my.account.sony.com and the store's session sign-in endpoint (web.np.playstation.com/api/session/v1/signin), WebFetch is blocked for my.account.sony.com, and clicking 'Pre-Order' signed out produces no visible change because the cross-origin redirect is blocked. Headline 'Sign In', fields 'Sign-in ID (Email address)' > 'Next' then 'Password' > 'Sign In', 'Sign in with Passkey', 2-step 'Verify', and the links 'Trouble Signing In?' / 'Create New Account' come from Sony's account help pages (basic300) and PlayStation help articles; exact casing and layout unverified (confidence medium).",
+    "Signed-in drawer not seen rendered: the 'Confirm Pre-Order' / 'Pre-Order & Pay' / 'Subtotal' / 'Tax' / 'Total (1 item)' / 'Thank you for your purchase!' wording and the BUY_NOW routing are read from the live checkout client's code, route manifest and msgid table and from the product page's CTA data, not from a signed-in screen. Unverified details: whether the 'Redeem Code' discount box renders for a US digital buy-now, the exact visual order of the payment-method section vs. summary, and how the wallet balance is worded inside the hosted transact iframe ('Wallet Balance' vs 'Wallet funds').",
+    "Add-card form: labels come from the transact iframe's English string file and compiled template ('Credit/Debit Card Number', 'Cardholder's Name', Month/Year, 'CVV'; billing 'First name', 'Last name', 'Street address', 'Address 2 (optional)', 'City', 'State', 'ZIP Code'), but the string file also contains a newer label set ('Card number', 'Expiration date', 'CVV number'), so the exact variant shown in the US drawer and the field order were not verified on screen (confidence medium).",
+    "Order-number format still rests on one third-party receipt (11-digit numeric example 14476045674); the on-screen confirmation shows none and the transaction-history article does not describe the format.",
+    "Product/cover images returned 403 from the PlayStation image CDN in the sandbox, so key art and edition images could not be viewed; only the hero image URL (image.api.playstation.com/vulcan/ap/rnd/202606/1818/...) and layout sizes were captured.",
+    "Account sign-up field list is from general knowledge of Sony account creation (confidence low); official article only says 'Enter your details and preferences and select Next on each screen' then verify the email.",
+    "Tom's Guide and TechRadar articles returned truncated content via WebFetch; no extra PS Store detail was taken from them. The PS4/PS5 console store manuals at manuals.playstation.net were not found (404 / redirect)."
+  ]
+}

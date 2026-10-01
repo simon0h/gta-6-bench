@@ -1,0 +1,373 @@
+{
+  "slug": "amazon",
+  "name": "Amazon (US)",
+  "country": "US",
+  "currency": "USD",
+  "base_url": "https://www.amazon.com",
+  "confirmed_preorder_live": true,
+  "confidence": "medium",
+  "browser_worked": true,
+  "sources": [
+    "https://www.amazon.com/s?k=grand+theft+auto+vi",
+    "https://www.amazon.com/dp/B0H6K928WL",
+    "https://www.amazon.com/Grand-Theft-Auto-VI-PlayStation-Delivers/dp/B0H6K928WL",
+    "https://www.amazon.com/dp/B0H6K49W6Y",
+    "https://www.amazon.com/Grand-Theft-Auto-VI-Delivers-Playable/dp/B0H6K49W6Y",
+    "https://www.amazon.com/s?k=grand+theft+auto+vi+ultimate+edition",
+    "https://www.amazon.com/ap/signin?openid.assoc_handle=amazon_checkout_us (reached by clicking Pre-order now as a guest)",
+    "https://www.amazon.com/ap/signin?openid.pape.max_auth_age=900&openid.assoc_handle=amazon_checkout_us (reached by clicking Proceed to checkout in a populated guest cart, 2nd pass)",
+    "https://www.amazon.com/gp/cart/view.html?ref_=nav_cart",
+    "https://www.amazon.com/cart?ref_=ox_ewc_ret_gtc_dsk_us (populated guest cart, 2nd pass)",
+    "https://www.amazon.com/gp/aws/cart/add.html?ASIN.1=B0H6K928WL&Quantity.1=1 (redirects to sign-in)",
+    "https://www.amazon.com/ap/register",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=G4BRP7LCB9DSDNCR",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GK4Y6CVAHRLMPC55",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GRCTKGZRHE3L2C65",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GFBWMNXEPYVJAY9A",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GF3GA88LAZ36ZMSQ",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GSL37WQTJZUYA9QE",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GPXSWFZ4PXRN96N3 (Determine Shipping Rates and Times — checkout step wording)",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GC2JR9VQQZMXLTP5 (Deliver to Multiple Addresses — 'Select a delivery address' page name)",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GNQFBWDZJN838JZF (Manage Payment Methods — 'Select a Payment Method' page, 'Add a credit or debit card')",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GCNQVPEFZLZZVLVY (Delivery Guarantees)",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GRPQFCNVUDYCBG24 (Amazon Prime Shipping Benefits)",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=G34EUPKVMYFW8N2U (The Amazon Prime Membership Fee)",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GU3U2EU63RCFDAP2 (Verify Your Email for a New Account)",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=GM6AEUPCYCFUTYX7 (Availability Estimate Definitions)",
+    "https://www.amazon.com/gp/help/customer/display.html?nodeId=TXqIexrTmLF1PKMHEM (Shipping Options hub)",
+    "https://images-na.ssl-images-amazon.com/images/G/01/vg/varia/tim-release-day-delivery-final.html (Amazon 'Release Day Delivery' terms page)",
+    "https://digprjsurvey.amazon.com/csad/help/node/G4BRP7LCB9DSDNCR",
+    "https://digprjsurvey.amazon.com/csad/help/node/GK4Y6CVAHRLMPC55",
+    "https://digprjsurvey.amazon.com/csad/help/node/GRCTKGZRHE3L2C65",
+    "https://digprjsurvey.amazon.com/csad/help/node/GFBWMNXEPYVJAY9A",
+    "https://digprjsurvey.amazon.com/csad/help/node/GF3GA88LAZ36ZMSQ",
+    "https://digprjsurvey.amazon.com/csad/help/node/GSL37WQTJZUYA9QE",
+    "https://digprjsurvey.amazon.com/csad/help/node/TM0z2tvxdI4nu36ypt",
+    "https://digprjsurvey.amazon.com/csad/help/node/508510 (help hub, link index)",
+    "https://digprjsurvey.amazon.com/csad/help/node/GQPC7HS9LCTBTUKK (Payment, Pricing & Promotions hub)",
+    "https://digprjsurvey.amazon.com/csad/help/node/GPXYBCMDK83JYUXR (Payment Methods hub)",
+    "https://digprjsurvey.amazon.com/csad/help/node/GGE5X8EV7VNVTK6R (Shipping and Delivery hub)",
+    "https://digprjsurvey.amazon.com/csad/help/node/GCLLEE4HCX3JKLHQ (Ordering hub)",
+    "https://digprjsurvey.amazon.com/csad/help/node/G57CN6WR9MNVANT8 (Placing an Order hub)",
+    "https://digprjsurvey.amazon.com/csad/help/node/GX7AZREFL3D5VC2D (Managing Your Account hub)",
+    "https://digprjsurvey.amazon.com/csad/help/node/GPXSWFZ4PXRN96N3",
+    "https://digprjsurvey.amazon.com/csad/help/node/GC2JR9VQQZMXLTP5",
+    "https://digprjsurvey.amazon.com/csad/help/node/GNQFBWDZJN838JZF",
+    "https://digprjsurvey.amazon.com/csad/help/node/GCNQVPEFZLZZVLVY",
+    "https://digprjsurvey.amazon.com/csad/help/node/GRPQFCNVUDYCBG24",
+    "https://digprjsurvey.amazon.com/csad/help/node/G34EUPKVMYFW8N2U",
+    "https://digprjsurvey.amazon.com/csad/help/node/GU3U2EU63RCFDAP2",
+    "https://digprjsurvey.amazon.com/csad/help/node/GM6AEUPCYCFUTYX7",
+    "https://digprjsurvey.amazon.com/csad/help/node/TXqIexrTmLF1PKMHEM",
+    "https://education.uw.edu/sites/default/files/users/user4624/PlacingOrderswithAmazon_Scribe_Updated2025.pdf",
+    "http://www.mtccomm.net/wp-content/uploads/2021/01/Amazon-Account-Creation-Instructions.pdf (2021 screenshots of the 'Create account' and 'Verify email address' screens)",
+    "https://techrigreview.com/how-to-order-from-amazon (2026 checkout walkthrough: 'Use this address', 'Add a credit or debit card', 'Add your card', 'Place your order')",
+    "https://www.androidpolice.com/change-shipping-address-amazon-order/ (Nov 2025, screenshots: 'Change' next to the checkout address, 'Use this address', 'Add a new address')",
+    "https://geekblog.net/how-to-guides/how-to-shop-on-amazon (2026)",
+    "https://www.marketingscoop.com/blog/amazon-pre-order-policy (Sep 2025)",
+    "https://revenuegeeks.com/guides/does-amazon-charge-before-shipping (Jul 2026)",
+    "https://www.alphr.com/amazon-delivery-cost (2023, no fee figures)",
+    "https://savemycent.com/amazon-shipping-guide (2026, no fee figures)",
+    "https://dealseek.com/shopping-guides/amazon-order-life-cycle-cart-to-delivery (May 2026, no exact UI text)",
+    "https://baymard.com/ux-benchmark/case-studies/amazon (paywalled; last reviewed Jan 2024)",
+    "https://www.pushsquare.com/news/2026/06/gta-6-physical-edition-doesnt-come-with-discs-its-a-code-in-the-box",
+    "https://opencritic.com/news/33616/gta-6s-code-in-a-box-hasnt-stopped-it-from-selling-out-on-amazon-ridiculously-fast",
+    "https://www.thesixthaxis.com/2026/06/25/grand-theft-auto-6-pre-orders-are-live-70-80-e80-regional-pricing-confirmed/",
+    "https://www.gfinityesports.com/article/gta-6-pre-orders-explained-where-to-buy-and-what-to-expect",
+    "https://www.gfinityesports.com/article/does-gta-6-have-a-disc-version-physical-editions-explained",
+    "https://www.digitalcitizen.life/gta-6-preloads-begin-on-november-12-for-digital-and-physical-code-copies/",
+    "https://www.deceptive.design/articles/amazon-deceptive-cart-button-hides-proceed-to-checkout-",
+    "https://windowscentral.com/gta6-faq-how-to-preorder (fetch truncated, not used for facts)",
+    "https://www.tomsguide.com/news/live/gta-6-pre-orders-news-and-live-updates (fetch truncated, not used for facts)",
+    "https://www.techradar.com/live/news/draft-gta-6-pre-orders-stock (fetch truncated, not used for facts)"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI - PlayStation 5 (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+        "url": "https://www.amazon.com/Grand-Theft-Auto-VI-PlayStation-Delivers/dp/B0H6K928WL",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "B0H6K928WL",
+        "release_date": "2026-11-12",
+        "availability_label": "This item will be released on November 12, 2026. Pre-order now.",
+        "delivery_estimate_text": "FREE delivery Monday, November 16 / Or fastest Release Day delivery Thursday, November 12"
+      },
+      {
+        "title": "Grand Theft Auto VI - Xbox Series X|S (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+        "url": "https://www.amazon.com/Grand-Theft-Auto-VI-Delivers-Playable/dp/B0H6K49W6Y",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "B0H6K49W6Y",
+        "release_date": "2026-11-12",
+        "availability_label": "This item will be released on November 12, 2026. Pre-order now.",
+        "delivery_estimate_text": "FREE delivery Monday, November 16 / Or fastest Release Day delivery Thursday, November 12"
+      }
+    ],
+    "preorder_bonus_text": "Pre-order to receive the Vintage Vice City Pack.",
+    "description_snippet": "Vice City, USA. Jason and Lucia have always known the deck is stacked against them."
+  },
+  "branding": {
+    "logo_text": "amazon (lowercase wordmark with the orange 'smile' arrow from a to z; alt text 'Amazon')",
+    "primary_color": "#131921",
+    "secondary_color": "#FF9900",
+    "background": "#FFFFFF",
+    "font_note": "Font stack 'Amazon Ember', Arial, sans-serif. Body 14px #0F1111; product title 24px regular weight (400), not bold; price 28px with cents as superscript; links #2162A1 (no underline until hover); secondary text grey; borders #D5D9D9, boxes 8px radius. Buttons are full pills (100px radius): Add to cart / Proceed to checkout / Sign in = yellow #FFD814 with dark text; Buy Now / 'Pre-order now' = orange #FFA41C (rgb 255,164,28) with #0F1111 text; outline buttons white with #888C8C border (e.g. 'Go to Cart' in the right-rail cart panel); Trade-In button has green #009502 border. Header top belt #131921, second nav row #232F3E, search 'Go' button #FEBD69, cart-count badge orange #F08804, savings/red price text #C10015. Right-rail cart panel: white, 1px #BBBBBB left border, fixed, ~100px wide, full viewport height.",
+    "header_layout": "Row 1 (dark #131921, ~60px): amazon logo | location pin 'Delivering to San Jose 95112 / Update location' | search bar (department dropdown 'All' + input placeholder 'Search Amazon' + orange magnifier 'Go' button, plus a small 'Agent Search' button) | 'EN' language flag dropdown | 'Hello, sign in / Account & Lists' dropdown | 'Returns / & Orders' | cart icon with count (aria label 'N item(s) in cart', e.g. '0 items in cart' → '1 item in cart') and word 'Cart'. Row 2 (dark slate #232F3E, ~39px): hamburger 'All' menu | horizontal link row (Early Prime Deals, Groceries, Prime, Coupons, Pharmacy, Amazon Home, Automotive, Music, Registry, Whole Foods, Audible, Video Games, New Releases, Baby, Fashion, Smart Home, Sports & Outdoors, Toys & Games, Custom Products, Works with Alexa, Gift Shop, Subscribe & Save, Best Sellers, Amazon Haul, Kindle Books, Books, Luxury, TV & Video, Handmade, Gift Cards) | right-side promo (observed 'Watch Aces vs. Fever live now' on 1st pass, 'Prime Big Deal Days is October 6-7' on 2nd pass). Row 3 on product pages only (white store sub-nav): 'Video Games' tab then PS5, Xbox Series X|S, Switch, Nex Playground, PS4, PC, Arcade Gaming, Accessories, VR, Trade-In, Deals, Best Sellers, New Releases, Digital Games. Above the fold on the product page a sponsored banner strip sits under the nav. A hidden 'Keyboard shortcuts' assistant menu lists Search (opt+/), Cart (shift+opt+C), Home (shift+opt+H), Orders (shift+opt+O) and, on product pages, 'Add to cart' (shift+opt+K). On desktop (viewport ≥ ~1000px) a fixed right-rail cart panel (id nav-flyout-ewc, 'everywhere cart') runs the full height of search-results and product pages: empty it shows just a cart icon and '0'; once an item is added it shows '1 item', 'Subtotal', '$79.99', 'Your order qualifies for FREE delivery. Choose this option at checkout.', a white outline 'Go to Cart' pill and the item thumbnail with a quantity stepper.",
+    "nav_items": ["All", "Early Prime Deals", "Groceries", "Prime", "Coupons", "Pharmacy", "Amazon Home", "Automotive", "Music", "Registry", "Whole Foods", "Audible", "Video Games", "New Releases", "Baby", "Fashion", "Smart Home", "Sports & Outdoors", "Toys & Games", "Custom Products", "Works with Alexa", "Gift Shop", "Subscribe & Save", "Best Sellers", "Amazon Haul", "Kindle Books", "Books", "Luxury", "TV & Video", "Handmade", "Gift Cards"]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search Amazon",
+      "search_url_pattern": "/s?k={q}  (department-scoped: /s?k={q}&i=videogames; result links carry ref=sr_1_N plus dib/qid tracking params)",
+      "search_results_layout": "Header line '1-16 of 346 results for \"grand theft auto vi\"' with 'Sort by: Featured' dropdown (Featured, Price: Low to High, Price: High to Low, Avg. Customer Review, Newest Arrivals, Best Sellers) and 'Check each product page for other buying options.' Left rail filters: Eligible for Free Shipping, Delivery Day (Get It by Tomorrow), Condition (New/Used), Customer Reviews (4 Stars & Up), Price slider $10-$275+, Deals & Discounts, Brands (Rockstar Games, Nintendo, 2K), Seller, Video Game Digital Download (Digital Download / Physical Copy), Video Game Genre, ESRB Rating, Premium Brands, Department. Each list-style tile shows: cover image (left) | title link | 'ESRB Rating: Rating Pending | Nov 12, 2026 | by Rockstar Games' | platform variant blocks side by side ('PlayStation 5' and 'Xbox Series X | S'), each with '9K+ bought in past month' / '2K+ bought in past month', price '$79.99' (large, cents superscript), 'Pre-order Price Guarantee.', 'FREE delivery Mon, Nov 16', 'Or fastest delivery Thu, Nov 12', 'This item will be released on November 12, 2026.', yellow pill 'Add to cart' button (button type=submit inside a small form with 8 hidden inputs; on the 2nd pass only the PlayStation 5 block carried the button, the Xbox block did not). After a successful add the tile shows '1 in cart' next to the button. Other tiles show star rating + count, 'Join Prime to get FREE delivery ...' / 'Or Non-members get FREE delivery ...', 'More Buying Choices $X (N new offers)'. The first result is the soundtrack 'Grand Theft Auto VI: The Album' (MP3/CD/Vinyl), and sponsored rows are mixed in. Pagination 'Previous 1 2 3 ... 20 Next'.",
+      "category_path": "Breadcrumb on product page: Video Games › PlayStation 5 › Games (Xbox: Video Games › Xbox Series X & S › Games). Nav route: Video Games (row 2) → PS5 or Xbox Series X|S sub-nav (node=20972781011 / 20972798011)."
+    },
+    "product_page": {
+      "url_pattern": "/{Title-Slug}/dp/{ASIN}  e.g. /Grand-Theft-Auto-VI-PlayStation-Delivers/dp/B0H6K928WL ; bare /dp/{ASIN} also resolves (and rewrites to /dp/{ASIN}?th=1); switching the platform swatch loads the sibling ASIN with ?th=1",
+      "headline": "Grand Theft Auto VI - PlayStation 5 (Code in Box, Delivers 11/12/26, Playable 11/19/26)",
+      "variant_selectors": [
+        { "label": "Platform For Display", "type": "buttons", "options": ["Xbox Series X | S", "PlayStation 5"] },
+        { "label": "Edition", "type": "buttons", "options": ["Standard"] }
+      ],
+      "price_display": "Center column: '$79.99' rendered as '$79' with '99' superscript, 28px, black; no list price / strikethrough for this item. Directly under it: 'Get $50 off instantly: Pay $29.99 upon approval for Amazon Visa.' then 'FREE Returns' (expandable) then a green 'Savings' tag line 'Pre-order Price Guarantee. Terms'. The right-hand buy box repeats '$79.99'. Price-details popover text: 'Shipping cost, delivery date, and order total (including tax) shown at checkout.'",
+      "fulfillment_options": [
+        { "label": "FREE delivery Monday, November 16", "detail": "Standard shipping, shipped and sold by Amazon.com ('Shipper / Seller: Amazon.com'). Not a selectable control on the product page; delivery speed is chosen at checkout. The cart confirms it is free for a non-Prime guest on this $79.99 item ('Your order qualifies for FREE delivery. Choose this option at checkout.').", "default": true },
+        { "label": "Or fastest Release Day delivery Thursday, November 12", "detail": "Release-Date Delivery: item ships early so it arrives on the listing's release date (Nov 12, the code-in-box ship date). Chosen at checkout; free for Prime members choosing Two-Day, otherwise Amazon's help says 'Shipping charges for Release-Date Delivery vary by item. We display shipping charges on the order confirmation page.' — no public fee table exists. Not available to Amazon Hub Lockers, AK/HI, P.O. Boxes, APO/FPO.", "default": false },
+        { "label": "Delivering to San Jose 95112 - Update location", "detail": "ZIP/location chooser popover; delivery dates recalc for the ZIP. No store pickup option for this item (pickup points, if any, appear only at checkout as Amazon Locker/Counter).", "default": false }
+      ],
+      "cta_buttons": [
+        { "label": "Pre-order now", "behavior": "The only primary CTA in the buy box on BOTH ASINs (PS5 and Xbox), verified on two passes (guest with an empty cart, then guest with this item already in the cart). It is Amazon's Buy Now control: input#buy-now-button (type=submit, title 'Buy Now', aria-labelledby submit.buy-now-announce whose text is 'Pre-order now') inside span#submit.buy-now (orange rgb(255,164,28), 206x32px, 100px radius) inside form#addToCart (POST /gp/product/handle-buy-box/ref=dp_start-bbf_1_glance). DOM inspection: #add-to-cart-button, submit.add-to-cart and submit.add-to-cart-announce are ABSENT from the page (not merely hidden), so there is no add-to-cart path from the buy box at all. Clicking goes to /checkout/entry/buynow?...isBuyNow=1&ASIN=B0H6K928WL and, for a signed-out shopper, straight to the sign-in wall /ap/signin (assoc_handle=amazon_checkout_us). Whether a signed-in shopper sees an extra yellow 'Add to Cart' could not be verified (no sign-in allowed); because the buy box is rendered per offer rather than per account, the same single-button box is the expected signed-in view (confidence medium)." },
+        { "label": "Quantity: 1", "behavior": "White bordered dropdown (a-autoid-0) with options 1-5, above the Pre-order now button." },
+        { "label": "Add to List", "behavior": "White outline pill (wishListMainButton) under the buy box; guest is sent to sign-in; signed-in users get a wish-list picker popover ('Added to ...')." },
+        { "label": "Trade-In and save", "behavior": "White pill with green border (tradeInLauncher) in the buy box; opens the Amazon Trade-In launcher (trade an old game/device for gift-card credit)." },
+        { "label": "Add all 3 to Cart", "behavior": "Yellow button on the 'Frequently bought together' bundle (this item + The Legend of Zelda: Ocarina of Time + Metroid Ravenous); 'To see our price, add these items to your cart.'" },
+        { "label": "Add to cart (search-results tile only)", "behavior": "Yellow pill on the search tile (button type=submit). Verified live: it does NOT navigate and does NOT open an 'Added to cart' page or drawer. The item is added in place: the header cart count becomes '1' (aria '1 item in cart'), the tile shows '1 in cart', and the fixed right-rail cart panel (nav-flyout-ewc) fills with '1 item', 'Subtotal $79.99', 'Your order qualifies for FREE delivery. Choose this option at checkout.', a white 'Go to Cart' pill (→ /cart?ref_=ox_ewc_ret_gtc_dsk_us) and the item thumbnail with a quantity stepper. No 'Proceed to checkout' appears anywhere until the cart page." }
+      ],
+      "quantity_selector": true,
+      "upsells": [
+        "Amazon Visa card promo under the price: 'Get $50 off instantly: Pay $29.99 upon approval for Amazon Visa.'",
+        "'Trade-In and save' button inside the buy box",
+        "'Frequently bought together' bundle: This item + The Legend of Zelda: Ocarina of Time + Metroid Ravenous → 'Add all 3 to Cart' ('Some of these items ship sooner than the others. Show details')",
+        "'Customers who bought this item also bought' carousel (Call of Duty: Modern Warfare 4 PS5 $69.00, Marvel's Wolverine PS5 $69.00 'Amazon's Choice', Zelda Ocarina of Time '#1 Best Seller', GTA 5 PS5 $24.34, EA SPORTS FC 27 $69.00, SILENT HILL: townfall $49.94)",
+        "Sponsored 'Products related to this item' carousels (twice on the page)",
+        "'Product Videos' influencer video ('PlayingAround4Now — Earns commissions')",
+        "Sponsored 'Brands in this category on Amazon' strip",
+        "'Visit the Rockstar Games Store' brand-store link under the title"
+      ],
+      "notable_text": [
+        "Platform : PlayStation 5 | Rated: Rating Pending",
+        "9K+ bought in past month (PS5) / 2K+ bought in past month (Xbox)",
+        "This item will be released on November 12, 2026.",
+        "Pre-order now.",
+        "FREE delivery Monday, November 16",
+        "Or fastest Release Day delivery Thursday, November 12",
+        "Savings  Pre-order Price Guarantee. Terms",
+        "Get $50 off instantly: Pay $29.99 upon approval for Amazon Visa.",
+        "FREE Returns",
+        "Shipper / Seller  Amazon.com",
+        "Returns  FREE 30-day refund/replacement (Xbox page: '30-day refund / replacement')",
+        "Payment  Secure transaction",
+        "About this item: This product contains a download code inside the box — no disc is included. Customer shipments will begin arriving November 12 for pre-load; game is playable starting November 19. Code can only be used by users holding an account for PlayStation registered to the US or Canada. (Xbox page omits the account-region sentence)",
+        "Pre-order to receive the Vintage Vice City Pack.",
+        "Grand Theft Auto VI is a single-player experience.",
+        "Product information: ASIN B0H6K928WL · Release date November 12, 2026 · Best Sellers Rank #33 in Video Games, #5 in PlayStation 5 Games (Xbox: #3 in Xbox Series X & S Games) · Package Dimensions 6.69 x 5.31 x 0.51 inches; 2.82 ounces · Type of item Video Game · Language English · Rated Rating Pending · Manufacturer Rockstar Games · Date First Available June 23, 2026",
+        "Customer reviews: 5 star 0% ... 1 star 0% — 'Sign in to see customer reviews.'",
+        "Would you like to tell us about a lower price?",
+        "Hidden template string in the buy box: '${cardName} unavailable for quantities greater than ${maxQuantity}.'"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "stay-on-page (in-place add; fixed right-rail cart panel updates)",
+      "contents": "Verified live (desktop, guest, 1024px viewport). Product page: there is no add-to-cart step at all — 'Pre-order now' is Buy Now and jumps straight to checkout entry (sign-in wall for guests). Search tile 'Add to cart': the page does not navigate and no 'Added to cart' page, side sheet or toast rendered. Instead (a) the header cart badge flips from '0' to '1' (aria '1 item in cart'), (b) the tile shows '1 in cart', and (c) the fixed right-rail cart panel (div#nav-flyout-ewc, Amazon's 'everywhere cart': white, 1px #BBBBBB left border, ~100px wide, full viewport height, present but empty before the add) fills in with: '1 item' · heading 'Subtotal' · '$79.99' · 'Your order qualifies for FREE delivery.' / 'Choose this option at checkout.' · white outline pill 'Go to Cart' (1px #888C8C border, 100px radius, ~91px wide, → /cart?ref_=ox_ewc_ret_gtc_dsk_us) · item list: thumbnail (link /gp/product/B0H6K928WL/ref=ewc_pr_img_1?smid=ATVPDKIKX0DER&psc=1), '$79.99', truncated title link 'Grand Theft Auto VI - PlayStation 5 (Code in Box, ...', quantity stepper (left half-pill trash 'Delete …' button, number input 'Qty:', right half-pill '+' 'Increase quantity by one'), 'Update' link. Hidden status strings in the panel: 'was removed from Shopping Cart.', 'was already removed from Shopping Cart.', 'Moved to' / 'Saved For Later', 'Delete Failed. Try again', 'Update failed. Try again', 'We couldn't save this item for later, try again', 'Updating quantity'. The DOM also contains an empty 'ewc-smart-wagon-desktop-sideSheet' container (Amazon's side-sheet shell), which did not open in this session — so on narrower desktops Amazon may instead show an 'Added to cart' side sheet; not observed here. The first click did not register until the button was scrolled into view.",
+      "buttons": ["Go to Cart", "Delete (trash icon in the stepper)", "Increase quantity by one (+)", "Update"]
+    },
+    "cart": {
+      "url": "https://www.amazon.com/cart  (also /gp/cart/view.html?ref_=nav_cart; the right-rail panel links to /cart?ref_=ox_ewc_ret_gtc_dsk_us). Page title 'Amazon.com Shopping Cart'.",
+      "line_item_fields": [
+        "Product image (links to /gp/product/{ASIN}/ref=ox_sc_act_title_1?smid=ATVPDKIKX0DER&psc=1)",
+        "Title link, then 'by Rockstar Games'",
+        "Price at the far right under a 'Price' column header ('$79.99', cents superscript)",
+        "Format line 'Video Game'",
+        "Availability line 'This item will be released on November 12, 2026.'",
+        "Delivery line 'FREE delivery Mon, Nov 16 available at checkout'",
+        "'FREE Returns' link",
+        "Gift checkbox 'This is a gift' + 'Learn more' link",
+        "Variant attributes 'Platform For Display: PlayStation 5' and 'Edition: Standard'",
+        "Quantity stepper (NOT a dropdown on the 2nd pass): left half-pill trash/'Delete' button, number field showing '1', right half-pill '+' ('Increase quantity by one'); aria text 'Quantity is 1'",
+        "Action buttons in a row: 'Delete' | 'Save for later' | 'Compare with similar items' | 'Share'",
+        "Price-change banner at top when a cart price moved: 'Some items in your Cart have changed price... [item] has increased from $X to $Y' (from help page; not triggered)"
+      ],
+      "summary_fields": [
+        "Right-hand box: 'Your order qualifies for FREE delivery. Choose this option at checkout.' (with a small 'Amazon' label)",
+        "Subtotal (1 item): $79.99",
+        "Checkbox 'This order contains a gift'",
+        "Yellow 'Proceed to checkout' button (type=submit)",
+        "Left column repeats 'Subtotal (1 item): $79.99' under the item list",
+        "No shipping, tax or total in the cart — footer note: 'Do you have a gift card or promotional code? We'll ask you to enter your claim code when it's time to pay.'",
+        "Legal note: 'The price and availability of items at Amazon.com are subject to change. The Cart is a temporary place to store a list of your items and reflects each item's most recent price.' + 'Learn more'"
+      ],
+      "promo_code_field": false,
+      "checkout_button_label": "Proceed to checkout",
+      "express_options": [],
+      "upsells": [
+        "Top banner: '$50 instant gift card — Get a $50 Amazon Gift Card instantly upon approval for Amazon Visa' with a mini table Current Total: $79.99 / Savings: - $50.00 / Cost After Savings: $29.99 and a 'Learn more' button",
+        "'Customers who bought Grand Theft Auto VI - PlayStation 5 (Code in Box, ... also bought these items from other categories:' carousel (Sony PlayStation 5 console $733.75 'Only 2 left in stock - order soon.', NEWDERY joystick grip caps $9.99, PS5 cooling stand $37.04 '-7% Typical: $39.99') each with a yellow 'Add to cart'",
+        "Heading 'All Carts' above the summary box",
+        "(Empty-cart state, 1st pass) 'Customers Who Bought Items in Your Recent History Also Bought' carousel with yellow 'Pre-order' buttons for unreleased games and 'Add to cart' for in-stock ones; 'Frequently bought together' row",
+        "Empty state: 'Your Amazon Cart is empty' + 'Shop today's deals' link + yellow 'Sign in to your account' + white 'Sign up now'"
+      ]
+    },
+    "checkout": {
+      "url": "Buy Now entry observed: https://www.amazon.com/checkout/entry/buynow?clientName=OffersX_OfferDisplay_DetailPage&ASIN=B0H6K928WL&isBuyNow=1&quantity=1... ; cart 'Proceed to checkout' (guest) observed → https://www.amazon.com/ap/signin?openid.pape.max_auth_age=900&openid.return_to=[checkout]&openid.assoc_handle=amazon_checkout_us&openid.mode=checkid_setup&language=en_US ; signed-in cart entry: /gp/cart/desktop/go-to-checkout.html (→ /checkout/p/p-{orderId}/... in the current single-page checkout; legacy step URLs /gp/buy/addressselect/handlers/display.html, /gp/buy/payselect/handlers/display.html, /gp/buy/spc/handlers/display.html)",
+      "auth": {
+        "guest_allowed": false,
+        "account_required": true,
+        "screen_text": "Headline 'Sign in or create account'. One field labelled 'Enter mobile number or email', yellow 'Continue' button, line 'By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.', link 'Need help?', then 'Buying for work?' / 'Create a free business account'. Minimal page: amazon logo on white, no nav; footer 'Conditions of Use | Privacy Notice | Help | © 1996-2026, Amazon.com, Inc. or its affiliates'. Inline validation strings present in the page: 'Enter your mobile number or email', 'Invalid mobile number', 'Invalid email address', 'Something's not right. Try again.' There is no guest / continue-without-account option anywhere. Identical screen reached from Buy Now and from the cart's 'Proceed to checkout' (verified on both passes).",
+        "guest_button_label": null,
+        "signin_fields": ["Enter mobile number or email", "Password (asked on the next screen; existing accounts may get a passkey or a one-time code instead)"]
+      },
+      "steps": [
+        {
+          "name": "Sign in or create account",
+          "fields": [
+            { "label": "Enter mobile number or email", "type": "text", "required": true },
+            { "label": "Password (second screen, existing account)", "type": "text", "required": true }
+          ],
+          "options": ["Existing account → Password screen with 'Keep me signed in' checkbox and 'Forgot your password?'", "New email → 'Create account' screen. Legacy form (2021 screenshots): fields 'Your name', 'Email', 'Password' (placeholder 'At least 6 characters', hint 'Passwords must be at least 6 characters.'), 'Re-enter password'; yellow 'Create your Amazon account'; 'By creating an account, you agree to Amazon's Conditions of Use and Privacy Notice.' Then 'Verify email address': 'To verify your email, we've sent a One Time Password (OTP) to [email]' (+ 'Change'), field 'Enter OTP', yellow 'Verify', link 'Resend OTP'; the email subject is 'Verify your new Amazon account'. In today's unified flow the email is captured on the first screen, so the second screen shows name + password + re-enter password (email pre-filled) — its button label ('Continue' vs 'Verify email' vs 'Create your Amazon account') is unverified."],
+          "button_label": "Continue",
+          "notes": "Unified sign-in/sign-up flow; the URL carries openid.return_to back to /checkout/entry/buynow (or the cart checkout URL) so the shopper lands in checkout after authenticating. Second-screen labels come from a 2021 screenshot PDF plus Amazon's current register-page strings seen in search snippets ('Passwords must be at least 6 characters.', 'By creating an account, you agree to Amazon's Conditions of Use and Privacy Notice.'); Amazon help 'Verify Your Email for a New Account' confirms an emailed verification step. Confidence medium-low; not observed live (typing an email is out of scope)."
+        },
+        {
+          "name": "Select a delivery address (help pages: 'Select a delivery address' page; older shells: 'Choose a shipping address')",
+          "fields": [
+            { "label": "Country/Region", "type": "select", "required": true },
+            { "label": "Full name (First and Last name)", "type": "text", "required": true },
+            { "label": "Phone number (hint: 'May be used to assist delivery')", "type": "tel", "required": true },
+            { "label": "Address — 'Street address or P.O. Box'", "type": "text", "required": true },
+            { "label": "Address line 2 — 'Apt, suite, unit, building, floor, etc.'", "type": "text", "required": false },
+            { "label": "City", "type": "text", "required": true },
+            { "label": "State ('Select')", "type": "select", "required": true },
+            { "label": "ZIP Code", "type": "text", "required": true },
+            { "label": "Delivery instructions (optional) — 'Add preferences, notes, access codes and more'", "type": "text", "required": false },
+            { "label": "Make this my default address", "type": "checkbox", "required": false }
+          ],
+          "options": ["Radio list of saved addresses, each with 'Edit address | Edit delivery preferences'; when an address is already selected it is shown pre-populated with a 'Change' link (Android Police, Nov 2025 screenshots)", "'Your pickup locations' (Amazon Counter / Amazon Locker / Amazon Fresh) and 'Find a pickup location near you' (Release-Date Delivery is not available to Lockers)", "'Add a new delivery address' / 'Add a new address' opens the 'Add a new address' modal (header 'Enter a new shipping address') with a blue 'Save time. Autofill your current location.' [Autofill] bar and street-address autocomplete suggestions", "'Deliver to multiple addresses' link on the Select a delivery address page (Amazon help)"],
+          "button_label": "Use this address  (modal button: 'Add address')",
+          "notes": "Page name 'Select a delivery address' is Amazon's own wording (help pages 'Deliver to Multiple Addresses' and 'Determine Shipping Rates and Times': 'Select or add your shipping address'). Button 'Use this address' is quoted by 2025 (Android Police) and 2026 (techrigreview) walkthroughs; a 'Deliver to this address' variant could not be corroborated by any quoted-phrase search. Address is validated/suggested (USPS-style); a mismatch shows a 'We could not verify this address' style prompt with 'Use the address as entered'. Right rail shows 'Order Summary' with dashes until an address is chosen and a hint 'Choose a shipping address and payment method to calculate shipping, handling, and tax.' Not observed live (account wall)."
+        },
+        {
+          "name": "Select a payment method (help pages: 'Select a Payment Method' page; older shells: 'Choose a payment method')",
+          "fields": [
+            { "label": "Card number", "type": "text", "required": true },
+            { "label": "Name on card", "type": "text", "required": true },
+            { "label": "Expiration date (Month / Year selects)", "type": "select", "required": true },
+            { "label": "Billing address (defaults to the selected shipping address; 'Change' to pick another)", "type": "radio", "required": true },
+            { "label": "Enter a gift card, voucher or promotional code — 'Enter Code' + 'Apply'", "type": "text", "required": false }
+          ],
+          "options": ["'Your credit and debit cards' table (columns: Name on card, Expires on) with radio per saved card", "'+ Add a credit or debit card › Amazon accepts all major credit cards.' → modal whose submit button is 'Add your card' (techrigreview 2026)", "'Your available balance' — gift card / promo code entry", "'Other payment methods' — '+ Add a personal checking account (Use your US based personal checking account.)'", "Amazon Visa / Prime Visa / Amazon Store Card application promo ('Get $50 off instantly...')"],
+          "button_label": "Use this payment method",
+          "notes": "Amazon help 'Manage Payment Methods': 'You can also add a new credit/debit card to your account while placing an order through the shopping cart; when on the Select a Payment Method page, choose Add a credit or debit card and enter your details.' Only one credit/debit card per order; a gift card balance can be combined with one card. CVV: 'Card Verification value (CVV) is mandatory for all Amazon Store Card transactions' (help); no source describes a CVV field for Visa/Mastercard/Amex/Discover, matching Amazon's long-standing no-CVV card entry (Amazon may ask for a security-code re-entry on new devices). No PayPal / Apple Pay / Google Pay. Card-modal field order (Card number → Name on card → Expiration date → 'Add your card' → billing-address confirmation) is from general knowledge + the 2026 walkthrough; confidence medium-low, not observed live."
+        },
+        {
+          "name": "Review items and shipping (order review; help pages: 'Select a shipping speed' then 'Place your order')",
+          "fields": [
+            { "label": "Delivery option for the item (radio): 'FREE delivery: Monday, November 16' vs 'Release-Date Delivery: Thursday, November 12' (FREE with Prime, otherwise the item-specific fee is shown next to the option)", "type": "radio", "required": true },
+            { "label": "Quantity (dropdown, per item)", "type": "select", "required": false },
+            { "label": "Add a promotional code — 'Enter code' + 'Apply'", "type": "text", "required": false },
+            { "label": "Gift options ('Add gift options' / 'This order contains a gift')", "type": "checkbox", "required": false }
+          ],
+          "options": ["Sections stacked left: '1 Shipping address' (name, address, 'Change', 'Edit delivery preferences'), '2 Payment method' ('Paying with Visa 0182', 'Billing address: ...', 'Change', 'Add a promotional code'), '3 Review items and shipping' (item image, title, price, qty, delivery radios). The newer single-page variant is believed to label these 'Delivering to [Name]', 'Paying with [card]' and 'Items and shipping' / 'Arriving [date]' — UNVERIFIED: no help page or quoted-phrase search returned those headings (see gaps)."],
+          "button_label": "Place your order",
+          "notes": "Right rail 'Order Summary': 'Items (1): $79.99', 'Shipping & handling: $0.00', 'Total before tax: $79.99', 'Estimated tax to be collected: $X.XX', 'Order total: $XX.XX' (red, bold), 'How are shipping costs calculated?', and for Prime 'Prime shipping benefits have been applied to your order.' Amazon help: 'The total shipping & handling cost as well as the estimated date of delivery, is listed under Order Summary.' and (Delivery Guarantees) 'we'll state this on the checkout page, with the associated delivery date and cost.' Below the button: 'By placing your order, you agree to Amazon's privacy notice and conditions of use.' Page header is a slim white bar: amazon logo | 'Checkout (1 item)' | lock icon. A passkey / OTP challenge can appear on 'high-risk' transactions. Exact delivery-option radio labels not observed live."
+        }
+      ],
+      "payment_methods": [
+        "Visa (Prime Visa and Amazon Visa)",
+        "Amazon Store Card",
+        "Amazon Secured Card",
+        "MasterCard/EuroCard",
+        "Discover Network",
+        "American Express",
+        "Visa, Mastercard or American Express prepaid credit/gift cards",
+        "Checking Account (US)",
+        "Amazon.com Gift Card (balance can be combined with one card)",
+        "EBT Cash / OTC Benefits card / FSA & HSA cards (eligible items only — not applicable to this game)",
+        "Buy-now-pay-later exists as a separate help topic ('Payment Plans': Amazon Monthly Payments, Credit Card Installments, Synchrony Pay Later, Pay Over Time with Affirm) but none was offered on this product page",
+        "NOT accepted: PayPal, Apple Pay, Google Pay"
+      ],
+      "card_fields": ["Card number", "Name on card", "Expiration date (Month, Year)", "Submit button 'Add your card' (2026 walkthrough)", "Billing address (defaults to the shipping address; choose saved / add new)", "Security code (CVV) — required only for Amazon Store Card per Amazon help; no source shows a CVV field for other cards"],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "when shipped — 'You're not charged until your order enters the shipping process.' The card is authorized when the order is placed (a temporary authorization hold that is released once the shipment is confirmed); the pre-order is charged when the code-in-box ships (around Nov 12, 2026; third-party guides note it can be a few days before release), at the lowest Amazon price seen between order time and end of release day.",
+      "charge_policy_text": "Product page: 'Pre-order Price Guarantee.' Help page: 'Whenever you pre-order a physical item displaying the \"Pre-order Price Guarantee\" message on the product detail page, the price we charge when we ship it to you will be the lowest price offered by Amazon.com between the time you placed your order and the end of the day of the release date.' Availability definition (help): 'Not yet published/released or Available for Preorder - The latest release date information provided for the item will be on its product detail page. We'll ship it to you after the release date passes and the item becomes available for shipment.' Checkout footer: 'For an item sold by Amazon.com: When you click the \"Place your order\" button, we'll send you an email message acknowledging receipt of your order. Your contract to purchase an item will not be complete until we send you an email notifying you that the item has been shipped.' Cart help: 'You're not charged until your order enters the shipping process.'",
+      "review_step": {
+        "exists": true,
+        "place_order_label": "Place your order",
+        "shows": [
+          "Shipping address block with 'Change' and 'Edit delivery preferences' (plus 'FREE pickup available nearby ... Change to pickup' when a pickup point exists)",
+          "Payment block 'Paying with Visa ending in 0182' + 'Billing address: ...' with 'Change'; 'Add a promotional code' [Enter code][Apply]",
+          "Items and shipping: item image, title, '$79.99', 'Qty: 1', delivery-speed radios with dates (and the Release-Date Delivery fee for non-Prime)",
+          "Order Summary (right rail): Items, Shipping & handling, Total before tax, Estimated tax to be collected, Order total (red bold)",
+          "Yellow 'Place your order' button (top of right rail and again at bottom) with 'By placing your order, you agree to Amazon's privacy notice and conditions of use.'",
+          "Footer notes: 'Why has sales tax been applied? See tax and seller information.' · 'Need help? Check our Help pages or contact us' · 30-day return note · 'Need to add more items to your order? Continue shopping on the Amazon.com homepage.'"
+        ]
+      },
+      "confirmation": {
+        "headline": "Order placed, thanks!  (confidence low-medium: widely attributed to Amazon's thank-you page but never observed live and not found quoted verbatim in any fetchable source)",
+        "order_number_format": "3-7-7 digits, e.g. 113-1234567-1234567 (public example seen: 114-6223405-5188207; wikiHow snippet: 'The order number will look something like 123-1234567-1234567')",
+        "contents": [
+          "Green check + 'Order placed, thanks!'",
+          "'Confirmation will be sent to your email.'",
+          "'Delivering to [Name], [City, ST ZIP]' / for pre-orders 'Arriving [date]' or 'Release-Date Delivery'",
+          "Order number with link 'Review or edit your recent orders'",
+          "Post-purchase upsells: 'Continue shopping', recommendation carousels, Prime trial / Amazon Visa offer",
+          "Order also appears under Account & Lists → Your Orders (status 'Not yet shipped' until the code-in-box ships), where a pre-order can be cancelled any time before it ships (Your Orders → 'View or change this order' → 'Cancel items' → reason → 'Request cancellation')"
+        ],
+        "email_sent_text": "Confirmation will be sent to your email. (Email subject pattern: 'Your Amazon.com order #113-XXXXXXX-XXXXXXX of \"Grand Theft Auto VI - PlayStation 5...\"'; Amazon help: the confirmed delivery date appears in the order confirmation email; a second 'Shipped' email is sent when the code-in-box ships and the card is charged.)"
+      }
+    },
+    "account": {
+      "required_for_purchase": true,
+      "signup_fields": ["Enter mobile number or email (unified first screen, 'Continue')", "Your name", "Password (placeholder 'At least 6 characters'; hint 'Passwords must be at least 6 characters.')", "Re-enter password", "One-time code: 'Verify email address' screen — 'To verify your email, we've sent a One Time Password (OTP) to [email]', field 'Enter OTP', button 'Verify' (2021 screenshots; today's button may read 'Create your Amazon account'), link 'Resend OTP' (mobile-number accounts get 'Verify mobile number')"],
+      "login_fields": ["Enter mobile number or email", "Password", "Keep me signed in (checkbox)", "Optional: passkey prompt or one-time code on new devices"],
+      "membership_program": "Amazon Prime — $14.99/month or $139/year (confirmed on Amazon's 'The Amazon Prime Membership Fee' help page; Young Adults $7.49/month or $69/year; discounted-access $6.99/month). Free Two-Day and free Release-Date Delivery on this item; 'Join Prime' upsells appear in search tiles and checkout. Not required to buy."
+    },
+    "quirks": [
+      "No 'Add to Cart' in the product-page buy box for this item: the DOM has no #add-to-cart-button at all (verified on both ASINs, with and without an item already in the cart). The single orange 'Pre-order now' button IS Buy Now (input#buy-now-button, title 'Buy Now') and jumps straight to checkout entry (then to the sign-in wall). Add to cart only exists on the search-results tile.",
+      "Search-tile 'Add to cart' adds in place: no 'Added to cart' page or drawer; the header badge, the tile ('1 in cart') and a fixed right-rail cart panel ('everywhere cart', ~100px wide, full height) update. The panel only offers 'Go to Cart' — 'Proceed to checkout' first appears on the cart page.",
+      "Hard account wall: no guest checkout. Sign-in is demanded on Buy Now, on the cart's 'Proceed to checkout' (openid.pape.max_auth_age=900), on 'Add to List', and even for the add-to-cart form URL (/gp/aws/cart/add.html).",
+      "Listing 'release date' is November 12, 2026 (the day the code-in-box ships/arrives), not the game's November 19 launch; the product title spells this out: '(Code in Box, Delivers 11/12/26, Playable 11/19/26)'. 'Release Day delivery Thursday, November 12' therefore means the box arrives a week before launch.",
+      "Physical product is a download code in a box — no disc. PS5 page adds: 'Code can only be used by users holding an account for PlayStation registered to the US or Canada.'",
+      "Pre-order Price Guarantee (lowest Amazon price between order and release day) and charge-at-shipment; a pre-order can be cancelled from Your Orders any time before it ships.",
+      "Only the Standard edition is sold on Amazon US ($79.99). No Ultimate Edition ($99.99) listing and no digital-code listing were found (search 'grand theft auto vi ultimate edition' returns only guides/old games).",
+      "Platform is a swatch pair ('Platform For Display: Xbox Series X | S / PlayStation 5'); each is a separate ASIN (B0H6K928WL / B0H6K49W6Y). 'Edition: Standard' shows a single swatch.",
+      "Quantity is a 1-5 dropdown in the buy box but a +/- stepper (with a trash icon at 1) in the cart and in the right-rail cart panel.",
+      "Amazon Visa financing/credit promos everywhere: '$50 off instantly' under the price and a '$50 instant gift card' banner atop the cart that recomputes 'Cost After Savings: $29.99' from the cart total.",
+      "Delivery ZIP is inferred from IP ('Delivering to San Jose 95112 - Update location'); delivery-date promises change per ZIP. Standard delivery is free for a non-Prime guest on this item; Release-Date Delivery carries an item-specific fee that Amazon only shows at checkout / on the order confirmation.",
+      "Customer reviews are hidden from guests ('Sign in to see customer reviews.'); rating shows 0% across all stars because the item is unreleased.",
+      "Search results are noisy: the soundtrack album 'Grand Theft Auto VI: The Album' ranks first, the game is result #10, and sponsored / renewed GTA IV & V tiles are interleaved.",
+      "Frequently-bought-together bundle ('Add all 3 to Cart') and 'Trade-In and save' sit inside the buy area as upsells; the cart adds a 'Customers who bought [item] also bought these items from other categories' carousel (PS5 console, controller grips, cooling stand).",
+      "At pre-order launch (June 25, 2026) the code-in-box sold out on Amazon in ~5 hours on both platforms, so the buy box can flip to 'Currently unavailable' / 'Temporarily out of stock' with a 'Sign up to be notified' control.",
+      "Checkout footer legal text notes the contract is only complete when the shipping email is sent; a passkey/OTP challenge can be inserted before 'Place your order'.",
+      "Keyboard-shortcut assistant (hidden menu) exposes 'Add to cart shift+option+K' on product pages even though this buy box has no add-to-cart control."
+    ]
+  },
+  "gaps": [
+    "Signed-in buy box: could not sign in, so whether a signed-in shopper sees an extra yellow 'Add to Cart' is unverified. Evidence against it: on both ASINs, as a guest with and without an item in the cart, #add-to-cart-button is absent from the DOM (not hidden) and the buy box is rendered per offer, not per account. Treat the single orange 'Pre-order now' (Buy Now) as the product-page CTA; confidence medium.",
+    "Checkout screens (address, payment, review) were never observed live (account wall). Page names 'Select a delivery address' and 'Select a Payment Method' and the button 'Use this address' / 'Add a credit or debit card' / 'Add your card' / 'Place your order' are corroborated by Amazon help pages and 2025-2026 walkthroughs; 'Use this payment method' comes from the 2025 Amazon Business walkthrough. The newer single-page headings 'Delivering to [Name]' / 'Paying with [card]' / 'Items and shipping' (or 'Arriving [date]') could not be corroborated by any fetchable source — low confidence.",
+    "Order-confirmation page: 'Order placed, thanks!' + 'Confirmation will be sent to your email.' + 3-7-7 order number is from general knowledge; Bing's result summaries attribute the phrase to Amazon and Reddit threads discuss the 'order has been placed' page, but no fetchable page quotes the headline verbatim. Confidence low-medium.",
+    "Card-entry modal: field order (Card number, Name on card, Expiration date Month/Year → 'Add your card' → billing-address confirmation) and the absence of a CVV field for non-Store cards are from general knowledge plus Amazon help ('CVV is mandatory for all Amazon Store Card transactions') and one 2026 walkthrough ('Add your card'); not observed live. Confidence medium-low.",
+    "Release-Date Delivery fee for non-Prime shoppers: Amazon publishes no figure ('Shipping charges for Release-Date Delivery vary by item. We display shipping charges on the order confirmation page.'; Delivery Guarantees: 'we'll state this on the checkout page, with the associated delivery date and cost.'). Exact delivery-option radio labels in the review step were not observed. Standard delivery is confirmed free for this item as a non-Prime guest.",
+    "Create-account second screen and OTP screen: labels come from a 2021 screenshot PDF (legacy flow: 'Create account' → Your name / Email / Password 'At least 6 characters' / Re-enter password → 'Create your Amazon account'; 'Verify email address' → 'Enter OTP' → 'Verify', 'Resend OTP') plus current register-page strings seen in search snippets. Today's unified flow (email first, then 'Continue') was not exercised because typing an email is out of scope; the second screen's button label is unverified. Confidence medium-low.",
+    "The 'Terms' popover for the Pre-order Price Guarantee did not render in the hidden pane; text taken from the help page (nodeId G4BRP7LCB9DSDNCR) instead.",
+    "Tooling limits on the 2nd pass: WebSearch budget was exhausted and DuckDuckGo/Brave/Mojeek/Bing returned CAPTCHA/403/generic pages to the fetch tool, so searching was done through Bing inside the browser tab; amazon.com help pages returned 503 to the fetch tool and were read from Amazon's digprjsurvey.amazon.com mirror (which needs a trailing '?' to render); wikiHow was unfetchable; Reddit is blocked. No screenshots were taken (hidden pane); colours come from getComputedStyle on the live DOM."
+  ]
+}

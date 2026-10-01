@@ -1,0 +1,476 @@
+{
+  "slug": "eb-games-au",
+  "name": "EB Games (Australia)",
+  "country": "AU",
+  "currency": "AUD",
+  "base_url": "https://www.ebgames.com.au",
+  "confirmed_preorder_live": true,
+  "confidence": "medium",
+  "browser_worked": false,
+  "sources": [
+    "https://www.ebgames.com.au/search?q=grand+theft+auto+vi",
+    "https://www.ebgames.com.au/product/ps5/330056-grand-theft-auto-vi",
+    "https://www.ebgames.com.au/product/xbox-series-x/330060-grand-theft-auto-vi",
+    "https://www.ebgames.com.au/product/loot/385339-grand-theft-auto-vi-the-goodtime-state-vice-city-collection",
+    "https://ebgames.com.au/product/ps5/384036-playstation-5-dualsense-wireless-controller-grand-theft-auto-vi-limited-edition-white",
+    "https://www.ebgames.com.au/grand-theft-auto",
+    "https://www.ebgames.com.au/featured/preorder-now",
+    "https://www.ebgames.com.au/featured/playstation-5",
+    "https://www.ebgames.com.au/terms",
+    "https://www.ebgames.com.au/clickandcollect",
+    "https://www.ebgames.com.au/ebworld/terms",
+    "https://www.ebgames.com.au/account/order-history",
+    "https://support.ebgames.com.au/hc/en-us",
+    "https://support.ebgames.com.au/api/v2/help_center/en-us/articles.json",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656624307983-How-do-I-place-an-order-or-preorder",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656654527503-Can-I-pay-for-my-preorder-before-the-release",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656655452303-What-happens-if-my-online-preorder-payment-fails",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656630731407-How-do-I-pay-my-preorder-off-if-I-placed-online-for-pick-up-in-store",
+    "https://support.ebgames.com.au/hc/en-us/articles/13814821212943-Do-you-ship-preorders-separately-from-other-items",
+    "https://support.ebgames.com.au/hc/en-us/articles/5069686856335-Why-has-my-preorder-been-cancelled",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656319445135-How-do-I-cancel-my-order",
+    "https://support.ebgames.com.au/hc/en-us/articles/4962104409743-How-do-I-track-my-order",
+    "https://support.ebgames.com.au/hc/en-us/articles/13813901730831-Where-can-I-view-my-order-history-or-invoices",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656373549327-Updating-address-details",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656507502223-What-is-Click-Collect",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656218028687-When-will-my-Click-Collect-order-by-ready-for-collection",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656234970639-How-long-will-my-Click-Collect-order-be-held-at-store",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656257051279-What-happens-if-my-Click-Collect-order-is-rejected",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656530329871-Can-I-cancel-or-change-an-order-paid-with-Afterpay-or-Zip",
+    "https://support.ebgames.com.au/hc/en-us/articles/13814791616911-Do-you-offer-free-shipping",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656627007759-How-long-will-it-take-to-ship-to-my-address",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656058966543-Why-is-express-post-not-an-option",
+    "https://support.ebgames.com.au/hc/en-us/articles/13814108857103-Can-I-deliver-to-a-PO-Box-or-Parcel-Locker",
+    "https://support.ebgames.com.au/hc/en-us/articles/4962579190927-Same-Day-Delivery-How-It-Works",
+    "https://support.ebgames.com.au/hc/en-us/articles/4962618500239-Who-will-deliver-my-order",
+    "https://support.ebgames.com.au/hc/en-us/articles/4962618016783-What-happens-if-I-place-my-Same-Day-Delivery-order-after-2-00pm",
+    "https://support.ebgames.com.au/hc/en-us/articles/13814010524815-Are-there-any-surcharges-for-certain-payment-methods",
+    "https://support.ebgames.com.au/hc/en-us/articles/13813962118159-How-do-I-use-a-promo-or-discount-code",
+    "https://support.ebgames.com.au/hc/en-us/articles/13814028112399-Will-I-be-charged-GST-on-my-purchase",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656562541839-What-can-Afterpay-be-used-on",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656561800207-How-does-Afterpay-work",
+    "https://support.ebgames.com.au/hc/en-us/articles/5063673319183-Who-can-use-Afterpay",
+    "https://support.ebgames.com.au/hc/en-us/articles/4962623228687-How-does-it-work",
+    "https://support.ebgames.com.au/hc/en-us/articles/4962101634191-Buy-now-pay-later-safely-with-PayPal",
+    "https://support.ebgames.com.au/hc/en-us/articles/6409238468367-I-have-been-charged-the-full-amount-for-PayPal-Pay-in-4",
+    "https://support.ebgames.com.au/hc/en-us/articles/7783517361295-PayPal-Support",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656605004303-Can-Zip-be-used-in-store",
+    "https://support.ebgames.com.au/hc/en-us/articles/5061521707407-What-can-Zip-be-used-on",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656579213583-Who-can-use-Zip",
+    "https://support.ebgames.com.au/hc/en-us/articles/4962655336975-How-to-checkout-with-Klarna",
+    "https://support.ebgames.com.au/hc/en-us/articles/4962099849999-How-do-the-payments-work",
+    "https://support.ebgames.com.au/hc/en-us/articles/5067630577167-I-am-having-issues-using-my-credit-card-on-your-site",
+    "https://support.ebgames.com.au/hc/en-us/articles/11294594464399-How-to-create-an-EB-World-Account",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656462257935-How-do-I-activate-my-account",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656473646223-Need-your-password-reset",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656508851599-Earning-Carrots-Leveling-Up",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656708012047-What-is-the-birthday-reward-for-my-level",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656642056335-What-is-the-Game-Guarantee",
+    "https://support.ebgames.com.au/hc/en-us/articles/13207353243919-What-is-EB-World-PLUS",
+    "https://support.ebgames.com.au/hc/en-us/articles/13207385254415-How-much-is-EB-Plus",
+    "https://support.ebgames.com.au/hc/en-us/articles/13207382038159-What-are-the-EB-Plus-benefits",
+    "https://support.ebgames.com.au/hc/en-us/articles/13207422675983-Does-EB-Plus-guarantee-me-a-product-in-an-exclusive-release",
+    "https://support.ebgames.com.au/hc/en-us/articles/4656713493263-How-do-I-become-a-Level-V-5-member",
+    "https://support.ebgames.com.au/hc/en-us/articles/17129671984527-Price-Match-Promise",
+    "https://press-start.com.au/news/playstation/2026/06/25/heres-the-aussie-grand-theft-auto-6-prices/",
+    "https://press-start.com.au/news/playstation/2026/06/23/heres-when-grand-theft-auto-6-pre-orders-go-live-in-australia/",
+    "https://press-start.com.au/news/2026/06/24/heres-when-grand-theft-auto-6-pre-orders-go-live-in-australia-2/",
+    "https://press-start.com.au/news/2026/06/24/grand-theft-auto-6s-physical-editions-wont-include-a-disc/",
+    "https://press-start.com.au/news/2026/06/24/heres-what-in-each-of-grand-theft-auto-6s-editions/",
+    "https://press-start.com.au/news/playstation/2026/09/04/grand-theft-auto-6-dualsense-controller-pre-order-australia/",
+    "https://press-start.com.au/news/playstation/2026/09/25/the-grand-theft-auto-6-vice-city-collectors-edition-australia/",
+    "https://press-start.com.au/news/playstation/2026/09/28/aussie-grand-theft-auto-6-collectors-edition-pre-orders-will-go-live-today/",
+    "https://press-start.com.au/news/playstation/2026/09/28/the-700-grand-theft-auto-6-collectors-edition-sold-out-instantly-in-australia/",
+    "https://press-start.com.au/?s=gta+6+pre-order",
+    "https://gta6index.com/guides/gta-6-preorder-guide/",
+    "https://www.reddit.com/r/EBGAMES/comments/1ueujve/info_relating_to_gta_6_physical_preorders/",
+    "https://www.reddit.com/r/EBGamesAus/comments/1uecx4f/gta_6_preordering/",
+    "https://www.reddit.com/r/EBGAMES/comments/1u9izoa/gta_vi_preorders_begin_on_june_25_how_can_i/",
+    "https://www.reddit.com/r/EBGAMES/comments/1syy9uq/are_eb_games_preorders_actually_worth_doing/",
+    "https://search.brave.com/search?q=site%3Aebgames.com.au+grand+theft+auto+vi",
+    "https://search.brave.com/search?q=site%3Aebgames.com.au+pre-order+deposit+online+charged",
+    "https://search.brave.com/search?q=site%3Aebgames.com.au+delivery+click+and+collect+shipping+cost+help",
+    "https://search.brave.com/search?q=site%3Aebgames.com.au+payment+methods+afterpay+zip+paypal+gift+card",
+    "https://search.brave.com/search?q=site%3Aebgames.com.au+EB+World+membership+levels+points+join",
+    "https://search.brave.com/search?q=reddit+EB+Games+GTA+6+pre-order+online+deposit+EB+World",
+    "https://search.brave.com/search?q=EB+Games+Australia+guest+checkout+online+order+without+account+help",
+    "https://en.wikipedia.org/wiki/EB_Games",
+    "https://upload.wikimedia.org/wikipedia/commons/1/12/Logo_of_EB_Games.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/0/0b/Ebworld_logo_bck.svg"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI - PlayStation 5",
+        "url": "https://www.ebgames.com.au/product/ps5/330056-grand-theft-auto-vi",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 129.95,
+        "list_price": 129.95,
+        "member_price": null,
+        "sku_or_id": "330056",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-Order",
+        "delivery_estimate_text": "Delivery starts November 12, allowing the game to be downloaded and installed in advance. Grand Theft Auto VI is releasing and becomes playable on November 19."
+      },
+      {
+        "title": "Grand Theft Auto VI - Xbox Series X",
+        "url": "https://www.ebgames.com.au/product/xbox-series-x/330060-grand-theft-auto-vi",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 129.95,
+        "list_price": 129.95,
+        "member_price": null,
+        "sku_or_id": "330060",
+        "release_date": "2026-11-19",
+        "availability_label": "Pre-Order",
+        "delivery_estimate_text": "Delivery starts November 12, allowing the game to be downloaded and installed in advance. Grand Theft Auto VI is releasing and becomes playable on November 19."
+      }
+    ],
+    "preorder_bonus_text": "All pre-orders and purchases made before November 20 will receive a Vintage Vice City Pack, featuring a collection of items that pay homage to the iconic city's neon origins (Rockstar wording quoted by Press Start; not verified on the EB Games page itself)",
+    "description_snippet": "Delivery starts November 12, allowing the game to be downloaded and installed in advance. Grand Theft Auto VI is releasing and becomes playable on November 19."
+  },
+  "branding": {
+    "logo_text": "EB GAMES",
+    "primary_color": "#db373f",
+    "secondary_color": "#1c1414",
+    "background": "#ffffff",
+    "font_note": "confidence: low - bold uppercase sans-serif wordmark; site body text is a plain sans-serif. Logo colours are taken from the Wikimedia SVG of the EB Games logo (red #db373f, near-black #1c1414); EB World logo red is #e1251b. Live site CSS could not be read (Cloudflare challenge).",
+    "header_layout": "confidence: low for exact order - EB Games logo (left), search bar (centre), then account/user avatar icon immediately to the left of the cart icon (right). The help centre explicitly says: 'Click the user avatar to the left of the cart to login or create an EB World account.' Below the header is a category nav row.",
+    "nav_items": [
+      "PlayStation",
+      "Xbox",
+      "Nintendo",
+      "PC",
+      "Preorders",
+      "Trading Cards",
+      "Collectibles",
+      "Toys",
+      "Clothing",
+      "Preowned",
+      "Deals",
+      "EB World"
+    ]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": null,
+      "search_url_pattern": "/search?q={q}",
+      "search_results_layout": "confidence: low - product tiles with box art, title ('Grand Theft Auto VI'), platform label (PlayStation 5 / Xbox Series X), price 'A$129.95', a Pre-Order badge and the deposit amount; tiles link to /product/<platform-slug>/<id>-<name>",
+      "category_path": "Home > PlayStation > PlayStation 5 > Games (also reachable via the /grand-theft-auto franchise hub and /featured/preorder-now)"
+    },
+    "product_page": {
+      "url_pattern": "/product/<platform-slug>/<numeric-id>-<product-name-slug> (e.g. /product/ps5/330056-grand-theft-auto-vi, /product/xbox-series-x/330060-grand-theft-auto-vi)",
+      "headline": "Grand Theft Auto VI",
+      "variant_selectors": [
+        {
+          "label": "Platform",
+          "type": "separate-listings",
+          "options": [
+            "PlayStation 5",
+            "Xbox Series X"
+          ]
+        }
+      ],
+      "price_display": "Single price shown as 'A$129.95' (GST included). Pre-order deposit shown separately (A$10 deposit per homepage search snippet). No strikethrough or member price seen for this title; EB World PLUS members can have PLUS-only preorder prices on some titles.",
+      "fulfillment_options": [
+        {
+          "label": "Delivery",
+          "detail": "Deposit now, balance charged 1-7 days before the estimated release date. Standard 2-7 business days / Express 1-3 business days after dispatch; free shipping only during promotions.",
+          "default": true
+        },
+        {
+          "label": "Click & Collect",
+          "detail": "Choose a store at checkout. Deposit paid online (card or Zip); remaining balance paid in store when the preorder is ready. Pickup windows depend on EB World level.",
+          "default": false
+        }
+      ],
+      "cta_buttons": [
+        {
+          "label": "Add to Cart",
+          "behavior": "Adds the pre-order (deposit item) to the cart; help centre wording is 'simply select what you want by clicking add to Cart'. Exact label on a pre-order product may read 'Pre-Order' (unverified)."
+        }
+      ],
+      "quantity_selector": true,
+      "upsells": [
+        "EB World sign-in / join prompt via the avatar icon",
+        "EB World PLUS (A$49 / 12 months) with PLUS-only preorder prices and double carrots",
+        "Grand Theft Auto VI Limited Edition DualSense controllers (A$134.95)",
+        "Grand Theft Auto VI: The Goodtime State - Vice City Collection (A$699.95, game not included, sold out)",
+        "Buy-now-pay-later logos (Zip, Afterpay, PayPal Pay in 4, Klarna) - Afterpay and PayPal Pay in 4 are unavailable for preorders"
+      ],
+      "notable_text": [
+        "Delivery starts November 12, allowing the game to be downloaded and installed in advance. Grand Theft Auto VI is releasing and becomes playable on November 19.",
+        "Physical edition contains a download code, not a disc (Rockstar: pack-in code, no disc in the box).",
+        "Release date: 19 November 2026.",
+        "Pre-order deposit: A$10 (homepage search snippet); Terms: 'When you place a preorder through the Website, you must pay a deposit at the time of ordering. The remaining balance for your preorder will be charged to the same payment method used to pay the deposit (such as a credit card or ZIP).'",
+        "Only the Standard Edition is sold by EB Games; the Ultimate Edition (A$159.95) is digital-only on PlayStation Store / Xbox Store."
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "inline-toast",
+      "contents": "confidence: low - cart icon count updates and a small confirmation appears with a link to view the cart; the help centre only documents 'add to Cart' then 'Checkout Now'.",
+      "buttons": [
+        "View Cart",
+        "Checkout Now"
+      ]
+    },
+    "cart": {
+      "url": null,
+      "line_item_fields": [
+        "Box art thumbnail",
+        "Title",
+        "Platform",
+        "Pre-order deposit amount and full price",
+        "Quantity",
+        "Remove"
+      ],
+      "summary_fields": [
+        "Subtotal",
+        "Deposit due today",
+        "Balance due before release",
+        "Shipping (calculated at checkout)",
+        "Total (GST inclusive)"
+      ],
+      "promo_code_field": true,
+      "checkout_button_label": "Checkout Now",
+      "express_options": [
+        "PayPal"
+      ],
+      "upsells": [
+        "EB World PLUS free gift selection at checkout (12-month members)",
+        "Buy-now-pay-later messaging (Zip; Afterpay/PayPal Pay in 4 hidden when a preorder is in the cart)"
+      ]
+    },
+    "checkout": {
+      "url": null,
+      "auth": {
+        "guest_allowed": true,
+        "account_required": false,
+        "screen_text": "Sign in with your EB World account, create an EB World account, or continue as a Guest. (Help centre: 'Click the user avatar to the left of the cart to login or create an EB World account'; order tracking offers 'EB World member or a Guest' login.)",
+        "guest_button_label": "Guest",
+        "signin_fields": [
+          "Email",
+          "Password",
+          "FORGOTTEN PASSWORD link"
+        ]
+      },
+      "steps": [
+        {
+          "name": "Sign in / Guest",
+          "fields": [
+            {
+              "label": "Email",
+              "type": "email",
+              "required": true
+            },
+            {
+              "label": "Password",
+              "type": "text",
+              "required": false
+            }
+          ],
+          "options": [
+            "EB World member login",
+            "Create an EB World account",
+            "Continue as Guest"
+          ],
+          "button_label": "Continue",
+          "notes": "Guest checkout is supported. Guests later use the 'Guest' tab on /account/order-history (order number + email) to view, track, change or cancel the order."
+        },
+        {
+          "name": "Delivery or Click & Collect",
+          "fields": [
+            {
+              "label": "First Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Last Name",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Email",
+              "type": "email",
+              "required": true
+            },
+            {
+              "label": "Mobile Number",
+              "type": "tel",
+              "required": true
+            },
+            {
+              "label": "Address",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Suburb",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "State",
+              "type": "select",
+              "required": true
+            },
+            {
+              "label": "Postcode",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Store (Click & Collect)",
+              "type": "select",
+              "required": false
+            }
+          ],
+          "options": [
+            "Standard delivery (2-7 business days after dispatch)",
+            "Express delivery (1-3 business days after dispatch; hidden for some items)",
+            "Same Day Delivery via Uber (selected areas, 2pm cutoff, in-stock items only)",
+            "Click & Collect - choose your store"
+          ],
+          "button_label": "Continue to Payment",
+          "notes": "confidence: low for exact field labels; help centre step 4: 'Choose a store to collect your order from or select your preferred shipping option'. Shipping costs and ETAs are displayed at checkout. PO Boxes and Parcel Lockers accepted. Free shipping only when a promotion is running."
+        },
+        {
+          "name": "Payment",
+          "fields": [
+            {
+              "label": "Promo Code",
+              "type": "text",
+              "required": false
+            },
+            {
+              "label": "Payment type",
+              "type": "radio",
+              "required": true
+            },
+            {
+              "label": "Card number",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Expiry",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "CVV",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Name on card",
+              "type": "text",
+              "required": true
+            }
+          ],
+          "options": [
+            "Credit/Debit Card (Visa, Mastercard, Amex)",
+            "PayPal",
+            "Zip",
+            "EB Games / Zing Gift Card",
+            "Afterpay (not for preorders)",
+            "PayPal Pay in 4 (not for preorders)",
+            "Klarna Pay in 4"
+          ],
+          "button_label": "Place order",
+          "notes": "Help centre step 5: 'Select your preferred payment type, enter the require information and click Place order'. Only the deposit is charged now; the balance is auto-charged to the same method 1-7 days before release. Afterpay and PayPal Pay in 4 do not appear when a preorder is in the cart. One promo code per order."
+        }
+      ],
+      "payment_methods": [
+        "Visa",
+        "Mastercard",
+        "American Express",
+        "PayPal",
+        "Zip",
+        "EB Games gift card",
+        "Zing gift card",
+        "Afterpay (excluded for online preorders)",
+        "PayPal Pay in 4 (excluded for preorders)",
+        "Klarna Pay in 4"
+      ],
+      "card_fields": [
+        "Card number",
+        "Expiry (MM/YY)",
+        "CVV",
+        "Name on card"
+      ],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "deposit",
+      "charge_policy_text": "When you place a pre-order for delivery you will be required to pay a deposit to secure the order, with the remaining balance being charged 1-7 days before the estimated release date. We do not have the facility to accept incremental payments towards delivery pre-orders.",
+      "review_step": {
+        "exists": false,
+        "place_order_label": "Place order",
+        "shows": [
+          "Items with deposit and balance",
+          "Delivery or collection store",
+          "Selected payment method",
+          "Order total (GST inclusive)"
+        ]
+      },
+      "confirmation": {
+        "headline": null,
+        "order_number_format": null,
+        "contents": [
+          "Order number",
+          "Items ordered",
+          "Deposit paid and balance due",
+          "Delivery address or collection store",
+          "Link to order history / tracking"
+        ],
+        "email_sent_text": "Once you are all done we will send you an email confirming we have received your order!"
+      }
+    },
+    "account": {
+      "required_for_purchase": false,
+      "signup_fields": [
+        "First Name",
+        "Last Name",
+        "Email Address",
+        "Password",
+        "Date of Birth",
+        "Mobile Number",
+        "Preferred Store (optional)",
+        "Agree to EB World Terms & Conditions and Privacy Policy (checkbox)",
+        "CAPTCHA",
+        "Sign Up button; then confirmation email link"
+      ],
+      "login_fields": [
+        "Email",
+        "Password",
+        "FORGOTTEN PASSWORD"
+      ],
+      "membership_program": "EB World - free loyalty program with five Levels (I-V) earning 'carrots' on purchases; EB World PLUS paid upgrade A$49 for 12 months online (A$25 for 3 months in store) with double carrots, 5% off digital, PLUS-only preorder prices and a free gift chosen at checkout."
+    },
+    "quirks": [
+      "Entire storefront (www.ebgames.com.au) sits behind a Cloudflare JavaScript/bot challenge ('Just a moment...'); headless or automated browsers are challenged before the search page even loads. The support subdomain also challenges browsers, but its Zendesk JSON API is open.",
+      "Deposit model: pay a A$10 deposit now; the balance is automatically charged to the same payment method 1-7 days before release. If that charge fails, an email asks you to update the card; unpaid after 10 days the order may be cancelled, and the hold time depends on your EB World level.",
+      "Afterpay and PayPal Pay in 4 are hidden at checkout when a preorder is in the cart. Zip can pay the deposit, but the balance of an in-store-pickup preorder cannot be paid with Zip in store.",
+      "Physical GTA VI is a code-in-box, not a disc; EB's page says delivery starts November 12 so the game can be installed ahead of the November 19 launch.",
+      "Only the Standard Edition (A$129.95) is sold; the A$159.95 Ultimate Edition is digital-only elsewhere. The A$699.95 Vice City Collection (no game) listed at 11:00am AEST on 28 Sept 2026 and sold out almost instantly; EB World PLUS members get early-access queues for exclusive releases.",
+      "Guest checkout works; guests manage orders via a 'Guest' tab on the order-history page. Preorders placed online for store pickup can only be cancelled in store, no earlier than 1 business day after ordering.",
+      "Click & Collect requires choosing a store at checkout; in-stock orders are ready in about 15 minutes and held 6 weeks, while preorder pickup windows depend on EB World level.",
+      "Same Day Delivery via Uber is offered in some areas (2pm cutoff) for in-stock items only. Preorders ship separately from in-stock items in the same order.",
+      "All prices include GST; no surcharge on Visa, Mastercard, PayPal or buy-now-pay-later.",
+      "EB World signup includes a CAPTCHA and an email confirmation link; the avatar icon left of the cart is the single entry point for login, signup and password reset."
+    ]
+  },
+  "gaps": [
+    "Browser blocked: https://www.ebgames.com.au/search?q=grand+theft+auto+vi returned a Cloudflare 'Just a moment...' challenge; per the rules I did not retry. WebFetch and curl to any www.ebgames.com.au URL returned HTTP 403 with cf-mitigated: challenge, so no product page, cart, checkout, terms or Click & Collect page was read directly.",
+    "WebSearch budget was exhausted before this task started (200/200), and DuckDuckGo, Bing (RSS), Mojeek, Yahoo, Ecosia and the Wayback Machine were unusable; Brave Search worked for a handful of queries then rate-limited (429). Product titles, URLs, price (A$129.95) and the A$10 deposit come from Brave result snippets and Press Start, not from the live page.",
+    "One Brave snippet for /featured/playstation-5 showed the PS5 pre-order at A$124.95 while the product listings show A$129.95; could not confirm whether A$124.95 is a promo, member or stale price.",
+    "Exact product-page CTA label ('Add to Cart' vs 'Pre-Order'), availability badge wording, quantity selector, add-to-cart behaviour (toast vs drawer), cart URL, checkout URL, checkout field labels/order, review step and confirmation headline/order-number format are inferred (confidence: low) from the help-centre step list, not observed.",
+    "Header layout, nav labels, search placeholder and site colours are inferred (confidence: low); only the logo colours (Wikimedia SVG) and the 'avatar to the left of the cart' detail are sourced.",
+    "Whether PayPal (full payment), gift cards or Klarna can be used for a preorder deposit is not stated explicitly; Terms mention 'credit card or ZIP', Click & Collect page lists 'Credit Card: Visa, Mastercard or Amex' for preorder products (truncated snippet).",
+    "Pre-order bonus (Vintage Vice City Pack) and the full product description are Rockstar wording via Press Start; not verified on the EB Games listing.",
+    "Reddit threads (r/EBGAMES, r/EBGamesAus) could not be opened (reddit.com, old.reddit.com and a mirror all blocked); only search snippets were used. No YouTube checkout walkthrough could be located without search."
+  ]
+}

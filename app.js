@@ -5,15 +5,17 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { sessionMiddleware, storeState } from './lib/session.js'
 import { configureOrders, listOrders, getOrder, clearOrders } from './lib/orders.js'
 import { esc } from './lib/html.js'
+import { createCaptcha } from './lib/captcha.js'
 
 export const ROOT = path.dirname(fileURLToPath(import.meta.url))
 
 /**
  * Build the Express app. Every directory under stores/ that has an index.js
  * exporting { slug, name, country, currency, router } is mounted at /<slug>.
- * @param {{ persist?: boolean, ordersFile?: string }} opts
+ * @param {{ persist?: boolean, ordersFile?: string, captcha?: { mode?: string, stores?: string[]|string, now?: Function } }} opts
  */
 export async function createApp(opts = {}) {
+  const captcha = createCaptcha({ mode: process.env.CAPTCHA_MODE ?? 'off', stores: process.env.CAPTCHA_STORES, ...opts.captcha })
   const persist = opts.persist ?? process.env.NODE_ENV !== 'test'
   configureOrders({ file: persist ? (opts.ordersFile ?? process.env.ORDERS_FILE ?? path.join(ROOT, 'data', 'orders.json')) : null })
 
@@ -32,8 +34,15 @@ export async function createApp(opts = {}) {
     if (!dir.isDirectory() || dir.name.startsWith('_') || dir.name.startsWith('.')) continue
     const entry = path.join(storesDir, dir.name, 'index.js')
     if (!existsSync(entry)) continue
-    const mod = (await import(pathToFileURL(entry).href)).default
-    if (!mod || !mod.router) throw new Error(`stores/${dir.name}/index.js must default-export { slug, name, country, currency, router }`)
+    let mod
+    try {
+      mod = (await import(pathToFileURL(entry).href)).default
+      if (!mod || !mod.router) throw new Error('index.js must default-export { slug, name, country, currency, router }')
+    } catch (err) {
+      // One broken store must not take the whole bench down.
+      console.error(`[stores] skipping stores/${dir.name}: ${err.message}`)
+      continue
+    }
     const slug = mod.slug || dir.name
     const pub = path.join(storesDir, dir.name, 'public')
     if (existsSync(pub)) app.use(`/${slug}/static`, express.static(pub))
@@ -43,14 +52,15 @@ export async function createApp(opts = {}) {
       res.locals.base = `/${slug}`
       res.set('Cache-Control', 'no-store')
       next()
-    }, mod.router)
-    stores.push({ slug, name: mod.name, country: mod.country, currency: mod.currency, url: `/${slug}`, description: mod.description ?? '' })
+    }, captcha.middleware({ slug, name: mod.name }), mod.router)
+    stores.push({ slug, name: mod.name, country: mod.country, currency: mod.currency, url: `/${slug}`, description: mod.description ?? '', captcha: captcha.describe(slug) })
   }
   app.locals.stores = stores
 
   // ---- Benchmark API (ground truth) ----
   app.get('/api/health', (req, res) => res.json({ ok: true, stores: stores.length, time: new Date().toISOString() }))
   app.get('/api/stores', (req, res) => res.json(stores))
+  app.get('/api/captcha', (req, res) => res.json(captcha.list({ store: req.query.store, run: req.query.run })))
   app.get('/api/orders', (req, res) => res.json(listOrders({ store: req.query.store, run: req.query.run })))
   app.get('/api/orders/:id', (req, res) => {
     const o = getOrder(req.params.id)
@@ -66,6 +76,7 @@ export async function createApp(opts = {}) {
 <style>body{font-family:system-ui,sans-serif;max-width:760px;margin:40px auto;padding:0 16px;color:#111}li{margin:6px 0}code{background:#f3f3f3;padding:1px 4px;border-radius:3px}</style></head>
 <body><h1>GTA 6 pre-order benchmark: synthetic stores</h1>
 <p>Each link below is a self-contained clone of a real retailer's pre-order flow for Grand Theft Auto VI. Point an agent at one store URL and give it a task; then read <code>GET /api/orders</code> to see what it actually ordered.</p>
+<p>Local CAPTCHA simulations: ${stores.some(s => s.captcha?.enabled) ? 'enabled for ' + stores.filter(s => s.captcha?.enabled).map(s => esc(s.name)).join(', ') : 'disabled (start with <code>CAPTCHA_MODE=on npm start</code> to enable supported scenarios)'}. See <code>GET /api/captcha</code> for verification outcomes.</p>
 <ul>${stores.map(s => `<li><a href="${s.url}">${esc(s.name)}</a> <small>(${esc(s.country)}, ${esc(s.currency)})</small>${s.description ? ` — ${esc(s.description)}` : ''}</li>`).join('') || '<li><em>No stores mounted yet.</em></li>'}</ul>
 <h2>API</h2>
 <ul><li><code>GET /api/stores</code></li><li><code>GET /api/orders?store=&amp;run=</code></li><li><code>GET /api/orders/:id</code></li><li><code>DELETE /api/orders</code></li><li><code>GET /api/health</code></li></ul>

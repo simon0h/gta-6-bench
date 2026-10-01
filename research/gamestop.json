@@ -1,0 +1,356 @@
+{
+  "slug": "gamestop",
+  "name": "GameStop",
+  "country": "US",
+  "currency": "USD",
+  "base_url": "https://www.gamestop.com",
+  "confirmed_preorder_live": true,
+  "confidence": "high",
+  "browser_worked": true,
+  "sources": [
+    "https://www.gamestop.com/search/?q=grand%20theft%20auto%20vi",
+    "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+    "https://www.gamestop.com/video-games/xbox-series-x%7Cs/products/grand-theft-auto-vi---xbox-series-x-s-code-in-box/448297.html",
+    "https://www.gamestop.com/cart/",
+    "https://www.gamestop.com/checkout/login/?required=false",
+    "https://identity.gamestop.com/oidc/auth (redirect target; Cloudflare bot check, not solved)",
+    "https://www.gamestop.com/help/articles/156000190556",
+    "https://www.gamestop.com/help/articles/156000190437",
+    "https://www.gamestop.com/help/articles/156000190557",
+    "https://www.gamestop.com/help/articles/156000190550",
+    "https://www.gamestop.com/help/articles/156000382697",
+    "https://www.gamestop.com/order/confirmation/?ID=1100000073394880&token=... (URL pattern seen in search index only)",
+    "https://hothardware.com/news/gta-6-preorder-guide-read-carefully-before-buying",
+    "https://www.dekudeals.com/articles/pre-order-video-games",
+    "https://shipito.com/en/stores/gamestop",
+    "https://manofmany.com/entertainment/gaming/gta-6-pre-order-pricing-bonuses-release-date",
+    "https://www.rivo.io/blog/gamestop-pro-membership",
+    "https://www.player.one/gamestop-pro-membership-loses-rewards-points-2026-customers-question-its-value-163349",
+    "https://gamefaqs.gamespot.com/boards/691087-playstation-4/78982372 (search snippet only; fetch returned 403)",
+    "https://www.gamestop.com/help/ (help center home; topic 'Payments & Gift Cards' = /help/categories/156000560712)",
+    "https://www.gamestop.com/help/articles/156000383776 (How Does Zip Work At GameStop?, updated 4/23/2026)",
+    "https://www.gamestop.com/help/articles/156000383763 (Why Was I Charged Twice?, updated 4/23/2026)",
+    "https://web.archive.org/web/20260729030312/https://www.gamestop.com/order/confirmation/?ID=1101000085862818&token=... (archived live confirmation page, PayPal order, July 2026; personal data not copied)",
+    "https://web.archive.org/web/20260430175004/https://www.gamestop.com/order/confirmation/?ID=1101000081166600&token=... (archived confirmation page, card order, April 2026)",
+    "https://web.archive.org/web/20250617082620/https://www.gamestop.com/order/confirmation/?ID=1100000074030513&token=... (archived confirmation page, card order, June 2025)",
+    "https://web.archive.org/web/20260729030312id_/https://www.gamestop.com/on/demandware.static/Sites-gamestop-us-Site/-/default/v1785284996003/js/main.js (GameStop storefront JS, July 2026 build; grepped for checkout hooks, form field names, payment tabs)",
+    "https://web.archive.org/cdx/search/cdx?url=identity.gamestop.com/*&filter=mimetype:text/html (every capture of identity.gamestop.com/interaction/{uid} and /interaction/{uid}/create-account is a Cloudflare 403)",
+    "https://web.archive.org/cdx/search/cdx?url=www.gamestop.com/login/&matchType=exact&from=2025 (2025 '200' captures are redirect stubs into identity.gamestop.com/oidc/, 403 from Feb 2025 on)"
+  ],
+  "product": {
+    "listings": [
+      {
+        "title": "Grand Theft Auto VI - PlayStation 5 (Code in Box)",
+        "url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+        "platform": "PS5",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "448295",
+        "release_date": "2026-11-12",
+        "availability_label": "Pre-Order",
+        "delivery_estimate_text": "Arrives on or shortly after release day"
+      },
+      {
+        "title": "Grand Theft Auto VI - Xbox Series X/S (Code in Box)",
+        "url": "https://www.gamestop.com/video-games/xbox-series-x%7Cs/products/grand-theft-auto-vi---xbox-series-x-s-code-in-box/448297.html",
+        "platform": "Xbox Series X|S",
+        "edition": "Standard",
+        "format": "code-in-box",
+        "price": 79.99,
+        "list_price": null,
+        "member_price": null,
+        "sku_or_id": "448297",
+        "release_date": "2026-11-12",
+        "availability_label": "Pre-Order",
+        "delivery_estimate_text": "Arrives on or shortly after release day"
+      }
+    ],
+    "preorder_bonus_text": "Pre-order to receive the Vintage Vice City Pack.",
+    "description_snippet": "This product will only contain a download code inside the box to support pre-load starting on November 12. A disc will not be included in the box."
+  },
+  "branding": {
+    "logo_text": "GameStop",
+    "primary_color": "#DA362C",
+    "secondary_color": "#000000",
+    "background": "#FFFFFF",
+    "font_note": "Body is 'Open Sans' 14px #000 on white. Price and primary buttons use 'Poppins' 600 weight (price 28px). Nav links Open Sans 600, 14.4px. Primary CTA: solid red #DA362C, white text, 4px radius on PDP ('Pre-Order'), 2px radius on cart ('PROCEED TO CHECKOUT', uppercase, 700 weight). Modal 'View Cart & Checkout' button is a slightly brighter red #E7230D. Social-proof badge '50+ Purchased Recently' is blue #006CE1 text on light blue #D3E7FC pill. Page section band / promo strip background is light grey #F2F4F7. Icons are Material Icons. Wordmark is bold black 'GameStop' with the red accent under the 'G' in the logo image.",
+    "header_layout": "Row 1 (white): hamburger 'Menu' icon | 'GameStop' wordmark (link to /) | wide rounded search box with magnifier icon, placeholder 'Search games, consoles & more' | right cluster of three icon+label links: 'Trade-In' (arrows icon, /trade/), 'Sign In' (person icon, /login/), 'Cart' (cart icon with red count badge, /cart/). Row 2 (white): horizontally scrolling category nav with chevrons. Row 3: light-grey promo strip 'Pre-Order The Newest Trading Cards Before They Sell Out.' linking to /pre-order-online-pick-up-in-store. Help pages additionally show 'GameStop Pro', 'Track Order' and a default nearby store name ('Ross Henderson S/C - GAMESTOP') in the header.",
+    "nav_items": [
+      "Trading Cards",
+      "Deals",
+      "Shop My Store",
+      "Pre-Order",
+      "Collectibles & More",
+      "PlayStation",
+      "Nintendo Switch",
+      "Xbox",
+      "Pre-Owned",
+      "New & Upcoming",
+      "Only At GameStop",
+      "Digital Store",
+      "Retro Gaming",
+      "GS Pro Credit Card"
+    ]
+  },
+  "flow": {
+    "entry": {
+      "homepage_search_placeholder": "Search games, consoles & more",
+      "search_url_pattern": "/search/?q={q}",
+      "search_results_layout": "Heading 'Search Results for \"grand theft auto vi\"' with '(4 items)' beneath, 'Sort: Best Matches' dropdown at right. Left facet sidebar: Delivery Method (Ship to Home / Same Day Delivery / Pick Up as icon toggles), Categories (with counts), Platform, Condition, Franchise, Genre, New Releases (Dropping In The Next 3/6/12 Months), More Ways To Shop (Shop Pre-Orders), Customer Rating, Color, Brand, Edition, ESRB. Result grid of 3 tiles per row: cover art image, title (2-line clamp, link), price in bold, optional '$X for Pros' line in smaller text, 'Release Date MM/DD/YYYY' line for pre-orders, star rating + count for released items. Platform facet used the label 'Xbox Series X' (not X|S). Facet URL pattern: /search/?prefn1=platform&prefv1=PlayStation%205&q={q}",
+      "category_path": "Home > Video Games > PlayStation 5 (breadcrumb on PDP); Xbox variant is Home > Video Games > Xbox Series X|S. Top nav 'Pre-Order' links to /pre-order-online-pick-up-in-store."
+    },
+    "product_page": {
+      "url_pattern": "/video-games/{platform-slug}/products/{product-slug}/{6-digit-id}.html (also resolves at /products/{product-slug}/{id}.html)",
+      "headline": "Grand Theft Auto VI - PlayStation 5 (Code in Box)",
+      "variant_selectors": [
+        {
+          "label": "Platform",
+          "type": "dropdown",
+          "options": ["PlayStation 5", "Xbox Series X"]
+        },
+        {
+          "label": "Condition",
+          "type": "buttons",
+          "options": ["New"]
+        }
+      ],
+      "price_display": "Single bold price '$79.99' (Poppins 600, 28px) to the left of a two-line 'Release Date: 11/12/2026'. No strikethrough list price and no Pro member price on this SKU (other tiles on the site show a second smaller line like '$61.74 for Pros'). Price repeats as 'New $79.99' next to the Condition selector.",
+      "fulfillment_options": [
+        {
+          "label": "Pick up in-store",
+          "detail": "Not Available",
+          "default": false
+        },
+        {
+          "label": "Ship to Home",
+          "detail": "2-3 business days. FREE Shipping on Pre-Orders $59+. Exclusions apply. Arrives on or shortly after release day",
+          "default": true
+        }
+      ],
+      "cta_buttons": [
+        {
+          "label": "Pre-Order",
+          "behavior": "Adds one unit to the cart via AJAX (no navigation). Header cart badge increments to '1' and an 'Added to the cart' modal opens over the page."
+        },
+        {
+          "label": "Join Pro Now",
+          "behavior": "Opens the GameStop Pro upgrade modal (#playerUpgradeModal)."
+        },
+        {
+          "label": "Apply Now / See if You're Pre-Qualified",
+          "behavior": "GameStop Pro Credit Card (Comenity) application links."
+        }
+      ],
+      "quantity_selector": false,
+      "upsells": [
+        "Credit card banner under the delivery block: 'Get A FREE Pro Membership ($85+ in savings) + 2% back on all purchases with the GameStop Pro Credit Card.' with 'Apply Now' and 'See if You're Pre-Qualified'",
+        "GameStop Pro Benefits block: 'Level up to Pro! Pros can gain $60 in annual value for just $25/year. Already a member? Sign In' with 'Join Pro Now'",
+        "Social proof pill next to title: '50+ Purchased Recently' (PS5 listing only)",
+        "Carousels below the fold: 'Top Games To Explore Next', 'Recommended Accessories For You', 'More Like This', 'People Also Bought', 'Recommended Deals', then 'Questions & Answers'",
+        "No product replacement / protection plan was offered for this item"
+      ],
+      "notable_text": [
+        "Release Date: 11/12/2026",
+        "Delivery: Ship to Home",
+        "FREE Shipping on Pre-Orders $59+. Exclusions apply",
+        "Arrives on or shortly after release day",
+        "ESRB Rating: RP (Rating Pending)",
+        "Billing does not occur until order is processed",
+        "Features: This product will only contain a download code inside the box to support pre-load starting on November 12. A disc will not be included in the box. Code can only be used by users holding an account for PlayStation® registered to the US or Canada. (PS5 listing; Xbox listing omits the account sentence)",
+        "Pre-order to receive the Vintage Vice City Pack.",
+        "Grand Theft Auto VI is a single-player experience.",
+        "Accordion headers below features: 'Product Description', 'Specs' (both collapsed; Product Description panel contained only the Pro Benefits block)"
+      ]
+    },
+    "add_to_cart": {
+      "behavior": "modal",
+      "contents": "Right-anchored modal titled 'Added to the cart' with a green check icon and an X close button. Body: small cover thumbnail plus 'Nice! Your \"Grand Theft Auto VI - PlayStation 5 (Code in Box)\" has been added to cart.' (title in bold). Full-width red button 'View Cart & Checkout'. Below it a 'People Also Bought' carousel of product tiles (GTA V, Red Dead Redemption, NBA 2K27, ...) with prices and '$X for Pros' lines and Previous/Next arrows.",
+      "buttons": ["View Cart & Checkout", "Close Modal (X)"]
+    },
+    "cart": {
+      "url": "https://www.gamestop.com/cart/",
+      "line_item_fields": [
+        "Section header with house icon: 'Ship To Home: 1 Item'",
+        "Cover thumbnail (links to PDP)",
+        "Title link: 'Grand Theft Auto VI - PlayStation 5 (Code in Box)'",
+        "Condition: New",
+        "Platform: PlayStation 5",
+        "Quantity: dropdown 'Qty 1' .. 'Qty 5'",
+        "Save for Later (link)",
+        "Remove (link)",
+        "Delivery option radio (pre-selected): 'FREE Shipping on Pre-Orders $59+. Exclusions apply' / 'Arrives on or shortly after release day'",
+        "Line price $79.99 (right-aligned)"
+      ],
+      "summary_fields": [
+        "ORDER SUMMARY",
+        "Subtotal (1 item) $79.99",
+        "Shipping & Handling FREE",
+        "Estimated Tax (i) $5.70",
+        "Estimated Total $85.69"
+      ],
+      "promo_code_field": true,
+      "checkout_button_label": "PROCEED TO CHECKOUT",
+      "express_options": [
+        "PayPal Smart Button above the 'OR' divider: a PayPal SDK iframe exposed to the accessibility tree as presentation 'PayPal-paypal' (logo button, no text label; main.js fires 'cart-paypal-checkout:start' / 'proceed to paypal'). It did not paint in the automated Chromium browser, leaving the slot visually blank.",
+        "Apple Pay slot in the same '.checkout-and-applepay' container (SFCC applepay.js is loaded); renders only in Safari on Apple devices, absent in Chromium",
+        "Zip: 'or pay in installments' (Zip logo)"
+      ],
+      "upsells": [
+        "'Don't Miss Out' GameStop Pro block: 'Get $60 in value and free shipping on orders $54+* when you join GameStop Pro!' / 'Get $5 Monthly Pro Rewards, 5% Extra Off Pre-Owned and Collectibles, and That's Just the Start' / 'Join today $25/Year' with 'Join Pro' button",
+        "'Need Help? Call 1-800-883-8895'",
+        "'ENTER PROMO CODE' accordion under the checkout button: label 'Promo Code', text field, 'Submit' button, inline error 'No coupon code entered' (note: help center says coupons cannot be used on pre-orders)"
+      ]
+    },
+    "checkout": {
+      "url": "https://www.gamestop.com/checkout/login/?required=false (302 to https://identity.gamestop.com/oidc/auth?scope=api:read offline_access openid address email phone profile&response_type=code&client_id=gamestop&redirect_uri=https://sfcc-ocapi.gamestop.com/shopper/auth/v1/idp/callback/default-gamestop&checkout=true&loginRequired=false; the OIDC provider then serves its sign-in UI at identity.gamestop.com/interaction/{uid} with /interaction/{uid}/create-account for registration, and returns to www.gamestop.com/checkout/)",
+      "auth": {
+        "guest_allowed": true,
+        "account_required": false,
+        "screen_text": "NOT OBSERVED (twice): identity.gamestop.com shows a Cloudflare managed challenge ('Just a moment...' / 'Performing security verification / This website uses a security service to protect against malicious bots.'); every Wayback capture of identity.gamestop.com/interaction/{uid} is a 403 too. Help center: 'You can check out as a guest, but creating an account makes it easier to track, manage, and return orders.' GameStop's own main.js (July 2026) wires analytics to a sign-in page with: '.login-guest-checkout .checkout-as-guest' (analytics label 'Guest Checkout'), '.create-account-initial .create-account-button' ('Create Account'), '.forgot-password-link-js', and a 'keep me signed in' checkbox ('login:keepMeSignedIn'). Expected screen (low confidence on wording): GameStop-branded card with Email + Password + 'Keep me signed in' + 'Sign In', a 'Forgot password?' link, a 'Create Account' button, and a guest button in its own block.",
+        "guest_button_label": "Checkout as Guest (LOW CONFIDENCE: inferred from CSS class 'checkout-as-guest' and analytics label 'Guest Checkout'; 'Continue as Guest' is the other candidate)",
+        "signin_fields": ["Email", "Password", "Keep me signed in (checkbox)"]
+      },
+      "steps": [
+        {
+          "name": "Sign in or check out as guest (identity.gamestop.com)",
+          "fields": [
+            { "label": "Email", "type": "email", "required": true },
+            { "label": "Password", "type": "password", "required": true },
+            { "label": "Keep me signed in", "type": "checkbox", "required": false }
+          ],
+          "options": [
+            "Sign In with an existing account",
+            "Create Account (identity.gamestop.com/interaction/{uid}/create-account)",
+            "Guest checkout button (CSS class 'checkout-as-guest', analytics label 'Guest Checkout'; visible text not verified)"
+          ],
+          "button_label": "Sign In",
+          "notes": "NOT OBSERVED LIVE (Cloudflare challenge; all archive captures 403). Structure inferred from the OIDC URLs and from GameStop's main.js analytics hooks ('.login-guest-checkout .checkout-as-guest', '.create-account-button', '.forgot-password-link-js', 'login:keepMeSignedIn'). Whether the guest path asks for an email before the shipping form is unknown; the confirmation page prints the email under the Billing Address, so it is at least collected with billing/contact info."
+        },
+        {
+          "name": "Checkout page - Shipping section",
+          "fields": [
+            { "label": "First Name", "type": "text", "required": true },
+            { "label": "Last Name", "type": "text", "required": true },
+            { "label": "Address 1", "type": "text", "required": true },
+            { "label": "Address 2", "type": "text", "required": false },
+            { "label": "City", "type": "text", "required": true },
+            { "label": "State", "type": "select", "required": true },
+            { "label": "ZIP Code", "type": "text", "required": true },
+            { "label": "Phone Number", "type": "tel", "required": true }
+          ],
+          "options": [
+            "Shipping methods are radio buttons (input name ends in '_shippingMethodID') inside a '.shipping-method-set' with a '.display-name' and price; method names seen on confirmations: 'Premium $0.00', 'Rush $x.xx'; cart shows 'FREE Shipping on Pre-Orders $59+' for this item",
+            "Standard Shipping $6.99 (1-3 business days), FREE on pre-orders $59+ / orders $79+ / Pro orders $54+",
+            "Same Day Delivery $12.99 (only when a nearby store has stock; not offered for this pre-order)",
+            "Pick Up In Store (not available for this item)"
+          ],
+          "button_label": null,
+          "notes": "Checkout is a SINGLE PAGE in the current build: main.js has a '.single-page-checkout' mode and the help center (updated 5/20/2026) says 'On the final checkout screen, you can: Confirm your shipping address, Apply gift cards or trade-in credit, Enter your payment method, Select Place Order' (medium confidence). No separate continue button in that mode. Legacy 3-stage SFRA flow still exists in main.js ('#checkout-main[data-checkout-stage]' = shipping / payment / placeOrder, URLs /checkout/?stage=shipping#shipping and /checkout/?stage=payment#payment, button '.submit-shipping' whose SFRA default label is 'Next: Payment'). Field LABELS are SFRA defaults and not observed (low confidence); the form is 'form.shipping-form' (class 'guest-checkout' for guests). Phone IS collected (printed under Shipping Address on confirmations); whether it is required is unverified. Email is not on this section (see Payment). An address-suggestion modal ('suggested address') exists. Help center: ships only within the continental U.S.; no freight forwarders/hotels/business addresses."
+        },
+        {
+          "name": "Checkout page - Payment section and Place Order",
+          "fields": [
+            { "label": "Card Number", "type": "text", "required": true },
+            { "label": "Expiration MM/YY (one combined field)", "type": "text", "required": true },
+            { "label": "Security Code", "type": "text", "required": true },
+            { "label": "Billing address same as shipping", "type": "checkbox", "required": false },
+            { "label": "Email", "type": "email", "required": true },
+            { "label": "Gift Card Number", "type": "text", "required": false },
+            { "label": "Gift Card PIN", "type": "text", "required": false }
+          ],
+          "options": [
+            "Payment methods are Bootstrap tabs ('.payment-options a.nav-link[data-bs-toggle=tab]'): credit/debit card tab (label not verified, payment method id CREDIT_CARD), 'PayPal', 'BUY NOW, PAY LATER' (Zip per help center; a legacy '#klarna-checkout-btn' also remains in main.js)",
+            "GameStop Pro Credit Card (Comenity) is entered as a card in the card tab (main.js has 'purCC:avsError' handling)",
+            "Gift cards: separate apply block (#giftCertificateAmount, payment id GIFT_CERTIFICATE, analytics 'Payment|Gift Card Applied'); up to 2 per order",
+            "Trade-in credit: applied here per help center (no client-side trace found)",
+            "Accepted cards: Visa, MasterCard, American Express, Discover (one card per order); PayPal incl. Pay in 4; Zip 4 or 8 payments"
+          ],
+          "button_label": "Place Order",
+          "notes": "Field NAMES verified from main.js (July 2026 build): dwfrm_billing_paymentMethod, dwfrm_billing_creditCardFields_cardNumber (#cardNumber, Cleave.js formatting with brand detection visa/mastercard/discover/amex/unionPay/jcb/diners), dwfrm_billing_creditCardFields_expirationMonthYear (#expirationMonthYear, ONE combined month/year field, not two selects), dwfrm_billing_creditCardFields_securityCode (#securityCode, maxlength 3, or 4 for Amex). There is NO cardOwner / 'Name on Card' field; the confirmation page shows the billing-address name as card holder. Cards are tokenised with CyberSource Secure Acceptance Flex ('SA_FLEX'). Visible labels ('Security Code' vs 'CVV', MM/YY placeholder, card-tab label) not observed (low confidence). 'Place Order' is the help-center name of the final control; a payment summary with an Edit link ('.updatePaymentLink', analytics 'Edit Payment') exists. In legacy stage mode the payment button was '.submit-payment' (SFRA default 'Next: Place Order') followed by a placeOrder stage."
+        }
+      ],
+      "payment_methods": [
+        "Visa",
+        "MasterCard",
+        "American Express",
+        "Discover",
+        "PayPal",
+        "PayPal Pay in 4",
+        "Zip (4 or 8 payments)",
+        "GameStop Credit Card (Comenity)",
+        "GameStop Gift Card (physical or digital, up to 2 per order)",
+        "Trade-in credit",
+        "Apple Pay (cart express slot only, Safari on Apple devices; SFCC applepay.js is loaded but the help center does not list it)"
+      ],
+      "card_fields": ["Card Number", "Expiration MM/YY (single combined field)", "Security Code (3 digits, 4 for Amex)", "Billing address (defaults to shipping); no separate Name on Card field"],
+      "billing_same_as_shipping_default": true,
+      "charge_timing": "Temporary authorization at order; pre-orders are charged about 1 week before the release date (help center 'GameStop Pre-Orders — How They Work'); general orders charged when shipped ('You are NOT fully charged until the order ships', help center 5/20/2026). No charge-timing sentence was found in the checkout client JS or on three archived confirmation pages; whether the checkout page itself shows one is unverified.",
+      "charge_policy_text": "Billing does not occur until order is processed",
+      "review_step": {
+        "exists": false,
+        "place_order_label": "Place Order",
+        "shows": ["order summary column (Subtotal, Shipping & Handling, Estimated Tax, Estimated Total, same rows as the cart)", "shipping address summary", "payment summary with an Edit link"],
+        "notes": "MEDIUM-LOW CONFIDENCE. Current build is a single-page checkout ('.single-page-checkout'): no separate review page; 'Place Order' sits on the same page once shipping and payment are filled, next to the order summary. main.js still carries the legacy SFRA placeOrder stage (shipping -> payment -> placeOrder with Edit links) so an A/B or fallback to a 3-stage flow is possible."
+      },
+      "confirmation": {
+        "headline": "Thank you for your order!",
+        "order_number_format": "16-digit numeric; 2025 orders start 1100000... (e.g. 1100000074030513), 2026 orders start 1101000... (e.g. 1101000085862818). Page URL /order/confirmation/?ID={orderNo}&token={token}; older URLs also carried fraudStatus=success, hasProSku, playerToProUpgradFlow, proRenewFlow and paypalExpressCart flags.",
+        "contents": [
+          "VERIFIED from three archived live confirmation pages (2025-06, 2026-04, 2026-07); page title 'Order Confirmation | GameStop'",
+          "'Don't Miss Out' GameStop Pro banner above the receipt: 'Get $60 in value when you join GameStop Pro!' / 'Join today $25/Year' / 'JOIN PRO'",
+          "H4 'Thank you for your order!' (CSS renders it uppercase: THANK YOU FOR YOUR ORDER!) then 'We've sent you a confirmation email.'",
+          "'Order Number: {16 digits}' and 'Order Date: M/D/YYYY'",
+          "Shipment group header 'Shipping Now' with columns 'Products' / 'Shipping Details': product title, then 'Shipping Method' + name + price (e.g. 'Premium $0.00', 'Rush $x.xx')",
+          "Totals card: Subtotal, Total Discount, Gift Cards Applied (n), Shipping & Handling (FREE), Shipping Surcharge, Shipping & Delivery Discount, Estimated Tax (i) 'Sales tax is an estimate only, final total is subject to change.', Total, 'Total Savings :' (zero-value rows hidden)",
+          "Link 'Return To Shopping'",
+          "H4 'SHIPPING' > 'Shipping Address': name, street, City, ST ZIP, phone",
+          "H4 'PAYMENT' > 'Billing Address' (name, street, City, ST ZIP, email) and 'Payment Method' (card orders: 'Credit Card' + holder name + brand + '************1234' + 'Expiration M/YYYY' + 'Amount: $X'; PayPal orders: PayPal account email + 'Amount: $X')",
+          "No create-account form and no charge-timing text on any of the three captures"
+        ],
+        "email_sent_text": "We've sent you a confirmation email."
+      }
+    },
+    "account": {
+      "required_for_purchase": false,
+      "signup_fields": ["First Name", "Last Name", "Email", "Password", "Phone Number", "Date of Birth"],
+      "login_fields": ["Email", "Password"],
+      "membership_program": "GameStop Pro — $25/year: $5 monthly Pro Reward, 5% extra off pre-owned & collectibles, free shipping on orders $54+, extra trade-in credit; marketed on PDP as '$60 in annual value'. GameStop Pro Credit Card (Comenity): free Pro membership + 2% back."
+    },
+    "quirks": [
+      "Physical SKU is 'Code in Box': the box contains only a download code, no disc; PS5 code only works on US/Canada PlayStation accounts.",
+      "Listed 'Release Date: 11/12/2026' is the code-in-box/pre-load ship date, one week before the Nov 19 launch; delivery text says 'Arrives on or shortly after release day'.",
+      "Only Standard edition is sold (Edition facet: Standard (2)); no Ultimate, disc or digital GTA VI SKU on GameStop.com today.",
+      "'Pick up in-store' shows 'Not Available' for this item; Ship to Home is the only fulfillment option.",
+      "Pre-orders get free shipping at $59+ (regular orders $79+, Pro $54+).",
+      "Coupons/promo codes cannot be applied to pre-orders even though the cart shows an 'ENTER PROMO CODE' field.",
+      "Card is only authorized at checkout; pre-orders are charged about a week before release. Split pay online only via PayPal Pay in 4 (or Zip at cart).",
+      "Guest pre-orders can only be cancelled by emailing care@gamestop.com; signed-in orders can self-cancel from Order History until processing starts.",
+      "Checkout hands off to identity.gamestop.com (OIDC) which sits behind a Cloudflare bot check; automated browsers are stopped there.",
+      "Cookie banner at the bottom with 'Accept', 'Opt-Out', 'More Info' — it does not block interaction.",
+      "Cart shows an estimated tax ($5.70 on $79.99) before any address is entered, based on a geo-default store/location.",
+      "Header shows a default 'my store' (e.g. 'Ross Henderson S/C - GAMESTOP') on some pages; product page has 'Change Store' / 'Verify Address' hidden controls.",
+      "Quantity is not chosen on the PDP; the cart has a Qty 1-5 dropdown.",
+      "Xbox listing is titled 'Xbox Series X/S' but the Platform selector/facet label is 'Xbox Series X'.",
+      "Persistent Pro upsells: PDP credit-card banner, PDP 'Join Pro Now', cart 'Don't Miss Out' block; other tiles show '$X for Pros' pricing.",
+      "The guest basket persisted between browser sessions and adding the same SKU again created a SECOND line item (Qty 1 each) instead of incrementing quantity: cart read 'Ship To Home: 2 Items', 'Subtotal (2 items) $159.98', 'Estimated Tax $11.40', 'Estimated Total $171.38'.",
+      "Checkout is a Salesforce Commerce Cloud (SFRA) storefront; the July-2026 main.js carries both a single-page checkout and the legacy 3-stage flow (/checkout/?stage=shipping, ?stage=payment, placeOrder).",
+      "Card expiry is one combined MM/YY field and there is no Name on Card field; cards go through CyberSource Flex.",
+      "Payment methods at checkout are tabs, one of them literally titled 'BUY NOW, PAY LATER' (Zip).",
+      "Order numbers moved from the 1100000... range (2025) to 1101000... (2026).",
+      "Cart express slot holds a PayPal iframe (logo only, no text) and a Safari-only Apple Pay slot; in Chromium the area above 'OR' looks empty."
+    ]
+  },
+  "gaps": [
+    "identity.gamestop.com sign-in/guest screen still not observed. Second attempt (2026-09-29) hit the Cloudflare managed challenge again ('Just a moment...'); not retried per rules. Wayback has captures of identity.gamestop.com/interaction/{uid} and /interaction/{uid}/create-account but all are 403, and www.gamestop.com/login/ captures since Feb 2025 are redirect stubs into identity. Headline, the exact guest button text ('Checkout as Guest' vs 'Continue as Guest') and whether the guest path asks for an email before the shipping form remain unverified; current best guess comes from the CSS class 'checkout-as-guest' and analytics label 'Guest Checkout' in main.js.",
+    "Visible checkout labels are not observed: shipping-address field labels (SFRA defaults assumed), whether Phone Number is required (it is collected), the card tab's title, 'Security Code' vs 'CVV', and the MM/YY placeholder. Field NAMES, the single combined expiry field, the absence of a Name on Card field and the tab layout are verified from GameStop's archived main.js.",
+    "Single-page vs 3-stage: main.js contains both. The help center's 'final checkout screen' wording points to single-page as the live default (medium confidence), but this was not seen; if the legacy stage flow is served, the buttons are SFRA's 'Next: Payment' / 'Next: Place Order' (labels not verified). Exact position of 'Place Order' (order-summary column vs bottom of the payment section) is unverified.",
+    "Whether the checkout page shows any pre-order charge-timing sentence (e.g. 'You will not be charged until...') is unverifiable from client JS or confirmation captures; only the PDP line 'Billing does not occur until order is processed' and the help-center wording are confirmed.",
+    "Account sign-up field list is from general knowledge (low confidence); only the /interaction/{uid}/create-account route is confirmed.",
+    "The Product Description and Specs accordions on the PDP were collapsed and the description panel contained only the Pro benefits block; no long-form description text was available.",
+    "WebFetch returns HTTP 403 for gamestop.com and identity.gamestop.com and cannot reach web.archive.org/archive.org; the WebSearch budget was exhausted before this follow-up (0 searches possible), so third-party guides could not be located. Wayback CDX queries for www.gamestop.com/checkout* returned 'Temporarily Offline'; no archived checkout-stage page was found.",
+    "No YouTube walkthrough transcript of a GameStop checkout was found."
+  ]
+}
