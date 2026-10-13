@@ -295,3 +295,4 @@ a.bbx-chip:hover{border-color:var(--bb-blue);color:var(--bb-blue);text-decoratio
 .bbs-dotd-card .bbs-card{color:var(--bb-ink)}
 @media(max-width:1000px){.bbs-scroller{grid-auto-columns:minmax(190px,calc((100% - 32px)/3))}}
 @media(max-width:700px){.bbs-row{padding:16px 12px 8px}.bbs-row-head h2{font-size:19px}.bbs-scroller{grid-auto-columns:minmax(150px,46%);gap:10px}.bbs-card{padding:9px}.bbs-card-title{font-size:13px}.bbs-price{font-size:19px}.bbs-dotd{grid-template-columns:1fr;padding:20px 16px}.bbs-dotd-card{max-width:240px}}
+.bbs-dotd-card .bbs-card-img{max-width:170px;margin:10px auto 0}.bbs-dotd-card .bbs-card-title{min-height:0}

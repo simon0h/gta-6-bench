@@ -41,7 +41,10 @@ export function installSite(router, { render, notFound }) {
   for (const node of NODES) {
     router.get(node.path, (req, res) => {
       const sort = ['price_low', 'price_high', 'rating'].includes(req.query.sort) ? req.query.sort : ''
-      const items = refine(nodeProducts(node).map(p => localProduct(p, req.store)), { sort })
+      let items = refine(nodeProducts(node).map(p => localProduct(p, req.store)), { sort })
+      // Best Match: the pre-order listings sit among the department's products (after the first
+      // row), as a promoted item would, rather than ahead of everything else.
+      if (!sort && items.some(p => p.shelf)) { const promoted = items.filter(p => !p.shelf), rest = items.filter(p => p.shelf); items = [...rest.slice(0, 4), ...promoted, ...rest.slice(4)] }
       const base = res.locals.base, dept = node.parent || node
       const shelfDept = items.find(p => p.shelf)?.department
       const moreHref = `${base}/site/searchpage.jsp?${new URLSearchParams(shelfDept ? { department: shelfDept, ...(node.parent && !/ Deals$/.test(node.name) && !node.games ? { node: node.name } : {}), ...(/ Deals$/.test(node.name) ? { offer: 'deals' } : {}) } : dept.local ? { department: dept.local } : { st: node.name })}`
