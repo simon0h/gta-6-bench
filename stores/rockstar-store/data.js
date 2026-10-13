@@ -4,6 +4,7 @@ import { expandCatalog } from './catalog500.js'
 // Listings and distractors as they appear on store.rockstargames.com (research/rockstar-store.md, 2026-09-29/30).
 import { EXTRA_PRODUCTS, enrichCatalog } from './catalog.js'
 import { PRICES } from '../../lib/catalog.js'
+import { SHELF } from './shelf.js'
 
 export const XSOLLA_PROJECT = '100851'
 export const MAX_QTY = 4                 // "max quantity 4" per SKU
@@ -106,15 +107,20 @@ applyCatalogPolicy('rockstar-store', PRODUCTS, CATALOG_EVIDENCE)
 if (!fixtureCatalog) for (const p of PRODUCTS) { delete p.inventory; delete p.stock; p.purchaseLimit = MAX_QTY }
 
 export const GAME = PRODUCTS[0]
-export const byPath = (p) => PRODUCTS.find(x => x.path === p) ?? null
-export const byId = (id) => PRODUCTS.find(x => x.id === String(id)) ?? null
+// The store assortment (shelf.js) is a separate array: PRODUCTS stays the evidence-backed catalog that applyCatalogPolicy,
+// the inventory adapter and the reference reports describe. Browse, search, product pages and the cart read CATALOG.
+// Fixture mode keeps its own authored 500-row catalog and does not add the shelf.
+export const SHELF_ITEMS = fixtureCatalog ? [] : SHELF
+export const CATALOG = [...PRODUCTS, ...SHELF_ITEMS]
+export const byPath = (p) => CATALOG.find(x => x.path === p) ?? null
+export const byId = (id) => CATALOG.find(x => x.id === String(id)) ?? null
 
 // A cart / checkout line is { sku, qty }. bySku resolves it to a game listing (kind 'game') or a distractor (kind 'other').
 export function bySku(sku) {
   const l = LISTINGS.find(x => x.sku === sku)
   if (l) return { ...l, kind: 'game', product: GAME }
   if (typeof sku !== 'string') return null
-  const p = PRODUCTS.find(x => x.sku === sku || x.variants?.some(v => `${x.sku}:${v.id}` === sku))
+  const p = CATALOG.find(x => x.sku === sku || x.variants?.some(v => `${x.sku}:${v.id}` === sku))
   if (!p) return null
   const variant = p.variants?.find(v=>`${p.sku}:${v.id}`===sku)
   return { sku, kind:'other', title:p.title, price:variant?.price ?? p.price, art:p.art, photo:p.photo, product:p, variant, options:variant?{[p.optionLabel]:variant.label}:{}, stock:variant?.stock ?? p.inventory }
@@ -126,8 +132,8 @@ export function bySku(sku) {
 export function search(q) {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9+]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  if (!tokens.length) return [...PRODUCTS]
-  return PRODUCTS
+  if (!tokens.length) return [...CATALOG]
+  return CATALOG
     .map((p, i) => {
       // Collection names count too, so the home page "See all" links (e.g. "New Arrivals", "Best Sellers") find their items.
       const words = norm(`${p.title} ${p.keywords} ${(p.collections ?? []).join(' ')}`).split(' ')

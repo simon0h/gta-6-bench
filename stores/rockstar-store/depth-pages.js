@@ -1,8 +1,9 @@
 import { productImage, productGallery } from '../../lib/product-assets.js'
 import { CATALOG_PLATFORMS } from '../../lib/expanded-games.js'
 import { esc, money } from '../../lib/html.js'
-import { PRODUCTS, SORTS } from './data.js'
-export const art = (p,cls='') => p.id==='gta-vi'?`<img class="${esc(cls)}" src="/static/reference/rockstar-store/GTAVI_PreOrderWebstore_GamesGrid_FOB_1212x1497_R01.jpg" alt="Grand Theft Auto VI">`:productImage('rockstar-store',p,{className:cls})
+import { CATALOG, SORTS } from './data.js'
+import { isShelf, shelfImage, shelfGallery } from './shelf-art.js'
+export const art = (p,cls='') => p.id==='gta-vi'?`<img class="${esc(cls)}" src="/static/reference/rockstar-store/GTAVI_PreOrderWebstore_GamesGrid_FOB_1212x1497_R01.jpg" alt="Grand Theft Auto VI">`:isShelf(p)?shelfImage(p,cls):productImage('rockstar-store',p,{className:cls})
 export function tile(base,p) {return `<article class="rs-tile"><a class="rs-tile-visual" href="${base}${p.path}">${art(p)}</a><h3><a href="${base}${p.path}">${esc(p.title)}</a></h3>${p.badge?`<span class="rs-badge">${esc(p.badge)}</span>`:''}<div class="rs-price">${p.variants?'From ':''}${money(p.price)}${esc(p.priceSuffix||'')}</div><p class="rs-fine">${p.delivery==='digital'?'PC · Rockstar Games Launcher':p.section==='Gear'?p.category:(p.catalogPlatform?p.chips.join(' · '):'Console')}</p></article>`}
 export const grid=(base,products)=>`<div class="rs-grid">${products.map(p=>tile(base,p)).join('')}</div>`
 export function searchPage({base,q,sort='relevance',products,options={}}) {
@@ -17,7 +18,7 @@ export function hubPage({base,title,description,products,collection,merch=false}
  const feature=products.filter(p=>p.photo&&(merch?p.section==='Gear':collection?true:p.section==='Games')).slice(0,3)
  return `<section class="rs-hub-head ${collection==='rdr'?'rs-hub-red':''}"><div class="rs-hub-copy"><p class="rs-eyebrow">ROCKSTAR STORE</p><h1>${esc(title)}</h1><p>${esc(description)}</p><a class="rs-btn rs-btn-pill" href="${base}/search?${merch?'section=Gear':collection?`collection=${collection}`:'section=Games'}">Shop all ${esc(title)}</a></div><div class="rs-hub-art" aria-hidden="true">${feature.map(p=>art(p)).join('')}</div></section><nav class="rs-hub-links" aria-label="Shop departments">${[['Games','/view-all-games'],['Apparel','/search?category=apparel'],['Accessories','/search?category=accessories'],['Collectibles','/search?category=collectibles'],['Game Add-Ons','/game-add-ons']].map(([l,h])=>`<a href="${base}${h}">${l}</a>`).join('')}</nav>${(merch?['apparel','accessories','collectibles']:collection?['Games','Gear','Add-Ons']:['Games']).map(c=>{const list=products.filter(p=>merch?p.category===c:p.section===c);return list.length?shelf(base,merch?c[0].toUpperCase()+c.slice(1):c,list,`/search?${merch?`category=${c}`:`section=${encodeURIComponent(c)}${collection?`&amp;collection=${collection}`:''}`}`):''}).join('')}`
 }
-function gallery(p) { return productGallery('rockstar-store',p,{className:'rs-gallery'}) }
+function gallery(p) { return isShelf(p)?shelfGallery(p,{className:'rs-gallery'}):productGallery('rockstar-store',p,{className:'rs-gallery'}) }
 
 export function shelf(base,heading,products,href) {
  const id=`shelf-${heading.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`
@@ -28,7 +29,7 @@ export function otherProductPage({base,p,popover='',modal='',variantId='',error=
  const v=p.variants?.find(v=>v.id===variantId), stock=v?.stock??p.inventory,digital=p.delivery==='digital'
  const option=p.variants?`<fieldset class="rs-variants"><legend>${esc(p.optionLabel)}${v?`: ${esc(v.label)}`:''}</legend>${p.variants.map(o=>`<a href="${base}${p.path}?variant=${o.id}" aria-pressed="${o.id===v?.id}" class="${!o.stock?'rs-soldout':''}">${esc(o.label)}${!o.stock?' · Unavailable':''}</a>`).join('')}</fieldset>`:''
  const specs=Object.entries(digital?{'Platform':'PC','Delivery':'Rockstar Games Launcher','Genre':p.genre||'In-game currency','Storage':p.storage||'Base game required','Account':'Rockstar Games account required'}:{'Material':p.material,'Dimensions':p.dimensions,'Fit':p.fit,'Capacity':p.capacity,...p.specs}).filter(([,v])=>v)
- const related=PRODUCTS.filter(x=>x.id!==p.id&&(x.category===p.category||x.collections?.some(c=>p.collections?.includes(c)))).sort((a,b)=>(b.category===p.category)-(a.category===p.category)).slice(0,8)
+ const related=CATALOG.filter(x=>x.id!==p.id&&(x.category===p.category||x.collections?.some(c=>p.collections?.includes(c)))).sort((a,b)=>(b.category===p.category)-(a.category===p.category)).slice(0,8)
  const sizeChart=p.category==='apparel'?`<details class="rs-product-details rs-size-chart"><summary>Size chart</summary><p>Garment measurements in inches. Allow a comfortable fit.</p><table><thead><tr><th>Size</th><th>Body width</th><th>Length</th></tr></thead><tbody>${['S','M','L','XL','XXL','XXXL'].map((s,i)=>`<tr><td>${s}</td><td>${18+i*2}</td><td>${28+i}</td></tr>`).join('')}</tbody></table></details>`:''
  const delivery=digital?'Purchased for the signed-in Rockstar Games account. Your entitlement appears in your PC library after payment. Internet access and the Rockstar Games Launcher are required.':p.badge==='COMING SOON'?'Pre-order shipping is shown at checkout.':'Ordinary merchandise: estimated 3–7 business days after dispatch with standard shipping.'
  const panels=[
