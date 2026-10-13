@@ -175,4 +175,5 @@
   .sx-gc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .sx-footer-features{grid-template-columns:1fr 1fr}.sx-footer-grid{grid-template-columns:1fr 1fr}.sx-footer-signup{grid-column:1/-1}
   .sx-dl{grid-template-columns:1fr}
+  .sx-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.sx-tiles a{padding:14px 12px}
 }
