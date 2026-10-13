@@ -82,7 +82,11 @@
   addEventListener('popstate', () => navigation('back_forward'))
   addEventListener('hashchange', () => navigation('hash'))
   addEventListener('pageshow', event => {
-    if (event.persisted) { rememberPage(); navigation('back_forward') }
+    if (event.persisted) {
+      const previous = lastPage()
+      rememberPage()
+      enqueue({ kind: 'navigation', navigation: 'back_forward', path: path(location.href), ...(previous && previous !== page ? { parent_page_id: previous } : {}) })
+    }
   })
   addEventListener('pagehide', () => { void flush(true) })
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') void flush(true) })

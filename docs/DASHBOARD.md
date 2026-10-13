@@ -13,9 +13,10 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
 3. Use **Copy prompt** or **Copy URL** and give the link to that agent.
 4. Refresh the run to review progress and each submitted task's private grade.
    Update labels, comments and comma-separated tags with **Save**.
-5. Click **View traversal** on an agent, then select a task. Expand pages to inspect
-   requests, clicks, form submissions, field changes and back/forward navigation.
-   The view refreshes every five seconds while open; **JSON** downloads the selected
+5. Click **View traversal** on an agent, then select a task. Follow connected page
+   nodes or switch to **All events**. Drag the canvas to pan, use the zoom controls
+   or **Fit view**, and select a node to inspect requests, clicks, forms and timing.
+   The graph refreshes every five seconds while open; **JSON** downloads the selected
    task's loaded events.
 
 An agent label is operator-supplied metadata. The system does not identify the
