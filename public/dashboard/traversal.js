@@ -143,7 +143,7 @@
           if (!state.cache.has(state.selected)) state.cache.set(state.selected, { events: new Map(), collapsed: new Set(), cursor: 0, total: 0, loaded: false })
           const cache = selectedCache()
           if (!cache.loaded) renderTrace()
-          if (manual || !cache.loaded || active(task) || Number(task.event_count) !== cache.total) {
+          if (manual || !cache.loaded || active(task) || cache.events.size < cache.total || Number(task.event_count) !== cache.total) {
             let pages = 0, cursor = cache.cursor
             do {
               const batch = await api(`${basePath()}/${encodeURIComponent(state.selected)}?after=${cursor}`, { signal })
