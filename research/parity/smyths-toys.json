@@ -1,0 +1,1400 @@
+{
+  "store": "smyths-toys",
+  "real_home": "https://www.smythstoys.com/uk/en-gb/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.smythstoys.com/uk/en-gb/",
+    "https://www.smythstoys.com/uk/en-gb/toys/c/SM0601",
+    "https://www.smythstoys.com/uk/en-gb/baby/c/SM0602",
+    "https://www.smythstoys.com/uk/en-gb/outdoor/c/SM0603",
+    "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/c/SM0604",
+    "https://www.smythstoys.com/uk/en-gb/search/?text=lego",
+    "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/grand-theft-auto-vi-ps5/p/263307",
+    "https://www.smythstoys.com/uk/en-gb/guest-lookup",
+    "https://www.smythstoys.com/uk/en-gb/help",
+    "https://www.smythstoys.com/uk/en-gb/storefinder",
+    "https://www.smythstoys.com/uk/en-gb/giftcardtype",
+    "https://www.smythstoys.com/uk/en-gb/returns",
+    "https://www.smythstoys.com/uk/en-gb/shipping-and-delivery",
+    "https://www.smythstoys.com/uk/en-gb/pre-order",
+    "https://www.smythstoys.com/uk/en-gb/click-and-collect",
+    "https://www.smythstoys.com/uk/en-gb/contact-us",
+    "https://www.smythstoys.com/uk/en-gb/about-us",
+    "https://www.smythstoys.com/uk/en-gb/request-a-catalogue",
+    "https://www.smythstoys.com/uk/en-gb/in-store-events",
+    "https://www.smythstoys.com/uk/en-gb/charity-partners",
+    "https://www.smythstoys.com/uk/en-gb/gift-finder-hub",
+    "https://www.smythstoys.com/uk/en-gb/stock-availability",
+    "https://www.smythstoys.com/uk/en-gb/terms-and-policies",
+    "https://www.smythstoys.com/uk/en-gb/payment-information",
+    "https://www.smythstoys.com/uk/en-gb/accessibility",
+    "https://www.smythstoys.com/uk/en-gb/transparency-statement",
+    "https://www.smythstoys.com/uk/en-gb/privacy-policy",
+    "https://www.smythstoys.com/uk/en-gb/toys",
+    "https://www.smythstoys.com/uk/en-gb/video-games",
+    "https://www.smythstoys.com/sitemap.xml",
+    "https://www.smythstoys.com/uk/en-gb/sitemap/category-en-gbp.xml",
+    "https://www.smythstoys.com/uk/en-gb/sitemap/content-en-gbp.xml"
+  ],
+  "home_path": "/uk/en-gb",
+  "sitemap_path": "/uk/en-gb/sitemap",
+  "notes": "Captured with WebFetch on 2026-10-13 (the Imperva wall seen on 2026-09-29 did not block it). Not fetchable: /cart (server error) and /login (served the homepage: sign-in is a JS modal), so their expects are minimal; web.archive.org is blocked. The header department mega-menu is rendered client-side and was not in any fetched HTML: the menu entries are the top-level categories of the real category sitemap. Store finder listed only the first ten store names (East of England); other regions are headings only. The PS5/Xbox pre-order sub-category codes (SM06040301/SM06040302) are assumed; their names come from the real product breadcrumb. Real site has no HTML site map, so /sitemap is a clone page. Careers (careers.smythstoys.com) is mirrored locally at /careers. The UK (£) region switcher is skipped.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Smyths",
+      "real": "https://www.smythstoys.com/uk/en-gb",
+      "path": "/uk/en-gb"
+    },
+    {
+      "kind": "header",
+      "label": "My orders",
+      "real": "https://www.smythstoys.com/uk/en-gb/my-account/orders",
+      "path": "/uk/en-gb/my-account/orders"
+    },
+    {
+      "kind": "header",
+      "label": "Store finder",
+      "real": "https://www.smythstoys.com/uk/en-gb/storefinder",
+      "path": "/uk/en-gb/storefinder"
+    },
+    {
+      "kind": "header",
+      "label": "Wishlist",
+      "real": "https://www.smythstoys.com/uk/en-gb/wishlist",
+      "path": "/uk/en-gb/wishlist"
+    },
+    {
+      "kind": "header",
+      "label": "Basket",
+      "real": "https://www.smythstoys.com/uk/en-gb/cart",
+      "path": "/uk/en-gb/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Toys",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/c/SM0601",
+      "path": "/uk/en-gb/toys/c/SM0601"
+    },
+    {
+      "kind": "header",
+      "label": "Baby",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/c/SM0602",
+      "path": "/uk/en-gb/baby/c/SM0602"
+    },
+    {
+      "kind": "header",
+      "label": "Outdoor",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/c/SM0603",
+      "path": "/uk/en-gb/outdoor/c/SM0603"
+    },
+    {
+      "kind": "header",
+      "label": "Gaming & Tech",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/c/SM0604",
+      "path": "/uk/en-gb/gaming-and-tech/c/SM0604"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Cards",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-cards/c/SM0605",
+      "path": "/uk/en-gb/gift-cards/c/SM0605"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Finder",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-finder-hub",
+      "path": "/uk/en-gb/gift-finder-hub"
+    },
+    {
+      "kind": "footer",
+      "label": "Request a catalogue",
+      "real": "https://www.smythstoys.com/uk/en-gb/request-a-catalogue",
+      "path": "/uk/en-gb/request-a-catalogue"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift cards",
+      "real": "https://www.smythstoys.com/uk/en-gb/giftcardtype",
+      "path": "/uk/en-gb/giftcardtype"
+    },
+    {
+      "kind": "footer",
+      "label": "About us",
+      "real": "https://www.smythstoys.com/uk/en-gb/about-us",
+      "path": "/uk/en-gb/about-us"
+    },
+    {
+      "kind": "footer",
+      "label": "In-store events",
+      "real": "https://www.smythstoys.com/uk/en-gb/in-store-events",
+      "path": "/uk/en-gb/in-store-events"
+    },
+    {
+      "kind": "footer",
+      "label": "Charity partners",
+      "real": "https://www.smythstoys.com/uk/en-gb/charity-partners",
+      "path": "/uk/en-gb/charity-partners"
+    },
+    {
+      "kind": "footer",
+      "label": "Help centre",
+      "real": "https://www.smythstoys.com/uk/en-gb/help",
+      "path": "/uk/en-gb/help"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns",
+      "real": "https://www.smythstoys.com/uk/en-gb/returns",
+      "path": "/uk/en-gb/returns"
+    },
+    {
+      "kind": "footer",
+      "label": "Shipping & delivery",
+      "real": "https://www.smythstoys.com/uk/en-gb/shipping-and-delivery",
+      "path": "/uk/en-gb/shipping-and-delivery"
+    },
+    {
+      "kind": "footer",
+      "label": "Right of withdrawal",
+      "real": "https://www.smythstoys.com/uk/en-gb/guest-lookup",
+      "path": "/uk/en-gb/guest-lookup"
+    },
+    {
+      "kind": "footer",
+      "label": "Cookie policy",
+      "real": "https://www.smythstoys.com/uk/en-gb/cookies-policy",
+      "path": "/uk/en-gb/cookies-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy policy",
+      "real": "https://www.smythstoys.com/uk/en-gb/privacy-policy",
+      "path": "/uk/en-gb/privacy-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms & policies",
+      "real": "https://www.smythstoys.com/uk/en-gb/terms-and-policies",
+      "path": "/uk/en-gb/terms-and-policies"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.smythstoys.com/uk/en-gb/accessibility",
+      "path": "/uk/en-gb/accessibility"
+    },
+    {
+      "kind": "footer",
+      "label": "Transparency statement",
+      "real": "https://www.smythstoys.com/uk/en-gb/transparency-statement",
+      "path": "/uk/en-gb/transparency-statement"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://careers.smythstoys.com/",
+      "path": "/uk/en-gb/careers"
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.smythstoys.com/uk/en-gb/search/?text=lego",
+      "path": "/uk/en-gb/search?text=lego",
+      "expect": [
+        "Search results for",
+        "Filters",
+        "Price",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department page (Toys)",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/c/SM0601",
+      "path": "/uk/en-gb/toys/c/SM0601",
+      "expect": [
+        "Toys",
+        "Category",
+        "Age",
+        "Brand",
+        "Sort by",
+        "Bestsellers"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Category page (Bikes)",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/bikes/c/SM060301",
+      "path": "/uk/en-gb/outdoor/bikes/c/SM060301",
+      "expect": [
+        "Bikes",
+        "Filters",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pre-order games category",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/c/SM060403",
+      "path": "/uk/en-gb/gaming-and-tech/pre-order-games/c/SM060403",
+      "expect": [
+        "Pre-Order Games",
+        "Filters"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/grand-theft-auto-vi-ps5/p/263307",
+      "path": "/uk/en-gb/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/grand-theft-auto-vi-ps5/p/263307",
+      "expect": [
+        "Grand Theft Auto VI PS5",
+        "Key features",
+        "Product details",
+        "Safety & manufacturer information"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Basket",
+      "real": "https://www.smythstoys.com/uk/en-gb/cart",
+      "path": "/uk/en-gb/cart",
+      "expect": [
+        "Basket"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.smythstoys.com/uk/en-gb/login",
+      "path": "/uk/en-gb/login",
+      "expect": [
+        "Sign in",
+        "Email address",
+        "Password"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Manage my order (guest order lookup)",
+      "real": "https://www.smythstoys.com/uk/en-gb/guest-lookup",
+      "path": "/uk/en-gb/guest-lookup",
+      "expect": [
+        "Manage my order",
+        "Order number",
+        "Email address",
+        "Look up order"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help Centre",
+      "real": "https://www.smythstoys.com/uk/en-gb/help",
+      "path": "/uk/en-gb/help",
+      "expect": [
+        "Help Centre",
+        "Shipping and delivery",
+        "Click & Collect",
+        "Stock availability",
+        "Payment Information"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store finder",
+      "real": "https://www.smythstoys.com/uk/en-gb/storefinder",
+      "path": "/uk/en-gb/storefinder",
+      "expect": [
+        "Store finder",
+        "All stores",
+        "East of England",
+        "Scotland",
+        "Use my current location"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.smythstoys.com/uk/en-gb/giftcardtype",
+      "path": "/uk/en-gb/giftcardtype",
+      "expect": [
+        "Smyths Toys Gift Cards",
+        "e-Gift Card",
+        "Physical Card",
+        "Already have a gift card?",
+        "Frequently asked questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift card info",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-card-info",
+      "path": "/uk/en-gb/gift-card-info",
+      "expect": [
+        "Gift Cards",
+        "When does my Smyths Gift Card expire?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals: Great Value Toys",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/great-value-toys/c/SM060108",
+      "path": "/uk/en-gb/toys/great-value-toys/c/SM060108",
+      "expect": [
+        "Great Value Toys",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals: Gaming Offers",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-offers/c/gaming-offers",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-offers/c/gaming-offers",
+      "expect": [
+        "Gaming Offers"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns",
+      "real": "https://www.smythstoys.com/uk/en-gb/returns",
+      "path": "/uk/en-gb/returns",
+      "expect": [
+        "Ways you can return",
+        "Online Orders",
+        "Cooling Off Period",
+        "In-store Orders",
+        "Pre-Order Cancellation"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping & Delivery",
+      "real": "https://www.smythstoys.com/uk/en-gb/shipping-and-delivery",
+      "path": "/uk/en-gb/shipping-and-delivery",
+      "expect": [
+        "Shipping & Delivery",
+        "Standard Delivery Charges",
+        "Express Delivery Charges",
+        "Delivery Information",
+        "Shipping & Delivery FAQs"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Click & Collect",
+      "real": "https://www.smythstoys.com/uk/en-gb/click-and-collect",
+      "path": "/uk/en-gb/click-and-collect",
+      "expect": [
+        "Click & Collect",
+        "How does Click & Collect work?",
+        "Click & Collect Price Promise"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pre-order",
+      "real": "https://www.smythstoys.com/uk/en-gb/pre-order",
+      "path": "/uk/en-gb/pre-order",
+      "expect": [
+        "Pre-Order",
+        "Price Promise"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Stock availability",
+      "real": "https://www.smythstoys.com/uk/en-gb/stock-availability",
+      "path": "/uk/en-gb/stock-availability",
+      "expect": [
+        "Stock Availability"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Payment information",
+      "real": "https://www.smythstoys.com/uk/en-gb/payment-information",
+      "path": "/uk/en-gb/payment-information",
+      "expect": [
+        "Payment Information",
+        "Which payment methods do you accept?",
+        "PayPal FAQs",
+        "Gift Cards"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Contact us",
+      "real": "https://www.smythstoys.com/uk/en-gb/contact-us",
+      "path": "/uk/en-gb/contact-us",
+      "expect": [
+        "Contact us",
+        "How to contact us?",
+        "Send us a message",
+        "Your message"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "About us",
+      "real": "https://www.smythstoys.com/uk/en-gb/about-us",
+      "path": "/uk/en-gb/about-us",
+      "expect": [
+        "About Us",
+        "Largest range of toys",
+        "Stores Nationwide",
+        "Company Information"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Request a catalogue",
+      "real": "https://www.smythstoys.com/uk/en-gb/request-a-catalogue",
+      "path": "/uk/en-gb/request-a-catalogue",
+      "expect": [
+        "FREE Annual Smyths Toys Catalogue",
+        "Catalogue options",
+        "First name"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "In-store events",
+      "real": "https://www.smythstoys.com/uk/en-gb/in-store-events",
+      "path": "/uk/en-gb/in-store-events",
+      "expect": [
+        "In-Store Events",
+        "Autism & Sensory Friendly Shopping Hours"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Charity partners",
+      "real": "https://www.smythstoys.com/uk/en-gb/charity-partners",
+      "path": "/uk/en-gb/charity-partners",
+      "expect": [
+        "Smyths Toys Charity Partners",
+        "Ray of Sunshine"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift Finder",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-finder-hub",
+      "path": "/uk/en-gb/gift-finder-hub",
+      "expect": [
+        "Gift Finder",
+        "I would like a gift for someone aged between",
+        "I would like to spend up to",
+        "Find your gift"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Terms & Policies",
+      "real": "https://www.smythstoys.com/uk/en-gb/terms-and-policies",
+      "path": "/uk/en-gb/terms-and-policies",
+      "expect": [
+        "Terms & Policies",
+        "Terms & Conditions",
+        "Modern Slavery Act Transparency Statement",
+        "Tax Strategy",
+        "Gender Pay Gap"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Privacy policy",
+      "real": "https://www.smythstoys.com/uk/en-gb/privacy-policy",
+      "path": "/uk/en-gb/privacy-policy",
+      "expect": [
+        "Privacy Policy",
+        "Purpose of this privacy policy",
+        "The data we collect about you"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cookie policy",
+      "real": "https://www.smythstoys.com/uk/en-gb/cookies-policy",
+      "path": "/uk/en-gb/cookies-policy",
+      "expect": [
+        "Cookies Policy"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Accessibility",
+      "real": "https://www.smythstoys.com/uk/en-gb/accessibility",
+      "path": "/uk/en-gb/accessibility",
+      "expect": [
+        "Accessibility"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Transparency statement",
+      "real": "https://www.smythstoys.com/uk/en-gb/transparency-statement",
+      "path": "/uk/en-gb/transparency-statement",
+      "expect": [
+        "Modern Slavery Act 2015"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product information",
+      "real": "https://www.smythstoys.com/uk/en-gb/product-information",
+      "path": "/uk/en-gb/product-information",
+      "expect": [
+        "Product Information"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Wishlist",
+      "real": "https://www.smythstoys.com/uk/en-gb/wishlist",
+      "path": "/uk/en-gb/wishlist",
+      "expect": [
+        "Wishlist"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Toys landing page",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys",
+      "path": "/uk/en-gb/toys",
+      "expect": [
+        "Shop by age",
+        "Shop by category"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Video games landing page",
+      "real": "https://www.smythstoys.com/uk/en-gb/video-games",
+      "path": "/uk/en-gb/video-games",
+      "expect": [
+        "Top categories",
+        "Shop by category",
+        "Coming soon"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Promo strip",
+      "expect": [
+        "FREE DELIVERY ON ORDERS OVER £20*",
+        "ORDER BY 10PM FOR NEXT DAY DELIVERY*",
+        "FREE CLICK & COLLECT WITHIN 2 HOURS*"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Hero banner",
+      "expect": [
+        "Power Up Playtime",
+        "Shop Now"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Top categories tiles",
+      "expect": [
+        "Top categories",
+        "Wooden Toys",
+        "LEGO New Arrivals"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Top picks this week",
+      "expect": [
+        "Top picks this week"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Trending this week",
+      "expect": [
+        "Trending this week"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Brand hero",
+      "expect": [
+        "Introducing Mirror Mi"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Shop by age",
+      "expect": [
+        "Shop by age",
+        "0-18 months",
+        "Big kids"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Top Toys picks",
+      "expect": [
+        "Top Toys picks this week!"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Gaming promo",
+      "expect": [
+        "Gaming at Smyths Toys"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Baby promo",
+      "expect": [
+        "Shopping for baby?"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Newsletter sign-up",
+      "expect": [
+        "Sign Up Now"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/c/SM0601",
+      "path": "/uk/en-gb/toys/c/SM0601"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Action Figures & Playsets",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/action-figures-and-playsets/c/SM060101",
+      "path": "/uk/en-gb/toys/action-figures-and-playsets/c/SM060101"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Construction & Cars",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/construction-and-cars/c/SM060102",
+      "path": "/uk/en-gb/toys/construction-and-cars/c/SM060102"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pre-School & Electronic Learning",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/pre-school-and-electronic-learning/c/SM060103",
+      "path": "/uk/en-gb/toys/pre-school-and-electronic-learning/c/SM060103"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fashion & Dolls",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/fashion-and-dolls/c/SM060104",
+      "path": "/uk/en-gb/toys/fashion-and-dolls/c/SM060104"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Arts, Crafts & Music",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/arts-crafts-and-music/c/SM060105",
+      "path": "/uk/en-gb/toys/arts-crafts-and-music/c/SM060105"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Games, Puzzles & Books",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/games-puzzles-and-books/c/SM060106",
+      "path": "/uk/en-gb/toys/games-puzzles-and-books/c/SM060106"
+    },
+    {
+      "kind": "sitemap",
+      "label": "LEGO & Bricks",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/lego-and-bricks/c/SM060107",
+      "path": "/uk/en-gb/toys/lego-and-bricks/c/SM060107"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Great Value Toys",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/great-value-toys/c/SM060108",
+      "path": "/uk/en-gb/toys/great-value-toys/c/SM060108"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Black Friday",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/black-friday/c/SM060110",
+      "path": "/uk/en-gb/toys/black-friday/c/SM060110"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Back to School",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/back-to-school/c/SM060112",
+      "path": "/uk/en-gb/toys/back-to-school/c/SM060112"
+    },
+    {
+      "kind": "sitemap",
+      "label": "STEAM",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/steam-science-tech-engineering-arts-math/c/SM060113",
+      "path": "/uk/en-gb/toys/steam-science-tech-engineering-arts-math/c/SM060113"
+    },
+    {
+      "kind": "sitemap",
+      "label": "£10 & Below",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/10-and-below/c/SM060114",
+      "path": "/uk/en-gb/toys/10-and-below/c/SM060114"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Books",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/books/c/SM060119",
+      "path": "/uk/en-gb/toys/books/c/SM060119"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wooden Toys",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/wooden-toys-and-puzzles/c/SM060120",
+      "path": "/uk/en-gb/toys/wooden-toys-and-puzzles/c/SM060120"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Top Toys",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/top-toys/c/top-toys",
+      "path": "/uk/en-gb/toys/top-toys/c/top-toys"
+    },
+    {
+      "kind": "sitemap",
+      "label": "LEGO New Arrivals",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/lego-and-bricks/lego-new-arrivals/c/new-lego-range",
+      "path": "/uk/en-gb/toys/lego-and-bricks/lego-new-arrivals/c/new-lego-range"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hot Wheels",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/construction-and-cars/car-toys/hot-wheels/c/SM06010210",
+      "path": "/uk/en-gb/toys/construction-and-cars/car-toys/hot-wheels/c/SM06010210"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Barbie",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/fashion-and-dolls/barbie/c/SM06010403",
+      "path": "/uk/en-gb/toys/fashion-and-dolls/barbie/c/SM06010403"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Blind Boxes",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/fashion-and-dolls/blind-boxes/c/SM06010416",
+      "path": "/uk/en-gb/toys/fashion-and-dolls/blind-boxes/c/SM06010416"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Play Factory",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/pre-school-and-electronic-learning/play-factory/c/SM06010315",
+      "path": "/uk/en-gb/toys/pre-school-and-electronic-learning/play-factory/c/SM06010315"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PAW Patrol",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/pre-school-and-electronic-learning/paw-patrol/c/SM06010350",
+      "path": "/uk/en-gb/toys/pre-school-and-electronic-learning/paw-patrol/c/SM06010350"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tonies",
+      "real": "https://www.smythstoys.com/uk/en-gb/toys/pre-school-and-electronic-learning/tonies/toniebox-audio/c/SM0601039702",
+      "path": "/uk/en-gb/toys/pre-school-and-electronic-learning/tonies/toniebox-audio/c/SM0601039702"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/c/SM0602",
+      "path": "/uk/en-gb/baby/c/SM0602"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Highchairs & Booster Seats",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/highchairs-and-booster-seats/c/SM060201",
+      "path": "/uk/en-gb/baby/highchairs-and-booster-seats/c/SM060201"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Car Seats & Bases",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/car-seats-and-bases/c/SM060202",
+      "path": "/uk/en-gb/baby/car-seats-and-bases/c/SM060202"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cots, Cribs & Bedding",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/cots-cribs-and-bedding/c/SM060203",
+      "path": "/uk/en-gb/baby/cots-cribs-and-bedding/c/SM060203"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pushchairs & Strollers",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/pushchairs-and-strollers/c/SM060205",
+      "path": "/uk/en-gb/baby/pushchairs-and-strollers/c/SM060205"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Bedding",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/baby-bedding/c/SM060206",
+      "path": "/uk/en-gb/baby/baby-bedding/c/SM060206"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Monitors & Safety",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/baby-monitors-and-safety/c/SM060208",
+      "path": "/uk/en-gb/baby/baby-monitors-and-safety/c/SM060208"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bouncers, Swings & Rockers",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/bouncers-swings-and-rockers/c/SM060211",
+      "path": "/uk/en-gb/baby/bouncers-swings-and-rockers/c/SM060211"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Walkers & Jumpers",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/baby-walkers-and-jumpers/c/SM060213",
+      "path": "/uk/en-gb/baby/baby-walkers-and-jumpers/c/SM060213"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathing, Changing & Potty Training",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/bathing-changing-and-potty-training/c/SM060214",
+      "path": "/uk/en-gb/baby/bathing-changing-and-potty-training/c/SM060214"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Toys",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/baby-toys/c/SM060216",
+      "path": "/uk/en-gb/baby/baby-toys/c/SM060216"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toddler Bedroom",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/toddler-bedroom/c/SM060229",
+      "path": "/uk/en-gb/baby/toddler-bedroom/c/SM060229"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Carriers & Slings",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/baby-carriers-and-slings/c/SM060230",
+      "path": "/uk/en-gb/baby/baby-carriers-and-slings/c/SM060230"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Bedroom Accessories",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/baby-bedroom-accessories/c/baby-bedroom-accessories",
+      "path": "/uk/en-gb/baby/baby-bedroom-accessories/c/baby-bedroom-accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Essentials",
+      "real": "https://www.smythstoys.com/uk/en-gb/baby/baby-essentials/c/baby-essentials",
+      "path": "/uk/en-gb/baby/baby-essentials/c/baby-essentials"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/c/SM0603",
+      "path": "/uk/en-gb/outdoor/c/SM0603"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bikes",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/bikes/c/SM060301",
+      "path": "/uk/en-gb/outdoor/bikes/c/SM060301"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Play Houses & Tents",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/play-houses-and-tents/c/SM060302",
+      "path": "/uk/en-gb/outdoor/play-houses-and-tents/c/SM060302"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pools & Sand Pits",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/pools-and-sand-pits/c/SM060303",
+      "path": "/uk/en-gb/outdoor/pools-and-sand-pits/c/SM060303"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ride Ons",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/ride-ons/c/SM060304",
+      "path": "/uk/en-gb/outdoor/ride-ons/c/SM060304"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rollerskates",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/rollerskates/c/SM060305",
+      "path": "/uk/en-gb/outdoor/rollerskates/c/SM060305"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Skateboards",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/skateboards/c/SM060306",
+      "path": "/uk/en-gb/outdoor/skateboards/c/SM060306"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sports & Equipment",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/sports-and-equipment/c/SM060307",
+      "path": "/uk/en-gb/outdoor/sports-and-equipment/c/SM060307"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Swings & Slides",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/swings-and-slides/c/SM060308",
+      "path": "/uk/en-gb/outdoor/swings-and-slides/c/SM060308"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trampolines & Accessories",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/trampolines-and-accessories/c/SM060309",
+      "path": "/uk/en-gb/outdoor/trampolines-and-accessories/c/SM060309"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trikes",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/trikes/c/SM060310",
+      "path": "/uk/en-gb/outdoor/trikes/c/SM060310"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Scooters",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/scooters/c/SM060311",
+      "path": "/uk/en-gb/outdoor/scooters/c/SM060311"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Garden Games & Accessories",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/garden-games-and-accessories/c/SM060312",
+      "path": "/uk/en-gb/outdoor/garden-games-and-accessories/c/SM060312"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electric Ride Ons",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/electric-ride-ons/c/SM060313",
+      "path": "/uk/en-gb/outdoor/electric-ride-ons/c/SM060313"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Goals",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/goals/c/SM060314",
+      "path": "/uk/en-gb/outdoor/goals/c/SM060314"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Basketball",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/basketball/c/SM060315",
+      "path": "/uk/en-gb/outdoor/basketball/c/SM060315"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Games Tables",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/games-tables/c/SM060316",
+      "path": "/uk/en-gb/outdoor/games-tables/c/SM060316"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bouncy Castles",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/bouncy-castles/c/SM060317",
+      "path": "/uk/en-gb/outdoor/bouncy-castles/c/SM060317"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rocking Horses",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/rocking-horses/c/SM060318",
+      "path": "/uk/en-gb/outdoor/rocking-horses/c/SM060318"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Go Karts",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/go-karts/c/SM060319",
+      "path": "/uk/en-gb/outdoor/go-karts/c/SM060319"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ride On Tractors",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/ride-on-tractors/c/SM060322",
+      "path": "/uk/en-gb/outdoor/ride-on-tractors/c/SM060322"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Helmets & Safety Gear",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/helmets-and-safety-gear/c/SM060323",
+      "path": "/uk/en-gb/outdoor/helmets-and-safety-gear/c/SM060323"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Heelys",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/heelys/c/SM060324",
+      "path": "/uk/en-gb/outdoor/heelys/c/SM060324"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Furniture",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/outdoor-furniture/c/SM060325",
+      "path": "/uk/en-gb/outdoor/outdoor-furniture/c/SM060325"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sand & Water Tables",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/sand-and-water-tables/c/SM060326",
+      "path": "/uk/en-gb/outdoor/sand-and-water-tables/c/SM060326"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hoverboards",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/hoverboards/c/SM060327",
+      "path": "/uk/en-gb/outdoor/hoverboards/c/SM060327"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Ride Ons",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/all-ride-ons/c/ride-ons",
+      "path": "/uk/en-gb/outdoor/all-ride-ons/c/ride-ons"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bikes, Trikes & Scooters",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/bikes-trikes-and-scooters/c/bikes-trikes-scooters",
+      "path": "/uk/en-gb/outdoor/bikes-trikes-and-scooters/c/bikes-trikes-scooters"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Footballs & Goals",
+      "real": "https://www.smythstoys.com/uk/en-gb/outdoor/sports-and-equipment/football/c/SM06030701",
+      "path": "/uk/en-gb/outdoor/sports-and-equipment/football/c/SM06030701"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming & Tech",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/c/SM0604",
+      "path": "/uk/en-gb/gaming-and-tech/c/SM0604"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital & Instant Cameras",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/digital-and-instant-cameras/c/SM060401",
+      "path": "/uk/en-gb/gaming-and-tech/digital-and-instant-cameras/c/SM060401"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pre-Order Games",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/c/SM060403",
+      "path": "/uk/en-gb/gaming-and-tech/pre-order-games/c/SM060403"
+    },
+    {
+      "kind": "sitemap",
+      "label": "ROG Xbox Ally",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/rog-xbox-ally/c/SM060404",
+      "path": "/uk/en-gb/gaming-and-tech/rog-xbox-ally/c/SM060404"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Monitors",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-monitors/c/SM060405",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-monitors/c/SM060405"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PC Gaming",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pc-gaming/c/SM060406",
+      "path": "/uk/en-gb/gaming-and-tech/pc-gaming/c/SM060406"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Headsets",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-headsets/c/SM060407",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-headsets/c/SM060407"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Batteries",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/batteries/c/SM060413",
+      "path": "/uk/en-gb/gaming-and-tech/batteries/c/SM060413"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tablets",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/tablets/c/SM060417",
+      "path": "/uk/en-gb/gaming-and-tech/tablets/c/SM060417"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation 4",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/playstation-4/c/SM060422",
+      "path": "/uk/en-gb/gaming-and-tech/playstation-4/c/SM060422"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox One",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/xbox-one/c/SM060423",
+      "path": "/uk/en-gb/gaming-and-tech/xbox-one/c/SM060423"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming eGift Cards",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-egift-cards/c/SM060424",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-egift-cards/c/SM060424"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Headphones, Earphones & Earbuds",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/headphones-earphones-and-earbuds/c/SM060428",
+      "path": "/uk/en-gb/gaming-and-tech/headphones-earphones-and-earbuds/c/SM060428"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Figures",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-figures/c/SM060434",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-figures/c/SM060434"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital Downloads",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/digital-downloads/c/SM060440",
+      "path": "/uk/en-gb/gaming-and-tech/digital-downloads/c/SM060440"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Console Bundle Deals",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/console-bundle-deals/c/SM060441",
+      "path": "/uk/en-gb/gaming-and-tech/console-bundle-deals/c/SM060441"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Virtual Reality",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/virtual-reality/c/SM060443",
+      "path": "/uk/en-gb/gaming-and-tech/virtual-reality/c/SM060443"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Retro Gaming",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/retro-gaming/c/SM060447",
+      "path": "/uk/en-gb/gaming-and-tech/retro-gaming/c/SM060447"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo Switch",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/nintendo-switch/c/SM060452",
+      "path": "/uk/en-gb/gaming-and-tech/nintendo-switch/c/SM060452"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Funko POP Culture",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/funko-pop-culture/c/SM060453",
+      "path": "/uk/en-gb/gaming-and-tech/funko-pop-culture/c/SM060453"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Steering Wheels",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/steering-wheels/c/SM060454",
+      "path": "/uk/en-gb/gaming-and-tech/steering-wheels/c/SM060454"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Merchandise",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-merchandise/c/SM060455",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-merchandise/c/SM060455"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Watches",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/smart-watches-and-fitness-trackers/c/SM060459",
+      "path": "/uk/en-gb/gaming-and-tech/smart-watches-and-fitness-trackers/c/SM060459"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Speakers",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/speakers/c/SM060465",
+      "path": "/uk/en-gb/gaming-and-tech/speakers/c/SM060465"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Offers",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-offers/c/gaming-offers",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-offers/c/gaming-offers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Top Selling Games",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/top-selling-games/c/top-selling-games",
+      "path": "/uk/en-gb/gaming-and-tech/top-selling-games/c/top-selling-games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation Gaming",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/playstation-gaming/c/playstation-gaming",
+      "path": "/uk/en-gb/gaming-and-tech/playstation-gaming/c/playstation-gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Gaming",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/xbox-gaming/c/xbox-gaming",
+      "path": "/uk/en-gb/gaming-and-tech/xbox-gaming/c/xbox-gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo Gaming",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/nintendo-gaming/c/nintendo-gaming",
+      "path": "/uk/en-gb/gaming-and-tech/nintendo-gaming/c/nintendo-gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Accessories",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-accessories/c/gaming-accessories",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-accessories/c/gaming-accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Controllers",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/gaming-controllers/c/gaming-controllers",
+      "path": "/uk/en-gb/gaming-and-tech/gaming-controllers/c/gaming-controllers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pokémon Gaming",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pokemon-gaming/c/pokemon-gaming",
+      "path": "/uk/en-gb/gaming-and-tech/pokemon-gaming/c/pokemon-gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation 5 Pre-Order Games",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/c/SM06040301",
+      "path": "/uk/en-gb/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/c/SM06040301"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Series X Pre-Order Games",
+      "real": "https://www.smythstoys.com/uk/en-gb/gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games/c/SM06040302",
+      "path": "/uk/en-gb/gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games/c/SM06040302"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-cards/c/SM0605",
+      "path": "/uk/en-gb/gift-cards/c/SM0605"
+    },
+    {
+      "kind": "sitemap",
+      "label": "eGift Cards",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-cards/egift-cards/c/SM060501",
+      "path": "/uk/en-gb/gift-cards/egift-cards/c/SM060501"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Physical Gift Cards",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-cards/physical-gift-cards/c/SM060502",
+      "path": "/uk/en-gb/gift-cards/physical-gift-cards/c/SM060502"
+    },
+    {
+      "kind": "sitemap",
+      "label": "KPop Demon Hunters",
+      "real": "https://www.smythstoys.com/uk/en-gb/brand/kpop-demon-hunters/c/SM060639",
+      "path": "/uk/en-gb/brand/kpop-demon-hunters/c/SM060639"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Marvel Spider-Man",
+      "real": "https://www.smythstoys.com/uk/en-gb/brand/spider-man/c/SM060613",
+      "path": "/uk/en-gb/brand/spider-man/c/SM060613"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mirror Mi",
+      "real": "https://www.smythstoys.com/uk/en-gb/brand/mirror-mi/c/SM060643",
+      "path": "/uk/en-gb/brand/mirror-mi/c/SM060643"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fortnite",
+      "real": "https://www.smythstoys.com/uk/en-gb/brand/fortnite/c/SM060634",
+      "path": "/uk/en-gb/brand/fortnite/c/SM060634"
+    },
+    {
+      "kind": "sitemap",
+      "label": "0-18 months",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-ideas-for-0-18-months/c/gift-finder-0-18-months",
+      "path": "/uk/en-gb/gift-ideas-for-0-18-months/c/gift-finder-0-18-months"
+    },
+    {
+      "kind": "sitemap",
+      "label": "18 - 36 months",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-ideas-for-18-36-months/c/gift-finder-18-36-months",
+      "path": "/uk/en-gb/gift-ideas-for-18-36-months/c/gift-finder-18-36-months"
+    },
+    {
+      "kind": "sitemap",
+      "label": "3-5 years",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-ideas-for-3-5-years/c/gift-finder-3-5-years",
+      "path": "/uk/en-gb/gift-ideas-for-3-5-years/c/gift-finder-3-5-years"
+    },
+    {
+      "kind": "sitemap",
+      "label": "6-8 years",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-ideas-for-6-8-years/c/gift-finder-6-8-years",
+      "path": "/uk/en-gb/gift-ideas-for-6-8-years/c/gift-finder-6-8-years"
+    },
+    {
+      "kind": "sitemap",
+      "label": "9-11 years",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-ideas-for-9-11-years/c/gift-finder-9-11-years",
+      "path": "/uk/en-gb/gift-ideas-for-9-11-years/c/gift-finder-9-11-years"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Big kids",
+      "real": "https://www.smythstoys.com/uk/en-gb/big-kids-12-and-adults/gift-ideas-for-big-kids-12/c/gift-finder-big-kids",
+      "path": "/uk/en-gb/big-kids-12-and-adults/gift-ideas-for-big-kids-12/c/gift-finder-big-kids"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Help centre",
+      "real": "https://www.smythstoys.com/uk/en-gb/help",
+      "path": "/uk/en-gb/help"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store finder",
+      "real": "https://www.smythstoys.com/uk/en-gb/storefinder",
+      "path": "/uk/en-gb/storefinder"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Finder",
+      "real": "https://www.smythstoys.com/uk/en-gb/gift-finder-hub",
+      "path": "/uk/en-gb/gift-finder-hub"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift cards",
+      "real": "https://www.smythstoys.com/uk/en-gb/giftcardtype",
+      "path": "/uk/en-gb/giftcardtype"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Games",
+      "real": "https://www.smythstoys.com/uk/en-gb/video-games",
+      "path": "/uk/en-gb/video-games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "In-store events",
+      "real": "https://www.smythstoys.com/uk/en-gb/in-store-events",
+      "path": "/uk/en-gb/in-store-events"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Buying guides",
+      "real": "https://www.smythstoys.com/uk/en-gb/buying-guides",
+      "path": "/uk/en-gb/buying-guides"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Request a catalogue",
+      "real": "https://www.smythstoys.com/uk/en-gb/request-a-catalogue",
+      "path": "/uk/en-gb/request-a-catalogue"
+    }
+  ]
+}
