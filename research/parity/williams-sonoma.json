@@ -1,0 +1,1773 @@
+{
+  "store": "williams-sonoma",
+  "real_home": "https://www.williams-sonoma.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.williams-sonoma.com/",
+    "https://www.williams-sonoma.com/shop/cookware/",
+    "https://www.williams-sonoma.com/shop/electrics/",
+    "https://www.williams-sonoma.com/shop/cutlery/",
+    "https://www.williams-sonoma.com/shop/bakeware/",
+    "https://www.williams-sonoma.com/shop/cooks-tools/",
+    "https://www.williams-sonoma.com/shop/food/",
+    "https://www.williams-sonoma.com/shop/tabletop/",
+    "https://www.williams-sonoma.com/shop/outdoor/",
+    "https://www.williams-sonoma.com/shop/home-furniture/",
+    "https://www.williams-sonoma.com/shop/sale-special-offer/",
+    "https://www.williams-sonoma.com/customer-service/",
+    "https://www.williams-sonoma.com/customer-service/shipping-info.html",
+    "https://www.williams-sonoma.com/customer-service/return/",
+    "https://www.williams-sonoma.com/customer-service/gift-services/gift-card-landing.html",
+    "https://www.williams-sonoma.com/customer-service/about-us.html",
+    "https://www.williams-sonoma.com/stores/",
+    "https://www.williams-sonoma.com/registry/",
+    "https://www.williams-sonoma.com/recipe/",
+    "https://www.williams-sonoma.com/pages/the-key-rewards/",
+    "https://www.williams-sonoma.com/cart/",
+    "https://www.williams-sonoma.com/search/results.html?words=gta%206 (research capture 2026-10-06)"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap.html",
+  "notes": "Fetched with WebFetch on 2026-10-13. Blocked by robots.txt: /customer-service/order-shipment-tracking/ and /account/login.html (web.archive.org is blocked for this tool too), so their expect strings come from the real header/footer link labels (\"Track Your Order\", \"Sign In\", \"Create an Account\") plus a generic \"Order Number\" field label. /sitemap.xml returned a client error and no HTML site map was found, so the sitemap section is built from the department left navigations; /sitemap.html and /customer-service/site-feedback/ (real link is a JavaScript feedback widget) are clone-only pages. Department entries in the live header are JavaScript flyouts (href void); local paths use each department landing URL (/shop/tabletop/ canonicalises to /shop/tabletop-glassware-bar/). /shop/home-essentials/ could not be resolved (redirects to the homepage), so Home Essentials uses a local path with approximate subcategories, as do the Holidays and Gifts menus. Shipping, Key Rewards, gift card, Our Story and Account bodies are client-rendered and were mostly empty in fetches; clone copy summarises banner/meta text and avoids specific rates. Some long faceted sale URLs were shortened to their base path. Sister brands, williams-sonomainc.com, the wine shop, personalized wine and the app store link are off-site and become local summary pages. Product inventory is out of scope: category grids only show the read-only listings captured from the 2026-10-06 \"gta 6\" search.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Williams Sonoma",
+      "real": "https://www.williams-sonoma.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Williams Sonoma Home",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma-home/",
+      "path": "/pages/williams-sonoma-home/"
+    },
+    {
+      "kind": "header",
+      "label": "Williams Sonoma Business to Business",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/b2b/overview/",
+      "path": "/pages/williams-sonoma/b2b/overview/"
+    },
+    {
+      "kind": "header",
+      "label": "Pottery Barn",
+      "path": "/pages/our-family-of-brands/pottery-barn/"
+    },
+    {
+      "kind": "header",
+      "label": "Pottery Barn Kids",
+      "path": "/pages/our-family-of-brands/pottery-barn-kids/"
+    },
+    {
+      "kind": "header",
+      "label": "Pottery Barn Teen",
+      "path": "/pages/our-family-of-brands/pottery-barn-teen/"
+    },
+    {
+      "kind": "header",
+      "label": "West Elm",
+      "path": "/pages/our-family-of-brands/west-elm/"
+    },
+    {
+      "kind": "header",
+      "label": "Rejuvenation",
+      "path": "/pages/our-family-of-brands/rejuvenation/"
+    },
+    {
+      "kind": "header",
+      "label": "Mark & Graham",
+      "path": "/pages/our-family-of-brands/mark-and-graham/"
+    },
+    {
+      "kind": "header",
+      "label": "GreenRow",
+      "path": "/pages/our-family-of-brands/greenrow/"
+    },
+    {
+      "kind": "header",
+      "label": "Dormify",
+      "path": "/pages/our-family-of-brands/dormify/"
+    },
+    {
+      "kind": "header",
+      "label": "Find A Store",
+      "real": "https://www.williams-sonoma.com/stores/",
+      "path": "/stores/"
+    },
+    {
+      "kind": "header",
+      "label": "In-Store Events",
+      "real": "https://www.williams-sonoma.com/pages/virtual-events-and-in-store-classes/in-store-events/",
+      "path": "/pages/virtual-events-and-in-store-classes/in-store-events/"
+    },
+    {
+      "kind": "header",
+      "label": "Skills Series",
+      "real": "https://www.williams-sonoma.com/pages/virtual-events-and-in-store-classes/skills-series/",
+      "path": "/pages/virtual-events-and-in-store-classes/skills-series/"
+    },
+    {
+      "kind": "header",
+      "label": "Book Tours",
+      "real": "https://www.williams-sonoma.com/pages/virtual-events-and-in-store-classes/book-tours/",
+      "path": "/pages/virtual-events-and-in-store-classes/book-tours/"
+    },
+    {
+      "kind": "header",
+      "label": "Virtual Events",
+      "real": "https://www.williams-sonoma.com/pages/virtual-events-and-in-store-classes/virtual-events/",
+      "path": "/pages/virtual-events-and-in-store-classes/virtual-events/"
+    },
+    {
+      "kind": "header",
+      "label": "Private Events",
+      "real": "https://www.williams-sonoma.com/pages/virtual-events-and-in-store-classes/private-events/",
+      "path": "/pages/virtual-events-and-in-store-classes/private-events/"
+    },
+    {
+      "kind": "header",
+      "label": "Free Kitchen Design Services",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/design-services/",
+      "path": "/pages/williams-sonoma/design-services/"
+    },
+    {
+      "kind": "header",
+      "label": "Free Registry Services",
+      "real": "https://www.williams-sonoma.com/appointments/registry-virtual-choice/",
+      "path": "/appointments/registry-virtual-choice/"
+    },
+    {
+      "kind": "header",
+      "label": "Free Trade Services",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/b2b/overview/",
+      "path": "/pages/williams-sonoma/b2b/overview/"
+    },
+    {
+      "kind": "header",
+      "label": "Knife Sharpening: In-Store & Online",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/cutlery/3-ways-to-sharpen-knives/",
+      "path": "/pages/williams-sonoma/cutlery/3-ways-to-sharpen-knives/"
+    },
+    {
+      "kind": "header",
+      "label": "Sign In",
+      "real": "https://www.williams-sonoma.com/account/login.html",
+      "path": "/account/login.html"
+    },
+    {
+      "kind": "header",
+      "label": "Create an Account",
+      "real": "https://www.williams-sonoma.com/account/create.html",
+      "path": "/account/create.html"
+    },
+    {
+      "kind": "header",
+      "label": "B2B Member Sign-In",
+      "real": "https://www.williams-sonoma.com/trade-signin/login.html",
+      "path": "/trade-signin/login.html"
+    },
+    {
+      "kind": "header",
+      "label": "Track Order",
+      "real": "https://www.williams-sonoma.com/customer-service/order-shipment-tracking/",
+      "path": "/customer-service/order-shipment-tracking/"
+    },
+    {
+      "kind": "header",
+      "label": "View My Rewards",
+      "real": "https://www.williams-sonoma.com/account/keyrewards.html",
+      "path": "/account/keyrewards.html"
+    },
+    {
+      "kind": "header",
+      "label": "Key Rewards",
+      "real": "https://www.williams-sonoma.com/pages/the-key-rewards/",
+      "path": "/pages/the-key-rewards/"
+    },
+    {
+      "kind": "header",
+      "label": "Williams Sonoma Credit Card",
+      "real": "https://www.williams-sonoma.com/ccvalueprop/",
+      "path": "/ccvalueprop/"
+    },
+    {
+      "kind": "header",
+      "label": "Registry",
+      "real": "https://www.williams-sonoma.com/registry/",
+      "path": "/registry/"
+    },
+    {
+      "kind": "header",
+      "label": "Favorites",
+      "real": "https://www.williams-sonoma.com/favorites/",
+      "path": "/favorites/"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.williams-sonoma.com/cart/",
+      "path": "/cart/"
+    },
+    {
+      "kind": "header",
+      "label": "Halloween",
+      "real": "https://www.williams-sonoma.com/shop/halloween/all-halloween/",
+      "path": "/shop/halloween/all-halloween/"
+    },
+    {
+      "kind": "header",
+      "label": "Thanksgiving",
+      "real": "https://www.williams-sonoma.com/shop/thanksgiving/all-thanksgiving/",
+      "path": "/shop/thanksgiving/all-thanksgiving/"
+    },
+    {
+      "kind": "header",
+      "label": "Christmas",
+      "real": "https://www.williams-sonoma.com/shop/christmas/christmas-view-all/",
+      "path": "/shop/christmas/christmas-view-all/"
+    },
+    {
+      "kind": "header",
+      "label": "Recipes & Menus",
+      "real": "https://www.williams-sonoma.com/recipe/",
+      "path": "/recipe/"
+    },
+    {
+      "kind": "header",
+      "label": "Entertaining & Design Inspiration",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/the-art-of-entertaining/",
+      "path": "/pages/williams-sonoma/the-art-of-entertaining/"
+    },
+    {
+      "kind": "header",
+      "label": "Brands",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/brands-a-to-z/",
+      "path": "/pages/williams-sonoma/brands-a-to-z/"
+    },
+    {
+      "kind": "header",
+      "label": "Collaborations",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/collaborations/",
+      "path": "/pages/williams-sonoma/collaborations/"
+    },
+    {
+      "kind": "header",
+      "label": "Wedding Registry",
+      "real": "https://www.williams-sonoma.com/registry/",
+      "path": "/registry/"
+    },
+    {
+      "kind": "header",
+      "label": "New",
+      "real": "https://www.williams-sonoma.com/shop/new/",
+      "path": "/shop/new/"
+    },
+    {
+      "kind": "header",
+      "label": "Cookware",
+      "real": "https://www.williams-sonoma.com/shop/cookware/",
+      "path": "/shop/cookware/"
+    },
+    {
+      "kind": "header",
+      "label": "Cooks' Tools",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/",
+      "path": "/shop/cooks-tools/"
+    },
+    {
+      "kind": "header",
+      "label": "Cutlery",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/",
+      "path": "/shop/cutlery/"
+    },
+    {
+      "kind": "header",
+      "label": "Electrics",
+      "real": "https://www.williams-sonoma.com/shop/electrics/",
+      "path": "/shop/electrics/"
+    },
+    {
+      "kind": "header",
+      "label": "Bakeware",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/",
+      "path": "/shop/bakeware/"
+    },
+    {
+      "kind": "header",
+      "label": "Food",
+      "real": "https://www.williams-sonoma.com/shop/food/",
+      "path": "/shop/food/"
+    },
+    {
+      "kind": "header",
+      "label": "Tabletop & Bar",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/",
+      "path": "/shop/tabletop-glassware-bar/"
+    },
+    {
+      "kind": "header",
+      "label": "Home Essentials",
+      "path": "/shop/home-essentials/"
+    },
+    {
+      "kind": "header",
+      "label": "Outdoor & Garden",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/",
+      "path": "/shop/outdoor/"
+    },
+    {
+      "kind": "header",
+      "label": "Furniture",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/",
+      "path": "/shop/home-furniture/"
+    },
+    {
+      "kind": "header",
+      "label": "Holidays",
+      "real": "https://www.williams-sonoma.com/shop/holidays/",
+      "path": "/shop/holidays/"
+    },
+    {
+      "kind": "header",
+      "label": "Gifts",
+      "real": "https://www.williams-sonoma.com/shop/gifts/",
+      "path": "/shop/gifts/"
+    },
+    {
+      "kind": "header",
+      "label": "Sale",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/",
+      "path": "/shop/sale-special-offer/"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact Us",
+      "real": "https://www.williams-sonoma.com/customer-service/email-us/",
+      "path": "/customer-service/email-us/"
+    },
+    {
+      "kind": "footer",
+      "label": "Track Your Order",
+      "real": "https://www.williams-sonoma.com/customer-service/order-shipment-tracking/",
+      "path": "/customer-service/order-shipment-tracking/"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns & Exchanges",
+      "real": "https://www.williams-sonoma.com/customer-service/return/",
+      "path": "/customer-service/return/"
+    },
+    {
+      "kind": "footer",
+      "label": "Shipping Information",
+      "real": "https://www.williams-sonoma.com/customer-service/shipping-info.html",
+      "path": "/customer-service/shipping-info.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Email Preferences",
+      "real": "https://www.williams-sonoma.com/customer-service/manage-email-settings/",
+      "path": "/customer-service/manage-email-settings/"
+    },
+    {
+      "kind": "footer",
+      "label": "Promotional Fine Print",
+      "real": "https://www.williams-sonoma.com/customer-service/fine-print.html",
+      "path": "/customer-service/fine-print.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Site Feedback",
+      "path": "/customer-service/site-feedback/"
+    },
+    {
+      "kind": "footer",
+      "label": "Our Story",
+      "real": "https://www.williams-sonoma.com/customer-service/about-us.html",
+      "path": "/customer-service/about-us.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Williams-Sonoma Inc.",
+      "path": "/corporate-information/"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://www.williams-sonoma.com/customer-service/careers.html",
+      "path": "/customer-service/careers.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Store Locator",
+      "real": "https://www.williams-sonoma.com/stores/",
+      "path": "/stores/"
+    },
+    {
+      "kind": "footer",
+      "label": "Wedding & Gift Registry",
+      "real": "https://www.williams-sonoma.com/registry/",
+      "path": "/registry/"
+    },
+    {
+      "kind": "footer",
+      "label": "Free Design Services",
+      "real": "https://www.williams-sonoma.com/pages/ws-home/design-services/",
+      "path": "/pages/ws-home/design-services/"
+    },
+    {
+      "kind": "footer",
+      "label": "Events",
+      "real": "https://www.williams-sonoma.com/pages/virtual-events-and-in-store-classes/in-store-events/",
+      "path": "/pages/virtual-events-and-in-store-classes/in-store-events/"
+    },
+    {
+      "kind": "footer",
+      "label": "Knife Sharpening",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/cutlery/3-ways-to-sharpen-knives/",
+      "path": "/pages/williams-sonoma/cutlery/3-ways-to-sharpen-knives/"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Cards",
+      "real": "https://www.williams-sonoma.com/customer-service/gift-services/gift-card-landing.html",
+      "path": "/customer-service/gift-services/gift-card-landing.html"
+    },
+    {
+      "kind": "footer",
+      "label": "B2B Overview",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/b2b/overview/",
+      "path": "/pages/williams-sonoma/b2b/overview/"
+    },
+    {
+      "kind": "footer",
+      "label": "Contract",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/b2b/contract/",
+      "path": "/pages/williams-sonoma/b2b/contract/"
+    },
+    {
+      "kind": "footer",
+      "label": "Trade",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/b2b/trade/",
+      "path": "/pages/williams-sonoma/b2b/trade/"
+    },
+    {
+      "kind": "footer",
+      "label": "Professional Chefs",
+      "real": "https://www.williams-sonoma.com/trade-programs/chefs/landing.html",
+      "path": "/trade-programs/chefs/landing.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Corporate Gifting",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/b2b/corporate-gifting/",
+      "path": "/pages/williams-sonoma/b2b/corporate-gifting/"
+    },
+    {
+      "kind": "footer",
+      "label": "Williams Sonoma Credit Card",
+      "real": "https://www.williams-sonoma.com/ccvalueprop/",
+      "path": "/ccvalueprop/"
+    },
+    {
+      "kind": "footer",
+      "label": "Key Rewards",
+      "real": "https://www.williams-sonoma.com/pages/the-key-rewards/",
+      "path": "/pages/the-key-rewards/"
+    },
+    {
+      "kind": "footer",
+      "label": "Request a Catalog",
+      "real": "https://www.williams-sonoma.com/customer-service/catalog-request/",
+      "path": "/customer-service/catalog-request/"
+    },
+    {
+      "kind": "footer",
+      "label": "Williams Sonoma Wine Shop",
+      "path": "/pages/wine-club/"
+    },
+    {
+      "kind": "footer",
+      "label": "Personalized Wine",
+      "path": "/pages/personalized-wine/"
+    },
+    {
+      "kind": "footer",
+      "label": "Everything you love about shopping with us",
+      "path": "/pages/williams-sonoma-app/"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms & Conditions",
+      "real": "https://www.williams-sonoma.com/customer-service/legal-statement.html#terms",
+      "path": "/customer-service/legal-statement.html#terms"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.williams-sonoma.com/customer-service/legal-statement.html#access",
+      "path": "/customer-service/legal-statement.html#access"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Policy",
+      "real": "https://www.williams-sonoma.com/customer-service/legal-statement.html#privacy",
+      "path": "/customer-service/legal-statement.html#privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "Do Not Sell or Share My Personal Information",
+      "real": "https://www.williams-sonoma.com/customer-service/legal-statement.html#do-not-sell",
+      "path": "/customer-service/legal-statement.html#do-not-sell"
+    },
+    {
+      "kind": "footer",
+      "label": "Safety Recalls",
+      "real": "https://www.williams-sonoma.com/customer-service/safety-recalls",
+      "path": "/customer-service/safety-recalls"
+    },
+    {
+      "kind": "footer",
+      "label": "State Disclosures",
+      "real": "https://www.williams-sonoma.com/customer-service/state-disclosures",
+      "path": "/customer-service/state-disclosures"
+    },
+    {
+      "kind": "page",
+      "label": "Department: Cookware",
+      "real": "https://www.williams-sonoma.com/shop/cookware/",
+      "path": "/shop/cookware/",
+      "expect": [
+        "Cookware Essentials",
+        "Specialty Cookware",
+        "Shop by Material",
+        "Types of Pots and Pans"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Electrics",
+      "real": "https://www.williams-sonoma.com/shop/electrics/",
+      "path": "/shop/electrics/",
+      "expect": [
+        "Coffee, Espresso & Tea",
+        "Kitchen Essentials",
+        "Specialty Appliances",
+        "Coffee Makers Are A Must"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Cutlery",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/",
+      "path": "/shop/cutlery/",
+      "expect": [
+        "Knives",
+        "Cutlery Accessories",
+        "Kitchen Knives"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Bakeware",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/",
+      "path": "/shop/bakeware/",
+      "expect": [
+        "Bakeware Essentials",
+        "Baking Tools",
+        "Pie Dishes & Tart Pans"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Cooks' Tools",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/",
+      "path": "/shop/cooks-tools/",
+      "expect": [
+        "Cooking Tools",
+        "Prep Tools",
+        "Kitchen Utensils & Gadgets"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Food",
+      "real": "https://www.williams-sonoma.com/shop/food/",
+      "path": "/shop/food/",
+      "expect": [
+        "Specialty Food & Gourmet Food Gifts",
+        "Bakery, Sweets & Snacks",
+        "Pantry & Ingredients"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Tabletop & Bar",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/",
+      "path": "/shop/tabletop-glassware-bar/",
+      "expect": [
+        "Dinnerware, Barware & Tableware",
+        "Serveware",
+        "Drinkware",
+        "Bar & Wine Essentials"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Outdoor & Garden",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/",
+      "path": "/shop/outdoor/",
+      "expect": [
+        "Outdoor Cooking",
+        "Outdoor Furniture",
+        "Garden & Outdoor Décor"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Furniture",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/",
+      "path": "/shop/home-furniture/",
+      "expect": [
+        "Living Room Furniture",
+        "Dining & Kitchen Furniture",
+        "Create an Elegant Home with Luxury Furniture"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Subcategory: Espresso Machines",
+      "real": "https://www.williams-sonoma.com/shop/electrics/espresso-makers/",
+      "path": "/shop/electrics/espresso-makers/",
+      "expect": [
+        "Espresso Machines",
+        "Coffee, Espresso & Tea",
+        "Sort By"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Subcategory: Cookware Sets",
+      "real": "https://www.williams-sonoma.com/shop/cookware/cookware-sets/",
+      "path": "/shop/cookware/cookware-sets/",
+      "expect": [
+        "Cookware Sets",
+        "Cookware Essentials"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.williams-sonoma.com/search/results.html?words=gta%206",
+      "path": "/search/results.html?words=gta%206",
+      "expect": [
+        "search results for"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.williams-sonoma.com/products/breville-barista-express-impress-espresso/",
+      "path": "/products/breville-barista-express-impress-espresso/",
+      "expect": [
+        "Breville Barista Express® Impress Espresso Machine",
+        "$649.95"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://www.williams-sonoma.com/cart/",
+      "path": "/cart/",
+      "expect": [
+        "Your cart is empty.",
+        "Already have an account? Sign in to pick up where you left off.",
+        "Start Shopping"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.williams-sonoma.com/account/login.html",
+      "path": "/account/login.html",
+      "expect": [
+        "Sign In",
+        "Create an Account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account",
+      "real": "https://www.williams-sonoma.com/account/",
+      "path": "/account/",
+      "expect": [
+        "Sign In",
+        "Create an Account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order tracking",
+      "real": "https://www.williams-sonoma.com/customer-service/order-shipment-tracking/",
+      "path": "/customer-service/order-shipment-tracking/",
+      "expect": [
+        "Track Your Order",
+        "Order Number"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Customer service",
+      "real": "https://www.williams-sonoma.com/customer-service/",
+      "path": "/customer-service/",
+      "expect": [
+        "Customer Service",
+        "Price Match Policy",
+        "Buy Online Pick Up In Store",
+        "Contact Us"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Contact us",
+      "real": "https://www.williams-sonoma.com/customer-service/email-us/",
+      "path": "/customer-service/email-us/",
+      "expect": [
+        "Contact Us",
+        "877.812.6235"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store locator",
+      "real": "https://www.williams-sonoma.com/stores/",
+      "path": "/stores/",
+      "expect": [
+        "Williams Sonoma Store Locations",
+        "Within 25 Miles",
+        "United States",
+        "Alabama",
+        "Biltmore Plaza"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.williams-sonoma.com/customer-service/gift-services/gift-card-landing.html",
+      "path": "/customer-service/gift-services/gift-card-landing.html",
+      "expect": [
+        "Online Gift Cards, eGift Cards & Gift Card"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals: Sale and Special Offers",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/",
+      "path": "/shop/sale-special-offer/",
+      "expect": [
+        "Sale and Special Offers",
+        "Limited Time Deals",
+        "Clearance",
+        "Open Box Outlet Deals"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns",
+      "real": "https://www.williams-sonoma.com/customer-service/return/",
+      "path": "/customer-service/return/",
+      "expect": [
+        "Start Return Process",
+        "Did you purchase the item or was it a gift?",
+        "Return Reference Number",
+        "Re-print Shipping Label"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping policy",
+      "real": "https://www.williams-sonoma.com/customer-service/shipping-info.html",
+      "path": "/customer-service/shipping-info.html",
+      "expect": [
+        "Shipping Information",
+        "Unlimited Flat Rate Delivery"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Registry",
+      "real": "https://www.williams-sonoma.com/registry/",
+      "path": "/registry/",
+      "expect": [
+        "Wedding Registry",
+        "find a wedding registry"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Recipes",
+      "real": "https://www.williams-sonoma.com/recipe/",
+      "path": "/recipe/",
+      "expect": [
+        "Recipes by Course",
+        "Chefs & Celebrities",
+        "Inspiration",
+        "This Season",
+        "Holiday Guides"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Our Story",
+      "real": "https://www.williams-sonoma.com/customer-service/about-us.html",
+      "path": "/customer-service/about-us.html",
+      "expect": [
+        "Chuck Williams' Story"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Key Rewards",
+      "real": "https://www.williams-sonoma.com/pages/the-key-rewards/",
+      "path": "/pages/the-key-rewards/",
+      "expect": [
+        "The Key Rewards"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Credit card",
+      "real": "https://www.williams-sonoma.com/ccvalueprop/",
+      "path": "/ccvalueprop/",
+      "expect": [
+        "Earn 10% in rewards today with a Williams Sonoma Visa"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Favorites",
+      "real": "https://www.williams-sonoma.com/favorites/",
+      "path": "/favorites/",
+      "expect": [
+        "Favorites"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Brands A to Z",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/brands-a-to-z/",
+      "path": "/pages/williams-sonoma/brands-a-to-z/",
+      "expect": [
+        "Brands"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "path": "/sitemap.html",
+      "expect": [
+        "Site Map",
+        "Shop by Department"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Free shipping promo bar",
+      "expect": [
+        "Free Shipping on Cookware, Electrics, Cutlery & More",
+        "SHOP NOW"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Credit card promo",
+      "expect": [
+        "Earn 10% in rewards today with a Williams Sonoma Visa"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Events & Services menu",
+      "expect": [
+        "Events & Services",
+        "In-Store Events",
+        "Skills Series",
+        "Free Kitchen Design Services"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Thanksgiving hero carousel",
+      "expect": [
+        "Thanksgiving"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Feature carousel (Shun Tomi, Skills Series, Thanksgiving table)",
+      "expect": [
+        "Shun Tomi",
+        "Skills Series"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Fall banner row",
+      "expect": [
+        "Williams Sonoma Visa",
+        "Staub Pumpkin",
+        "KitchenAid",
+        "Baking Mixes"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Coffee makers banner",
+      "expect": [
+        "Breville",
+        "SMEG",
+        "JURA"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Halloween tiles",
+      "expect": [
+        "Clearance",
+        "Halloween",
+        "Nightmare Before Christmas",
+        "Peanuts"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Online-only carousel",
+      "expect": [
+        "Online Only"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Holiday tiles",
+      "expect": [
+        "NFL",
+        "Day of the Dead",
+        "Christmas",
+        "Hanukkah"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Brand tiles",
+      "expect": [
+        "The Instagram Shop",
+        "Williams Sonoma Home",
+        "Pottery Barn"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Email and text sign-up",
+      "expect": [
+        "Be the first to know about new arrivals, sales & more.",
+        "Sign Up Now"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "App promo",
+      "expect": [
+        "Williams Sonoma App",
+        "Everything you love about shopping with us all in one convenient place."
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "New",
+      "real": "https://www.williams-sonoma.com/shop/new/",
+      "path": "/shop/new/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Cookware",
+      "real": "https://www.williams-sonoma.com/shop/cookware/cookware-new/",
+      "path": "/shop/cookware/cookware-new/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Cooks' Tools",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/cooks-tools-new/",
+      "path": "/shop/cooks-tools/cooks-tools-new/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Cutlery",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/cutlery-new/",
+      "path": "/shop/cutlery/cutlery-new/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "No Kid Hungry®",
+      "real": "https://www.williams-sonoma.com/shop/new/new-no-kid-hungry/",
+      "path": "/shop/new/new-no-kid-hungry/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Williams Sonoma Home New Arrivals",
+      "real": "https://www.williams-sonoma.com/shop/home-new/home-new-furniture/",
+      "path": "/shop/home-new/home-new-furniture/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cookware",
+      "real": "https://www.williams-sonoma.com/shop/cookware/",
+      "path": "/shop/cookware/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cookware Sets",
+      "real": "https://www.williams-sonoma.com/shop/cookware/cookware-sets/",
+      "path": "/shop/cookware/cookware-sets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fry Pans & Skillets",
+      "real": "https://www.williams-sonoma.com/shop/cookware/fry-pans-skillets/",
+      "path": "/shop/cookware/fry-pans-skillets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dutch Ovens & Braisers",
+      "real": "https://www.williams-sonoma.com/shop/cookware/dutch-ovens-braisers/",
+      "path": "/shop/cookware/dutch-ovens-braisers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Grill Pans & Griddles",
+      "real": "https://www.williams-sonoma.com/shop/cookware/grills-griddles/",
+      "path": "/shop/cookware/grills-griddles/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Omelette, Egg & Crêpe Pans",
+      "real": "https://www.williams-sonoma.com/shop/cookware/omelette-egg-pans/",
+      "path": "/shop/cookware/omelette-egg-pans/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Woks",
+      "real": "https://www.williams-sonoma.com/shop/cookware/woks/",
+      "path": "/shop/cookware/woks/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Stainless-Steel",
+      "real": "https://www.williams-sonoma.com/shop/cookware/stainless-steel-cookware/",
+      "path": "/shop/cookware/stainless-steel-cookware/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nonstick",
+      "real": "https://www.williams-sonoma.com/shop/cookware/nonstick-cookware/",
+      "path": "/shop/cookware/nonstick-cookware/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ceramic Nonstick",
+      "real": "https://www.williams-sonoma.com/shop/cookware/cookware-ceramic-nonstick/",
+      "path": "/shop/cookware/cookware-ceramic-nonstick/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cooks' Tools",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/",
+      "path": "/shop/cooks-tools/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Utensil Sets",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/tool-sets/",
+      "path": "/shop/cooks-tools/tool-sets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Spatulas & Turners",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/turner-spatulas/",
+      "path": "/shop/cooks-tools/turner-spatulas/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Spoons, Ladles & Whisks",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/slotted-spoons-sets/",
+      "path": "/shop/cooks-tools/slotted-spoons-sets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Measuring Cups & Spoons",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/measuring-cups-spoons/",
+      "path": "/shop/cooks-tools/measuring-cups-spoons/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mixing Bowls",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/cooks-mixing-bowls/",
+      "path": "/shop/cooks-tools/cooks-mixing-bowls/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cutting Boards",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/cutting-boards-storage/",
+      "path": "/shop/cutlery/cutting-boards-storage/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fruit & Vegetable Tools",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/tools-produce/",
+      "path": "/shop/cooks-tools/tools-produce/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pizza Tools",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/pizza-tools/",
+      "path": "/shop/cooks-tools/pizza-tools/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pasta Tools",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/pasta-tools/",
+      "path": "/shop/cooks-tools/pasta-tools/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cutlery",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/",
+      "path": "/shop/cutlery/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Knife Sets",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/knife-sets/",
+      "path": "/shop/cutlery/knife-sets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chef's Knives",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/cutlery-chef-knives/",
+      "path": "/shop/cutlery/cutlery-chef-knives/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Steak Knives",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/steak-knives/",
+      "path": "/shop/cutlery/steak-knives/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Knife Storage",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/knives-blocks-storage/",
+      "path": "/shop/cutlery/knives-blocks-storage/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Knife Sharpeners",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/knife-sharpeners-honing/",
+      "path": "/shop/cutlery/knife-sharpeners-honing/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Williams Sonoma",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/cutlery-ws-cutting-boards/",
+      "path": "/shop/cutlery/cutlery-ws-cutting-boards/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Global",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/knives-global/",
+      "path": "/shop/cutlery/knives-global/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Miyabi",
+      "real": "https://www.williams-sonoma.com/shop/cutlery/miyabi-brand/",
+      "path": "/shop/cutlery/miyabi-brand/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electrics",
+      "real": "https://www.williams-sonoma.com/shop/electrics/",
+      "path": "/shop/electrics/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Espresso Machines",
+      "real": "https://www.williams-sonoma.com/shop/electrics/espresso-makers/",
+      "path": "/shop/electrics/espresso-makers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Coffee Makers",
+      "real": "https://www.williams-sonoma.com/shop/electrics/coffee-makers/",
+      "path": "/shop/electrics/coffee-makers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Coffee Grinders",
+      "real": "https://www.williams-sonoma.com/shop/electrics/coffee-grinders/",
+      "path": "/shop/electrics/coffee-grinders/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toasters & Toaster Ovens",
+      "real": "https://www.williams-sonoma.com/shop/electrics/toasters-ovens/",
+      "path": "/shop/electrics/toasters-ovens/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Air Fryers",
+      "real": "https://www.williams-sonoma.com/shop/electrics/electrics-fryers/",
+      "path": "/shop/electrics/electrics-fryers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mixers & Attachments",
+      "real": "https://www.williams-sonoma.com/shop/electrics/mixers-attachments/",
+      "path": "/shop/electrics/mixers-attachments/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Waffle & Bread Makers",
+      "real": "https://www.williams-sonoma.com/shop/electrics/waffle-bread-makers/",
+      "path": "/shop/electrics/waffle-bread-makers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ice Makers",
+      "real": "https://www.williams-sonoma.com/shop/electrics/electrics-ice-makers/",
+      "path": "/shop/electrics/electrics-ice-makers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ice Cream & Gelato Makers",
+      "real": "https://www.williams-sonoma.com/shop/electrics/electrics-ice-cream-makers/",
+      "path": "/shop/electrics/electrics-ice-cream-makers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bakeware",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/",
+      "path": "/shop/bakeware/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bakeware Sets",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/bakeware-sets/",
+      "path": "/shop/bakeware/bakeware-sets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sheet Pans & Cookie Sheets",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/sheet-pans-cookie-sheets/",
+      "path": "/shop/bakeware/sheet-pans-cookie-sheets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cake & Bundt Pans",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/cake-pans/",
+      "path": "/shop/bakeware/cake-pans/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baking & Pastry Tools",
+      "real": "https://www.williams-sonoma.com/shop/cooks-tools/baking-pastry-tools/",
+      "path": "/shop/cooks-tools/baking-pastry-tools/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Williams Sonoma",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/bakeware-williams-sonoma/",
+      "path": "/shop/bakeware/bakeware-williams-sonoma/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All-Clad",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/bakeware-all-clad/",
+      "path": "/shop/bakeware/bakeware-all-clad/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Emile Henry",
+      "real": "https://www.williams-sonoma.com/shop/bakeware/bakeware-emile-henry/",
+      "path": "/shop/bakeware/bakeware-emile-henry/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Food",
+      "real": "https://www.williams-sonoma.com/shop/food/",
+      "path": "/shop/food/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Croissants, Pastries & Scones",
+      "real": "https://www.williams-sonoma.com/shop/food/croissants-bread-pastries/",
+      "path": "/shop/food/croissants-bread-pastries/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cakes, Cupcakes & Pies",
+      "real": "https://www.williams-sonoma.com/shop/food/food-desserts-baked-goods/",
+      "path": "/shop/food/food-desserts-baked-goods/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cookies, Brownies & Bars",
+      "real": "https://www.williams-sonoma.com/shop/food/food-cookies-brownies/",
+      "path": "/shop/food/food-cookies-brownies/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Coffee, Tea & Syrups",
+      "real": "https://www.williams-sonoma.com/shop/food/food-coffee-tea/",
+      "path": "/shop/food/food-coffee-tea/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cocktail Mixes & Garnish",
+      "real": "https://www.williams-sonoma.com/shop/food/food-cocktail-mixes/",
+      "path": "/shop/food/food-cocktail-mixes/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hot Chocolate",
+      "real": "https://www.williams-sonoma.com/shop/food/food-hot-chocolate/",
+      "path": "/shop/food/food-hot-chocolate/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Appetizers",
+      "real": "https://www.williams-sonoma.com/shop/food/appetizers-hors-doeuvres/",
+      "path": "/shop/food/appetizers-hors-doeuvres/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Entrées",
+      "real": "https://www.williams-sonoma.com/shop/food/food-entrees/",
+      "path": "/shop/food/food-entrees/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sides, Soups & Bread",
+      "real": "https://www.williams-sonoma.com/shop/food/food-side-dishes/",
+      "path": "/shop/food/food-side-dishes/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tabletop & Bar",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/",
+      "path": "/shop/tabletop-glassware-bar/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dinnerware Sets",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/tabletop-place-settings/",
+      "path": "/shop/tabletop-glassware-bar/tabletop-place-settings/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dinner Plates",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/tabletop-plates/",
+      "path": "/shop/tabletop-glassware-bar/tabletop-plates/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Salad & Appetizer Plates",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/salad-appetizer-plates/",
+      "path": "/shop/tabletop-glassware-bar/salad-appetizer-plates/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Serving Trays & Platters",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/serving-trays-platters-baskets/",
+      "path": "/shop/tabletop-glassware-bar/serving-trays-platters-baskets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Salad & Condiment Bowls",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/salad-serving-bowls/",
+      "path": "/shop/tabletop-glassware-bar/salad-serving-bowls/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cheese Boards & Accessories",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/cheese-boards-accessories/",
+      "path": "/shop/tabletop-glassware-bar/cheese-boards-accessories/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Drinking Glasses",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/bar-glassware-casual/",
+      "path": "/shop/tabletop-glassware-bar/bar-glassware-casual/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wine Glasses",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/bar-wine-glasses/",
+      "path": "/shop/tabletop-glassware-bar/bar-wine-glasses/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bar & Cocktail Glasses",
+      "real": "https://www.williams-sonoma.com/shop/tabletop-glassware-bar/bar-glasses/",
+      "path": "/shop/tabletop-glassware-bar/bar-glasses/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home Essentials",
+      "path": "/shop/home-essentials/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Aprons",
+      "path": "/shop/home-essentials/aprons/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen Towels",
+      "path": "/shop/home-essentials/kitchen-towels/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pot Holders & Oven Mitts",
+      "path": "/shop/home-essentials/pot-holders-oven-mitts/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hand Soap & Dish Soap",
+      "path": "/shop/home-essentials/hand-dish-soap/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vacuums & Floor Care",
+      "path": "/shop/home-essentials/vacuums/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Irons & Steamers",
+      "path": "/shop/home-essentials/irons-steamers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pantry Storage",
+      "path": "/shop/home-essentials/pantry-storage/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Food Storage Containers",
+      "path": "/shop/home-essentials/food-storage/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Canisters & Jars",
+      "path": "/shop/home-essentials/canisters/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor & Garden",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/",
+      "path": "/shop/outdoor/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Grill Tools & Accessories",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/outdoor-grill-tools-accessories/",
+      "path": "/shop/outdoor/outdoor-grill-tools-accessories/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Grill Prep & Marinade Trays",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/outdoor-grill-prep-trays/",
+      "path": "/shop/outdoor/outdoor-grill-prep-trays/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Cookware",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/outdoor-cookware/",
+      "path": "/shop/outdoor/outdoor-cookware/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Lounge Furniture",
+      "real": "https://www.williams-sonoma.com/shop/home-outdoor/all-outdoor-lounge-furniture/",
+      "path": "/shop/home-outdoor/all-outdoor-lounge-furniture/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Dining Furniture",
+      "real": "https://www.williams-sonoma.com/shop/home-outdoor/all-outdoor-dining/",
+      "path": "/shop/home-outdoor/all-outdoor-dining/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Umbrellas",
+      "real": "https://www.williams-sonoma.com/shop/home-outdoor/home-outdoor-umbrellas/",
+      "path": "/shop/home-outdoor/home-outdoor-umbrellas/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wreaths & Garlands",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/wreaths-garlands/",
+      "path": "/shop/outdoor/wreaths-garlands/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Florals & Centerpieces",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/fresh-dried-flowers/",
+      "path": "/shop/outdoor/fresh-dried-flowers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Live & Faux Plants",
+      "real": "https://www.williams-sonoma.com/shop/outdoor/plants-trees/",
+      "path": "/shop/outdoor/plants-trees/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Furniture",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/",
+      "path": "/shop/home-furniture/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sofas",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/sofas-loveseats/",
+      "path": "/shop/home-furniture/sofas-loveseats/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sectionals",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/all-sectionals/",
+      "path": "/shop/home-furniture/all-sectionals/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sleeper Sofas & Settees",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/sleeper-sofas/",
+      "path": "/shop/home-furniture/sleeper-sofas/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dining & Kitchen Tables",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/dining-kitchen-tables/",
+      "path": "/shop/home-furniture/dining-kitchen-tables/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dining Chairs",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/dining-chairs-casual/",
+      "path": "/shop/home-furniture/dining-chairs-casual/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dining Benches & Banquettes",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/dining-benches-banquettes/",
+      "path": "/shop/home-furniture/dining-benches-banquettes/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beds & Headboards",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/beds-headboards/",
+      "path": "/shop/home-furniture/beds-headboards/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nightstands",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/nightstands-dressers/",
+      "path": "/shop/home-furniture/nightstands-dressers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dressers",
+      "real": "https://www.williams-sonoma.com/shop/home-furniture/dresser/",
+      "path": "/shop/home-furniture/dresser/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Holidays",
+      "real": "https://www.williams-sonoma.com/shop/holidays/",
+      "path": "/shop/holidays/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Halloween",
+      "real": "https://www.williams-sonoma.com/shop/halloween/all-halloween/",
+      "path": "/shop/halloween/all-halloween/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Day of the Dead",
+      "real": "https://www.williams-sonoma.com/shop/holidays/day-of-the-dead/",
+      "path": "/shop/holidays/day-of-the-dead/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Thanksgiving",
+      "real": "https://www.williams-sonoma.com/shop/thanksgiving/all-thanksgiving/",
+      "path": "/shop/thanksgiving/all-thanksgiving/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gifts",
+      "real": "https://www.williams-sonoma.com/shop/gifts/",
+      "path": "/shop/gifts/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Top Gifts",
+      "real": "https://www.williams-sonoma.com/shop/gifts/top-10-food-gifts/",
+      "path": "/shop/gifts/top-10-food-gifts/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Sets, Crates & Baskets",
+      "real": "https://www.williams-sonoma.com/shop/food/food-sets/",
+      "path": "/shop/food/food-sets/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Birthday",
+      "real": "https://www.williams-sonoma.com/shop/gifts/gifts-birthday/",
+      "path": "/shop/gifts/gifts-birthday/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sale",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/",
+      "path": "/shop/sale-special-offer/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Deals",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/premier-view-all/",
+      "path": "/shop/sale-special-offer/premier-view-all/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "The Coffee & Espresso Savings Event - Up to 25% Off",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/coffee-espresso-event/",
+      "path": "/shop/sale-special-offer/coffee-espresso-event/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Breville - Up to 25% Off",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/breville-promo/",
+      "path": "/shop/sale-special-offer/breville-promo/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Clearance",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/view-all-sale/",
+      "path": "/shop/sale-special-offer/view-all-sale/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cookware",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/sale-cookware/",
+      "path": "/shop/sale-special-offer/sale-cookware/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cooks' Tools",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/sale-cooks-tools/",
+      "path": "/shop/sale-special-offer/sale-cooks-tools/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Free Shipping",
+      "real": "https://www.williams-sonoma.com/shop/sale-special-offer/free-shipping/",
+      "path": "/shop/sale-special-offer/free-shipping/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Halloween",
+      "real": "https://www.williams-sonoma.com/shop/halloween/",
+      "path": "/shop/halloween/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Thanksgiving",
+      "real": "https://www.williams-sonoma.com/shop/thanksgiving/",
+      "path": "/shop/thanksgiving/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Christmas",
+      "real": "https://www.williams-sonoma.com/shop/christmas/",
+      "path": "/shop/christmas/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Customer Service",
+      "real": "https://www.williams-sonoma.com/customer-service/",
+      "path": "/customer-service/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store Locator",
+      "real": "https://www.williams-sonoma.com/stores/",
+      "path": "/stores/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wedding & Gift Registry",
+      "real": "https://www.williams-sonoma.com/registry/",
+      "path": "/registry/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Recipes & Menus",
+      "real": "https://www.williams-sonoma.com/recipe/",
+      "path": "/recipe/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.williams-sonoma.com/customer-service/gift-services/gift-card-landing.html",
+      "path": "/customer-service/gift-services/gift-card-landing.html"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Key Rewards",
+      "real": "https://www.williams-sonoma.com/pages/the-key-rewards/",
+      "path": "/pages/the-key-rewards/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Williams Sonoma Credit Card",
+      "real": "https://www.williams-sonoma.com/ccvalueprop/",
+      "path": "/ccvalueprop/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "B2B Overview",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/b2b/overview/",
+      "path": "/pages/williams-sonoma/b2b/overview/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "In-Store Events",
+      "real": "https://www.williams-sonoma.com/pages/virtual-events-and-in-store-classes/in-store-events/",
+      "path": "/pages/virtual-events-and-in-store-classes/in-store-events/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Brands A to Z",
+      "real": "https://www.williams-sonoma.com/pages/williams-sonoma/brands-a-to-z/",
+      "path": "/pages/williams-sonoma/brands-a-to-z/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Our Story",
+      "real": "https://www.williams-sonoma.com/customer-service/about-us.html",
+      "path": "/customer-service/about-us.html"
+    }
+  ]
+}
