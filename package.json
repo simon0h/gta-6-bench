@@ -18,7 +18,9 @@
     "cf:typegen": "wrangler types deploy/worker-configuration.d.ts"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "@rrweb/record": "2.1.6",
+    "express": "^5.1.0",
+    "rrweb-player": "2.1.6"
   },
   "devDependencies": {
     "playwright": "1.64.0",

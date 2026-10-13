@@ -7,6 +7,7 @@ import { gradeTask } from './grader.js'
 import { environmentFingerprint, summarize } from './report.js'
 import { BENCHMARK_DATE } from './environment.js'
 import { browserEvent, requestEvent, validPageId, validateTraversalEvent } from './traversal.js'
+import { REPLAY_LIMITS, replayChunk, replayPage, validateReplayChunk, validReplayMetadata } from './replay.js'
 
 export const DASHBOARD_AGENTS = ['grokbot', 'dots', 'muse']
 const clone = value => structuredClone(value)
@@ -85,6 +86,10 @@ export async function createRunManager({
   const filename = path.join(path.resolve(directory), 'dashboard-state.json')
   let runs = [], trials = [], queue = Promise.resolve(), closed = false, closePromise
   const workers = new Map(), timers = new Map(), traceEvents = new Map()
+  // Replay chunks are an outbox when archived by the host, files on local disk,
+  // and plain memory otherwise. They never enter the local checkpoint file.
+  const replayChunks = new Map(), replayFiles = persist && !traceArchive
+  const replayDirectory = path.join(path.resolve(directory), 'replays')
   const serialized = operation => {
     const result = queue.then(() => { if (closed) throw fail('Run manager is closed', 503); return operation() })
     queue = result.catch(() => {})
@@ -133,7 +138,33 @@ export async function createRunManager({
   }
   function traceState() {
     return { dashboard_runs: clone(runs), dashboard_trials: clone(trials),
-      dashboard_trace_events: [...traceEvents].flatMap(([trial_id, events]) => events.map(event => ({ trial_id, ...clone(event) }))) }
+      dashboard_trace_events: [...traceEvents].flatMap(([trial_id, events]) => events.map(event => ({ trial_id, ...clone(event) }))),
+      ...(traceArchive ? { dashboard_replay_chunks: [...replayChunks].flatMap(([trial_id, chunks]) => chunks.map(chunk => ({ trial_id, ...chunk }))) } : {}) }
+  }
+  const replayFolder = trial => {
+    if (!/^[A-Za-z0-9-]{1,64}$/.test(trial.id)) throw fail('Invalid replay task identity')
+    return path.join(replayDirectory, trial.id)
+  }
+  async function storeReplay(trial, chunk) {
+    if (!replayFiles) {
+      if (!replayChunks.has(trial.id)) replayChunks.set(trial.id, [])
+      replayChunks.get(trial.id).push(chunk)
+      return
+    }
+    await mkdir(replayFolder(trial), { recursive: true })
+    await writeFile(path.join(replayFolder(trial), `${chunk.id}.json`), JSON.stringify(chunk), { flag: 'wx', mode: 0o600 })
+  }
+  async function loadReplay(trial, after) {
+    if (!replayFiles) return replayPage(replayChunks.get(trial.id) ?? [], after)
+    const chunks = []
+    for (let id = after + 1; id <= (trial.replay?.chunk_count ?? 0); id++) {
+      let chunk
+      try { chunk = JSON.parse(await readFile(path.join(replayFolder(trial), `${id}.json`), 'utf8')) }
+      catch (error) { if (error.code === 'ENOENT') continue; throw error }
+      chunks.push(chunk)
+      if (replayPage(chunks, after).length < chunks.length) { chunks.pop(); break }
+    }
+    return chunks
   }
   function appendEvent(trial, fields) {
     if (!trial.traversal) return null // Earlier trials explicitly remain unrecorded.
@@ -291,6 +322,7 @@ export async function createRunManager({
         || !/^[A-Za-z0-9_-]{43}$/.test(trial.traversal_secret || '')
         || Object.keys(trial.traversal).some(key => !['version', 'event_count'].includes(key)))) throw fail('Invalid traversal metadata checkpoint')
       if (trial.traversal === undefined && trial.traversal_secret !== undefined) throw fail('Invalid traversal secret checkpoint')
+      if (trial.replay !== undefined && (!trial.traversal || !validReplayMetadata(trial.replay))) throw fail('Invalid replay metadata checkpoint')
       trialIds.add(trial.id); positions.add(position)
       trialMap.set(trial.id, trial)
     }
@@ -308,6 +340,16 @@ export async function createRunManager({
       if (!eventIds.has(trial.id)) eventIds.set(trial.id, new Set())
       if (eventIds.get(trial.id).has(event.id)) throw fail('Duplicate traversal event identifier')
       eventIds.get(trial.id).add(event.id)
+    }
+    if (next.dashboard_replay_chunks === undefined) next.dashboard_replay_chunks = []
+    if (!Array.isArray(next.dashboard_replay_chunks) || (!traceArchive && next.dashboard_replay_chunks.length)) throw fail('Invalid replay checkpoint')
+    const chunkIds = new Set()
+    for (const chunk of next.dashboard_replay_chunks) {
+      const trial = trialMap.get(chunk?.trial_id)
+      if (!trial) throw fail('Replay chunk has no recorded task')
+      validateReplayChunk(chunk, trial)
+      if (chunkIds.has(`${trial.id}:${chunk.id}`)) throw fail('Duplicate replay chunk identifier')
+      chunkIds.add(`${trial.id}:${chunk.id}`)
     }
     if (!traceArchive) for (const trial of next.dashboard_trials) {
       if (trial.traversal && (eventIds.get(trial.id)?.size ?? 0) !== trial.traversal.event_count) throw fail('Local traversal checkpoint is incomplete')
@@ -327,6 +369,14 @@ export async function createRunManager({
       traceEvents.get(trial_id).push(event)
     }
     for (const events of traceEvents.values()) events.sort((a, b) => a.id - b.id)
+    if (traceArchive) {
+      replayChunks.clear()
+      for (const { trial_id, ...chunk } of next.dashboard_replay_chunks) {
+        if (!replayChunks.has(trial_id)) replayChunks.set(trial_id, [])
+        replayChunks.get(trial_id).push(chunk)
+      }
+      for (const chunks of replayChunks.values()) chunks.sort((a, b) => a.id - b.id)
+    }
     for (const run of runs) for (const attempt of run.attempts) {
       const trial = activeTrial(attempt)
       if (trial && run.environment_sha256 === fingerprint.environment_sha256 && run.selected_tasks_sha256 === hashes[run.suite]) arm(run, attempt, trial)
@@ -383,6 +433,7 @@ export async function createRunManager({
         trial_id: trial.id, task_id: trial.task_id, index: trial.index + 1, status: trial.status,
         started_at: trial.started_at, completed_at: trial.completed_at ?? null, grade: clone(trial.result?.grade ?? null),
         recorded: Boolean(trial.traversal), event_count: trial.traversal?.event_count ?? 0,
+        replay_recorded: Boolean(trial.replay), replay_chunks: trial.replay?.chunk_count ?? 0,
       })) }
     }),
     getTraversalEvents: (runId, attemptId, trialId, { after = 0, limit = 500 } = {}) => serialized(async () => {
@@ -392,6 +443,46 @@ export async function createRunManager({
       const events = (traceEvents.get(trial.id) ?? []).filter(event => event.id > after).slice(0, limit)
       const last = events.at(-1)?.id ?? after, event_count = trial.traversal?.event_count ?? 0
       return { trial_id: trial.id, events: clone(events), next_cursor: events.length && last < event_count ? last : null, event_count }
+    }),
+    getReplay: (runId, attemptId, trialId, { after = 0 } = {}) => serialized(async () => {
+      if (!Number.isSafeInteger(after) || after < 0) throw fail('Invalid replay pagination')
+      await expireAll()
+      const { attempt } = ownedAttempt(runId, attemptId), trial = ownedTrial(attempt, trialId)
+      const chunk_count = trial.replay?.chunk_count ?? 0
+      const chunks = trial.replay ? await loadReplay(trial, after) : []
+      const last = chunks.at(-1)?.id ?? after
+      return { trial_id: trial.id, recorded: Boolean(trial.replay), started_at: trial.started_at, chunk_count,
+        chunks: chunks.map(({ trial_id, ...chunk }) => clone(chunk)), next_cursor: chunks.length && last < chunk_count ? last : null }
+    }),
+    recordReplay: async (token, input, body) => {
+      if (!isObject(input) || typeof input.trial_id !== 'string' || typeof input.page_id !== 'string'
+        || !Number.isSafeInteger(input.seq) || input.seq < 1 || input.seq > 100000) throw fail('Invalid replay chunk')
+      // Decompress and check the upload before taking the shared queue.
+      const fields = replayChunk(body, [token])
+      return serialized(async () => {
+        const trial = await recordingTrial(token, input.trial_id)
+        if (!trial.replay || !validPageId(trial.traversal_secret, input.page_id)) throw fail('Unknown task page', 403)
+        if (trial.replay.chunk_count >= REPLAY_LIMITS.chunks || trial.replay.bytes + fields.bytes > REPLAY_LIMITS.trial) throw fail('Replay storage limit reached', 413)
+        const timestamp = now()
+        const chunk = { id: trial.replay.chunk_count + 1, page_id: input.page_id, seq: input.seq, at: iso(timestamp),
+          elapsed_ms: Math.max(0, Math.round(timestamp - Date.parse(trial.started_at))), ...fields }
+        await storeReplay(trial, chunk)
+        trial.replay.chunk_count = chunk.id
+        trial.replay.bytes += chunk.bytes
+        await save({ captureWorkers: false })
+      })
+    },
+    acknowledgeReplay: acknowledgements => serialized(async () => {
+      if (!Array.isArray(acknowledgements)) throw fail('Invalid replay acknowledgement')
+      for (const ack of acknowledgements) {
+        const trial = trials.find(item => item.id === ack?.trial_id)
+        if (!trial?.replay || !Number.isSafeInteger(ack.id) || ack.id < 0 || ack.id > trial.replay.chunk_count) throw fail('Invalid replay acknowledgement')
+      }
+      if (traceArchive) for (const { trial_id, id } of acknowledgements) {
+        const remaining = (replayChunks.get(trial_id) ?? []).filter(chunk => chunk.id > id)
+        if (remaining.length) replayChunks.set(trial_id, remaining)
+        else replayChunks.delete(trial_id)
+      }
     }),
     recordRequest: (token, trialId, input) => serialized(async () => {
       // The trusted proxy already selected this task before starting the
@@ -437,7 +528,8 @@ export async function createRunManager({
         const started = now()
         trial = { id: randomUUID(), run_id: run.id, attempt_id: attempt.id, index, task_id: task.id, task_version: task.version,
           status: 'running', started_at: iso(started), deadline_at: iso(started + task.timeout_ms), snapshot: null, result: null,
-          traversal: { version: 1, event_count: 0 }, traversal_secret: randomBytes(32).toString('base64url') }
+          traversal: { version: 1, event_count: 0 }, traversal_secret: randomBytes(32).toString('base64url'),
+          replay: { version: 1, chunk_count: 0, bytes: 0 } }
         trials.push(trial)
         appendEvent(trial, { kind: 'start' })
       }
@@ -461,7 +553,7 @@ export async function createRunManager({
       const trial = activeTrial(attempt)
       if (!trial) return null
       const worker = await ensureWorker(run, attempt, trial)
-      return { ...clone(worker.target), trialId: trial.id }
+      return { ...clone(worker.target), trialId: trial.id, replay: Boolean(trial.replay) }
     }),
     finishTask: (token, finalResponse) => serialized(async () => {
       const { run, attempt } = findAttempt(token)

@@ -78,6 +78,14 @@ export async function createHostedApp({
       res.status(400).json({ error: 'Invalid traversal acknowledgement' })
     }
   })
+  app.post('/__hosting/replay/ack', express.json({ limit: '256kb' }), async (req, res) => {
+    try {
+      await manager.acknowledgeReplay(req.body)
+      res.json({ ok: true })
+    } catch {
+      res.status(400).json({ error: 'Invalid replay acknowledgement' })
+    }
+  })
   app.use('/__hosting', (req, res) => res.sendStatus(404))
   app.use('/api', (req, res, next) => {
     res.set('Cache-Control', 'no-store')

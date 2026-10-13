@@ -161,9 +161,11 @@ test('checkpoint import preserves old unrecorded trials and rejects forged, orph
   delete old.dashboard_trace_events
   delete old.dashboard_trials[0].traversal
   delete old.dashboard_trials[0].traversal_secret
+  delete old.dashboard_trials[0].replay
   await m.importState(old)
   assert.equal(await request(m, attempt, trialId), null)
   assert.equal((await m.getTraversal(run.id, attempt.id)).tasks[0].recorded, false)
+  assert.equal((await m.getReplay(run.id, attempt.id, trialId)).recorded, false)
   assert.deepEqual((await m.getTraversalEvents(run.id, attempt.id, trialId)).events, [])
   await m.finishTask(attempt.token, { outcome: 'not_purchased', reason: 'budget_exceeded' })
   assert.equal((await m.getTraversal(run.id, attempt.id)).tasks[0].recorded, false)
