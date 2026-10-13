@@ -426,3 +426,4 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:#D00;box-shadow:
 .azp-pager{display:flex;gap:6px;justify-content:center;align-items:center;margin:18px 0;flex-wrap:wrap}.azp-pager a,.azp-pager span{padding:6px 12px;border:1px solid #D5D9D9;border-radius:8px;color:#0F1111;background:#fff}.azp-pager .is-current{border-color:#0F1111;font-weight:700}.azp-pager .is-disabled{color:#8D9096}
 .azp-facet-brands label{display:block;font-size:14px;margin:4px 0}
 @media(max-width:600px){.az-shelf-gallery{grid-template-columns:minmax(0,1fr)}.az-shelf-thumbs{flex-direction:row;order:2}.az-shelf-thumbs a{width:48px}.az-shelf-gallery>.az-fine{grid-column:1}}
+.az-list-price,.az-list-price s{font-size:12px!important}
