@@ -1,0 +1,988 @@
+{
+  "store": "coupang",
+  "real_home": "https://www.coupang.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.coupang.com/",
+    "https://shop.coupang.com/vid/A00080746",
+    "https://shop.coupang.com/fafesir/368051?platform=p",
+    "https://news.coupang.com/company/",
+    "https://ir.aboutcoupang.com/",
+    "https://www.coupang.jobs/kr/",
+    "https://privacy.coupang.com/ko/center/coupang/coupang-v7-8/"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/np/sitemap",
+  "notes": "www.coupang.com, m.coupang.com, mc.coupang.com, login.coupang.com, pages.coupang.com and cart.coupang.com all failed via WebFetch (fetch error or robots disallow); web.archive.org and archive.ph are blocked for this tool. The header (top bar, 입점신청/고객센터/마이쿠팡 dropdowns, logo, search action, cart) and the full 15-item quick menu (GNB) with real URLs were captured live from shop.coupang.com, which serves the same desktop chrome; its department menu is filled by JS and its footer was beyond the fetch window. Department names and IDs (564553, 176422, 219079, 194276, 185669, 115673, 184555, 178255, 317778, 183960, 317777, 317779, 177195, 115674, 305798, 393760) and subcategory names are from prior knowledge of the desktop category menu, not a live capture; subcategory local paths are slugs because their numeric IDs were not captured. Footer links and company/legal text are from prior knowledge plus WebSearch results (terms, privacy, newsroom); the CEO name follows the live newsroom page. Privacy section headings, company, IR and careers summaries are from live fetches of news.coupang.com, privacy.coupang.com, ir.aboutcoupang.com and coupang.jobs. Homepage section names are from memory of the desktop home and could not be verified. Coupang has no store locator, gift-card section or guest order lookup (orders require sign-in, so 마이쿠팡 redirects to 로그인); those page types are omitted. Product pages are omitted: the reference catalog has no captured Coupang products.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "쿠팡 홈",
+      "real": "https://www.coupang.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "카테고리",
+      "real": "https://www.coupang.com/ (category menu)",
+      "path": "/np/categories"
+    },
+    {
+      "kind": "header",
+      "label": "로그인",
+      "real": "https://login.coupang.com/login/login.pang",
+      "path": "/login"
+    },
+    {
+      "kind": "header",
+      "label": "회원가입",
+      "real": "https://login.coupang.com/login/memberJoinFrm.pang",
+      "path": "/register"
+    },
+    {
+      "kind": "header",
+      "label": "고객센터",
+      "real": "https://mc.coupang.com/ssr/desktop/contact/faq",
+      "path": "/ssr/desktop/contact/faq"
+    },
+    {
+      "kind": "header",
+      "label": "판매자 가입",
+      "real": "https://wing.coupang.com/tenants/vendor-signup/signup",
+      "path": "/np/partners/vendor-signup"
+    },
+    {
+      "kind": "header",
+      "label": "마이쿠팡",
+      "real": "https://mc.coupang.com/ssr/desktop/order/list",
+      "path": "/ssr/desktop/order/list"
+    },
+    {
+      "kind": "header",
+      "label": "장바구니",
+      "real": "https://cart.coupang.com/cartView.pang",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "자주묻는 질문",
+      "real": "https://mc.coupang.com/ssr/desktop/contact/faq",
+      "path": "/ssr/desktop/contact/faq"
+    },
+    {
+      "kind": "header",
+      "label": "1:1 채팅문의",
+      "real": "https://mc.coupang.com/ssr/desktop/contact/inquiry",
+      "path": "/ssr/desktop/contact/inquiry"
+    },
+    {
+      "kind": "header",
+      "label": "취소 / 반품 안내",
+      "real": "https://www.coupang.com/returnPolicy.pang",
+      "path": "/returnPolicy.pang"
+    },
+    {
+      "kind": "header",
+      "label": "주문목록",
+      "real": "https://mc.coupang.com/ssr/desktop/order/list",
+      "path": "/ssr/desktop/order/list"
+    },
+    {
+      "kind": "header",
+      "label": "취소/반품",
+      "real": "https://mc.coupang.com/ssr/desktop/cancel-return-exchange/list",
+      "path": "/ssr/desktop/cancel-return-exchange/list"
+    },
+    {
+      "kind": "header",
+      "label": "찜 리스트",
+      "real": "https://wish-web.coupang.com/wishInitView.pang",
+      "path": "/wishInitView.pang"
+    },
+    {
+      "kind": "header",
+      "label": "오픈마켓",
+      "real": "https://wing.coupang.com/tenants/vendor-signup/signup",
+      "path": "/np/partners/marketplace"
+    },
+    {
+      "kind": "header",
+      "label": "여행·티켓",
+      "real": "https://with.coupang.com/contract/initialize",
+      "path": "/np/partners/travel"
+    },
+    {
+      "kind": "header",
+      "label": "제휴마케팅",
+      "real": "https://partners.coupang.com",
+      "path": "/np/partners/affiliate"
+    },
+    {
+      "kind": "header",
+      "label": "로켓그로스",
+      "real": "https://sell.coupang.com",
+      "path": "/np/partners/rocket-growth"
+    },
+    {
+      "kind": "header",
+      "label": "쿠팡플레이",
+      "real": "https://www.coupangplay.com/catalog",
+      "path": "/np/coupangplay"
+    },
+    {
+      "kind": "header",
+      "label": "로켓배송",
+      "real": "https://www.coupang.com/np/campaigns/82",
+      "path": "/np/campaigns/82"
+    },
+    {
+      "kind": "header",
+      "label": "로켓프레시",
+      "real": "https://www.coupang.com/np/categories/393760",
+      "path": "/np/categories/393760"
+    },
+    {
+      "kind": "header",
+      "label": "다시 구매",
+      "real": "https://www.coupang.com/np/fbi",
+      "path": "/np/fbi"
+    },
+    {
+      "kind": "header",
+      "label": "쿠팡비즈",
+      "real": "https://login.coupang.com/corporation/member/landing-page",
+      "path": "/np/coupangbiz"
+    },
+    {
+      "kind": "header",
+      "label": "로켓직구",
+      "real": "https://www.coupang.com/np/coupangglobal",
+      "path": "/np/coupangglobal"
+    },
+    {
+      "kind": "header",
+      "label": "골드박스",
+      "real": "https://www.coupang.com/mlp/web/mlp-landing-page?landingId=3712",
+      "path": "/np/goldbox"
+    },
+    {
+      "kind": "header",
+      "label": "이달의신상",
+      "real": "https://pages.coupang.com/p/136938",
+      "path": "/p/136938"
+    },
+    {
+      "kind": "header",
+      "label": "입점신청",
+      "real": "https://wing.coupang.com/tenants/vendor-signup/signup",
+      "path": "/np/partners/vendor-signup"
+    },
+    {
+      "kind": "header",
+      "label": "판매자특가",
+      "real": "https://www.coupang.com/np/omp",
+      "path": "/np/omp"
+    },
+    {
+      "kind": "header",
+      "label": "와우회원할인",
+      "real": "https://www.coupang.com/np/campaigns/83",
+      "path": "/np/campaigns/83"
+    },
+    {
+      "kind": "header",
+      "label": "반품마켓",
+      "real": "https://pages.coupang.com/p/54908",
+      "path": "/p/54908"
+    },
+    {
+      "kind": "header",
+      "label": "착한상점",
+      "real": "https://pages.coupang.com/p/63240",
+      "path": "/p/63240"
+    },
+    {
+      "kind": "header",
+      "label": "기획전",
+      "real": "https://pages.coupang.com/p/bep",
+      "path": "/p/bep"
+    },
+    {
+      "kind": "header",
+      "label": "쿠팡트래블",
+      "real": "https://trip.coupang.com/",
+      "path": "/np/travel"
+    },
+    {
+      "kind": "footer",
+      "label": "회사소개",
+      "real": "https://news.coupang.com/company/",
+      "path": "/np/company"
+    },
+    {
+      "kind": "footer",
+      "label": "Investor Relations",
+      "real": "https://ir.aboutcoupang.com/",
+      "path": "/np/investor-relations"
+    },
+    {
+      "kind": "footer",
+      "label": "인재채용",
+      "real": "https://www.coupang.jobs/kr/",
+      "path": "/np/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "입점 / 제휴문의",
+      "real": "https://www.coupang.com (footer)",
+      "path": "/np/partnership"
+    },
+    {
+      "kind": "footer",
+      "label": "공지사항",
+      "real": "https://www.coupang.com (footer)",
+      "path": "/np/notices"
+    },
+    {
+      "kind": "footer",
+      "label": "고객의 소리",
+      "real": "https://mc.coupang.com/ssr/desktop/contact/voc",
+      "path": "/ssr/desktop/contact/voc"
+    },
+    {
+      "kind": "footer",
+      "label": "이용약관",
+      "real": "https://www.coupang.com/np/policies/terms",
+      "path": "/np/policies/terms"
+    },
+    {
+      "kind": "footer",
+      "label": "개인정보 처리방침",
+      "real": "https://privacy.coupang.com/ko/center/coupang/",
+      "path": "/np/policies/privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "쿠팡페이 이용약관",
+      "real": "https://www.coupang.com (footer, from memory)",
+      "path": "/np/policies/coupay"
+    },
+    {
+      "kind": "footer",
+      "label": "위치기반서비스 이용약관",
+      "real": "https://www.coupang.com (footer, from memory)",
+      "path": "/np/policies/location"
+    },
+    {
+      "kind": "footer",
+      "label": "청소년보호정책",
+      "real": "https://www.coupang.com (footer, from memory)",
+      "path": "/np/policies/youth"
+    },
+    {
+      "kind": "footer",
+      "label": "판매자 이용약관",
+      "real": "https://www.coupang.com (footer, from memory)",
+      "path": "/np/policies/seller"
+    },
+    {
+      "kind": "footer",
+      "label": "사업자정보 확인",
+      "real": "https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1208800767",
+      "path": "/np/business-info"
+    },
+    {
+      "kind": "page",
+      "label": "All categories",
+      "path": "/np/categories",
+      "expect": [
+        "전체 카테고리",
+        "가전디지털",
+        "식품"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department page (가전디지털)",
+      "path": "/np/categories/178255",
+      "expect": [
+        "가전디지털",
+        "TV/영상가전",
+        "쿠팡 랭킹순",
+        "낮은가격순",
+        "로켓배송"
+      ],
+      "real": "https://www.coupang.com/np/categories/178255"
+    },
+    {
+      "kind": "page",
+      "label": "Subcategory page",
+      "path": "/np/categories/178255/laptop",
+      "expect": [
+        "노트북",
+        "가전디지털",
+        "판매량순"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Rocket Fresh",
+      "path": "/np/categories/393760",
+      "expect": [
+        "로켓프레시"
+      ],
+      "real": "https://www.coupang.com/np/categories/393760"
+    },
+    {
+      "kind": "page",
+      "label": "Search",
+      "path": "/np/search",
+      "expect": [
+        "쿠팡 랭킹순",
+        "낮은가격순",
+        "높은가격순",
+        "판매량순",
+        "최신순"
+      ],
+      "real": "https://www.coupang.com/np/search"
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "path": "/cart",
+      "expect": [
+        "장바구니",
+        "장바구니에 담은 상품이 없습니다"
+      ],
+      "real": "https://cart.coupang.com/cartView.pang"
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "path": "/login",
+      "expect": [
+        "로그인",
+        "비밀번호",
+        "회원가입"
+      ],
+      "real": "https://login.coupang.com/login/login.pang"
+    },
+    {
+      "kind": "page",
+      "label": "Register",
+      "path": "/register",
+      "expect": [
+        "회원가입",
+        "비밀번호 확인",
+        "이름",
+        "휴대폰 번호"
+      ],
+      "real": "https://login.coupang.com/login/memberJoinFrm.pang"
+    },
+    {
+      "kind": "page",
+      "label": "My Coupang (signed out → login)",
+      "path": "/ssr/desktop/order/list",
+      "expect": [
+        "로그인"
+      ],
+      "real": "https://mc.coupang.com/ssr/desktop/order/list"
+    },
+    {
+      "kind": "page",
+      "label": "Customer service FAQ",
+      "path": "/ssr/desktop/contact/faq",
+      "expect": [
+        "고객센터",
+        "자주 묻는 질문"
+      ],
+      "real": "https://mc.coupang.com/ssr/desktop/contact/faq"
+    },
+    {
+      "kind": "page",
+      "label": "1:1 inquiry",
+      "path": "/ssr/desktop/contact/inquiry",
+      "expect": [
+        "1:1 채팅문의"
+      ],
+      "real": "https://mc.coupang.com/ssr/desktop/contact/inquiry"
+    },
+    {
+      "kind": "page",
+      "label": "Voice of customer",
+      "path": "/ssr/desktop/contact/voc",
+      "expect": [
+        "고객의 소리"
+      ],
+      "real": "https://mc.coupang.com/ssr/desktop/contact/voc"
+    },
+    {
+      "kind": "page",
+      "label": "Cancel / return / exchange policy",
+      "path": "/returnPolicy.pang",
+      "expect": [
+        "취소 / 반품 / 교환 안내",
+        "반품 신청",
+        "교환 신청"
+      ],
+      "real": "https://www.coupang.com/returnPolicy.pang"
+    },
+    {
+      "kind": "page",
+      "label": "Rocket delivery (shipping)",
+      "path": "/np/campaigns/82",
+      "expect": [
+        "로켓배송",
+        "무료배송"
+      ],
+      "real": "https://www.coupang.com/np/campaigns/82"
+    },
+    {
+      "kind": "page",
+      "label": "Deals: Goldbox",
+      "path": "/np/goldbox",
+      "expect": [
+        "골드박스",
+        "오늘의 특가"
+      ],
+      "real": "https://www.coupang.com/mlp/web/mlp-landing-page?landingId=3712"
+    },
+    {
+      "kind": "page",
+      "label": "WOW member discounts",
+      "path": "/np/campaigns/83",
+      "expect": [
+        "와우회원할인"
+      ],
+      "real": "https://www.coupang.com/np/campaigns/83"
+    },
+    {
+      "kind": "page",
+      "label": "Seller deals",
+      "path": "/np/omp",
+      "expect": [
+        "판매자특가"
+      ],
+      "real": "https://www.coupang.com/np/omp"
+    },
+    {
+      "kind": "page",
+      "label": "Rocket Direct (global)",
+      "path": "/np/coupangglobal",
+      "expect": [
+        "로켓직구"
+      ],
+      "real": "https://www.coupang.com/np/coupangglobal"
+    },
+    {
+      "kind": "page",
+      "label": "Returned-goods market",
+      "path": "/p/54908",
+      "expect": [
+        "반품마켓"
+      ],
+      "real": "https://pages.coupang.com/p/54908"
+    },
+    {
+      "kind": "page",
+      "label": "Notices",
+      "path": "/np/notices",
+      "expect": [
+        "공지사항"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Terms of use",
+      "path": "/np/policies/terms",
+      "expect": [
+        "이용약관"
+      ],
+      "real": "https://www.coupang.com/np/policies/terms"
+    },
+    {
+      "kind": "page",
+      "label": "Privacy policy",
+      "path": "/np/policies/privacy",
+      "expect": [
+        "개인정보 처리방침",
+        "개인정보의 제3자 제공"
+      ],
+      "real": "https://privacy.coupang.com/ko/center/coupang/coupang-v7-8/"
+    },
+    {
+      "kind": "page",
+      "label": "Company intro",
+      "path": "/np/company",
+      "expect": [
+        "회사소개",
+        "로켓배송"
+      ],
+      "real": "https://news.coupang.com/company/"
+    },
+    {
+      "kind": "page",
+      "label": "Investor relations",
+      "path": "/np/investor-relations",
+      "expect": [
+        "Investor Relations",
+        "CPNG"
+      ],
+      "real": "https://ir.aboutcoupang.com/"
+    },
+    {
+      "kind": "page",
+      "label": "Careers",
+      "path": "/np/careers",
+      "expect": [
+        "인재채용"
+      ],
+      "real": "https://www.coupang.jobs/kr/"
+    },
+    {
+      "kind": "page",
+      "label": "HTML site map",
+      "path": "/np/sitemap",
+      "expect": [
+        "사이트맵"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Main banner carousel",
+      "expect": [
+        "로켓배송",
+        "로켓프레시",
+        "골드박스"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Quick shortcuts",
+      "expect": [
+        "로켓직구",
+        "판매자특가",
+        "반품마켓"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "오늘의 발견",
+      "expect": [
+        "오늘의 발견",
+        "오늘의 쇼핑제안"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "골드박스 row",
+      "expect": [
+        "골드박스",
+        "오늘의 특가"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Category recommendations",
+      "expect": [
+        "카테고리별 추천상품"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "WOW membership promo",
+      "expect": [
+        "로켓와우",
+        "와우회원"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Search box",
+      "expect": [
+        "찾고 싶은 상품을 검색해보세요"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Footer company info",
+      "expect": [
+        "쿠팡(주)",
+        "120-88-00767",
+        "1577-7011",
+        "통신판매중개자"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "패션의류/잡화",
+      "real": "https://www.coupang.com/np/categories/564553",
+      "path": "/np/categories/564553"
+    },
+    {
+      "kind": "sitemap",
+      "label": "여성패션",
+      "path": "/np/categories/564553/women"
+    },
+    {
+      "kind": "sitemap",
+      "label": "남성패션",
+      "path": "/np/categories/564553/men"
+    },
+    {
+      "kind": "sitemap",
+      "label": "남녀 공용 의류",
+      "path": "/np/categories/564553/unisex"
+    },
+    {
+      "kind": "sitemap",
+      "label": "뷰티",
+      "real": "https://www.coupang.com/np/categories/176422",
+      "path": "/np/categories/176422"
+    },
+    {
+      "kind": "sitemap",
+      "label": "명품뷰티",
+      "path": "/np/categories/176422/luxury"
+    },
+    {
+      "kind": "sitemap",
+      "label": "스킨케어",
+      "path": "/np/categories/176422/skincare"
+    },
+    {
+      "kind": "sitemap",
+      "label": "클렌징/필링",
+      "path": "/np/categories/176422/cleansing"
+    },
+    {
+      "kind": "sitemap",
+      "label": "출산/유아동",
+      "real": "https://www.coupang.com/np/categories/219079",
+      "path": "/np/categories/219079"
+    },
+    {
+      "kind": "sitemap",
+      "label": "기저귀",
+      "path": "/np/categories/219079/diapers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "물티슈",
+      "path": "/np/categories/219079/wipes"
+    },
+    {
+      "kind": "sitemap",
+      "label": "분유/어린이식품",
+      "path": "/np/categories/219079/formula"
+    },
+    {
+      "kind": "sitemap",
+      "label": "식품",
+      "real": "https://www.coupang.com/np/categories/194276",
+      "path": "/np/categories/194276"
+    },
+    {
+      "kind": "sitemap",
+      "label": "과일",
+      "path": "/np/categories/194276/fruit"
+    },
+    {
+      "kind": "sitemap",
+      "label": "견과/건과",
+      "path": "/np/categories/194276/nuts"
+    },
+    {
+      "kind": "sitemap",
+      "label": "채소",
+      "path": "/np/categories/194276/vegetables"
+    },
+    {
+      "kind": "sitemap",
+      "label": "주방용품",
+      "real": "https://www.coupang.com/np/categories/185669",
+      "path": "/np/categories/185669"
+    },
+    {
+      "kind": "sitemap",
+      "label": "주방가전",
+      "path": "/np/categories/185669/appliances"
+    },
+    {
+      "kind": "sitemap",
+      "label": "냄비/프라이팬",
+      "path": "/np/categories/185669/cookware"
+    },
+    {
+      "kind": "sitemap",
+      "label": "주방조리도구",
+      "path": "/np/categories/185669/tools"
+    },
+    {
+      "kind": "sitemap",
+      "label": "생활용품",
+      "real": "https://www.coupang.com/np/categories/115673",
+      "path": "/np/categories/115673"
+    },
+    {
+      "kind": "sitemap",
+      "label": "헤어",
+      "path": "/np/categories/115673/hair"
+    },
+    {
+      "kind": "sitemap",
+      "label": "바디/세안",
+      "path": "/np/categories/115673/body"
+    },
+    {
+      "kind": "sitemap",
+      "label": "구강/면도",
+      "path": "/np/categories/115673/oral"
+    },
+    {
+      "kind": "sitemap",
+      "label": "홈인테리어",
+      "real": "https://www.coupang.com/np/categories/184555",
+      "path": "/np/categories/184555"
+    },
+    {
+      "kind": "sitemap",
+      "label": "홈데코",
+      "path": "/np/categories/184555/decor"
+    },
+    {
+      "kind": "sitemap",
+      "label": "가구",
+      "path": "/np/categories/184555/furniture"
+    },
+    {
+      "kind": "sitemap",
+      "label": "수납/정리",
+      "path": "/np/categories/184555/storage"
+    },
+    {
+      "kind": "sitemap",
+      "label": "가전디지털",
+      "real": "https://www.coupang.com/np/categories/178255",
+      "path": "/np/categories/178255"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV/영상가전",
+      "path": "/np/categories/178255/tv"
+    },
+    {
+      "kind": "sitemap",
+      "label": "냉장고",
+      "path": "/np/categories/178255/refrigerator"
+    },
+    {
+      "kind": "sitemap",
+      "label": "세탁기/건조기",
+      "path": "/np/categories/178255/washer"
+    },
+    {
+      "kind": "sitemap",
+      "label": "스포츠/레저",
+      "real": "https://www.coupang.com/np/categories/317778",
+      "path": "/np/categories/317778"
+    },
+    {
+      "kind": "sitemap",
+      "label": "캠핑",
+      "path": "/np/categories/317778/camping"
+    },
+    {
+      "kind": "sitemap",
+      "label": "홈트레이닝",
+      "path": "/np/categories/317778/fitness"
+    },
+    {
+      "kind": "sitemap",
+      "label": "수영/수상스포츠",
+      "path": "/np/categories/317778/swim"
+    },
+    {
+      "kind": "sitemap",
+      "label": "자동차용품",
+      "real": "https://www.coupang.com/np/categories/183960",
+      "path": "/np/categories/183960"
+    },
+    {
+      "kind": "sitemap",
+      "label": "인테리어",
+      "path": "/np/categories/183960/interior"
+    },
+    {
+      "kind": "sitemap",
+      "label": "익스테리어",
+      "path": "/np/categories/183960/exterior"
+    },
+    {
+      "kind": "sitemap",
+      "label": "세차/카케어",
+      "path": "/np/categories/183960/wash"
+    },
+    {
+      "kind": "sitemap",
+      "label": "도서/음반/DVD",
+      "real": "https://www.coupang.com/np/categories/317777",
+      "path": "/np/categories/317777"
+    },
+    {
+      "kind": "sitemap",
+      "label": "유아/어린이",
+      "path": "/np/categories/317777/children"
+    },
+    {
+      "kind": "sitemap",
+      "label": "소설/에세이/시",
+      "path": "/np/categories/317777/fiction"
+    },
+    {
+      "kind": "sitemap",
+      "label": "초중고참고서",
+      "path": "/np/categories/317777/study"
+    },
+    {
+      "kind": "sitemap",
+      "label": "완구/취미",
+      "real": "https://www.coupang.com/np/categories/317779",
+      "path": "/np/categories/317779"
+    },
+    {
+      "kind": "sitemap",
+      "label": "블록놀이",
+      "path": "/np/categories/317779/blocks"
+    },
+    {
+      "kind": "sitemap",
+      "label": "인형/피규어",
+      "path": "/np/categories/317779/figures"
+    },
+    {
+      "kind": "sitemap",
+      "label": "RC완구/부품",
+      "path": "/np/categories/317779/rc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "문구/오피스",
+      "real": "https://www.coupang.com/np/categories/177195",
+      "path": "/np/categories/177195"
+    },
+    {
+      "kind": "sitemap",
+      "label": "사무용품",
+      "path": "/np/categories/177195/office"
+    },
+    {
+      "kind": "sitemap",
+      "label": "학용품/수업준비",
+      "path": "/np/categories/177195/school"
+    },
+    {
+      "kind": "sitemap",
+      "label": "필기류",
+      "path": "/np/categories/177195/pens"
+    },
+    {
+      "kind": "sitemap",
+      "label": "반려동물용품",
+      "real": "https://www.coupang.com/np/categories/115674",
+      "path": "/np/categories/115674"
+    },
+    {
+      "kind": "sitemap",
+      "label": "강아지 사료/간식/영양제",
+      "path": "/np/categories/115674/dog-food"
+    },
+    {
+      "kind": "sitemap",
+      "label": "강아지 용품",
+      "path": "/np/categories/115674/dog"
+    },
+    {
+      "kind": "sitemap",
+      "label": "고양이 사료/간식/영양제",
+      "path": "/np/categories/115674/cat-food"
+    },
+    {
+      "kind": "sitemap",
+      "label": "헬스/건강식품",
+      "real": "https://www.coupang.com/np/categories/305798",
+      "path": "/np/categories/305798"
+    },
+    {
+      "kind": "sitemap",
+      "label": "비타민/미네랄",
+      "path": "/np/categories/305798/vitamins"
+    },
+    {
+      "kind": "sitemap",
+      "label": "영양제",
+      "path": "/np/categories/305798/supplements"
+    },
+    {
+      "kind": "sitemap",
+      "label": "허브/자연추출물",
+      "path": "/np/categories/305798/herbal"
+    },
+    {
+      "kind": "sitemap",
+      "label": "로켓프레시",
+      "real": "https://www.coupang.com/np/categories/393760",
+      "path": "/np/categories/393760"
+    },
+    {
+      "kind": "sitemap",
+      "label": "과일",
+      "path": "/np/categories/393760/fruit"
+    },
+    {
+      "kind": "sitemap",
+      "label": "채소",
+      "path": "/np/categories/393760/vegetables"
+    },
+    {
+      "kind": "sitemap",
+      "label": "우유/유제품",
+      "path": "/np/categories/393760/dairy"
+    },
+    {
+      "kind": "sitemap",
+      "label": "고객센터",
+      "path": "/ssr/desktop/contact/faq"
+    },
+    {
+      "kind": "sitemap",
+      "label": "골드박스",
+      "path": "/np/goldbox"
+    },
+    {
+      "kind": "sitemap",
+      "label": "로켓직구",
+      "path": "/np/coupangglobal"
+    },
+    {
+      "kind": "sitemap",
+      "label": "와우회원할인",
+      "path": "/np/campaigns/83"
+    },
+    {
+      "kind": "sitemap",
+      "label": "쿠팡트래블",
+      "path": "/np/travel"
+    },
+    {
+      "kind": "sitemap",
+      "label": "공지사항",
+      "path": "/np/notices"
+    },
+    {
+      "kind": "sitemap",
+      "label": "이용약관",
+      "path": "/np/policies/terms"
+    }
+  ]
+}
