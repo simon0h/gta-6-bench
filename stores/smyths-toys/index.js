@@ -13,18 +13,26 @@ import { retailState, rememberProduct, defaultAddress } from '../../lib/retail-s
 import { installSite, homePage, landingExtras, giftFinderIntro } from './site.js'
 import { installJourneys, productJourney, privateOrder } from './journeys.js'
 
-import { browseProducts, departments, departmentPaths, slug, browseTiles, browseProduct, catalogListing, departmentHub, homeContent, resolveProduct, optionInput, quantityLimit, artwork } from './browse.js'
+import { browseProducts, departments, departmentPaths, slug, browseTiles, browseProduct, catalogListing, departmentHub, homeContent, resolveProduct, optionInput, quantityLimit, artwork, shelf } from './browse.js'
+import { isShelfSku, shelfSvg, shelfViews } from './shelf.js'
+import { shelfProductPage, rankSearch } from './shelf-pages.js'
+import { listingPage, SEARCH_SORTS, departmentLanding } from './site.js'
 
 const router = express.Router()
 const NAME = 'Smyths Toys Superstores'
 const ROOT = '/uk/en-gb'
+// Reference mode: the GTA VI listings stay read-only (409), while ordinary shop-floor items from
+// shelf.js can be bought. Checkout opens only for a basket made up entirely of shop-floor items.
+const shelfBasket = items => items.length > 0 && items.every(line => isShelfSku(line.sku))
 router.use((req,res,next) => {
- if (!fixtureCatalog && (/(?:^|\/)checkout(?:\/|$)/.test(req.path) || req.method === 'POST' && /\/cart\/(?:add|update)$/.test(req.path))) {
+ const checkout = /(?:^|\/)checkout(?:\/|$)/.test(req.path) && !/\/checkout\/confirmation$/.test(req.path)
+ const mutate = req.method === 'POST' && /\/cart\/(?:add|update)$/.test(req.path)
+ if (!fixtureCatalog && (checkout && !shelfBasket(req.store.cart) || mutate && !isShelfSku(typeof req.body?.sku === 'string' ? req.body.sku.trim() : ''))) {
   return render(req,res,'Availability not verified','<h1>Availability not verified</h1><p>This listing does not have verified ordering availability.</p>',[],409)
  }
  next()
 })
-const catalog = [...browseProducts, ...products]
+const catalog = [...browseProducts, ...products, ...shelf]
 const catalogProduct = sku => catalog.find(p => p.sku === sku)
 const isPreorder = item => products.some(p => p.sku === item.sku)
 const hasPreorder = items => items.some(isPreorder)
@@ -36,7 +44,7 @@ function trustedLine(p, selected, qty) {
 function cartErrors(state, fulfillment = null) {
  enterScenarioCart(state)
  const errors=[], counts=new Map(), variantCounts=new Map()
- if (!fixtureCatalog && state.cart.length) return ['Ordering availability has not been verified for these listings.']
+ if (!fixtureCatalog && state.cart.some(line => !isShelfSku(line.sku))) return ['Ordering availability has not been verified for these listings.']
  for(const line of state.cart) {
   const p=catalogProduct(line.sku), selected=resolveProduct(p,line.selectedOptions||{})
   if(!selected || !Number.isInteger(line.qty) || line.qty<1 || selected.unit_price!==line.unit_price) {errors.push('An item or option in your basket has changed. Remove it and choose the product again.');continue}
@@ -111,10 +119,12 @@ router.get([`${ROOT}/search`, '/search'], (req, res) => {
  const q=string(req.query.text||req.query.q)
  if(q) req.store.smythsSearches=[q,...(req.store.smythsSearches||[]).filter(x=>x!==q)].slice(0,5)
  const recent=(req.store.smythsSearches||[]).length?`<div class="recent-searches">Recent searches: ${(req.store.smythsSearches||[]).map(q=>`<a href="${url(res,'/search')}?text=${encodeURIComponent(q)}">${esc(q)}</a>`).join(' · ')} <form action="${url(res,'/search/clear')}" method="post"><button class="secondary">Clear recent searches</button></form></div>`:''
- render(req,res,'Search results',catalogListing(url(res),catalog,req.query,q?`Search results for “${q}”`:'Shop all toys and games')+recent)
+ if(fixtureCatalog)return render(req,res,'Search results',catalogListing(url(res),catalog,req.query,q?`Search results for “${q}”`:'Shop all toys and games')+recent)
+ const heading=q?`Search results for “${q}”`:'Shop all toys and games'
+ render(req,res,q?`Search results for ${q}`:'Search results',listingPage(url(res),{all:q?rankSearch(catalog,q):catalog,query:req.query,path:'/search',trail:[[heading,'/search']],head:`<h1 class="st-cat-h1">${esc(heading)}</h1>${recent}`,keep:{text:q},label:'your search',defaultSort:q?'relevance':'bestsellers',sorts:SEARCH_SORTS}))
 })
 router.post(`${ROOT}/search/clear`,(req,res)=>{req.store.smythsSearches=[];res.redirect(url(res,'/search'))})
-for(const department of departments) router.get(`${ROOT}${departmentPaths[department]}`,(req,res)=>render(req,res,department,departmentHub(url(res),department)+landingExtras(url(res),department)))
+for(const department of departments) router.get(`${ROOT}${departmentPaths[department]}`,(req,res)=>render(req,res,department,fixtureCatalog?departmentHub(url(res),department)+landingExtras(url(res),department):departmentLanding(url(res),department,catalog)))
 router.get(`${ROOT}/category/:slug`,(req,res)=>{
  const p=catalog.find(p=>p.family===req.params.slug)
  if(!p)return render(req,res,'Category not found','<h1>Category not found</h1>',[],404)
@@ -133,9 +143,22 @@ router.get([`${ROOT}/campaigns/:slug`,`${ROOT}/gaming-and-tech/pre-order-games`]
  render(req,res,campaign==='pocket-money'?'Pocket money picks':'Gaming pre-orders',catalogListing(url(res),catalog,selected,campaign==='pocket-money'?'Pocket money picks — £15 and under':'Gaming pre-orders'))
 })
 router.get(`${ROOT}/gift-finder-hub`,(req,res)=>render(req,res,'Gift Finder',giftFinderIntro(url(res),req.query)+'<div class="st-gf-results">'+catalogListing(url(res),catalog,req.query,'Gift Finder','/gift-finder-hub')+'</div>'))
-function ordinaryProduct(req,res,p,values=req.query,errors=[],status=200){rememberProduct(req,p.sku);render(req,res,p.title,browseProduct(url(res),p,values,[],productJourney(req,url(res),p,values)),errors,status)}
+function ordinaryProduct(req,res,p,values=req.query,errors=[],status=200){
+ rememberProduct(req,p.sku)
+ if(p.shelf){const returnTo=typeof values.return==='string'&&/^\/search\?/.test(values.return)?values.return:'';return render(req,res,p.title,shelfProductPage(url(res),p,{values,returnTo,tools:productJourney(req,url(res),p,values)}),errors,status)}
+ render(req,res,p.title,browseProduct(url(res),p,values,[],productJourney(req,url(res),p,values)),errors,status)
+}
+for(const p of shelf)router.get(`${ROOT}${p.path}`,(req,res)=>ordinaryProduct(req,res,p,req.query))
+router.get(`${ROOT}/p/:sku`,(req,res,next)=>{const p=shelf.find(p=>p.sku===req.params.sku);return p?res.redirect(301,url(res,p.path)):next()})
+router.get(`${ROOT}/medias/:sku/:view.svg`,(req,res)=>{
+ const p=shelf.find(p=>p.sku===req.params.sku),view=Number(req.params.view)
+ if(!p||!/^\d$/.test(req.params.view)||view>=shelfViews(p))return res.status(404).type('text').send('Image not found')
+ res.set('Cache-Control','public, max-age=3600').type('image/svg+xml').send(shelfSvg(p,view))
+})
 router.get(`${ROOT}/catalog/:sku`, (req,res) => {
  const p=browseProducts.find(p=>p.sku===req.params.sku)
+ const floor=shelf.find(p=>p.sku===req.params.sku)
+ if(floor)return res.redirect(301,url(res,floor.path))
  if(!p)return render(req,res,'Product not found','<h1>Product not found</h1>',[],404)
  const opts=optionInput(p,req.query),invalid=Object.keys(opts).length&&!resolveProduct(p,opts)
  ordinaryProduct(req,res,p,req.query,invalid?['Choose a valid combination of product options.']:[],invalid?400:200)
