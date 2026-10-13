@@ -6,6 +6,7 @@ import { tasks, publicTask, SUITE_VERSION } from './tasks.js'
 import { gradeTask } from './grader.js'
 import { environmentFingerprint, summarize } from './report.js'
 import { BENCHMARK_DATE } from './environment.js'
+import { browserEvent, requestEvent, validPageId, validateTraversalEvent } from './traversal.js'
 
 export const DASHBOARD_AGENTS = ['grokbot', 'dots', 'muse']
 const clone = value => structuredClone(value)
@@ -72,7 +73,7 @@ async function launchTrial({ trial, task, run, secureCookies }) {
 export async function createRunManager({
   directory = path.resolve('data/dashboard'), persist = true, secureCookies = false,
   environment, taskSets = { original30: tasks.filter(task => !task.scenario), all240: tasks },
-  now = Date.now, workerFactory = launchTrial,
+  now = Date.now, workerFactory = launchTrial, traceArchive = false,
 } = {}) {
   const fingerprint = environment ?? await environmentFingerprint()
   if (typeof fingerprint.environment_sha256 !== 'string' || !fingerprint.environment_sha256) throw fail('An environment fingerprint is required')
@@ -83,7 +84,7 @@ export async function createRunManager({
   const hashes = Object.fromEntries(Object.entries(catalogs).map(([suite, selected]) => [suite, digest(selected)]))
   const filename = path.join(path.resolve(directory), 'dashboard-state.json')
   let runs = [], trials = [], queue = Promise.resolve(), closed = false, closePromise
-  const workers = new Map(), timers = new Map()
+  const workers = new Map(), timers = new Map(), traceEvents = new Map()
   const serialized = operation => {
     const result = queue.then(() => { if (closed) throw fail('Run manager is closed', 503); return operation() })
     queue = result.catch(() => {})
@@ -110,7 +111,7 @@ export async function createRunManager({
     const results = completed.map(trial => trial.result)
     return { ...clone(attempt), status: completed.length === run.task_ids.length ? 'complete' : records.some(trial => trial.status === 'running') ? 'running' : 'ready',
       completed: completed.length, total: run.task_ids.length, summary: summarize(results),
-      trials: records.map(({ snapshot, ...trial }) => clone(trial)) }
+      trials: records.map(({ snapshot, traversal_secret, ...trial }) => clone(trial)) }
   }
   function runDetail(run) {
     return { ...clone(run), attempts: run.attempts.map(attempt => attemptDetail(run, attempt)) }
@@ -130,15 +131,49 @@ export async function createRunManager({
     }
     return { status: completed === run.task_ids.length ? 'complete' : current ? 'running' : 'ready', completed, total: run.task_ids.length, currentTask }
   }
+  function traceState() {
+    return { dashboard_runs: clone(runs), dashboard_trials: clone(trials),
+      dashboard_trace_events: [...traceEvents].flatMap(([trial_id, events]) => events.map(event => ({ trial_id, ...clone(event) }))) }
+  }
+  function appendEvent(trial, fields) {
+    if (!trial.traversal) return null // Earlier trials explicitly remain unrecorded.
+    const timestamp = now()
+    const event = { id: ++trial.traversal.event_count, at: iso(timestamp), elapsed_ms: Math.max(0, Math.round(timestamp - Date.parse(trial.started_at))), ...fields }
+    if (!traceEvents.has(trial.id)) traceEvents.set(trial.id, [])
+    traceEvents.get(trial.id).push(event)
+    return clone(event)
+  }
+  function ownedAttempt(runId, attemptId) {
+    const run = runById(runId), attempt = run?.attempts.find(item => item.id === attemptId)
+    if (!attempt) throw fail('Agent attempt not found', 404)
+    return { run, attempt }
+  }
+  function ownedTrial(attempt, trialId) {
+    const trial = trials.find(item => item.id === trialId && item.attempt_id === attempt.id)
+    if (!trial) throw fail('Task traversal not found', 404)
+    return trial
+  }
+  async function recordingTrial(token, trialId) {
+    const { run, attempt } = findAttempt(token)
+    const trial = ownedTrial(attempt, trialId)
+    compatible(run)
+    if (trial.status === 'running' && await expire(run, attempt)) await save()
+    // A page departure can deliver its last beacon just after Submit result.
+    // A signed page remains valid briefly for observation, never for shopping
+    // or for changing the sealed grade.
+    const completionGrace = trial.status === 'completed' && now() - Date.parse(trial.completed_at) <= 5000
+    if (!completionGrace && (trial.status !== 'running' || activeTrial(attempt)?.id !== trial.id)) throw fail('This task is no longer running', 409)
+    return trial
+  }
   async function capture() {
     for (const [id, worker] of workers) {
       const trial = trials.find(trial => trial.id === id)
       if (trial?.status === 'running') trial.snapshot = await worker.snapshot(false)
     }
-    return { dashboard_runs: clone(runs), dashboard_trials: clone(trials) }
+    return traceState()
   }
   async function save({ captureWorkers = true } = {}) {
-    const state = captureWorkers ? await capture() : { dashboard_runs: clone(runs), dashboard_trials: clone(trials) }
+    const state = captureWorkers ? await capture() : traceState()
     if (persist) {
       await mkdir(path.dirname(filename), { recursive: true })
       const temporary = `${filename}.${process.pid}.${randomBytes(6).toString('hex')}.tmp`
@@ -192,6 +227,7 @@ export async function createRunManager({
       artifacts: { trace: false, screenshot: false }, metrics: null,
     }
     trial.status = 'completed'; trial.completed_at = iso(now()); trial.result = result
+    appendEvent(trial, { kind: 'complete' })
     // Completed evidence lives in result; checkpoint sessions and test-account
     // passwords are no longer needed after a trial is sealed and scored.
     trial.snapshot = null
@@ -236,7 +272,7 @@ export async function createRunManager({
         tokens.add(attempt.token); attempts.set(attempt.id, run)
       }
     }
-    const trialIds = new Set(), positions = new Set()
+    const trialIds = new Set(), positions = new Set(), trialMap = new Map()
     for (const trial of next.dashboard_trials) {
       if (!isObject(trial)) throw fail('Invalid dashboard trial checkpoint')
       const run = attempts.get(trial.attempt_id), position = `${trial.attempt_id}:${trial.index}`
@@ -250,11 +286,31 @@ export async function createRunManager({
         || (trial.status === 'running' && (!isObject(trial.snapshot) || trial.snapshot.version !== 1 || trial.snapshot.run_id !== trial.id))) {
         throw fail('Invalid dashboard trial checkpoint')
       }
+      if (trial.traversal !== undefined && (!isObject(trial.traversal) || trial.traversal.version !== 1
+        || !Number.isSafeInteger(trial.traversal.event_count) || trial.traversal.event_count < 0
+        || !/^[A-Za-z0-9_-]{43}$/.test(trial.traversal_secret || '')
+        || Object.keys(trial.traversal).some(key => !['version', 'event_count'].includes(key)))) throw fail('Invalid traversal metadata checkpoint')
+      if (trial.traversal === undefined && trial.traversal_secret !== undefined) throw fail('Invalid traversal secret checkpoint')
       trialIds.add(trial.id); positions.add(position)
+      trialMap.set(trial.id, trial)
     }
     for (const id of attempts.keys()) {
       const records = next.dashboard_trials.filter(trial => trial.attempt_id === id).sort((a, b) => a.index - b.index)
       if (records.some((trial, index) => trial.index !== index || (trial.status === 'running' && index !== records.length - 1))) throw fail('Dashboard trials must be sequential')
+    }
+    if (next.dashboard_trace_events === undefined) next.dashboard_trace_events = []
+    if (!Array.isArray(next.dashboard_trace_events)) throw fail('Invalid traversal checkpoint')
+    const eventIds = new Map()
+    for (const event of next.dashboard_trace_events) {
+      const trial = trialMap.get(event?.trial_id)
+      if (!trial?.traversal) throw fail('Traversal event has no recorded task')
+      validateTraversalEvent(event, trial)
+      if (!eventIds.has(trial.id)) eventIds.set(trial.id, new Set())
+      if (eventIds.get(trial.id).has(event.id)) throw fail('Duplicate traversal event identifier')
+      eventIds.get(trial.id).add(event.id)
+    }
+    if (!traceArchive) for (const trial of next.dashboard_trials) {
+      if (trial.traversal && (eventIds.get(trial.id)?.size ?? 0) !== trial.traversal.event_count) throw fail('Local traversal checkpoint is incomplete')
     }
     return next
   }
@@ -265,6 +321,12 @@ export async function createRunManager({
     await Promise.all([...workers.values()].map(worker => worker.close()))
     workers.clear()
     runs = next.dashboard_runs; trials = next.dashboard_trials
+    traceEvents.clear()
+    for (const { trial_id, ...event } of next.dashboard_trace_events) {
+      if (!traceEvents.has(trial_id)) traceEvents.set(trial_id, [])
+      traceEvents.get(trial_id).push(event)
+    }
+    for (const events of traceEvents.values()) events.sort((a, b) => a.id - b.id)
     for (const run of runs) for (const attempt of run.attempts) {
       const trial = activeTrial(attempt)
       if (trial && run.environment_sha256 === fingerprint.environment_sha256 && run.selected_tasks_sha256 === hashes[run.suite]) arm(run, attempt, trial)
@@ -276,6 +338,7 @@ export async function createRunManager({
     catch (error) { if (error.code !== 'ENOENT') throw error }
   }
   return {
+    traceArchive: Boolean(traceArchive),
     listRuns: () => serialized(async () => { await expireAll(); return runs.map(runDetail).reverse() }),
     getRun: id => serialized(async () => {
       await expireAll()
@@ -313,6 +376,51 @@ export async function createRunManager({
       try { await save() } catch (error) { Object.assign(attempt, previous); throw error }
       return attemptDetail(run, attempt)
     }),
+    getTraversal: (runId, attemptId) => serialized(async () => {
+      await expireAll()
+      const { attempt } = ownedAttempt(runId, attemptId)
+      return { attempt_id: attempt.id, agent: attempt.agent, tasks: attemptTrials(attempt).map(trial => ({
+        trial_id: trial.id, task_id: trial.task_id, index: trial.index + 1, status: trial.status,
+        started_at: trial.started_at, completed_at: trial.completed_at ?? null, grade: clone(trial.result?.grade ?? null),
+        recorded: Boolean(trial.traversal), event_count: trial.traversal?.event_count ?? 0,
+      })) }
+    }),
+    getTraversalEvents: (runId, attemptId, trialId, { after = 0, limit = 500 } = {}) => serialized(async () => {
+      if (!Number.isSafeInteger(after) || after < 0 || !Number.isSafeInteger(limit) || limit < 1 || limit > 500) throw fail('Invalid traversal pagination')
+      await expireAll()
+      const { attempt } = ownedAttempt(runId, attemptId), trial = ownedTrial(attempt, trialId)
+      const events = (traceEvents.get(trial.id) ?? []).filter(event => event.id > after).slice(0, limit)
+      const last = events.at(-1)?.id ?? after, event_count = trial.traversal?.event_count ?? 0
+      return { trial_id: trial.id, events: clone(events), next_cursor: events.length && last < event_count ? last : null, event_count }
+    }),
+    recordRequest: (token, trialId, input) => serialized(async () => {
+      // The trusted proxy already selected this task before starting the
+      // request. Finishing or expiring during fetch must not turn its successful
+      // storefront response into a tracing error or change the sealed grade.
+      const { attempt } = findAttempt(token), trial = ownedTrial(attempt, trialId)
+      return trial.traversal ? appendEvent(trial, requestEvent(input, trial.traversal_secret)) : null
+    }),
+    recordBrowserEvents: (token, input) => serialized(async () => {
+      if (!isObject(input) || !Array.isArray(input.events) || input.events.length > 32) throw fail('Use at most 32 browser events')
+      const trial = await recordingTrial(token, input.trial_id)
+      if (!trial.traversal || !validPageId(trial.traversal_secret, input.page_id)) throw fail('Unknown task page', 403)
+      // Validate the entire batch before mutating the trace.
+      const events = input.events.map(event => browserEvent(event, input.page_id, trial.traversal_secret))
+      for (const event of events) appendEvent(trial, event)
+      await save({ captureWorkers: false })
+    }),
+    acknowledgeTraversal: acknowledgements => serialized(async () => {
+      if (!Array.isArray(acknowledgements)) throw fail('Invalid traversal acknowledgement')
+      for (const ack of acknowledgements) {
+        const trial = trials.find(item => item.id === ack?.trial_id)
+        if (!trial?.traversal || !Number.isSafeInteger(ack.id) || ack.id < 0 || ack.id > trial.traversal.event_count) throw fail('Invalid traversal acknowledgement')
+      }
+      if (traceArchive) for (const { trial_id, id } of acknowledgements) {
+        const remaining = (traceEvents.get(trial_id) ?? []).filter(event => event.id > id)
+        if (remaining.length) traceEvents.set(trial_id, remaining)
+        else traceEvents.delete(trial_id)
+      }
+    }),
     agentView: token => serialized(async () => {
       const { run, attempt } = findAttempt(token)
       if (await expire(run, attempt)) await save()
@@ -328,8 +436,10 @@ export async function createRunManager({
         if (!task) throw fail('All tasks are complete', 409)
         const started = now()
         trial = { id: randomUUID(), run_id: run.id, attempt_id: attempt.id, index, task_id: task.id, task_version: task.version,
-          status: 'running', started_at: iso(started), deadline_at: iso(started + task.timeout_ms), snapshot: null, result: null }
+          status: 'running', started_at: iso(started), deadline_at: iso(started + task.timeout_ms), snapshot: null, result: null,
+          traversal: { version: 1, event_count: 0 }, traversal_secret: randomBytes(32).toString('base64url') }
         trials.push(trial)
+        appendEvent(trial, { kind: 'start' })
       }
       try {
         const worker = await ensureWorker(run, attempt, trial)
@@ -351,7 +461,7 @@ export async function createRunManager({
       const trial = activeTrial(attempt)
       if (!trial) return null
       const worker = await ensureWorker(run, attempt, trial)
-      return clone(worker.target)
+      return { ...clone(worker.target), trialId: trial.id }
     }),
     finishTask: (token, finalResponse) => serialized(async () => {
       const { run, attempt } = findAttempt(token)

@@ -38,6 +38,7 @@
     }
     return body
   }
+  const traversal = window.DashboardTraversal.create({ api })
 
   function toast(message, error = false) {
     clearTimeout(toastTimer)
@@ -139,7 +140,7 @@
       <div class="agent-body"><div class="url-bar">${icon('link')}<input type="text" aria-label="Agent URL ${index + 1}" readonly value="${escape(url)}" autocomplete="off" spellcheck="false"><button class="button" type="button" data-action="copy-url" data-attempt="${id}">${icon('copy')}Copy URL</button></div><div class="link-utilities"><button class="copy-prompt" type="button" data-action="copy-prompt" data-attempt="${id}">${icon('prompt')}Copy prompt</button><a class="open-agent" href="${escape(url)}" target="_blank" rel="noopener">Open task${icon('external')}</a></div>
       <div class="entry-fields"><div><label for="tags-${id}">Tags</label><input name="tags" id="tags-${id}" value="${escape(draft.tags)}" placeholder="baseline, v2" maxlength="500" autocomplete="off"><p class="field-help">Comma-separated.</p></div><div><label for="comments-${id}">Comments</label><textarea name="comments" id="comments-${id}" placeholder="Model, settings, notes" maxlength="5000" rows="2">${escape(draft.comments)}</textarea></div></div></div>
       <div class="agent-card-footer"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="Task results submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><div class="progress-fill" style="width:${p.percentage}%"></div></div><span>${p.completed} / ${p.total} results</span></div><div class="save-group"><span class="save-feedback${draft.dirty ? ' dirty' : ''}" role="status">${draft.dirty ? 'Unsaved changes' : 'Saved'}</span><button class="button secondary small" type="submit"${draft.dirty && !state.saving.has(attempt.id) ? '' : ' disabled'}>${state.saving.has(attempt.id) ? 'Saving…' : 'Save'}</button></div></div>
-      </form>${renderResults(attempt)}</article>`
+      </form><div class="attempt-traversal"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${id}">${icon('tasks')}View traversal</button></div>${renderResults(attempt)}</article>`
   }
 
   function renderDetail() {
@@ -185,6 +186,7 @@
     $('#boot').hidden = true
     $('#workspace').hidden = true
     $('#create-dialog').close()
+    traversal.close()
     $('#auth').hidden = false
     $('#auth').innerHTML = `<form class="auth-card" id="login-form"><span class="brand-mark" aria-hidden="true">VI</span><div class="eyebrow">GTA 6 BENCH</div><h1>Sign in</h1><label for="workspace-token">Operator token</label><input id="workspace-token" name="token" type="password" required autocomplete="current-password"><p class="form-error" role="alert">${escape(error)}</p><button class="button primary" type="submit">Sign in</button></form>`
     $('#workspace-token').focus()
@@ -243,6 +245,10 @@
     if (action === 'close-dialog') $('#create-dialog').close()
     if (action === 'refresh') { control.disabled = true; await load(); if (control.isConnected) control.disabled = false }
     if (action === 'retry-session') { control.disabled = true; await initialize() }
+    if (action === 'view-traversal') {
+      const attempt = attempts(state.selected).find(item => item.id === control.dataset.attempt)
+      if (attempt) traversal.open({ runId: state.selected.id, attemptId: attempt.id, label: agentData(attempt.agent).name })
+    }
     if (action === 'logout') {
       control.disabled = true
       try { await api('/logout', { method: 'POST' }); state.drafts.clear(); state.runs = []; state.selected = null; showAuth() } catch (error) { toast(error.message, true) } finally { control.disabled = false }
@@ -347,7 +353,7 @@
       }
     }
   })
-  window.addEventListener('hashchange', () => { if (state.authenticated) load({ initial: true }) })
+  window.addEventListener('hashchange', () => { traversal.close(); if (state.authenticated) load({ initial: true }) })
   window.addEventListener('beforeunload', event => { if ([...state.drafts.values()].some(draft => draft.dirty)) { event.preventDefault(); event.returnValue = '' } })
   initialize()
 })()

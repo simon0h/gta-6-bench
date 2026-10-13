@@ -13,6 +13,10 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
 3. Use **Copy prompt** or **Copy URL** and give the link to that agent.
 4. Refresh the run to review progress and each submitted task's private grade.
    Update labels, comments and comma-separated tags with **Save**.
+5. Click **View traversal** on an agent, then select a task. Expand pages to inspect
+   requests, clicks, form submissions, field changes and back/forward navigation.
+   The view refreshes every five seconds while open; **JSON** downloads the selected
+   task's loaded events.
 
 An agent label is operator-supplied metadata. The system does not identify the
 agent automatically or infer its underlying model. Record model/version, account
@@ -55,13 +59,28 @@ changes. Labels and notes remain editable without rewriting recorded task eviden
 Local state is atomically stored in `data/dashboard/dashboard-state.json`.
 Cloudflare stores dashboard records and active-task snapshots in Durable Object
 SQLite before releasing dynamic responses. A resumed task retains its original
-deadline and state. This dashboard does not capture browser traces, screenshots,
-model settings or token usage from external agents; the local adapter-based runner
-has separate tracing support.
+deadline and state. Traversal events are appended to a separate SQLite archive,
+with paginated operator reads, so historical traces do not grow the active checkpoint.
+
+## Traversal recording
+
+New tasks record dynamic storefront requests and HTTP outcomes. A small script
+records browser page relationships, interactive clicks, form submissions, field
+changes and history navigation. Entered field values, request bodies, cookies and
+URL query values are excluded. Static assets are omitted from the tree. Browser
+events are observations and are not used for grading; they can be missing when
+JavaScript is disabled or a browser closes before sending them. Server requests
+remain visible even without the script, though their page relationships may be unknown.
+
+The tree covers activity on the benchmark website, not the external agent's
+internal reasoning, tool calls, sub-agents, model configuration or token usage.
+Tasks created before recording was enabled show **Traversal unavailable**. No
+historical browsing path is inferred from its score or request count.
 
 Verification commands:
 
 ```sh
 npm run dashboard:check
 npm run hosting:check
+RUN_BROWSER_TESTS=1 node --test test/dashboard-traversal-browser.reference.test.mjs
 ```

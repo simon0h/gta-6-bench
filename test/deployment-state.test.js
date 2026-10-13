@@ -51,6 +51,14 @@ test('only operators can read or clear ground truth and only the internal token 
     }
   }
   assert.equal((await fetch(`${base}/__hosting/health`, { headers: privateHeaders })).status, 200)
+  for (const headers of [{}, operatorHeaders, { authorization: 'Bearer invalid' }]) {
+    assert.equal((await fetch(`${base}/__hosting/traversal/ack`, {
+      method: 'POST', headers: { ...headers, 'content-type': 'application/json' }, body: '[]',
+    })).status, 404)
+  }
+  assert.equal((await fetch(`${base}/__hosting/traversal/ack`, {
+    method: 'POST', headers: { ...privateHeaders, 'content-type': 'application/json' }, body: '{"invalid":true}',
+  })).status, 400)
   for (const [method, pathname] of [
     ['GET', '/api/stores'], ['GET', '/api/catalog'], ['GET', '/api/captcha'],
     ['GET', '/api/orders'], ['GET', '/api/orders/example'], ['DELETE', '/api/orders'],
@@ -248,5 +256,33 @@ test('hosted checkpoint restores dashboard metadata and an active isolated task 
   assert.equal(next.dashboard_trials[0].snapshot.sessions[0].id, trial.snapshot.sessions[0].id)
   assert.deepEqual(next.dashboard_trials[0].snapshot.sessions[0].stores.bestbuy.cart, trial.snapshot.sessions[0].stores.bestbuy.cart)
   assert.equal(next.dashboard_runs[0].attempts[0].token, attempt.token)
+  const pending = next.dashboard_trace_events.filter(event => event.trial_id === trial.id)
+  assert.ok(pending.length > 0, 'Observed storefront requests must enter the hosted traversal outbox')
+  const watermark = Math.max(...pending.map(event => event.id))
+  assert.equal(next.dashboard_trials[0].traversal.event_count, watermark)
+  const traversalPath = `/dashboard/api/runs/${run.id}/attempts/${attempt.id}/traversal/${trial.id}`
+  const deniedTraversal = await fetch(base + traversalPath)
+  assert.equal(deniedTraversal.status, 401)
+  assert.equal(deniedTraversal.headers.get('x-benchmark-trace-trial'), null)
+  const wrongOwner = await fetch(base + traversalPath.replace(`/runs/${run.id}/`, '/runs/unknown/'), { headers: operatorHeaders })
+  assert.equal(wrongOwner.status, 404)
+  assert.equal(wrongOwner.headers.get('x-benchmark-trace-trial'), null)
+  const authorizedTraversal = await fetch(base + traversalPath, { headers: operatorHeaders })
+  assert.equal(authorizedTraversal.status, 200)
+  assert.equal(authorizedTraversal.headers.get('x-benchmark-trace-trial'), trial.id, 'Only a validated operator read can ask the edge for archived events')
+  assert.equal((await authorizedTraversal.json()).event_count, watermark)
+  const acknowledgement = [{ trial_id: trial.id, id: watermark }]
+  for (let repeat = 0; repeat < 2; repeat++) {
+    const response = await fetch(`${base}/__hosting/traversal/ack`, {
+      method: 'POST', headers: { ...privateHeaders, 'content-type': 'application/json' }, body: JSON.stringify(acknowledgement),
+    })
+    assert.equal(response.status, 200, 'Committed watermarks must be safe to acknowledge repeatedly')
+  }
+  const acknowledged = await state()
+  assert.deepEqual(acknowledged.dashboard_trace_events, [])
+  assert.equal(acknowledged.dashboard_trials[0].traversal.event_count, watermark, 'Discarding the outbox must preserve durable traversal metadata')
+  const archivedView = await (await fetch(base + traversalPath, { headers: operatorHeaders })).json()
+  assert.deepEqual(archivedView.events, [], 'Archived history is read at the edge rather than kept in Node memory')
+  assert.equal(archivedView.event_count, watermark)
   assert.equal((await restore({ version: 1, sessions: [], orders: [], accounts: [], dashboard_runs: [], dashboard_trials: [] })).status, 200)
 })

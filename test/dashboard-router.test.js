@@ -206,3 +206,24 @@ test('a completed or removed attempt allows the browser to claim the next agent 
     assert.match(response.headers.get('set-cookie'), new RegExp(`^bench_attempt=${nextToken};`))
   }
 })
+
+test('a streamed sign-in POST preserves the storefront 401 response without replaying the request', async t => {
+  let count = 0, received = '', receivedCookie
+  const assigned = await listen(t, async (req, res) => {
+    count++
+    receivedCookie = req.headers.cookie
+    for await (const chunk of req) received += chunk
+    res.writeHead(401, { 'content-type': 'text/html' })
+    res.end('<body>Incorrect email or password</body>')
+  })
+  const { base } = await dashboard(t, { manager: stubManager({ getTarget: async () => ({ baseUrl: assigned.base }) }) })
+  const response = await fetch(base + '/bestbuy/identity/global/signin', {
+    method: 'POST', headers: { cookie: `${agentCookie}; trial_example=shopper-session`, 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ email: 'test@example.test', password: 'incorrect-test-value' }),
+  })
+  assert.equal(response.status, 401)
+  assert.match(await response.text(), /Incorrect email or password/)
+  assert.equal(count, 1)
+  assert.equal(new URLSearchParams(received).get('password'), 'incorrect-test-value')
+  assert.equal(receivedCookie.trim(), 'trial_example=shopper-session')
+})

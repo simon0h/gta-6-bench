@@ -44,7 +44,7 @@ export async function createHostedApp({
 } = {}) {
   const internal = requireToken(internalToken, 'HOSTING_INTERNAL_TOKEN')
   const operator = requireToken(apiToken, 'BENCHMARK_API_TOKEN')
-  const manager = await createRunManager({ persist: false, secureCookies: true })
+  const manager = await createRunManager({ persist: false, secureCookies: true, traceArchive: true })
   const app = express()
   app.locals.runManager = manager
   app.disable('x-powered-by')
@@ -68,6 +68,14 @@ export async function createHostedApp({
       res.json({ ok: true })
     } catch {
       res.status(400).json({ error: 'Invalid hosting checkpoint' })
+    }
+  })
+  app.post('/__hosting/traversal/ack', express.json({ limit: '256kb' }), async (req, res) => {
+    try {
+      await manager.acknowledgeTraversal(req.body)
+      res.json({ ok: true })
+    } catch {
+      res.status(400).json({ error: 'Invalid traversal acknowledgement' })
     }
   })
   app.use('/__hosting', (req, res) => res.sendStatus(404))

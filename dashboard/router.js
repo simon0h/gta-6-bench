@@ -1,7 +1,8 @@
 import express from 'express'
-import { createHmac, timingSafeEqual } from 'node:crypto'
+import { createHmac, timingSafeEqual, randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { readBounded, RESPONSE_LIMIT } from '../deploy/coordinator.js'
+import { dynamicTraversalRequest } from '../benchmark/traversal.js'
 
 const publicDirectory = fileURLToPath(new URL('../public/dashboard/', import.meta.url))
 const ADMIN_COOKIE = 'bench_operator'
@@ -94,11 +95,30 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
   }))
   router.post('/dashboard/api/runs/:id/attempts', action(async (req, res) => res.status(201).json({ attempt: attemptWithUrl(await manager.addAttempt(req.params.id, req.body || {}), req) })))
   router.patch('/dashboard/api/runs/:id/attempts/:attempt', action(async (req, res) => res.json({ attempt: attemptWithUrl(await manager.updateAttempt(req.params.id, req.params.attempt, req.body || {}), req) })))
+  router.get('/dashboard/api/runs/:id/attempts/:attempt/traversal', action(async (req, res) => {
+    res.json(await manager.getTraversal(req.params.id, req.params.attempt))
+  }))
+  router.get('/dashboard/api/runs/:id/attempts/:attempt/traversal/:trial', action(async (req, res) => {
+    const cursor = req.query.after ?? '0'
+    if (typeof cursor !== 'string' || !/^\d+$/.test(cursor) || !Number.isSafeInteger(Number(cursor))) return res.status(400).json({ error: 'Invalid traversal cursor' })
+    const result = await manager.getTraversalEvents(req.params.id, req.params.attempt, req.params.trial, { after: Number(cursor) })
+    // The hosting coordinator reads its private archive only after these
+    // operator-authentication and task-ownership checks have succeeded.
+    if (manager.traceArchive) res.set('x-benchmark-trace-trial', result.trial_id)
+    res.json(result)
+  }))
   router.use('/dashboard/api', (req, res) => res.status(404).json({ error: 'Endpoint not found' }))
   router.use('/dashboard/assets', express.static(`${publicDirectory}/assets`, { fallthrough: false }))
   router.get('/dashboard', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
   router.get('/dashboard/', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
-  for (const file of ['app.js', 'style.css', 'portal.js', 'portal.css']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))
+  for (const file of ['app.js', 'style.css', 'portal.js', 'portal.css', 'capture.js', 'traversal.js']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))
+
+  router.post('/agent/events', sameOrigin, express.json({ limit: '32kb' }), action(async (req, res) => {
+    const token = cookie(req, AGENT_COOKIE)
+    if (!token) return res.status(401).json({ error: 'Open your agent URL before recording browser events.' })
+    await manager.recordBrowserEvents(token, req.body)
+    res.sendStatus(204)
+  }))
 
   const validToken = (req, res, next) => /^[a-zA-Z0-9_-]{20,128}$/.test(req.params.token) ? next() : res.sendStatus(404)
   const claimBrowser = async (req, res) => {
@@ -153,11 +173,20 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
       const hasBody = !['GET', 'HEAD'].includes(req.method)
       const destination = new URL(req.originalUrl, target.baseUrl)
       if (destination.origin !== new URL(target.baseUrl).origin) return res.status(400).send('Invalid storefront path')
+      const requestStarted = performance.now()
       const upstream = await fetch(destination, {
-        method: req.method, headers, redirect: 'manual',
+        // Cookies are forwarded explicitly above. Disable Fetch's automatic
+        // HTTP-auth retry, which cannot replay a streamed POST on a 401 response.
+        method: req.method, headers, redirect: 'manual', credentials: 'omit',
         ...(hasBody ? { body: req, duplex: 'half' } : {}), signal: AbortSignal.timeout(15_000),
       })
       const body = await readBounded(upstream, RESPONSE_LIMIT)
+      const html = Boolean(upstream.headers.get('content-type')?.includes('text/html')) && req.method !== 'HEAD' && ![204, 205, 304].includes(upstream.status)
+      let traversal
+      if (target.trialId && dynamicTraversalRequest(req.originalUrl, upstream.headers.get('content-type') || '')) {
+        traversal = await manager.recordRequest(token, target.trialId, { path: req.originalUrl, method: req.method,
+          status: upstream.status, duration_ms: performance.now() - requestStarted, html, ...(html ? { page_id: randomUUID() } : {}) })
+      }
       await manager.exportState()
       for (const [name, value] of upstream.headers) {
         if (!['set-cookie', 'content-length', 'content-encoding', 'connection', 'transfer-encoding'].includes(name)) res.set(name, value)
@@ -169,9 +198,11 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
       res.set('Referrer-Policy', 'no-referrer')
       res.status(upstream.status)
       if (req.method === 'HEAD' || [204, 205, 304].includes(upstream.status)) return res.end()
-      if (upstream.headers.get('content-type')?.includes('text/html')) {
+      if (html) {
         const back = `<a href="/agent/${esc(token)}" aria-label="Return to benchmark task and submit result" style="position:fixed;z-index:2147483647;bottom:16px;right:16px;padding:11px 15px;background:#181c19;color:#fff;border:1px solid #59605b;border-radius:999px;font:600 12px system-ui;text-decoration:none;box-shadow:0 4px 16px #0002">Task &amp; submit result ↗</a>`
-        return res.send(Buffer.from(body).toString('utf8').replace(/<\/body>/i, `${back}</body>`))
+        const capture = traversal?.page_id ? `<script src="/dashboard/capture.js" data-trial="${esc(target.trialId)}" data-page="${esc(traversal.page_id)}" defer></script>` : ''
+        const document = Buffer.from(body).toString('utf8'), addition = `${back}${capture}`
+        return res.send(/<\/body>/i.test(document) ? document.replace(/<\/body>/i, `${addition}</body>`) : document + addition)
       }
       res.end(Buffer.from(body))
     })

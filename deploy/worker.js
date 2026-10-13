@@ -4,6 +4,8 @@ import { CheckpointCoordinator, isStaticRequest, readBounded, STATE_LIMIT } from
 
 const IDLE_MS = 10 * 60 * 1000
 const STORE_KEYS = ['sessions', 'orders', 'accounts', 'dashboard_runs', 'dashboard_trials']
+const TRACE_HEADER = 'x-benchmark-trace-trial'
+const TRACE_PAGE_SIZE = 500
 
 function authorized(request, token) {
   if (!token || token.length < 32) return false
@@ -19,6 +21,7 @@ export class Storefront extends DurableObject {
     this.preparing = null
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS checkpoint (kind TEXT NOT NULL, ordinal INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (kind, ordinal))')
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)')
+    this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS traversal_events (trial_id TEXT NOT NULL, event_id INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (trial_id, event_id))')
     this.coordinator = new CheckpointCoordinator({
       prepare: () => this.prepare(),
       forward: request => this.forward(request),
@@ -32,9 +35,12 @@ export class Storefront extends DurableObject {
     return this.ctx.storage.sql.exec('SELECT value FROM metadata WHERE key = ?', key).toArray()[0]?.value
   }
 
-  save(state) {
+  async save(state) {
     state = { dashboard_runs: [], dashboard_trials: [], ...state }
     if (state.version !== 1 || STORE_KEYS.some(key => !Array.isArray(state[key]))) throw new Error('Unsupported hosting checkpoint')
+    const events = state.dashboard_trace_events ?? []
+    if (!Array.isArray(events)) throw new Error('Invalid traversal event batch')
+    const watermarks = new Map()
     this.ctx.storage.transactionSync(() => {
       this.ctx.storage.sql.exec('DELETE FROM checkpoint')
       for (const kind of STORE_KEYS) {
@@ -42,8 +48,24 @@ export class Storefront extends DurableObject {
           this.ctx.storage.sql.exec('INSERT INTO checkpoint (kind, ordinal, value) VALUES (?, ?, ?)', kind, ordinal, JSON.stringify(value))
         }
       }
+      for (const event of events) {
+        if (!event || typeof event.trial_id !== 'string' || !event.trial_id || !Number.isSafeInteger(event.id) || event.id < 1) throw new Error('Invalid traversal event')
+        const value = JSON.stringify(event)
+        const previous = this.ctx.storage.sql.exec('SELECT value FROM traversal_events WHERE trial_id = ? AND event_id = ?', event.trial_id, event.id).toArray()[0]
+        if (previous && previous.value !== value) throw new Error('Traversal event identity conflict')
+        if (!previous) this.ctx.storage.sql.exec('INSERT INTO traversal_events (trial_id, event_id, value) VALUES (?, ?, ?)', event.trial_id, event.id, value)
+        watermarks.set(event.trial_id, Math.max(watermarks.get(event.trial_id) ?? 0, event.id))
+      }
       this.ctx.storage.sql.exec('INSERT OR REPLACE INTO metadata (key, value) VALUES (?, ?)', 'version', '1')
     })
+    if (watermarks.size) {
+      // Confirm the durable write before the process is allowed to discard its
+      // outbox. Failed acknowledgements are safe to repeat after restoration.
+      await this.ctx.storage.sync()
+      const response = await this.internal('traversal/ack', { method: 'POST', body: JSON.stringify([...watermarks].map(([trial_id, id]) => ({ trial_id, id }))) })
+      if (!response.ok) { await response.body?.cancel(); throw new Error('Cannot acknowledge traversal archive') }
+      await response.body?.cancel()
+    }
   }
 
   restore() {
@@ -112,7 +134,7 @@ export class Storefront extends DurableObject {
       if (!response.ok) throw new Error('Cannot restore hosting checkpoint')
       await response.body?.cancel()
     } else {
-      this.save(await this.snapshot())
+      await this.save(await this.snapshot())
     }
     this.ctx.storage.sql.exec('INSERT OR REPLACE INTO metadata (key, value) VALUES (?, ?)', 'generation', generationHash)
     this.ready = true
@@ -135,11 +157,33 @@ export class Storefront extends DurableObject {
   }
 
   async fetch(request) {
+    let response
     if (isStaticRequest(request)) {
       await this.prepare()
-      return this.forward(request)
+      response = await this.forward(request)
+    } else {
+      response = await this.coordinator.fetch(request)
     }
-    return this.coordinator.fetch(request)
+    const headers = new Headers(response.headers)
+    const trialId = headers.get(TRACE_HEADER)
+    headers.delete(TRACE_HEADER)
+    const url = new URL(request.url)
+    const route = url.pathname.match(/^\/dashboard\/api\/runs\/[^/]+\/attempts\/[^/]+\/traversal\/([^/]+)\/?$/i)
+    if (request.method !== 'GET' || response.status !== 200 || !trialId || !route) return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
+    const after = Number(url.searchParams.get('after') ?? 0)
+    const body = JSON.parse(new TextDecoder().decode(await readBounded(response, STATE_LIMIT)))
+    if (decodeURIComponent(route[1]) !== trialId || body.trial_id !== trialId || !Number.isSafeInteger(after) || after < 0
+      || !Number.isSafeInteger(body.event_count) || body.event_count < 0) throw new Error('Invalid authorized traversal response')
+    // Node has authenticated the operator and checked run/attempt/trial
+    // ownership. Read only this authorized page, after its outbox was committed.
+    const events = this.ctx.storage.sql.exec('SELECT value FROM traversal_events WHERE trial_id = ? AND event_id > ? AND event_id <= ? ORDER BY event_id ASC LIMIT ?', trialId, after, body.event_count, TRACE_PAGE_SIZE).toArray().map(row => JSON.parse(row.value))
+    const last = events.at(-1)?.id ?? after
+    headers.delete('content-length')
+    headers.delete('content-encoding')
+    headers.delete('etag')
+    headers.set('content-type', 'application/json; charset=utf-8')
+    headers.set('cache-control', 'no-store')
+    return new Response(JSON.stringify({ ...body, events, next_cursor: last < body.event_count ? last : null }), { status: 200, headers })
   }
 }
 
@@ -157,6 +201,7 @@ export default {
       const response = await env.STOREFRONT.getByName('reference-v1').fetch(request)
       const result = new Response(response.body, response)
       result.headers.set('X-Robots-Tag', headers['X-Robots-Tag'])
+      result.headers.delete(TRACE_HEADER)
       return result
     } catch (error) {
       console.error(JSON.stringify({ event: 'hosting_request_failed', message: error.message }))
