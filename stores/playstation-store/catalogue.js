@@ -1,4 +1,6 @@
 import { CATALOG_PLATFORMS, GAME_SEEDS } from '../../lib/expanded-games.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
+import { SHELF_COLLECTIONS } from './shelf.js'
 // Local catalogue snapshot: authored prices, ranks and ratings; public compatibility sources
 // are recorded in research/depth/playstation-store-catalog.md. Fiction has matching original art.
 const rows = [
@@ -81,7 +83,19 @@ export function enrichCatalogue(baseline) {
  out.push({...minecraft,id:'BENCH-MINECRAFT-PS4',title:'Minecraft – PS4 Edition',editionName:'PS4 Standard Edition',platforms:['PS4'],chips:['PS4'],entitlements:['PS4 digital license'],release:'9/4/2014',accessibility:{}})
  return out
 }
-export const FILTERS = [
+// Reference mode lists only facets the PlayStation Store assortment actually has.
+const REFERENCE_FILTERS = [
+ ['price','Price',[['free','Free'],['under20','Under $20'],['20to40','$20–$40'],['over40','Over $40'],['sale','On sale']]],
+ ['genre','Genre',['Action','Adventure','Driving/Racing','Family','Fighting','Horror','Music/Rhythm','Party','Puzzle','Role Playing Games','Shooter','Simulation','Sport','Strategy'].map(v=>[v,v])],
+ ['platform','Platform',[['PS5','PS5'],['PS4','PS4']]],
+ ['feature','Supported Features',['PS5 Pro Enhanced','Remote Play','Game Help','Local Multiplayer','Online Multiplayer'].map(v=>[v,v])],
+ ['release','Release Date',[['recent','Last 90 days'],['2026','Released in 2026'],['older','Before 2026'],['upcoming','Coming soon']]],
+ ['vr','VR',[['PS VR2 required','PS VR2 required'],['PS VR2 optional','PS VR2 optional'],['No VR','No VR required']]],
+ ['age','Age Rating',[['E','Everyone'],['E10+','Everyone 10+'],['T','Teen'],['M','Mature']]],
+ ['content','Content Type',['FULL GAME','PRE-ORDER','FREE','PREMIUM EDITION','GAME BUNDLE','ADD-ON','SEASON PASS','VIRTUAL CURRENCY','SUBSCRIPTION'].map(v=>[v,v])],
+ ['plus','PS Plus',[['Extra','Game Catalog – Extra'],['Premium','Classics Catalog – Premium']]],
+]
+const FIXTURE_FILTERS = [
  ['price','Price',[['free','Free'],['under20','Under $20'],['20to40','$20–$40'],['over40','Over $40'],['sale','On sale']]],
  ['genre','Genre',[...new Set(['Action','Adventure','Shooter','Driving/Racing','Role Playing Games','Sport','Fighting','Simulation','Strategy',...GAME_SEEDS.map(p=>p.genre)])].map(v=>[v,v])],
  ['platform','Platform',CATALOG_PLATFORMS.map(p=>[p.short,p.short])],
@@ -92,6 +106,7 @@ export const FILTERS = [
  ['content','Content Type',['FULL GAME','PRE-ORDER','ADD-ON PACK','GAME BUNDLE','VIRTUAL CURRENCY','PHYSICAL GAME','CONSOLE','ACCESSORY'].map(v=>[v,v])],
  ['plus','PS Plus Discovery',[['Extra','Game Catalog – Extra'],['Premium','Premium']]],
 ]
+export const FILTERS = fixtureCatalog ? FIXTURE_FILTERS : REFERENCE_FILTERS
 export const SORTS=[['relevance','Relevance'],['best-selling','Best Selling'],['most-downloaded','Most Downloaded'],['name','Name: A–Z'],['name-desc','Name: Z–A'],['release-desc','Release Date: New–Old'],['release-asc','Release Date: Old–New'],['plus-recent','Recently Added to PS Plus'],['price-asc','Price: low to high'],['price-desc','Price: high to low']]
 export function cleanOptions(options={}) {
  const clean={}
@@ -100,15 +115,16 @@ export function cleanOptions(options={}) {
  clean.page=typeof options.page==='string'&&/^\d{1,5}$/.test(options.page)?Math.max(1,Number(options.page)):1
  return clean
 }
+const NOW = Date.parse(fixtureCatalog ? '2026-10-02' : '2026-10-13')
 export function refineProducts(products,raw={}) {
  const o=cleanOptions(raw)
  const release=p=>new Date(p.release).getTime()
- let found=products.filter(p=>(!o.platform||p.platforms.includes(o.platform))&&(!o.content||p.type===o.content)&&(!o.genre||p.genres===o.genre)&&(!o.age||p.rating===o.age)&&(!o.feature||p.features.includes(o.feature))&&(!o.vr||p.vr===o.vr)&&(!o.plus||p.plusTag===o.plus)&&(!o.price||(o.price==='free'?p.price===0:o.price==='sale'?p.originalPrice>p.price:o.price==='under20'?p.price!==null&&p.price<20:o.price==='20to40'?p.price>=20&&p.price<=40:p.price>40))&&(!o.release||(o.release==='upcoming'?release(p)>Date.parse('2026-10-02'):o.release==='recent'?release(p)>=Date.parse('2026-07-04')&&release(p)<=Date.parse('2026-10-02'):o.release==='2026'?release(p)>=Date.parse('2026-01-01')&&release(p)<=Date.parse('2026-10-02'):release(p)<Date.parse('2026-01-01'))))
+ let found=products.filter(p=>(!o.platform||p.platforms.includes(o.platform))&&(!o.content||p.type===o.content)&&(!o.genre||p.genres===o.genre)&&(!o.age||p.rating===o.age)&&(!o.feature||p.features.includes(o.feature))&&(!o.vr||p.vr===o.vr)&&(!o.plus||p.plusTag===o.plus)&&(!o.price||(o.price==='free'?p.price===0:o.price==='sale'?p.originalPrice>p.price:o.price==='under20'?p.price!==null&&p.price<20:o.price==='20to40'?p.price>=20&&p.price<=40:p.price>40))&&(!o.release||(o.release==='upcoming'?release(p)>NOW:o.release==='recent'?release(p)>=NOW - 90 * 864e5&&release(p)<=NOW:o.release==='2026'?release(p)>=Date.parse('2026-01-01')&&release(p)<=NOW:release(p)<Date.parse('2026-01-01'))))
  const sorts={'best-selling':(a,b)=>a.bestRank-b.bestRank,'most-downloaded':(a,b)=>a.downloadRank-b.downloadRank,name:(a,b)=>a.title.localeCompare(b.title),'name-desc':(a,b)=>b.title.localeCompare(a.title),'release-desc':(a,b)=>release(b)-release(a),'release-asc':(a,b)=>release(a)-release(b),'plus-recent':(a,b)=>(b.plusAdded||'').localeCompare(a.plusAdded||''),'price-asc':(a,b)=>(a.price??Infinity)-(b.price??Infinity),'price-desc':(a,b)=>(b.price??-1)-(a.price??-1)}
  if(Object.hasOwn(sorts,o.sort))found.sort(sorts[o.sort])
  return found
 }
-export const COLLECTIONS=[
+const FIXTURE_COLLECTIONS=[
  ['autumn','Autumn Adventures','Head outdoors, discover new worlds and make room for a little wonder.',p=>p.fictional],
  ['studios','PlayStation Studios','Distinctive adventures and competition from PlayStation Studios.',p=>p.publisher==='Sony Interactive Entertainment'],
  ['together','Play together','Share a sofa or connect with friends online.',p=>p.ordinary&&p.localPlayers>1&&p.contentType==='base-game'],
@@ -118,3 +134,4 @@ export const COLLECTIONS=[
  ['new-games','New games','Explore recent releases.',p=>p.ordinary&&new Date(p.release)>=new Date('2026-07-01')&&p.contentType==='base-game'],
  ['add-ons','Add-ons by game','Expand a game you already play. Check the required base game and platform.',p=>p.contentType==='add-on'||p.contentType==='consumable'],
 ]
+export const COLLECTIONS = fixtureCatalog ? FIXTURE_COLLECTIONS : SHELF_COLLECTIONS
