@@ -6,6 +6,7 @@ import { productPath, STATES, PAYMENT_TYPES, SHIP_ZIP, STORE_LOCATION, ARRIVES, 
 import { DEPARTMENTS } from './catalog.js'
 import { catalogHome, catalogTile, listingPage, ordinaryProductPage } from './browse.js'
 import { productImage, optionText, targetIcon, productGallery } from './media.js'
+import * as S from './site.js'
 
 const NAME = 'Target'
 const UTILITY_NAV = ['Target Circle™', 'Target Circle™ Card', 'Target Circle 360™', 'Registry & Wish List', 'Weekly Ad', 'Find Stores']
@@ -23,17 +24,17 @@ export function layout({ base, title, body, cartCount = 0, user = null, q = '', 
     : `<header class="tg-header">
   <div class="tg-utility"><div class="tg-wrap">
     <div class="tg-util-left"><a href="${base}/location" class="tg-util-btn">${targetIcon('pin')} Ship to ${esc(shipZip)}</a><a href="${base}/stores" class="tg-util-btn">${targetIcon('store')} ${esc(storeLocation)}</a></div>
-    <nav class="tg-util-right" aria-label="Target services">${UTILITY_NAV.map(n => `<a href="${base}${n.includes('Circle') ? '/circle' : n.includes('Registry') ? '/lists' : n === 'Weekly Ad' ? '/weekly-ad' : '/stores'}">${esc(n)}</a>`).join('')}</nav>
+    <nav class="tg-util-right" aria-label="Target services">${S.UTILITY.map(([n, p]) => `<a href="${base}${p}">${esc(n)}</a>`).join('')}</nav>
   </div></div>
   <div class="tg-wrap tg-main-row">
     <a class="tg-logo" href="${base}/" aria-label="Target home">${bullseye()}<span class="visually-hidden">Target</span></a>
-    <nav class="tg-nav" aria-label="Main menu"><details class="tg-native-menu"><summary>Categories</summary><div class="tg-menu-body"><a href="${base}/c"><b>Shop all categories</b></a>${DEPARTMENTS.map(d=>`<details name="departments"><summary>${esc(d.name)}</summary><div class="tg-menu-panel"><h2>${esc(d.name)}</h2><a href="${base}/c/${d.id}">Shop all ${esc(d.name)}</a>${[...new Set(PRODUCTS.filter(p=>p.department===d.id).map(p=>p.type))].map(t=>`<a href="${base}/c/${d.id}?type=${encodeURIComponent(t)}">${esc(t)}</a>`).join('')}</div></details>`).join('')}</div></details><a href="${base}/c/top-deals">Deals</a><a href="${base}/services/pickup-delivery">Pickup &amp; delivery</a></nav>
+    <nav class="tg-nav" aria-label="Main menu">${S.menuDrawer(base)}<a href="${base}${S.PATHS.deals}">Deals</a><a href="${base}${S.PATHS.pickup}">Pickup &amp; delivery</a></nav>
     <form class="tg-search" action="${base}/s" method="get" role="search">
       <input type="search" name="searchTerm" value="${esc(q)}" placeholder="What can we help you find?" aria-label="search" autocomplete="off" list="tg-search-suggestions">
       <datalist id="tg-search-suggestions">${['coffee','headphones','kitchen','pet bed','paper towels','GTA 6'].map(q=>`<option value="${q}">`).join('')}</datalist><button type="submit" aria-label="search">${targetIcon('search')}</button>
     </form>
     <nav class="tg-account-nav" aria-label="Account and cart">
-      <a href="${user ? `${base}/account` : `${base}/login`}" class="tg-icon-link" aria-label="${user ? `Account, ${esc(first)}` : 'Account, sign in'}">${targetIcon('account')}<small>${user ? `Hi, ${esc(first)}` : 'Sign in'}</small></a>
+      <a href="${base}/account" class="tg-icon-link" aria-label="${user ? `Account, ${esc(first)}` : 'Account, sign in'}">${targetIcon('account')}<small>${user ? `Hi, ${esc(first)}` : 'Sign in'}</small></a>
       <a href="${base}/cart" class="tg-icon-link tg-cart-link" aria-label="cart ${plural(cartCount, 'item')}">${targetIcon('cart')}${cartCount ? `<span class="tg-badge">${cartCount}</span>` : ''}</a>
     </nav>
   </div>
@@ -47,15 +48,10 @@ export function layout({ base, title, body, cartCount = 0, user = null, q = '', 
 <a class="tg-skip-link" href="#main-content">Skip to main content</a>
 ${header}
 <main id="main-content" tabindex="-1" class="tg-main ${minimal ? 'tg-main-min' : ''}">${body}</main>
+${minimal ? '' : S.signupBand(base)}
 <footer class="tg-footer${minimal ? ' tg-footer-min' : ''}">
-  ${minimal ? '' : `<div class="tg-wrap tg-footer-cols">
-    <div><h4>About</h4><span class="tg-static">About Target</span><span class="tg-static">Careers</span><span class="tg-static">News &amp; features</span><span class="tg-static">Investors</span></div>
-    <div><h4>Help</h4><a href="${base}/help">Target Help</a><a href="${base}/help/articles/returns">Returns</a><a href="${base}/orders">Track orders</a><a href="${base}/help/contact">Contact us</a></div>
-    <div><h4>Stores</h4><a href="${base}/stores">Find a store</a><span class="tg-static">Pharmacy</span><span class="tg-static">Target Optical</span><a href="${base}/stores">Store services</a></div>
-    <div><h4>Services</h4><a href="${base}/circle">Target Circle&trade;</a><a href="${base}/circle">Target Circle&trade; Card</a><a href="${base}/circle">Target Circle 360&trade;</a><a href="${base}/services/pickup-delivery">Same Day Delivery</a></div>
-    <div class="tg-footer-email"><h4>Get top deals, latest trends, and more.</h4><p>Shop the latest offers and featured products above.</p></div>
-  </div>`}
-  <p class="tg-copy">&copy; 2026 Target Brands, Inc.</p>
+  ${minimal ? '' : `<h2 class="visually-hidden">Footer</h2>${S.footerColumns(base)}`}
+  <p class="tg-copy">&copy; 2026 Target Brands, Inc. Target, the Bullseye Design and Bullseye Dog are trademarks of Target Brands, Inc.${minimal ? '' : ` · <a class="tg-inline" href="${base}/sitemap">Site map</a>`}</p>
   ${disclaimer(NAME)}
 </footer>
 <script src="${base}/static/ui.js" defer></script>
@@ -196,7 +192,7 @@ export function cartPage({ base, t, saved = [], user, promo, promoError, promoVa
 </aside></div>` : ''
   if (!t.lines.length && !saved.length) {
     return `<div class="tg-cart-empty"><h1>Your cart is empty</h1>${user ? '' : `<p><a href="${base}/login?redirect=${encodeURIComponent(base + '/cart')}">Sign in</a> to see items you may have added from another device.</p>`}
-  <div class="tg-email-box"><h2>Get top deals, latest trends, and more.</h2><p>Shop the latest offers and featured products above.</p></div></div>`
+  <a class="tg-btn" href="${base}/">Start shopping</a></div>`
   }
   const savedRows = saved.map(p => `<div class="tg-saved-item">${productImage(p)}<div><a href="${productPath(base, p)}${p.variantId?'?variant='+encodeURIComponent(p.variantId):''}">${esc(p.title)}</a><div class="tg-fine">${esc(optionText(p))}</div><div><b>${money(p.price)}</b></div></div>
     <form method="post" action="${base}/cart/update"><input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}<button type="submit" name="action" value="restore" class="tg-btn tg-btn-outline tg-btn-sm">Move to cart</button> <button type="submit" name="action" value="removesaved" class="tg-link-btn">Remove</button></form></div>`).join('')

@@ -7,6 +7,8 @@ import { authenticate, createAccount, publicAccount } from '../../lib/accounts.j
 import { PRODUCTS, byTcin, games, sponsored, protectionPlan, productPath, search, refine, totals, STATES, PAYMENT_TYPES, PREORDER_ARRIVAL, ARRIVES, selectedProduct, stockLimit, lineKey, productForLine, cartIssues, arrivalSummary } from './data.js'
 import * as P from './pages.js'
 import * as B from './browse.js'
+import * as S from './site.js'
+import { installSite } from './site-routes.js'
 import { DEPARTMENTS, CAMPAIGNS } from './catalog.js'
 import { saveAddress } from '../../lib/retail-state.js'
 import { installJourneys, accountOrder, retailState, defaultAddress, addressValues, shippingAddressInput, rememberSelection, selectedStore, orderPage } from './journeys.js'
@@ -90,16 +92,17 @@ router.use((req,res,next)=>{
 })
 
 // ---- browse ----
-router.get('/', (req,res)=>render(req,res,'Target : Expect More. Pay Less.',B.catalogHome({base:res.locals.base})+drawerFor(req,res,res.locals.base+'/')))
+router.get('/', (req,res)=>render(req,res,'Target : Expect More. Pay Less.',S.homePage({base:res.locals.base,catalog:B.catalogHome({base:res.locals.base})})+drawerFor(req,res,res.locals.base+'/')))
 const filterNames=['platform','category','type','material','size','price','availability','brand','format','rating','fulfillment','sort']
-function browseRender(req,res,{q='',pool=search(q),heading='',intro=''}={}) {
+function browseRender(req,res,{q='',pool=search(q),heading='',intro='',outro='',crumbs=true,emptyCategory=false}={}) {
   const base=res.locals.base
   const filters=Object.fromEntries(filterNames.map(k=>[k,String(req.query[k]??'')]))
   const products=refine(pool,filters), page=Math.max(1,Number.parseInt(req.query.page,10)||1)
   const params=new URLSearchParams({...((req.path==='/s'||req.path.startsWith('/s/'))?{searchTerm:q}:{}),...Object.fromEntries(Object.entries(filters).filter(([,v])=>v)),...(page>1?{page:String(page)}:{})})
   const path=`${base}${req.path.startsWith('/s/')?'/s':req.path}${params.size?'?'+params:''}`
-  render(req,res,`${heading||q||'Shop all products'} : Target`,B.listingPage({base,q,pool,products,filters,heading,intro,page,backPath:path,drawer:drawerFor(req,res,path)}),{q})
+  render(req,res,`${heading||q||'Shop all products'} : Target`,B.listingPage({base,q,pool,products,filters,heading,intro,outro,crumbs,emptyCategory,page,backPath:path,drawer:drawerFor(req,res,path)}),{q})
 }
+installSite(router,{render,notFound,browseRender,products:PRODUCTS})
 router.get('/s',(req,res)=>browseRender(req,res,{q:String(req.query.searchTerm??'').trim()}))
 router.get('/s/:term',(req,res)=>browseRender(req,res,{q:String(req.params.term).replace(/\+/g,' ').trim()}))
 router.get('/c',(req,res)=>render(req,res,'Shop all categories : Target',B.categoryDirectory({base:res.locals.base})))
