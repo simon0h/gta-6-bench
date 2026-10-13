@@ -35,7 +35,9 @@ test('PlayStation Store shelf: home, search, Direct pages and an assortment orde
 
     const consoles = await c.get(`${B}/direct.playstation.com/en-us/hardware/ps5`)
     assert.match(consoles.text, /PlayStation®5 Pro Console/)
-    const controllerPath = consoles.text.includes('buy-accessories') ? null : (await c.get(`${B}/direct.playstation.com/en-us/accessories/ps5?category=controllers`)).text.match(/href="(\/playstation-store\/direct\.playstation\.com\/en-us\/buy-accessories\/[^"]+)"/)[1]
+    const controllers = await c.get(`${B}/direct.playstation.com/en-us/accessories/ps5?category=controllers&sort=price-asc`)
+    assert.doesNotMatch(controllers.text, /PULSE Elite/)
+    const controllerPath = controllers.text.match(/href="(\/playstation-store\/direct\.playstation\.com\/en-us\/buy-accessories\/[^"]+)"/)[1]
     const page = await c.get(controllerPath)
     assert.equal(page.status, 200)
     assert.match(page.text, /Add to Cart/)
