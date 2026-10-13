@@ -107,16 +107,28 @@
     const complete = state.runs.reduce((sum, run) => sum + attempts(run).filter(entry => ['completed', 'complete', 'finished'].includes(entry.status)).length, 0)
     $('#main').innerHTML = `
       <div class="page-heading"><div><h1>Benchmark runs</h1></div><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div>
-      <div class="stats-grid" aria-label="Run summary"><div class="stat"><div class="stat-label">${icon('run')}Total runs</div><div class="stat-value">${state.runs.length}</div></div><div class="stat"><div class="stat-label">${icon('link')}Agent URLs</div><div class="stat-value">${links}</div></div><div class="stat"><div class="stat-label">${icon('check')}Completed attempts</div><div class="stat-value">${complete}</div></div></div>
+      <div class="stats-grid" role="group" aria-label="Run summary"><div class="stat"><div class="stat-label">${icon('run')}Total runs</div><div class="stat-value">${state.runs.length}</div></div><div class="stat"><div class="stat-label">${icon('link')}Agent URLs</div><div class="stat-value">${links}</div></div><div class="stat"><div class="stat-label">${icon('check')}Completed attempts</div><div class="stat-value">${complete}</div></div></div>
       <div class="section-heading"><h2>Run history<span class="section-count">${state.runs.length}</span></h2><button class="icon-button" data-action="refresh" aria-label="Refresh runs" title="Refresh runs">${icon('refresh')}</button></div>
-      ${state.runs.length ? `<div class="run-list">${state.runs.map(run => `<a class="run-row" href="#/runs/${encodeURIComponent(run.id)}"><div class="run-symbol">${icon('run')}</div><div class="run-row-text"><h3>${escape(runName(run))}</h3><div class="run-row-meta"><span>${escape(date(run.created_at, true))}</span><span class="meta-divider">·</span><span>${suiteName(run)}</span></div></div><div class="run-row-extra">${attempts(run).length ? `<div class="agent-stack" aria-hidden="true">${attempts(run).slice(0, 5).map(attempt => `<img src="${agentData(attempt.agent).icon}" alt="">`).join('')}</div>` : ''}<span class="attempt-count">${attemptCount(run)} / 5 URLs</span><span class="badge">${taskCount(run)} tasks</span>${icon('arrow')}</div></a>`).join('')}</div>` : `<section class="empty-state"><h2>No runs yet</h2><button class="button primary" data-action="new-run">${icon('plus')}New run</button></section>`}`
+      ${state.runs.length ? `<div class="run-list" role="region" aria-label="Run history" tabindex="0"><table class="run-table"><thead><tr><th scope="col">Run</th><th scope="col">Task set</th><th scope="col">Agents</th><th scope="col">Progress</th><th scope="col">Created</th></tr></thead><tbody>${state.runs.map(run => {
+        const entries = attempts(run)
+        const completed = entries.reduce((sum, entry) => sum + progress(entry, run).completed, 0)
+        const total = entries.reduce((sum, entry) => sum + progress(entry, run).total, 0)
+        const percentage = total > 0 ? Math.min(100, completed / total * 100) : 0
+        return `<tr class="run-row"><td class="run-name-cell"><a class="run-name" href="#/runs/${encodeURIComponent(run.id)}"><span class="run-symbol">${icon('run')}</span><span class="run-row-text"><span class="run-title">${escape(runName(run))}</span><small class="run-id">${escape(String(run.id).slice(0, 8))}</small></span>${icon('arrow')}</a></td><td class="run-suite-cell">${suiteName(run)}</td><td class="run-agents-cell"><div class="run-agents">${entries.length ? `<span class="agent-stack" aria-hidden="true">${entries.slice(0, 5).map(attempt => `<img src="${agentData(attempt.agent).icon}" alt="">`).join('')}</span>` : ''}<span class="attempt-count">${attemptCount(run)} / 5</span></div></td><td class="run-progress-cell"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="${escape(runName(run))} task progress" aria-valuenow="${completed}" aria-valuemin="0" aria-valuemax="${total || 1}"><div class="progress-fill" style="width:${percentage}%"></div></div><span>${completed} / ${total}</span></div></td><td class="run-date-cell">${escape(date(run.created_at, true))}</td></tr>`
+      }).join('')}</tbody></table></div>` : `<section class="empty-state"><h2>No runs yet</h2><button class="button primary" data-action="new-run">${icon('plus')}New run</button></section>`}`
     renderSidebar()
+  }
+
+  function resultBadge(result) {
+    const status = result.grade?.status || result.outcome || result.status || 'Submitted'
+    const tone = status === 'passed' ? 'green' : status === 'failed' ? 'red' : status === 'environment_error' ? 'orange' : 'gray'
+    return `<span class="badge ${tone}"><span class="status-dot"></span>${escape(status.replace(/_/g, ' '))}</span>`
   }
 
   function renderResults(attempt) {
     const results = resultList(attempt)
     if (!results.length) return ''
-    return `<details class="result-details"><summary>View ${results.length} task result${results.length === 1 ? '' : 's'}${Number.isFinite(attempt.summary?.passed) ? ` · ${attempt.summary.passed} passed` : ''}</summary><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Notes</th></tr></thead><tbody>${results.map((result, index) => `<tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${escape((result.grade?.status || result.outcome || result.status || 'Submitted').replace(/_/g, ' '))}</td><td>${escape(result.grade?.reasons?.map(reason => reason.message).filter(Boolean).join('; ') || result.final_response?.message || result.reason || result.message || result.notes || '—')}</td></tr>`).join('')}</tbody></table></details>`
+    return `<details class="result-details"><summary>View ${results.length} task result${results.length === 1 ? '' : 's'}${Number.isFinite(attempt.summary?.passed) ? ` · ${attempt.summary.passed} passed` : ''}</summary><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Notes</th></tr></thead><tbody>${results.map((result, index) => `<tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(result.grade?.reasons?.map(reason => reason.message).filter(Boolean).join('; ') || result.final_response?.message || result.reason || result.message || result.notes || '—')}</td></tr>`).join('')}</tbody></table></details>`
   }
 
   function renderAttempt(attempt, index, run) {
@@ -132,8 +144,12 @@
 
   function renderDetail() {
     const run = state.selected, entries = attempts(run)
+    const results = entries.flatMap(resultList)
+    const counts = { completed: entries.reduce((sum, entry) => sum + progress(entry, run).completed, 0), passed: 0, failed: 0, environment_error: 0 }
+    for (const result of results) if (['passed', 'failed', 'environment_error'].includes(result.grade?.status)) counts[result.grade.status]++
     document.title = `${runName(run)} · GTA 6 Bench`
     $('#main').innerHTML = `<div class="page-heading run-detail-heading"><div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div>
+      <div class="stats-grid run-summary" role="group" aria-label="Run results"><div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${counts.completed}</div></div><div class="stat"><div class="stat-label">Passed</div><div class="stat-value positive">${counts.passed}</div></div><div class="stat"><div class="stat-label">Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div></div><div class="stat"><div class="stat-label">Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div></div></div>
       <div class="section-heading"><div><h2>Agent URLs<span class="section-count">${entries.length} / 5</span></h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button secondary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five agent URLs"' : ''}>${icon('plus')}Add agent URL</button></div></div>
       ${entries.length ? `<div class="agent-grid">${entries.map((attempt, index) => renderAttempt(attempt, index, run)).join('')}</div>${entries.length >= 5 ? '<p class="capacity-note">Five-URL limit reached.</p>' : ''}` : `<section class="empty-state"><h2>No agent URLs yet</h2><button class="button primary" data-action="new-attempt">${icon('plus')}Add agent URL</button></section>`}`
     renderSidebar()
