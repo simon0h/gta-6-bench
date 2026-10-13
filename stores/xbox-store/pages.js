@@ -3,13 +3,15 @@ import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { benchmarkDate } from '../../lib/payment.js'
 import { physicalPage, shippingFields, shippingReceipt } from '../playstation-store/physical.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
-import { productPath, byId, STATES, ESRB, RELEASE, isBuyable, PRODUCTS } from './data.js'
+import { productPath, byId, STATES, ESRB, RELEASE, isBuyable, CATALOG as PRODUCTS } from './data.js'
+import { shelfImage, shelfGallery } from './shelf-art.js'
+export { hardwarePage } from './shelf-pages.js'
 import * as discovery from './discovery.js'
 import { megaNav, footerCols, homeHero, shopStrip, followXbox } from './site.js'
 
 const NAME = 'Xbox Store'
 const referenceCover = p => p.id === '9nnzsnhlr63l' ? 'gta-vi-ultimate-cover.jpg' : ['9p3h4968grsm','9nl3wwnzlzzn'].includes(p.id) ? 'gta-vi-cover.png' : null
-export const artwork = (p,cls='') => referenceCover(p) ? `<img class="${esc(cls)}" src="/static/reference/xbox-store/${referenceCover(p)}" alt="${esc(p.title)}">` : productImage('xbox-store',p,{className:cls})
+export const artwork = (p,cls='') => p.shelf ? shelfImage(p,{className:cls}) : referenceCover(p) ? `<img class="${esc(cls)}" src="/static/reference/xbox-store/${referenceCover(p)}" alt="${esc(p.title)}">` : productImage('xbox-store',p,{className:cls})
 const utilityIcon = name => name === 'search' ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h3l2 12h12l3-9H6"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>'
 const xboxMark = '<svg class="xb-mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="currentColor"/><path d="M5 7q5-3 11 3q6-6 11-3q-5 1-8 6q7 8 8 13q-6-6-11-10q-6 4-11 10q1-6 8-13Q10 8 5 7" fill="white"/></svg>'
 
@@ -231,12 +233,12 @@ export function productPage({ base, p, editions, related, inCart, owned = false,
   const actions = `<div class="xb-buybox" id="buybox">${!owned&&p.type==='game'&&p.subscriptions.length?`<a class="xb-btn xb-btn-buy xb-btn-two" href="${base}/en-US/xbox-game-pass"><span>GET GAME PASS</span><span class="xb-btn-sub">Included in ${esc(p.subscriptions.includes('Premium')?'Premium':p.subscriptions[0])}</span></a><span class="xb-buy-or">OR</span>`:''}${buy}${editionPicker}${authentic ? wishlist : ''}${overflow}</div>`
   return `<div class="xb-hero${authentic ? ' xb-gta-hero' : ''}" id="top"><div class="xb-hero-backdrop" aria-hidden="true">${authentic ? '<img src="/static/reference/xbox-store/gta-vi-background.jpg" alt="">' : artwork(p)}</div>
   <div class="xb-hero-inner">
-    ${referenceCover(p) ? artwork(p,'xb-cover') : productGallery('xbox-store',p,{className:'xb-cover'})}
+    ${referenceCover(p) ? artwork(p,'xb-cover') : p.shelf ? shelfGallery(p,{className:'xb-cover'}) : productGallery('xbox-store',p,{className:'xb-cover'})}
     <div class="xb-hero-info">
       ${p.subscriptions.length ? '<p class="xb-pdp-pass">XBOX GAME PASS</p>' : ''}<h1>${esc(p.title)}</h1>
-      <p class="xb-fine">Digital license · Delivered to your Xbox account library</p>
+      <p class="xb-fine">${p.type==='gift-card'?'Digital code · Delivered by email and to your order history':'Digital license · Delivered to your Xbox account library'}</p>
       <p class="xb-meta">${esc(p.publisher)} &bull; ${esc(p.genre)}${p.rating ? ` &bull; <span class="xb-stars" role="img" aria-label="Rating of ${esc(p.rating)} stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> ${esc(p.ratingCount)}` : ''}</p>
-      <ul class="xb-badges">${p.capabilities.map(c=>`<li>${esc(c)}</li>`).join('')}${p.ribbon ? '<li><img class="xb-badge-icon" src="/static/reference/xbox-store/preorder-icon.svg" alt="">Pre-order</li>' : ''}<li><img class="xb-badge-icon" src="/static/reference/xbox-store/languages-icon.svg" alt="">${p.languages} Supported languages</li></ul>${authentic ? '' : `<p class="xb-entitlement">${esc(p.productType==='currency'?'Consumable currency':p.productType==='dlc'?'Game add-on':p.productType==='bundle'?'Game bundle':p.productType==='base-listing'?'Base game listing':'Digital game')}</p>`}
+      <ul class="xb-badges">${p.capabilities.map(c=>`<li>${esc(c)}</li>`).join('')}${p.ribbon ? '<li><img class="xb-badge-icon" src="/static/reference/xbox-store/preorder-icon.svg" alt="">Pre-order</li>' : ''}<li><img class="xb-badge-icon" src="/static/reference/xbox-store/languages-icon.svg" alt="">${p.languages} Supported languages</li></ul>${authentic ? '' : `<p class="xb-entitlement">${esc(p.productType==='currency'?'Consumable currency':p.productType==='dlc'?'Game add-on':p.productType==='bundle'?'Game bundle':p.productType==='base-listing'?'Base game listing':p.productType==='gift-card'?'Digital gift card':p.productType==='membership-code'?'Game Pass membership code':'Digital game')}</p>`}
       ${authentic ? '' : actions}
     </div>
   </div>

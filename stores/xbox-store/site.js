@@ -6,7 +6,7 @@
 import { esc } from '../../lib/html.js'
 import { getOrder } from '../../lib/orders.js'
 import { MENU, FOOTER, LEGAL, ALL_MICROSOFT } from './site-data.js'
-import { PRODUCTS, productPath, isBuyable } from './data.js'
+import { CATALOG as PRODUCTS, productPath, isBuyable } from './data.js'
 
 // ---------- chrome ----------
 export function megaNav(base) {
@@ -37,12 +37,19 @@ function section(base, s, ctx) {
   if (s.ctas) body += `<div class="xs-ctas">${s.ctas.map(c => cta(base, c)).join('')}</div>`
   return `<section class="xs-section${s.band ? ' xs-band' : ''}"${id}>${s.h ? `<h2>${esc(s.h)}</h2>` : ''}${s.sub ? `<p class="xs-sub">${esc(s.sub)}</p>` : ''}${body}</section>`
 }
-// Product rows: only titles the store's catalog carries; otherwise a styled empty state.
-function productRow(base, { filter, empty, more }, ctx) {
-  const list = PRODUCTS.filter(filter)
+// Product rows: titles the store's catalog carries, most popular first (one row of up to `limit` tiles);
+// otherwise a styled empty state.
+const popularityOf = p => p.popularity ?? ({ '9p3h4968grsm': 17000, '9nnzsnhlr63l': 9000 })[p.id] ?? 0
+function productRow(base, { filter, empty, more, limit = 10, sort }, ctx) {
+  const list = PRODUCTS.filter(filter).sort(sort || ((a, b) => popularityOf(b) - popularityOf(a)))
   if (!list.length) return `<div class="xs-empty"><p class="xs-empty-title">${esc(empty || 'No games found.')}</p><p>This store's catalog only lists the titles shown on its game pages.</p>${more ? cta(base, more, 'xs-link') : ''}</div>`
-  return `<div class="xb-grid xs-row">${list.map(p => ctx.tile(base, p)).join('')}</div>${more ? cta(base, more, 'xs-link xs-more') : ''}`
+  return `<div class="xb-grid xs-row">${list.slice(0, limit).map(p => ctx.tile(base, p)).join('')}</div>${more ? cta(base, more, 'xs-link xs-more') : ''}`
 }
+const countLabel = (label, filter) => `${label} (${PRODUCTS.filter(filter).length})`
+const isAccessory = p => p.type === 'hardware' && p.catalogType !== 'console'
+const ACCESSORY_CHIPS = [['Controllers', 'controllers'], ['XBOX Design Lab', 'design-lab'], ['Mobile gaming accessories', 'mobile'], ['Handheld gaming accessories', 'handheld'], ['Stands and charging solutions', 'charging'], ['Headsets & communication', 'headsets'], ['Storage', 'storage'], ['Console wraps', 'wraps'], ['Wheels & joysticks', 'wheels'], ['Assistive technologies', 'assistive']]
+const inCategory = (...names) => p => p.type === 'hardware' && names.includes(p.category)
+const shopCategory = name => ['SHOP ' + name.toUpperCase(), `/en-US/store/b/xbox-accessories?category=${encodeURIComponent(name)}`]
 export function infoPage(base, pg, ctx) {
   return `<div class="xs-page">${pg.crumbs ? `<nav class="xs-crumbs" aria-label="Breadcrumb">${pg.crumbs.map(([l, p]) => `<a href="${base}${p}">${esc(l)}</a>`).join('<span aria-hidden="true">›</span>')}</nav>` : ''}${hero(base, pg)}${(pg.sections || []).map(s => section(base, s, ctx)).join('')}</div>`
 }
@@ -118,7 +125,7 @@ export const PAGES = {
         card('Cloud gaming', 'Stream games to your phone, tablet, TV or browser.', 'EXPLORE CLOUD GAMING', '/en-US/cloud-gaming'),
         card('Deals and discounts', 'Members save on select games and add-ons.', 'EXPLORE DEALS', '/en-US/xbox-game-pass/deals'),
       ] },
-      { h: 'Games (0)', id: 'games', sub: 'Console Games · PC Games — Sort by: Recently added', html: base => `<form class="xs-filterbar" method="get" action="${base}/en-US/xbox-game-pass/games"><label for="gp-q">Search game title</label><input id="gp-q" name="q" type="search"><label for="gp-sort">Sort by</label><select id="gp-sort" name="sort"><option>Recently added</option><option>Title (A-Z)</option><option>Title (Z-A)</option></select><button class="xs-btn" type="submit">SHOW RESULTS</button></form><div class="xs-empty"><p class="xs-empty-title">No games found.</p><p>No Game Pass library titles are listed in this store's catalog. Grand Theft Auto VI is sold separately.</p><a class="xs-link" href="${base}/en-US/search/results?q=grand%20theft%20auto%20vi">Find Grand Theft Auto VI</a></div>` },
+      { get h() { return countLabel('Games', p => p.type === 'game' && (p.subscriptions || []).length > 0) }, id: 'games', sub: 'Console Games · PC Games — Sort by: Recently added', html: (base, ctx) => `<form class="xs-filterbar" method="get" action="${base}/en-US/games/collection/game-pass"><label for="gp-q">Search game title</label><input id="gp-q" name="q" type="search"><label for="gp-sort">Sort by</label><select id="gp-sort" name="sort"><option value="release">Recently added</option><option value="name">Title (A-Z)</option><option value="name-desc">Title (Z-A)</option></select><button class="xs-btn" type="submit">SHOW RESULTS</button></form>${productRow(base, { filter: p => p.type === 'game' && (p.subscriptions || []).length > 0, limit: 15, empty: 'No games found.', more: ['SEE ALL GAME PASS GAMES', '/en-US/games/collection/game-pass'] }, ctx)}<p class="xs-sub">Grand Theft Auto VI is not included with Game Pass and is sold separately.</p>` },
       { h: 'Access XBOX Game Pass on your devices', cards: [card('XBOX on PC', 'Get the Xbox PC app.', 'GET THE APP', '/en-US/xbox-on-pc'), card('XBOX on mobile', 'Get the Xbox mobile app.', 'DOWNLOAD THE APP', '/en-US/xbox-on-mobile'), card('XBOX Cloud Gaming', 'Play in your browser.', 'EXPLORE CLOUD GAMING', '/en-US/cloud-gaming')] },
     ],
   },
@@ -168,7 +175,7 @@ export const PAGES = {
     { h: 'XBOX Smart Delivery', text: 'Buy a supported game once and always get the best version for your console.' },
   ], { ctas: [['BROWSE OPTIMIZED GAMES', '/en-US/games/all-games/console']] }),
   '/en-US/handhelds/handheld-compatibility': simple('GAMES', 'Optimized for handhelds', 'Find games that are verified to play well on Windows gaming handhelds, with controller support, readable text and handheld-friendly settings.', [
-    { h: 'Handheld compatible games', products: { filter: p => (p.handheld || []).length > 0, empty: 'No handheld-verified games are listed in this store.', more: ['Shop all PC games', '/en-US/games/all-games/pc'] } },
+    { h: 'Handheld compatible games', products: { filter: p => ['Optimized', 'Compatible'].includes(p.handheld), empty: 'No handheld-verified games are listed in this store.', more: ['Shop all PC games', '/en-US/games/all-games/pc'] } },
     { h: 'What the labels mean', list: ['Optimized for handhelds: plays great with default settings on a handheld.', 'Playable: may need minor adjustments, such as text size or an on-screen keyboard.', 'Unsupported: not recommended on handhelds.'] },
   ], { ctas: [['XBOX on handhelds', '/en-US/xbox-on-handhelds']] }),
   '/en-US/games/backward-compatibility': simple('GAMES', 'XBOX Backward Compatible Games Library', 'Play thousands of Xbox One, Xbox 360 and original Xbox games on Xbox Series X|S.', [
@@ -179,8 +186,8 @@ export const PAGES = {
   '/en-US/promotions/sales/sales-and-specials': {
     h1: 'XBOX Sales & Specials', eyebrow: 'DEALS', intro: 'Find the latest deals on digital games, controllers and accessories.', ctas: [['SEE ALL DEALS', '/en-US/games/all-games/console']],
     sections: [
-      { h: 'This week’s digital game deals', products: { filter: p => p.listPrice && p.listPrice > p.price, empty: 'No digital game deals are listed in this store this week.', more: ['SHOP MORE', '/en-US/games/all-games/console'] } },
-      { h: 'Controllers & accessories on sale', products: { filter: p => p.type === 'hardware' && p.listPrice && p.listPrice > p.price, empty: 'No controllers or accessories are on sale in this store.', more: ['SHOP MORE', '/en-US/accessories'] } },
+      { h: 'This week’s digital game deals', products: { filter: p => p.type !== 'hardware' && p.listPrice && p.listPrice > p.price, limit: 15, empty: 'No digital game deals are listed in this store this week.', more: ['SHOP MORE', '/en-US/games/collection/deals'] } },
+      { h: 'Controllers & accessories on sale', products: { filter: p => p.type === 'hardware' && p.listPrice && p.listPrice > p.price, empty: 'No controllers or accessories are on sale in this store.', more: ['SHOP MORE', '/en-US/store/b/xbox-accessories?price=sale'] } },
       { h: 'Deals with Game Pass', band: true, text: 'Members save on select games and add-ons.', ctas: [['JOIN GAME PASS', '/en-US/xbox-game-pass'], ['Deals with Game Pass', '/en-US/xbox-game-pass/deals']] },
       { h: 'Receive an XBOX gift card? Redeem your code to apply on digital games.', ctas: [['REDEEM CODE', '/en-US/redeem']] },
     ],
@@ -216,16 +223,18 @@ export const PAGES = {
     { h: 'MORE PLAYING, LESS WAITING', cards: [card('QUICK RESUME', 'Continue multiple games from a suspended state.'), card('FASTER LOAD TIMES', 'A custom 1TB SSD gets you into games faster.'), card('FASTER FRAMERATE', 'Up to 120 FPS in supported games.')] },
     { h: 'TRUE 4K GAMING', text: 'Play games at up to 4K resolution and 60 FPS, with HDR and DirectX ray tracing.' },
     { h: 'LOOKS BETTER, SOUNDS BETTER, PLAYS BETTER', cards: [card('Optimized gaming experience', '', 'EXPLORE GAMES', '/en-US/games/optimized'), card('Amazing visual fidelity', ''), card('Get it once', 'Smart Delivery gives you the best version of supported games.')] },
-    { h: 'Buy XBOX Series X', html: base => `<div class="xs-empty"><p class="xs-empty-title">Consoles are not sold in this store.</p><p>See participating retailers on Where to buy.</p><a class="xs-link" href="${base}/en-US/where-to-buy">Where to buy</a></div>` },
+    { h: 'Buy XBOX Series X', products: { filter: p => p.group === 'series-x', sort: (a, b) => a.price - b.price, empty: 'Consoles (0)', more: ['SHOP ALL CONSOLES', '/en-US/consoles/all-consoles'] } },
   ], { tone: 'dark', crumbs: [['Consoles', '/en-US/consoles']], ctas: [['COMPARE CONSOLES', '/en-US/consoles/compare']] }),
   '/en-US/consoles/xbox-series-s': simple('CONSOLES', 'XBOX SERIES S', 'Next-gen performance in the smallest Xbox ever. Go all-digital with Xbox Series S.', [
     { h: 'VARIETY MEETS VALUE', cards: [card('QUICK RESUME', 'Continue multiple games from a suspended state.'), card('FASTER LOAD TIMES', 'A custom SSD gets you into games faster.'), card('FASTER FRAMERATE', 'Up to 120 FPS in supported games.')] },
     { h: 'ALL DIGITAL, ALL XBOX', text: 'Xbox Series S has no disc drive; build your digital library and play Game Pass games.' },
     { h: 'BACKWARD COMPATIBLE WITH THOUSANDS OF GAMES', ctas: [['Backward compatible games', '/en-US/games/backward-compatibility']] },
+    { h: 'Buy XBOX Series S', products: { filter: p => p.group === 'series-s', sort: (a, b) => a.price - b.price, empty: 'Consoles (0)', more: ['SHOP ALL CONSOLES', '/en-US/consoles/all-consoles'] } },
     { h: 'TECH SPECS', table: [['Spec', 'XBOX SERIES S'], ['Processor', '4 TFLOPS, 20 CUs @1.565 GHz'], ['Storage', '512GB or 1TB custom NVMe SSD'], ['Performance target', '1440p at 60 FPS, up to 120 FPS'], ['Optical drive', 'Digital only']] },
   ], { tone: 'dark', crumbs: [['Consoles', '/en-US/consoles']], ctas: [['COMPARE CONSOLES', '/en-US/consoles/compare']] }),
   '/en-US/consoles/all-consoles': simple('CONSOLES', 'Shop all consoles', 'Xbox Series X, Xbox Series S and special editions.', [
-    { h: 'Consoles', products: { filter: p => p.type === 'hardware' && /console|series [xs]/i.test(p.title), empty: 'Consoles (0)', more: ['Where to buy', '/en-US/where-to-buy'] } },
+    { get h() { return countLabel('Consoles', p => p.type === 'hardware' && (p.catalogType === 'console' || /console|series [xs]/i.test(p.title))) }, products: { filter: p => p.type === 'hardware' && (p.catalogType === 'console' || /console|series [xs]/i.test(p.title)), sort: (a, b) => b.price - a.price, empty: 'Consoles (0)', more: ['Where to buy', '/en-US/where-to-buy'] } },
+    { h: 'Storage for your console', products: { filter: inCategory('Storage'), more: shopCategory('Storage') } },
   ], { crumbs: [['Consoles', '/en-US/consoles']], ctas: [['COMPARE CONSOLES', '/en-US/consoles/compare']] }),
   '/en-US/consoles/compare': simple('CONSOLES', 'COMPARE XBOX CONSOLES', 'See how Xbox Series X and Xbox Series S compare.', [
     { h: 'Specifications', table: [['', 'XBOX SERIES X', 'XBOX SERIES S'], ['COLOR', 'Carbon Black', 'Robot White / Carbon Black'], ['STORAGE & EXPANDABILITY', '1TB or 2TB Custom SSD', '512GB or 1TB Custom SSD'], ['PROCESSOR', '12 Teraflops processing power', '4 Teraflops processing power'], ['GAMING RESOLUTION', 'True 4K', '1440p'], ['OPTICAL DISC DRIVE', '4K UHD Blu-ray (disc models)', 'Digital only'], ['VIDEO', 'HDMI 2.1, Dolby Vision', 'HDMI 2.1, Dolby Vision'], ['XBOX SERIES X|S FEATURES', 'Quick Resume, Variable Refresh Rate, Auto Low-Latency Mode', 'Quick Resume, Variable Refresh Rate, Auto Low-Latency Mode']] },
@@ -237,22 +246,22 @@ export const PAGES = {
   ], { crumbs: [['Consoles', '/en-US/consoles']] }),
   '/en-US/where-to-buy': simple('DEVICES', 'FIND AVAILABLE XBOX RETAILERS', 'Find Xbox consoles and accessories at participating retailers.', [
     { h: 'Buy direct from Microsoft', text: 'Microsoft Store sells Xbox consoles and accessories online with free shipping on eligible orders.' },
-    { h: 'Participating retailers', id: 'accessories', list: ['Microsoft Store', 'Amazon', 'Walmart', 'Best Buy', 'GameStop', 'Target', 'Verizon'], text: 'Retailer stock and prices vary. This store does not sell hardware and does not link to retailer sites.' },
+    { h: 'Participating retailers', id: 'accessories', list: ['Microsoft Store', 'Amazon', 'Walmart', 'Best Buy', 'GameStop', 'Target', 'Verizon'], text: 'Retailer stock and prices vary. Microsoft Store ships consoles and accessories directly; other retailers are not linked from this store.' },
     { h: '0% APR with Amazon monthly payments', text: 'Eligible customers may be offered monthly payments at checkout with the retailer. Terms apply.' },
   ]),
   '/en-US/accessories': {
     h1: 'Accessories', eyebrow: 'DEVICES', intro: 'Controllers, headsets, storage and more for Xbox consoles, PC and mobile.', ctas: [['Design your controller', '/en-US/xbox-design-lab'], ['Where to buy', '/en-US/where-to-buy#accessories']],
     sections: [
-      { h: 'Accessories (0)', html: base => `<nav class="xs-chips" aria-label="Accessory categories">${[['Controllers', 'controllers'], ['XBOX Design Lab', 'design-lab'], ['Mobile gaming accessories', 'mobile'], ['Handheld gaming accessories', 'handheld'], ['Stands and charging solutions', 'charging'], ['Headsets & communication', 'headsets'], ['Storage', 'storage'], ['Console wraps', 'wraps'], ['Wheels & joysticks', 'wheels'], ['Assistive technologies', 'assistive']].map(([l, id]) => `<a href="${base}/en-US/accessories#${id}">${esc(l)}</a>`).join('')}</nav><div class="xs-empty"><p class="xs-empty-title">${PRODUCTS.some(p => p.type === 'hardware') ? 'Accessories are listed in Shop all products.' : 'No accessories are sold in this store.'}</p><p>Every accessory category below shows what is available; this store's catalog lists Grand Theft Auto VI titles.</p><a class="xs-link" href="${base}/en-US/games/browse?type=hardware">CLEAR FILTERS</a></div>` },
-      { h: 'Controllers', id: 'controllers', text: 'Xbox Wireless Controllers, Elite Series 2 and Xbox Adaptive Controller.', ctas: [['XBOX Design Lab', '/en-US/xbox-design-lab']] },
-      { h: 'Mobile gaming accessories', id: 'mobile', text: 'Clips and controllers for playing on phones and tablets.' },
-      { h: 'Handheld gaming accessories', id: 'handheld', text: 'Cases and accessories for Windows gaming handhelds.' },
-      { h: 'Stands & charging solutions', id: 'charging', text: 'Rechargeable battery packs and charging stands.' },
-      { h: 'Headsets & communication', id: 'headsets', text: 'Xbox Wireless Headset and Designed for Xbox headsets.' },
-      { h: 'Storage', id: 'storage', text: 'Storage Expansion Cards for Xbox Series X|S and external drives for backward compatible games.' },
+      { get h() { return countLabel('Accessories', isAccessory) }, html: (base, ctx) => `<nav class="xs-chips" aria-label="Accessory categories">${ACCESSORY_CHIPS.map(([l, id]) => `<a href="${base}/en-US/accessories#${id}">${esc(l)}</a>`).join('')}</nav>${PRODUCTS.some(isAccessory) ? productRow(base, { filter: isAccessory, limit: 10, more: ['SHOP ALL ACCESSORIES', '/en-US/store/b/xbox-accessories'] }, ctx) : `<div class="xs-empty"><p class="xs-empty-title">${PRODUCTS.some(p => p.type === 'hardware') ? 'Accessories are listed in Shop all products.' : 'No accessories are sold in this store.'}</p><p>Every accessory category below shows what is available; this store's catalog lists Grand Theft Auto VI titles.</p><a class="xs-link" href="${base}/en-US/games/browse?type=hardware">CLEAR FILTERS</a></div>`}` },
+      { h: 'Controllers', id: 'controllers', text: 'Xbox Wireless Controllers, Elite Series 2 and Xbox Adaptive Controller.', ctas: [['XBOX Design Lab', '/en-US/xbox-design-lab']], products: { filter: inCategory('Controllers', 'PC accessories'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Controllers') } },
+      { h: 'Mobile gaming accessories', id: 'mobile', text: 'Clips and controllers for playing on phones and tablets.', products: { filter: inCategory('Mobile gaming'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Mobile gaming') } },
+      { h: 'Handheld gaming accessories', id: 'handheld', text: 'Cases and accessories for Windows gaming handhelds.', products: { filter: inCategory('Handheld gaming'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Handheld gaming') } },
+      { h: 'Stands & charging solutions', id: 'charging', text: 'Rechargeable battery packs and charging stands.', products: { filter: inCategory('Stands & charging'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Stands & charging') } },
+      { h: 'Headsets & communication', id: 'headsets', text: 'Xbox Wireless Headset and Designed for Xbox headsets.', products: { filter: inCategory('Headsets & communication'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Headsets & communication') } },
+      { h: 'Storage', id: 'storage', text: 'Storage Expansion Cards for Xbox Series X|S and external drives for backward compatible games.', products: { filter: inCategory('Storage'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Storage') } },
       { h: 'Console wraps', id: 'wraps', text: 'Skins and wraps for Xbox Series X|S.' },
-      { h: 'Wheels & Joysticks', id: 'wheels', text: 'Racing wheels, flight sticks and arcade sticks Designed for Xbox.' },
-      { h: 'Assistive technologies', id: 'assistive', text: 'The Xbox Adaptive Controller, Adaptive Joystick and switch accessories.' },
+      { h: 'Wheels & Joysticks', id: 'wheels', text: 'Racing wheels, flight sticks and arcade sticks Designed for Xbox.', products: { filter: inCategory('Wheels & joysticks'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Wheels & joysticks') } },
+      { h: 'Assistive technologies', id: 'assistive', text: 'The Xbox Adaptive Controller, Adaptive Joystick and switch accessories.', products: { filter: inCategory('Assistive technologies'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Assistive technologies') } },
       { h: 'Stream XBOX games. No console required.', ctas: [['EXPLORE CLOUD GAMING', '/en-US/cloud-gaming']] },
     ],
   },
@@ -346,7 +355,7 @@ export const PAGES = {
     { h: 'More support options', ctas: [['Contact support', '/en-US/support/contact'], ['Get self-help support', '/en-US/support']] },
   ]),
   '/en-US/store/b/gift-cards': simple('MICROSOFT STORE', 'Microsoft and XBOX Gift Cards', 'Give the gift of games, apps and more. Gift cards add money to a Microsoft account to spend in Microsoft Store and on Xbox.', [
-    { h: 'Shop gift cards', cards: [card('The perfect gift for gamers', 'Xbox gift cards can be used for games, add-ons and Game Pass.'), card('Giving made easy', 'Send a digital code by email or give a physical card.'), card('Gift Card FAQ', 'Answers to common gift card questions.', 'Read the FAQ', '/en-US/store/b/gift-cards#faq'), card('Redeem a gift card', 'Add a gift card to your Microsoft account balance.', 'Learn more', '/en-US/redeem')], html: base => `<div class="xs-empty"><p class="xs-empty-title">Gift cards are not sold in this store.</p><p>You can still redeem an Xbox or Microsoft gift card code.</p><a class="xs-link" href="${base}/en-US/redeem">Redeem a code</a></div>` },
+    { h: 'Shop gift cards', cards: [card('The perfect gift for gamers', 'Xbox gift cards can be used for games, add-ons and Game Pass.'), card('Giving made easy', 'Send a digital code by email or give a physical card.'), card('Gift Card FAQ', 'Answers to common gift card questions.', 'Read the FAQ', '/en-US/store/b/gift-cards#faq'), card('Redeem a gift card', 'Add a gift card to your Microsoft account balance.', 'Learn more', '/en-US/redeem')], html: (base, ctx) => PRODUCTS.some(p => p.type === 'gift-card') ? productRow(base, { filter: p => p.type === 'gift-card', limit: 10, sort: (a, b) => a.rank - b.rank, more: ['SHOP ALL GIFT CARDS', '/en-US/search/results?type=gift-cards'] }, ctx) : `<div class="xs-empty"><p class="xs-empty-title">Gift cards are not sold in this store.</p><p>You can still redeem an Xbox or Microsoft gift card code.</p><a class="xs-link" href="${base}/en-US/redeem">Redeem a code</a></div>` },
     { h: 'Give 100+ games with Game Pass', ctas: [['Join Game Pass', '/en-US/xbox-game-pass']] },
     { h: 'Frequently Asked Questions', id: 'faq', faq: [['What can I purchase with an XBOX gift card?', 'Games, add-ons, subscriptions such as Game Pass, movies and apps in Microsoft Store on Xbox and Windows.'], ['Where can you use an XBOX or Microsoft gift card?', 'Redeem it to your Microsoft account, then use the balance in Microsoft Store on Xbox, Windows and the web.'], ['How do you gift XBOX Game Pass?', 'Buy a Game Pass gift card or digital code and send it to the recipient.']] },
     STORE_WHY,
@@ -430,7 +439,9 @@ export function sitemapXml(base, origin = '') {
 // slides point at what this store sells (GTA VI pre-orders) and the Xbox sections it mirrors.
 export function homeHero(base) {
   const gta = PRODUCTS.find(p => p.id === '9p3h4968grsm')
+  const outer = PRODUCTS.find(p => p.shelf && p.title === 'The Outer Worlds 2')
   const slides = [
+    ...(outer ? [{ id: 'outer-worlds', cls: 'xs-slide-gp', eyebrow: 'AVAILABLE NOW', h: 'The Outer Worlds 2', text: 'Become an Earth Directorate agent in Arcadia. Play it with Game Pass Ultimate and PC Game Pass, or buy it today.', ctas: [['BUY NOW', productPath('', outer)], ['JOIN GAME PASS', '/en-US/xbox-game-pass']] }] : []),
     { id: 'gta', cls: 'xs-slide-gta', eyebrow: 'PRE-ORDER NOW', h: 'Grand Theft Auto VI', text: 'Pre-order now on Xbox Series X|S and receive the Vintage Vice City Pack and one month of GTA+.', ctas: gta ? [['PRE-ORDER', productPath('', gta)], ['COMPARE EDITIONS', productPath('', gta)]] : [['Games home', '/en-US/games']] },
     { id: 'gamepass', cls: 'xs-slide-gp', eyebrow: 'XBOX GAME PASS', h: 'Play hundreds of games', text: 'Discover your next favorite game on console, PC and cloud.', ctas: [['JOIN GAME PASS', '/en-US/xbox-game-pass'], ['BROWSE GAMES', '/en-US/xbox-game-pass/games']] },
     { id: 'consoles', cls: 'xs-slide-hw', eyebrow: 'XBOX SERIES X|S', h: 'Power your dreams', text: 'The fastest, most powerful Xbox consoles.', ctas: [['SHOP CONSOLES', '/en-US/consoles'], ['COMPARE CONSOLES', '/en-US/consoles/compare']] },

@@ -3,7 +3,7 @@ import { findAccount } from '../../lib/accounts.js'
 import { randomBytes } from 'node:crypto'
 import { esc, money } from '../../lib/html.js'
 import { appendOrderEvent } from '../../lib/orders.js'
-import { byId, PRODUCTS, PLAN_DATA, productPath, isBuyable } from './data.js'
+import { byId, CATALOG as PRODUCTS, PLAN_DATA, productPath, isBuyable } from './data.js'
 import * as P from './pages.js'
 import { accountState, ownedOrders, ownedOrder, library, lifecycle, statusLabel, token, validToken, activeSubscription, canCancel, canRefund } from './journey-state.js'
 
