@@ -1,0 +1,102 @@
+/* PlayStation Store assortment: home carousel, shelf rows, assortment product pages, PlayStation Direct listings. */
+.ps-shelf-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ps-discount { position: absolute; top: 8px; left: 8px; padding: 2px 7px; border-radius: 4px; background: #fff; color: #000; font-size: 11px; font-weight: 700; }
+
+/* home carousel (radio inputs, no script) */
+.ps-carousel { position: relative; background: var(--ps-darker); color: #fff; }
+.ps-carousel-radio { position: absolute; opacity: 0; pointer-events: none; }
+.ps-carousel-slides { position: relative; min-height: 460px; }
+.ps-carousel-slide { position: absolute; inset: 0; display: none; align-items: center; overflow: hidden; }
+#ps-hero-0:checked ~ .ps-carousel-slides .ps-carousel-slide-0, #ps-hero-1:checked ~ .ps-carousel-slides .ps-carousel-slide-1, #ps-hero-2:checked ~ .ps-carousel-slides .ps-carousel-slide-2, #ps-hero-3:checked ~ .ps-carousel-slides .ps-carousel-slide-3, #ps-hero-4:checked ~ .ps-carousel-slides .ps-carousel-slide-4 { display: flex; }
+.ps-carousel-bg { position: absolute; inset: 0; }
+.ps-carousel-bg > img { width: 100%; height: 100%; object-fit: cover; }
+.ps-carousel-bg.is-shelf > img { filter: saturate(1.1) brightness(.75); }
+.ps-carousel-key { position: absolute; top: 50%; right: max(32px, calc((100vw - var(--ps-wrap)) / 2 + 64px)); width: 340px; aspect-ratio: 1; transform: translateY(-50%); overflow: hidden; border-radius: 16px; box-shadow: 0 18px 50px rgba(0, 0, 0, .5); }
+.ps-carousel-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(18, 19, 20, .92) 0%, rgba(18, 19, 20, .55) 40%, rgba(18, 19, 20, 0) 70%); }
+.ps-carousel-card { position: relative; z-index: 1; max-width: 520px; margin-left: max(32px, calc((100vw - var(--ps-wrap)) / 2 + 32px)); padding: 32px 0 72px; }
+.ps-carousel-card h1, .ps-carousel-card h2 { margin: 6px 0 12px; color: #fff; font-size: 44px; font-weight: 300; line-height: 1.1; }
+.ps-carousel-card p { margin: 0 0 12px; font-size: 16px; }
+.ps-carousel-card .ps-home-hero-date { color: #d8d8d8; font-size: 14px; }
+.ps-carousel-card .ps-home-hero-date s { color: #a9a9a9; }
+.ps-carousel-thumbs { position: absolute; z-index: 2; bottom: 16px; left: max(32px, calc((100vw - var(--ps-wrap)) / 2 + 32px)); display: flex; gap: 10px; }
+.ps-carousel-thumb { display: block; width: 64px; height: 64px; overflow: hidden; border: 2px solid transparent; border-radius: 10px; cursor: pointer; opacity: .65; }
+.ps-carousel-thumb img { width: 100%; height: 100%; object-fit: cover; }
+#ps-hero-0:checked ~ .ps-carousel-thumbs .ps-carousel-thumb-0, #ps-hero-1:checked ~ .ps-carousel-thumbs .ps-carousel-thumb-1, #ps-hero-2:checked ~ .ps-carousel-thumbs .ps-carousel-thumb-2, #ps-hero-3:checked ~ .ps-carousel-thumbs .ps-carousel-thumb-3, #ps-hero-4:checked ~ .ps-carousel-thumbs .ps-carousel-thumb-4 { border-color: #fff; opacity: 1; }
+.ps-carousel-radio:focus-visible + .ps-carousel-radio { outline: none; }
+
+/* shelf rows */
+.ps-shelf { padding-top: 20px; padding-bottom: 12px; }
+.ps-shelf-row { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 5 * 16px) / 6); gap: 16px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.ps-shelf-row > .ps-tile { scroll-snap-align: start; min-width: 0; }
+
+/* assortment product page */
+.ps-hero.ps-shelf-hero .ps-hero-art { inset: 0; padding: 0; background: #000; }
+.ps-hero.ps-shelf-hero .ps-hero-art img { width: 100%; height: 100%; padding: 0; object-fit: cover; filter: brightness(.6); }
+.ps-edition-card .ps-shelf-img { height: auto; aspect-ratio: 1; }
+.ps-shelf-cover { display: block; width: 120px; aspect-ratio: 1; margin-bottom: 16px; overflow: hidden; border-radius: 12px; }
+.ps-shelf-media { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 40px; }
+.ps-shelf-media img { border-radius: 10px; aspect-ratio: 16 / 9; }
+.ps-requirements { margin: 0 0 32px; padding: 16px 20px; border-radius: 12px; background: var(--ps-soft); }
+.ps-requirements h2 { margin: 0 0 8px; font-size: 18px; }
+.ps-ratings { margin: 0 0 44px; }
+.ps-ratings h2 { margin: 0 0 12px; font-size: 24px; font-weight: 300; }
+.ps-rating-row { display: grid; grid-template-columns: 48px minmax(0, 320px) 48px; align-items: center; gap: 10px; font-size: 13px; }
+.ps-rating-row meter { width: 100%; }
+.ps-rating-link { display: inline-block; margin: 4px 0 12px; color: #fff; }
+
+/* PlayStation Direct */
+.ps-direct-filters form { display: flex; flex-direction: column; gap: 14px; }
+.ps-direct-filters fieldset { margin: 0; padding: 0; border: 0; }
+.ps-direct-filters legend { margin-bottom: 6px; font-weight: 700; }
+.ps-direct-filters label { display: block; padding: 3px 0; }
+.ps-direct-sort select { display: block; width: 100%; margin-top: 4px; padding: 6px; }
+.ps-direct-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 20px; }
+.ps-direct-card { display: flex; flex-direction: column; gap: 6px; padding: 14px; border: 1px solid var(--ps-line); border-radius: 12px; background: #fff; }
+.ps-direct-card h3 { margin: 4px 0 0; font-size: 15px; font-weight: 500; line-height: 1.3; }
+.ps-direct-card h3 a { color: #000; text-decoration: none; }
+.ps-direct-card h3 a:hover { text-decoration: underline; }
+.ps-direct-card p { margin: 0; }
+.ps-direct-card form { margin-top: auto; padding-top: 6px; }
+.ps-direct-card-art { display: block; aspect-ratio: 1; overflow: hidden; border-radius: 8px; }
+.ps-direct-price { font-size: 18px; font-weight: 700; color: #000; }
+.ps-direct-price s { color: var(--ps-muted); font-weight: 400; font-size: 14px; }
+.ps-direct-stock { color: #1b7a2f; font-size: 13px; }
+.ps-stars { color: #000; font-weight: 700; }
+.ps-crumbs { margin: 0 0 16px; font-size: 13px; }
+.ps-direct-product { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; margin-bottom: 40px; }
+.ps-direct-gallery input { position: absolute; opacity: 0; pointer-events: none; }
+.ps-direct-stage { aspect-ratio: 1; overflow: hidden; border-radius: 16px; background: #f5f6f8; }
+.ps-direct-view { display: none; margin: 0; height: 100%; }
+#ps-view-0:checked ~ .ps-direct-stage .ps-direct-view-0, #ps-view-1:checked ~ .ps-direct-stage .ps-direct-view-1, #ps-view-2:checked ~ .ps-direct-stage .ps-direct-view-2, #ps-view-3:checked ~ .ps-direct-stage .ps-direct-view-3 { display: block; }
+.ps-direct-thumbs { display: flex; gap: 10px; margin-top: 10px; }
+.ps-direct-thumbs label { width: 72px; height: 72px; overflow: hidden; border: 2px solid var(--ps-line); border-radius: 8px; cursor: pointer; }
+#ps-view-0:checked ~ .ps-direct-thumbs .ps-direct-thumb-0, #ps-view-1:checked ~ .ps-direct-thumbs .ps-direct-thumb-1, #ps-view-2:checked ~ .ps-direct-thumbs .ps-direct-thumb-2, #ps-view-3:checked ~ .ps-direct-thumbs .ps-direct-thumb-3 { border-color: var(--ps-blue); }
+.ps-direct-buy h1 { margin: 4px 0 8px; font-size: 32px; font-weight: 300; line-height: 1.15; }
+.ps-direct-buy .ps-direct-price { font-size: 26px; }
+.ps-direct-perks { margin: 16px 0 0; padding-left: 18px; color: var(--ps-muted); font-size: 13px; }
+
+@media (max-width: 1100px) {
+  .ps-shelf-row { grid-auto-columns: calc((100% - 3 * 16px) / 4); }
+}
+@media (max-width: 720px) {
+  .ps-hero.ps-shelf-hero .ps-hero-art { position: relative; height: 220px; }
+  .ps-carousel-slides { min-height: 520px; }
+  .ps-carousel-slide { align-items: flex-end; }
+  .ps-carousel-key { top: 24px; right: 50%; width: 200px; transform: translateX(50%); }
+  .ps-carousel-bg::after { background: linear-gradient(0deg, rgba(18, 19, 20, .95) 0%, rgba(18, 19, 20, .6) 50%, rgba(18, 19, 20, .2) 100%); }
+  .ps-carousel-card { margin: 0 16px; padding: 0 0 84px; }
+  .ps-carousel-card h1, .ps-carousel-card h2 { font-size: 30px; }
+  .ps-carousel-thumbs { left: 16px; }
+  .ps-carousel-thumb { width: 48px; height: 48px; }
+  .ps-shelf-row { grid-auto-columns: 42%; gap: 12px; }
+  .ps-shelf-media { grid-template-columns: 1fr; }
+  .ps-direct-product { grid-template-columns: 1fr; gap: 20px; }
+  .ps-direct-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .ps-rating-row { grid-template-columns: 40px 1fr 40px; }
+}
+
+.ps-direct-buy .ps-promo { color: #b83400; font-weight: 700; }
+.ps-direct-specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0 32px; margin: 0; }
+.ps-direct-specs div { display: grid; grid-template-columns: 140px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ps-line); }
+.ps-direct-specs dt { color: var(--ps-muted); }
+.ps-direct-specs dd { margin: 0; color: #000; }

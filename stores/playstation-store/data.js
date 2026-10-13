@@ -2,6 +2,7 @@ import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
 import { CATALOG_EVIDENCE } from './catalog-evidence.js'
 import { expandCatalog } from './expand500.js'
 import { enrichCatalogue, refineProducts } from './catalogue.js'
+import { SHELF } from './shelf.js'
 // Listings as they appear on store.playstation.com (research/playstation-store.md, 2026-09-29/30).
 // Native digital records retain their licenses; expanded physical offers ship separately.
 
@@ -144,10 +145,16 @@ if (!fixtureCatalog) for (const p of PRODUCTS) {
   p.accessorySubtype = p.catalogType === 'accessory' ? 'digital-add-on' : null
   for (const key of ['ratingCount','distribution','score','bestRank','downloadRank']) delete p[key]
 }
-export const byId = (id) => typeof id === 'string' ? PRODUCTS.find(p => p.id === id) ?? null : null
+// Reference-mode assortment (stores/playstation-store/shelf.js): real games, add-ons, PS Plus and
+// PlayStation Direct hardware. Kept apart from the evidence-backed PRODUCTS array, so catalog policy
+// and the reference inventory keep describing only the GTA VI listings. Fixture mode keeps its own catalog.
+export const ASSORTMENT = fixtureCatalog ? [] : SHELF
+export const CATALOG = [...PRODUCTS, ...ASSORTMENT]
+const assortmentById = new Map(ASSORTMENT.map(p => [p.id, p]))
+export const byId = (id) => typeof id === 'string' ? PRODUCTS.find(p => p.id === id) ?? assortmentById.get(id) ?? null : null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 export const featured = () => byId('EP1004-PPSA01547_00-GTAVIULTIMATE001') // the concept page currently features the Ultimate Edition
-export const productPath = (base, p) => `${base}/en-us/product/${p.id}`
+export const productPath = (base, p) => p.directPath ? `${base}${p.directPath}` : `${base}/en-us/product/${p.id}`
 export const conceptPath = (base) => `${base}/en-us/concept/${CONCEPT_ID}/`
 
 // PS Store search is fuzzy: any matching word counts, and the best matches come first
@@ -156,8 +163,8 @@ export function search(q) {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9$+]+/g, ' ').trim()
   const tokens = [...new Set(norm(q).split(' ').filter(Boolean))]
   if (!tokens.length) return []
-  return PRODUCTS
-    .map((p, i) => { const words = new Set(norm(p.title + ' ' + p.keywords).split(' ')); return { p, i, score: tokens.filter(t => words.has(t)).length } })
+  return CATALOG
+    .map((p, i) => { const words = new Set(norm(p.title + ' ' + p.keywords).split(' ')); const title = new Set(norm(p.title).split(' ')); return { p, i, score: tokens.filter(t => words.has(t)).length + (fixtureCatalog ? 0 : tokens.filter(t => title.has(t)).length * 0.01) } })
     .filter(x => x.score > 0)
     .sort((a, b) => b.score - a.score || a.i - b.i)
     .map(x => x.p)

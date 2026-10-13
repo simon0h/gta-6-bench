@@ -2,6 +2,7 @@ import { productImage, productGallery } from '../../lib/product-assets.js'
 import { benchmarkDate } from '../../lib/payment.js'
 import { physicalPage, shippingFields, shippingReceipt } from './physical.js'
 import * as C from './catalog-pages.js'
+import { shelfProductPage } from './shelf-pages.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
 import { byId, productPath, conceptPath, games, PROMO_LINE, COMPAT, LEGAL_INFO, LEGAL_TEXT, ULTIMATE_UPGRADE_BULLETS, STATES, PRELOAD, WALLET_BALANCE, RELEASE, RATING_DESCRIPTORS } from './data.js'
 
@@ -55,7 +56,7 @@ export function layout({ base, title, body, path = '/', user = null, cartCount =
   const head = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
-<script src="${base}/static/store.js" defer></script><link rel="stylesheet" href="${base}/static/style.css"><link rel="stylesheet" href="${base}/static/journeys.css"></head>`
+<script src="${base}/static/store.js" defer></script><link rel="stylesheet" href="${base}/static/style.css"><link rel="stylesheet" href="${base}/static/journeys.css"><link rel="stylesheet" href="${base}/static/shelf.css"></head>`
   if (chrome === 'sony') {
     // Sony's account sign-in lives on its own domain with its own minimal chrome.
     return `${head}
@@ -160,6 +161,7 @@ export const searchPage = C.searchPage
 export const collectionsPage = C.collectionsPage
 export const subscriptionsPage = C.subscriptionsPage
 export function productPage({ base, p, here, toast = null, owned = new Set(), saved = new Set() }) {
+  if (p.shelf) return shelfProductPage({ base, p, here, toast, owned, cta: (b, e, h, o) => ctaBlock(b, e, h, o, saved) })
   if (p.physical) return physicalPage({base,p,action:`${base}/en-us/cart/add`,idField:'sku',buttonClass:'ps-pill ps-pill-orange'})
   if (p.family !== 'gta-vi') return C.ordinaryPage({base,p,here,toast,owned,cta:(b,p,h,o)=>ctaBlock(b,p,h,o,saved)})
   const isGta6 = p.family === 'gta-vi'
