@@ -19,7 +19,7 @@ const categoryAnchor = { Controllers: 'controllers', 'Headsets & communication':
 export function hardwarePage({ base, p, inCart = false, added = false }) {
   const path = productPath(base, p)
   const siblings = p.group ? CATALOG.filter(x => x.group === p.group) : []
-  const related = CATALOG.filter(x => x.shelf && x.physical && x.id !== p.id && x.group !== p.group && (x.category === p.category || (p.catalogType === 'console' && x.category === 'Storage') || (p.category === 'Controllers' && x.category === 'Stands & charging'))).slice(0, 5)
+  const related = CATALOG.filter(x => x.shelf && x.physical && x.id !== p.id && x.group !== p.group && (p.catalogType === 'console' ? x.category === 'Storage' : x.category === p.category || (p.category === 'Controllers' && x.category === 'Stands & charging'))).slice(0, 5)
   const total = countOf(p.ratingCount)
   const save = p.listPrice ? p.listPrice - p.price : 0
   const crumbParent = p.catalogType === 'console' ? ['Consoles', '/en-US/consoles/all-consoles'] : ['Accessories', '/en-US/store/b/xbox-accessories']
