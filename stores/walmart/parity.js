@@ -5,7 +5,7 @@
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { productPhoto } from '../../lib/product-photos.js'
 import { esc } from '../../lib/html.js'
-import { PRODUCTS, productPath } from './data.js'
+import { PRODUCTS, CATALOG, productPath } from './data.js'
 import { DEPARTMENTS } from './catalog.js'
 import * as B from './browse.js'
 import { ALL_DEPARTMENTS, DEPARTMENT_MENU, SERVICE_MENU, NAV_BAR, FOOTER_LINKS } from './sitetree.js'
@@ -43,8 +43,27 @@ export function shopByCategory(base, path) {
 const crumbs = (base, items) => `<nav class="wm-crumbs" aria-label="Breadcrumb"><a href="${base}/">Home</a>${items.map(([n, p]) => p ? ` / <a href="${base}${p}">${esc(n)}</a>` : ` / <span aria-current="page">${esc(n)}</span>`).join('')}</nav>`
 
 // Products the existing catalog supports for a tree node (often none in reference mode).
+const discountOf = p => p.wasPrice ? (p.wasPrice - p.price) / p.wasPrice : 0
+// Savings and featured-shop pages filled from the reference assortment, as on walmart.com.
+const FEATURED = {
+  '/shop/deals/flash-deals': () => CATALOG.filter(p => p.wasPrice).sort((a, b) => discountOf(b) - discountOf(a)),
+  '/shop/deals/clearance': () => CATALOG.filter(p => discountOf(p) >= 0.2),
+  '/shop/best-sellers': () => CATALOG.filter(p => p.tileBadge === 'Best seller' || p.ratings >= 15000).sort((a, b) => b.ratings - a.ratings),
+  '/cp/new-trending/7689165': () => CATALOG.filter(p => p.kind === 'game' || ['games', 'electronics', 'toys'].includes(p.department) && (p.tileBadge === 'Popular pick' || p.ratings < 1000)),
+  '/shop/deals/video-games-and-media': () => CATALOG.filter(p => p.department === 'games' && p.wasPrice),
+}
 function nodeProducts(node) {
   const n = node.name.toLowerCase()
+  if (!fixtureCatalog) {
+    if (FEATURED[node.path]) return FEATURED[node.path]()
+    if (node.dept === node) return CATALOG.filter(p => p.deptPath === node.path)
+    const shelf = CATALOG.filter(p => p.nodePath === node.path)
+    if (node.dept?.name === 'Video Games') {
+      if (n === 'playstation') return [...PRODUCTS.filter(p => p.kind === 'game' && p.platform === 'ps5'), ...shelf]
+      if (n === 'xbox') return [...PRODUCTS.filter(p => p.kind === 'game' && p.platform === 'xbox'), ...shelf]
+    }
+    return shelf
+  }
   if (node.dept?.name === 'Video Games') {
     if (n === 'playstation') return PRODUCTS.filter(p => p.kind === 'game' && p.platform === 'ps5')
     if (n === 'xbox') return PRODUCTS.filter(p => p.kind === 'game' && p.platform === 'xbox')
@@ -53,7 +72,7 @@ function nodeProducts(node) {
   }
   return PRODUCTS.filter(p => String(p.category).toLowerCase() === n)
 }
-const emptyCategory = (base, name) => `<section class="wm-empty wm-empty-cat"><svg viewBox="0 0 64 64" aria-hidden="true" width="64" height="64"><circle cx="28" cy="28" r="17" fill="none" stroke="#0053E2" stroke-width="5"/><line x1="41" y1="41" x2="56" y2="56" stroke="#0053E2" stroke-width="6" stroke-linecap="round"/></svg><h2>No items to show in ${esc(name)} right now</h2><p>This simulated store only carries a small assortment, so this Walmart.com category page shows its layout, filters and links without products. ${fixtureCatalog ? '' : 'Product listings here are limited to items with captured source evidence.'}</p><a class="wm-pill" href="${base}/all-departments">Browse all departments</a> <a href="${base}/search?q=grand+theft+auto+vi">Shop Grand Theft Auto VI</a></section>`
+const emptyCategory = (base, name) => `<section class="wm-empty wm-empty-cat"><svg viewBox="0 0 64 64" aria-hidden="true" width="64" height="64"><circle cx="28" cy="28" r="17" fill="none" stroke="#0053E2" stroke-width="5"/><line x1="41" y1="41" x2="56" y2="56" stroke="#0053E2" stroke-width="6" stroke-linecap="round"/></svg><h2>No items to show in ${esc(name)} right now</h2><p>${fixtureCatalog ? 'This simulated store only carries a small assortment, so this Walmart.com category page shows its layout, filters and links without products.' : 'Try another category, or search for what you need.'}</p><a class="wm-pill" href="${base}/all-departments">Browse all departments</a> <a href="${base}/search?q=grand+theft+auto+vi">Shop Grand Theft Auto VI</a></section>`
 
 export function landingPage({ base, node, query, tile }) {
   const dept = node.dept, isDept = dept === node
@@ -86,7 +105,7 @@ export const INFO = {
   '/adchoices': ['AdChoices', 'Interest-based advertising', ['Walmart and its partners use information about browsing and purchases to show interest-based ads. The AdChoices section of the privacy notice explains how to opt out of interest-based advertising in browsers and apps.'], [['Privacy Notice', '/privacy-notice'], ['Your Privacy Choices', '/privacyrequest']]],
   '/consumer-health-data-privacy-notices': ['Consumer Health Data Privacy Notices', 'Privacy & security', ['These notices explain how Walmart handles consumer health data under state laws such as Washington\'s My Health My Data Act and Nevada\'s consumer health data law, and how to exercise related rights.'], [['Privacy Notice', '/privacy-notice']]],
   '/spark-driver': ['Learn about Spark Driver', 'Deliver with Spark', ['The Spark Driver app lets independent contractors pick up and deliver Walmart orders in their area and earn money on their own schedule.', 'Drivers sign up in the app, which shows available delivery offers and earnings.'], [['Pickup and Delivery', '/help/article/pickup-and-delivery/d0d02a5f54e54592930f110aaf6a2f50']]],
-  '/brand/branddirectory': ['Brand Shop Directory', 'Shop by brand', ['The Brand Shop Directory lists brand storefronts on Walmart.com from A to Z. Each brand shop collects that brand\'s items, featured collections and deals.', 'This simulated store does not carry brand inventory; use search to find the items it does list.'], [['All Departments', '/all-departments'], ['Search Grand Theft Auto VI', '/search?q=grand+theft+auto+vi']]],
+  '/brand/branddirectory': ['Brand Shop Directory', 'Shop by brand', ['The Brand Shop Directory lists brand storefronts on Walmart.com from A to Z. Each brand shop collects that brand\'s items, featured collections and deals.', 'Search a brand name to see its items, for example Great Value, onn., Mainstays or Sony.'], [['All Departments', '/all-departments'], ['Search Grand Theft Auto VI', '/search?q=grand+theft+auto+vi']]],
   '/cp/about-walmart-business/6136230': ['Walmart Business', 'Buying for work?', ['Walmart Business is a purchasing site for organizations such as small businesses, nonprofits, schools and churches, with business accounts, multiple users, tax-exempt purchasing and a Walmart Business+ membership.'], [['Tax Exempt Program', '/cp/tax-exemption-program/8480422'], ['Create an account', '/account/sign-up']]],
   '/cp/walmart-in-the-know/7781927': ['#IYWYK', 'If you know, you know', ['#IYWYK ("If You Know You Know") is Walmart\'s editorial shop of trending fashion, beauty and home finds picked by creators.'], [['Clothing, Shoes & Accessories', '/cp/clothing/5438'], ['Beauty', '/cp/beauty/1085666']]],
   '/cp/tax-exemption-program/8480422': ['Tax Exempt Program', 'Shop tax free', ['Qualifying tax-exempt organizations can enroll their Walmart.com account in the Tax Exempt Program by submitting their exemption certificate. Once approved, eligible online purchases are made without sales tax.', 'This simulated store does not process exemption certificates; checkout always shows estimated tax.'], [['Walmart Business', '/cp/about-walmart-business/6136230'], ['Account & Payments help', '/help/article/payments-and-preorders']]],
@@ -186,7 +205,7 @@ export function dealsPage(base) {
   return `<div class="wm-deals">${crumbs(base, [['Deals']])}<section class="wm-deals-hero"><p class="wm-eyebrow">Shop Deals &amp; More</p><h1>Deals</h1><p>Rollbacks, clearance and Flash Deals across every department.</p></section><nav class="wm-chip-row wm-deal-chips" aria-label="Deal categories">${chips.map(([l, p]) => `<a class="wm-chip" href="${base}${p}">${esc(l)}</a>`).join('')}</nav>
   <section><div class="wm-section-head"><h2>Must-haves for less</h2></div><div class="wm-deal-tiles">${tiles.map(([l, p, s]) => `<a href="${base}${p}"><span class="wm-deal-flag">Deal</span><h3>${esc(l)}</h3><p>${esc(s)}</p><span class="wm-text-cta">Shop now</span></a>`).join('')}</div></section>
   <section class="wm-deals-split"><article><h2>Shopping, simplified</h2><p>Save items to a list, set your pickup or shipping preference and check Purchase History for order updates.</p><a href="${base}/lists">Lists</a> · <a href="${base}/orders">Purchase History</a></article><article><h2>Get inspired</h2><p>Browse departments for seasonal ideas and everyday low prices.</p><a href="${base}/all-departments">All Departments</a></article></section>
-  <section class="wm-about"><h2>How to plan your Fall Deals shopping</h2><p>Make a list of what you need, compare prices across Rollbacks and Clearance, and check Flash Deals often because they are limited-time offers while supplies last.</p><h2>Choosing between online, in-store, and app-exclusive options</h2><p>Some deals are online only, some are in stores only, and some are available in the Walmart app. Each item page shows how you can get it. This simulated store shows deal categories but has no discounted inventory.</p></section></div>`
+  <section class="wm-about"><h2>How to plan your Fall Deals shopping</h2><p>Make a list of what you need, compare prices across Rollbacks and Clearance, and check Flash Deals often because they are limited-time offers while supplies last.</p><h2>Choosing between online, in-store, and app-exclusive options</h2><p>Some deals are online only, some are in stores only, and some are available in the Walmart app. Each item page shows how you can get it. Rollback prices are shown on each item.</p></section></div>`
 }
 
 // ---- registry ----
@@ -207,7 +226,7 @@ export function sitemapPage(base) {
   return `<section class="wm-sitemap"><h1>Site Map</h1><p>Every department, service and customer page on this store.</p><h2>Departments</h2><div class="wm-all-depts-grid">${ALL_DEPARTMENTS.map(([name, path, subs]) => `<section><h3><a href="${base}${path}">${esc(name)}</a></h3><ul>${subs.filter(([, p]) => p !== path).map(([s, p]) => `<li><a href="${base}${p}">${esc(s)}</a></li>`).join('')}</ul></section>`).join('')}</div><div class="wm-sitemap-cols">${block('Customer service & shopping', customer)}${block('Services', services)}${block('About Walmart & policies', FOOTER_LINKS.filter(([, p]) => !['/all-departments', '/help', '/store/directory'].includes(p)))}${block('Help articles', Object.entries(HELP_ARTICLES).map(([k, [t]]) => [t, `/help/article/${k}`]))}</div></section>`
 }
 export function sitemapXml(base) {
-  const paths = new Set(['/', '/all-departments', '/sitemap', '/search?q=grand+theft+auto+vi', ...PRODUCTS.map(p => productPath('', p)), ...TREE.keys(), ...Object.keys(INFO), ...SERVICE_MENU.map(s => s[1]), ...NAV_BAR.map(s => s[1]), ...DEPARTMENT_MENU.map(s => s[1]), ...FOOTER_LINKS.map(s => s[1]), ...Object.keys(HELP_ARTICLES).map(k => `/help/article/${k}`), '/help', '/store/directory', '/store-finder', '/cp/gift-cards/96894', '/account/giftcards/balance', '/shop/deals', '/registry', '/plus', '/services', '/cart', '/account/login', '/orders', '/lists', '/my-items'])
+  const paths = new Set(['/', '/all-departments', '/sitemap', '/search?q=grand+theft+auto+vi', ...CATALOG.map(p => productPath('', p)), ...TREE.keys(), ...Object.keys(INFO), ...SERVICE_MENU.map(s => s[1]), ...NAV_BAR.map(s => s[1]), ...DEPARTMENT_MENU.map(s => s[1]), ...FOOTER_LINKS.map(s => s[1]), ...Object.keys(HELP_ARTICLES).map(k => `/help/article/${k}`), '/help', '/store/directory', '/store-finder', '/cp/gift-cards/96894', '/account/giftcards/balance', '/shop/deals', '/registry', '/plus', '/services', '/cart', '/account/login', '/orders', '/lists', '/my-items'])
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...paths].map(p => `<url><loc>${esc(base + p)}</loc></url>`).join('\n')}\n</urlset>\n`
 }
 

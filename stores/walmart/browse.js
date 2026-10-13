@@ -3,18 +3,46 @@ import { productImage } from '../../lib/product-assets.js'
 import { CATALOG_PLATFORMS, pageWindow } from '../amazon/assortment500.js'
 import { esc, money } from '../../lib/html.js'
 import { productPhoto } from '../../lib/product-photos.js'
-import { PRODUCTS, productPath, refine } from './data.js'
+import { shelfImage, SHELF_DEPARTMENTS } from './shelf.js'
+import { CATALOG, productPath, refine } from './data.js'
 import { DEPARTMENTS, CAMPAIGNS, SELLERS, departmentPath, categorySlug } from './catalog.js'
 
 export const FILTER_KEYS = ['department','category','price','availability','brand','format','platform','rating','fulfillment','seller','deal','dietary','size','sort']
 export const filtersFrom = query => Object.fromEntries(FILTER_KEYS.map(k=>[k,typeof query[k]==='string' ? query[k]:'']))
-const thumb = p => p.title ? productImage('walmart',p) : p.photo ? productPhoto(p.photo,p.name) : `<img src="${esc(p.art)}" alt="${esc(p.name)}">`
+const thumb = p => p.shelf ? shelfImage(p) : p.title ? productImage('walmart',p) : p.photo ? productPhoto(p.photo,p.name) : `<img src="${esc(p.art)}" alt="${esc(p.name)}">`
 const queryLink = (route,values) => {const q = new URLSearchParams(Object.entries(values).filter(([,v])=>v!=='' && v!=null));return `${route}${q.size ? `?${esc(q.toString())}`:''}`}
 const hero = (base,c) => `<section class="wm-depth-hero" style="background-image:url('/static/art/depth/${c.image}-campaign.png')"><div><p class="wm-eyebrow">Save money. Live better.</p><h1>${esc(c.title)}</h1><p>${esc(c.subtitle)}</p><a class="wm-pill wm-pill-white" href="${base}/shop/${c.slug}">Shop now</a></div></section>`
 // walmart.com homepage (captured 2026-10-13): promo mosaic, Walmart+ hero, Flash Deals row, seasonal promo grid.
 // Promo cards only link to categories; product tiles come from the active catalog.
 function promo(base,{title,sub,cta='Shop now',path,photo,tone,big=false}) {
  return `<a class="wm-promo wm-promo-${tone}${big?' wm-promo-big':''}" href="${base}${path}"><div><h2>${title}</h2>${sub?`<p>${sub}</p>`:''}<span class="${big?'wm-pill wm-pill-white':'wm-text-cta'}">${cta}</span></div>${photo?productPhoto(photo,''):''}</a>`
+}
+// Reference homepage: walmart.com's promo mosaic and seasonal tiles around product carousels from
+// many departments. The GTA VI preorders sit inside the "New releases" video game row only.
+const discount = p => p.wasPrice ? (p.wasPrice - p.price) / p.wasPrice : 0
+function referenceHome({base,products,tile,head,mosaic,grid}) {
+ const shelf = products.filter(p=>p.shelf), dept = k => shelf.filter(p=>p.department===k)
+ const popular = list => [...list].sort((a,b)=>b.ratings-a.ratings)
+ const row = (title,sub,path,items,id) => `<section class="wm-depth-shelf wm-home-row" data-home-row="${id}"><div class="wm-section-head"><div><h2>${title}</h2>${sub?`<h3>${sub}</h3>`:''}</div><a href="${base}${path}">View all</a></div><div class="wm-grid wm-home-products">${items.slice(0,6).map(p=>tile(base,p,{from:'home'})).join('')}</div></section>`
+ // Flash Deals: the deepest current Rollbacks, one per department so the row spans the store.
+ const flashPicks=[], seen=new Set()
+ for (const p of [...shelf].filter(p=>p.wasPrice).sort((a,b)=>discount(b)-discount(a))) { if(!seen.has(p.department)){seen.add(p.department);flashPicks.push(p)} }
+ const flash=`<section class="wm-flash wm-home-row" data-home-row="flash-deals"><div class="wm-section-head"><div><h2>Flash Deals</h2><h3>Up to 65% off</h3></div><a href="${base}/shop/deals/flash-deals">View all</a></div><div class="wm-grid wm-home-products">${flashPicks.slice(0,6).map(p=>tile(base,p,{from:'home'})).join('')}</div></section>`
+ const gta=products.filter(p=>p.kind==='game')
+ const releases=['EA Sports College Football 27, PlayStation 5','Mario Kart World, Nintendo Switch 2','NBA 2K27, PlayStation 5','Halo: Campaign Evolved, Xbox Series X'].map(t=>shelf.find(p=>p.title===t)).filter(Boolean)
+ const gameRow=[releases[0],gta[0],releases[1],releases[2],gta[1],releases[3]].filter(Boolean)
+ return `<div class="wm-depth-home wm-real-home">${head}${mosaic}${flash}
+ ${row('Stock up on household essentials','Paper towels, laundry &amp; more','/cp/household-essentials/1115193',popular(dept('household')),'household')}
+ ${grid}
+ ${row('Top deals in tech','TVs, laptops, headphones &amp; more','/cp/electronics/3944',[...dept('electronics')].filter(p=>p.wasPrice).sort((a,b)=>b.ratings-a.ratings),'electronics')}
+ ${row('Grocery essentials','Low prices on pantry staples','/cp/food/976759',popular(dept('groceries')),'groceries')}
+ ${row('New releases in video games','Just-released games and preorders','/cp/video-games/2636',gameRow,'video-games')}
+ ${row('Refresh your space','Furniture, kitchen &amp; appliances','/cp/home/4044',popular(dept('home')).filter((p,i)=>i%2===0),'home')}
+ ${row('Top toys for every kid','LEGO, Barbie, Hot Wheels &amp; more','/cp/toys/4171',popular(dept('toys')),'toys')}
+ ${row('Pet favorites','Food, litter &amp; treats','/cp/pet-supplies/5440',popular(dept('pets')),'pets')}
+ ${row('Beauty best sellers','Skincare, makeup &amp; hair','/cp/beauty/1085666',popular(dept('beauty')),'beauty')}
+ ${row('Baby must-haves','Diapers, wipes &amp; feeding','/cp/baby-products/5427',popular(dept('baby')),'baby')}
+ <a class="wm-rollback-strip" href="${base}/shop/savings"><span class="wm-rollback-mark" aria-hidden="true">↓</span><div><h2>Rollbacks &amp; more</h2><p>Find a little more value in your everyday.</p></div><span class="wm-pill wm-pill-white">Shop savings</span></a></div>`
 }
 export function homePage({base,products,tile}) {
  const P=(o)=>promo(base,o)
@@ -29,7 +57,7 @@ export function homePage({base,products,tile}) {
  const gta=products.filter(p=>p.kind==='game')
  const gtaShelf=`<section class="wm-depth-shelf wm-home-gta"><div class="wm-section-head"><h2>Video Games</h2><a href="${base}/search?q=grand+theft+auto+vi">View all</a></div><p class="wm-fine">Preorder Grand Theft Auto VI</p><div class="wm-grid wm-home-products">${gta.map(p=>tile(base,p,{from:'home'})).join('')}</div></section>`
  const head=`<h1 class="sr-only">Walmart | Save Money. Live better.</h1>`
- if (!fixtureCatalog) return `<div class="wm-depth-home wm-real-home">${head}${mosaic}${flash}${gtaShelf}${grid}<a class="wm-rollback-strip" href="${base}/shop/savings"><span class="wm-rollback-mark" aria-hidden="true">↓</span><div><h2>Rollbacks &amp; more</h2><p>Find a little more value in your everyday.</p></div><span class="wm-pill wm-pill-white">Shop savings</span></a></div>`
+ if (!fixtureCatalog) return referenceHome({base,products,tile,head,mosaic,grid})
  const shelf = (title,path,items) => `<section class="wm-depth-shelf"><div class="wm-section-head"><h2>${title}</h2><a href="${base}${path}">View all</a></div><div class="wm-grid wm-home-products">${items.map(p=>tile(base,p,{from:'home'})).join('')}</div></section>`
  return `<div class="wm-depth-home wm-real-home">${head}${mosaic}${flash}<section><div class="wm-section-head"><h2>Shop by department</h2><a href="${base}/all-departments">See all departments</a></div><nav class="wm-department-shelf" aria-label="Shop by department">${DEPARTMENTS.map(d=>`<a href="${departmentPath(base,d)}">${thumb(d)}<span>${esc(d.name)}</span></a>`).join('')}</nav></section>
  ${shelf('Low prices on your weekly essentials','/cp/food/976759',products.filter(p=>p.department==='groceries').slice(0,6))}
@@ -43,19 +71,25 @@ export function homePage({base,products,tile}) {
  ${shelf('Coming soon: Grand Theft Auto VI','/search?q=gta+6',gta)}</div>`
 }
 export function departmentsPage({base,tile}) {
- return `<section class="wm-departments"><h1>All Departments</h1><p>Find the essentials, new favorites and everyday value.</p><div class="wm-department-grid">${DEPARTMENTS.map(d=>`<article><a href="${departmentPath(base,d)}">${thumb(d)}<h2>${esc(d.name)}</h2></a><p>${esc(d.intro)}</p><ul>${[...new Set(PRODUCTS.filter(p=>p.department===d.key).map(p=>p.category))].map(c=>`<li><a href="${base}/browse/${categorySlug(c)}?department=${d.key}">${esc(c)}</a></li>`).join('')}</ul><a href="${departmentPath(base,d)}">Shop all ${esc(d.name)}</a></article>`).join('')}</div></section>`
+ return `<section class="wm-departments"><h1>All Departments</h1><p>Find the essentials, new favorites and everyday value.</p><div class="wm-department-grid">${DEPARTMENTS.map(d=>`<article><a href="${departmentPath(base,d)}">${thumb(d)}<h2>${esc(d.name)}</h2></a><p>${esc(d.intro)}</p><ul>${[...new Set(CATALOG.filter(p=>p.department===d.key).map(p=>p.category))].map(c=>`<li><a href="${base}/browse/${categorySlug(c)}?department=${d.key}">${esc(c)}</a></li>`).join('')}</ul><a href="${departmentPath(base,d)}">Shop all ${esc(d.name)}</a></article>`).join('')}</div></section>`
 }
-export function listingPage({base,q='',source=PRODUCTS,filters={},page=1,route=`${base}/search`,title,description='',fixed={},tile,level=1,empty=''}) {
+// Like walmart.com's Brand facet: the most-listed brands first, capped, plus any brand already chosen.
+function topBrands(source,chosen) {
+ const counts=new Map();for(const p of source)if(p.brand)counts.set(p.brand,(counts.get(p.brand)??0)+1)
+ const top=[...counts].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).slice(0,15).map(([b])=>b)
+ return chosen&&counts.has(chosen)&&!top.includes(chosen)?[...top,chosen]:top
+}
+export function listingPage({base,q='',source=CATALOG,filters={},page=1,route=`${base}/search`,title,description='',fixed={},tile,level=1,empty=''}) {
  const products=refine(source,filters), pageSize=12, pages=Math.max(1,Math.ceil(products.length/pageSize)), current=Math.min(pages,Math.max(1,Number.parseInt(page,10)||1))
  const shown=products.slice((current-1)*pageSize,current*pageSize)
  const values={...fixed,...filters,...(route===`${base}/search` ? {q}: {})}
  const distinct = key => [...new Set(source.map(p=>p[key]).filter(Boolean))]
  const gaming=source.some(p=>p.department==='games'), grocery=source.some(p=>p.department==='groceries')
  const options=[
-  ['department','Department',DEPARTMENTS.filter(d=>source.some(p=>p.department===d.key)).map(d=>[d.key,d.name])],
+  ['department','Department',(fixtureCatalog?DEPARTMENTS:SHELF_DEPARTMENTS).filter(d=>source.some(p=>p.department===d.key)).map(d=>[d.key,d.name])],
   ['category','Category',distinct('category').map(v=>[v,v])],
   ['price','Price',[['under25','Under $25'],['25to50','$25 to $50'],['50to100','$50 to $100'],['over100','Over $100']]],
-  ['brand','Brand',distinct('brand').map(v=>[v,v])],
+  ['brand','Brand',topBrands(source,filters.brand).map(v=>[v,v])],
   ['seller','Retailer',distinct('sellerId').map(v=>[v,SELLERS[v].name])],
   ['availability','Availability',[['instock','In stock'],['preorder','Preorder'],['outofstock','Out of stock']]],
   ['rating','Customer rating',[['4','4 stars & up'],['4.5','4.5 stars & up']]],
@@ -79,18 +113,18 @@ export function listingPage({base,q='',source=PRODUCTS,filters={},page=1,route=`
  <div class="wm-related"><b>Related searches</b> ${suggestions.map(s=>`<a class="wm-chip" href="${base}/search?q=${encodeURIComponent(s)}">${esc(s)}</a>`).join('')}</div></div></div></div>`
 }
 export function departmentPage({base,department,filters,page,tile,crumbs='',shopBy='',heading=department.name,route:fixedRoute,empty=''}) {
- const source=PRODUCTS.filter(p=>p.department===department.key)
+ const source=CATALOG.filter(p=>p.department===department.key)
  const categories=[...new Set(source.map(p=>p.category))]
  const route=fixedRoute ?? departmentPath(base,department)
  return `${crumbs}<section class="wm-department-intro"><div><p><a href="${base}/all-departments">All Departments</a></p><h1>${esc(heading)}</h1><p>${esc(department.intro)}</p></div>${department.campaign?`<img src="/static/art/depth/${department.campaign}-campaign.png" alt="${esc(department.name)} inspiration">`:thumb(department)}</section><nav class="wm-category-links">${categories.map(c=>`<a href="${base}/browse/${categorySlug(c)}?department=${department.key}">${thumb(source.find(p=>p.category===c))}<span>${esc(c)}</span></a>`).join('')}</nav>${shopBy}${listingPage({base,source,filters,page,route,title:`Shop all ${heading}`,level:2,empty,tile})}`
 }
 export function campaignPage({base,campaign,filters,page,tile}) {
- const source=PRODUCTS.filter(p=>campaign.departments.includes(p.department))
+ const source=CATALOG.filter(p=>campaign.departments.includes(p.department))
  return hero(base,campaign)+listingPage({base,source,filters,page,route:`${base}/shop/${campaign.slug}`,title:campaign.title,tile})
 }
 export function sellerPage({base,seller,filters,page,tile}) {
- if (!fixtureCatalog) return `<section class="wm-seller-profile"><h1>${esc(seller.name)}</h1><p>Sold and shipped by Walmart.</p></section>${listingPage({base,source:PRODUCTS.filter(p=>p.sellerId===seller.id),filters,page,route:`${base}/seller/${seller.id}`,title:`Shop ${seller.name}`,tile})}`
- return `<section class="wm-seller-profile"><p>Marketplace seller</p><h1>${esc(seller.name)}</h1><p><strong>${seller.rating} out of 5</strong> seller rating</p><p>${esc(seller.description)}</p><h2>Shipping & returns</h2><p>Each item shows its shipping estimate. ${esc(seller.returns)}</p><a href="${base}/help">Get help with an order or seller</a></section>${listingPage({base,source:PRODUCTS.filter(p=>p.sellerId===seller.id),filters,page,route:`${base}/seller/${seller.id}`,title:`Shop ${seller.name}`,tile})}`
+ if (!fixtureCatalog) return `<section class="wm-seller-profile"><h1>${esc(seller.name)}</h1><p>Sold and shipped by Walmart.</p></section>${listingPage({base,source:CATALOG.filter(p=>p.sellerId===seller.id),filters,page,route:`${base}/seller/${seller.id}`,title:`Shop ${seller.name}`,tile})}`
+ return `<section class="wm-seller-profile"><p>Marketplace seller</p><h1>${esc(seller.name)}</h1><p><strong>${seller.rating} out of 5</strong> seller rating</p><p>${esc(seller.description)}</p><h2>Shipping & returns</h2><p>Each item shows its shipping estimate. ${esc(seller.returns)}</p><a href="${base}/help">Get help with an order or seller</a></section>${listingPage({base,source:CATALOG.filter(p=>p.sellerId===seller.id),filters,page,route:`${base}/seller/${seller.id}`,title:`Shop ${seller.name}`,tile})}`
 }
 export function servicePage({base,slug}) {
  const services={

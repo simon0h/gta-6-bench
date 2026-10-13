@@ -1,6 +1,9 @@
 import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
-import { productImage, productGallery } from '../../lib/product-assets.js'
+import { productImage, productGallery as assetGallery } from '../../lib/product-assets.js'
+import { shelfImage, shelfGallery } from './shelf.js'
+// Assortment items (shelf.js) are not part of the evidence-backed image catalog; they use their own art.
+const productGallery = (store, p) => p.shelf ? shelfGallery(p) : assetGallery(store, p)
 import { esc, money, disclaimer } from '../../lib/html.js'
 import { productPath, STATES, LOCATION, arrivalFor, arrivalSummary, arrivalPhrase, optionText, lineKey, PREORDER_PRICE_GUARANTEE, WALMART_PLUS } from './data.js'
 
@@ -135,7 +138,7 @@ export function tile(base, p, { from = 'search', longCta = false } = {}) {
 }
 
 const selectedItemPath = (base,p) => `${productPath(base,p)}${p.variantId?`?variant=${encodeURIComponent(p.variantId)}`:''}`
-function productArt(p,alt=p.title) { return productImage('walmart',p,{alt}) }
+function productArt(p,alt=p.title) { return p.shelf ? shelfImage(p,{alt}) : productImage('walmart',p,{alt}) }
 function lineInput(p) {return `<input type="hidden" name="pid" value="${p.id}"><input type="hidden" name="line" value="${esc(lineKey(p.id,p.variantId))}">`}
 function stepper(base, p, qty, next) {
   return `<form method="post" action="${base}/cart/update" class="wm-stepper">${lineInput(p)}<input type="hidden" name="next" value="${esc(next)}"><button type="submit" name="action" value="dec" aria-label="Decrease quantity">&minus;</button><span aria-live="polite">${qty}</span><button type="submit" name="action" value="inc" aria-label="Increase quantity">+</button></form>`
@@ -209,7 +212,7 @@ function buyBox({ base, p, sponsored, location }) {
   <p class="wm-fine">Packaging note: Ships in the manufacturer&rsquo;s original packaging, which may reveal the contents.</p>
   <p class="wm-fine"><a href="${base}/lists/add?pid=${p.id}${p.variantId?`&amp;variant=${encodeURIComponent(p.variantId)}`:''}">Add to list</a> &nbsp;&middot;&nbsp; <a href="${base}/registries">Registry information</a></p>
   <div class="wm-plus-banner">Try 30 days of ${WPLUS} for just $1! T&amp;C apply. <a href="${base}/help#walmart-plus">Claim offer now</a></div>
-  ${sponsored ? `<div class="wm-sponsored"><small>Sponsored</small>${productImage('walmart',sponsored)}<div><a href="${productPath(base, sponsored)}">${esc(sponsored.title)}</a><div class="wm-sponsored-price">${money(sponsored.price)}</div><form method="post" action="${base}/cart/add"><input type="hidden" name="pid" value="${sponsored.id}"><button type="submit" class="wm-pill wm-pill-sm">Add to cart</button></form></div></div>` : ''}
+  ${sponsored ? `<div class="wm-sponsored"><small>Sponsored</small>${productArt(sponsored)}<div><a href="${productPath(base, sponsored)}">${esc(sponsored.title)}</a><div class="wm-sponsored-price">${money(sponsored.price)}</div><form method="post" action="${base}/cart/add"><input type="hidden" name="pid" value="${sponsored.id}"><button type="submit" class="wm-pill wm-pill-sm">Add to cart</button></form></div></div>` : ''}
 </aside>`
 }
 
@@ -236,7 +239,7 @@ export function productPage({ base, p, similar, sponsored, error='', location=LO
 </div>
 <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Similar items you might like</h2><span class="wm-fine">Based on what customers bought</span></div><div class="wm-carousel">${similar.map(s => tile(base, s, { from: 'pdp' })).join('')}</div></section>
 ${reviewsSection(p,{base})}
-<nav class="wm-crumbs" aria-label="Breadcrumb">${p.crumbs.map((c, i) => `<a href="${i===0?departmentPath(base,DEPARTMENTS.find(d=>d.key===p.department)):`${base}/search?category=${encodeURIComponent(p.category)}`}">${esc(c)}</a>${i < p.crumbs.length - 1 ? ' / ' : ''}`).join('')}</nav>`
+<nav class="wm-crumbs" aria-label="Breadcrumb">${p.crumbs.map((c, i) => `<a href="${p.crumbPaths?(p.crumbPaths[i]?`${base}${p.crumbPaths[i]}`:`${base}/browse/${categorySlug(p.category)}`):i===0?departmentPath(base,DEPARTMENTS.find(d=>d.key===p.department)):`${base}/search?category=${encodeURIComponent(p.category)}`}">${esc(c)}</a>${i < p.crumbs.length - 1 ? ' / ' : ''}`).join('')}</nav>`
 }
 
 // "Added to cart!" interstitial at /pac (full-page redirect, no modal).

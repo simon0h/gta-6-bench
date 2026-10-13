@@ -1,5 +1,6 @@
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { productImage } from '../../lib/product-assets.js'
+import { shelfImage } from './shelf.js'
 import { randomUUID } from 'node:crypto'
 import { esc, money } from '../../lib/html.js'
 import { retailState, rememberProduct, saveAddress, deleteAddress, defaultAddress, ownedOrders, ownedOrder, orderStatus, requestOrderAction, createSupportCase } from '../../lib/retail-state.js'
@@ -39,7 +40,7 @@ function lists(req) {
 }
 const selectedUrl = (base, product) => `${productPath(base, product)}${product.variantId ? `?variant=${encodeURIComponent(product.variantId)}` : ''}`
 function miniItem(base, product, qty = 1, actions = '') {
-  return `<article class="wm-journey-item" data-product="${product.id}">${productImage('walmart',product)}<div><a href="${selectedUrl(base, product)}"><b>${esc(product.title)}</b></a><p>${esc(optionText(product))}</p><p>${money(product.price)} · Qty ${qty} · ${stockLimit(product) ? 'Shipping available' : 'Out of stock'}</p>${actions}</div></article>`
+  return `<article class="wm-journey-item" data-product="${product.id}">${product.shelf ? shelfImage(product) : productImage('walmart',product)}<div><a href="${selectedUrl(base, product)}"><b>${esc(product.title)}</b></a><p>${esc(optionText(product))}</p><p>${money(product.price)} · Qty ${qty} · ${stockLimit(product) ? 'Shipping available' : 'Out of stock'}</p>${actions}</div></article>`
 }
 const orderLink = (base, order) => `${base}/orders/${order.id}`
 function orderCard(base, order) {
