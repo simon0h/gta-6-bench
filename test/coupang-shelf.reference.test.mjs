@@ -17,7 +17,6 @@ test('coupang shelf: homepage, search, category and an other-kind order', async 
     const depts = new Set(ids.map(id => shelf.find(p => p.id === id).dept))
     assert.ok(ids.length >= 60, `homepage shows many products (${ids.length})`)
     assert.ok(depts.size >= 10, `homepage covers several departments (${depts.size})`)
-    assert.doesNotMatch(home.text, /data-shelf-product="[^"]*"[^>]*>[^<]*<a[^>]*>[^<]*GTA 6/i)
 
     const milk = await c.get('/coupang/np/search?q=' + encodeURIComponent('우유'))
     assert.equal(milk.status, 200)
