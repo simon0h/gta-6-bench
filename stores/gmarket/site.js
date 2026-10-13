@@ -1,11 +1,13 @@
-// Reference-mode chrome and non-product pages for the Gmarket clone.
-// Layout follows the www.gmarket.co.kr PC site captured 2026-10-13. Product areas never
-// invent merchandise: they show only the captured read-only observations or an
-// explicit "not captured" state.
+// Reference-mode chrome and pages for the Gmarket clone.
+// Layout follows the www.gmarket.co.kr PC site captured 2026-10-13. Product areas show the
+// everyday shelf assortment (shelf.js) next to the captured read-only GTA 6 observations,
+// which keep their own "purchase unverified" cards and detail pages.
 import { esc, money, disclaimer } from '../../lib/html.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
 import { departments, departmentByCode, menuTabs, exhibitions, services, homeShopping, superdealTabs, starCategories,
   emartCategories, emartPromotions, policies, faqTopics, notices, mySections, company } from './site-data.js'
+import { shelf, inDept, best } from './shelf.js'
+import { shelfRow, mixedBest, resultsBlock, sortLabels } from './shelf-pages.js'
 
 const won = n => money(n, 'KRW')
 const icon = {
@@ -16,7 +18,7 @@ const icon = {
 }
 const logo = '<span class="gm-logo-mark" aria-hidden="true"><b>G</b>market</span>'
 
-export function layout(base, title, user, body, query = {}) {
+export function layout(base, title, user, body, query = {}, count = 0) {
   const keyword = typeof (query.keyword ?? query.q) === 'string' ? (query.keyword ?? query.q) : ''
   const drawer = departments.map(d => `<li><a class="dep" href="${base}/n/list?category=${d.code}"><span aria-hidden="true">${d.icon}</span>${esc(d.name)}</a><ul>${d.subs.map((s, i) => `<li><a href="${base}/n/list?category=${d.code}&amp;sub=${i + 1}">${esc(s)}</a></li>`).join('')}</ul></li>`).join('')
   const footerLinks = [['회사소개', '/company'], ['채용정보', '/company/careers'], ['구매회원 약관', '/terms-policy/buyer-use'], ['판매회원 약관', '/terms-policy/seller-use'], ['개인정보 처리방침', '/terms-policy/privacy', 'strong'], ['알기쉬운 개인정보 처리방침', '/terms-policy/easy-privacy'], ['청소년보호 정책', '/terms-policy/youth'], ['납세관리 정책', '/terms-policy/tax-management'], ['전자금융거래 약관', '/terms-policy/electronic-finance'], ['판매자센터', '/seller-center'], ['광고센터', '/ad-center'], ['제휴서비스', '/partnership'], ['사이트맵', '/sitemap']]
@@ -27,7 +29,7 @@ export function layout(base, title, user, body, query = {}) {
  <div class="gm-wrap gm-gnb">
   <a class="gm-logo" href="${base}/" aria-label="G마켓 홈">${logo}</a>
   <form class="gm-search" id="skip-navigation-search" action="${base}/n/search" method="get" role="search"><label class="sr-only" for="gm-keyword">검색어 입력</label><input id="gm-keyword" name="keyword" type="search" value="${esc(keyword)}" placeholder="검색어를 입력해 주세요" autocomplete="off"><button aria-label="검색">${icon.search}</button></form>
-  <nav class="gm-my" aria-label="나의 쇼핑 메뉴"><a href="${base}/myg">${icon.my}<span>마이페이지</span></a><a href="${base}/myg/recent">${icon.recent}<span>최근본상품</span></a><a href="${base}/cart">${icon.cart}<span>장바구니</span></a></nav>
+  <nav class="gm-my" aria-label="나의 쇼핑 메뉴"><a href="${base}/myg">${icon.my}<span>마이페이지</span></a><a href="${base}/myg/recent">${icon.recent}<span>최근본상품</span></a><a href="${base}/cart" class="gm-cart-link">${icon.cart}<span>장바구니</span>${count ? `<b class="gm-cart-count" aria-label="담은 상품 ${count}개">${count}</b>` : ''}</a></nav>
  </div>
  <div class="gm-lnb"><div class="gm-wrap">
   <details class="gm-allcat" id="button__category-all"><summary><span class="burger" aria-hidden="true"></span>전체카테고리</summary><div class="gm-drawer"><ul>${drawer}</ul><a class="gm-drawer-all" href="${base}/n/category">전체카테고리 한눈에 보기 ›</a></div></details>
@@ -65,17 +67,36 @@ const cards = (base, list) => `<div class="gm-cards">${list.map(p => card(base, 
 const sidebarPage = (base, title, nav, current, body) => `<div class="gm-side-layout"><aside class="gm-side"><p class="gm-side-title">${title}</p><ul>${nav.map(([l, p]) => `<li><a href="${base}${p}"${p === current ? ' aria-current="page"' : ''}>${esc(l)}</a></li>`).join('')}</ul></aside><div class="gm-side-body">${body}</div></div>`
 const sorts = ['G마켓 랭크순', '판매인기순', '낮은가격순', '높은가격순', '상품평 많은순', '신규상품순']
 
+// --- product groupings ------------------------------------------------------
+// [dept code, sub indexes (empty = all)] pairs used by the service pages' menus.
+const pick = pairs => shelf.filter(p => pairs.some(([d, subs]) => p.dept === d && (!subs.length || subs.includes(p.sub))))
+const F = '100000006', P = '100000005', H = '100000007', L = '100001001', FA = '100000001', B = '100000003', D = '100001007', HO = '100001004', S = '100001002', T = '100001003', BK = '100001009', EC = '100001011', TR = '100001005'
+const grocery = () => pick([[F, []], [P, []]])
+const superdealGroups = { '400000135': [[FA, [1, 2, 3]]], '400000136': [[FA, [4, 5, 6]]], '400000137': [[B, []]], '400000138': [[H, [3, 4, 5, 6]]], '400000139': [[F, []], [P, []]], '400000140': [[H, [1, 2]], [L, []]], '400000141': [[HO, []]], '400000143': [[L, []], [S, [5]]], '400000146': [[S, []]], '400000151': [[T, [1, 2]], [BK, []]], '400000148': [[D, [2, 5, 6, 7]]], '400000149': [[D, [1, 3, 4]]], '400000152': [[TR, []]], '400000153': [[EC, []]] }
+const starGroups = { '100003006': [[P, [2]]], '100004012': [[P, [1]]], '100004014': [[F, []]], '100004013': [[P, [5]]], '100004011': [[P, [3]]], '100003008': [[P, [6]]], '100003001': [[L, []]], '100004001': [[D, []]], '100003005': [[HO, []]], '100004007': [[S, []]], '100004003': [[FA, [1, 2, 3]]], '100003003': [[B, []]], '100004004': [[FA, [4, 5, 6]]], '100003009': [[H, [3, 4, 5, 6]]], '100003004': [[T, [4]]], '100004010': [[T, [1]]], '100004008': [[H, [6]], [T, [2]]], '100004006': [[T, [5]]], '100004009': [[T, [6]], [L, [5]]], '100004002': [[S, [5]]], '100006001': [[BK, [1]]], '100005001': [[BK, [2]]], '100000003': [[H, [1, 2]]] }
+const emartGroups = { '100001000': [[F, [1]]], '100001001': [[F, [2]]], '100001002': [[F, [3]]], '100001003': [[F, [4]]], '100001004': [[F, [5]]], '100001009': [[F, [6]]], '100001011': [[P, [1]]], '100001012': [[F, [2]]], '100001013': [[P, [3]]], '100001014': [[P, [3]]], '100001015': [[P, [4]]], '100001016': [[P, [5]]], '100001017': [[P, [2]]], '100001018': [[P, [2]]], '100001019': [[P, [6]]], '100001020': [[H, [1]]], '100001021': [[H, [2]]], '100001022': [[L, [2]]], '100001023': [[L, [1, 6]]], '100001024': [[L, [5]]], '100001025': [[T, [4]]], '100001026': [[B, []]], '100001027': [[H, [3, 4, 5, 6]]], '100001028': [[FA, [3]]], '100001029': [[FA, [4, 5, 6]]], '100001030': [[S, []], [T, [5]]], '100001031': [[D, []]], '100001040': [[T, [1, 2]], [BK, []]] }
+const newest = n => [...shelf].sort((a, b) => Number(b.code) - Number(a.code)).slice(0, n)
+const exhibitGroups = { 267301: () => pick([[P, [1, 4]]]), 275223: () => pick([[FA, []], [S, [6]]]), 46199: () => pick([[BK, []]]), 46705: () => grocery().filter(p => p.price >= 20000), 247323: () => shelf.filter(p => p.star), 247329: () => [...shelf].sort((a, b) => b.discount - a.discount).slice(0, 40), 247325: () => newest(40), 256447: () => pick([[B, []]]).filter(p => p.star), 254245: () => newest(24), 56191: () => pick([[P, [3]]]), 271282: () => pick([[F, []]]), 271159: () => grocery().filter(p => p.discount >= 20), 248149: () => pick([[P, [6]], [S, [5]]]) }
+const deals = list => [...list].filter(p => p.deal || p.discount >= 20).sort((a, b) => (b.deal - a.deal) || (b.discount - a.discount))
+const spread = (list, n) => { const seen = new Set(); return list.filter(p => !seen.has(p.dept) && seen.add(p.dept)).slice(0, n) }
+const productRow = (base, list, opts) => list.length ? shelfRow(base, list, opts) : ''
+
 // --- homepage -------------------------------------------------------------
 export function home(base, observations) {
   const groups = [['전체', ''], ...departments.filter(d => d.code !== '100001005').map(d => [d.name, d.code])]
+  const games = best(inDept(D, 1).filter(p => p.game))
+  const gameRow = [...games.slice(0, 2), ...observations, ...games.slice(2, 10 - observations.length)]
   return `<h1 class="sr-only">G마켓 - 지금부터의 마켓</h1>
 <section class="gm-hero" aria-label="기획전 배너"><div class="gm-hero-slide"><p class="gm-eyebrow">지금부터의 마켓</p><p class="gm-hero-title">오늘 주문하면 내일 도착<br>스타배송 도착보장</p><p>꼭 멤버십은 무료반품까지</p><a class="gm-btn" href="${base}/n/stardelivery">스타배송 바로가기</a></div><div class="gm-hero-side"><a href="${base}/n/superdeal"><strong>슈퍼딜</strong><span>오늘의 특가 모음</span></a><a href="${base}/n/smilehome"><strong>쿠폰/출첵</strong><span>매일 출석하고 캐시받기</span></a><a href="${base}/n/emartmall"><strong>이마트몰</strong><span>신선한 장보기</span></a></div></section>
 <section class="gm-home-sec" aria-labelledby="h-allcat"><h2 id="h-allcat" class="gm-sub-title">전체카테고리</h2><div class="gm-cat-icons">${departments.map(d => `<a href="${base}/n/list?category=${d.code}"><span aria-hidden="true">${d.icon}</span>${esc(d.name)}</a>`).join('')}</div></section>
-<section class="gm-home-sec">${sectionHead('지금 제일 잘 나가는 상품', '/n/best', base)}${tabs(base, groups.map(([l, c]) => [l, c ? `/n/best?groupCode=${c}` : '/n/best']), '/n/best', '베스트 카테고리')}${empty(base, '실시간 베스트 순위 상품은 수집되지 않았습니다.')}</section>
-<section class="gm-home-sec" data-reference-state="catalog" aria-labelledby="h-captured">${sectionHead('<span id="h-captured">수집된 상품</span>', '/n/search?keyword=ps5gta6', base, '검색결과 보기')}<p class="gm-muted">${observations.length}개의 공개 상품 정보를 2026년 10월 6일에 확인했습니다. 재고, 상품 구성 및 구매 가능 여부는 확인되지 않았습니다.</p>${cards(base, observations)}</section>
-<section class="gm-home-sec gm-band emart">${sectionHead('지금부터의 신선마켓, 이마트몰', '/n/emartmall', base, '바로가기')}<nav class="gm-pill-tabs">${Object.entries(emartPromotions).filter(([k]) => k !== '5').map(([k, l]) => `<a href="${base}/n/emartmall/sale?promotionCode=${k}">${l}</a>`).join('')}</nav><h3 class="gm-sub-title" id="오반장">오반장 상품</h3>${empty(base, '이마트몰 행사 상품은 수집되지 않았습니다.')}<p class="gm-more"><a href="${base}/n/emartmall/sale?promotionCode=3">오반장 상품 더보기 ›</a></p></section>
-<section class="gm-home-sec gm-band star">${sectionHead('오늘 주문 내일 도착보장, 스타배송', '/n/stardelivery', base, '바로가기')}<div class="gm-exhibits">${[267301, 275223, 46199, 46705, 247323, 247329, 247325].map(id => `<a href="${base}/rpp?exhib=${id}"><span>${esc(exhibitions[id])}</span></a>`).join('')}</div>
- <div class="gm-two"><div id="best"><h3 class="gm-sub-title">베스트 상품</h3>${empty(base, '스타배송 베스트 상품은 수집되지 않았습니다.')}<p class="gm-more"><a href="${base}/n/stardelivery/best">베스트 상품 더보기 ›</a></p></div><div id="freedelivery"><h3 class="gm-sub-title">무료배송 상품</h3>${empty(base, '무료배송 상품은 수집되지 않았습니다.')}<p class="gm-more"><a href="${base}/n/stardelivery/category?categoryCode=100000003">무료배송 상품 더보기 ›</a></p></div></div></section>
+<section class="gm-home-sec" data-home-row="best">${sectionHead('지금 제일 잘 나가는 상품', '/n/best', base)}${tabs(base, groups.map(([l, c]) => [l, c ? `/n/best?groupCode=${c}` : '/n/best']), '/n/best', '베스트 카테고리')}${productRow(base, mixedBest(shelf, 10), { ranked: true })}<p class="gm-more"><a href="${base}/n/best">베스트 상품 더보기 ›</a></p></section>
+<section class="gm-home-sec" data-home-row="superdeal">${sectionHead('슈퍼딜 <em class="gm-onair">오늘의 특가</em>', '/n/superdeal', base)}${productRow(base, spread(deals(shelf.filter(p => !mixedBest(shelf, 10).includes(p))), 5))}</section>
+<section class="gm-home-sec gm-band emart" data-home-row="emart">${sectionHead('지금부터의 신선마켓, 이마트몰', '/n/emartmall', base, '바로가기')}<nav class="gm-pill-tabs">${Object.entries(emartPromotions).filter(([k]) => k !== '5').map(([k, l]) => `<a href="${base}/n/emartmall/sale?promotionCode=${k}">${l}</a>`).join('')}</nav><h3 class="gm-sub-title" id="오반장">오반장 상품</h3>${productRow(base, [...shelf.filter(p => p.emart), ...best(grocery()).filter(p => !p.emart)].slice(0, 5))}<p class="gm-more"><a href="${base}/n/emartmall/sale?promotionCode=3">오반장 상품 더보기 ›</a></p></section>
+<section class="gm-home-sec gm-band star" data-home-row="star">${sectionHead('오늘 주문 내일 도착보장, 스타배송', '/n/stardelivery', base, '바로가기')}<div class="gm-exhibits">${[267301, 275223, 46199, 46705, 247323, 247329, 247325].map(id => `<a href="${base}/rpp?exhib=${id}"><span>${esc(exhibitions[id])}</span></a>`).join('')}</div>
+ <div id="best"><h3 class="gm-sub-title">베스트 상품</h3>${productRow(base, mixedBest(shelf.filter(p => p.star), 5))}<p class="gm-more"><a href="${base}/n/stardelivery/best">베스트 상품 더보기 ›</a></p></div><div id="freedelivery"><h3 class="gm-sub-title">무료배송 상품</h3>${productRow(base, mixedBest(shelf.filter(p => p.free && !p.star && p.dept !== EC), 5))}<p class="gm-more"><a href="${base}/n/stardelivery/category?categoryCode=100000003">무료배송 상품 더보기 ›</a></p></div></section>
+<section class="gm-home-sec" data-home-row="digital">${sectionHead('디지털/가전 베스트', '/n/best?groupCode=100001007', base)}${productRow(base, mixedBest(pick([[D, [2, 3, 4, 5, 6, 7]]]), 5, p => p.sub))}</section>
+<section class="gm-home-sec" data-reference-state="catalog" aria-labelledby="h-games" data-home-row="games">${sectionHead('<span id="h-games">게임 · 콘솔 인기상품</span>', '/n/list?category=100001007&sub=1', base)}<p class="gm-muted">신작 예약판매와 인기 게임기를 모았습니다. 예약판매 일부 상품은 구매 가능 여부가 확인되지 않아 상품정보만 제공됩니다.</p>${shelfRow(base, gameRow.slice(0, 10), { observed: p => card(base, p) })}</section>
+<section class="gm-home-sec" data-home-row="fashion-beauty">${sectionHead('패션 · 뷰티 가을 신상 특가', '/n/best?groupCode=100000001', base)}${productRow(base, mixedBest(pick([[FA, []], [B, []]]), 5))}</section>
 <section class="gm-home-sec">${sectionHead('G마켓 서비스', '', base)}<div class="gm-services">${services.map(([l, p, i]) => `<a href="${base}${p}"><span aria-hidden="true">${i}</span>${esc(l)}</a>`).join('')}</div></section>
 <section class="gm-home-sec">${sectionHead('홈쇼핑 모아보기 <em class="gm-onair">on air</em>', '/homeshopping', base)}<div class="gm-shops">${homeShopping.map(([id, l]) => `<a href="${base}/homeshopping#${id}"><strong>${l}</strong><span>방송 상품 보기</span></a>`).join('')}</div></section>`
 }
@@ -83,17 +104,15 @@ export function home(base, observations) {
 // --- pages ---------------------------------------------------------------
 const deptPage = (base, d, sub, query) => {
   const subName = sub ? d.subs[sub - 1] : ''
-  const sort = sorts.includes(query.sort) ? query.sort : sorts[0]
-  const observed = d.code === '100001007' && (!sub || sub === 1) ? query.observations : []
+  const observed = d.code === D && (!sub || sub === 1) ? query.observations : []
+  const params = { category: d.code, ...(sub ? { sub } : {}) }
   return `${crumbs(base, [[d.name, subName ? `/n/list?category=${d.code}` : ''], ...(subName ? [[subName]] : [])])}<h1 class="gm-page-title">${esc(subName || d.name)}</h1>
-<div class="gm-subcats">${d.subs.map((s, i) => `<a href="${base}/n/list?category=${d.code}&amp;sub=${i + 1}"${sub === i + 1 ? ' aria-current="page"' : ''}>${esc(s)}</a>`).join('')}</div>
-<div class="gm-list-layout"><aside class="gm-filters" aria-label="상세검색"><form method="get" action="${base}/n/list"><input type="hidden" name="category" value="${d.code}">${sub ? `<input type="hidden" name="sub" value="${sub}">` : ''}
-<fieldset><legend>배송/혜택</legend><label><input type="checkbox" name="star" value="1"> 스타배송</label><label><input type="checkbox" name="free" value="1"> 무료배송</label><label><input type="checkbox" name="today" value="1"> 오늘출발</label></fieldset>
-<fieldset><legend>가격</legend><div class="gm-range"><label class="sr-only" for="minp">최저가</label><input id="minp" name="minPrice" inputmode="numeric" placeholder="최저가"><span>~</span><label class="sr-only" for="maxp">최고가</label><input id="maxp" name="maxPrice" inputmode="numeric" placeholder="최고가"></div></fieldset>
-<fieldset><legend>상품상태</legend><label><input type="checkbox" name="new" value="1"> 새상품</label><label><input type="checkbox" name="used" value="1"> 중고상품</label></fieldset><button class="gm-btn small">검색</button></form></aside>
-<section class="gm-results"><div class="gm-sortbar"><p>상품 <strong>${observed.length}</strong>개 수집됨</p><nav aria-label="정렬">${sorts.map(s => `<a href="${base}/n/list?category=${d.code}${sub ? `&amp;sub=${sub}` : ''}&amp;sort=${encodeURIComponent(s)}"${s === sort ? ' aria-current="true"' : ''}>${s}</a>`).join('')}</nav></div>
-${observed.length ? `<p class="gm-muted">게임 카테고리에서 확인된 공개 상품 정보입니다. 이 카테고리의 전체 상품 목록은 아닙니다.</p>${cards(base, observed)}` : ''}${empty(base, `${subName || d.name} 카테고리의 상품 목록은 수집되지 않았습니다.`)}</section></div>`
+<div class="gm-subcats">${d.subs.map((s, i) => `<a href="${base}/n/list?category=${d.code}&amp;sub=${i + 1}"${sub === i + 1 ? ' aria-current="page"' : ''}>${esc(s)} <small>${inDept(d.code, i + 1).length + (d.code === D && i === 0 ? query.observations.length : 0)}</small></a>`).join('')}</div>
+${resultsBlock(base, { path: '/n/list', params, list: best(inDept(d.code, sub)), observations: observed, query: query.raw, observedCard: p => card(base, p), emptyText: `${subName || d.name} 카테고리에 조건에 맞는 상품이 없습니다.` })}`
 }
+
+// A ranked or filtered collection page with the shared filter/sort/pagination block.
+const collection = (base, path, params, list, query, extra = {}) => resultsBlock(base, { path, params, list, query, observedCard: p => card(base, p), ...extra })
 
 const sitemapPage = base => `${crumbs(base, [['사이트맵']])}<h1 class="gm-page-title">사이트맵</h1><div class="gm-sitemap">
 <section><h2>전체카테고리</h2><ul>${departments.map(d => `<li><a href="${base}/n/list?category=${d.code}">${esc(d.name)}</a><ul>${d.subs.map((s, i) => `<li><a href="${base}/n/list?category=${d.code}&amp;sub=${i + 1}">${esc(s)}</a></li>`).join('')}</ul></li>`).join('')}</ul></section>
@@ -154,7 +173,7 @@ function mygPage(base, user, section = '') {
   const label = mySections.find(([id]) => id === section)?.[1] || '나의 G마켓'
   const gate = user ? '' : `<div class="gm-panel gm-gate"><p><strong>로그인이 필요한 서비스입니다.</strong></p><p class="gm-muted">로그인하시면 주문/배송조회, 쿠폰, 스마일캐시 등 나의 쇼핑 정보를 확인할 수 있습니다.</p><a class="gm-btn" href="${base}/LogIn/LogIn">로그인</a> <a class="gm-btn outline" href="${base}/LogIn/LogIn?tab=guest">비회원 주문조회</a></div>`
   let body
-  if (!section) body = `<h1 class="gm-page-title">나의 G마켓</h1>${user ? `<p class="gm-hello-big"><strong>${esc(user.first_name || user.email)}</strong>님, 반갑습니다.</p>` : gate}<div class="gm-my-summary">${[['주문/배송조회', 'orders'], ['취소/반품/교환', 'claims'], ['쿠폰', 'coupons'], ['스마일캐시', 'cash']].map(([l, id]) => `<a class="gm-panel" href="${base}/myg/${id}"><span>${l}</span><strong>0</strong></a>`).join('')}</div><h2 class="gm-sub-title">최근 주문 내역</h2><p class="gm-muted gm-panel">최근 주문 내역이 없습니다. 이 환경에서는 수집된 상품의 구매가 확인되지 않아 주문을 만들 수 없습니다.</p>`
+  if (!section) body = `<h1 class="gm-page-title">나의 G마켓</h1>${user ? `<p class="gm-hello-big"><strong>${esc(user.first_name || user.email)}</strong>님, 반갑습니다.</p>` : gate}<div class="gm-my-summary">${[['주문/배송조회', 'orders'], ['취소/반품/교환', 'claims'], ['쿠폰', 'coupons'], ['스마일캐시', 'cash']].map(([l, id]) => `<a class="gm-panel" href="${base}/myg/${id}"><span>${l}</span><strong>0</strong></a>`).join('')}</div><h2 class="gm-sub-title">최근 주문 내역</h2><p class="gm-muted gm-panel">최근 주문 내역이 없습니다.</p>`
   else if (section === 'orders') body = `<h1 class="gm-page-title">주문/배송조회</h1>${user ? '<p class="gm-panel gm-muted">조회 기간 내 주문 내역이 없습니다.</p>' : `<div class="gm-panel"><h2>비회원 주문조회</h2><form method="get" action="${base}/myg/orders" class="gm-inline-form"><label for="o-name">주문자 이름</label><input id="o-name" name="name" autocomplete="name"><label for="o-phone">휴대폰 번호</label><input id="o-phone" name="phone" inputmode="tel" autocomplete="tel"><label for="o-cart">장바구니 번호</label><input id="o-cart" name="cartNo" inputmode="numeric"><button class="gm-btn">주문내역 조회</button></form></div>${gate}`}`
   else body = `<h1 class="gm-page-title">${esc(label)}</h1>${user ? `<p class="gm-panel gm-muted">${esc(label)} 내역이 없습니다.</p>` : gate}`
   return `${crumbs(base, [['나의 G마켓', section ? '/myg' : ''], ...(section ? [[label]] : [])])}${sidebarPage(base, '나의 쇼핑정보', nav, section ? `/myg/${section}` : '/myg', body)}`
@@ -188,48 +207,58 @@ export function installSite(router, { render, coverage, baseOf, observations }) 
   router.get('/n/list', (req, res) => {
     const d = departmentByCode(req.query.category), sub = Number(req.query.sub || 0)
     if (!d || !Number.isInteger(sub) || sub < 0 || sub > d.subs.length) return coverage(req, res, 'Page not captured', 404)
-    render(req, res, sub ? d.subs[sub - 1] : d.name, deptPage(baseOf(res), d, sub, { sort: req.query.sort, observations }))
+    render(req, res, sub ? d.subs[sub - 1] : d.name, deptPage(baseOf(res), d, sub, { raw: req.query, observations }))
   })
 
   const groups = [['전체', ''], ...departments.map(d => [d.name, d.code])]
   page('/n/best', 'G마켓 베스트', (base, req) => {
     const code = groups.some(([, c]) => c && c === req.query.groupCode) ? req.query.groupCode : ''
-    return simple(base, [['베스트']], 'G마켓 베스트', `${tabs(base, groups.map(([l, c]) => [l, c ? `/n/best?groupCode=${c}` : '/n/best']), code ? `/n/best?groupCode=${code}` : '/n/best', '베스트 카테고리')}<p class="gm-muted">실시간 판매량을 기준으로 집계되는 순위입니다.</p>${empty(base, `${groups.find(([, c]) => c === code)[0]} 베스트 순위 상품은 수집되지 않았습니다.`)}`)
+    const list = code ? best(inDept(code)) : mixedBest(shelf, 100)
+    return simple(base, [['베스트']], 'G마켓 베스트', `${tabs(base, groups.map(([l, c]) => [l, c ? `/n/best?groupCode=${c}` : '/n/best']), code ? `/n/best?groupCode=${code}` : '/n/best', '베스트 카테고리')}<p class="gm-muted">베스트 선정 기준: 최근 판매량, 상품평, 구매만족도를 반영해 실시간으로 집계되는 순위입니다.</p><section data-best-group="${code || 'all'}">${shelfRow(base, list.slice(0, 100), { ranked: true })}</section>`)
   })
   page('/n/superdeal', '슈퍼딜', (base, req) => {
     const code = superdealTabs.some(([, c]) => c && c === req.query.categoryCode) ? req.query.categoryCode : ''
-    return simple(base, [['슈퍼딜']], '슈퍼딜', `<div class="gm-icon-tabs">${superdealTabs.map(([l, c]) => `<a href="${base}/n/superdeal${c ? `?categoryCode=${c}` : ''}"${c === code ? ' aria-current="page"' : ''}><span aria-hidden="true">${l.slice(0, 1)}</span><strong>${l}</strong></a>`).join('')}</div>${empty(base, '슈퍼딜 상품은 수집되지 않았습니다.')}`)
+    const list = code ? deals(pick(superdealGroups[code])) : mixedBest(deals(shelf), 60)
+    return simple(base, [['슈퍼딜']], '슈퍼딜', `<div class="gm-icon-tabs">${superdealTabs.map(([l, c]) => `<a href="${base}/n/superdeal${c ? `?categoryCode=${c}` : ''}"${c === code ? ' aria-current="page"' : ''}><span aria-hidden="true">${l.slice(0, 1)}</span><strong>${l}</strong></a>`).join('')}</div><p class="gm-muted">매일 오전 10시에 새로운 특가 상품이 열립니다. 한정 수량으로 조기 종료될 수 있습니다.</p>${list.length ? shelfRow(base, list) : '<div class="gm-noresult"><p><strong>지금 진행 중인 슈퍼딜이 없습니다.</strong></p></div>'}`)
   })
   page('/n/stardelivery', '스타배송', base => `${crumbs(base, [['스타배송']])}<section class="gm-star-hero"><h1>스타배송</h1><p class="gm-hero-title">주말까지 매일매일 빠른배송</p><p>오늘 주문, 내일 도착 보장</p><a class="gm-btn outline" href="${base}/n/stardelivery/guide">스타배송 알아보기</a></section>
 <nav class="gm-pill-tabs" aria-label="스타배송 기획전">${[['한가위빅세일', '/rpp?exhib=271159'], ['생필품 쟁이기', '/n/stardelivery/category?categoryCode=100000003'], ['이달의발견', '/rpp?exhib=247325'], ['단독상품관', '/rpp?exhib=247323'], ['창고대방출', '/rpp?exhib=247329'], ['LIVE 다시보기', '/rpp?exhib=275223'], ['대용량알뜰관', '/rpp?exhib=46705'], ['베스트 100', '/n/stardelivery/best'], ['이마트몰', '/n/emartmall']].map(([l, p]) => `<a href="${base}${p}">${l}</a>`).join('')}</nav>
-<section class="gm-home-sec">${sectionHead('실시간 BEST 순위🏆', '/n/stardelivery/best', base)}${empty(base, '스타배송 실시간 순위 상품은 수집되지 않았습니다.')}</section>
-<section class="gm-home-sec"><h2>슈퍼딜</h2>${empty(base, '스타배송 슈퍼딜 상품은 수집되지 않았습니다.')}</section>
+<section class="gm-home-sec">${sectionHead('실시간 BEST 순위🏆', '/n/stardelivery/best', base)}${shelfRow(base, mixedBest(shelf.filter(p => p.star), 10), { ranked: true })}</section>
+<section class="gm-home-sec"><h2>슈퍼딜</h2>${shelfRow(base, deals(shelf.filter(p => p.star)).slice(0, 5))}</section>
 <section class="gm-home-sec"><h2>Star Delivery 카테고리</h2><div class="gm-subcats">${starCategories.map(([l, c]) => `<a href="${base}/n/stardelivery/category?categoryCode=${c}">${esc(l)}</a>`).join('')}</div></section>`)
-  page('/n/stardelivery/best', '스타배송 베스트', base => simple(base, [['스타배송', '/n/stardelivery'], ['베스트']], '스타배송 베스트 100', empty(base, '스타배송 베스트 상품은 수집되지 않았습니다.')))
+  page('/n/stardelivery/best', '스타배송 베스트', base => simple(base, [['스타배송', '/n/stardelivery'], ['베스트']], '스타배송 베스트 100', shelfRow(base, mixedBest(shelf.filter(p => p.star), 100), { ranked: true })))
   page('/n/stardelivery/guide', '스타배송 알아보기', base => simple(base, [['스타배송', '/n/stardelivery'], ['스타배송 알아보기']], '스타배송 알아보기', '<div class="gm-panel"><h2>오늘 주문, 내일 도착 보장</h2><p>스타배송 상품은 마감 시간 전에 주문하면 다음 날 도착을 보장합니다. 도착보장 상품이 약속한 날짜에 도착하지 않으면 보상 혜택을 제공합니다.</p><h2>도착보장! 꼭 멤버십은 무료반품</h2><p>꼭 멤버십 회원은 스타배송 상품 무료반품 혜택을 받을 수 있습니다. 세부 조건은 멤버십 안내를 확인해 주세요.</p></div>'))
   router.get('/n/stardelivery/category', (req, res) => {
     const c = starCategories.find(([, code]) => code === req.query.categoryCode)
     if (!c) return coverage(req, res, 'Page not captured', 404)
-    const base = baseOf(res)
-    render(req, res, c[0], simple(base, [['스타배송', '/n/stardelivery'], [c[0]]], `스타배송 ${c[0]}`, `<div class="gm-subcats">${starCategories.map(([l, code]) => `<a href="${base}/n/stardelivery/category?categoryCode=${code}"${code === c[1] ? ' aria-current="page"' : ''}>${esc(l)}</a>`).join('')}</div>${empty(base, `${c[0]} 스타배송 상품은 수집되지 않았습니다.`)}`))
+    const base = baseOf(res), list = pick(starGroups[c[1]] || [])
+    const star = best(list.filter(p => p.star)), other = best(list.filter(p => !p.star))
+    render(req, res, c[0], simple(base, [['스타배송', '/n/stardelivery'], [c[0]]], `스타배송 ${c[0]}`, `<div class="gm-subcats">${starCategories.map(([l, code]) => `<a href="${base}/n/stardelivery/category?categoryCode=${code}"${code === c[1] ? ' aria-current="page"' : ''}>${esc(l)}</a>`).join('')}</div>
+${star.length ? shelfRow(base, star) : `<div class="gm-noresult"><p><strong>${esc(c[0])} 스타배송 상품을 준비 중입니다.</strong></p></div>`}${other.length ? `<h2 class="gm-sub-title">${esc(c[0])} 일반배송 인기상품</h2>${shelfRow(base, other.slice(0, 10))}` : ''}`))
   })
-  router.get('/n/stardelivery/search', (req, res) => coverage(req, res, 'Search has not been captured'))
+  router.get('/n/stardelivery/search', (req, res) => res.redirect(`${baseOf(res)}/n/search?keyword=${encodeURIComponent(typeof req.query.keyword === 'string' ? req.query.keyword : '')}&star=1`))
 
   const emartNav = base => tabs(base, [['홈', '/n/emartmall'], ['브랜드', '/n/emartmall/brand'], ['베스트', '/n/emartmall/best'], ['행사중', '/n/emartmall/sale?promotionCode=1'], ['자주구매', '/n/emartmall/frequent']], '', '이마트몰 메뉴')
+  const emartPromo = code => { const g = best(grocery()); return code === '3' ? [...shelf.filter(p => p.emart), ...g.filter(p => !p.emart)].slice(0, 15) : g.filter((p, i) => i % 4 === (Number(code) || 1) % 4) }
+  const emartTabs = [['All', []], ['정육/계란', [[F, [4]]]], ['과일', [[F, [1]]]], ['냉동/간편식', [[P, [1]]]], ['쌀/잡곡', [[F, [3]]]], ['채소/두부', [[F, [2]]]], ['라면/즉석식품', [[P, [4]]]], ['생수/음료', [[P, [3]]]]]
   page('/n/emartmall', '이마트몰', base => `${crumbs(base, [['이마트몰']])}<h1 class="gm-page-title emart">이마트몰</h1>${emartNav(base)}<div class="gm-subcats">${emartCategories.map(([l, c]) => `<a href="${base}/n/emartmall/category?categoryCode=${c}">${esc(l)}</a>`).join('')}</div>
-${[['지금 잘 나가는 신선식품 베스트는?', '/n/emartmall/best'], ["'하나 더' 인기 상품", '/n/emartmall/sale?promotionCode=1'], ["대한민국 장보기 국민반장 '오반장'", '/n/emartmall/sale?promotionCode=3'], ['새로운 별미, SSG ONLY', '/n/emartmall/sale?promotionCode=5'], ['믿고 장보는 공식 브랜드', '/n/emartmall/brand'], ['이마트몰 BEST', '/n/emartmall/best']].map(([t, p]) => `<section class="gm-home-sec">${sectionHead(esc(t), p, base)}${empty(base)}</section>`).join('')}<section class="gm-panel"><h3>다양한 혜택받고 이마트몰로 장보기!</h3><p class="gm-muted">이마트몰 상품은 G마켓에서 신선식품과 생필품을 함께 주문할 수 있는 장보기 서비스입니다.</p></section>`)
-  page('/n/emartmall/best', '이마트몰 BEST', base => simple(base, [['이마트몰', '/n/emartmall'], ['베스트']], '이마트몰 BEST', `${emartNav(base)}${tabs(base, ['All', '정육/계란', '과일', '냉동/간편식', '쌀/잡곡', '채소/두부', '라면/즉석식품', '생수/음료'].map((l, i) => [l, `/n/emartmall/best${i ? `?tab=${i}` : ''}`]), '/n/emartmall/best')}${empty(base)}`))
-  page('/n/emartmall/brand', '이마트몰 브랜드', base => simple(base, [['이마트몰', '/n/emartmall'], ['브랜드']], '믿고 장보는 공식 브랜드', `${emartNav(base)}${empty(base)}`))
+${[['지금 잘 나가는 신선식품 베스트는?', '/n/emartmall/best', () => best(pick([[F, []]]))], ["'하나 더' 인기 상품", '/n/emartmall/sale?promotionCode=1', () => emartPromo('1')], ["대한민국 장보기 국민반장 '오반장'", '/n/emartmall/sale?promotionCode=3', () => emartPromo('3')], ['새로운 별미, SSG ONLY', '/n/emartmall/sale?promotionCode=5', () => emartPromo('5')], ['믿고 장보는 공식 브랜드', '/n/emartmall/brand', () => best(grocery().filter(p => p.brand))], ['이마트몰 BEST', '/n/emartmall/best', () => best(grocery())]].map(([t, p, list]) => `<section class="gm-home-sec">${sectionHead(esc(t), p, base)}${shelfRow(base, list().slice(0, 5))}</section>`).join('')}<section class="gm-panel"><h3>다양한 혜택받고 이마트몰로 장보기!</h3><p class="gm-muted">이마트몰 상품은 G마켓에서 신선식품과 생필품을 함께 주문할 수 있는 장보기 서비스입니다.</p></section>`)
+  page('/n/emartmall/best', '이마트몰 BEST', (base, req) => {
+    const tab = emartTabs[Number(req.query.tab)] ? Number(req.query.tab) : 0
+    const list = tab ? best(pick(emartTabs[tab][1])) : best(grocery())
+    return simple(base, [['이마트몰', '/n/emartmall'], ['베스트']], '이마트몰 BEST', `${emartNav(base)}${tabs(base, emartTabs.map(([l], i) => [l, `/n/emartmall/best${i ? `?tab=${i}` : ''}`]), `/n/emartmall/best${tab ? `?tab=${tab}` : ''}`)}${shelfRow(base, list, { ranked: true })}`)
+  })
+  page('/n/emartmall/brand', '이마트몰 브랜드', base => simple(base, [['이마트몰', '/n/emartmall'], ['브랜드']], '믿고 장보는 공식 브랜드', `${emartNav(base)}<div class="gm-subcats">${[...new Set(best(grocery()).map(p => p.brand).filter(Boolean))].slice(0, 16).map(b => `<a href="${base}/n/search?keyword=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>${shelfRow(base, best(grocery().filter(p => p.brand)).slice(0, 20))}`))
   page('/n/emartmall/frequent', '자주구매', base => simple(base, [['이마트몰', '/n/emartmall'], ['자주구매']], '자주구매', `${emartNav(base)}<p class="gm-panel gm-muted">로그인하면 자주 구매한 이마트몰 상품을 모아볼 수 있습니다. <a href="${base}/LogIn/LogIn">로그인</a></p>`))
   router.get('/n/emartmall/sale', (req, res) => {
     const label = emartPromotions[req.query.promotionCode] || '행사중', base = baseOf(res)
-    render(req, res, label, simple(base, [['이마트몰', '/n/emartmall'], [label]], `이마트몰 ${label}`, `${emartNav(base)}${tabs(base, Object.entries(emartPromotions).map(([k, l]) => [l, `/n/emartmall/sale?promotionCode=${k}`]), `/n/emartmall/sale?promotionCode=${req.query.promotionCode}`)}${empty(base, `${label} 상품은 수집되지 않았습니다.`)}`))
+    render(req, res, label, simple(base, [['이마트몰', '/n/emartmall'], [label]], `이마트몰 ${label}`, `${emartNav(base)}${tabs(base, Object.entries(emartPromotions).map(([k, l]) => [l, `/n/emartmall/sale?promotionCode=${k}`]), `/n/emartmall/sale?promotionCode=${req.query.promotionCode}`)}${shelfRow(base, emartPromo(req.query.promotionCode))}`))
   })
   router.get('/n/emartmall/category', (req, res) => {
     const c = emartCategories.find(([, code]) => code === req.query.categoryCode)
     if (!c) return coverage(req, res, 'Page not captured', 404)
     const base = baseOf(res)
-    render(req, res, c[0], simple(base, [['이마트몰', '/n/emartmall'], [c[0]]], c[0], `${emartNav(base)}${empty(base, `이마트몰 ${c[0]} 상품은 수집되지 않았습니다.`)}`))
+    render(req, res, c[0], simple(base, [['이마트몰', '/n/emartmall'], [c[0]]], c[0], `${emartNav(base)}${collection(base, '/n/emartmall/category', { categoryCode: c[1] }, best(pick(emartGroups[c[1]] || [])), req.query, { emptyText: `이마트몰 ${c[0]} 상품이 없습니다.` })}`))
   })
 
   page('/n/smilehome', '쿠폰/출첵', base => {
@@ -241,17 +270,18 @@ ${[['지금 잘 나가는 신선식품 베스트는?', '/n/emartmall/best'], ["'
   })
   page('/n/showroom/membership', '꼭 멤버십', base => simple(base, [['꼭 멤버십']], '꼭 멤버십', `<section class="gm-member-hero"><p class="gm-hero-title">도착보장! 꼭 멤버십은 무료반품</p><p>스타배송 도착보장 상품을 부담 없이 주문하세요.</p></section><div class="gm-quick">${[['무료반품', '스타배송 상품 무료반품'], ['전용 쿠폰', '멤버십 회원 전용 할인 쿠폰'], ['전용 상담', `멤버십 전용 고객센터 ${company.membershipPhone}`]].map(([t, d]) => `<div class="gm-panel"><h2>${t}</h2><p class="gm-muted">${d}</p></div>`).join('')}</div><p class="gm-muted">요금, 가입 조건 및 혜택 세부 내용은 수집되지 않았습니다.</p>`))
   page('/n/showroom/ggokcard', '꼭 현대카드', base => simple(base, [['꼭 현대카드']], '꼭 현대카드', '<div class="gm-panel"><p>G마켓 제휴 신용카드 꼭 현대카드 안내 페이지입니다. 적립률, 연회비, 이벤트 조건은 수집되지 않았습니다.</p></div>'))
-  page('/n/expressshop/home', '트레이더스', base => simple(base, [['트레이더스']], '트레이더스', empty(base, '트레이더스 상품은 수집되지 않았습니다.')))
+  page('/n/expressshop/home', '트레이더스', base => simple(base, [['트레이더스']], '트레이더스', `<p class="gm-muted">대용량 장보기, 트레이더스 홀세일 클럽 상품을 G마켓에서 만나보세요.</p>${shelfRow(base, best(grocery().filter(p => p.price >= 20000)).slice(0, 20))}`))
   page('/n/ecoupon', 'e쿠폰', base => {
-    const d = departmentByCode('100001011')
-    return simple(base, [['e쿠폰']], 'e쿠폰', `<p class="gm-muted">커피, 외식, 편의점, 영화, 상품권 등 모바일 교환권을 카카오톡·문자로 받아 바로 사용할 수 있습니다.</p><div class="gm-subcats">${d.subs.map((s, i) => `<a href="${base}/n/list?category=${d.code}&amp;sub=${i + 1}">${esc(s)}</a>`).join('')}</div>${empty(base, 'e쿠폰 상품은 수집되지 않았습니다.')}`)
+    const d = departmentByCode(EC)
+    return simple(base, [['e쿠폰']], 'e쿠폰', `<p class="gm-muted">커피, 외식, 편의점, 영화, 상품권 등 모바일 교환권을 카카오톡·문자로 받아 바로 사용할 수 있습니다.</p><div class="gm-subcats">${d.subs.map((s, i) => `<a href="${base}/n/list?category=${d.code}&amp;sub=${i + 1}">${esc(s)}</a>`).join('')}</div>${shelfRow(base, best(inDept(EC)), { ranked: true })}`)
   })
-  page('/travel', '여행/항공', base => simple(base, [['여행/항공']], '여행/항공', `<div class="gm-quick">${['항공권', '해외숙소', '국내숙소', '해외여행', '레저/티켓'].map((l, i) => `<a class="gm-panel" href="${base}/n/list?category=100001005&amp;sub=${[3, 2, 1, 4, 5][i]}">${l}</a>`).join('')}</div>${empty(base, '여행 상품은 수집되지 않았습니다.')}`))
-  page('/homeshopping', '홈쇼핑 모아보기', base => simple(base, [['홈쇼핑 모아보기']], '홈쇼핑 모아보기', `${homeShopping.map(([id, l]) => `<section class="gm-panel" id="${id}"><h2>${l}</h2><p class="gm-muted">방송 상품 정보는 수집되지 않았습니다.</p></section>`).join('')}`))
+  page('/travel', '여행/항공', base => simple(base, [['여행/항공']], '여행/항공', `<div class="gm-quick">${['항공권', '해외숙소', '국내숙소', '해외여행', '레저/티켓'].map((l, i) => `<a class="gm-panel" href="${base}/n/list?category=100001005&amp;sub=${[3, 2, 1, 4, 5][i]}">${l}</a>`).join('')}</div><h2 class="gm-sub-title">레저/티켓 인기상품</h2>${shelfRow(base, best(inDept(TR)))}`))
+  page('/homeshopping', '홈쇼핑 모아보기', base => simple(base, [['홈쇼핑 모아보기']], '홈쇼핑 모아보기', `${homeShopping.map(([id, l]) => `<section class="gm-panel" id="${id}"><h2>${l}</h2><p class="gm-muted">방송 편성표와 방송 상품은 각 홈쇼핑 채널에서 확인할 수 있습니다.</p></section>`).join('')}<h2 class="gm-sub-title">홈쇼핑 인기상품</h2>${shelfRow(base, best(shelf.filter(p => /홈쇼핑/.test(p.title) || p.homeshopping)))}`))
   router.get('/rpp', (req, res) => {
     const title = exhibitions[req.query.exhib]
     if (!title) return coverage(req, res, 'Page not captured', 404)
-    render(req, res, title, simple(baseOf(res), [['기획전'], [title]], title, empty(baseOf(res), '기획전 상품은 수집되지 않았습니다.')))
+    const list = best(exhibitGroups[req.query.exhib]?.() || [])
+    render(req, res, title, simple(baseOf(res), [['기획전'], [title]], title, `<section class="gm-exhibit-hero"><p class="gm-hero-title">${esc(title)}</p><p>기획전 상품 ${list.length}개</p></section>${shelfRow(baseOf(res), list)}`))
   })
 
   page('/cart', '장바구니', base => cartPage(base))
@@ -318,11 +348,14 @@ ${[['지금 잘 나가는 신선식품 베스트는?', '/n/emartmall/best'], ["'
   router.get('/sitemap.xml', (req, res) => res.type('application/xml').send(sitemapXml(baseOf(res))))
 }
 
-export function searchPage(base, query, observations) {
+// Search results mix the shelf with the captured observations by relevance
+// (searchShelf ranks GTA queries' observations first). `hits` is that ranked list.
+export function searchPage(base, query, hits, raw = {}) {
+  const shelfHits = hits.filter(p => p.purchase !== 'unverified'), observed = hits.filter(p => p.purchase === 'unverified')
+  const obsAt = observed.length && hits.indexOf(observed[0]) === 0 ? 0 : 4
   return `${crumbs(base, [['검색결과']])}<h1 class="gm-page-title"><strong class="gm-green">‘${esc(query)}’</strong> 검색 결과</h1>
-<nav class="gm-pill-tabs" aria-label="검색 구분"><a href="${base}/n/search?keyword=${encodeURIComponent(query)}" aria-current="page">전체</a><a href="${base}/n/stardelivery/search?keyword=${encodeURIComponent(query)}">스타배송</a></nav>
-<div class="gm-list-layout"><aside class="gm-filters" aria-label="상세검색"><p class="gm-side-title">상세검색</p><p class="gm-muted">필터와 카테고리 집계는 수집되지 않았습니다.</p></aside><section class="gm-results"><div class="gm-sortbar"><p>공개 검색에서 확인한 상품 <strong>${observations.length}</strong>개</p><nav aria-label="정렬">${sorts.map((s, i) => `<span${i === 0 ? ' aria-current="true"' : ''}>${s}</span>`).join('')}</nav></div>
-<h2 class="sr-only">관찰된 상품</h2><p class="gm-muted">전체 검색 결과, 재고, 상품 구성 및 구매 가능 여부는 확인되지 않았습니다.</p>${cards(base, observations)}</section></div>`
+<nav class="gm-pill-tabs" aria-label="검색 구분"><a href="${base}/n/search?keyword=${encodeURIComponent(query)}"${raw.star !== '1' ? ' aria-current="page"' : ''}>전체</a><a href="${base}/n/search?keyword=${encodeURIComponent(query)}&amp;star=1"${raw.star === '1' ? ' aria-current="page"' : ''}>스타배송</a></nav>
+<h2 class="sr-only">검색된 상품</h2>${resultsBlock(base, { path: '/n/search', params: { keyword: query }, list: shelfHits, observations: observed, query: { ...raw, obsAt }, observedCard: p => card(base, p), emptyText: `‘${query}’에 대한 검색결과가 없습니다.` })}`
 }
 
 export function productPage(base, p) {
