@@ -261,3 +261,90 @@ body.gm{margin:0;background:var(--gm-bg);color:var(--gm-text);font:14px/1.5 -app
  .gm-side{order:2}
  .gm-dl{grid-template-columns:100px 1fr}
 }
+
+/* --- shelf assortment (shelf.js / shelf-pages.js) --- */
+.gm-card{min-width:0}
+.gm-card>a{color:inherit}
+.gm-card>a:hover{text-decoration:none}
+.gm-card>a:hover h3{text-decoration:underline}
+.gm-card-img{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#f4f5f7;border:1px solid #eef0f2}
+.gm-card-img img{width:100%;height:100%;object-fit:contain;display:block}
+.gm-rank{position:absolute;left:0;top:0;z-index:1;min-width:28px;height:28px;padding:0 6px;background:#222;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;border-radius:10px 0 10px 0}
+.gm-price-line{margin:2px 0;font-size:13px;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 4px}
+.gm-price-line strong{font-size:18px;font-weight:800}
+.gm-price-line del,.gm-list-price del{color:var(--gm-muted);font-size:12px}
+.gm-rate{font-style:normal;color:var(--gm-red);font-weight:800;font-size:16px;margin-right:2px}
+.gm-delivery{font-size:12px;color:#444;margin:2px 0}
+.gm-star-badge{display:inline-block;background:#1e6bff;color:#fff;border-radius:4px;padding:0 5px;font-size:11px;font-weight:700;line-height:17px}
+.gm-score{font-size:12px;color:var(--gm-muted);margin:2px 0}
+.gm-score.big{font-size:13px;margin:0 0 12px}
+.gm-stars{color:#ffb400}
+.gm-shelf-row{margin-bottom:6px}
+.gm-cart-link{position:relative}
+.gm-cart-count{position:absolute;top:-4px;right:2px;background:var(--gm-green);color:#fff;border-radius:10px;font-size:11px;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px}
+.gm-brand-filter{max-height:320px;overflow:auto}
+.gm-brand-filter small{color:var(--gm-muted)}
+.gm-filters input[type=radio]{accent-color:var(--gm-green)}
+.gm-reset{font-size:13px;color:var(--gm-sub);margin-left:6px}
+.gm-pager{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin:26px 0 8px}
+.gm-pager a,.gm-pager strong{min-width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;padding:0 8px;font-size:13px}
+.gm-pager strong{background:#222;color:#fff;border-color:#222}
+.gm-noresult{text-align:center;padding:50px 16px;border:1px solid var(--gm-line);border-radius:12px;color:var(--gm-sub)}
+.gm-subcats small{color:var(--gm-muted);margin-left:2px}
+.gm-subcats a[aria-current] small{color:#e6ffe9}
+.gm-left{text-align:left!important;font-weight:400!important}
+.gm-gallery-main{aspect-ratio:1;border:1px solid var(--gm-line);border-radius:12px;overflow:hidden;background:#f4f5f7}
+.gm-gallery-main img{width:100%;height:100%;object-fit:contain;display:block}
+.gm-gallery-cap{text-align:center;font-size:12px;margin:6px 0}
+.gm-gallery-thumbs{display:grid;align-items:start;grid-template-columns:repeat(4,1fr);gap:8px}
+.gm-gallery-thumbs a{display:block;aspect-ratio:1;border:2px solid transparent;border-radius:8px;overflow:hidden;background:#f4f5f7}
+.gm-gallery-thumbs a[aria-current]{border-color:var(--gm-green)}
+.gm-gallery-thumbs img{width:100%;height:100%;display:block;object-fit:contain}
+.gm-price-box{border-top:1px solid var(--gm-line);border-bottom:1px solid var(--gm-line);padding:12px 0;margin-bottom:6px}
+.gm-price-box p{margin:2px 0}
+.gm-ship dd strong{color:var(--gm-blue)}
+.gm-buy{display:grid;gap:8px;margin-top:10px;max-width:460px}
+.gm-buy label{font-size:13px;font-weight:700}
+.gm-buy select,.gm-buy input,.gm-checkout input:not([type=checkbox]):not([type=radio]),.gm-lines input[type=number]{padding:10px;border:1px solid #ccc;border-radius:6px;font:inherit;min-width:0}
+.gm-buy-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gm-buy-btns .gm-btn{margin:0;align-self:stretch}
+.gm-spec{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px}
+.gm-spec th,.gm-spec td{border:1px solid var(--gm-line);padding:9px 12px;text-align:left;vertical-align:top}
+.gm-spec th{background:var(--gm-soft);width:150px;font-weight:600}
+.gm-review-sum{display:grid;grid-template-columns:160px 1fr;gap:20px;align-items:center}
+.gm-review-score{display:flex;flex-direction:column;align-items:center;margin:0}
+.gm-review-score strong{font-size:34px;color:var(--gm-green-dark)}
+.gm-bars{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:12px}
+.gm-bars li{display:grid;grid-template-columns:36px 1fr 40px;gap:8px;align-items:center}
+.gm-bars .bar{height:8px;border-radius:4px;background:#eee;overflow:hidden}
+.gm-bars .bar i{display:block;height:100%;background:var(--gm-green)}
+.gm-lines{list-style:none;margin:0;padding:0}
+.gm-line{display:grid;grid-template-columns:90px 1fr auto;gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid var(--gm-line)}
+.gm-line:last-child{border-bottom:0}
+.gm-line-img img{width:90px;height:90px;object-fit:contain;border-radius:8px;background:#f4f5f7;display:block}
+.gm-line-info{min-width:0;font-size:14px}
+.gm-line-info p{margin:3px 0}
+.gm-line-price{margin:0;white-space:nowrap}
+.gm-line-ctrl form{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}
+.gm-line-ctrl input{width:70px}
+.gm-line-ctrl .gm-btn{margin:0}
+.gm-form-grid{display:grid;grid-template-columns:140px 1fr;gap:8px 12px;align-items:center;margin-bottom:10px}
+.gm-checkout label{font-size:13px;font-weight:600}
+.gm-checkout>div>label[for=co-note]{display:block;margin:4px 0}
+.gm-checkout #co-note,.gm-checkout #co-email{width:100%;box-sizing:border-box}
+.gm-terms{margin:8px 0 20px;font-size:13px}
+.gm-complete{text-align:center}
+.gm-complete h2{font-size:22px}
+.gm-exhibit-hero{background:linear-gradient(120deg,#e9fbe9,#e8f0ff);border-radius:14px;padding:26px 24px;margin:0 0 20px}
+.gm-exhibit-hero p{margin:4px 0}
+@media (max-width:760px){
+ .gm-card h3{font-size:13px}
+ .gm-price-line strong{font-size:16px}
+ .gm-review-sum{grid-template-columns:1fr}
+ .gm-form-grid{grid-template-columns:1fr}
+ .gm-line{grid-template-columns:70px 1fr}
+ .gm-line-img img{width:70px;height:70px}
+ .gm-line-price{grid-column:2}
+ .gm-spec th{width:96px}
+ .gm-filters{order:2}
+}
