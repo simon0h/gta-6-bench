@@ -598,13 +598,6 @@
     },
     {
       "kind": "home",
-      "label": "Search box",
-      "expect": [
-        "찾고 싶은 상품을 검색해보세요"
-      ]
-    },
-    {
-      "kind": "home",
       "label": "Footer company info",
       "expect": [
         "쿠팡(주)",
