@@ -1,9 +1,13 @@
 // Site-wide Coupang pages that do not depend on product inventory: department and
 // subcategory landing pages, quick-menu landings (로켓배송, 골드박스 ...), customer service,
 // policies, company pages that replace off-site links, the HTML site map and /sitemap.xml.
-// Product grids never invent merchandise: they show Coupang's own empty-result layout.
+// In the default reference catalog the grids show the Coupang shelf (shelf.js), a
+// general-merchandise assortment kept separate from GTA 6 evidence. Pages that have
+// no shelf rows keep Coupang's empty-result layout.
 import { esc } from '../../lib/html.js'
 import { DEPARTMENTS, FRESH, deptById, GNB, PARTNER_MENU, HELP_MENU, MY_MENU, FOOTER_LINKS } from './site-data.js'
+import { shelf, inDept, searchShelf } from './shelf.js'
+import { grid, row } from './shelf-pages.js'
 
 const text = v => typeof v === 'string' ? v.trim() : ''
 const crumb = (base, parts) => `<p class="crumb cp-crumb"><a href="${base}">쿠팡 홈</a>${parts.map(([label, href]) => ` &gt; ${href ? `<a href="${base}${href}">${esc(label)}</a>` : esc(label)}`).join('')}</p>`
@@ -14,7 +18,8 @@ const PRICE = [['0-10000', '1만원 이하'], ['10000-30000', '1만원~3만원']
 const RATING = [['4', '★★★★ 4점 이상'], ['3', '★★★ 3점 이상']]
 
 // Filter sidebar + sort bar + empty product area. GET form so it works without JS.
-function listing(base, action, query, { heading, emptyTitle, emptyCopy, hidden = {} } = {}) {
+function listing(base, action, query, { heading, emptyTitle, emptyCopy, hidden = {}, items, keepOrder } = {}) {
+  if (items && items.length) return grid(base, action, query, items, { heading, hidden, keepOrder })
   const sort = SORTS.some(([v]) => v === query.sorter) ? query.sorter : 'scoreDesc'
   const checked = (k, v) => [].concat(query[k] || []).includes(v) ? ' checked' : ''
   const keep = Object.entries(hidden).map(([k, v]) => `<input type="hidden" name="${esc(k)}" value="${esc(v)}">`).join('')
@@ -38,13 +43,13 @@ function categoryIndex(base) {
   return `${crumb(base, [['전체 카테고리']])}<h1>전체 카테고리</h1><div class="cp-dept-directory">${[...DEPARTMENTS, FRESH].map(d => `<section><h2><a href="${base}/np/categories/${d.id}">${esc(d.label)}</a></h2><ul>${d.subs.map(s => `<li><a href="${base}/np/categories/${d.id}/${s.slug}">${esc(s.label)}</a></li>`).join('')}</ul></section>`).join('')}</div>`
 }
 
-function categoryPage(base, dept, sub, query) {
+function categoryPage(base, dept, sub, query, reference = false) {
   const title = sub ? sub.label : dept.label
   const action = `${base}/np/categories/${dept.id}${sub ? `/${sub.slug}` : ''}`
   const side = `<aside class="cp-cat-side"><h2><a href="${base}/np/categories/${dept.id}">${esc(dept.label)}</a></h2><ul>${dept.subs.map(s => `<li><a href="${base}/np/categories/${dept.id}/${s.slug}"${sub?.slug === s.slug ? ' aria-current="page"' : ''}>${esc(s.label)}</a></li>`).join('')}</ul></aside>`
   const hero = `<section class="cp-cat-hero${dept.id === FRESH.id ? ' cp-fresh' : ''}"><div><p>${sub ? esc(dept.label) : dept.id === FRESH.id ? '새벽배송 · 신선식품' : '카테고리'}</p><h1>${esc(title)}</h1><p>${dept.id === FRESH.id ? '로켓프레시 상품은 지역별 배송 가능 여부와 도착 시간을 주문 화면에서 확인할 수 있습니다.' : `${esc(dept.label)} 카테고리의 하위 분류와 필터, 정렬을 확인해 보세요.`}</p></div></section>`
   const tiles = sub ? '' : `<div class="cp-subtiles">${dept.subs.map(s => `<a href="${base}/np/categories/${dept.id}/${s.slug}"><span aria-hidden="true">${esc(s.label.slice(0, 2))}</span>${esc(s.label)}</a>`).join('')}</div>`
-  return `${crumb(base, sub ? [[dept.label, `/np/categories/${dept.id}`], [sub.label]] : [[dept.label]])}<div class="cp-cat-layout">${side}<div>${hero}${tiles}${listing(base, action, query, { heading: `<h2 class="cp-results-title">${esc(title)} 전체 상품</h2>`, emptyTitle: `${title} 상품 목록이 이 환경에 수집되지 않았습니다.` })}</div></div>`
+  return `${crumb(base, sub ? [[dept.label, `/np/categories/${dept.id}`], [sub.label]] : [[dept.label]])}<div class="cp-cat-layout">${side}<div>${hero}${tiles}${listing(base, action, query, { heading: `<h2 class="cp-results-title">${esc(title)} 전체 상품</h2>`, emptyTitle: `${title} 상품 목록이 이 환경에 수집되지 않았습니다.`, items: reference ? inDept(dept.id, sub?.slug) : undefined })}</div></div>`
 }
 
 // Quick-menu landings. Copy summarises what each real section is; product rows stay empty.
@@ -63,11 +68,24 @@ export const LANDINGS = {
 // Old fixture-era campaign ids route to the real quick-menu landings in reference mode.
 export const LEGACY_CAMPAIGNS = { rocket: '/np/campaigns/82', 'rocket-fresh': '/np/categories/393760', 'gold-box': '/np/goldbox', 'seller-deals': '/np/omp', returned: '/p/54908', 'new-arrivals': '/p/136938' }
 
-function landingPage(base, path, l, query, user) {
+// Shelf rows behind each quick-menu landing (reference catalog only).
+const byDiscount = items => [...items].sort((a, b) => b.discount - a.discount || b.sales - a.sales)
+export const LANDING_ITEMS = {
+  '/np/campaigns/82': () => shelf.filter(p => p.delivery === 'rocket'),
+  '/np/campaigns/83': () => byDiscount(shelf.filter(p => p.wow && p.discount >= 10)),
+  '/np/goldbox': () => byDiscount(shelf.filter(p => p.discount >= 20)),
+  '/np/omp': () => byDiscount(shelf.filter(p => p.delivery === 'seller' || p.delivery === 'seller-rocket' || (p.discount >= 25 && p.delivery !== 'fresh'))),
+  '/np/coupangglobal': () => shelf.filter(p => p.delivery === 'global'),
+  '/p/136938': () => [...shelf].sort((a, b) => b.newness - a.newness).slice(0, 72),
+}
+function landingPage(base, path, l, query, user, reference = false) {
   const tabs = `<nav class="cp-landing-tabs" aria-label="카테고리">${DEPARTMENTS.slice(0, 10).map(d => `<a href="${base}${path}?category=${d.id}"${query.category === d.id ? ' aria-current="true"' : ''}>${esc(d.label)}</a>`).join('')}</nav>`
   const hero = `<section class="cp-landing-hero" style="background:${l.color}"><div><p class="cp-kicker">${esc(l.kicker)}</p><h1>${esc(l.title)}</h1><p>${esc(l.copy)}</p></div><ul>${l.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul></section>`
   if (l.login && !user) return `${crumb(base, [[l.title]])}${hero}<div class="cp-empty"><h2>로그인하고 자주 산 상품을 확인하세요.</h2><p>구매 이력은 로그인한 회원에게만 표시됩니다.</p><a class="cp-btn" href="${base}/login">로그인</a></div>`
-  return `${crumb(base, [[l.title]])}${hero}${tabs}${listing(base, base + path, query, { emptyTitle: `${l.title} 상품 목록이 이 환경에 수집되지 않았습니다.`, emptyCopy: '실시간 특가와 상품 구성은 이 모의 환경에 수집되지 않았습니다. 카테고리를 선택해 둘러보세요.', hidden: query.category ? { category: query.category } : {} })}`
+  const all = reference && LANDING_ITEMS[path] ? LANDING_ITEMS[path]() : null
+  const items = all && (query.category ? all.filter(p => p.dept === query.category) : all)
+  const keepOrder = path === '/np/goldbox' || path === '/np/campaigns/83' || path === '/np/omp'
+  return `${crumb(base, [[l.title]])}${hero}${tabs}${listing(base, base + path, query, { emptyTitle: `${l.title} 상품 목록이 이 환경에 수집되지 않았습니다.`, emptyCopy: '실시간 특가와 상품 구성은 이 모의 환경에 수집되지 않았습니다. 카테고리를 선택해 둘러보세요.', hidden: query.category ? { category: query.category } : {}, items: items || undefined, keepOrder })}`
 }
 
 // Customer service and company pages. Off-site links on coupang.com become these local pages.
@@ -165,17 +183,31 @@ export function homePage(base) {
   const hero = `<section class="cp-hero" aria-label="메인 배너"><a class="cp-hero-main" href="${base}${banners[0][1]}" style="background:${banners[0][3]}"><span class="cp-kicker">쿠팡 로켓배송</span><strong>${banners[0][2]}</strong><span>생활필수품부터 가전까지, 도착 예정일을 주문 전에 확인하세요.</span><span class="cp-btn">바로가기 ›</span></a><ol class="cp-hero-list">${banners.map(([t, h, c], i) => `<li><a href="${base}${h}"${i === 0 ? ' aria-current="true"' : ''}><b>${t}</b><small>${c}</small></a></li>`).join('')}</ol></section>`
   const shortcuts = `<section class="cp-shortcuts" aria-label="바로가기"><h2 class="cp-sr">바로가기</h2>${GNB.filter(([l]) => l !== '입점신청').map(([l, h]) => `<a href="${base}${h}"><span aria-hidden="true">${ICONS[l] || esc(l.slice(0, 2))}</span>${esc(l)}</a>`).join('')}</section>`
   const discovery = `<section class="cp-home-section"><div class="cp-section-head"><h2>오늘의 발견</h2><span>오늘 쿠팡이 엄선한 가장 HOT한 상품</span></div><div class="cp-discovery"><a class="cp-disc-big" href="${base}/p/136938"><span class="cp-kicker">오늘의 쇼핑제안</span><strong>이달의신상</strong><small>새로 입점한 브랜드와 신상품</small></a><a href="${base}/np/categories/194276"><strong>식품</strong><small>신선 · 간편식 · 생수</small></a><a href="${base}/np/categories/178255"><strong>가전디지털</strong><small>TV · 노트북 · 게임</small></a><a href="${base}/np/categories/115673"><strong>생활용품</strong><small>세제 · 화장지 · 욕실</small></a><a href="${base}/np/categories/176422"><strong>뷰티</strong><small>스킨케어 · 메이크업</small></a></div></section>`
-  const goldbox = `<section class="cp-home-section cp-goldbox"><div class="cp-section-head"><h2>골드박스</h2><span>오늘의 특가</span><a href="${base}/np/goldbox">더보기 ›</a></div><div class="cp-empty cp-empty-slim"><p>오늘의 골드박스 특가 상품은 이 모의 환경에 수집되지 않았습니다.</p><a class="cp-btn-outline" href="${base}/np/goldbox">골드박스 바로가기</a></div></section>`
-  const rows = `<section class="cp-home-section"><div class="cp-section-head"><h2>카테고리별 추천상품</h2><a href="${base}/np/categories">전체 카테고리 ›</a></div><div class="cp-cat-rows">${DEPARTMENTS.map(d => `<article><h3><a href="${base}/np/categories/${d.id}">${esc(d.label)}</a></h3><p>${d.subs.slice(0, 4).map(s => `<a href="${base}/np/categories/${d.id}/${s.slug}">${esc(s.label)}</a>`).join('')}</p></article>`).join('')}</div></section>`
+  const deals = []
+  for (const p of [...shelf].sort((a, b) => b.discount - a.discount || b.sales - a.sales)) if (p.discount >= 20 && deals.filter(x => x.dept === p.dept).length < 1 && deals.length < 6) deals.push(p)
+  const goldbox = `<section class="cp-home-section cp-goldbox"><div class="cp-section-head"><h2>골드박스</h2><span>오늘의 특가</span><a href="${base}/np/goldbox">더보기 ›</a></div>${row(base, deals)}</section>`
+  const fresh = `<section class="cp-home-section"><div class="cp-section-head"><h2>로켓프레시</h2><span>오늘 밤 12시 전 주문 시 내일 아침 7시 전 도착</span><a href="${base}/np/categories/393760">더보기 ›</a></div>${row(base, inDept('393760').slice(0, 6))}</section>`
+  const ranking = `<section class="cp-home-section"><div class="cp-section-head"><h2>지금 많이 찾는 상품</h2><span>최근 판매량 기준 쿠팡 랭킹</span><a href="${base}/np/campaigns/82">로켓배송 전체 ›</a></div>${row(base, [...shelf].filter(p => p.delivery === 'rocket').sort((a, b) => b.sales - a.sales).slice(0, 6), { ranked: true })}</section>`
+  const top = (id, n) => [...inDept(id)].sort((a, b) => b.sales * b.rating - a.sales * a.rating).slice(0, n)
+  const rows = `<section class="cp-home-section"><div class="cp-section-head"><h2>카테고리별 추천상품</h2><a href="${base}/np/categories">전체 카테고리 ›</a></div><div class="cs-cat-blocks">${DEPARTMENTS.filter(d => inDept(d.id).length).map(d => `<article class="cs-cat-block"><header><h3><a href="${base}/np/categories/${d.id}">${esc(d.label)}</a></h3><p>${d.subs.slice(0, 5).map(s => `<a href="${base}/np/categories/${d.id}/${s.slug}">${esc(s.label)}</a>`).join('')}</p><a class="cs-more" href="${base}/np/categories/${d.id}">더보기 ›</a></header>${row(base, top(d.id, 6))}</article>`).join('')}</div></section>`
   const wow = `<section class="cp-wow"><div><p class="cp-kicker">로켓와우</p><h2>와우회원이라면 누리는 혜택</h2><ul><li>로켓배송 상품 무료배송</li><li>로켓배송 상품 30일 무료반품</li><li>쿠팡플레이 무료 시청</li><li>쿠팡이츠 무료배달</li></ul></div><a class="cp-btn" href="${base}/np/campaigns/83">와우회원할인 보기</a></section>`
-  const note = `<section class="cp-catalog-note" data-reference-state="catalog"><h2>수집된 상품 정보</h2><p>Captured catalog · 0 product observations. 이 환경에는 쿠팡의 실제 상품 목록, 가격과 재고가 수집되지 않았습니다. 상품이 없다는 뜻은 아닙니다.</p></section>`
-  return `<h1 class="cp-sr">쿠팡</h1>${hero}${shortcuts}${discovery}${goldbox}${rows}${wow}${note}`
+  const note = `<section class="cp-catalog-note" data-reference-state="catalog"><h2>상품 정보 안내</h2><p>표시된 상품의 가격, 할인율, 상품평 수와 도착 예정일은 모의 쇼핑 환경을 위한 예시입니다. 실제 쿠팡의 실시간 판매 정보와 다를 수 있습니다. Captured catalog · 0 GTA 6 product observations.</p></section>`
+  return `<h1 class="cp-sr">쿠팡</h1>${hero}${shortcuts}${discovery}${goldbox}${ranking}${fresh}${rows}${wow}${note}`
 }
 
 export function searchBody(base, query) {
   const q = text(typeof query.q === 'string' ? query.q : '')
   const head = `${crumb(base, [['검색']])}<h1 class="cp-search-title">${q ? `‘${esc(q)}’ 검색결과` : '상품 검색'}</h1><form class="cp-inline-search" method="get" action="${base}/np/search"><label for="cp-q">검색어</label><input id="cp-q" name="q" type="search" value="${esc(q)}" placeholder="찾고 싶은 상품을 검색해보세요!"><button>검색</button></form>`
   if (!q) return `${head}${listing(base, `${base}/np/search`, query, { emptyTitle: '검색어를 입력해 주세요.', emptyCopy: '상품명, 브랜드 또는 카테고리로 검색할 수 있습니다.' })}`
+  const dept = typeof query.category === 'string' && deptById(query.category)
+  const results = searchShelf(q).filter(p => !dept || p.dept === dept.id)
+  const hidden = { q, ...(dept ? { category: query.category } : {}) }
+  // GTA 6 has no captured Coupang listing: say so, then show what the shelf matches.
+  if (/gta|grand\s*theft|그랜드\s*테프트|지티에이/i.test(q)) {
+    const notice = `<section class="reference-coverage cs-coverage" data-reference-state="uncaptured"><h2>‘${esc(q)}’ 예약판매 상품 정보가 수집되지 않았습니다.</h2><p>Search has not been captured for GTA 6 listings. This is not a zero-result or out-of-stock response from the retailer.</p><p>이 환경에는 쿠팡의 Grand Theft Auto VI 판매 정보가 없습니다. 아래는 검색어와 관련된 다른 상품입니다.</p></section>`
+    return `${head}${notice}${results.length ? listing(base, `${base}/np/search`, query, { hidden, items: results, keepOrder: true }) : ''}`
+  }
+  if (results.length) return `${head}${listing(base, `${base}/np/search`, query, { hidden, items: results, keepOrder: true })}`
   // Uncaptured query: identify missing coverage rather than fabricate an empty result set.
   return `${head}<div class="cp-listing"><div class="cp-filters" aria-hidden="true"><h2>필터</h2><p>배송 · 가격 · 상품평</p></div><section class="cp-results"><div class="cp-sortbar">${SORTS.map(([, l], i) => `<span${i === 0 ? ' aria-current="true"' : ''}>${l}</span>`).join('')}</div><section class="empty reference-coverage cp-empty" data-reference-state="uncaptured"><h2>Search has not been captured</h2><p>Search: <strong>${esc(q)}</strong></p><p>The available source capture does not establish the products or purchase options for this page. This is not a zero-result or out-of-stock response from the retailer.</p><p>이 검색어의 실제 쿠팡 검색결과는 수집되지 않았습니다.</p><a href="${base}/np/categories">전체 카테고리 보기</a></section></section></div>`
 }
@@ -192,16 +224,16 @@ export function installSite(router, { render, reference = false, knownCategory =
     if (!reference && knownCategory(req.params.id)) return next()
     const d = deptById(req.params.id)
     if (!d) return reference ? render(req, res, '카테고리 없음', `<h1>카테고리를 찾을 수 없습니다.</h1><p><a href="${base(res)}/np/categories">전체 카테고리 보기</a></p>`, 404) : next()
-    render(req, res, d.label, categoryPage(base(res), d, null, req.query))
+    render(req, res, d.label, categoryPage(base(res), d, null, req.query, reference))
   })
   router.get('/np/categories/:id/:sub', (req, res, next) => {
     const d = deptById(req.params.id), s = d?.subs.find(x => x.slug === req.params.sub)
     if (!s) return next()
-    render(req, res, s.label, categoryPage(base(res), d, s, req.query))
+    render(req, res, s.label, categoryPage(base(res), d, s, req.query, reference))
   })
   for (const [path, l] of Object.entries(LANDINGS)) router.get(path, (req, res, next) => {
     if (!reference && knownCampaign(path.split('/').pop())) return next()
-    render(req, res, l.title, landingPage(base(res), path, l, req.query, req.store.user))
+    render(req, res, l.title, landingPage(base(res), path, l, req.query, req.store.user, reference))
   })
   if (reference) router.get(['/np/campaigns/:id', '/events/:id'], (req, res, next) => LEGACY_CAMPAIGNS[req.params.id] ? res.redirect(base(res) + LEGACY_CAMPAIGNS[req.params.id]) : next())
   for (const [path, p] of Object.entries(INFO)) router.get(path, (req, res) => render(req, res, p.title, infoPage(base(res), path, p)))
