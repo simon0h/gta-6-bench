@@ -1,0 +1,1340 @@
+{
+  "store": "argos",
+  "real_home": "https://www.argos.co.uk/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.argos.co.uk/",
+    "https://help.argos.co.uk/help",
+    "https://help.argos.co.uk/help/contact-us",
+    "https://help.argos.co.uk/help/gift-cards",
+    "https://help.argos.co.uk/help/delivery-&-collection-guide",
+    "https://help.argos.co.uk/help/refunds-&-returns/returns-product-support-and-repairs/returnsproductsupportrepairs",
+    "https://help.argos.co.uk/help/argos-pay",
+    "https://help.argos.co.uk/help/nectar",
+    "https://help.argos.co.uk/help/argos-care",
+    "https://help.argos.co.uk/help/terms-and-conditions",
+    "https://help.argos.co.uk/help/accessibility-statement",
+    "https://www.argos.co.uk/stores",
+    "https://www.argos.co.uk/sitemap.xml",
+    "https://www.argos.co.uk/product/8747444",
+    "https://www.argos.co.uk/search/gta-6/",
+    "https://www.argos.co.uk/browse/technology/video-games-and-consoles/c:29952/",
+    "https://www.argos.co.uk/order/tracking",
+    "https://www.argos.co.uk/account/login"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "notes": "Captured with WebFetch on 2026-10-13. argos.co.uk pages are client-rendered and the fetch was cut off inside the mega menu, so the homepage body, category grids, search results, product body, trolley (/basket returned a server error), sign-in form and order-tracking form could not be read; their expects use only the page titles (Track your order, Results for gta 6, Video Games & Gaming Consoles, Voucher Codes and Offers, Advice and inspiration, Login) plus well-known labels (Sign in / Email address / Password, Your trolley). Homepage items therefore use the header promo flyout and the persistent footer blocks (Returning an item, Payment methods, Follow us, Download our app) that every argos.co.uk page carries, captured verbatim from the help centre and store finder. The footer and legal bar were captured verbatim from help.argos.co.uk/help. The mega menu lists hundreds of subcategories; the sitemap section uses each department plus the first links of each menu column. argos.co.uk has no HTML site map (only sitemap.xml with 12 child sitemaps), so /sitemap is the clone's own HTML directory. web.archive.org is blocked for this host. Off-site footer links (Sainsbury's corporate, careers, privacy hub, Argos for Business, pet insurance, spares, product support) become local summary pages.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "go to homepage",
+      "real": "https://www.argos.co.uk/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Track Order",
+      "real": "https://www.argos.co.uk/order/tracking",
+      "path": "/order/tracking"
+    },
+    {
+      "kind": "header",
+      "label": "Returns",
+      "real": "https://www.argos.co.uk/order/tracking?type=returns",
+      "path": "/order/tracking?type=returns"
+    },
+    {
+      "kind": "header",
+      "label": "Stores",
+      "real": "https://www.argos.co.uk/stores",
+      "path": "/stores"
+    },
+    {
+      "kind": "header",
+      "label": "Help",
+      "real": "https://www.argos.co.uk/help",
+      "path": "/help"
+    },
+    {
+      "kind": "header",
+      "label": "Account",
+      "real": "https://www.argos.co.uk/account/login",
+      "path": "/account/login"
+    },
+    {
+      "kind": "header",
+      "label": "Wishlist",
+      "real": "https://www.argos.co.uk/wishlist",
+      "path": "/wishlist"
+    },
+    {
+      "kind": "header",
+      "label": "Trolley",
+      "real": "https://www.argos.co.uk/basket",
+      "path": "/basket"
+    },
+    {
+      "kind": "header",
+      "label": "The Big Red Event",
+      "real": "https://www.argos.co.uk/events/big-event",
+      "path": "/events/big-event"
+    },
+    {
+      "kind": "header",
+      "label": "Advice & Inspiration",
+      "real": "https://www.argos.co.uk/features/advice-and-inspiration",
+      "path": "/features/advice-and-inspiration"
+    },
+    {
+      "kind": "header",
+      "label": "Small Item Delivery £4.95, free over £100",
+      "real": "https://help.argos.co.uk/help/delivery-&-collection-guide",
+      "path": "/help/delivery-and-collection-guide"
+    },
+    {
+      "kind": "header",
+      "label": "Christmas",
+      "real": "https://www.argos.co.uk/events/christmas-gifts",
+      "path": "/events/christmas-gifts"
+    },
+    {
+      "kind": "header",
+      "label": "Toys",
+      "real": "https://www.argos.co.uk/browse/toys/c:30299/",
+      "path": "/browse/toys/c:30299/"
+    },
+    {
+      "kind": "header",
+      "label": "Technology",
+      "real": "https://www.argos.co.uk/browse/technology/c:29949/",
+      "path": "/browse/technology/c:29949/"
+    },
+    {
+      "kind": "header",
+      "label": "Gaming",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/c:29952/",
+      "path": "/browse/technology/video-games-and-consoles/c:29952/"
+    },
+    {
+      "kind": "header",
+      "label": "Home & Furniture",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/c:29351/",
+      "path": "/browse/home-and-furniture/c:29351/"
+    },
+    {
+      "kind": "header",
+      "label": "Health & Beauty",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/c:29203/",
+      "path": "/browse/health-and-beauty/c:29203/"
+    },
+    {
+      "kind": "header",
+      "label": "Appliances",
+      "real": "https://www.argos.co.uk/browse/appliances/c:787124/",
+      "path": "/browse/appliances/c:787124/"
+    },
+    {
+      "kind": "header",
+      "label": "Sports & Leisure",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/c:30468/",
+      "path": "/browse/sports-and-leisure/c:30468/"
+    },
+    {
+      "kind": "header",
+      "label": "Jewellery & Watches",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/c:29298/",
+      "path": "/browse/jewellery-and-watches/c:29298/"
+    },
+    {
+      "kind": "header",
+      "label": "Baby & Nursery",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/c:29000/",
+      "path": "/browse/baby-and-nursery/c:29000/"
+    },
+    {
+      "kind": "header",
+      "label": "Clothing",
+      "real": "https://www.argos.co.uk/browse/clothing/c:29131/",
+      "path": "/browse/clothing/c:29131/"
+    },
+    {
+      "kind": "header",
+      "label": "Garden & DIY",
+      "real": "https://www.argos.co.uk/browse/garden-and-diy/c:797660/",
+      "path": "/browse/garden-and-diy/c:797660/"
+    },
+    {
+      "kind": "footer",
+      "label": "Help & FAQs",
+      "real": "https://help.argos.co.uk/help",
+      "path": "/help"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact us",
+      "real": "https://help.argos.co.uk/help/contact-us",
+      "path": "/help/contact"
+    },
+    {
+      "kind": "footer",
+      "label": "Store finder",
+      "real": "https://www.argos.co.uk/stores",
+      "path": "/stores"
+    },
+    {
+      "kind": "footer",
+      "label": "Account",
+      "real": "https://www.argos.co.uk/account/login",
+      "path": "/account/login"
+    },
+    {
+      "kind": "footer",
+      "label": "Advice & inspiration",
+      "real": "https://www.argos.co.uk/features/advice-and-inspiration",
+      "path": "/features/advice-and-inspiration"
+    },
+    {
+      "kind": "footer",
+      "label": "Delivery & collection",
+      "real": "https://help.argos.co.uk/help/delivery-&-collection-guide",
+      "path": "/help/delivery-and-collection-guide"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns & refunds",
+      "real": "https://help.argos.co.uk/help/refunds-&-returns/returns-product-support-and-repairs/returnsproductsupportrepairs",
+      "path": "/help/returns-product-support-and-repairs"
+    },
+    {
+      "kind": "footer",
+      "label": "Track your order",
+      "real": "https://www.argos.co.uk/order/tracking",
+      "path": "/order/tracking"
+    },
+    {
+      "kind": "footer",
+      "label": "Argos Care",
+      "real": "https://www.argos.co.uk/help/argos-care",
+      "path": "/help/argos-care"
+    },
+    {
+      "kind": "footer",
+      "label": "Product Support",
+      "real": "https://www.argos-support.co.uk/",
+      "path": "/help/product-support"
+    },
+    {
+      "kind": "footer",
+      "label": "Product recall",
+      "real": "https://www.argos.co.uk/events/safety-product-recalls",
+      "path": "/events/safety-product-recalls"
+    },
+    {
+      "kind": "footer",
+      "label": "Argos Spares",
+      "real": "http://www.argosspares.co.uk/",
+      "path": "/help/argos-spares"
+    },
+    {
+      "kind": "footer",
+      "label": "Payment types",
+      "real": "https://help.argos.co.uk/help/prices-and-payment/payment-types",
+      "path": "/help/payment-types"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift cards",
+      "real": "https://www.argos.co.uk/help/gift-cards",
+      "path": "/help/gift-cards"
+    },
+    {
+      "kind": "footer",
+      "label": "Voucher codes",
+      "real": "https://www.argos.co.uk/events/voucher-discount-codes",
+      "path": "/events/voucher-discount-codes"
+    },
+    {
+      "kind": "footer",
+      "label": "eGift Card Rewards",
+      "real": "https://www.argos.co.uk/features/egift-card-rewards",
+      "path": "/features/egift-card-rewards"
+    },
+    {
+      "kind": "footer",
+      "label": "Argos Pay",
+      "real": "https://help.argos.co.uk/help/argos-pay",
+      "path": "/help/argos-pay"
+    },
+    {
+      "kind": "footer",
+      "label": "Nectar at Argos",
+      "real": "https://www.argos.co.uk/help/nectar",
+      "path": "/help/nectar"
+    },
+    {
+      "kind": "footer",
+      "label": "Pet Insurance",
+      "real": "https://www.argospetinsurance.co.uk/",
+      "path": "/pet-insurance"
+    },
+    {
+      "kind": "footer",
+      "label": "Furniture Recycling",
+      "real": "https://help.argos.co.uk/help/products-and-services/clearabee-information-page/clearabeeinfopage",
+      "path": "/help/furniture-recycling"
+    },
+    {
+      "kind": "footer",
+      "label": "About us",
+      "real": "https://www.about.sainsburys.co.uk/brands-that-deliver/argos",
+      "path": "/about-us"
+    },
+    {
+      "kind": "footer",
+      "label": "Argos for Business",
+      "real": "https://argosforbusiness.co.uk/",
+      "path": "/argos-for-business"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://sainsburys.jobs/",
+      "path": "/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Press enquiries",
+      "real": "https://www.about.sainsburys.co.uk/news/media-enquiries",
+      "path": "/press-enquiries"
+    },
+    {
+      "kind": "footer",
+      "label": "Modern Slavery Statement",
+      "real": "https://www.about.sainsburys.co.uk/sustainability/plan-for-better/our-stories/2017/standing-up-to-modern-slavery",
+      "path": "/modern-slavery-statement"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.argos.co.uk/help/accessibility-statement",
+      "path": "/help/accessibility-statement"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy hub",
+      "real": "https://privacy-hub.sainsburys.co.uk/",
+      "path": "/privacy-hub"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy policy",
+      "real": "https://privacy-hub.sainsburys.co.uk/privacy-policy/",
+      "path": "/privacy-hub/privacy-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Cookies policy",
+      "real": "https://privacy-hub.sainsburys.co.uk/cookie-policy/",
+      "path": "/privacy-hub/cookie-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "List of cookies",
+      "real": "https://www.argos.co.uk/help/cookie-list/",
+      "path": "/help/cookie-list"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms & conditions",
+      "real": "https://help.argos.co.uk/help/terms-and-conditions",
+      "path": "/help/terms-and-conditions"
+    },
+    {
+      "kind": "page",
+      "label": "Store finder",
+      "real": "https://www.argos.co.uk/stores",
+      "path": "/stores",
+      "expect": [
+        "Find an Argos store near you",
+        "All Stores",
+        "Use my location"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help centre",
+      "real": "https://help.argos.co.uk/help",
+      "path": "/help",
+      "expect": [
+        "How can we help?",
+        "Check your account",
+        "Aftersales and returns",
+        "Ways to pay",
+        "Delivery and collection",
+        "Insurance and Argos Care"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Contact us",
+      "real": "https://help.argos.co.uk/help/contact-us",
+      "path": "/help/contact-us",
+      "expect": [
+        "Contact us",
+        "Common questions",
+        "Call Us",
+        "Write to Us",
+        "SignVideo (BSL)"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Track your order",
+      "real": "https://www.argos.co.uk/order/tracking",
+      "path": "/order/tracking",
+      "expect": [
+        "Track your order"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns lookup",
+      "real": "https://www.argos.co.uk/order/tracking?type=returns",
+      "path": "/order/tracking?type=returns",
+      "expect": [
+        "Returns"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.argos.co.uk/account/login",
+      "path": "/account/login",
+      "expect": [
+        "Sign in",
+        "Email address",
+        "Password"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Trolley",
+      "real": "https://www.argos.co.uk/basket",
+      "path": "/basket",
+      "expect": [
+        "Your trolley"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://help.argos.co.uk/help/gift-cards",
+      "path": "/help/gift-cards",
+      "expect": [
+        "Send an Argos, Habitat, Sainsbury's or a Multi-brand Gift Card",
+        "Shop all gift cards",
+        "Our other brands",
+        "Already got an Argos Gift Card or eGift Card?",
+        "Argos for Business Gift Cards"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Delivery & collection guide",
+      "real": "https://help.argos.co.uk/help/delivery-&-collection-guide",
+      "path": "/help/delivery-and-collection-guide",
+      "expect": [
+        "Delivery & Collection Guide",
+        "Get 12 months of delivery with Argos Plus",
+        "Our delivery and collection options",
+        "Home delivery for big things",
+        "Installation and recycling"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns policy",
+      "real": "https://help.argos.co.uk/help/refunds-&-returns/returns-product-support-and-repairs/returnsproductsupportrepairs",
+      "path": "/help/returns-product-support-and-repairs",
+      "expect": [
+        "Returns, refunds and exchanges",
+        "How to return your item",
+        "If you've changed your mind",
+        "If your item is faulty or damaged",
+        "Your statutory rights to cancel"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Argos Pay",
+      "real": "https://help.argos.co.uk/help/argos-pay",
+      "path": "/help/argos-pay",
+      "expect": [
+        "Buy what you love, pay at your pace.",
+        "What are my payment options?",
+        "Why choose Argos Pay?",
+        "How to apply for Argos Pay"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Nectar at Argos",
+      "real": "https://help.argos.co.uk/help/nectar",
+      "path": "/help/nectar",
+      "expect": [
+        "Nectar at Argos",
+        "How Nectar works at Argos",
+        "How to link your Nectar account online",
+        "Shopping with Nectar in-store"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Argos Care",
+      "real": "https://help.argos.co.uk/help/argos-care",
+      "path": "/help/argos-care",
+      "expect": [
+        "Argos Care",
+        "Argos Electrical Product Care",
+        "Argos Replacement Care",
+        "Argos Furniture Care"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Terms and conditions",
+      "real": "https://help.argos.co.uk/help/terms-and-conditions",
+      "path": "/help/terms-and-conditions",
+      "expect": [
+        "Terms and Conditions",
+        "Trusted Seller Terms and Conditions",
+        "Delivery and Collection",
+        "Age-Restricted Products"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Accessibility statement",
+      "real": "https://help.argos.co.uk/help/accessibility-statement",
+      "path": "/help/accessibility-statement",
+      "expect": [
+        "Accessibility Statement for Argos",
+        "How the website was tested",
+        "Known issues",
+        "Reporting an issue"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gaming department",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/c:29952/",
+      "path": "/browse/technology/video-games-and-consoles/c:29952/",
+      "expect": [
+        "Video Games & Gaming Consoles",
+        "PlayStation",
+        "XBOX",
+        "Nintendo"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pre-order games category",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/pre-order-games/c:29997/",
+      "path": "/browse/technology/video-games-and-consoles/pre-order-games/c:29997/",
+      "expect": [
+        "Pre-order Games"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.argos.co.uk/search/gta-6/",
+      "path": "/search/gta-6/",
+      "expect": [
+        "gta 6"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.argos.co.uk/product/8747444",
+      "path": "/product/8747444",
+      "expect": [
+        "Grand Theft Auto VI PS5 Game Pre-Order"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Voucher codes & offers",
+      "real": "https://www.argos.co.uk/events/voucher-discount-codes",
+      "path": "/events/voucher-discount-codes",
+      "expect": [
+        "Voucher Codes and Offers"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Top 100 deals",
+      "real": "https://www.argos.co.uk/list/shop-top-100-deals",
+      "path": "/list/shop-top-100-deals",
+      "expect": [
+        "top 100 deals"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Advice & inspiration",
+      "real": "https://www.argos.co.uk/features/advice-and-inspiration",
+      "path": "/features/advice-and-inspiration",
+      "expect": [
+        "Advice and inspiration"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Delivery promo strip",
+      "expect": [
+        "Small Item Delivery £4.95, free over £100"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Shop / Trending navigation",
+      "expect": [
+        "Shop",
+        "Trending",
+        "The Big Red Event"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Top 100 deals promo",
+      "expect": [
+        "Shop our top 100 deals"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Christmas promo",
+      "expect": [
+        "Shop Christmas"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Returning an item block",
+      "expect": [
+        "Returning an item",
+        "For returns, product support and repairs"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Payment methods block",
+      "expect": [
+        "Payment methods",
+        "We accept the following payment methods online"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Follow us block",
+      "expect": [
+        "Follow us"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "App download block",
+      "expect": [
+        "Download our app"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Copyright bar",
+      "expect": [
+        "© Argos Limited 2026. All Rights Reserved."
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Christmas",
+      "real": "https://www.argos.co.uk/events/christmas-gifts",
+      "path": "/events/christmas-gifts"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Christmas Trees",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/home-furnishings/christmas-decorations/christmas-trees/c:29817/",
+      "path": "/browse/home-and-furniture/home-furnishings/christmas-decorations/christmas-trees/c:29817/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toy Offers",
+      "real": "https://www.argos.co.uk/events/toys-offers",
+      "path": "/events/toys-offers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids Gifts",
+      "real": "https://www.argos.co.uk/browse/toys/gifts-for-kids/c:1100025/",
+      "path": "/browse/toys/gifts-for-kids/c:1100025/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys",
+      "real": "https://www.argos.co.uk/browse/toys/c:30299/",
+      "path": "/browse/toys/c:30299/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "1 to 2 years",
+      "real": "https://www.argos.co.uk/sd/1-to-2-years-toys/",
+      "path": "/sd/1-to-2-years-toys/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Playsets & Figures",
+      "real": "https://www.argos.co.uk/browse/toys/playsets-and-figures/c:30373/",
+      "path": "/browse/toys/playsets-and-figures/c:30373/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Board Games",
+      "real": "https://www.argos.co.uk/browse/toys/family-games/board-games/c:30423/",
+      "path": "/browse/toys/family-games/board-games/c:30423/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Creative Toys",
+      "real": "https://www.argos.co.uk/browse/toys/art-and-creativity-toys/c:30302/",
+      "path": "/browse/toys/art-and-creativity-toys/c:30302/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Dolls & Accessories",
+      "real": "https://www.argos.co.uk/browse/toys/dolls-and-doll-accessories/c:30305/",
+      "path": "/browse/toys/dolls-and-doll-accessories/c:30305/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Toy Vehicles",
+      "real": "https://www.argos.co.uk/browse/toys/toy-vehicles-and-sets/c:30311/",
+      "path": "/browse/toys/toy-vehicles-and-sets/c:30311/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Technology",
+      "real": "https://www.argos.co.uk/browse/technology/c:29949/",
+      "path": "/browse/technology/c:29949/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Televisions",
+      "real": "https://www.argos.co.uk/browse/technology/televisions-and-accessories/televisions/c:30106/",
+      "path": "/browse/technology/televisions-and-accessories/televisions/c:30106/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sound Bars",
+      "real": "https://www.argos.co.uk/browse/technology/sound-bars/c:30123/",
+      "path": "/browse/technology/sound-bars/c:30123/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cameras",
+      "real": "https://www.argos.co.uk/browse/technology/cameras/c:30168/",
+      "path": "/browse/technology/cameras/c:30168/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "SIM Free Mobile Phones",
+      "real": "https://www.argos.co.uk/browse/technology/mobile-phones-and-accessories/sim-free-phones/c:30147/",
+      "path": "/browse/technology/mobile-phones-and-accessories/sim-free-phones/c:30147/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Watches",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/watches/smart-watches/c:786024/",
+      "path": "/browse/jewellery-and-watches/watches/smart-watches/c:786024/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wireless Headphones",
+      "real": "https://www.argos.co.uk/browse/technology/headphones-and-earphones/wireless-headphones/c:815766/",
+      "path": "/browse/technology/headphones-and-earphones/wireless-headphones/c:815766/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laptops & 2-in-1s",
+      "real": "https://www.argos.co.uk/browse/technology/laptops-and-pcs/laptops/c:30049/",
+      "path": "/browse/technology/laptops-and-pcs/laptops/c:30049/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tablets",
+      "real": "https://www.argos.co.uk/browse/technology/tablets-and-ipad/tablets/c:30159/",
+      "path": "/browse/technology/tablets-and-ipad/tablets/c:30159/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/c:29952/",
+      "path": "/browse/technology/video-games-and-consoles/c:29952/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all PlayStation",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/playstation/c:812419/",
+      "path": "/browse/technology/video-games-and-consoles/playstation/c:812419/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS5 Consoles",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/playstation/ps5-consoles/c:812421/",
+      "path": "/browse/technology/video-games-and-consoles/playstation/ps5-consoles/c:812421/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS5 Games",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/playstation/ps5-games/c:812420/",
+      "path": "/browse/technology/video-games-and-consoles/playstation/ps5-games/c:812420/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all XBOX",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/xbox/c:812424/",
+      "path": "/browse/technology/video-games-and-consoles/xbox/c:812424/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX Series X Consoles",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/xbox/xbox-series-x-consoles/c:812425/",
+      "path": "/browse/technology/video-games-and-consoles/xbox/xbox-series-x-consoles/c:812425/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX Series Games",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/xbox/xbox-series-games/c:812426/",
+      "path": "/browse/technology/video-games-and-consoles/xbox/xbox-series-games/c:812426/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all Nintendo",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/nintendo/c:30291/",
+      "path": "/browse/technology/video-games-and-consoles/nintendo/c:30291/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo Switch 2 Consoles",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/nintendo/nintendo-switch-2-consoles/c:1054684/",
+      "path": "/browse/technology/video-games-and-consoles/nintendo/nintendo-switch-2-consoles/c:1054684/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo Switch Games",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/nintendo/nintendo-switch-games/c:30292/",
+      "path": "/browse/technology/video-games-and-consoles/nintendo/nintendo-switch-games/c:30292/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pre-order Games",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/pre-order-games/c:29997/",
+      "path": "/browse/technology/video-games-and-consoles/pre-order-games/c:29997/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation Digital Downloads",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/playstation/playstation-digital-downloads/c:1012069/",
+      "path": "/browse/technology/video-games-and-consoles/playstation/playstation-digital-downloads/c:1012069/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Headsets",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/gaming-headsets/c:29987/",
+      "path": "/browse/technology/video-games-and-consoles/gaming-headsets/c:29987/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Upcoming Games",
+      "real": "https://www.argos.co.uk/features/gaming",
+      "path": "/features/gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all PC Gaming",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/pc-gaming/c:29986/",
+      "path": "/browse/technology/video-games-and-consoles/pc-gaming/c:29986/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Laptops",
+      "real": "https://www.argos.co.uk/browse/technology/laptops-and-pcs/gaming-laptops/c:30279/",
+      "path": "/browse/technology/laptops-and-pcs/gaming-laptops/c:30279/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PC Games",
+      "real": "https://www.argos.co.uk/browse/technology/video-games-and-consoles/pc-gaming/pc-games/c:30005/",
+      "path": "/browse/technology/video-games-and-consoles/pc-gaming/pc-games/c:30005/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home & Furniture",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/c:29351/",
+      "path": "/browse/home-and-furniture/c:29351/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beds",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/bedroom-furniture/beds/c:29865/",
+      "path": "/browse/home-and-furniture/bedroom-furniture/beds/c:29865/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sofas",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/living-room-furniture/sofas/c:29643/",
+      "path": "/browse/home-and-furniture/living-room-furniture/sofas/c:29643/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rugs & Runners",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/home-furnishings/rugs-and-runners/c:1000173/",
+      "path": "/browse/home-and-furniture/home-furnishings/rugs-and-runners/c:1000173/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchenware & Accessories",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/kitchenware/c:29704/",
+      "path": "/browse/home-and-furniture/kitchenware/c:29704/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dining Table Sets",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/dining-room-furniture/dining-table-and-chair-sets/c:29647/",
+      "path": "/browse/home-and-furniture/dining-room-furniture/dining-table-and-chair-sets/c:29647/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desks",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/office-furniture/desks/c:29863/",
+      "path": "/browse/home-and-furniture/office-furniture/desks/c:29863/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ceiling Lights",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/lighting/ceiling-lights/c:29802/",
+      "path": "/browse/home-and-furniture/lighting/ceiling-lights/c:29802/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Storage Units",
+      "real": "https://www.argos.co.uk/browse/home-and-furniture/storage-and-organisation/storage-units/c:29590/",
+      "path": "/browse/home-and-furniture/storage-and-organisation/storage-units/c:29590/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Health & Beauty",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/c:29203/",
+      "path": "/browse/health-and-beauty/c:29203/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hair Stylers",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/hair-care/hot-air-stylers-and-brushes/c:29238/",
+      "path": "/browse/health-and-beauty/hair-care/hot-air-stylers-and-brushes/c:29238/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electric Toothbrushes",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/electric-toothbrushes/c:29231/",
+      "path": "/browse/health-and-beauty/electric-toothbrushes/c:29231/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Perfume",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/fragrance/perfume/c:29282/",
+      "path": "/browse/health-and-beauty/fragrance/perfume/c:29282/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Makeup Sets",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/makeup/makeup-sets/c:29265/",
+      "path": "/browse/health-and-beauty/makeup/makeup-sets/c:29265/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beauty Appliances",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/beauty-appliances/c:29259/",
+      "path": "/browse/health-and-beauty/beauty-appliances/c:29259/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Handheld Massagers",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/wellness/handheld-massagers/c:29227/",
+      "path": "/browse/health-and-beauty/wellness/handheld-massagers/c:29227/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mens Shavers",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/mens-shaving-and-grooming/shavers-and-shaving-accessories/mens-electric-shavers/c:29256/",
+      "path": "/browse/health-and-beauty/mens-shaving-and-grooming/shavers-and-shaving-accessories/mens-electric-shavers/c:29256/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Blood Pressure Monitors",
+      "real": "https://www.argos.co.uk/browse/health-and-beauty/health/blood-pressure-monitors/c:29219/",
+      "path": "/browse/health-and-beauty/health/blood-pressure-monitors/c:29219/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Appliances",
+      "real": "https://www.argos.co.uk/browse/appliances/c:787124/",
+      "path": "/browse/appliances/c:787124/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vacuum Cleaners",
+      "real": "https://www.argos.co.uk/browse/appliances/vacuum-cleaners-and-floorcare/vacuum-cleaners/c:29693/",
+      "path": "/browse/appliances/vacuum-cleaners-and-floorcare/vacuum-cleaners/c:29693/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fridge Freezers",
+      "real": "https://www.argos.co.uk/browse/appliances/fridges-and-freezers/fridge-freezers/c:29617/",
+      "path": "/browse/appliances/fridges-and-freezers/fridge-freezers/c:29617/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Washing Machines",
+      "real": "https://www.argos.co.uk/browse/appliances/laundry/washing-machines/c:29612/",
+      "path": "/browse/appliances/laundry/washing-machines/c:29612/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Freestanding Cookers",
+      "real": "https://www.argos.co.uk/browse/appliances/cookers-ovens-and-hobs/freestanding-cookers/c:29623/",
+      "path": "/browse/appliances/cookers-ovens-and-hobs/freestanding-cookers/c:29623/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dishwashers",
+      "real": "https://www.argos.co.uk/browse/appliances/dishwashers/c:29615/",
+      "path": "/browse/appliances/dishwashers/c:29615/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kettles",
+      "real": "https://www.argos.co.uk/browse/appliances/kettles/c:29560/",
+      "path": "/browse/appliances/kettles/c:29560/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Heaters",
+      "real": "https://www.argos.co.uk/browse/appliances/fans-heaters-and-dehumidifiers/heaters-and-radiators/c:29444/",
+      "path": "/browse/appliances/fans-heaters-and-dehumidifiers/heaters-and-radiators/c:29444/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Air Fryers & Fryers",
+      "real": "https://www.argos.co.uk/browse/appliances/small-cooking-appliances/air-fryers-and-fryers/c:29575/",
+      "path": "/browse/appliances/small-cooking-appliances/air-fryers-and-fryers/c:29575/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sports & Leisure",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/c:30468/",
+      "path": "/browse/sports-and-leisure/c:30468/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dumbbells",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/weights/dumbbells/c:30630/",
+      "path": "/browse/sports-and-leisure/weights/dumbbells/c:30630/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Treadmills",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/exercise-machines/treadmills/c:30612/",
+      "path": "/browse/sports-and-leisure/exercise-machines/treadmills/c:30612/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Exercise Mats",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/fitness-and-gym-accessories/exercise-and-yoga-mats/c:30622/",
+      "path": "/browse/sports-and-leisure/fitness-and-gym-accessories/exercise-and-yoga-mats/c:30622/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Adult Bikes",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/bikes-and-accessories/mens-and-womens-bikes/c:30482/",
+      "path": "/browse/sports-and-leisure/bikes-and-accessories/mens-and-womens-bikes/c:30482/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Football",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/sports/football/c:30531/",
+      "path": "/browse/sports-and-leisure/sports/football/c:30531/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Suitcases",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/bags-luggage-and-travel/suitcases/c:30493/",
+      "path": "/browse/sports-and-leisure/bags-luggage-and-travel/suitcases/c:30493/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tents",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/camping-and-caravanning/tents/c:30505/",
+      "path": "/browse/sports-and-leisure/camping-and-caravanning/tents/c:30505/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fitness Trackers",
+      "real": "https://www.argos.co.uk/browse/sports-and-leisure/fitness-and-activity-trackers/c:30621/",
+      "path": "/browse/sports-and-leisure/fitness-and-activity-trackers/c:30621/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jewellery & Watches",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/c:29298/",
+      "path": "/browse/jewellery-and-watches/c:29298/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mens Watches",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/watches/mens-watches/c:29307/",
+      "path": "/browse/jewellery-and-watches/watches/mens-watches/c:29307/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Womens Watches",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/watches/womens-watches/c:29306/",
+      "path": "/browse/jewellery-and-watches/watches/womens-watches/c:29306/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Womens Earrings",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/womens-jewellery/womens-earrings/c:29315/",
+      "path": "/browse/jewellery-and-watches/womens-jewellery/womens-earrings/c:29315/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chains & Necklaces",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/mens-jewellery/mens-necklaces-and-chains/c:29329/",
+      "path": "/browse/jewellery-and-watches/mens-jewellery/mens-necklaces-and-chains/c:29329/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids Earrings",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/kids-jewellery/kids-earrings/c:29338/",
+      "path": "/browse/jewellery-and-watches/kids-jewellery/kids-earrings/c:29338/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wedding Rings",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/wedding-bands/c:1043194/",
+      "path": "/browse/jewellery-and-watches/wedding-bands/c:1043194/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gold Jewellery",
+      "real": "https://www.argos.co.uk/sd/gold-jewellery/",
+      "path": "/sd/gold-jewellery/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jewellery Boxes",
+      "real": "https://www.argos.co.uk/browse/jewellery-and-watches/jewellery-boxes-and-hangers/c:29344/",
+      "path": "/browse/jewellery-and-watches/jewellery-boxes-and-hangers/c:29344/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby & Nursery",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/c:29000/",
+      "path": "/browse/baby-and-nursery/c:29000/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Prams & Pushchairs",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/prams-and-pushchairs/c:29042/",
+      "path": "/browse/baby-and-nursery/prams-and-pushchairs/c:29042/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Early Learning Toys",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/baby-toys/early-learning-toys/c:29101/",
+      "path": "/browse/baby-and-nursery/baby-toys/early-learning-toys/c:29101/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cots & Cot Beds",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/cots-and-cot-beds/c:29129/",
+      "path": "/browse/baby-and-nursery/cots-and-cot-beds/c:29129/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Highchairs",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/feeding-and-weaning/highchairs/c:29067/",
+      "path": "/browse/baby-and-nursery/feeding-and-weaning/highchairs/c:29067/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Baths",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/bathing-and-changing/baby-baths/c:29089/",
+      "path": "/browse/baby-and-nursery/bathing-and-changing/baby-baths/c:29089/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Monitors",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/health-and-safety/baby-monitors/c:29056/",
+      "path": "/browse/baby-and-nursery/health-and-safety/baby-monitors/c:29056/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nightlights & Projectors",
+      "real": "https://www.argos.co.uk/browse/baby-and-nursery/baby-sleep-aids/nightlights-projectors-and-clocks/c:29033/",
+      "path": "/browse/baby-and-nursery/baby-sleep-aids/nightlights-projectors-and-clocks/c:29033/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sleepwear",
+      "real": "https://www.argos.co.uk/browse/clothing/baby/sleepsuits-and-pyjamas/c:691061/",
+      "path": "/browse/clothing/baby/sleepsuits-and-pyjamas/c:691061/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing",
+      "real": "https://www.argos.co.uk/browse/clothing/c:29131/",
+      "path": "/browse/clothing/c:29131/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Womens",
+      "real": "https://www.argos.co.uk/browse/clothing/womens/c:691104/",
+      "path": "/browse/clothing/womens/c:691104/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Girls Uniform",
+      "real": "https://www.argos.co.uk/browse/clothing/school-uniforms/girls-school-uniforms/c:812484/",
+      "path": "/browse/clothing/school-uniforms/girls-school-uniforms/c:812484/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Boys",
+      "real": "https://www.argos.co.uk/browse/clothing/boys/c:812621/",
+      "path": "/browse/clothing/boys/c:812621/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Girls",
+      "real": "https://www.argos.co.uk/browse/clothing/girls/c:812622/",
+      "path": "/browse/clothing/girls/c:812622/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Mens",
+      "real": "https://www.argos.co.uk/browse/clothing/mens/c:691144/",
+      "path": "/browse/clothing/mens/c:691144/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Baby",
+      "real": "https://www.argos.co.uk/browse/clothing/baby/all-baby-clothes/c:812374/",
+      "path": "/browse/clothing/baby/all-baby-clothes/c:812374/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fancy Dress",
+      "real": "https://www.argos.co.uk/browse/clothing/fancy-dress/c:29137/",
+      "path": "/browse/clothing/fancy-dress/c:29137/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Garden & DIY",
+      "real": "https://www.argos.co.uk/browse/garden-and-diy/c:797660/",
+      "path": "/browse/garden-and-diy/c:797660/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all Garden & DIY Offers",
+      "real": "https://www.argos.co.uk/events/garden-diy-offers",
+      "path": "/events/garden-diy-offers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Garden Table & Chair Sets",
+      "real": "https://www.argos.co.uk/browse/garden-and-diy/garden-furniture/patio-sets/c:29391/",
+      "path": "/browse/garden-and-diy/garden-furniture/patio-sets/c:29391/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gazebos",
+      "real": "https://www.argos.co.uk/browse/garden-and-diy/garden-furniture/gazebos-and-awnings/c:29397/",
+      "path": "/browse/garden-and-diy/garden-furniture/gazebos-and-awnings/c:29397/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sheds",
+      "real": "https://www.argos.co.uk/browse/garden-and-diy/sheds-and-garden-storage/sheds/c:29492/",
+      "path": "/browse/garden-and-diy/sheds-and-garden-storage/sheds/c:29492/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Summerhouses",
+      "real": "https://www.argos.co.uk/browse/garden-and-diy/summer-houses-and-log-cabins/c:29495/",
+      "path": "/browse/garden-and-diy/summer-houses-and-log-cabins/c:29495/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Greenhouses",
+      "real": "https://www.argos.co.uk/browse/garden-and-diy/greenhouses/greenhouses/c:29490/",
+      "path": "/browse/garden-and-diy/greenhouses/greenhouses/c:29490/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Barbecues",
+      "real": "https://www.argos.co.uk/browse/garden-and-diy/barbecues/c:29382/",
+      "path": "/browse/garden-and-diy/barbecues/c:29382/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store finder",
+      "real": "https://www.argos.co.uk/stores",
+      "path": "/stores"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Help & FAQs",
+      "real": "https://help.argos.co.uk/help",
+      "path": "/help"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Track your order",
+      "real": "https://www.argos.co.uk/order/tracking",
+      "path": "/order/tracking"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift cards",
+      "real": "https://www.argos.co.uk/help/gift-cards",
+      "path": "/help/gift-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Voucher codes",
+      "real": "https://www.argos.co.uk/events/voucher-discount-codes",
+      "path": "/events/voucher-discount-codes"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Advice & inspiration",
+      "real": "https://www.argos.co.uk/features/advice-and-inspiration",
+      "path": "/features/advice-and-inspiration"
+    }
+  ]
+}
