@@ -26,7 +26,7 @@
   ],
   "home_path": "/",
   "sitemap_path": "/sitemap",
-  "notes": "Captured with WebFetch on 2026-10-13. Client-rendered pages returned no form content: /register (only 'You need to enable JavaScript'), /orders/details and /orders/gift-card-lookup (title 'Member Orders' only), and the member profile was not reachable signed-out, so those expect strings use Nike's long-standing sign-in, account and lookup labels rather than a fresh capture. sitemap.xml could not be fetched (direct fetch errored, web.archive.org blocked); Nike has no HTML site map, so the sitemap items are the real mega-menu department tree plus main service sections. /retail geolocated the fetch to Toronto, so its store list is the Toronto/Niagara list. Search expectations come from the real 'running' search but are checked on the clone's captured 'gta 6' search, because uncaptured queries must stay marked uncaptured. The product check uses a captured observation path (purchase stays unverified, no Add to Bag). Off-site corporate links (about.nike.com, news, jobs, investors, purpose, agreementservice legal documents) are local summary pages.",
+  "notes": "Captured with WebFetch on 2026-10-13. Client-rendered pages returned no form content: /register (only 'You need to enable JavaScript'), /orders/details and /orders/gift-card-lookup (title 'Member Orders' only), and the member profile was not reachable signed-out, so those expect strings use Nike's long-standing sign-in, account and lookup labels rather than a fresh capture. sitemap.xml could not be fetched (direct fetch errored, web.archive.org blocked); Nike has no HTML site map, so the sitemap items are the real mega-menu department tree plus main service sections. /retail geolocated the fetch to Toronto, so its store list is the Toronto/Niagara list. The search check uses the real 'running' search; the product check keeps a captured observation path (unpurchasable). The reference catalog now carries a nike.com assortment (stores/nike/shelf-data.js, ~290 models with nike.com style-colour codes) on the homepage, category grids, search, product pages, Bag and checkout, ordered as kind 'other'. The captured 'gta 6' search (Nike sells no GTA 6) is unchanged and its observations stay unpurchasable; queries with no assortment match stay marked uncaptured. Off-site corporate links (about.nike.com, news, jobs, investors, purpose, agreementservice legal documents) are local summary pages.",
   "items": [
     {
       "kind": "header",
@@ -675,7 +675,7 @@
       "kind": "page",
       "label": "Search results",
       "real": "https://www.nike.com/w?q=running",
-      "path": "/w?q=gta%206",
+      "path": "/w?q=running",
       "expect": [
         "Search results for",
         "Sports",

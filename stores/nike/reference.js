@@ -7,6 +7,8 @@ import { capturedColorways } from './search-colorways.js'
 import { MENUS } from './site-data.js'
 import { INFO_PAGES } from './site-content.js'
 import * as site from './site-pages.js'
+import { shelf, searchShelf, listingItems, HUB_ITEMS } from './shelf.js'
+import { installShelf, bagCount, row, listingGrid, searchGrid } from './shelf-pages.js'
 
 const mainPaths = new Set(capturedSearchProducts.map(p => p.path))
 export const catalogObservations = [...capturedSearchProducts, ...Object.values(capturedColorways).flat().filter(p => !mainPaths.has(p.path)).map(p => ({ ...p, kind: 'other', price: null, image_source_url: p.source_url }))]
@@ -105,20 +107,86 @@ function installSite(router, { render, coverage, baseOf }) {
   }
 }
 
-const store = referenceRetailStore({ slug: 'nike', name: 'Nike', availability: 'unavailable', chrome: nikeSiteChrome,
+const store = referenceRetailStore({ slug: 'nike', name: 'Nike', availability: 'unavailable', chrome: args => nikeSiteChrome({ ...args, count: bagCount(args.req) }),
   observations: catalogObservations, prepare(req) { req.nikeCapturedSearch = true },
   queryKeys: ['q'], searchRoutes: ['/w', '/search'], matches: capturedPhrase, capturedSearch: '/w?q=gta%206',
   search(req, res, { render, base, query }) { render(req, res, `Search results for ${query}`, capturedNikeSearch(base, { ...req.query, q: query })) },
   install: installSite,
 })
 
-// The shared reference router serves its captured-catalog list at "/"; nike.com's
-// homepage (with the captured listings as one section) is served first instead.
+// nike.com pages layered in front of the shared reference router. The shelf
+// (shelf.js) is the nike.com assortment: homepage rows, category grids, search,
+// product pages, Bag and checkout for `kind: 'other'` items. It is kept apart
+// from the captured "gta 6" search observations above, which stay unverified and
+// cannot be bought; Nike does not sell GTA 6. Purchase requests naming anything
+// that is not a shelf style still reach the shared guard (409).
 const router = Router()
-router.get('/', (req, res, next) => {
-  if (Object.values(req.query).some(v => typeof v !== 'string')) return next()
-  helpers.render(req, res, 'Nike. Just Do It', site.homePage(helpers.baseOf(res)))
+const render = (...args) => helpers.render(...args)
+const baseOf = res => helpers.baseOf(res)
+router.use((req, res, next) => Object.values(req.query).some(v => typeof v !== 'string') ? store.router.handle(req, res, next) : next())
+
+const top = (items, n, key = p => p.reviews) => [...items].sort((a, b) => key(b) - key(a)).slice(0, n)
+const pickIds = ids => ids.map(id => shelf.find(p => p.id === id)).filter(Boolean)
+function homeRows(base) {
+  const popular = pickIds(['CW2288-111', 'FB7921-010', 'FD2722-002', 'DD1391-100', 'DQ5860-010', '553558-161', 'BV2654-010', 'DQ6015-010', 'CN8490-100', 'DH2920-111', 'SX6897-100', 'DC4244-010'])
+  const fresh = top(shelf.filter(p => p.badge === 'Just In'), 12, p => p.newness)
+  const fleece = top(shelf.filter(p => p.tags.includes('fleece') && p.g !== 'kids'), 12)
+  const running = top(shelf.filter(p => p.cat === 'shoes' && p.sport === 'running' && p.g !== 'kids'), 12)
+  const sale = top(shelf.filter(p => p.sale), 12, p => p.discount * 1000 + p.reviews / 100)
+  const kids = top(shelf.filter(p => p.g === 'kids'), 12)
+  const gear = top(shelf.filter(p => p.cat === 'accessories'), 12)
+  return {
+    top: row(base, 'Popular Right Now', popular, ['Shop Best Sellers', '/w/mens-best-76m50znik1']) + row(base, 'New Arrivals', fresh, ['Shop All New', '/w/new-mens-3n82yznik1']),
+    mid: row(base, 'Fleece Season', fleece, ['Shop Fleece', '/w/mens-fleece-4xh6qznik1']) + row(base, 'Run in Comfort', running, ['Shop Running', '/w/mens-running-shoes-37v7jznik1zy7ok']) + row(base, 'Sale: Up to 30% Off', sale, ['Shop All Sale', '/w/sale-3yaep']),
+    end: row(base, "Kids' Favorites", kids, ['Shop Kids', '/kids']) + row(base, 'Gear Up', gear, ['Shop Accessories', '/w/mens-accessories-equipment-awwpwznik1']),
+  }
+}
+router.get('/', (req, res) => render(req, res, 'Nike. Just Do It', site.homePage(baseOf(res), homeRows(baseOf(res)))))
+
+// Departments and sport hubs carry product rows under the hero.
+const withRows = (html, rows) => { const at = html.indexOf('<section class="nkx-section">'); return at < 0 ? html.replace(/<\/div>$/, rows + '</div>') : html.slice(0, at) + rows + html.slice(at) }
+for (const menu of MENUS) {
+  const pick = HUB_ITEMS[menu.path]
+  if (!pick) continue
+  const dept = ['Men', 'Women', 'Kids'].includes(menu.label)
+  const title = dept ? `${menu.label}'s Shoes, Clothing & Accessories`.replace("Kids's", "Kids'") : menu.label
+  router.get(menu.path, (req, res) => {
+    const base = baseOf(res), items = shelf.filter(pick)
+    const rows = row(base, dept ? 'Trending Now' : `Shop ${menu.label}`, top(items, 12)) + (dept ? row(base, 'Just In', top(items, 12, p => p.newness)) : '')
+    render(req, res, title, withRows(dept ? site.departmentPage(base, menu) : site.hubPage(base, menu.path, menu.label, menu.groups), rows))
+  })
+}
+const sport = MENUS.find(m => m.label === 'Sport')
+for (const [path, label, groups] of [...sport.groups.map(g => [g.path, g.label, [g]]), ['/baseball', 'Baseball', []], ['/us-football', 'Football', []]]) {
+  const pick = HUB_ITEMS[path]
+  if (!pick || MENUS.some(m => m.path === path)) continue
+  router.get(path, (req, res) => {
+    const base = baseOf(res)
+    render(req, res, label, withRows(site.hubPage(base, path, label, groups), row(base, `Shop ${label}`, top(shelf.filter(pick), 12))))
+  })
+}
+
+// Category listings with shelf products; listings the shelf does not cover keep
+// the captured category structure.
+router.get('/w/:slug', (req, res, next) => {
+  const info = site.LISTINGS.get(req.params.slug)
+  const items = info ? listingItems(req.params.slug) : []
+  if (!items.length) return next()
+  render(req, res, info.title, listingGrid(baseOf(res), req.params.slug, info, items, req.query))
 })
+
+// Search: "gta 6" keeps the captured nike.com result (no GTA 6 product exists on
+// nike.com); other queries search the shelf, and queries without shelf matches
+// stay marked uncaptured.
+router.get(['/w', '/search'], (req, res, next) => {
+  const q = typeof req.query.q === 'string' ? req.query.q.trim().slice(0, 100) : ''
+  if (!q || capturedPhrase(q)) return next()
+  const items = searchShelf(q)
+  if (!items.length) return next()
+  render(req, res, `Search results for ${q}`, searchGrid(baseOf(res), q, items, req.query))
+})
+
+installShelf(router, { render, baseOf })
 router.use(store.router)
 
 export default { ...store, router }
