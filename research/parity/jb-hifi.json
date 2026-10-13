@@ -1,0 +1,1190 @@
+{
+  "store": "jb-hifi",
+  "real_home": "https://www.jbhifi.com.au/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.jbhifi.com.au/",
+    "https://www.jbhifi.com.au/sitemap.xml",
+    "https://www.jbhifi.com.au/sitemap_pages_1.xml",
+    "https://www.jbhifi.com.au/sitemap_collections_1.xml",
+    "https://www.jbhifi.com.au/sitemap_collections_2.xml",
+    "https://www.jbhifi.com.au/sitemap_blogs_1.xml",
+    "https://www.jbhifi.com.au/sitemap_agentic_discovery.xml",
+    "https://www.jbhifi.com.au/agents.md",
+    "https://www.jbhifi.com.au/collections/all",
+    "https://www.jbhifi.com.au/pages/track-my-order",
+    "https://www.jbhifi.com.au/pages/store-finder",
+    "https://www.jbhifi.com.au/pages/perks",
+    "https://www.jbhifi.com.au/pages/catalogues",
+    "https://www.jbhifi.com.au/pages/brands",
+    "https://www.jbhifi.com.au/pages/about-us",
+    "https://www.jbhifi.com.au/pages/terms-and-conditions",
+    "https://www.jbhifi.com.au/pages/help-and-support/how-do-i-return-faulty-goods",
+    "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+    "research/jb-hifi.md"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "notes": "Captured 2026-10-13. jbhifi.com.au is a client-rendered Shopify storefront: WebFetch returns only <head> metadata (titles, meta descriptions) for the homepage and /pages/* (no header, nav, footer or body), web.archive.org is blocked, /account/login, /pages/privacy-policy and support.jbhifi.com.au are robots-disallowed, and /pages/gift-cards, /pages/new, /pages/clearance, /collections/new, /collections/clearance, /collections/gift-cards and /collections/games-hardware returned client errors. What was fetched: the sitemap index and the pages/collections/blogs sitemaps (real handles such as /pages/store-finder, /pages/track-my-order, /pages/perks, /pages/installations, /pages/tradein, /pages/extracare, /pages/interest-free-finance, /pages/receipts, /pages/catalogues, /pages/brands, /pages/about-us, /blogs/news-and-reviews, /blogs/competitions, /collections/computers-tablets, /collections/mobile-phones, /collections/music), page titles (\"Order Tracking\", \"JB Hi-Fi Store Finder\", \"Current catalogues - Shop Red Hot Deals at JB Hi-Fi!\", \"Products\" H1 on /collections/all, \"About us - JB Hi-Fi\", \"Electronic Brands\") and the PDP body (Description, Availability, Returns policy and Warranty guide help links). Header utilities and the nine nav entries come from research/jb-hifi.md (live browser walk 2026-09-29). The footer column contents, the homepage section list, the department tree (based on the collections sitemap handles) and the help/policy copy are reconstructed from those URLs, the PDP help links and the research/jb-hifi.md help-article quotes; they could not be checked against a rendered footer or homepage. New, Clearance, Services and Gift Cards keep local paths because the real URL could not be confirmed. Off-site JB properties (careers.jbhifi.com.au, the investor site, JB Hi-Fi Business, JB Hi-Fi Education, corporate gift cards) are local summary pages. The real site has no HTML site map; the clone serves /sitemap and /sitemap.xml.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "JB Hi-Fi home",
+      "real": "https://www.jbhifi.com.au/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Track order",
+      "real": "https://www.jbhifi.com.au/pages/track-my-order",
+      "path": "/pages/track-my-order"
+    },
+    {
+      "kind": "header",
+      "label": "Stores",
+      "real": "https://www.jbhifi.com.au/pages/store-finder",
+      "path": "/pages/store-finder"
+    },
+    {
+      "kind": "header",
+      "label": "Log in",
+      "real": "https://www.jbhifi.com.au/account/login",
+      "path": "/account/login"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.jbhifi.com.au/cart",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "New",
+      "real": "https://www.jbhifi.com.au/collections/new",
+      "path": "/collections/new"
+    },
+    {
+      "kind": "header",
+      "label": "Products",
+      "real": "https://www.jbhifi.com.au/collections/all",
+      "path": "/collections/all"
+    },
+    {
+      "kind": "header",
+      "label": "Brands",
+      "real": "https://www.jbhifi.com.au/pages/brands",
+      "path": "/pages/brands"
+    },
+    {
+      "kind": "header",
+      "label": "Deals & Catalogues",
+      "real": "https://www.jbhifi.com.au/pages/catalogues",
+      "path": "/pages/catalogues"
+    },
+    {
+      "kind": "header",
+      "label": "Clearance",
+      "real": "https://www.jbhifi.com.au/collections/clearance",
+      "path": "/collections/clearance"
+    },
+    {
+      "kind": "header",
+      "label": "Services",
+      "real": "https://www.jbhifi.com.au/pages/services",
+      "path": "/pages/services"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Cards",
+      "real": "https://www.jbhifi.com.au/pages/gift-cards",
+      "path": "/pages/gift-cards"
+    },
+    {
+      "kind": "header",
+      "label": "Join JB Perks",
+      "real": "https://www.jbhifi.com.au/pages/perks",
+      "path": "/pages/perks"
+    },
+    {
+      "kind": "header",
+      "label": "News & Reviews",
+      "real": "https://www.jbhifi.com.au/blogs/news-and-reviews",
+      "path": "/blogs/news-and-reviews"
+    },
+    {
+      "kind": "footer",
+      "label": "Help & Support",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support",
+      "path": "/pages/help-and-support"
+    },
+    {
+      "kind": "footer",
+      "label": "Track my order",
+      "real": "https://www.jbhifi.com.au/pages/track-my-order",
+      "path": "/pages/track-my-order"
+    },
+    {
+      "kind": "footer",
+      "label": "Delivery & Collection",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/delivery-and-collection",
+      "path": "/pages/help-and-support/delivery-and-collection"
+    },
+    {
+      "kind": "footer",
+      "label": "Click & Collect",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/what-is-click-and-collect",
+      "path": "/pages/help-and-support/what-is-click-and-collect"
+    },
+    {
+      "kind": "footer",
+      "label": "Pre-orders",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/how-do-pre-orders-work",
+      "path": "/pages/help-and-support/how-do-pre-orders-work"
+    },
+    {
+      "kind": "footer",
+      "label": "Payment methods",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/online-payment-methods",
+      "path": "/pages/help-and-support/online-payment-methods"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns policy",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/how-do-i-return-faulty-goods",
+      "path": "/pages/help-and-support/how-do-i-return-faulty-goods"
+    },
+    {
+      "kind": "footer",
+      "label": "Warranty guide",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/refunds-and-warranties-guide",
+      "path": "/pages/help-and-support/refunds-and-warranties-guide"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact us",
+      "real": "https://www.jbhifi.com.au/pages/contact-us",
+      "path": "/pages/contact-us"
+    },
+    {
+      "kind": "footer",
+      "label": "Installations",
+      "real": "https://www.jbhifi.com.au/pages/installations",
+      "path": "/pages/installations"
+    },
+    {
+      "kind": "footer",
+      "label": "Trade-in",
+      "real": "https://www.jbhifi.com.au/pages/tradein",
+      "path": "/pages/tradein"
+    },
+    {
+      "kind": "footer",
+      "label": "JB Hi-Fi ExtraCare",
+      "real": "https://www.jbhifi.com.au/pages/extracare",
+      "path": "/pages/extracare"
+    },
+    {
+      "kind": "footer",
+      "label": "Interest Free Finance",
+      "real": "https://www.jbhifi.com.au/pages/interest-free-finance",
+      "path": "/pages/interest-free-finance"
+    },
+    {
+      "kind": "footer",
+      "label": "Mobile & Broadband Plans",
+      "real": "https://www.jbhifi.com.au/pages/mobile-broadband-plans",
+      "path": "/pages/mobile-broadband-plans"
+    },
+    {
+      "kind": "footer",
+      "label": "Prepaid SIM",
+      "real": "https://www.jbhifi.com.au/pages/pre-paid-sim",
+      "path": "/pages/pre-paid-sim"
+    },
+    {
+      "kind": "footer",
+      "label": "Digital receipts",
+      "real": "https://www.jbhifi.com.au/pages/receipts",
+      "path": "/pages/receipts"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Cards",
+      "real": "https://www.jbhifi.com.au/pages/gift-cards",
+      "path": "/pages/gift-cards"
+    },
+    {
+      "kind": "footer",
+      "label": "JB Perks",
+      "real": "https://www.jbhifi.com.au/pages/perks",
+      "path": "/pages/perks"
+    },
+    {
+      "kind": "footer",
+      "label": "Catalogues",
+      "real": "https://www.jbhifi.com.au/pages/catalogues",
+      "path": "/pages/catalogues"
+    },
+    {
+      "kind": "footer",
+      "label": "Brands",
+      "real": "https://www.jbhifi.com.au/pages/brands",
+      "path": "/pages/brands"
+    },
+    {
+      "kind": "footer",
+      "label": "JB Hi-Fi Business",
+      "real": "https://www.jbhifi.com.au/pages/jb-hi-fi-business",
+      "path": "/pages/jb-hi-fi-business"
+    },
+    {
+      "kind": "footer",
+      "label": "JB Hi-Fi Education",
+      "real": "https://www.jbhifi.com.au/pages/education",
+      "path": "/pages/education"
+    },
+    {
+      "kind": "footer",
+      "label": "Corporate gift cards",
+      "real": "https://www.jbhifi.com.au/pages/corporate-gift-cards",
+      "path": "/pages/corporate-gift-cards"
+    },
+    {
+      "kind": "footer",
+      "label": "About us",
+      "real": "https://www.jbhifi.com.au/pages/about-us",
+      "path": "/pages/about-us"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://www.jbhifi.com.au/pages/careers",
+      "path": "/pages/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Investor relations",
+      "real": "https://www.jbhifi.com.au/pages/investors",
+      "path": "/pages/investors"
+    },
+    {
+      "kind": "footer",
+      "label": "Store finder",
+      "real": "https://www.jbhifi.com.au/pages/store-finder",
+      "path": "/pages/store-finder"
+    },
+    {
+      "kind": "footer",
+      "label": "News & Reviews",
+      "real": "https://www.jbhifi.com.au/blogs/news-and-reviews",
+      "path": "/blogs/news-and-reviews"
+    },
+    {
+      "kind": "footer",
+      "label": "Competitions",
+      "real": "https://www.jbhifi.com.au/blogs/competitions",
+      "path": "/blogs/competitions"
+    },
+    {
+      "kind": "footer",
+      "label": "Product recalls",
+      "real": "https://www.jbhifi.com.au/pages/product-recalls",
+      "path": "/pages/product-recalls"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy policy",
+      "real": "https://www.jbhifi.com.au/pages/privacy-policy",
+      "path": "/pages/privacy-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms & conditions",
+      "real": "https://www.jbhifi.com.au/pages/terms-and-conditions",
+      "path": "/pages/terms-and-conditions"
+    },
+    {
+      "kind": "footer",
+      "label": "Site map",
+      "real": "https://www.jbhifi.com.au/sitemap",
+      "path": "/sitemap"
+    },
+    {
+      "kind": "page",
+      "label": "Department page (Computers & Tablets)",
+      "real": "https://www.jbhifi.com.au/collections/computers-tablets",
+      "path": "/collections/computers-tablets",
+      "expect": [
+        "Computers & Tablets",
+        "Laptops",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "All products",
+      "real": "https://www.jbhifi.com.au/collections/all",
+      "path": "/collections/all",
+      "expect": [
+        "Products",
+        "Shop by department"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.jbhifi.com.au/search",
+      "path": "/search?query=grand+theft+auto+vi",
+      "expect": [
+        "results for \"grand theft auto vi\"",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+      "path": "/products/playstation-5-grand-theft-auto-vi",
+      "expect": [
+        "Grand Theft Auto VI",
+        "Release date",
+        "Pre-order price guarantee",
+        "Availability"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://www.jbhifi.com.au/cart",
+      "path": "/cart",
+      "expect": [
+        "My Cart"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Log in",
+      "real": "https://www.jbhifi.com.au/account/login",
+      "path": "/account/login",
+      "expect": [
+        "Log in",
+        "Email",
+        "Password"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Create account",
+      "real": "https://www.jbhifi.com.au/account/register",
+      "path": "/account/register",
+      "expect": [
+        "Create account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order tracking",
+      "real": "https://www.jbhifi.com.au/pages/track-my-order",
+      "path": "/pages/track-my-order",
+      "expect": [
+        "Track your order",
+        "Order number"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help & Support",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support",
+      "path": "/pages/help-and-support",
+      "expect": [
+        "Help & Support",
+        "Orders",
+        "Delivery & Collection",
+        "Payments"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store finder",
+      "real": "https://www.jbhifi.com.au/pages/store-finder",
+      "path": "/pages/store-finder",
+      "expect": [
+        "Store Finder",
+        "Find your nearest JB Hi-Fi store"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.jbhifi.com.au/pages/gift-cards",
+      "path": "/pages/gift-cards",
+      "expect": [
+        "Gift Cards",
+        "Check your balance"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Catalogues / deals",
+      "real": "https://www.jbhifi.com.au/pages/catalogues",
+      "path": "/pages/catalogues",
+      "expect": [
+        "Current catalogues",
+        "Red Hot Deals"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns policy",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/how-do-i-return-faulty-goods",
+      "path": "/pages/help-and-support/how-do-i-return-faulty-goods",
+      "expect": [
+        "faulty",
+        "change of mind"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Delivery options",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/what-are-the-delivery-options-for-online-purchases",
+      "path": "/pages/help-and-support/what-are-the-delivery-options-for-online-purchases",
+      "expect": [
+        "Standard Delivery",
+        "Express Delivery",
+        "Courier Delivery"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pre-orders help",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/how-do-pre-orders-work",
+      "path": "/pages/help-and-support/how-do-pre-orders-work",
+      "expect": [
+        "Pre-orders allow you to pay for an item you want ahead of its release day"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Payment methods",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support/online-payment-methods",
+      "path": "/pages/help-and-support/online-payment-methods",
+      "expect": [
+        "Afterpay",
+        "Zip",
+        "PayPal",
+        "Latitude"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "JB Perks",
+      "real": "https://www.jbhifi.com.au/pages/perks",
+      "path": "/pages/perks",
+      "expect": [
+        "JB Perks",
+        "welcome coupon"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Brands",
+      "real": "https://www.jbhifi.com.au/pages/brands",
+      "path": "/pages/brands",
+      "expect": [
+        "Brands"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "News & Reviews",
+      "real": "https://www.jbhifi.com.au/blogs/news-and-reviews",
+      "path": "/blogs/news-and-reviews",
+      "expect": [
+        "News & Reviews"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "About us",
+      "real": "https://www.jbhifi.com.au/pages/about-us",
+      "path": "/pages/about-us",
+      "expect": [
+        "About us",
+        "largest home entertainment retailer"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.jbhifi.com.au/sitemap",
+      "path": "/sitemap",
+      "expect": [
+        "Site map",
+        "Computers & Tablets"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Promo strip",
+      "expect": [
+        "Seen it cheaper?",
+        "Ask for a JB Deal!"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Hero banner",
+      "expect": [
+        "Grand Theft Auto VI",
+        "Pre-order now"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Shop by category tiles",
+      "expect": [
+        "Shop by category"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Catalogue / hot deals promo",
+      "expect": [
+        "Current catalogues",
+        "Red Hot Deals"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Gaming pre-orders row",
+      "expect": [
+        "Gaming pre-orders"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "JB Perks promo",
+      "expect": [
+        "Join JB Perks",
+        "$10 welcome coupon"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Services row",
+      "expect": [
+        "More than just products",
+        "Installations",
+        "Trade-in"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "News & Reviews row",
+      "expect": [
+        "Latest News & Reviews"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Popular brands",
+      "expect": [
+        "Popular brands"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computers & Tablets",
+      "real": "https://www.jbhifi.com.au/collections/computers-tablets",
+      "path": "/collections/computers-tablets"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laptops",
+      "real": "https://www.jbhifi.com.au/collections/laptops",
+      "path": "/collections/laptops"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tablets",
+      "real": "https://www.jbhifi.com.au/collections/tablets",
+      "path": "/collections/tablets"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desktop Computers",
+      "real": "https://www.jbhifi.com.au/collections/desktop-computers",
+      "path": "/collections/desktop-computers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Monitors",
+      "real": "https://www.jbhifi.com.au/collections/monitors",
+      "path": "/collections/monitors"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Printers & Ink",
+      "real": "https://www.jbhifi.com.au/collections/printers-ink",
+      "path": "/collections/printers-ink"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Networking",
+      "real": "https://www.jbhifi.com.au/collections/networking",
+      "path": "/collections/networking"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computer Accessories",
+      "real": "https://www.jbhifi.com.au/collections/computer-accessories",
+      "path": "/collections/computer-accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mobile Phones",
+      "real": "https://www.jbhifi.com.au/collections/mobile-phones",
+      "path": "/collections/mobile-phones"
+    },
+    {
+      "kind": "sitemap",
+      "label": "iPhone",
+      "real": "https://www.jbhifi.com.au/collections/iphone",
+      "path": "/collections/iphone"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Android Phones",
+      "real": "https://www.jbhifi.com.au/collections/android-phones",
+      "path": "/collections/android-phones"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Prepaid Phones",
+      "real": "https://www.jbhifi.com.au/collections/prepaid-phones",
+      "path": "/collections/prepaid-phones"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Phone Cases",
+      "real": "https://www.jbhifi.com.au/collections/phone-cases",
+      "path": "/collections/phone-cases"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Phone Chargers",
+      "real": "https://www.jbhifi.com.au/collections/phone-chargers",
+      "path": "/collections/phone-chargers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Power Banks",
+      "real": "https://www.jbhifi.com.au/collections/power-banks",
+      "path": "/collections/power-banks"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wearables",
+      "real": "https://www.jbhifi.com.au/collections/wearables",
+      "path": "/collections/wearables"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Watches",
+      "real": "https://www.jbhifi.com.au/collections/smart-watches",
+      "path": "/collections/smart-watches"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fitness Trackers",
+      "real": "https://www.jbhifi.com.au/collections/fitness-trackers",
+      "path": "/collections/fitness-trackers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Watch Straps",
+      "real": "https://www.jbhifi.com.au/collections/watch-straps",
+      "path": "/collections/watch-straps"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TVs & Home Theatre",
+      "real": "https://www.jbhifi.com.au/collections/tvs-home-theatre",
+      "path": "/collections/tvs-home-theatre"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TVs",
+      "real": "https://www.jbhifi.com.au/collections/tvs",
+      "path": "/collections/tvs"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Soundbars",
+      "real": "https://www.jbhifi.com.au/collections/soundbars",
+      "path": "/collections/soundbars"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Projectors",
+      "real": "https://www.jbhifi.com.au/collections/projectors",
+      "path": "/collections/projectors"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Streaming Players",
+      "real": "https://www.jbhifi.com.au/collections/streaming-players",
+      "path": "/collections/streaming-players"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Blu-ray & DVD Players",
+      "real": "https://www.jbhifi.com.au/collections/blu-ray-players",
+      "path": "/collections/blu-ray-players"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV Wall Brackets",
+      "real": "https://www.jbhifi.com.au/collections/tv-wall-brackets",
+      "path": "/collections/tv-wall-brackets"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Headphones & Audio",
+      "real": "https://www.jbhifi.com.au/collections/headphones-audio",
+      "path": "/collections/headphones-audio"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Headphones",
+      "real": "https://www.jbhifi.com.au/collections/headphones",
+      "path": "/collections/headphones"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Earbuds",
+      "real": "https://www.jbhifi.com.au/collections/earbuds",
+      "path": "/collections/earbuds"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Portable Speakers",
+      "real": "https://www.jbhifi.com.au/collections/portable-speakers",
+      "path": "/collections/portable-speakers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Speakers",
+      "real": "https://www.jbhifi.com.au/collections/smart-speakers",
+      "path": "/collections/smart-speakers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Turntables",
+      "real": "https://www.jbhifi.com.au/collections/turntables",
+      "path": "/collections/turntables"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hi-Fi Systems",
+      "real": "https://www.jbhifi.com.au/collections/hi-fi-systems",
+      "path": "/collections/hi-fi-systems"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cameras",
+      "real": "https://www.jbhifi.com.au/collections/cameras",
+      "path": "/collections/cameras"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mirrorless Cameras",
+      "real": "https://www.jbhifi.com.au/collections/mirrorless-cameras",
+      "path": "/collections/mirrorless-cameras"
+    },
+    {
+      "kind": "sitemap",
+      "label": "DSLR Cameras",
+      "real": "https://www.jbhifi.com.au/collections/dslr-cameras",
+      "path": "/collections/dslr-cameras"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Action Cameras",
+      "real": "https://www.jbhifi.com.au/collections/action-cameras",
+      "path": "/collections/action-cameras"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Instant Cameras",
+      "real": "https://www.jbhifi.com.au/collections/instant-cameras",
+      "path": "/collections/instant-cameras"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Camera Lenses",
+      "real": "https://www.jbhifi.com.au/collections/camera-lenses",
+      "path": "/collections/camera-lenses"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Drones",
+      "real": "https://www.jbhifi.com.au/collections/drones",
+      "path": "/collections/drones"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming",
+      "real": "https://www.jbhifi.com.au/collections/gaming",
+      "path": "/collections/gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation",
+      "real": "https://www.jbhifi.com.au/collections/playstation",
+      "path": "/collections/playstation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox",
+      "real": "https://www.jbhifi.com.au/collections/xbox",
+      "path": "/collections/xbox"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo Switch",
+      "real": "https://www.jbhifi.com.au/collections/nintendo-switch",
+      "path": "/collections/nintendo-switch"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PC Gaming",
+      "real": "https://www.jbhifi.com.au/collections/pc-gaming",
+      "path": "/collections/pc-gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Accessories",
+      "real": "https://www.jbhifi.com.au/collections/gaming-accessories",
+      "path": "/collections/gaming-accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Game Pre-orders",
+      "real": "https://www.jbhifi.com.au/collections/game-pre-orders",
+      "path": "/collections/game-pre-orders"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home Appliances",
+      "real": "https://www.jbhifi.com.au/collections/home-appliances",
+      "path": "/collections/home-appliances"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Coffee Machines",
+      "real": "https://www.jbhifi.com.au/collections/coffee-machines",
+      "path": "/collections/coffee-machines"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vacuums",
+      "real": "https://www.jbhifi.com.au/collections/vacuums",
+      "path": "/collections/vacuums"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen Appliances",
+      "real": "https://www.jbhifi.com.au/collections/kitchen-appliances",
+      "path": "/collections/kitchen-appliances"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fridges & Freezers",
+      "real": "https://www.jbhifi.com.au/collections/fridges-freezers",
+      "path": "/collections/fridges-freezers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Washing Machines & Dryers",
+      "real": "https://www.jbhifi.com.au/collections/washing-machines-dryers",
+      "path": "/collections/washing-machines-dryers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Heating & Cooling",
+      "real": "https://www.jbhifi.com.au/collections/heating-cooling",
+      "path": "/collections/heating-cooling"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Home",
+      "real": "https://www.jbhifi.com.au/collections/smart-home",
+      "path": "/collections/smart-home"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Security Cameras",
+      "real": "https://www.jbhifi.com.au/collections/security-cameras",
+      "path": "/collections/security-cameras"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Doorbells",
+      "real": "https://www.jbhifi.com.au/collections/video-doorbells",
+      "path": "/collections/video-doorbells"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Lighting",
+      "real": "https://www.jbhifi.com.au/collections/smart-lighting",
+      "path": "/collections/smart-lighting"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Plugs & Power",
+      "real": "https://www.jbhifi.com.au/collections/smart-plugs-power",
+      "path": "/collections/smart-plugs-power"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Health & Beauty",
+      "real": "https://www.jbhifi.com.au/collections/health-beauty",
+      "path": "/collections/health-beauty"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hair Care",
+      "real": "https://www.jbhifi.com.au/collections/hair-care",
+      "path": "/collections/hair-care"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shavers & Trimmers",
+      "real": "https://www.jbhifi.com.au/collections/shavers-trimmers",
+      "path": "/collections/shavers-trimmers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electric Toothbrushes",
+      "real": "https://www.jbhifi.com.au/collections/electric-toothbrushes",
+      "path": "/collections/electric-toothbrushes"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Massagers",
+      "real": "https://www.jbhifi.com.au/collections/massagers",
+      "path": "/collections/massagers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Music",
+      "real": "https://www.jbhifi.com.au/collections/music",
+      "path": "/collections/music"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vinyl",
+      "real": "https://www.jbhifi.com.au/collections/vinyl",
+      "path": "/collections/vinyl"
+    },
+    {
+      "kind": "sitemap",
+      "label": "CDs",
+      "real": "https://www.jbhifi.com.au/collections/cds",
+      "path": "/collections/cds"
+    },
+    {
+      "kind": "sitemap",
+      "label": "JB Exclusive Vinyl",
+      "real": "https://www.jbhifi.com.au/collections/jb-exclusive-vinyl",
+      "path": "/collections/jb-exclusive-vinyl"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Musical Instruments",
+      "real": "https://www.jbhifi.com.au/collections/musical-instruments",
+      "path": "/collections/musical-instruments"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Movies & TV",
+      "real": "https://www.jbhifi.com.au/collections/movies-tv",
+      "path": "/collections/movies-tv"
+    },
+    {
+      "kind": "sitemap",
+      "label": "4K Ultra HD",
+      "real": "https://www.jbhifi.com.au/collections/4k-ultra-hd",
+      "path": "/collections/4k-ultra-hd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Blu-ray",
+      "real": "https://www.jbhifi.com.au/collections/blu-ray",
+      "path": "/collections/blu-ray"
+    },
+    {
+      "kind": "sitemap",
+      "label": "DVD",
+      "real": "https://www.jbhifi.com.au/collections/dvd",
+      "path": "/collections/dvd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV Series",
+      "real": "https://www.jbhifi.com.au/collections/tv-series",
+      "path": "/collections/tv-series"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Collectibles & Merchandise",
+      "real": "https://www.jbhifi.com.au/collections/collectibles-merchandise",
+      "path": "/collections/collectibles-merchandise"
+    },
+    {
+      "kind": "sitemap",
+      "label": "LEGO",
+      "real": "https://www.jbhifi.com.au/collections/lego",
+      "path": "/collections/lego"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pop! Vinyl",
+      "real": "https://www.jbhifi.com.au/collections/pop-vinyl",
+      "path": "/collections/pop-vinyl"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Figurines",
+      "real": "https://www.jbhifi.com.au/collections/figurines",
+      "path": "/collections/figurines"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Board Games",
+      "real": "https://www.jbhifi.com.au/collections/board-games",
+      "path": "/collections/board-games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Car Audio & GPS",
+      "real": "https://www.jbhifi.com.au/collections/car-audio-gps",
+      "path": "/collections/car-audio-gps"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dash Cams",
+      "real": "https://www.jbhifi.com.au/collections/dash-cams",
+      "path": "/collections/dash-cams"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Car Stereos",
+      "real": "https://www.jbhifi.com.au/collections/car-stereos",
+      "path": "/collections/car-stereos"
+    },
+    {
+      "kind": "sitemap",
+      "label": "GPS Navigation",
+      "real": "https://www.jbhifi.com.au/collections/gps-navigation",
+      "path": "/collections/gps-navigation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electric Transportation",
+      "real": "https://www.jbhifi.com.au/collections/electric-transportation",
+      "path": "/collections/electric-transportation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "e-Scooters",
+      "real": "https://www.jbhifi.com.au/collections/e-scooters",
+      "path": "/collections/e-scooters"
+    },
+    {
+      "kind": "sitemap",
+      "label": "e-Bikes",
+      "real": "https://www.jbhifi.com.au/collections/e-bikes",
+      "path": "/collections/e-bikes"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Software",
+      "real": "https://www.jbhifi.com.au/collections/software",
+      "path": "/collections/software"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Microsoft 365",
+      "real": "https://www.jbhifi.com.au/collections/microsoft-365",
+      "path": "/collections/microsoft-365"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Antivirus & Security",
+      "real": "https://www.jbhifi.com.au/collections/antivirus-security",
+      "path": "/collections/antivirus-security"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Help & Support",
+      "real": "https://www.jbhifi.com.au/pages/help-and-support",
+      "path": "/pages/help-and-support"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Track my order",
+      "real": "https://www.jbhifi.com.au/pages/track-my-order",
+      "path": "/pages/track-my-order"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store finder",
+      "real": "https://www.jbhifi.com.au/pages/store-finder",
+      "path": "/pages/store-finder"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.jbhifi.com.au/pages/gift-cards",
+      "path": "/pages/gift-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "JB Perks",
+      "real": "https://www.jbhifi.com.au/pages/perks",
+      "path": "/pages/perks"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Catalogues",
+      "real": "https://www.jbhifi.com.au/pages/catalogues",
+      "path": "/pages/catalogues"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Services",
+      "real": "https://www.jbhifi.com.au/pages/services",
+      "path": "/pages/services"
+    },
+    {
+      "kind": "sitemap",
+      "label": "News & Reviews",
+      "real": "https://www.jbhifi.com.au/blogs/news-and-reviews",
+      "path": "/blogs/news-and-reviews"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Brands",
+      "real": "https://www.jbhifi.com.au/pages/brands",
+      "path": "/pages/brands"
+    },
+    {
+      "kind": "sitemap",
+      "label": "About us",
+      "real": "https://www.jbhifi.com.au/pages/about-us",
+      "path": "/pages/about-us"
+    }
+  ]
+}

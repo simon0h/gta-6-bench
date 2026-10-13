@@ -4,6 +4,7 @@ import { productImage, productGallery } from '../../lib/product-assets.js'
 import { orderStatus } from '../../lib/retail-state.js'
 import { DEPARTMENT_DEFS, slugify, selectedProduct, lineKey, stockLimit } from './catalog.js'
 import { catalogHome, catalogListing, collectionFor } from './browsing.js'
+import { siteHeader, siteFooter, siteHome } from './site.js'
 import { PRODUCTS } from './data.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
 import { byId, productPath, STATES, SHIPPING_METHODS, COURIER_METHOD, PREORDER_BONUS } from './data.js'
@@ -14,7 +15,7 @@ const nativeCart = t => t.lines.length > 0 && t.lines.every(line => nativeProduc
 
 function informationHref(base, label) {
  const text = label.replaceAll('&amp;', '&')
- const routes = {"Mobile Phones":"/collections/mobile-phones","TVs":"/collections/tvs-home-theatre","Computers":"/collections/computers-tablets","Music & Movies":"/collections/music","JB Perks":"/perks","Help Centre":"/help","Contact us":"/help/contact","Contact":"/help/contact","Delivery & Collection":"/help/topics/delivery","Returns & Refunds":"/help/topics/returns","Refund policy":"/help/topics/returns","Shipping policy":"/help/topics/delivery"}
+ const routes = {"Mobile Phones":"/collections/mobile-phones","TVs":"/collections/tvs-home-theatre","Computers":"/collections/computers-tablets","Music & Movies":"/collections/music","JB Perks":"/pages/perks","Gift Cards":"/pages/gift-cards","Help Centre":"/pages/help-and-support","Contact us":"/pages/contact-us","Contact":"/pages/contact-us","Live chat":"/pages/contact-us","Call 13 52 44":"/pages/contact-us","Delivery & Collection":"/pages/help-and-support/delivery-and-collection","Returns & Refunds":"/pages/help-and-support/how-do-i-return-faulty-goods","Refund policy":"/pages/help-and-support/how-do-i-return-faulty-goods","Shipping policy":"/pages/help-and-support/what-are-the-delivery-options-for-online-purchases","Privacy policy":"/pages/privacy-policy","Terms of service":"/pages/terms-and-conditions","afterpay":"/pages/help-and-support/afterpay","zip":"/pages/help-and-support/zip","PayPal":"/pages/help-and-support/paypal-pay-in-4"}
  return base + (routes[text] || '/information?topic=' + encodeURIComponent(text))
 }
 export function supportInformationPage(base, topic = 'Shopping information') {
@@ -44,26 +45,20 @@ export function layout({ base, title, body, cartCount = 0, user = null, added = 
   const referenceCheckout = body.includes('jb-reference-checkout')
   const referenceCart = body.includes('jb-reference-cart')
   const reference = body.includes('class="jb-pdp jb-reference-pdp"') || referenceCart
-  const header = checkout ? checkoutHeader(base, checkout, referenceCheckout) : storeHeader(base, cartCount, user, reference)
+  const header = checkout ? checkoutHeader(base, checkout, referenceCheckout) : siteHeader(base, cartCount, user, reference)
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
-<link rel="stylesheet" href="${base}/static/style.css">${referenceCheckout ? `<link rel="stylesheet" href="${base}/static/checkout-reference.css">` : ''}<script src="${base}/static/site.js" defer></script></head>
+<link rel="stylesheet" href="${base}/static/style.css"><link rel="stylesheet" href="${base}/static/site.css">${referenceCheckout ? `<link rel="stylesheet" href="${base}/static/checkout-reference.css">` : ''}<script src="${base}/static/site.js" defer></script></head>
 <body class="${checkout ? `jb-checkout-body${referenceCheckout ? ' jb-reference-checkout-body' : ''}` : reference ? `jb-reference-page${referenceCart ? ' jb-reference-cart-body' : ''}` : ''}">
 ${added ? addedModal(base, added, closeHref) : ''}
 ${header}
 <a class="jb-skip" href="#main-content">Skip to content</a><main id="main-content" class="jb-main">${body}</main>
 <footer class="jb-footer">
-  ${checkout ? `<p class="jb-footer-links"><a href="${informationHref(base, 'Refund policy')}">Refund policy</a> <a href="${informationHref(base, 'Shipping policy')}">Shipping policy</a> <a href="${informationHref(base, 'Privacy policy')}">Privacy policy</a> <a href="${informationHref(base, 'Terms of service')}">Terms of service</a> <a href="${informationHref(base, 'Contact')}">Contact</a></p>` : `<div class="jb-footer-cols">
-    <div><h4>Help &amp; Support</h4><a href="${informationHref(base, 'Help Centre')}">Help Centre</a><a href="${base}/account/orders">Track my order</a><a href="${informationHref(base, 'Delivery &amp; Collection')}">Delivery &amp; Collection</a><a href="${informationHref(base, 'Returns &amp; Refunds')}">Returns &amp; Refunds</a><a href="${informationHref(base, 'Contact us')}">Contact us</a></div>
-    <div><h4>About JB Hi-Fi</h4><a href="${informationHref(base, 'About us')}">About us</a><a href="${informationHref(base, 'Careers')}">Careers</a><a href="${base}/stores">Store finder</a><a href="${informationHref(base, 'Gift Cards')}">Gift Cards</a><a href="${informationHref(base, 'JB Perks')}">JB Perks</a></div>
-    <div><h4>Shop</h4><a href="${base}/recently-viewed">Recently viewed</a><a href="${base}/collections/gaming">Gaming</a><a href="${informationHref(base, 'TVs')}">TVs</a><a href="${informationHref(base, 'Computers')}">Computers</a><a href="${informationHref(base, 'Mobile Phones')}">Mobile Phones</a><a href="${informationHref(base, 'Music &amp; Movies')}">Music &amp; Movies</a></div>
-    <div><h4>Stay in the loop</h4><p>Get the latest deals, catalogues and news.</p><p>Newsletter signup is unavailable in this shop.</p></div>
-  </div>
-  <p class="jb-copy">&copy; 2026 JB Hi-Fi Group Pty Ltd &nbsp;·&nbsp; ABN 37 093 114 286 &nbsp;·&nbsp; Prices include GST</p>`}
+  ${checkout ? `<p class="jb-footer-links"><a href="${informationHref(base, 'Refund policy')}">Refund policy</a> <a href="${informationHref(base, 'Shipping policy')}">Shipping policy</a> <a href="${informationHref(base, 'Privacy policy')}">Privacy policy</a> <a href="${informationHref(base, 'Terms of service')}">Terms of service</a> <a href="${informationHref(base, 'Contact')}">Contact</a></p>` : siteFooter(base)}
   ${disclaimer(NAME)}
 </footer>
-<a class="jb-chat" href="${base}/help">Help</a>
+<a class="jb-chat" href="${base}/pages/contact-us">Chat</a>
 </body></html>`
 }
 
@@ -71,17 +66,6 @@ function icon(name) {
  const paths={track:'<path d="M4 7h16v13H4zM4 7l8-4 8 4M12 3v8M4 7l8 4 8-4"/>',store:'<path d="M3 9h18l-2-5H5zM5 9v11h14V9M9 20v-7h6v7M2 20h20"/>',user:'<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0116 0v2z"/>',cart:'<path d="M2 3h3l3 13h11l3-9H6"/><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/>',heart:'<path d="M12 21L3 12C-3 5 6-1 12 6c6-7 15-1 9 6z"/>'}
  return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`
 }
-function storeHeader(base, cartCount, user, reference = false) {
- const groups=DEPARTMENT_DEFS.map(d=>`<section><a class="jb-menu-title" href="${base}/collections/${d.slug}">${esc(d.title)} &rsaquo;</a>${[...new Set(PRODUCTS.filter(p=>p.crumbs[0]===d.title).map(p=>p.type))].slice(0,4).map(type=>`<a href="${base}/collections/${d.slug}/${slugify(type)}">${esc(type)}</a>`).join('')}</section>`).join('')
- const menu=(title,content,cls='')=>`<details class="jb-nav-menu ${cls}"><summary>${title}<span aria-hidden="true">⌄</span></summary><div class="jb-menu-panel">${content}</div></details>`
- return `<header class="jb-header">
- <div class="jb-strip"><span>${reference ? `<b>Seen it cheaper?</b> Ask for a JB Deal! <a href="${base}/help/contact">Live chat</a> or call <a href="${base}/help/contact">13 52 44</a>.` : `Seen it cheaper? <b>Ask for a JB Deal!</b> <a href="${base}/help/contact">Get help with your purchase</a>`}</span><button type="button" aria-label="Close" onclick="this.parentNode.remove()">&times;</button></div>
- <div class="jb-bar"><a class="jb-logo" href="${base}/" aria-label="JB Hi-Fi home">${reference ? '<img class="jb-reference-logo" src="/static/reference/jb-hifi/jb-logo.svg" alt="">' : '<span class="jb-wordmark">JB HI-FI</span>'}<span class="jb-tagline">ALWAYS CHEAP PRICES</span></a>
- <form class="jb-search" action="${base}/search" method="get" role="search"><input type="search" name="query" list="jb-search-suggestions" placeholder="Search products, brands, and more…" aria-label="Search products, brands, and more"><button type="submit" aria-label="Search"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4"/></svg></button><datalist id="jb-search-suggestions">${['headphones','laptop','Samsung','coffee','Grand Theft Auto VI','tablet','vinyl','monitor'].map(v=>`<option value="${v}"></option>`).join('')}</datalist></form>
- <nav class="jb-utils" aria-label="Account"><a href="${base}/wishlist" class="jb-wishlist-link"><span class="jb-ico">${icon('heart')}</span>Wishlist</a><a href="${base}/account/orders"><span class="jb-ico">${icon('track')}</span>Track order</a><a href="${base}/stores"><span class="jb-ico">${icon('store')}</span>Stores</a>${user?`<a href="${base}/account"><span class="jb-ico">${icon('user')}</span>Hi, ${esc(user.first_name||'there')}</a>`:`<a href="${base}/account/login"><span class="jb-ico">${icon('user')}</span>Log in</a>`}<a href="${base}/cart" class="jb-cart-link" aria-label="Cart, ${cartCount} items"><span class="jb-ico">${icon('cart')}${cartCount?`<span class="jb-badge">${cartCount}</span>`:''}</span>Cart</a></nav></div>
- <nav class="jb-nav" aria-label="Shop"><a href="${base}/collections/new">New</a>${menu('Products',groups,'jb-products-menu')}${menu('Brands',`<a class="jb-menu-title" href="${base}/brands">All brands &rsaquo;</a>${[...new Set(PRODUCTS.map(p=>p.brand))].sort().map(b=>`<a href="${base}/brands/${slugify(b)}">${esc(b)}</a>`).join('')}`,'jb-brands-menu')}${menu('Deals & Catalogues',`<a class="jb-menu-title" href="${base}/collections/deals">Shop all deals &rsaquo;</a>${[['work-study','Work & Study'],['movie-night','Movie Night'],['kitchen-upgrades','Kitchen Upgrades'],['clearance','Clearance']].map(([slug,label])=>`<a href="${base}/collections/${slug}">${label}</a>`).join('')}`)}<a href="${base}/collections/clearance">Clearance</a>${menu('Services',`<a href="${base}/help/articles/installations">Installations</a><a href="${base}/help/topics/delivery">Delivery & Collection</a><a href="${base}/help/topics/returns">Returns & Refunds</a><a href="${base}/stores">Find a store</a><a href="${base}/help">Help & Support</a>`)}<a href="${base}/information?topic=Gift%20Cards">Gift Cards</a><a href="${base}/perks">Join JB Perks</a><a href="${base}/information?topic=News%20%26%20Reviews">News & Reviews</a></nav></header>`
-}
-
 function checkoutHeader(base, { steps = [], current }, reference = false) {
   return `<header class="jb-header jb-header-checkout">
   <div class="jb-bar jb-bar-centered"><a class="jb-logo" href="${base}/" aria-label="JB Hi-Fi home">${reference ? '<img class="jb-reference-logo" src="/static/reference/jb-hifi/checkout-logo.png" alt="">' : '<span class="jb-wordmark">JB HI-FI</span><span class="jb-tagline">ALWAYS CHEAP PRICES</span>'}</a></div>
@@ -116,7 +100,7 @@ function ctaForm(base, p, returnTo, block = true) {
   return `<form method="post" action="${base}/cart/add" class="jb-add-form"><input type="hidden" name="id" value="${p.id}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}<input type="hidden" name="return" value="${esc(returnTo)}"><button class="jb-btn ${block ? 'jb-btn-block' : ''}" type="submit">${esc(p.cta)}</button></form>`
 }
 
-function tile(base, p, returnTo) {
+export function tile(base, p, returnTo) {
   const detail=productPath(base,p)+(p.variantId?'?variant='+p.variantId:'')
   return `<article class="jb-tile">
   ${badges(p)}
@@ -132,7 +116,7 @@ function tile(base, p, returnTo) {
 }
 
 // ---- store pages ----
-export function homePage(args) { return catalogHome({...args,tile}) }
+export function homePage(args) { return siteHome({ base: args.base, tile, artwork, catalogHome: fixtureCatalog ? catalogHome({...args,tile}) : '' }) }
 export function searchPage(args) { return catalogListing({...args,tile}) }
 
 export function productPage({ base, p, siblings, availability, stores = [], perks = false, error = '' }) {
