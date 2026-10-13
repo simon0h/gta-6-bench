@@ -9,7 +9,8 @@ import { products as shelfProducts, shelfBrands, categoryProducts, COLLECTIONS }
 import { shelfCard, shelfRow, listing, basketCount, sessionOrders } from './shelf-pages.js'
 import { CATEGORIES, DEPARTMENTS, NAV, FOOTER, LEGAL, HELP_TOPICS, INFO, QUICK_LINKS, FILTERS } from './site-data.js'
 
-export const brandSlug = name => name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+import { brandSlug } from './shelf.js'
+export { brandSlug }
 const BRANDS = [...new Set([...capturedSearchProducts.map(p => p.brand), ...shelfBrands])].sort((a, b) => a.localeCompare(b)).map(name => ({ name, slug: brandSlug(name) }))
 const EXTRA_BRANDS = { 'sephora-collection': 'SEPHORA COLLECTION', kayali: 'KAYALI' }
 
@@ -95,7 +96,7 @@ export function homePage(base, req) {
   <section class="sx-greeting"><p><strong>${greet}, ${esc(user?.first_name || 'Beautiful')}. ☀️</strong> ${user ? `You're signed in. ${a(base, '/profile/BeautyInsider', 'View your Beauty Insider benefits ▸')}` : `Join Beauty Insider to earn points with every purchase. ${a(base, '/login', 'Sign In')} ${a(base, '/registration', 'Create Account')}`}</p></section>
   <section class="sx-hero" aria-label="Featured">${SLIDES.map(([tag, h, t, p, cls]) => `<a class="sx-slide ${cls}" href="${esc(base + p)}"><span class="sx-slide-art" aria-hidden="true"></span><span class="sx-slide-copy">${tag ? `<small>${esc(tag)}</small>` : ''}<strong>${esc(h)}</strong><span>${esc(t)}</span><em>SHOP NOW ▸</em></span></a>`).join('')}</section>
   ${row(base, 'Chosen For You', ps.slice(0, 12), ['Show more', '/shop/skincare'], ' data-reference-state="catalog"')}
-  ${shelfRow(base, 'Just Dropped', shelf.filter(p => p.flags.has('new')).slice(0, 12), ['Show more', '/beauty/new-beauty-products'])}
+  ${shelfRow(base, 'New Arrivals', shelf.filter(p => p.flags.has('new')).slice(0, 12), ['Show more', '/beauty/new-beauty-products'])}
   <section class="sx-row"><div class="sx-row-head"><h2>Shop by Category</h2></div><div class="sx-cats">${tiles.map(([l, s], i) => `<a href="${base}/shop/${s}"><span class="sx-cat-dot sx-c${i}" aria-hidden="true"></span>${esc(l)}</a>`).join('')}</div></section>
   ${shelfRow(base, 'Bestselling Makeup', pick('makeup-cosmetics'), ['Show more', '/shop/makeup-cosmetics'])}
   <section class="sx-row"><div class="sx-row-head"><h2>Beauty Offers</h2>${a(base, '/beauty/beauty-offers', 'See all')}</div><div class="sx-offers">
