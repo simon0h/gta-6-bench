@@ -6,7 +6,10 @@ import { GAME } from '../../lib/catalog.js'
 import { localProduct, pickupLimit } from './location.js'
 import { ORDINARY } from './catalog.js'
 import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
-export { DEPARTMENTS } from './catalog.js'
+import { DEPARTMENTS as BASE_DEPARTMENTS } from './catalog.js'
+import { SHELF, EXTRA_DEPARTMENTS } from './shelf.js'
+// Reference mode adds the departments the store assortment covers beyond the fixture set.
+export const DEPARTMENTS = fixtureCatalog ? BASE_DEPARTMENTS : [...BASE_DEPARTMENTS, ...EXTRA_DEPARTMENTS]
 
 export const STORE_NAME = 'Compton' // store auto-picked from geolocation ("Your Store: Compton")
 export const SHIP_ZIP = '90001'     // "FREE shipping to 90001" on the product page
@@ -111,7 +114,11 @@ if (!fixtureCatalog) for (const p of PRODUCTS) {
   if (p.platform === 'xbox') p.badge = null
 }
 
-export const byId = (id) => PRODUCTS.find(p => p.sku === String(id) || p.id === String(id)) ?? null
+// Everything a shopper can browse and buy: the evidence-backed GTA VI listings (PRODUCTS) plus,
+// in reference mode, the store assortment (shelf.js). PRODUCTS itself stays evidence-only.
+export const ASSORTMENT = fixtureCatalog ? [] : SHELF
+export const CATALOG = [...PRODUCTS, ...ASSORTMENT]
+export const byId = (id) => CATALOG.find(p => p.sku === String(id) || p.id === String(id)) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 
 // /product/<slug>/<productId>/sku/<skuId>, as on bestbuy.com.
@@ -119,13 +126,23 @@ export function productPath(base, p) {
   return `${base}/product/${p.slug}/${p.id}/sku/${p.sku}${p.variant ? `?variant=${encodeURIComponent(p.variant)}` : ''}`
 }
 
+// Every query word must match; results rank by how well the title matches, then by catalog rank.
 export function search(q) {
-  const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+  const norm = s => String(s ?? '').toLowerCase().normalize(fixtureCatalog ? 'NFC' : 'NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  if (!tokens.length) return [...PRODUCTS]
-  return PRODUCTS
-    .filter(p => { const hay = norm(p.title + ' ' + p.keywords + ' ' + p.category + ' ' + p.brand); return tokens.every(t => hay.includes(t)) })
-    .sort((a, b) => a.rank - b.rank)
+  if (!tokens.length) return [...CATALOG]
+  const phrase = tokens.join(' ')
+  return CATALOG
+    .map(p => {
+      const title = norm(p.title + ' ' + (p.aliases || '')), hay = norm(p.title + ' ' + p.keywords + ' ' + p.category + ' ' + p.brand)
+      if (!tokens.every(t => hay.includes(t))) return null
+      const words = new Set(title.split(' '))
+      const score = tokens.reduce((n, t) => n + (words.has(t) ? 3 : title.includes(t) ? 2 : 1), 0) + (title.includes(phrase) ? 4 : 0)
+      return { p, score }
+    })
+    .filter(Boolean)
+    .sort((a, b) => (fixtureCatalog ? 0 : b.score - a.score) || a.p.rank - b.p.rank)
+    .map(x => x.p)
 }
 
 export const STATES = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'AA', 'AE', 'AP', 'AS', 'GU', 'MP', 'PR', 'VI']
@@ -161,11 +178,12 @@ export function selectedProduct(p, variant) {
   const v = p.variants.find(v => v.id === (variant || p.variants[0].id))
   return v ? {...p, ...v, id:p.id, sku:p.sku, variant:v.id, title:`${p.title} — ${v.label}`, specs:{...p.specs,...v.specs}} : null
 }
-export const pickupAvailabilityKnown = p => fixtureCatalog || (p?.pickupStoreId || 'compton') === 'compton'
+export const pickupAvailabilityKnown = p => fixtureCatalog || !!p?.shelf || (p?.pickupStoreId || 'compton') === 'compton'
 export const stockFor = (p, method) => {
   if (!p || !['pickup','shipping'].includes(method)) return 0
   const scenarioStock=scenarioStockFor(p,method)
   if (scenarioStock !== null) return scenarioStock
+  if (p.shelf) return Math.min(p.stock ?? 0, p.methodStock?.[method] ?? 0, method === 'pickup' ? pickupLimit(p,p.pickupStoreId) : Infinity)
   if (!fixtureCatalog) return method === 'pickup' && !pickupAvailabilityKnown(p) ? 0 : Math.min(3, p.stock ?? 3)
   return Math.min(p.stock ?? 3, p.methodStock?.[method] ?? 3, method === 'pickup' ? pickupLimit(p,p.pickupStoreId) : Infinity)
 }
@@ -190,6 +208,7 @@ export function refine(products, filters = {}) {
   }).filter(p => {
     const text = `${p.title} ${p.keywords}`.toLowerCase()
     if (filters.department && p.department !== filters.department) return false
+    if (filters.node && !p.nodes?.includes(filters.node)) return false
     if (filters.platform && merchandisingPlatform(p) !== filters.platform) return false
     const categories={games:()=>p.kind==='game'||p.esrb,accessories:()=>/controller|headset/.test(text),music:()=>/album|soundtrack/.test(text),cards:()=>false}
     if (filters.category && !(categories[filters.category]?.() ?? p.category===filters.category)) return false

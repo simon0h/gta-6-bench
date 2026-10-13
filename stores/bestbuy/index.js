@@ -3,7 +3,7 @@ import { randomBytes, randomInt } from 'node:crypto'
 import { recordOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, byId, search, refine, totals, STATES, DEPARTMENTS, selectedProduct, cartIssue, stockFor, etaFor } from './data.js'
+import { PRODUCTS, CATALOG, byId, search, refine, totals, STATES, DEPARTMENTS, selectedProduct, cartIssue, stockFor, etaFor } from './data.js'
 import * as P from './pages.js'
 import * as D from './browse-pages.js'
 import { installJourneys, retailState, rememberProduct, privateOrder, signInAccount, afterSignIn, selectedAddress, checkoutAddress } from './journeys.js'
@@ -14,6 +14,8 @@ import { enterScenarioCart, scenarioPayment } from '../../lib/benchmark-scenario
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { installSite } from './site.js'
 import * as S from './site-pages.js'
+import { shelfHome } from './shelf-home.js'
+import { shelfArtSvg } from './shelf-art.js'
 
 const router = Router()
 const HUB = '/site/video-game-franchises/grand-theft-auto/pcmcat301800050002.c'
@@ -110,15 +112,16 @@ installSite(router,{render,notFound})
 
 // ---- browse ----
 router.get('/', (req, res) => {
-  const base=res.locals.base, products=PRODUCTS.map(p=>localProduct(p,req.store))
-  // Fixture mode keeps its authored merchandising modules; reference mode shows only the captured GTA VI listings.
-  const featuredHtml=fixtureCatalog?`<div class="bbx-fixture-home">${D.homePage({ base, user:req.store.user, featured:req.query.featured, products })}</div>`:S.gtaRow(base,products.filter(p=>p.kind==='game').map(p=>D.tile(base,p)).join(''))
+  const base=res.locals.base, products=CATALOG.map(p=>localProduct(p,req.store))
+  // Fixture mode keeps its authored merchandising modules; reference mode shows the store assortment
+  // in bestbuy.com-style rows, with the GTA VI pre-orders inside the video games row.
+  const featuredHtml=fixtureCatalog?`<div class="bbx-fixture-home">${D.homePage({ base, user:req.store.user, featured:req.query.featured, products })}</div>`:shelfHome({ base, catalog:products, trending:String(req.query.trending??'') })
   render(req, res, 'Best Buy | Official Online Store | Shop Now & Save', S.homePage({ base, user:req.store.user, featuredHtml, heading:!fixtureCatalog }))
 })
 // Franchise hub the search banner and header band link to.
 router.get(HUB, (req, res) => render(req, res, 'Grand Theft Auto VI - Best Buy', P.homePage({ base: res.locals.base, products: PRODUCTS.map(p=>localProduct(p,req.store)) })))
 
-const FILTERS = ['department','platform','category','price','availability','condition','brand','format','rating','fulfillment','offer','sort','page']
+const FILTERS = ['department','node','platform','category','price','availability','condition','brand','format','rating','fulfillment','offer','sort','page']
 function browse(req,res,defaults={},heading='',intro='',landing=null) {
   const q=trim(req.query.st??req.query.q)
   const filters={...defaults,...Object.fromEntries(FILTERS.filter(k=>req.query[k]!==undefined).map(k=>[k,String(req.query[k])]))}
@@ -127,11 +130,11 @@ function browse(req,res,defaults={},heading='',intro='',landing=null) {
 }
 router.get('/site/searchpage.jsp',(req,res)=>browse(req,res))
 router.get('/search/suggestions',(req,res)=>res.json(search(trim(req.query.q)).slice(0,6).map(p=>({title:p.title,sku:p.sku,url:`${res.locals.base}/product/${p.slug}/${p.id}/sku/${p.sku}`}))))
-router.get('/departments',(req,res)=>render(req,res,'Departments - Best Buy',D.departmentsPage({products:PRODUCTS.map(p=>localProduct(p,req.store)),base:res.locals.base})))
+router.get('/departments',(req,res)=>render(req,res,'Departments - Best Buy',D.departmentsPage({products:CATALOG.map(p=>localProduct(p,req.store)),base:res.locals.base})))
 router.get('/departments/:slug',(req,res)=>{
   const department=DEPARTMENTS.find(d=>d.id===req.params.slug)
   if(!department) return notFound(req,res)
-  render(req,res,`${department.name} - Best Buy`,D.departmentsPage({products:PRODUCTS.map(p=>localProduct(p,req.store)),base:res.locals.base,department}))
+  render(req,res,`${department.name} - Best Buy`,D.departmentsPage({products:CATALOG.map(p=>localProduct(p,req.store)),base:res.locals.base,department}))
 })
 router.get('/brands',(req,res)=>render(req,res,'Shop by Brand - Best Buy',D.brandsPage({base:res.locals.base})))
 for(const [paths,offer,heading,intro,landing] of [
@@ -151,8 +154,8 @@ function productRoute(req, res) {
   const p=localProduct(selectedProduct(source,req.query.variant),req.store)
   if(!p) return render(req,res,'Invalid selection',P.simplePage({title:'Choose a valid product option.',html:`<a href="${res.locals.base}/product/${source.slug}/${source.id}/sku/${source.sku}">Return to product</a>`}),{status:400})
   rememberProduct(req,p.sku)
-  const accessories=p.kind==='game'?PRODUCTS.filter(x=>/The Album/.test(x.title)):PRODUCTS.filter(x=>x.sku!==p.sku&&x.department===p.department&&!x.preorder).slice(0,4)
-  render(req,res,`${p.pageTitle} - Best Buy`,(p.model?D:P).productPage({...locationContext(req.store),base:res.locals.base,p,accessories:accessories.map(p=>localProduct(p,req.store))}))
+  const accessories=p.kind==='game'?PRODUCTS.filter(x=>/The Album/.test(x.title)):p.shelf?CATALOG.filter(x=>x.shelf&&x.sku!==p.sku&&x.tree===p.tree&&x.stock>0).sort((a,b)=>(b.nodes[0]===p.nodes[0])-(a.nodes[0]===p.nodes[0])).slice(0,4):PRODUCTS.filter(x=>x.sku!==p.sku&&x.department===p.department&&!x.preorder).slice(0,4)
+  render(req,res,`${p.pageTitle} - Best Buy`,(p.model||p.shelf?D:P).productPage({...locationContext(req.store),base:res.locals.base,p,accessories:accessories.map(p=>localProduct(p,req.store))}))
 }
 router.get('/product/:slug/:id/sku/:sku', productRoute)
 router.get('/product/:slug/:id', productRoute)
@@ -161,7 +164,7 @@ function renderCart(req,res,message='',status=200) {
   enterScenarioCart(req.store)
   const t=totals(req.store),inCart=new Set(t.lines.map(l=>l.product.sku))
   const departments=new Set(t.lines.map(l=>l.product.department))
-  const alsoBought=PRODUCTS.filter(p=>!inCart.has(p.sku)&&(!departments.size||departments.has(p.department))).slice(0,4).map(p=>localProduct(p,req.store))
+  const alsoBought=CATALOG.filter(p=>!inCart.has(p.sku)&&(fixtureCatalog?(!departments.size||departments.has(p.department)):p.shelf&&p.stock>0&&(departments.size?departments.has(p.department):p.deal))).slice(0,4).map(p=>localProduct(p,req.store))
   const saved=(retailState(req).savedForLater??[]).map(s=>({...s,product:selectedProduct(byId(s.pid),s.variant)})).filter(s=>s.product)
   render(req,res,'Cart - Best Buy',P.cartPage({...locationContext(req.store),base:res.locals.base,t,alsoBought,saved,savedMsg:message||cartIssue(req.store)}),{status})
 }
@@ -552,10 +555,17 @@ router.post('/checkout/r/create-account', (req, res) => {
   render(req, res, 'Thank You - Best Buy', P.thankYouPage({ base: res.locals.base, order, accountCreated }), { status: accountCreated?.ok === false ? 400 : 200 })
 })
 
+// Illustrations for the store assortment (see shelf-art.js).
+router.get('/shelf-art/:sku/:view.svg', (req, res) => {
+  const p = byId(req.params.sku)
+  if (!p?.shelf || !/^[0-3]$/.test(req.params.view)) return res.status(404).type('text').send('Product image not found')
+  res.set('Cache-Control', 'public, max-age=3600').set('X-Content-Type-Options', 'nosniff').type('image/svg+xml').send(shelfArtSvg(p, Number(req.params.view)))
+})
+
 router.get('/compare', (req, res) => {
   const skus = [...new Set([].concat(req.query.sku ?? []).map(String))].slice(0, 3)
   const products = skus.map(byId).filter(Boolean)
-  render(req, res, 'Compare Products - Best Buy', P.comparePage({ base: res.locals.base, products, catalog: PRODUCTS }))
+  render(req, res, 'Compare Products - Best Buy', P.comparePage({ base: res.locals.base, products, catalog: CATALOG }))
 })
 
 router.use(notFound)

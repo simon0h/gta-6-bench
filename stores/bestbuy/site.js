@@ -3,7 +3,7 @@
 // and the site map. Product grids list only the active catalog (see site-tree.js for the mapping).
 import { esc } from '../../lib/html.js'
 import { orderStatus } from '../../lib/retail-state.js'
-import { PRODUCTS, refine } from './data.js'
+import { CATALOG, refine } from './data.js'
 import { tile } from './browse-pages.js'
 import { localProduct } from './location.js'
 import { privateOrders } from './journeys.js'
@@ -12,10 +12,21 @@ import { INFO, SENTRY } from './site-content.js'
 import * as S from './site-pages.js'
 
 const textMatch = (m, v) => m instanceof RegExp ? m.test(v) : v === m
+// GTA VI listings keep their original node rules; assortment rows (shelf.js) name their
+// site-tree department and categories directly.
+function shelfMatch(node, p) {
+  const dept = node.parent || node
+  if (p.tree !== dept.id && p.alsoTree !== dept.id) return false
+  if (!node.parent) return true
+  if (/ Deals$/.test(node.name)) return p.deal && (p.tree === dept.id)
+  if (node.games) return !!p.esrb
+  return p.nodes.includes(node.name)
+}
 export function nodeProducts(node) {
   const dept = node.parent || node
-  if (!dept.local) return []
-  return PRODUCTS.filter(p => {
+  return CATALOG.filter(p => {
+    if (p.shelf) return shelfMatch(node, p)
+    if (!dept.local) return false
     if (node.games) return p.kind === 'game'
     if (node.platform) return p.kind === 'game' && p.platform === node.platform
     if (p.department !== dept.local) return false
@@ -32,7 +43,8 @@ export function installSite(router, { render, notFound }) {
       const sort = ['price_low', 'price_high', 'rating'].includes(req.query.sort) ? req.query.sort : ''
       const items = refine(nodeProducts(node).map(p => localProduct(p, req.store)), { sort })
       const base = res.locals.base, dept = node.parent || node
-      const moreHref = `${base}/site/searchpage.jsp?${new URLSearchParams(dept.local ? { department: dept.local } : { st: node.name })}`
+      const shelfDept = items.find(p => p.shelf)?.department
+      const moreHref = `${base}/site/searchpage.jsp?${new URLSearchParams(shelfDept ? { department: shelfDept, ...(node.parent && !/ Deals$/.test(node.name) && !node.games ? { node: node.name } : {}), ...(/ Deals$/.test(node.name) ? { offer: 'deals' } : {}) } : dept.local ? { department: dept.local } : { st: node.name })}`
       render(req, res, `${node.name} - Best Buy`, S.categoryPage({ base, node, count: items.length, shown: Math.min(items.length, 24), moreHref, sort, tilesHtml: items.slice(0, 24).map(p => tile(base, p)).join('') }))
     })
   }
