@@ -11,6 +11,9 @@ import { saveAddress } from '../../lib/retail-state.js'
 import { localProduct, currentStore, locationContext } from './location.js'
 import { prepareReview, invalidateReview, currentReview } from './review.js'
 import { enterScenarioCart, scenarioPayment } from '../../lib/benchmark-scenarios.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
+import { installSite } from './site.js'
+import * as S from './site-pages.js'
 
 const router = Router()
 const HUB = '/site/video-game-franchises/grand-theft-auto/pcmcat301800050002.c'
@@ -103,17 +106,24 @@ function validateAddress(v, { first, last, line1, city, state, zip }) {
 
 router.use((req, res, next) => { req.body ??= {}; retailState(req); next() })
 installJourneys(router,{render,notFound})
+installSite(router,{render,notFound})
 
 // ---- browse ----
-router.get('/', (req, res) => render(req, res, 'Best Buy | Official Online Store | Shop Now & Save', D.homePage({ base: res.locals.base, user:req.store.user, featured:req.query.featured, products: PRODUCTS.map(p=>localProduct(p,req.store)) })))
+router.get('/', (req, res) => {
+  const base=res.locals.base, products=PRODUCTS.map(p=>localProduct(p,req.store))
+  // Fixture mode keeps its authored merchandising modules; reference mode shows only the captured GTA VI listings.
+  const featuredHtml=fixtureCatalog?`<div class="bbx-fixture-home">${D.homePage({ base, user:req.store.user, featured:req.query.featured, products })}</div>`:S.gtaRow(base,products.filter(p=>p.kind==='game').map(p=>D.tile(base,p)).join(''))
+  render(req, res, 'Best Buy | Official Online Store | Shop Now & Save', S.homePage({ base, user:req.store.user, featuredHtml, heading:!fixtureCatalog }))
+})
 // Franchise hub the search banner and header band link to.
 router.get(HUB, (req, res) => render(req, res, 'Grand Theft Auto VI - Best Buy', P.homePage({ base: res.locals.base, products: PRODUCTS.map(p=>localProduct(p,req.store)) })))
 
 const FILTERS = ['department','platform','category','price','availability','condition','brand','format','rating','fulfillment','offer','sort','page']
-function browse(req,res,defaults={},heading='',intro='') {
+function browse(req,res,defaults={},heading='',intro='',landing=null) {
   const q=trim(req.query.st??req.query.q)
   const filters={...defaults,...Object.fromEntries(FILTERS.filter(k=>req.query[k]!==undefined).map(k=>[k,String(req.query[k])]))}
-  render(req,res,`${q||heading||'Shop'} - Best Buy`,D.searchPage({base:res.locals.base,q,filters,heading,intro,products:refine(search(q).map(p=>localProduct(p,req.store)),filters)}))
+  const wrap=landing?.(res.locals.base)
+  render(req,res,`${q||heading||'Shop'} - Best Buy`,`${wrap?.before??''}${D.searchPage({base:res.locals.base,q,filters,heading,intro,products:refine(search(q).map(p=>localProduct(p,req.store)),filters),embedded:!!wrap})}${wrap?.after??''}`)
 }
 router.get('/site/searchpage.jsp',(req,res)=>browse(req,res))
 router.get('/search/suggestions',(req,res)=>res.json(search(trim(req.query.q)).slice(0,6).map(p=>({title:p.title,sku:p.sku,url:`${res.locals.base}/product/${p.slug}/${p.id}/sku/${p.sku}`}))))
@@ -124,19 +134,15 @@ router.get('/departments/:slug',(req,res)=>{
   render(req,res,`${department.name} - Best Buy`,D.departmentsPage({products:PRODUCTS.map(p=>localProduct(p,req.store)),base:res.locals.base,department}))
 })
 router.get('/brands',(req,res)=>render(req,res,'Shop by Brand - Best Buy',D.brandsPage({base:res.locals.base})))
-for(const [path,offer,heading,intro] of [
-  ['/top-deals','deals','Top Deals','Save on useful tech and home upgrades from across our departments.'],
-  ['/deal-of-the-day','daily','Deal of the Day','A featured audio offer. Available while the listed inventory lasts.'],
-  ['/gift-ideas','gifts','Gift Ideas','Find something for the music fan, home cook or tech enthusiast in your life.'],
-  ['/outlet','outlet','Best Buy Outlet','Explore inspected open-box offers. Review condition, accessories and pickup availability before buying.'],
-]) router.get(path,(req,res)=>browse(req,res,{offer},heading,intro))
+for(const [paths,offer,heading,intro,landing] of [
+  [['/top-deals'],'deals','Top Deals','Save on useful tech and home upgrades from across our departments.',S.landings.topDeals],
+  [['/deal-of-the-day',S.PATHS.dotd],'daily','Deal of the Day','A featured audio offer. Available while the listed inventory lasts.',S.landings.dealOfTheDay],
+  [['/gift-ideas',S.PATHS.giftIdeas],'gifts','Gift Ideas','Find something for the music fan, home cook or tech enthusiast in your life.',S.landings.giftIdeas],
+  [['/outlet',S.PATHS.outlet],'outlet','Best Buy Outlet','Explore inspected open-box offers. Review condition, accessories and pickup availability before buying.',S.landings.outlet],
+  [[S.PATHS.memberDeals],'deals','Exclusive Member Deals','Member pricing on select products for My Best Buy Plus and Total members. Paid membership enrollment is not available in this local store.',null],
+]) for(const path of paths) router.get(path,(req,res)=>browse(req,res,{offer},heading,intro,landing))
 const serviceInfo={
   services:['Support & Services','Get help choosing compatible equipment, setting up new technology and caring for your purchase.','TV mounting requires a compatible wall and mount. Smart doorbells and thermostats require suitable wiring. Computer upgrades require compatible ports and components. Installation and repair appointments are not bookable in this local store.'],
-  membership:['My Best Buy Memberships','Compare membership benefits before joining.','The local catalog supports guest and account shopping. Paid Plus and Total enrollment, reward certificates and real membership benefits are not available here. Product offers show their own prices and conditions.'],
-  financing:['Financing & Rewards','Choose a payment method that works for you.','Card and simulated PayPal checkout are available. Credit applications, installment financing and external rewards accounts are not connected. Compare the full order total before placing an order.'],
-  'trade-in':['Trade-In','Learn what to prepare for a device trade-in.','Back up personal data, remove account locks and check your device condition. Trade-in valuations, mail-in kits and store appointments require services outside this local catalog.'],
-  business:['Best Buy Business','Technology for work and small teams.','Browse computers, displays, audio and accessories. Business quotes, volume pricing, tax-exempt enrollment and business credit accounts are not connected in this local store.'],
-  'gift-cards':['Gift Cards','Give the freedom to choose.','Gift card issuance and balance lookup are not supported in this local store. Browse gift ideas to purchase a physical item instead.'],
 }
 for(const [path,[title,lead,detail]] of Object.entries(serviceInfo)) router.get(`/${path}`,(req,res)=>render(req,res,`${title} - Best Buy`,P.simplePage({title,html:`<p>${lead}</p><p>${detail}</p><p><a href="${res.locals.base}/departments">Browse departments</a> · <a href="${res.locals.base}/help">Shopping help</a> · <a href="${res.locals.base}/gift-ideas">Gift ideas</a></p>`})))
 function productRoute(req, res) {

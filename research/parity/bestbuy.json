@@ -1,0 +1,1307 @@
+{
+  "store": "bestbuy",
+  "real_home": "https://www.bestbuy.com/",
+  "captured_at": "2026-10-13",
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "sources": [
+    "https://www.bestbuy.com/",
+    "https://www.bestbuy.com/sitemap.xml",
+    "https://www.bestbuy.com/site/electronics/tv-video/abcat0100000.c?id=abcat0100000",
+    "https://www.bestbuy.com/site/electronics/video-games/abcat0700000.c?id=abcat0700000",
+    "https://www.bestbuy.com/site/electronics/computers-pcs/abcat0500000.c?id=abcat0500000",
+    "https://www.bestbuy.com/site/searchpage.jsp?st=grand+theft+auto+vi",
+    "https://www.bestbuy.com/top-deals",
+    "https://www.bestbuy.com/site/misc/deal-of-the-day/pcmcat248000050016.c?id=pcmcat248000050016",
+    "https://www.bestbuy.com/site/electronics/outlet-refurbished-clearance/pcmcat142300050026.c?id=pcmcat142300050026",
+    "https://www.bestbuy.com/site/electronics/gift-cards/cat09000.c?id=cat09000",
+    "https://www.bestbuy.com/site/electronics/gift-ideas/abcat0010000.c?id=abcat0010000",
+    "https://www.bestbuy.com/site/store-locator",
+    "https://www.bestbuy.com/support",
+    "https://www.bestbuy.com/contact-us",
+    "https://www.bestbuy.com/site/help-topics/return-exchange-policy/pcmcat260800050014.c?id=pcmcat260800050014",
+    "https://www.bestbuy.com/site/help-topics/shipping-delivery-store-pickup/pcmcat316000050003.c?id=pcmcat316000050003",
+    "https://www.bestbuy.com/site/help-topics/price-match-guarantee/pcmcat290300050002.c?id=pcmcat290300050002",
+    "https://www.bestbuy.com/site/electronics/best-buy-membership/pcmcat1679668833285.c?id=pcmcat1679668833285",
+    "https://www.bestbuy.com/site/misc/financing-rewards/pcmcat102500050032.c?id=pcmcat102500050032",
+    "https://www.bestbuy.com/site/best-buy-trade-in/trade-in-offers/pcmcat1774297472214.c?id=pcmcat1774297472214",
+    "https://www.bestbuy.com/site/electronics/bestbuy-business/pcmcat230900050001.c?id=pcmcat230900050001",
+    "https://www.bestbuy.com/site/misc/mobile-app/pcmcat208500050016.c?id=pcmcat208500050016",
+    "research/bestbuy.md"
+  ],
+  "notes": "Fetched with WebFetch on 2026-10-13. Blocked or empty: /profile/ss/orderlookup and /cart (robots disallowed), /identity/global/signin (empty JS shell), /gift-card-balance (JS shell, no headings), the HTML site map (site-map URLs errored) and the JS-rendered Shop/Menu drawer contents (its department entries were reconstructed from the captured department pages and the Top Deals / Outlet category tiles). Stand-ins: sign-in, cart and product/search expectations come from research/bestbuy.md (browser capture 2026-09-29/30); order-lookup and gift-card-balance labels are the standard Best Buy form labels (unverified wording); the department tree comes from the captured TV, Video Games and Computers department pages plus the Top Deals and Outlet category tiles. Category paths whose numeric IDs were not observed keep the real URL shape with a slug only. The sitemap.xml index (76 product/review/category sitemaps) was fetched; the clone serves its own /sitemap.xml and an HTML /sitemap. Seasonal header promos (Fall Football, Halloween links) and social icons were skipped. Off-site footer links (corporate.bestbuy.com, jobs.bestbuy.com, bestbuyads.com, healthcare.bestbuy.com) map to local summary pages.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "best buy home",
+      "real": "https://www.bestbuy.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Your Store",
+      "real": "https://www.bestbuy.com/site/store-locator",
+      "path": "/site/store-locator"
+    },
+    {
+      "kind": "header",
+      "label": "Sign In",
+      "real": "https://www.bestbuy.com/identity/global/signin",
+      "path": "/identity/global/signin"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.bestbuy.com/cart",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Top Deals",
+      "real": "https://www.bestbuy.com/top-deals",
+      "path": "/top-deals"
+    },
+    {
+      "kind": "header",
+      "label": "Deal of the Day",
+      "real": "https://www.bestbuy.com/site/misc/deal-of-the-day/pcmcat248000050016.c?id=pcmcat248000050016",
+      "path": "/site/misc/deal-of-the-day/pcmcat248000050016.c"
+    },
+    {
+      "kind": "header",
+      "label": "Trade-In",
+      "real": "https://www.bestbuy.com/site/best-buy-trade-in/trade-in-offers/pcmcat1774297472214.c?id=pcmcat1774297472214",
+      "path": "/site/best-buy-trade-in/trade-in-offers/pcmcat1774297472214.c"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Ideas",
+      "real": "https://www.bestbuy.com/site/electronics/gift-ideas/abcat0010000.c?id=abcat0010000",
+      "path": "/site/electronics/gift-ideas/abcat0010000.c"
+    },
+    {
+      "kind": "header",
+      "label": "My Best Buy Memberships",
+      "real": "https://www.bestbuy.com/site/electronics/best-buy-membership/pcmcat1679668833285.c?id=pcmcat1679668833285",
+      "path": "/site/electronics/best-buy-membership/pcmcat1679668833285.c"
+    },
+    {
+      "kind": "header",
+      "label": "Credit Cards",
+      "real": "https://www.bestbuy.com/site/misc/financing-rewards/pcmcat102500050032.c?id=pcmcat102500050032",
+      "path": "/site/misc/financing-rewards/pcmcat102500050032.c"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Cards",
+      "real": "https://www.bestbuy.com/site/electronics/gift-cards/cat09000.c?id=cat09000",
+      "path": "/site/electronics/gift-cards/cat09000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Best Buy Business",
+      "real": "https://www.bestbuy.com/site/electronics/bestbuy-business/pcmcat230900050001.c?id=pcmcat230900050001",
+      "path": "/site/electronics/bestbuy-business/pcmcat230900050001.c"
+    },
+    {
+      "kind": "header",
+      "label": "Appliances",
+      "real": "https://www.bestbuy.com/site/electronics/home-appliances/abcat0900000.c?id=abcat0900000",
+      "path": "/site/electronics/home-appliances/abcat0900000.c"
+    },
+    {
+      "kind": "header",
+      "label": "TV & Home Theater",
+      "real": "https://www.bestbuy.com/site/electronics/tv-video/abcat0100000.c?id=abcat0100000",
+      "path": "/site/electronics/tv-video/abcat0100000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Computers & Tablets",
+      "real": "https://www.bestbuy.com/site/electronics/computers-pcs/abcat0500000.c?id=abcat0500000",
+      "path": "/site/electronics/computers-pcs/abcat0500000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Cell Phones",
+      "real": "https://www.bestbuy.com/site/electronics/mobile-cell-phones/abcat0800000.c?id=abcat0800000",
+      "path": "/site/electronics/mobile-cell-phones/abcat0800000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Audio",
+      "real": "https://www.bestbuy.com/site/electronics/audio/abcat0200000.c?id=abcat0200000",
+      "path": "/site/electronics/audio/abcat0200000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Video Games",
+      "real": "https://www.bestbuy.com/site/electronics/video-games/abcat0700000.c?id=abcat0700000",
+      "path": "/site/electronics/video-games/abcat0700000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Cameras, Camcorders & Drones",
+      "real": "https://www.bestbuy.com/site/electronics/cameras-camcorders/abcat0400000.c?id=abcat0400000",
+      "path": "/site/electronics/cameras-camcorders/abcat0400000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Home, Furniture & Office",
+      "real": "https://www.bestbuy.com/site/electronics/home-furniture-office",
+      "path": "/site/electronics/home-furniture-office"
+    },
+    {
+      "kind": "header",
+      "label": "Smart Home, Security & Wi-Fi",
+      "real": "https://www.bestbuy.com/site/electronics/home-security-safety/pcmcat254000050002.c?id=pcmcat254000050002",
+      "path": "/site/electronics/home-security-safety/pcmcat254000050002.c"
+    },
+    {
+      "kind": "header",
+      "label": "Car Electronics & GPS",
+      "real": "https://www.bestbuy.com/site/electronics/car-electronics-gps/abcat0300000.c?id=abcat0300000",
+      "path": "/site/electronics/car-electronics-gps/abcat0300000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Wearable Technology",
+      "real": "https://www.bestbuy.com/site/electronics/wearable-technology/pcmcat332000050000.c?id=pcmcat332000050000",
+      "path": "/site/electronics/wearable-technology/pcmcat332000050000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Health, Wellness & Fitness",
+      "real": "https://www.bestbuy.com/site/electronics/health-wellness-fitness",
+      "path": "/site/electronics/health-wellness-fitness"
+    },
+    {
+      "kind": "header",
+      "label": "Outdoor Living",
+      "real": "https://www.bestbuy.com/site/electronics/outdoor-living",
+      "path": "/site/electronics/outdoor-living"
+    },
+    {
+      "kind": "header",
+      "label": "Toys, Games & Crafts",
+      "real": "https://www.bestbuy.com/site/electronics/toys-games-crafts",
+      "path": "/site/electronics/toys-games-crafts"
+    },
+    {
+      "kind": "header",
+      "label": "Movies & Music",
+      "real": "https://www.bestbuy.com/site/electronics/movies-music/abcat0600000.c?id=abcat0600000",
+      "path": "/site/electronics/movies-music/abcat0600000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Electric Transportation",
+      "real": "https://www.bestbuy.com/site/electronics/electric-transportation",
+      "path": "/site/electronics/electric-transportation"
+    },
+    {
+      "kind": "footer",
+      "label": "Check your Order Status",
+      "real": "https://www.bestbuy.com/profile/ss/orderlookup",
+      "path": "/profile/ss/orderlookup"
+    },
+    {
+      "kind": "footer",
+      "label": "Shipping, Delivery & Store Pickup",
+      "real": "https://www.bestbuy.com/site/help-topics/shipping-delivery-store-pickup/pcmcat316000050003.c?id=pcmcat316000050003",
+      "path": "/site/help-topics/shipping-delivery-store-pickup/pcmcat316000050003.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns & Exchanges",
+      "real": "https://www.bestbuy.com/site/help-topics/return-exchange-policy/pcmcat260800050014.c?id=pcmcat260800050014",
+      "path": "/site/help-topics/return-exchange-policy/pcmcat260800050014.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Price Match Guarantee",
+      "real": "https://www.bestbuy.com/site/help-topics/price-match-guarantee/pcmcat290300050002.c?id=pcmcat290300050002",
+      "path": "/site/help-topics/price-match-guarantee/pcmcat290300050002.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Check Order Status",
+      "real": "https://www.bestbuy.com/profile/ss/orderlookup",
+      "path": "/profile/ss/orderlookup"
+    },
+    {
+      "kind": "footer",
+      "label": "Shipping, Delivery & Pickup",
+      "real": "https://www.bestbuy.com/site/help-topics/shipping-delivery-store-pickup/pcmcat316000050003.c?id=pcmcat316000050003",
+      "path": "/site/help-topics/shipping-delivery-store-pickup/pcmcat316000050003.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns & Exchanges",
+      "real": "https://www.bestbuy.com/site/help-topics/return-exchange-policy/pcmcat260800050014.c?id=pcmcat260800050014",
+      "path": "/site/help-topics/return-exchange-policy/pcmcat260800050014.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Price Match Guarantee",
+      "real": "https://www.bestbuy.com/site/help-topics/price-match-guarantee/pcmcat290300050002.c?id=pcmcat290300050002",
+      "path": "/site/help-topics/price-match-guarantee/pcmcat290300050002.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Product Recalls",
+      "real": "https://www.bestbuy.com/site/help-topics/product-recalls/pcmcat114800050015.c?id=pcmcat114800050015",
+      "path": "/site/help-topics/product-recalls/pcmcat114800050015.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Trade-In Program",
+      "real": "https://www.bestbuy.com/trade-in",
+      "path": "/trade-in"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Cards",
+      "real": "https://www.bestbuy.com/site/electronics/gift-cards/cat09000.c?id=cat09000",
+      "path": "/site/electronics/gift-cards/cat09000.c"
+    },
+    {
+      "kind": "footer",
+      "label": "My Best Buy Credit Card",
+      "real": "https://www.bestbuy.com/site/misc/financing-rewards/pcmcat102500050032.c?id=pcmcat102500050032",
+      "path": "/site/misc/financing-rewards/pcmcat102500050032.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Pay Your Bill at Citibank",
+      "real": "https://www.bestbuy.com/identity/sso/signin?contextId=sso-visa&processIndicator=dashboard",
+      "path": "/identity/sso/signin"
+    },
+    {
+      "kind": "footer",
+      "label": "Lease to Own",
+      "real": "https://www.bestbuy.com/site/financing-rewards/progressive-leasing/pcmcat1535574988808.c?id=pcmcat1535574988808",
+      "path": "/site/financing-rewards/progressive-leasing/pcmcat1535574988808.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Buy Now, Pay Later",
+      "real": "https://www.bestbuy.com/site/financing-rewards/zip/pcmcat1727878406362.c?id=pcmcat1727878406362",
+      "path": "/site/financing-rewards/zip/pcmcat1727878406362.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Best Buy Business Financing",
+      "real": "https://www.bestbuy.com/site/bestbuy-business/best-buy-business-financing/pcmcat1556029048796.c?id=pcmcat1556029048796",
+      "path": "/site/bestbuy-business/best-buy-business-financing/pcmcat1556029048796.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Visit our Support Center",
+      "real": "https://www.bestbuy.com/support",
+      "path": "/support"
+    },
+    {
+      "kind": "footer",
+      "label": "Shop with an Expert",
+      "real": "https://www.bestbuy.com/services/triage/shopping",
+      "path": "/services/triage/shopping"
+    },
+    {
+      "kind": "footer",
+      "label": "Schedule a Service",
+      "real": "https://www.bestbuy.com/services/triage/home",
+      "path": "/services/triage/home"
+    },
+    {
+      "kind": "footer",
+      "label": "Manage an Appointment",
+      "real": "https://www.bestbuy.com/dossier/service/appointmentfinder",
+      "path": "/dossier/service/appointmentfinder"
+    },
+    {
+      "kind": "footer",
+      "label": "Protection & Support Plans",
+      "real": "https://www.bestbuy.com/site/electronics/services/pcmcat1528819595254.c?id=pcmcat1528819595254",
+      "path": "/site/electronics/services/pcmcat1528819595254.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Haul Away & Recycling",
+      "real": "https://www.bestbuy.com/site/services/recycling/pcmcat149900050025.c?id=pcmcat149900050025",
+      "path": "/site/services/recycling/pcmcat149900050025.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact Us",
+      "real": "https://www.bestbuy.com/contact-us",
+      "path": "/contact-us"
+    },
+    {
+      "kind": "footer",
+      "label": "My Best Buy Memberships",
+      "real": "https://www.bestbuy.com/site/electronics/best-buy-membership/pcmcat1679668833285.c?id=pcmcat1679668833285",
+      "path": "/site/electronics/best-buy-membership/pcmcat1679668833285.c"
+    },
+    {
+      "kind": "footer",
+      "label": "View Points & Certificates",
+      "real": "https://www.bestbuy.com/profile/c/rwz/overview",
+      "path": "/profile/c/rwz/overview"
+    },
+    {
+      "kind": "footer",
+      "label": "Member Offers",
+      "real": "https://www.bestbuy.com/loyalty/catalog",
+      "path": "/loyalty/catalog"
+    },
+    {
+      "kind": "footer",
+      "label": "Sell on Best Buy Marketplace",
+      "real": "https://www.bestbuy.com/site/electronics/marketplace/pcmcat248200050007.c?id=pcmcat248200050007",
+      "path": "/site/electronics/marketplace/pcmcat248200050007.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Advertise with Us",
+      "real": "https://www.bestbuyads.com/",
+      "path": "/advertise-with-us"
+    },
+    {
+      "kind": "footer",
+      "label": "Affiliates: Creators & Publishers",
+      "real": "https://www.bestbuy.com/site/misc/best-buy-affiliate-program/pcmcat198500050002.c?id=pcmcat198500050002",
+      "path": "/site/misc/best-buy-affiliate-program/pcmcat198500050002.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Best Buy Health",
+      "real": "https://healthcare.bestbuy.com/",
+      "path": "/best-buy-health"
+    },
+    {
+      "kind": "footer",
+      "label": "Best Buy Education",
+      "real": "https://www.bestbuy.com/site/bestbuy-business/bestbuy-education/pcmcat356600050000.c?id=pcmcat356600050000",
+      "path": "/site/bestbuy-business/bestbuy-education/pcmcat356600050000.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Best Buy Business",
+      "real": "https://www.bestbuy.com/site/electronics/bestbuy-business/pcmcat230900050001.c?id=pcmcat230900050001",
+      "path": "/site/electronics/bestbuy-business/pcmcat230900050001.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Partner+",
+      "real": "https://www.bestbuy.com/site/clp-bbfb/partner-plus/pcmcat1715699845027.c?id=pcmcat1715699845027",
+      "path": "/site/clp-bbfb/partner-plus/pcmcat1715699845027.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Corporate Information",
+      "real": "https://corporate.bestbuy.com/",
+      "path": "/corporate-information"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://jobs.bestbuy.com/bby",
+      "path": "/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Corporate Responsibility",
+      "real": "https://corporate.bestbuy.com/our-goals/",
+      "path": "/corporate-responsibility"
+    },
+    {
+      "kind": "footer",
+      "label": "Sustainability",
+      "real": "https://corporate.bestbuy.com/sustainability/",
+      "path": "/sustainability"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.bestbuy.com/site/help-topics/accessibility/pcmcat1496336482680.c?id=pcmcat1496336482680",
+      "path": "/site/help-topics/accessibility/pcmcat1496336482680.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms & Conditions",
+      "real": "https://www.bestbuy.com/site/help-topics/terms-and-conditions/pcmcat204400050067.c?id=pcmcat204400050067",
+      "path": "/site/help-topics/terms-and-conditions/pcmcat204400050067.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy",
+      "real": "https://www.bestbuy.com/site/help-topics/privacy-policy/pcmcat204400050062.c?id=pcmcat204400050062",
+      "path": "/site/help-topics/privacy-policy/pcmcat204400050062.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Interest-Based Ads",
+      "real": "https://www.bestbuy.com/site/privacy-policy/interest-based-ads/pcmcat204400050066.c?id=pcmcat204400050066",
+      "path": "/site/privacy-policy/interest-based-ads/pcmcat204400050066.c"
+    },
+    {
+      "kind": "footer",
+      "label": "State Privacy Rights",
+      "real": "https://www.bestbuy.com/site/privacy-policy/state-privacy-rights/pcmcat204400050063.c?id=pcmcat204400050063",
+      "path": "/site/privacy-policy/state-privacy-rights/pcmcat204400050063.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Health Data Privacy",
+      "real": "https://www.bestbuy.com/site/privacy-policy/health-data-privacy/pcmcat1709131468002.c?id=pcmcat1709131468002",
+      "path": "/site/privacy-policy/health-data-privacy/pcmcat1709131468002.c"
+    },
+    {
+      "kind": "footer",
+      "label": "Do Not Sell/Share My Personal Information",
+      "real": "https://www.bestbuy.com/sentry/landing?type=ca_donotsell",
+      "path": "/sentry/landing?type=ca_donotsell"
+    },
+    {
+      "kind": "footer",
+      "label": "Limit Use of My Sensitive Personal Information",
+      "real": "https://www.bestbuy.com/sentry/landing?type=optout",
+      "path": "/sentry/landing?type=optout"
+    },
+    {
+      "kind": "footer",
+      "label": "Targeted Advertising Opt Out",
+      "real": "https://www.bestbuy.com/sentry/landing?type=donottarget",
+      "path": "/sentry/landing?type=donottarget"
+    },
+    {
+      "kind": "footer",
+      "label": "CA Supply Chain Transparency Act",
+      "real": "https://www.bestbuy.com/site/help-topics/ca-transparency-act/pcmcat263000050003.c?id=pcmcat263000050003",
+      "path": "/site/help-topics/ca-transparency-act/pcmcat263000050003.c"
+    },
+    {
+      "kind": "page",
+      "label": "Department: TV & Home Theater",
+      "real": "https://www.bestbuy.com/site/electronics/tv-video/abcat0100000.c?id=abcat0100000",
+      "path": "/site/electronics/tv-video/abcat0100000.c",
+      "expect": [
+        "TV & Home Theater",
+        "Shop confidently at Best Buy",
+        "Popular TV types",
+        "Building a home theater system"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Video Games",
+      "real": "https://www.bestbuy.com/site/electronics/video-games/abcat0700000.c?id=abcat0700000",
+      "path": "/site/electronics/video-games/abcat0700000.c",
+      "expect": [
+        "Video Games",
+        "Trending from Best Buy & IGN",
+        "Shopping for video games at Best Buy"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Computers & Tablets",
+      "real": "https://www.bestbuy.com/site/electronics/computers-pcs/abcat0500000.c?id=abcat0500000",
+      "path": "/site/electronics/computers-pcs/abcat0500000.c",
+      "expect": [
+        "Computers & Tablets",
+        "Shop accessories",
+        "Services and memberships",
+        "Featured technology"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.bestbuy.com/site/searchpage.jsp?st=grand+theft+auto+vi",
+      "path": "/site/searchpage.jsp?st=grand+theft+auto+vi",
+      "expect": [
+        "grand theft auto vi",
+        "Filters",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.bestbuy.com/product/grand-theft-auto-vi-code-in-box-delivers-11-12-26-playable-11-19-26-playstation-5/JXHY5RW2JZ/sku/6684968",
+      "path": "/product/grand-theft-auto-vi-code-in-box-delivers-11-12-26-playable-11-19-26-playstation-5/JXHY5RW2JZ/sku/6684968",
+      "expect": [
+        "Grand Theft Auto VI",
+        "About this product",
+        "Specifications"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart (empty)",
+      "real": "https://www.bestbuy.com/cart",
+      "path": "/cart",
+      "expect": [
+        "Your cart is empty"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.bestbuy.com/identity/global/signin",
+      "path": "/identity/global/signin",
+      "expect": [
+        "Sign in",
+        "Email Address"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Create account",
+      "real": "https://www.bestbuy.com/identity/newAccount",
+      "path": "/identity/newAccount",
+      "expect": [
+        "Create an account",
+        "First Name"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status lookup",
+      "real": "https://www.bestbuy.com/profile/ss/orderlookup",
+      "path": "/profile/ss/orderlookup",
+      "expect": [
+        "Check Order Status",
+        "Order Number",
+        "Email Address"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Support center",
+      "real": "https://www.bestbuy.com/support",
+      "path": "/support",
+      "expect": [
+        "Best Buy Support",
+        "Help Topics",
+        "Contact Us"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Contact us",
+      "real": "https://www.bestbuy.com/contact-us",
+      "path": "/contact-us",
+      "expect": [
+        "Contact Best Buy",
+        "What can we help you with?",
+        "Orders & Purchases",
+        "My Account",
+        "Product Repair & Support",
+        "Best Buy Stores"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store locator",
+      "real": "https://www.bestbuy.com/site/store-locator",
+      "path": "/site/store-locator",
+      "expect": [
+        "Stores Near",
+        "Find stores that have what you need",
+        "Make This Your Store",
+        "Use my current location"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.bestbuy.com/site/electronics/gift-cards/cat09000.c?id=cat09000",
+      "path": "/site/electronics/gift-cards/cat09000.c",
+      "expect": [
+        "Best Buy Gift Cards",
+        "Check your gift card balance",
+        "Corporate Gift Cards",
+        "Exploring Best Buy Gift Cards"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift card balance",
+      "real": "https://www.bestbuy.com/gift-card-balance",
+      "path": "/gift-card-balance",
+      "expect": [
+        "Gift Card Balance",
+        "Card Number",
+        "PIN"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Top Deals",
+      "real": "https://www.bestbuy.com/top-deals",
+      "path": "/top-deals",
+      "expect": [
+        "Top Deals",
+        "12 month financing",
+        "Scoring top deals and saving big with Best Buy"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deal of the Day",
+      "real": "https://www.bestbuy.com/site/misc/deal-of-the-day/pcmcat248000050016.c?id=pcmcat248000050016",
+      "path": "/site/misc/deal-of-the-day/pcmcat248000050016.c",
+      "expect": [
+        "Deal of the Day",
+        "Bonus Deals of the Day",
+        "Get the Deal of the Day delivered to you",
+        "Exploring the Deal of the Day"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Outlet",
+      "real": "https://www.bestbuy.com/site/electronics/outlet-refurbished-clearance/pcmcat142300050026.c?id=pcmcat142300050026",
+      "path": "/site/electronics/outlet-refurbished-clearance/pcmcat142300050026.c",
+      "expect": [
+        "Best Buy Outlet",
+        "Top-quality tech. Even better prices.",
+        "Open-box",
+        "Shop the Best Buy Outlet"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift Ideas",
+      "real": "https://www.bestbuy.com/site/electronics/gift-ideas/abcat0010000.c?id=abcat0010000",
+      "path": "/site/electronics/gift-ideas/abcat0010000.c",
+      "expect": [
+        "Gift Ideas",
+        "Who are you shopping for?",
+        "Gifts that give more",
+        "Shop gifts by brand"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns & exchanges policy",
+      "real": "https://www.bestbuy.com/site/help-topics/return-exchange-policy/pcmcat260800050014.c?id=pcmcat260800050014",
+      "path": "/site/help-topics/return-exchange-policy/pcmcat260800050014.c",
+      "expect": [
+        "Returns and Exchanges",
+        "Return and exchange periods",
+        "Restocking fees",
+        "Refund method and timing"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping, delivery & pickup policy",
+      "real": "https://www.bestbuy.com/site/help-topics/shipping-delivery-store-pickup/pcmcat316000050003.c?id=pcmcat316000050003",
+      "path": "/site/help-topics/shipping-delivery-store-pickup/pcmcat316000050003.c",
+      "expect": [
+        "Shipping, Delivery & Store Pickup",
+        "Best Buy Store Pickup",
+        "Additional Order Pickup Options",
+        "Delivery"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Price Match Guarantee",
+      "real": "https://www.bestbuy.com/site/help-topics/price-match-guarantee/pcmcat290300050002.c?id=pcmcat290300050002",
+      "path": "/site/help-topics/price-match-guarantee/pcmcat290300050002.c",
+      "expect": [
+        "Price Match Guarantee",
+        "What qualifies?",
+        "Price Match Guarantee FAQs"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Memberships",
+      "real": "https://www.bestbuy.com/site/electronics/best-buy-membership/pcmcat1679668833285.c?id=pcmcat1679668833285",
+      "path": "/site/electronics/best-buy-membership/pcmcat1679668833285.c",
+      "expect": [
+        "Meet the My Best Buy Memberships",
+        "My Best Buy Total",
+        "My Best Buy Plus",
+        "Still have questions?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Credit cards",
+      "real": "https://www.bestbuy.com/site/misc/financing-rewards/pcmcat102500050032.c?id=pcmcat102500050032",
+      "path": "/site/misc/financing-rewards/pcmcat102500050032.c",
+      "expect": [
+        "My Best Buy Credit Cards",
+        "Cardmember offers",
+        "Ways to pay your bill"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Trade-In",
+      "real": "https://www.bestbuy.com/site/best-buy-trade-in/trade-in-offers/pcmcat1774297472214.c?id=pcmcat1774297472214",
+      "path": "/site/best-buy-trade-in/trade-in-offers/pcmcat1774297472214.c",
+      "expect": [
+        "Trade-In Offers",
+        "How trade-in works",
+        "Explore trade-in categories",
+        "Trade-in FAQs"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Best Buy Business",
+      "real": "https://www.bestbuy.com/site/electronics/bestbuy-business/pcmcat230900050001.c?id=pcmcat230900050001",
+      "path": "/site/electronics/bestbuy-business/pcmcat230900050001.c",
+      "expect": [
+        "Best Buy Business",
+        "Your success is our business",
+        "Connect with us"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Mobile app",
+      "real": "https://www.bestbuy.com/site/misc/mobile-app/pcmcat208500050016.c?id=pcmcat208500050016",
+      "path": "/site/misc/mobile-app/pcmcat208500050016.c",
+      "expect": [
+        "Best Buy Mobile App",
+        "The gotta-have app for gotta-have tech"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.bestbuy.com/sitemap.xml",
+      "path": "/sitemap",
+      "expect": [
+        "Site Map"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Outlet Event hero banner",
+      "expect": [
+        "Outlet Event"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Select OLED TVs banner",
+      "expect": [
+        "Select OLED TVs"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Sign-in prompt",
+      "expect": [
+        "Sign in for free shipping",
+        "Create an account"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Newsletter sign-up",
+      "expect": [
+        "Get the latest deals and more.",
+        "Sign Up"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Best Buy app promo",
+      "expect": [
+        "Best Buy app"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Footer support panel",
+      "expect": [
+        "Visit our Support Center"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Appliances",
+      "real": "https://www.bestbuy.com/site/electronics/home-appliances/abcat0900000.c?id=abcat0900000",
+      "path": "/site/electronics/home-appliances/abcat0900000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Appliance Deals",
+      "real": "https://www.bestbuy.com/site/all-electronics-on-sale/all-appliances-on-sale/pcmcat1637009144989.c?id=pcmcat1637009144989",
+      "path": "/site/all-electronics-on-sale/all-appliances-on-sale/pcmcat1637009144989.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Refrigerators",
+      "real": "https://www.bestbuy.com/site/home-appliances/refrigerators/abcat0901000.c?id=abcat0901000",
+      "path": "/site/home-appliances/refrigerators/abcat0901000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Washers & Dryers",
+      "real": "https://www.bestbuy.com/site/home-appliances/washers-dryers/abcat0910000.c?id=abcat0910000",
+      "path": "/site/home-appliances/washers-dryers/abcat0910000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ranges, Cooktops & Ovens",
+      "real": "https://www.bestbuy.com/site/home-appliances/ranges-cooktops-ovens/abcat0904000.c?id=abcat0904000",
+      "path": "/site/home-appliances/ranges-cooktops-ovens/abcat0904000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dishwashers",
+      "real": "https://www.bestbuy.com/site/home-appliances/dishwashers/abcat0905000.c?id=abcat0905000",
+      "path": "/site/home-appliances/dishwashers/abcat0905000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Microwaves",
+      "real": "https://www.bestbuy.com/site/home-appliances/microwaves/abcat0904010.c?id=abcat0904010",
+      "path": "/site/home-appliances/microwaves/abcat0904010.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Small Kitchen Appliances",
+      "real": "https://www.bestbuy.com/site/home-appliances/small-appliances/abcat0912000.c?id=abcat0912000",
+      "path": "/site/home-appliances/small-appliances/abcat0912000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vacuums & Floor Care",
+      "real": "https://www.bestbuy.com/site/home-appliances/vacuums-floor-care/abcat0911000.c?id=abcat0911000",
+      "path": "/site/home-appliances/vacuums-floor-care/abcat0911000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV & Home Theater",
+      "real": "https://www.bestbuy.com/site/electronics/tv-video/abcat0100000.c?id=abcat0100000",
+      "path": "/site/electronics/tv-video/abcat0100000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV & Home Theater Deals",
+      "real": "https://www.bestbuy.com/site/all-electronics-on-sale/all-tv-home-theater-on-sale/pcmcat1690836748285.c?id=pcmcat1690836748285",
+      "path": "/site/all-electronics-on-sale/all-tv-home-theater-on-sale/pcmcat1690836748285.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TVs",
+      "real": "https://www.bestbuy.com/site/tv-home-theater/tvs/abcat0101000.c?id=abcat0101000",
+      "path": "/site/tv-home-theater/tvs/abcat0101000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Projectors & Screens",
+      "real": "https://www.bestbuy.com/site/tv-home-theater/projectors-screens/pcmcat158900050008.c?id=pcmcat158900050008",
+      "path": "/site/tv-home-theater/projectors-screens/pcmcat158900050008.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Streaming Devices",
+      "real": "https://www.bestbuy.com/site/tv-home-theater/streaming-media-devices/pcmcat161100050040.c?id=pcmcat161100050040",
+      "path": "/site/tv-home-theater/streaming-media-devices/pcmcat161100050040.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home Audio",
+      "real": "https://www.bestbuy.com/site/audio/home-audio-systems/pcmcat241600050001.c?id=pcmcat241600050001",
+      "path": "/site/audio/home-audio-systems/pcmcat241600050001.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV Stands & Mounts",
+      "real": "https://www.bestbuy.com/site/tv-video-accessories/tv-stands-mounts/abcat0106000.c?id=abcat0106000",
+      "path": "/site/tv-video-accessories/tv-stands-mounts/abcat0106000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV & Home Theater Accessories",
+      "real": "https://www.bestbuy.com/site/tv-home-theater/tv-video-accessories/abcat0107000.c?id=abcat0107000",
+      "path": "/site/tv-home-theater/tv-video-accessories/abcat0107000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV & Home Theater Services",
+      "real": "https://www.bestbuy.com/site/services/tv-home-theater-services/pcmcat138100050024.c?id=pcmcat138100050024",
+      "path": "/site/services/tv-home-theater-services/pcmcat138100050024.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sound Bars",
+      "real": "https://www.bestbuy.com/site/speakers/sound-bars/abcat0205007.c?id=abcat0205007",
+      "path": "/site/speakers/sound-bars/abcat0205007.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home Theater & Stereo Systems",
+      "real": "https://www.bestbuy.com/site/home-audio-systems/home-theater-systems/abcat0203000.c?id=abcat0203000",
+      "path": "/site/home-audio-systems/home-theater-systems/abcat0203000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Blu-ray and DVD Players",
+      "real": "https://www.bestbuy.com/site/tv-home-theater/blu-ray-dvd-players/abcat0102000.c?id=abcat0102000",
+      "path": "/site/tv-home-theater/blu-ray-dvd-players/abcat0102000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Home Theater",
+      "real": "https://www.bestbuy.com/site/tv-home-theater/outdoor-home-theater/pcmcat1590695649808.c?id=pcmcat1590695649808",
+      "path": "/site/tv-home-theater/outdoor-home-theater/pcmcat1590695649808.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computers & Tablets",
+      "real": "https://www.bestbuy.com/site/electronics/computers-pcs/abcat0500000.c?id=abcat0500000",
+      "path": "/site/electronics/computers-pcs/abcat0500000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computers & Tablets Deals",
+      "real": "https://www.bestbuy.com/site/all-electronics-on-sale/all-computers-tablets-on-sale/pcmcat1632941704767.c?id=pcmcat1632941704767",
+      "path": "/site/all-electronics-on-sale/all-computers-tablets-on-sale/pcmcat1632941704767.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laptops",
+      "real": "https://www.bestbuy.com/site/computers-pcs/laptop-computers/abcat0502000.c?id=abcat0502000",
+      "path": "/site/computers-pcs/laptop-computers/abcat0502000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desktops & All-in-Ones",
+      "real": "https://www.bestbuy.com/site/computers-pcs/desktops-all-in-one-computers/abcat0501000.c?id=abcat0501000",
+      "path": "/site/computers-pcs/desktops-all-in-one-computers/abcat0501000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tablets",
+      "real": "https://www.bestbuy.com/site/computers-pcs/tablets/pcmcat209000050006.c?id=pcmcat209000050006",
+      "path": "/site/computers-pcs/tablets/pcmcat209000050006.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PC Gaming",
+      "real": "https://www.bestbuy.com/site/computers-pcs/pc-gaming/abcat0712000.c?id=abcat0712000",
+      "path": "/site/computers-pcs/pc-gaming/abcat0712000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Printers, Ink & Toner",
+      "real": "https://www.bestbuy.com/site/computers-pcs/printers-ink-toner/abcat0511001.c?id=abcat0511001",
+      "path": "/site/computers-pcs/printers-ink-toner/abcat0511001.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Monitors",
+      "real": "https://www.bestbuy.com/site/computer-monitors/all-monitors/pcmcat143700050048.c?id=pcmcat143700050048",
+      "path": "/site/computer-monitors/all-monitors/pcmcat143700050048.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computer Cards & Components",
+      "real": "https://www.bestbuy.com/site/computers-pcs/computer-cards-components/abcat0507000.c?id=abcat0507000",
+      "path": "/site/computers-pcs/computer-cards-components/abcat0507000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hard Drives, SSD & Storage",
+      "real": "https://www.bestbuy.com/site/computers-pcs/hard-drives-storage/abcat0504001.c?id=abcat0504001",
+      "path": "/site/computers-pcs/hard-drives-storage/abcat0504001.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computer Accessories & Peripherals",
+      "real": "https://www.bestbuy.com/site/computers-pcs/computer-accessories-peripherals/abcat0515000.c?id=abcat0515000",
+      "path": "/site/computers-pcs/computer-accessories-peripherals/abcat0515000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Software",
+      "real": "https://www.bestbuy.com/site/computers-pcs/software/abcat0508000.c?id=abcat0508000",
+      "path": "/site/computers-pcs/software/abcat0508000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wi-Fi & Networking",
+      "real": "https://www.bestbuy.com/site/computers-pcs/networking/abcat0503000.c?id=abcat0503000",
+      "path": "/site/computers-pcs/networking/abcat0503000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cell Phones",
+      "real": "https://www.bestbuy.com/site/electronics/mobile-cell-phones/abcat0800000.c?id=abcat0800000",
+      "path": "/site/electronics/mobile-cell-phones/abcat0800000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Audio",
+      "real": "https://www.bestbuy.com/site/electronics/audio/abcat0200000.c?id=abcat0200000",
+      "path": "/site/electronics/audio/abcat0200000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Games",
+      "real": "https://www.bestbuy.com/site/electronics/video-games/abcat0700000.c?id=abcat0700000",
+      "path": "/site/electronics/video-games/abcat0700000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Games Deals",
+      "real": "https://www.bestbuy.com/site/all-electronics-on-sale/all-video-games-on-sale/pcmcat1690896520374.c?id=pcmcat1690896520374",
+      "path": "/site/all-electronics-on-sale/all-video-games-on-sale/pcmcat1690896520374.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation",
+      "real": "https://www.bestbuy.com/site/video-games/playstation/pcmcat1741974777714.c?id=pcmcat1741974777714",
+      "path": "/site/video-games/playstation/pcmcat1741974777714.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo",
+      "real": "https://www.bestbuy.com/site/video-games/nintendo/pcmcat1742407305710.c?id=pcmcat1742407305710",
+      "path": "/site/video-games/nintendo/pcmcat1742407305710.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX",
+      "real": "https://www.bestbuy.com/site/video-games/xbox/pcmcat1741975945801.c?id=pcmcat1741975945801",
+      "path": "/site/video-games/xbox/pcmcat1741975945801.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Video Games",
+      "real": "https://www.bestbuy.com/site/video-games/all-video-games/pcmcat1487698928729.c?id=pcmcat1487698928729",
+      "path": "/site/video-games/all-video-games/pcmcat1487698928729.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Handheld Gaming",
+      "real": "https://www.bestbuy.com/site/video-games/handheld-gaming/pcmcat1662993575810.c?id=pcmcat1662993575810",
+      "path": "/site/video-games/handheld-gaming/pcmcat1662993575810.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Game Accessories",
+      "real": "https://www.bestbuy.com/site/video-games/video-games-accessories/abcat0715000.c?id=abcat0715000",
+      "path": "/site/video-games/video-games-accessories/abcat0715000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Virtual Reality",
+      "real": "https://www.bestbuy.com/site/video-games/virtual-reality/pcmcat1476727552895.c?id=pcmcat1476727552895",
+      "path": "/site/video-games/virtual-reality/pcmcat1476727552895.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital Gaming",
+      "real": "https://www.bestbuy.com/site/video-games/digital-gaming/pcmcat1497456762821.c?id=pcmcat1497456762821",
+      "path": "/site/video-games/digital-gaming/pcmcat1497456762821.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Gift Cards",
+      "real": "https://www.bestbuy.com/site/entertainment-gift-cards/gaming-gift-cards/pcmcat140000050010.c?id=pcmcat140000050010",
+      "path": "/site/entertainment-gift-cards/gaming-gift-cards/pcmcat140000050010.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Simulation Racing",
+      "real": "https://www.bestbuy.com/site/video-games/simulation-racing/pcmcat1762458962968.c?id=pcmcat1762458962968",
+      "path": "/site/video-games/simulation-racing/pcmcat1762458962968.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Retro Gaming & Arcade",
+      "real": "https://www.bestbuy.com/site/video-games/retro-gaming/pcmcat1500927006607.c?id=pcmcat1500927006607",
+      "path": "/site/video-games/retro-gaming/pcmcat1500927006607.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Game Releases & Events",
+      "real": "https://www.bestbuy.com/site/video-games/video-game-releases-events/pcmcat308100050002.c?id=pcmcat308100050002",
+      "path": "/site/video-games/video-game-releases-events/pcmcat308100050002.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cameras, Camcorders & Drones",
+      "real": "https://www.bestbuy.com/site/electronics/cameras-camcorders/abcat0400000.c?id=abcat0400000",
+      "path": "/site/electronics/cameras-camcorders/abcat0400000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home, Furniture & Office",
+      "real": "https://www.bestbuy.com/site/electronics/home-furniture-office",
+      "path": "/site/electronics/home-furniture-office"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Home, Security & Wi-Fi",
+      "real": "https://www.bestbuy.com/site/electronics/home-security-safety/pcmcat254000050002.c?id=pcmcat254000050002",
+      "path": "/site/electronics/home-security-safety/pcmcat254000050002.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Car Electronics & GPS",
+      "real": "https://www.bestbuy.com/site/electronics/car-electronics-gps/abcat0300000.c?id=abcat0300000",
+      "path": "/site/electronics/car-electronics-gps/abcat0300000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wearable Technology",
+      "real": "https://www.bestbuy.com/site/electronics/wearable-technology/pcmcat332000050000.c?id=pcmcat332000050000",
+      "path": "/site/electronics/wearable-technology/pcmcat332000050000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Health, Wellness & Fitness",
+      "real": "https://www.bestbuy.com/site/electronics/health-wellness-fitness",
+      "path": "/site/electronics/health-wellness-fitness"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Living",
+      "real": "https://www.bestbuy.com/site/electronics/outdoor-living",
+      "path": "/site/electronics/outdoor-living"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys, Games & Crafts",
+      "real": "https://www.bestbuy.com/site/electronics/toys-games-crafts",
+      "path": "/site/electronics/toys-games-crafts"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Movies & Music",
+      "real": "https://www.bestbuy.com/site/electronics/movies-music/abcat0600000.c?id=abcat0600000",
+      "path": "/site/electronics/movies-music/abcat0600000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electric Transportation",
+      "real": "https://www.bestbuy.com/site/electronics/electric-transportation",
+      "path": "/site/electronics/electric-transportation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Top Deals",
+      "real": "https://www.bestbuy.com/top-deals",
+      "path": "/top-deals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Deal of the Day",
+      "real": "https://www.bestbuy.com/site/misc/deal-of-the-day/pcmcat248000050016.c?id=pcmcat248000050016",
+      "path": "/site/misc/deal-of-the-day/pcmcat248000050016.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Buy Outlet",
+      "real": "https://www.bestbuy.com/site/electronics/outlet-refurbished-clearance/pcmcat142300050026.c?id=pcmcat142300050026",
+      "path": "/site/electronics/outlet-refurbished-clearance/pcmcat142300050026.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Ideas",
+      "real": "https://www.bestbuy.com/site/electronics/gift-ideas/abcat0010000.c?id=abcat0010000",
+      "path": "/site/electronics/gift-ideas/abcat0010000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.bestbuy.com/site/electronics/gift-cards/cat09000.c?id=cat09000",
+      "path": "/site/electronics/gift-cards/cat09000.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Check Gift Card Balance",
+      "real": "https://www.bestbuy.com/gift-card-balance",
+      "path": "/gift-card-balance"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trade-In Offers",
+      "real": "https://www.bestbuy.com/site/best-buy-trade-in/trade-in-offers/pcmcat1774297472214.c?id=pcmcat1774297472214",
+      "path": "/site/best-buy-trade-in/trade-in-offers/pcmcat1774297472214.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "My Best Buy Memberships",
+      "real": "https://www.bestbuy.com/site/electronics/best-buy-membership/pcmcat1679668833285.c?id=pcmcat1679668833285",
+      "path": "/site/electronics/best-buy-membership/pcmcat1679668833285.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "My Best Buy Credit Cards",
+      "real": "https://www.bestbuy.com/site/misc/financing-rewards/pcmcat102500050032.c?id=pcmcat102500050032",
+      "path": "/site/misc/financing-rewards/pcmcat102500050032.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Buy Business",
+      "real": "https://www.bestbuy.com/site/electronics/bestbuy-business/pcmcat230900050001.c?id=pcmcat230900050001",
+      "path": "/site/electronics/bestbuy-business/pcmcat230900050001.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop by Brand",
+      "real": "https://www.bestbuy.com/brands",
+      "path": "/brands"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Buy app",
+      "real": "https://www.bestbuy.com/site/misc/mobile-app/pcmcat208500050016.c?id=pcmcat208500050016",
+      "path": "/site/misc/mobile-app/pcmcat208500050016.c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store Locator",
+      "real": "https://www.bestbuy.com/site/store-locator",
+      "path": "/site/store-locator"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Support Center",
+      "real": "https://www.bestbuy.com/support",
+      "path": "/support"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Contact Us",
+      "real": "https://www.bestbuy.com/contact-us",
+      "path": "/contact-us"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Order Status",
+      "real": "https://www.bestbuy.com/profile/ss/orderlookup",
+      "path": "/profile/ss/orderlookup"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Account",
+      "real": "https://www.bestbuy.com/account",
+      "path": "/account"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cart",
+      "real": "https://www.bestbuy.com/cart",
+      "path": "/cart"
+    }
+  ]
+}
