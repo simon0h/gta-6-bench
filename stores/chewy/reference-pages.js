@@ -1,8 +1,9 @@
 // Reference-mode pages for the Chewy clone. These reproduce www.chewy.com's
 // navigation, landing pages, help/policy content and account entry points
-// (captured 2026-10-13) without inventing products, prices, stock or ratings:
-// the reference catalog for Chewy has no captured product observations, so
-// every listing area renders an explicit "listings not captured" state.
+// (captured 2026-10-13). Listing areas show the Chewy assortment from
+// shelf.js (real brands, typical prices) so the store reads like chewy.com;
+// it is kept apart from the evidence-backed catalog, and every purchase is
+// recorded as a kind:'other' order line. Chewy sells no video games.
 import { Router } from 'express'
 import { esc } from '../../lib/html.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
@@ -11,6 +12,8 @@ import {
   TOP_NAV, DOG_MENU, CAT_MENU, OTHER_ANIMALS_MENU, PHARMACY_MENU, SERVICES_MENU, EDUCATION_MENU, PICKS_MENU,
   GIVE_BACK_MENU, BRANDS, PET_TILES, POPULAR_CATEGORIES, SORTS, CATEGORIES, DEALS, DEAL_TILE_PATH, FOOTER, LEGAL, idOf,
 } from './reference-data.js'
+import { SHELF, SHELF_BY_ID, categoryProducts, dealProducts, brandProducts, pickProducts, searchShelf } from './shelf.js'
+import { productCard, productRow, listingFilters, listingResults, productPage, cartPage, cartCount, addToCart, updateLine, checkoutPage, placeOrder, confirmationPage, orderHistory, shelfArt } from './shelf-pages.js'
 
 const str = v => (typeof v === 'string' ? v.trim() : '')
 const slugify = s => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
@@ -40,12 +43,12 @@ function resultsBar(base, path, req) {
   return `<div class="cw-results-bar"><p class="cw-results-count">Listings not captured</p><label for="cw-sort">Sort By</label><select id="cw-sort" name="sort" form="cw-filters">${SORTS.map(s => `<option${s === sort ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select><button class="cw-btn cw-btn-outline" form="cw-filters" type="submit">Sort</button></div>${chosen.length ? `<p class="cw-chips">${chosen.map(([, v]) => `<span>${esc(v)}</span>`).join('')} <a href="${base}${path}">Clear all</a></p>` : ''}`
 }
 
-function categoryPage(base, path, req, entry) {
+function categoryPage(base, path, req, entry, products = null) {
   const groups = entry.filters || (entry.animal === 'Dog' ? ['Autoship', 'Brand', 'Breed Size', 'Product Category', 'Lifestage', 'Price', 'Customer Rating'] : entry.animal === 'Cat' ? ['Autoship', 'Brand', 'Product Category', 'Lifestage', 'Price', 'Customer Rating'] : ['Brand', 'Product Category', 'Price', 'Customer Rating'])
   const banner = entry.banner ? `<section class="cw-banner"><div><p class="cw-eyebrow">Chewy</p><h2>${esc(entry.banner)}</h2><a class="cw-btn" href="${base}/deals/todays-deals-2723">Shop now</a></div>${paw(120)}</section>` : ''
   const related = (entry.tiles || []).slice(0, 6)
   const pharmacy = entry.pharmacy ? `<section class="cw-steps"><h2>Filling their prescription is simple</h2><ol><li><h3>1) Check their meds</h3><p>Add your pet’s prescriptions to your cart and tell us about your pet and your vet at checkout.</p></li><li><h3>2) Checkout</h3><p>Choose Autoship or Buy once. Chewy contacts your vet to approve the prescription.</p></li><li><h3>3) Review & delivery</h3><p>Licensed pharmacists review the order and it ships once approved, typically within 3–5 days.</p></li></ol></section><section class="cw-callout"><h2>Any questions?</h2><p>Licensed pharmacists are available 24/7 at <a href="${base}/customer-care">${PHONE}</a>. Learn <a href="${base}/b/pharmacy-15697">how Chewy Pharmacy works</a> or <a href="${base}/app/content/pharmacy">ordering prescription and veterinary diet items</a>.</p></section>` : ''
-  return `${crumbs(base, [...(entry.crumbs || []), [entry.h1]])}<h1 class="cw-page-title">${esc(entry.h1)}</h1>${entry.tiles?.length ? tiles(base, entry.tiles) : ''}${banner}${pharmacy}<div class="cw-plp">${filterPanel(base, path, req, groups, entry)}<section class="cw-results" aria-label="${esc(entry.h1)} results">${resultsBar(base, path, req)}${notCaptured(base, entry.h1)}</section></div>${related.length ? `<section class="cw-related"><h2>Related Searches</h2><p>${related.map(([l, p]) => `<a href="${base}${p}">${esc(l)}</a>`).join('')}</p></section>` : ''}<section class="cw-seo"><h2>${esc(entry.h1)}</h2><p>Shop ${esc(entry.h1.toLowerCase())} at Chewy with fast shipping, free shipping on orders of $49+ and Autoship savings on eligible items. Customer service experts are available 24/7 at ${PHONE}.</p>${entry.faq ? `<h2>Frequently Asked Questions about ${esc(entry.h1)}</h2>${faq(entry.faq)}` : ''}</section>`
+  return `${crumbs(base, [...(entry.crumbs || []), [entry.h1]])}<h1 class="cw-page-title">${esc(entry.h1)}</h1>${entry.tiles?.length ? tiles(base, entry.tiles) : ''}${banner}${pharmacy}<div class="cw-plp">${products?.length ? `${listingFilters(base, path, req, groups, products, entry)}${listingResults(base, path, req, products, entry.h1)}` : `${filterPanel(base, path, req, groups, entry)}<section class="cw-results" aria-label="${esc(entry.h1)} results">${resultsBar(base, path, req)}${notCaptured(base, entry.h1)}</section>`}</div>${related.length ? `<section class="cw-related"><h2>Related Searches</h2><p>${related.map(([l, p]) => `<a href="${base}${p}">${esc(l)}</a>`).join('')}</p></section>` : ''}<section class="cw-seo"><h2>${esc(entry.h1)}</h2><p>Shop ${esc(entry.h1.toLowerCase())} at Chewy with fast shipping, free shipping on orders of $49+ and Autoship savings on eligible items. Customer service experts are available 24/7 at ${PHONE}.</p>${entry.faq ? `<h2>Frequently Asked Questions about ${esc(entry.h1)}</h2>${faq(entry.faq)}` : ''}</section>`
 }
 
 const INFO_B = {
@@ -85,12 +88,20 @@ function homePage(base, req) {
   const user = req.store?.user
   return `<h1 class="cw-sr">Welcome to Chewy</h1><section class="cw-hero" aria-label="Featured offers"><a class="cw-hero-main ${HOME_HERO[0].cls}" href="${base}${HOME_HERO[0].path}"><div><h2>${HOME_HERO[0].h}</h2><p>${HOME_HERO[0].sub}</p><span class="cw-btn">Shop now</span><small>${HOME_HERO[0].fine}</small></div><span class="cw-hero-art">${paw(220)}</span></a><div class="cw-hero-side">${HOME_HERO.slice(1).map(s => `<a class="${s.cls}" href="${base}${s.path}"><h2>${esc(s.h)}</h2><p>${esc(s.sub)}</p><span class="cw-link">Shop now</span>${s.fine ? `<small>${esc(s.fine)}</small>` : ''}</a>`).join('')}</div></section>
 <section class="cw-welcome"><h2>Welcome to Chewy</h2><div class="cw-welcome-grid"><div class="cw-welcome-card"><h3>${user ? `Hey, ${esc(user.first_name || 'friend')}!` : 'Hey, friend!'}</h3><p>${user ? 'Manage Autoship, orders and pet profiles from your account.' : 'Sign in for a personalized experience, Autoship and order tracking.'}</p><a class="cw-btn" href="${base}${user ? '/app/account' : '/app/login'}">${user ? 'Your Account' : 'Sign in'}</a></div><div class="cw-welcome-card cw-offer"><p class="cw-eyebrow">Pharmacy</p><h3>Save 50% on first Pharmacy order</h3><a class="cw-btn cw-btn-outline" href="${base}/deals/50-off-your-first-autoship-order-3448422">Set up a prescription Autoship</a></div><div class="cw-welcome-card cw-offer"><p class="cw-eyebrow">Autoship</p><h3>Save 35% on first order</h3><a class="cw-btn cw-btn-outline" href="${base}/b/autoship-save-15682">Set up an Autoship</a></div></div></section>
+<div class="cw-home-rows" data-reference-state="catalog">${productRow(base, 'Deals for you', SHELF.filter(p => p.list).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/deals/todays-deals-2723')}</div>
 <section class="cw-section"><h2>Shop all pets, friends & more</h2><div class="cw-tiles cw-tiles-round">${PET_TILES.map(t => tile(base, t.label, t.path)).join('')}</div></section>
 <section class="cw-section"><h2>Explore popular categories</h2><div class="cw-cat-cards">${POPULAR_CATEGORIES.map(c => `<a href="${base}${c.path}"><span class="cw-tile-art">${paw(40)}</span>${esc(c.label)}</a>`).join('')}</div></section>
+${productRow(base, 'Bestselling dog food', categoryProducts('332').filter(p => !p.rx).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/b/food-332')}
+${productRow(base, 'Cat food & litter favorites', [...categoryProducts('387'), ...categoryProducts('411')].filter(p => !p.rx).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/b/food-387')}
 <section class="cw-pharmacy-band"><div><p class="cw-eyebrow">Chewy Pharmacy</p><h2>50% off your first Autoship order of prescription medication</h2><p>Chewy Pharmacy has the pet meds you trust at low prices every day. Our licensed pharmacists work with your vet to get the prescription approved, then ship it fast.</p><a class="cw-btn" href="${base}/deals/50-off-your-first-autoship-order-3448422">Shop now</a></div>${paw(160)}</section>
+${productRow(base, 'Treats they’ll love', [...categoryProducts('335'), ...categoryProducts('391')].sort((a, b) => b.rating * b.reviews - a.rating * a.reviews).slice(0, 14), '/b/treats-335')}
+${productRow(base, 'Toys to keep them busy', [...categoryProducts('315'), ...categoryProducts('326')].sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/b/toys-315')}
 <section class="cw-section"><h2>Pet parenting made easy</h2><div class="cw-easy">${[['Award-winning 24/7 customer care', '/customer-care'], ['Chat free with our licensed vet team', '/b/connect-vet-16616'], ['Prescription meds, delivered fast', '/b/pharmacy-2515'], ['Discover pet insurance', '/pet-insurance']].map(([l, p]) => `<a href="${base}${p}"><span class="cw-tile-art">${paw(36)}</span><strong>${l}</strong></a>`).join('')}</div></section>
 <section class="cw-section"><h2>Get your pet all set for fall</h2><div class="cw-season">${[['Shop Halloween costumes, toys & more', '/b/halloween-shop-2026'], ['Buy 3, Get 4th FREE: Toys & Costumes', '/deals/buy-3-get-4th-free-2685446'], ['Dig up some tasty seasonal treats', '/b/treats-2040'], ['Gear up for game day fun', '/b/football-shop-15520'], ['Get cozy with fall snuggle essentials', '/b/refresh-your-nest-159246']].map(([l, p], i) => `<a class="cw-season-${i}" href="${base}${p}"><span>${esc(l)}</span></a>`).join('')}</div><a class="cw-wide-banner" href="${base}/b/halloween-shop-2026">Frightfully good fall treats from Temptations, Greenies, & more. <strong>Shop more</strong></a></section>
-<section class="cw-section cw-catalog-note" data-reference-state="catalog"><h2>Product listings</h2><p>Chewy’s product inventory has not been captured for this benchmark store, so the replica shows Chewy’s navigation and pages without product listings. This does not mean the retailer has no products. <a href="${base}/reference/catalog">View captured catalog</a></p></section>`
+${productRow(base, 'Halloween shop', categoryProducts('2026'), '/b/halloween-shop-2026')}
+${productRow(base, 'Flea, tick & health essentials', [...categoryProducts('372'), ...categoryProducts('415')].filter(p => !p.rx).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/b/health-pharmacy-372')}
+${productRow(base, 'New arrivals', categoryProducts('14264').slice(0, 14), '/b/new-arrivals-14264')}
+${productRow(base, 'For horses, birds, fish & more', SHELF.filter(p => !['Dog', 'Cat'].includes(p.pet)).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/other-animals')}`
 }
 
 function giftCardPage(base) {
@@ -102,12 +113,13 @@ const ACCOUNT_LINKS = [['Orders', '/app/account/orderhistory', 'Track, return or
 const accountNav = (base, current) => `<nav class="cw-account-nav" aria-label="Account">${ACCOUNT_LINKS.map(([l, p]) => `<a href="${base}${p}"${p === current ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</nav>`
 const signInPrompt = (base, what) => `<div class="cw-notice"><p>Sign in to ${what}.</p><p><a class="cw-btn" href="${base}/app/login">Sign In</a> <a class="cw-btn cw-btn-outline" href="${base}/app/register">Create an Account</a></p></div>`
 
-function loginPage(base, { email = '', error = '' } = {}) {
-  return `<section class="cw-auth"><span class="cw-logo cw-logo-blue">chewy</span><h1>Sign In</h1>${error ? `<p class="cw-error" role="alert">${esc(error)}</p>` : ''}<form method="post" action="${base}/app/login" class="cw-form"><label for="login-email">Email Address</label><input id="login-email" name="email" type="email" autocomplete="email" value="${esc(email)}" required><label for="login-password">Password</label><input id="login-password" name="password" type="password" autocomplete="current-password" required><p><a href="${base}/customer-care">Forgot Password?</a></p><button class="cw-btn cw-btn-block" type="submit">Sign In</button></form><p class="cw-or">New to Chewy?</p><a class="cw-btn cw-btn-outline cw-btn-block" href="${base}/app/register">Create an Account</a><p class="cw-muted">By continuing, you agree to Chewy’s <a href="${base}/app/content/terms-of-use">Terms of Use</a> and <a href="${base}/app/content/privacy">Privacy Policy</a>.</p></section>`
+const safeNext = v => (typeof v === 'string' && /^\/app\/(checkout|cart|account)(\/[\w-]*)*$/.test(v) ? v : '')
+function loginPage(base, { email = '', error = '', next = '', notice = '' } = {}) {
+  return `<section class="cw-auth"><span class="cw-logo cw-logo-blue">chewy</span><h1>Sign In</h1>${notice ? `<p class="cw-notice">${esc(notice)}</p>` : ''}${error ? `<p class="cw-error" role="alert">${esc(error)}</p>` : ''}<form method="post" action="${base}/app/login" class="cw-form">${next ? `<input type="hidden" name="next" value="${esc(next)}">` : ''}<label for="login-email">Email Address</label><input id="login-email" name="email" type="email" autocomplete="email" value="${esc(email)}" required><label for="login-password">Password</label><input id="login-password" name="password" type="password" autocomplete="current-password" required><p><a href="${base}/customer-care">Forgot Password?</a></p><button class="cw-btn cw-btn-block" type="submit">Sign In</button></form><p class="cw-or">New to Chewy?</p><a class="cw-btn cw-btn-outline cw-btn-block" href="${base}/app/register${next ? `?next=${encodeURIComponent(next)}` : ''}">Create an Account</a><p class="cw-muted">By continuing, you agree to Chewy’s <a href="${base}/app/content/terms-of-use">Terms of Use</a> and <a href="${base}/app/content/privacy">Privacy Policy</a>.</p></section>`
 }
-function registerPage(base, { values = {}, error = '' } = {}) {
+function registerPage(base, { values = {}, error = '', next = '' } = {}) {
   const f = (id, label, type, ac) => `<label for="reg-${id}">${label}</label><input id="reg-${id}" name="${id}" type="${type}" autocomplete="${ac}" value="${type === 'password' ? '' : esc(values[id] || '')}" required>`
-  return `<section class="cw-auth"><span class="cw-logo cw-logo-blue">chewy</span><h1>Create an Account</h1>${error ? `<p class="cw-error" role="alert">${esc(error)}</p>` : ''}<form method="post" action="${base}/app/register" class="cw-form">${f('first_name', 'First Name', 'text', 'given-name')}${f('last_name', 'Last Name', 'text', 'family-name')}${f('email', 'Email Address', 'email', 'email')}${f('password', 'Password', 'password', 'new-password')}<p class="cw-muted">Passwords must be at least 8 characters.</p><button class="cw-btn cw-btn-block" type="submit">Create Account</button></form><p class="cw-or">Already have an account? <a href="${base}/app/login">Sign In</a></p></section>`
+  return `<section class="cw-auth"><span class="cw-logo cw-logo-blue">chewy</span><h1>Create an Account</h1>${error ? `<p class="cw-error" role="alert">${esc(error)}</p>` : ''}<form method="post" action="${base}/app/register" class="cw-form">${next ? `<input type="hidden" name="next" value="${esc(next)}">` : ''}${f('first_name', 'First Name', 'text', 'given-name')}${f('last_name', 'Last Name', 'text', 'family-name')}${f('email', 'Email Address', 'email', 'email')}${f('password', 'Password', 'password', 'new-password')}<p class="cw-muted">Passwords must be at least 8 characters.</p><button class="cw-btn cw-btn-block" type="submit">Create Account</button></form><p class="cw-or">Already have an account? <a href="${base}/app/login">Sign In</a></p></section>`
 }
 
 function infoPage(base, { title, crumb, eyebrow, lede, list, cta }) {
@@ -117,7 +129,7 @@ function infoPage(base, { title, crumb, eyebrow, lede, list, cta }) {
 export function installChewyReferencePages(inner) {
   const router = Router()
   const baseOf = res => res.locals.base || '/chewy'
-  const render = (req, res, title, body, status = 200) => res.status(status).type('html').send(chewyReferenceChrome({ req, base: baseOf(res), title, body, count: 0 }))
+  const render = (req, res, title, body, status = 200) => res.status(status).type('html').send(chewyReferenceChrome({ req, base: baseOf(res), title, body, count: cartCount(req) }))
   // Repeated query keys keep the shared reference router's 400 response.
   router.use((req, res, next) => Object.values(req.query).some(v => typeof v !== 'string') ? inner(req, res, next) : next())
 
@@ -127,12 +139,12 @@ export function installChewyReferencePages(inner) {
     if (INFO_B[id]) return render(req, res, INFO_B[id].title, INFO_B[id].body(base))
     const entry = CATEGORIES.get(id)
     if (!entry) return next()
-    render(req, res, entry.h1, categoryPage(base, `/b/${req.params.slug}`, req, entry))
+    render(req, res, entry.h1, categoryPage(base, `/b/${req.params.slug}`, req, entry, categoryProducts(id)))
   })
   router.get('/deals/:slug', (req, res, next) => {
     const d = DEALS[req.params.slug]; if (!d) return next()
     const base = baseOf(res)
-    render(req, res, d.h1, categoryPage(base, `/deals/${req.params.slug}`, req, { h1: d.h1, banner: d.banner, tiles: d.tiles.map(t => [t, DEAL_TILE_PATH(t)]), filters: ['Category', 'Product Category', 'Brand', 'Lifestage', 'Breed Size', 'Price', 'Customer Rating'], crumbs: [] }))
+    render(req, res, d.h1, categoryPage(base, `/deals/${req.params.slug}`, req, { h1: d.h1, banner: d.banner, tiles: d.tiles.map(t => [t, DEAL_TILE_PATH(t)]), filters: ['Category', 'Product Category', 'Brand', 'Lifestage', 'Breed Size', 'Price', 'Customer Rating'], crumbs: [] }, dealProducts(req.params.slug)))
   })
   router.get('/other-animals', (req, res) => {
     const base = baseOf(res)
@@ -144,18 +156,20 @@ export function installChewyReferencePages(inner) {
   // Cart and account entry points (no purchasable inventory in reference mode).
   router.get('/app/cart', (req, res) => {
     const base = baseOf(res)
+    const full = cartPage(base, req)
+    if (full) return render(req, res, 'Cart', full)
     render(req, res, 'Cart', `<section class="cw-cart-empty"><span class="cw-empty-art">${paw(80)}</span><h1>Your cart is empty.</h1>${req.store.user ? '<p>Items you add will show up here.</p>' : `<p>Something missing? Sign in to see items you may have added from another computer or device.</p><a class="cw-btn" href="${base}/app/login">Sign In or Create an Account</a>`} <a class="cw-btn cw-btn-outline" href="${base}/deals/todays-deals-2723">Shop Today's Deals</a></section>`)
   })
-  router.get('/app/login', (req, res) => render(req, res, 'Sign In', loginPage(baseOf(res))))
+  router.get('/app/login', (req, res) => { const next = safeNext(req.query.next); render(req, res, 'Sign In', loginPage(baseOf(res), { next, notice: next === '/app/checkout' ? 'Sign in or create an account to check out.' : '' })) })
   router.post('/app/login', (req, res) => {
-    const base = baseOf(res), email = str(req.body?.email), password = typeof req.body?.password === 'string' ? req.body.password : ''
-    if (!email || !password) return render(req, res, 'Sign In', loginPage(base, { email, error: 'Please enter your email address and password.' }), 400)
+    const base = baseOf(res), email = str(req.body?.email), password = typeof req.body?.password === 'string' ? req.body.password : '', next = safeNext(req.body?.next)
+    if (!email || !password) return render(req, res, 'Sign In', loginPage(base, { email, next, error: 'Please enter your email address and password.' }), 400)
     const acct = authenticate('chewy', email, password)
-    if (!acct) return render(req, res, 'Sign In', loginPage(base, { email, error: 'The email or password you entered is incorrect. Please try again.' }), 401)
+    if (!acct) return render(req, res, 'Sign In', loginPage(base, { email, next, error: 'The email or password you entered is incorrect. Please try again.' }), 401)
     req.store.user = publicAccount(acct)
-    res.redirect(`${base}/app/account`)
+    res.redirect(`${base}${next || '/app/account'}`)
   })
-  router.get('/app/register', (req, res) => render(req, res, 'Create an Account', registerPage(baseOf(res))))
+  router.get('/app/register', (req, res) => render(req, res, 'Create an Account', registerPage(baseOf(res), { next: safeNext(req.query.next) })))
   router.post('/app/register', (req, res) => {
     const base = baseOf(res), values = Object.fromEntries(['first_name', 'last_name', 'email'].map(k => [k, str(req.body?.[k])]))
     const password = typeof req.body?.password === 'string' ? req.body.password : ''
@@ -165,9 +179,9 @@ export function installChewyReferencePages(inner) {
     else if (password.length < 8) error = 'Passwords must be at least 8 characters.'
     const acct = error ? null : createAccount('chewy', { ...values, password })
     if (acct?.error) error = acct.error
-    if (error) return render(req, res, 'Create an Account', registerPage(base, { values, error }), 400)
+    if (error) return render(req, res, 'Create an Account', registerPage(base, { values, error, next: safeNext(req.body?.next) }), 400)
     req.store.user = publicAccount(acct)
-    res.redirect(`${base}/app/account`)
+    res.redirect(`${base}${safeNext(req.body?.next) || '/app/account'}`)
   })
   router.post('/app/logout', (req, res) => { req.store.user = null; res.redirect(`${baseOf(res)}/`) })
   router.get('/app/account', (req, res) => {
@@ -176,9 +190,9 @@ export function installChewyReferencePages(inner) {
   })
   const accountSub = (path, title, signedOutWhat, signedIn) => router.get(path, (req, res) => {
     const base = baseOf(res)
-    render(req, res, title, `${crumbs(base, [['Account', '/app/account'], [title]])}<h1 class="cw-page-title">${esc(title)}</h1>${accountNav(base, path)}${req.store.user ? signedIn(base) : signInPrompt(base, signedOutWhat)}`)
+    render(req, res, title, `${crumbs(base, [['Account', '/app/account'], [title]])}<h1 class="cw-page-title">${esc(title)}</h1>${accountNav(base, path)}${req.store.user ? signedIn(base, req) : signInPrompt(base, signedOutWhat)}`)
   })
-  accountSub('/app/account/orderhistory', 'Your Orders', 'view your orders, track packages and start returns', base => `<div class="cw-empty"><h2>You haven’t placed any orders yet.</h2><p>Track orders and start returns here once you’ve ordered.</p><a class="cw-btn" href="${base}/deals/todays-deals-2723">Shop Today's Deals</a></div>`)
+  accountSub('/app/account/orderhistory', 'Your Orders', 'view your orders, track packages and start returns', (base, req) => orderHistory(base, req) || `<div class="cw-empty"><h2>You haven’t placed any orders yet.</h2><p>Track orders and start returns here once you’ve ordered.</p><a class="cw-btn" href="${base}/deals/todays-deals-2723">Shop Today's Deals</a></div>`)
   accountSub('/app/subs', 'Manage Autoship', 'manage your Autoship orders', base => `<div class="cw-empty"><h2>You don’t have any Autoship orders yet.</h2><p>Save 35% on your first Autoship order. <a href="${base}/app/content/autoship">Learn about Autoship</a></p></div>`)
   accountSub('/app/account/pets', 'Pet Profiles', 'add and manage pet profiles', () => '<div class="cw-empty"><h2>No pet profiles yet.</h2><p>Pet profiles help personalize recommendations and pharmacy orders.</p></div>')
   accountSub('/app/account/favorites', 'Favorites', 'see your favorites', base => `<div class="cw-empty"><h2>You have no favorites yet.</h2><p><a href="${base}/b/new-arrivals-14264">Browse New Arrivals</a></p></div>`)
@@ -240,7 +254,7 @@ export function installChewyReferencePages(inner) {
   router.get('/best/:slug', (req, res, next) => {
     const pick = PICKS_MENU.find(p => p.path === `/best/${req.params.slug}`); if (!pick) return next()
     const base = baseOf(res)
-    render(req, res, pick.label, `${crumbs(base, [['Chewy Picks', '/best'], [pick.label]])}<h1 class="cw-page-title">${esc(pick.label)}</h1><p class="cw-lede">Chewy Picks highlight top-rated products across categories, based on customer ratings and expert input.</p>${notCaptured(base, pick.label.toLowerCase())}`)
+    render(req, res, pick.label, `${crumbs(base, [['Chewy Picks', '/best'], [pick.label]])}<h1 class="cw-page-title">${esc(pick.label)}</h1><p class="cw-lede">Chewy Picks highlight top-rated products across categories, based on customer ratings and expert input.</p>${(() => { const list = pickProducts(req.params.slug); return list.length ? `<div class="cw-grid">${list.slice(0, 36).map(p => productCard(base, p)).join('')}</div>` : notCaptured(base, pick.label.toLowerCase()) })()}`)
   })
   router.get('/g/:slug', (req, res, next) => {
     const p = GIVE_BACK_MENU.find(x => x.path === `/g/${req.params.slug}`); if (!p) return next()
@@ -254,7 +268,7 @@ export function installChewyReferencePages(inner) {
   router.get('/brands/:slug', (req, res, next) => {
     const b = BRANDS.find(x => x.path === `/brands/${req.params.slug}`); if (!b) return next()
     const base = baseOf(res)
-    render(req, res, b.label, `${crumbs(base, [['Popular Brands', '/brands'], [b.label]])}<section class="cw-hero-band"><div><p class="cw-eyebrow">Brand</p><h1>${esc(b.label)}</h1><p>${esc(b.text)}</p></div>${paw(130)}</section>${notCaptured(base, b.label)}`)
+    render(req, res, b.label, `${crumbs(base, [['Popular Brands', '/brands'], [b.label]])}<section class="cw-hero-band"><div><p class="cw-eyebrow">Brand</p><h1>${esc(b.label)}</h1><p>${esc(b.text)}</p></div>${paw(130)}</section>${(() => { const list = brandProducts(b.path); return list.length ? `<div class="cw-plp">${listingFilters(base, b.path, req, [], list, null)}${listingResults(base, b.path, req, list, b.label)}</div>` : notCaptured(base, b.label) })()}`)
   })
 
   // Site map (HTML) and sitemap.xml.
@@ -282,6 +296,58 @@ export function installChewyReferencePages(inner) {
   for (const [from, to] of Object.entries(legacy)) router.get(from, (req, res) => res.redirect(`${baseOf(res)}${to}`))
   router.get('/department/:slug', (req, res) => res.redirect(`${baseOf(res)}/other-animals`))
   router.get('/collections/:slug', (req, res) => res.redirect(`${baseOf(res)}/deals/todays-deals-2723`))
+
+  // ── Assortment: search, product pages, images, cart and checkout ──────
+  const search = (req, res, next) => {
+    const raw = typeof req.query.query === 'string' ? req.query.query : typeof req.query.q === 'string' ? req.query.q : ''
+    const found = searchShelf(raw)
+    // Queries with no assortment match (for example "gta 6": Chewy sells no
+    // video games) keep the shared reference router's coverage state.
+    if (!found.length) return next()
+    const base = baseOf(res), path = req.path, query = raw.trim()
+    const hidden = { [typeof req.query.query === 'string' ? 'query' : 'q']: query }
+    render(req, res, `${query} - Search Results`, `${crumbs(base, [[`Results for “${query}”`]])}<h1 class="cw-page-title">Results for “${esc(query)}”</h1><div class="cw-plp">${listingFilters(base, path, req, ['Autoship', 'Brand', 'Lifestage', 'Breed Size', 'Food Form', 'Price', 'Customer Rating', 'Deals & Savings'], found, null, hidden)}${listingResults(base, path, req, found, `Search: ${query}`, hidden)}</div>`)
+  }
+  router.get(['/s', '/search'], search)
+  router.get('/product-images/:id/:view.svg', (req, res, next) => {
+    const p = SHELF_BY_ID.get(req.params.id), view = Number(req.params.view)
+    if (!p || ![0, 1, 2].includes(view)) return next()
+    res.set('Cache-Control', 'public, max-age=86400').type('image/svg+xml').send(shelfArt(p, view))
+  })
+  router.get('/:slug/dp/:id', (req, res, next) => {
+    const p = SHELF_BY_ID.get(req.params.id); if (!p) return next()
+    const base = baseOf(res)
+    if (req.params.slug !== p.slug) return res.redirect(301, `${base}${p.path}`)
+    render(req, res, p.title, productPage(base, req, p))
+  })
+  router.post('/app/cart/add', (req, res, next) => {
+    const result = addToCart(req, req.body)
+    if (result.error === 'unknown') return next()
+    const base = baseOf(res)
+    if (result.error) return render(req, res, result.p.title, productPage(base, req, result.p, { error: result.error }), 400)
+    res.redirect(`${base}/app/cart`)
+  })
+  router.post('/app/cart/update', (req, res, next) => updateLine(req, req.body) ? res.redirect(`${baseOf(res)}/app/cart`) : next())
+  router.post('/app/cart/remove', (req, res, next) => updateLine(req, req.body, true) ? res.redirect(`${baseOf(res)}/app/cart`) : next())
+  router.get('/app/checkout', (req, res) => {
+    const base = baseOf(res)
+    if (!cartCount(req)) return res.redirect(`${base}/app/cart`)
+    if (!req.store.user) return res.redirect(`${base}/app/login?next=${encodeURIComponent('/app/checkout')}`)
+    render(req, res, 'Checkout', checkoutPage(base, req))
+  })
+  router.post('/app/checkout', (req, res) => {
+    const base = baseOf(res)
+    if (!cartCount(req)) return res.redirect(`${base}/app/cart`)
+    if (!req.store.user) return res.redirect(`${base}/app/login?next=${encodeURIComponent('/app/checkout')}`)
+    const result = placeOrder(req, req.body)
+    if (result.empty) return res.redirect(`${base}/app/cart`)
+    if (result.order_number) return res.redirect(`${base}/app/checkout/confirmation/${result.order_number}`)
+    render(req, res, 'Checkout', checkoutPage(base, req, result), 400)
+  })
+  router.get('/app/checkout/confirmation/:number', (req, res, next) => {
+    const o = (req.store.chewyOrders || []).find(x => x.order_number === req.params.number); if (!o) return next()
+    render(req, res, 'Order Confirmation', confirmationPage(baseOf(res), o))
+  })
 
   router.use(inner)
   return router
