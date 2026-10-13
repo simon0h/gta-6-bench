@@ -1,12 +1,15 @@
 // Reference-mode site pages: homepage, department and subcategory pages, customer service,
-// account, store locator, registry, recipes, gift cards, site map. Product grids only list
-// read-only captured observations (purchase unverified); no purchase controls are added.
+// account, store locator, registry, recipes, gift cards, site map. Product grids list the
+// purchasable Williams Sonoma assortment (shelf.js); the captured "gta 6" observations stay
+// read-only on the captured search, their own pages and /reference/catalog.
 import { esc } from '../../lib/html.js'
 import { authenticate, createAccount } from '../../lib/accounts.js'
 import { departments, mainDepartments, subcategories, subcategoryMatchers, footerColumns, legalLinks, customerServiceNav, recipeCourses, storeDirectory, eventsServices, editorialNav, brandBar } from './site-data.js'
 import { contentPages, csHelpTiles } from './site-content.js'
 import { capturedSearchProducts } from './search-capture.js'
 import { icon, tileArt } from './site-chrome.js'
+import { shelf } from './shelf.js'
+import { productsForPath, productsForDepartment, listing, shelfCard, usd } from './shelf-routes.js'
 
 const unique = [...new Map(capturedSearchProducts.map(p => [p.id, p])).values()]
 const a = (base, path, label, attrs = '') => `<a href="${esc(base + path)}"${attrs}>${esc(label)}</a>`
@@ -17,8 +20,6 @@ export function productCard(base, p, index = 0) {
   return `<article class="wsx-card" data-reference-product="${esc(p.id)}" data-purchase-evidence="unverified"><a class="wsx-card-art" href="${esc(base + p.path)}"><img src="${esc(p.image)}" alt="${esc(p.alt || p.title)}"${index > 3 ? ' loading="lazy"' : ''}>${p.badge ? `<span>${esc(p.badge)}</span>` : ''}</a><h3><a href="${esc(base + p.path)}">${esc(p.title)}</a></h3>${p.price_label ? `<p class="wsx-sale-label">${esc(p.price_label)}</p>` : ''}<p class="wsx-price${p.original_price_text ? ' wsx-price-sale' : ''}">${esc(p.price_text)}${p.original_price_text ? ` <s>${esc(p.original_price_text)}</s>` : ''}</p>${p.free_shipping ? '<p class="wsx-ship">Free Shipping</p>' : ''}</article>`
 }
 
-const productsFor = path => { const re = subcategoryMatchers[path]; return re ? unique.filter(p => re.test(p.title)) : [] }
-const deptProducts = dept => [...new Map(dept.groups.flatMap(g => g.links).flatMap(([, path]) => productsFor(path)).map(p => [p.id, p])).values()]
 
 function sidebar(base, dept, current) {
   return `<aside class="wsx-sidenav" aria-label="${esc(dept.label)} categories"><h2>${a(base, dept.path, dept.label)}</h2>${dept.groups.map(g => `<section><h3>${esc(g.title)}</h3><ul>${g.links.map(([label, path]) => `<li><a href="${esc(base + path)}"${path === current ? ' aria-current="page"' : ''}>${esc(label)}</a></li>`).join('')}</ul></section>`).join('')}</aside>`
@@ -26,30 +27,23 @@ function sidebar(base, dept, current) {
 
 const tile = (base, label, path, tone, sub = '') => `<a class="wsx-tile" href="${esc(base + path)}" style="--tone:${tone}">${tileArt(label)}<strong>${esc(label)}</strong>${sub ? `<span>${esc(sub)}</span>` : ''}</a>`
 
-function departmentPage(base, dept) {
+function departmentPage(base, dept, query = {}) {
   const tiles = dept.groups.slice(0, 2).flatMap(g => g.links).filter(([label]) => !/^All /.test(label)).slice(0, 8)
-  const products = deptProducts(dept).slice(0, 8)
+  const all = productsForDepartment(dept), list = listing(base, dept.path, all, query)
   return `${crumbs(base, [[dept.label, dept.path]])}<div class="wsx-plp">${sidebar(base, dept, dept.path)}<div class="wsx-plp-main"><header class="wsx-plp-head"><h1>${esc(dept.title)}</h1><p>${esc(dept.intro)}</p></header>
 <section class="wsx-section"><h2 class="wsx-sr">Shop by Category</h2><div class="wsx-tiles">${tiles.map(([label, path]) => tile(base, label, path, dept.tone)).join('')}</div></section>
 <div class="wsx-banner" style="--tone:${dept.tone}"><div><p class="wsx-eyebrow">Free Shipping</p><h2>Free Shipping on Cookware, Electrics, Cutlery &amp; More</h2>${a(base, '/shop/sale-special-offer/free-shipping/', 'Shop Now', ' class="wsx-btn"')}</div></div>
-${products.length ? `<section class="wsx-section" data-reference-state="catalog"><h2>Shop ${esc(dept.label)} Favorites</h2><p class="wsx-note">Listings captured from williams-sonoma.com on October 6, 2026. Stock and purchase options have not been verified.</p><div class="wsx-grid">${products.map((p, i) => productCard(base, p, i)).join('')}</div></section>` : ''}
+${all.length ? `<section class="wsx-section wss-dept-grid" id="products" data-reference-state="catalog"><h2>Shop All ${esc(dept.label)}</h2><p class="wsx-count">${list.count} ${list.count === 1 ? 'Result' : 'Results'}</p>${list.html}${list.count ? '' : `<div class="wsx-empty"><h2>0 Results</h2><p>No items match these filters. ${a(base, dept.path, 'Clear all filters')}</p></div>`}</section>` : ''}
 <section class="wsx-editorial-copy">${dept.editorial.map(([h, p]) => `<h2>${esc(h)}</h2><p>${esc(p)}</p>`).join('')}</section></div></div>`
 }
 
 function subcategoryPage(base, sub, query) {
   const dept = sub.dept
-  const all = productsFor(sub.path)
-  const brands = [...new Set(all.map(p => p.brand))].sort()
-  const brand = brands.includes(str(query.brand)) ? str(query.brand) : ''
-  let products = all.filter(p => !brand || p.brand === brand)
-  if (query.sort === 'price-asc') products = products.toSorted((x, y) => x.price - y.price)
-  if (query.sort === 'price-desc') products = products.toSorted((x, y) => y.price - x.price)
-  const sortOpt = (v, l) => `<option value="${v}"${(str(query.sort)) === v ? ' selected' : ''}>${l}</option>`
-  const toolbar = `<form class="wsx-toolbar" method="get" action="${esc(base + sub.path)}"><div class="wsx-filter"><label for="wsx-brand">Brand</label><select id="wsx-brand" name="brand"><option value="">All Brands</option>${brands.map(b => `<option${b === brand ? ' selected' : ''}>${esc(b)}</option>`).join('')}</select></div><div class="wsx-filter"><label for="wsx-sort">Sort By</label><select id="wsx-sort" name="sort">${sortOpt('', 'Best Match')}${sortOpt('price-asc', 'Price: Low to High')}${sortOpt('price-desc', 'Price: High to Low')}</select></div><button type="submit">Apply</button></form>`
-  const results = products.length
-    ? `<div class="wsx-grid" data-reference-state="catalog">${products.map((p, i) => productCard(base, p, i)).join('')}</div><p class="wsx-note">Listings captured from williams-sonoma.com on October 6, 2026. Stock, options and purchase eligibility have not been verified.</p>`
-    : `<div class="wsx-empty"><h2>0 Results</h2><p>There are no items to show in ${esc(sub.label)} right now. Products in this category are not part of this replica’s captured catalog.</p><p>${a(base, dept.path, `Shop all ${dept.label}`, ' class="wsx-btn"')} ${a(base, '/reference/catalog', 'Browse captured catalog', ' class="wsx-btn wsx-btn-light"')}</p></div>`
-  return `${crumbs(base, [[dept.label, dept.path], [sub.label, sub.path]])}<div class="wsx-plp">${sidebar(base, dept, sub.path)}<div class="wsx-plp-main"><header class="wsx-plp-head"><h1>${esc(sub.label)}</h1><p class="wsx-count">${products.length} ${products.length === 1 ? 'Result' : 'Results'}</p></header>${toolbar}${results}</div></div>`
+  const all = productsForPath(sub.path), list = listing(base, sub.path, all, query)
+  const results = list.count
+    ? list.html
+    : `${all.length ? list.toolbar + list.chipBar : ''}<div class="wsx-empty"><h2>0 Results</h2><p>${all.length ? 'No items match these filters.' : `There are no items to show in ${esc(sub.label)} right now.`}</p><p>${a(base, all.length ? sub.path : dept.path, all.length ? 'Clear all filters' : `Shop all ${dept.label}`, ' class="wsx-btn"')}</p></div>`
+  return `${crumbs(base, [[dept.label, dept.path], [sub.label, sub.path]])}<div class="wsx-plp">${sidebar(base, dept, sub.path)}<div class="wsx-plp-main"><header class="wsx-plp-head"><h1>${esc(sub.label)}</h1><p class="wsx-count">${list.count} ${list.count === 1 ? 'Result' : 'Results'}</p></header>${results}</div></div>`
 }
 
 function infoLayout(base, page, extra = '') {
@@ -72,16 +66,26 @@ export const sitePaths = () => [
 ]
 
 export function homepage(base) {
-  const coffee = unique.filter(p => /espresso machine|coffee maker/i.test(p.title)).slice(0, 8)
+  const coffee = productsForPath('/shop/electrics/coffee-espresso-view-all/').filter(p => /espresso machine|coffee maker|grinder/i.test(p.title)).slice(0, 8)
+  const pick = ids => ids.map(id => shelf.find(p => p.id === id)).filter(Boolean)
+  const row = (title, products, link, attrs = '') => `<section class="wsx-section wss-row"${attrs}><div class="wss-row-head"><h2 class="wsx-section-title">${esc(title)}</h2>${link ? a(base, link[1], link[0]) : ''}</div><div class="wss-carousel">${products.map((p, i) => shelfCard(base, p, i)).join('')}</div></section>`
+  const trending = pick(['le-creuset-signature-enameled-cast-iron-round-dutch-oven', 'kitchenaid-artisan-tilt-head-stand-mixer', 'breville-the-smart-oven-air-fryer-pro', 'shun-classic-chefs-knife', 'williams-sonoma-goldtouch-pro-nonstick-half-sheet-pan', 'williams-sonoma-peppermint-bark', 'thermoworks-thermapen-one-instant-read-thermometer', 'williams-sonoma-brasserie-all-white-porcelain-16-piece-dinnerware-set', 'all-clad-d3-tri-ply-stainless-steel-fry-pan', 'vitamix-5200-blender'])
+  const deals = shelf.filter(p => p.limitedDeal).toSorted((x, y) => (y.was - y.price) / y.was - (x.was - x.price) / x.was).slice(0, 10)
+  const fresh = shelf.filter(p => p.isNew).slice(0, 10)
+  const thanksgiving = productsForPath('/shop/thanksgiving/all-thanksgiving/').slice(0, 10)
   const t = (label, path, tone, sub) => tile(base, label, path, tone, sub)
   return `<h1 class="wsx-sr">Williams Sonoma: Cookware, Kitchen Electrics, Cutlery, Tabletop &amp; More</h1>
 <section class="wsx-hero" aria-label="Thanksgiving carousel, Item 1 of 6"><div class="wsx-hero-art" aria-hidden="true"><span></span><span></span><span></span></div><div class="wsx-hero-copy"><p class="wsx-eyebrow">Thanksgiving</p><h2>Thanksgiving Starts Here</h2><p>Roasters, carving sets, serveware and the turkey itself: everything for the feast.</p>${a(base, '/shop/thanksgiving/all-thanksgiving/', 'Shop Thanksgiving', ' class="wsx-btn"')}</div><p class="wsx-dots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></p></section>
 <section class="wsx-section wsx-trio" aria-label="Featured stories, Item 1 of 5">${t('Shun Tomi', '/shop/cutlery/knives-shun/', '#dcdcd6', 'Exclusive Japanese cutlery · Shop Now')}${t('Skills Series', '/pages/virtual-events-and-in-store-classes/skills-series/', '#e7dfd2', 'Hands-on classes in our stores · Learn More')}${t('The Thanksgiving Table', '/shop/thanksgiving/thanksgiving-tabletop-new/', '#eadbc8', 'Dinnerware, linens & centerpieces · Shop Now')}</section>
+${row('Trending Now', trending, ['Shop Best Sellers', '/shop/sale-special-offer/premier-view-all/?sort=best-sellers'])}
 <section class="wsx-section"><h2 class="wsx-section-title">Fall at Williams Sonoma</h2><div class="wsx-tiles wsx-tiles-5">${t('Williams Sonoma Visa', '/ccvalueprop/', '#e3e6e8', 'Earn 10% in rewards today')}${t('Staub Pumpkin', '/shop/cookware/cookware-staub/', '#efd9bf', 'Cast iron cocottes for fall')}${t('Fall Décor', '/shop/outdoor/wreaths-garlands/', '#e6dccb', 'Wreaths, garlands & florals')}${t('KitchenAid', '/shop/electrics/electrics-kitchenaid/', '#e8d9d4', 'Stand mixers & attachments')}${t('Baking Mixes', '/shop/food/dessert-mixes/', '#efe4cf', 'Breads, cakes & cookies')}</div></section>
-<section class="wsx-section wsx-coffee" data-reference-state="catalog"><div class="wsx-coffee-head"><h2 class="wsx-section-title">Coffee Makers &amp; Espresso Machines</h2><p>${a(base, '/shop/electrics/electrics-breville/', 'Breville')} · ${a(base, '/shop/electrics/electrics-smeg/', 'SMEG')} · ${a(base, '/shop/electrics/electrics-jura/', 'JURA')} · ${a(base, '/shop/electrics/coffee-espresso-view-all/', 'Shop All Coffee, Espresso & Tea')}</p></div><div class="wsx-grid">${coffee.map((p, i) => productCard(base, p, i)).join('')}</div><p class="wsx-note">Listings captured from williams-sonoma.com on October 6, 2026; stock and purchase options are not verified. ${a(base, '/reference/catalog', 'View all captured listings')}</p></section>
+<section class="wsx-section wsx-coffee" data-reference-state="catalog"><div class="wsx-coffee-head"><h2 class="wsx-section-title">Coffee Makers &amp; Espresso Machines</h2><p>${a(base, '/shop/electrics/electrics-breville/', 'Breville')} · ${a(base, '/shop/electrics/electrics-smeg/', 'SMEG')} · ${a(base, '/shop/electrics/electrics-jura/', 'JURA')} · ${a(base, '/shop/electrics/coffee-espresso-view-all/', 'Shop All Coffee, Espresso & Tea')}</p></div><div class="wss-carousel">${coffee.map((p, i) => shelfCard(base, p, i)).join('')}</div></section>
 <section class="wsx-section"><h2 class="wsx-section-title">Halloween</h2><div class="wsx-tiles">${t('Clearance', '/shop/halloween/halloween-clearance/', '#ead6c4', 'Up to 75% Off')}${t('Halloween', '/shop/halloween/all-halloween/', '#e7cfae', 'Treats, bakeware & décor')}${t('Nightmare Before Christmas', '/shop/halloween/nightmare-before-christmas/', '#d9d6d6', 'Exclusive collection')}${t('Peanuts', '/shop/halloween/peanuts/', '#efe0c4', 'The Great Pumpkin collection')}</div></section>
 <section class="wsx-section" aria-label="Online only, Item 1 of 8"><h2 class="wsx-section-title">Online Only</h2><div class="wsx-tiles">${t('Gift Sets, Crates & Baskets', '/shop/food/food-sets/', '#eee3d2')}${t('Food Subscriptions', '/shop/food/food-subscription/', '#e5e3d4')}${t('Open Box Outlet Deals', '/shop/sale-special-offer/open-box-deals/', '#e4e4e4')}${t('In Stock & Ready to Ship Furniture', '/shop/home-furniture/home-furniture-quick-ship-2/', '#e6e0d6')}</div></section>
 <section class="wsx-section" aria-label="Cookware and promotions, Item 1 of 12"><h2 class="wsx-section-title">Cookware Deals</h2><div class="wsx-tiles">${t('All-Clad - Up To 30% Off', '/shop/sale-special-offer/offers-all-clad-cookware/', '#e0e2e3')}${t('Le Creuset - Up To 40% Off', '/shop/sale-special-offer/offers-le-creuset-cookware/', '#efd8c8')}${t('Staub - Up To 45% Off', '/shop/sale-special-offer/offers-staub-cookware/', '#dcd8d2')}${t('Up to 75% Off Clearance', '/shop/sale-special-offer/view-all-sale/', '#f1e3e1')}</div></section>
+${row('Limited-Time Deals', deals, ['Shop All Deals', '/shop/sale-special-offer/premier-view-all/'])}
+${row('Thanksgiving Favorites', thanksgiving, ['Shop Thanksgiving', '/shop/thanksgiving/all-thanksgiving/'])}
+${row('New Arrivals', fresh, ['Shop What’s New', '/shop/new/'])}
 <section class="wsx-section"><h2 class="wsx-section-title">Celebrate the Season</h2><div class="wsx-tiles">${t('NFL', '/shop/holidays/nfl-shop/', '#dfe3ea', 'Game day essentials')}${t('Day of the Dead', '/shop/holidays/day-of-the-dead/', '#efd6c8', 'Día de los Muertos')}${t('Christmas', '/shop/christmas/christmas-view-all/', '#dfe6dc', 'Bakeware, décor & gifts')}${t('Hanukkah', '/shop/holidays/hanukkah/', '#dde3ee', 'Menorahs & entertaining')}</div></section>
 <section class="wsx-section"><h2 class="wsx-section-title">Our Family of Brands</h2><div class="wsx-tiles">${t('The Instagram Shop', '/pages/instagram-shop/', '#ece4dc', '@williamssonoma')}${t('Williams Sonoma Home', '/pages/williams-sonoma-home/', '#e6e0d6', 'Furniture, lighting & décor')}${t('Pottery Barn', '/pages/our-family-of-brands/pottery-barn/', '#e9e2d6', 'Home furnishings')}${t('West Elm', '/pages/our-family-of-brands/west-elm/', '#e2e2dc', 'Modern furniture')}</div></section>`
 }
@@ -99,7 +103,7 @@ export function installSite(router, { render, baseOf }) {
   const page = (path, title, body) => router.get(path, (req, res) => render(req, res, typeof title === 'function' ? title(req) : title, body(req, baseOf(res), res)))
 
   // Departments and subcategories.
-  for (const dept of departments) page(dept.path, dept.title, (req, base) => departmentPage(base, dept))
+  for (const dept of departments) page(dept.path, dept.title, (req, base) => departmentPage(base, dept, req.query))
   router.get('/shop/:dept/:sub/', (req, res, next) => {
     const sub = subcategories.get(`/shop/${req.params.dept}/${req.params.sub}/`)
     if (!sub) return next()
@@ -197,6 +201,7 @@ export function installSite(router, { render, baseOf }) {
   page('/pages/williams-sonoma/brands-a-to-z/', 'Brands A to Z', (req, base) => {
     const brands = new Map()
     for (const d of departments) for (const g of d.groups) if (g.title === 'Brands') for (const [label, path] of g.links) if (label !== 'All Brands' && !brands.has(label)) brands.set(label, path)
+    for (const p of shelf) if (!brands.has(p.brand)) brands.set(p.brand, `/search/results.html?words=${encodeURIComponent(p.brand)}`)
     for (const p of unique) if (!brands.has(p.brand)) brands.set(p.brand, `/search/results.html?words=gta%206&brand=${encodeURIComponent(p.brand)}`)
     const sorted = [...brands].sort((x, y) => x[0].localeCompare(y[0]))
     const letters = [...new Set(sorted.map(([n]) => n[0].toUpperCase()))]
@@ -226,13 +231,17 @@ export function installSite(router, { render, baseOf }) {
   })
   page('/trade-signin/login.html', 'B2B Member Sign-In', (req, base) => accountPage(base, `<section><h1>B2B Member Sign-In</h1><p>Trade, contract and professional chef members sign in here.</p>${signInForm(base)}</section><section><h2>Not a member?</h2><p>${a(base, '/pages/williams-sonoma/b2b/overview/', 'Learn about B2B Programs', ' class="wsx-btn wsx-btn-light"')}</p></section>`))
   router.get('/account/logout', (req, res) => { req.store.user = null; res.redirect(`${baseOf(res)}/`) })
+  const orderHistory = (req, base) => {
+    const orders = Array.isArray(req.store.wsOrders) ? req.store.wsOrders : []
+    return orders.length ? `<ul class="wss-history">${orders.toReversed().map(o => `<li>${a(base, `/checkout/confirmation.html?order=${encodeURIComponent(o.order_number)}`, `Order ${o.order_number}`)} · ${esc(new Date(o.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }))} · ${o.items.reduce((n, it) => n + it.qty, 0)} item(s) · ${usd(o.totals.total)}</li>`).join('')}</ul>` : '<p>You have no orders on this account.</p>'
+  }
   const requireUser = (title, inner) => (req, base) => req.store.user ? accountPage(base, inner(req, base)) : signInPage(base, {}, `Please sign in to view ${title}.`)
   const accountNav = base => `<nav class="wsx-account-nav" aria-label="My Account">${[['Account Overview', '/account/'], ['Order History', '/account/'], ['View My Rewards', '/account/keyrewards.html'], ['Recipe Box', '/account/recipe-box/'], ['Favorites', '/favorites/'], ['Registry', '/registry/'], ['Email Preferences', '/customer-service/manage-email-settings/'], ['Sign Out', '/account/logout']].map(([l, p]) => a(base, p, l)).join('')}</nav>`
-  page('/account/', 'My Account', (req, base) => req.store.user ? accountPage(base, `${accountNav(base)}<section><h1>My Account</h1><p>Welcome back, ${esc(req.store.user.first_name || req.store.user.email)}.</p><h2>Order History</h2><p>You have no orders on this account.</p><h2>The Key Rewards</h2><p>${a(base, '/account/keyrewards.html', 'View My Rewards')}</p></section>`) : signInPage(base))
+  page('/account/', 'My Account', (req, base) => req.store.user ? accountPage(base, `${accountNav(base)}<section><h1>My Account</h1><p>Welcome back, ${esc(req.store.user.first_name || req.store.user.email)}.</p><h2>Order History</h2>${orderHistory(req, base)}<h2>The Key Rewards</h2><p>${a(base, '/account/keyrewards.html', 'View My Rewards')}</p></section>`) : signInPage(base))
   page('/account/keyrewards.html', 'View My Rewards', requireUser('your rewards', (req, base) => `${accountNav(base)}<section><h1>View My Rewards</h1><p>Available rewards: $0.00</p><p>${a(base, '/pages/the-key-rewards/', 'About The Key Rewards')}</p></section>`))
   page('/account/recipe-box/', 'Recipe Box', requireUser('your recipe box', (req, base) => `${accountNav(base)}<section><h1>Recipe Box</h1><p>You haven’t saved any recipes yet.</p><p>${a(base, '/recipe/', 'Explore Recipes', ' class="wsx-btn"')}</p></section>`))
   page('/favorites/', 'Favorites', (req, base) => `${crumbs(base, [['Favorites', '/favorites/']])}<div class="wsx-info"><article><h1>Favorites</h1><p class="wsx-lead">You have no favorites yet.</p><p>Save items you love by selecting the heart on any product.</p><p>${req.store.user ? a(base, '/', 'Start Shopping', ' class="wsx-btn"') : `${a(base, '/account/login.html', 'Sign In', ' class="wsx-btn"')} ${a(base, '/', 'Start Shopping', ' class="wsx-btn wsx-btn-light"')}`}</p></article></div>`)
-  page('/cart/', 'Shopping Cart', (req, base) => `${crumbs(base, [['Cart', '/cart/']])}<div class="wsx-cart"><h1>Your cart is empty.</h1>${req.store.user ? '' : `<p>Already have an account? Sign in to pick up where you left off.</p>`}<p>${a(base, '/', 'Start Shopping', ' class="wsx-btn"')}${req.store.user ? '' : ` ${a(base, '/account/login.html', 'Sign In', ' class="wsx-btn wsx-btn-light"')}`}</p><p class="wsx-note">Captured listings in this replica are read-only; items cannot be added to the cart.</p></div>`)
+  page('/cart/', 'Shopping Cart', (req, base) => `${crumbs(base, [['Cart', '/cart/']])}<div class="wsx-cart"><h1>Your cart is empty.</h1>${req.store.user ? '' : `<p>Already have an account? Sign in to pick up where you left off.</p>`}<p>${a(base, '/', 'Start Shopping', ' class="wsx-btn"')}${req.store.user ? '' : ` ${a(base, '/account/login.html', 'Sign In', ' class="wsx-btn wsx-btn-light"')}`}</p></div>`)
 
   // Site map (HTML and XML).
   page('/sitemap.html', 'Site Map', (req, base) => sitemapPage(base))
