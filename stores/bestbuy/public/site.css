@@ -266,3 +266,6 @@ a.bbx-chip:hover{border-color:var(--bb-blue);color:var(--bb-blue);text-decoratio
 .bbx-more .bbx-cards{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:860px){.bbx-more .bbx-cards{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.bbx-more .bbx-cards{grid-template-columns:1fr}}
+.bbx-gta{padding:20px 24px}
+@media (max-width:560px){.bbx-gta{padding:14px}}
+.bbx-drawer-shop a span{color:var(--bb-muted)}
