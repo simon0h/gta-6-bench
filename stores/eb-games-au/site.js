@@ -1,8 +1,9 @@
 // Real-site chrome (header, department menu, footer), homepage sections, landing pages,
 // information pages, help centre, order tracking, gift cards and site map for EB Games Australia.
 // Content summarised from the real site on 2026-10-13 (research/parity/eb-games-au.json).
-// No products, prices or stock are invented here: product rows use only the store's own catalog.
+// Product rows use the store's own catalog: the GTA VI listings plus the shop assortment (shelf.js).
 import { esc } from '../../lib/html.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { MENU, SHOPPING_INFO, LEGAL, PAYMENTS, CATEGORY_SLUGS, GAMING_SUBCATEGORIES, LANDINGS, HUB_TILES, HELP_CATEGORIES, POPULAR_ANSWERS, INFO_PAGES, PLUS_BENEFITS } from './site-data.js'
 
 const ICONS = { 'Trading Cards':'cards', 'Clothing & Lifestyle':'shirt', Preowned:'console', 'Consoles & Hardware':'handheld', 'Video Games':'game', 'Gaming Accessories':'controller', 'Digital Currency, Content & Gift Cards':'sleeves', 'PC Gaming':'keyboard', Homewares:'mug', Collectibles:'figure', 'Board Games':'board', 'Toys & Games':'plush', 'Books & Comics':'binder', 'Movies & TV':'ssd', 'Console Trade Deals':'dock', 'EB World PLUS':'lamp', Sale:'cap' }
@@ -38,18 +39,27 @@ export function footer(b, disclaimerHTML) {
 }
 
 // ---------- Search slug mapping ----------
-const MENU_LINKS = MENU.flatMap(([dept, href, kids]) => [[dept, href, dept], ...kids.map(([l, h]) => [l, h, dept])])
+const REFERENCE_SHELF = !fixtureCatalog
+const PLAT = fixtureCatalog
+  ? { 'playstation-5': 'PlayStation 5', 'xbox-series-x': 'Xbox Series X', 'nintendo-switch': 'Nintendo Switch', 'nintendo-switch-2': 'Nintendo Switch 2', pc: 'PC' }
+  : { 'playstation-5': 'PlayStation 5', 'playstation-4': 'PlayStation 4', 'playstation-3': 'PlayStation 3', 'playstation-2': 'PlayStation 2', 'playstation-vr2': 'PlayStation 5', 'xbox-series-x': 'Xbox Series X', 'xbox-one': 'Xbox One', 'xbox-360': 'Xbox 360', 'nintendo-switch': 'Nintendo Switch', 'nintendo-switch-lite': 'Nintendo Switch', 'nintendo-switch-2': 'Nintendo Switch 2', 'nintendo-3ds': 'Nintendo 3DS', pc: 'PC' }
+const MENU_LINKS =MENU.flatMap(([dept, href, kids]) => [[dept, href, dept], ...kids.map(([l, h]) => [l, h, dept])])
 export function mapSearch(url, query) {
   const exact = MENU_LINKS.find(([, h]) => h === url)
   const out = {}, s = v => typeof v === 'string' ? v : ''
   const category = s(query.category), sub = s(query.subcategory), condition = s(query.condition), promo = s(query.promotions)
   let title = '', dept = exact?.[2] || ''
   if (category === 'gaming') Object.assign(out, { category: '' }, sub === 'gaming-accessories' ? { category: 'Gaming Accessories' } : GAMING_SUBCATEGORIES[sub] || (sub ? { type: `subcategory:${sub}` } : {}))
-  else if (CATEGORY_SLUGS[category]) { out.category = CATEGORY_SLUGS[category]; if (sub || query.attributes) out.type = `subcategory:${sub || 'attributes'}` }
+  else if (CATEGORY_SLUGS[category]) { out.category = CATEGORY_SLUGS[category]; if (sub) out.type = `subcategory:${sub}`; else if (query.attributes && !REFERENCE_SHELF) out.type = 'subcategory:attributes' }
   else if (MENU_LINKS.some(([, h]) => h.includes(`category=${category}&`) || h.endsWith(`category=${category}`))) out.category = `none:${category}` // real departments this store has no products for
   const attrs = [].concat(query.attributes || []).filter(x => typeof x === 'string')
-  if (category === 'gaming' && attrs.length) {
-    const PLAT = { 'playstation-5': 'PlayStation 5', 'xbox-series-x': 'Xbox Series X', 'nintendo-switch': 'Nintendo Switch', 'nintendo-switch-2': 'Nintendo Switch 2', pc: 'PC' }
+  const platforms = attrs.filter(x => x.startsWith('platform:')), others = attrs.filter(x => !x.startsWith('platform:'))
+  if (REFERENCE_SHELF) {
+    // Real attribute filters: platforms (any of), plus other attributes such as board-game-type or format (any of).
+    const labels = [...new Set(platforms.map(x => PLAT[x.slice(9)]).filter(Boolean))]
+    if (platforms.length) out.platform = labels.length ? labels.join('|') : `attributes:${platforms.length}`
+    if (others.length) out.attrs = others.join('|')
+  } else if (category === 'gaming' && attrs.length) {
     out.platform = attrs.length === 1 && PLAT[attrs[0].replace(/^platform:/, '')] && attrs[0].startsWith('platform:') ? PLAT[attrs[0].slice(9)] : `attributes:${attrs.length}`
   }
   if (condition === 'preowned') out.condition = 'Preowned'
@@ -71,8 +81,21 @@ export function hubIntro(b, path) {
   const hub = HUB_TILES[path]; if (!hub) return ''
   return `<div class="eb-dept-banner"><span>EB GAMES</span><strong>${esc(hub.banner)}</strong></div>${tileRow(b, hub.tiles)}${(hub.anchors || []).map(([id, l]) => `<h2 class="eb-row-title" id="${id}">${esc(l)}</h2>`).join('')}`
 }
-export function hubRows(b, path) {
+// Reference mode fills the real hub rows from the store's assortment (rows with no matching products are left out).
+const TCG = { category: 'Trading Cards' }, PRE = { condition: 'Preowned' }
+const ROW_QUERIES = {
+  'New Release Trading Cards': { ...TCG, sort: 'release' }, 'Shop the Latest Pokemon TCG!': { ...TCG, q: 'pokemon' }, 'Shop Magic: the Gathering!': { ...TCG, q: 'magic' },
+  'Yu-Gi-Oh TCG!': { ...TCG, q: 'yugioh' }, 'League of Legends TCG!': { ...TCG, q: 'riftbound' }, 'Disney Lorcana!': { ...TCG, q: 'lorcana' },
+  'Pop Culture Favourites!': { ...TCG, type: 'subcategory:trading-cards-pop-culture' }, 'Sports Trading Cards!': { ...TCG, q: 'sports' },
+  'Shop Preowned Consoles!': { ...PRE, category: 'Consoles' }, 'Shop Premium Preowned Consoles': { ...PRE, category: 'Consoles', sort: 'price-desc' },
+  'Best Selling Preowned Titles!': { ...PRE, category: 'Video Games' }, 'Shop Preowned PlayStation Consoles': { ...PRE, category: 'Consoles', platform: 'PlayStation 5|PlayStation 4' },
+  'Best Selling PlayStation Games': { ...PRE, category: 'Video Games', platform: 'PlayStation 5|PlayStation 4|PlayStation 3|PlayStation 2' },
+  'Shop Preowned Nintendo Consoles': { ...PRE, category: 'Consoles', q: 'nintendo' }, 'Best Selling Switch Games': { ...PRE, category: 'Video Games', platform: 'Nintendo Switch|Nintendo 3DS' },
+  'Preowned Xbox Consoles': { ...PRE, category: 'Consoles', platform: 'Xbox One|Xbox Series X' }, 'Best Selling Preowned Xbox Games': { ...PRE, category: 'Video Games', platform: 'Xbox One|Xbox 360' },
+}
+export function hubRows(b, path, shelf = null) {
   const hub = HUB_TILES[path]; if (!hub?.rows) return ''
+  if (shelf) return `<section class="eb-hub-rows">${hub.rows.map(r => { const q = ROW_QUERIES[r], list = q ? shelf.matching(q).slice(0, 12) : []; return list.length ? `<div class="eb-hub-row"><div class="section-heading"><h2>${esc(r)}</h2><a class="eb-shop-all" href="${b}/search?${esc(new URLSearchParams(q).toString())}">SHOP ALL</a></div>${shelf.carousel(b, list)}</div>` : '' }).join('')}</section>`
   return `<section class="eb-hub-rows">${hub.rows.map(r => `<div class="eb-hub-row"><h2>${esc(r)}</h2><p>Products in this row come from the live EB Games range and are not listed in this store. <a href="${b}/search?q=${encodeURIComponent(r.replace(/[!.]/g, ''))}">Search this range</a></p></div>`).join('')}</section>`
 }
 

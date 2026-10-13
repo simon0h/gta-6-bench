@@ -10,7 +10,8 @@ import { esc, money, disclaimer } from '../../lib/html.js'
 import { validateCard } from '../../lib/payment.js'
 import { getOrder, recordOrder } from '../../lib/orders.js'
 
-import { browseProducts, departments, brands, hubs, matching, browseTiles, browseProduct, catalogPage, resolveProduct, productArt } from './browse.js'
+import { shelfArtSvg } from './shelf-art.js'
+import { browseProducts, shopProducts, departments, brands, hubs, matching, browseTiles, browseProduct, catalogPage, resolveProduct, productArt } from './browse.js'
 import { canonicalProducts as PRODUCTS } from './canonical-products.js'
 import { header as siteHeader, footer as siteFooter, installSite, homePage, mapSearch, hubIntro, hubRows, tileRow } from './site.js'
 import { ownedOrders } from '../../lib/retail-state.js'
@@ -45,7 +46,7 @@ const STORES = fixtureCatalog ? [
   { id: 'melbourne', name: 'EB Games Melbourne', location: 'Melbourne VIC 3000' },
   { id: 'brisbane', name: 'EB Games Brisbane', location: 'Brisbane QLD 4000' },
 ] : []
-const bySku = id => PRODUCTS.find(p => p.sku === id) || browseProducts.find(p => p.sku === id)
+const bySku = id => PRODUCTS.find(p => p.sku === id) || shopProducts.find(p => p.sku === id)
 const canonical = p => PRODUCTS.includes(p)
 const preorderItems = store => store.cart.some(i => canonical(bySku(i.sku)))
 const lineDetails = i => canonical(bySku(i.sku)) ? `${bySku(i.sku).label} · Standard Edition · Code in Box` : `${bySku(i.sku)?.condition || ''}${Object.values(i.options || {}).length ? ' · '+Object.values(i.options).join(' / ') : ''}`
@@ -102,13 +103,21 @@ function tiles(base, list = PRODUCTS) {
   return `<div class="products">${list.map(p => `<article><a href="${base}${p.path}">${productImage('eb-games-au',{...p,title:`Grand Theft Auto VI — ${p.label}`})}<h2>Grand Theft Auto VI - ${p.label}</h2></a><p class="badge">Pre-Order</p><p>Standard Edition · Code in Box</p><strong>${price(129.95)}</strong><p>A$10 deposit</p></article>`).join('')}</div>`
 }
 
-const searchProducts = () => [...PRODUCTS.map(p=>({...p,title:`Grand Theft Auto VI - ${p.label}`,price:129.95,category:'Video Games',brand:'Rockstar Games',condition:'New',platform:p.label,keywords:`gta 6 gta6 gtavi grand theft auto vi preorder ${p.platform}`,...(fixtureCatalog ? {rating:0,reviews:0,stock:10} : {purchaseLimit:10}),release:GAME.release_date,preorder:true,art:`/static/art/${p.platform}-standard.svg`})),...browseProducts]
+const searchProducts = () => [...PRODUCTS.map(p=>({...p,title:`Grand Theft Auto VI - ${p.label}`,price:129.95,category:'Video Games',brand:'Rockstar Games',condition:'New',platform:p.label,keywords:`gta 6 gta6 gtavi grand theft auto vi preorder ${p.platform}`,...(fixtureCatalog ? {rating:0,reviews:0,stock:10} : {purchaseLimit:10}),release:GAME.release_date,preorder:true,art:`/static/art/${p.platform}-standard.svg`})),...shopProducts]
+// Homepage carousels in the real site's order: New Releases, then Preorder Now, where the two
+// Grand Theft Auto VI listings sit among the other preorders as they do on ebgames.com.au.
+const carousel = (b, list) => `<div class="eb-carousel" tabindex="0" aria-label="Scrollable product row">${browseTiles(b, list)}</div>`
+function homeRows(b) {
+ const newReleases = shopProducts.filter(p => p.newRelease).sort((x, y) => y.release.localeCompare(x.release)).slice(0, 16)
+ const preorders = shopProducts.filter(p => p.preorder), gta = searchProducts().filter(p => canonical(PRODUCTS.find(x => x.sku === p.sku)))
+ return { newReleases: carousel(b, newReleases), preorderTiles: carousel(b, [...preorders.slice(0, 2), ...gta, ...preorders.slice(2, 14)]) }
+}
 installSite(router,{render,catalogPage,searchProducts,fixtureCatalog,retailOrders:req=>ownedOrders(req,SLUG).filter(o=>ownOrder(req,o.id))})
 installJourneys(router,{render,login,field,select,errorsHTML,bySku,canonical,stockErrors,STORES,STATES})
 router.get('/', (req,res) => {
  const b=res.locals.base
- const newReleases=fixtureCatalog?browseTiles(b,browseProducts.filter(p=>p.category==='Video Games').slice(0,4)):''
- render(req,res,'EB Games Australia | Video Games, Consoles, Trading Cards & Pop Culture',homePage(b,{preorderTiles:tiles(b),newReleases}))
+ const rows=fixtureCatalog?{preorderTiles:tiles(b),newReleases:browseTiles(b,browseProducts.filter(p=>p.category==='Video Games').slice(0,4))}:homeRows(b)
+ render(req,res,'EB Games Australia | Video Games, Consoles, Trading Cards & Pop Culture',homePage(b,rows))
 })
 router.get(['/grand-theft-auto','/featured/preorder-now'],(req,res)=>render(req,res,'Preorder Grand Theft Auto VI',`<h1>Preorder now</h1><p>Grand Theft Auto VI · 19 November 2026 · A$10 deposit</p>${tiles(res.locals.base)}`))
 router.get('/search/suggestions',(req,res)=>res.json(matching({q:str(req.query.q)},searchProducts()).slice(0,6).map(p=>({title:p.title,url:p.path||`/catalog/${p.sku}`}))))
@@ -121,15 +130,16 @@ router.get('/search',(req,res)=>{
  const page=catalogPage(res.locals.base,title,q,searchProducts()),stock=`<p class="breadcrumb"><a href="${res.locals.base}">Home</a> › Shop</p>`
  render(req,res,q.q?'Search products':title,crumbs+(promos||(m.kids?.length?tileRow(res.locals.base,m.kids):''))+(crumbs?page.replace(stock,''):page))
 })
-for(const [path,title,intro,filters] of hubs) router.get(path,(req,res)=>render(req,res,title,hubIntro(res.locals.base,path)+catalogPage(res.locals.base,title,{...req.query,...filters},searchProducts(),intro)+hubRows(res.locals.base,path)))
+for(const [path,title,intro,filters] of hubs) router.get(path,(req,res)=>render(req,res,title,hubIntro(res.locals.base,path)+catalogPage(res.locals.base,title,{...req.query,...filters},searchProducts(),intro)+hubRows(res.locals.base,path,fixtureCatalog?null:{matching:q=>matching(q,shopProducts),carousel})))
 router.get('/brands',(req,res)=>render(req,res,'Shop by brand',`<h1>Shop by brand</h1><div class="category-tiles">${brands.map(brand=>`<a href="${res.locals.base}/brands/${encodeURIComponent(brand)}">${esc(brand)}</a>`).join('')}</div>`))
 router.get('/brands/:brand',(req,res)=>brands.includes(req.params.brand)?render(req,res,req.params.brand,catalogPage(res.locals.base,req.params.brand,{...req.query,brand:req.params.brand},searchProducts())):render(req,res,'Brand not found','<h1>Brand not found</h1>',404))
 function ordinaryProduct(req,res,p,errors=[],values={}) {
  render(req,res,p.title,browseProduct(res.locals.base,p,'AUD',values.variant_id??str(req.query.variant),{...values,added:req.query.added,journey:productJourney(req,res.locals.base,p,values.variant_id??str(req.query.variant),STORES)},errors),errors.length?400:200)
 }
 router.get('/catalog/:sku',(req,res)=>{
- const p=browseProducts.find(p=>p.sku===req.params.sku)
+ const p=shopProducts.find(p=>p.sku===req.params.sku)
  if(!p) return render(req,res,'Product not found','<h1>Product not found</h1>',404)
+ if(p.path) return res.redirect(301,`${res.locals.base}${p.path}${req.url.includes('?')?req.url.slice(req.url.indexOf('?')):''}`)
  if(req.query.variant&&!resolveProduct(p,str(req.query.variant))) return ordinaryProduct(req,res,p,['Choose an available product option.'])
  rememberSelection(req,p,str(req.query.variant));ordinaryProduct(req,res,p)
 })
@@ -140,6 +150,19 @@ function product(req, res, p, errors = [], values = {}) {
   render(req, res, `Grand Theft Auto VI - ${p.label}`, `${errorsHTML(errors)}${req.query.added ? `<div class="notice">Added to your cart. <a href="${b}/cart">View Cart</a> · <a href="${b}/checkout">Checkout Now</a></div>` : ''}<p class="breadcrumb"><a href="${b}">Home</a> › <a href="${b}/search?category=gaming&amp;subcategory=gaming-video-game">Video Games</a> › <a href="${b}/search?category=gaming&amp;subcategory=gaming-video-game&amp;attributes=platform%3A${p.platform==='ps5'?'playstation-5':'xbox-series-x'}">${esc(p.label)}</a></p><div class="product">${productGallery('eb-games-au',{...p,title:`Grand Theft Auto VI — ${p.label}`})}<section><p class="badge">Pre-Order</p><h1>Grand Theft Auto VI</h1><h2>${p.label}</h2><p>Standard Edition · Code in Box — no disc included</p><p>Requires an Australian ${p.platform === 'ps5' ? 'PlayStation' : 'Xbox'} account.</p><p class="price">${price(129.95)}</p><p><strong>A$10 deposit per copy</strong></p><p>Release date: 19 November 2026</p><form action="${b}/cart/add" method="post"><input type="hidden" name="sku" value="${p.sku}">${field('qty', 'Quantity (1–10)', { qty: values.qty ?? '1' }, 'number')}<button>Preorder now</button></form><div class="eb-preorder-availability"><section><h3>Click &amp; Collect</h3><strong>${!fixtureCatalog ? 'Availability not verified' : pickupStore ? esc(pickupStore.name) : 'No store set'}</strong>${!fixtureCatalog || pickupStore ? '' : '<p>Find your local store to view product availability.</p>'}<a href="${b}/stores?sku=${p.sku}">Set your store</a></section><section><h3>Home Delivery</h3><strong>Available</strong><p>For exact delivery costs and times, proceed to checkout and enter your specific address.</p></section></div><p>${PRODUCTS.filter(x => x !== p).map(x => `<a href="${b}${x.path}">View ${x.label} version</a>`).join('')}</p></section></div><div class="eb-pdp-sections"><section class="panel"><h2>Description</h2><p>${esc(GAME.description)}</p><p>Delivery starts November 12, allowing the game to be downloaded and installed in advance. Grand Theft Auto VI is releasing and becomes playable on November 19.</p><p>Pay a deposit now. For delivery, the balance is charged to the same payment method 1–7 days before release. For Click &amp; Collect, pay the balance in store.</p></section><section class="panel"><h2>Details</h2><dl class="eb-details"><dt>Platform</dt><dd>${esc(p.label)}</dd><dt>Franchise</dt><dd>Grand Theft Auto</dd><dt>Developer</dt><dd>Rockstar Games</dd><dt>Category</dt><dd>Video Games</dd><dt>SKU</dt><dd>${esc(p.sku)}</dd><dt>Rating</dt><dd>R18+</dd></dl></section></div>${productJourney(req,b,p,'',STORES)}<section class="panel"><h2>EB World</h2><p>Keep your favourites together in EB World. <a href="${b}/plus">Explore EB World PLUS</a>.</p><a href="${b}/account">Sign in to EB World</a></section>${fixtureCatalog ? '<section class="panel"><h2>The Goodtime State — Vice City Collection</h2><p>A$699.95 · Collectibles only, game not included. <strong>Sold out</strong></p></section>' : ''}`, errors.length ? 400 : 200)
 }
 for (const p of PRODUCTS) router.get(p.path, (req, res) => { rememberSelection(req,p);product(req, res, p) })
+// Assortment product pages at the real site's /product/{category}/{id}-{name} addresses.
+const shelfByPath = new Map(shopProducts.filter(p => p.path).map(p => [p.path, p]))
+router.get('/product/:section/:slug', (req, res, next) => {
+ const p = shelfByPath.get(`/product/${req.params.section}/${req.params.slug}`)
+ if (!p) return next()
+ if (req.query.variant && !resolveProduct(p, str(req.query.variant))) return ordinaryProduct(req, res, p, ['Choose an available product option.'])
+ rememberSelection(req, p, str(req.query.variant)); ordinaryProduct(req, res, p)
+})
+router.get('/shelf-art/:sku/:view.svg', (req, res) => {
+ const p = shopProducts.find(x => x.shelf && x.sku === req.params.sku), view = Number(req.params.view)
+ if (!p || !/^[0-3]$/.test(req.params.view) || view >= (p.catalogType === 'console' ? 4 : 3)) return res.status(404).type('text').send('Product image not found')
+ res.set('Cache-Control', 'public, max-age=3600').set('X-Content-Type-Options', 'nosniff').type('image/svg+xml').send(shelfArtSvg(p, view))
+})
 
 router.post('/cart/add', (req,res)=>{
  const p=bySku(str(req.body.sku)),qty=quantity(req.body.qty??'1'),variantId=str(req.body.variant_id)

@@ -29,7 +29,7 @@ export const LEGAL = [['Privacy Policy','/privacy'],['Terms & Conditions','/term
 export const PAYMENTS = ['Visa','Mastercard','Amex','Apple Pay','PayPal','Afterpay','Zip','Gift Card']
 
 // Local department mapping for the real site's search slugs. Filters use only the store's own catalog.
-export const CATEGORY_SLUGS = { 'trading-cards':'Trading Cards', collectibles:'Collectibles', 'toys-hobbies':'Toys & Games', homewares:'Homewares', clothing:'Clothing', apparel:'Clothing' }
+export const CATEGORY_SLUGS = { 'trading-cards':'Trading Cards', collectibles:'Collectibles', 'toys-hobbies':'Toys & Games', homewares:'Homewares', clothing:'Clothing', apparel:'Clothing', 'books-movies':'Books & Comics', 'movies-tv':'Movies & TV', electronics:'Gaming Accessories' }
 export const GAMING_SUBCATEGORIES = { 'gaming-console':{category:'Consoles'}, 'gaming-video-game':{category:'Video Games'}, 'gaming-controller':{type:'controller'}, 'gaming-keyboards':{type:'keyboard'}, 'gaming-mice':{type:'mouse'}, 'gaming-storage':{type:'ssd'}, 'gaming-simulation':{type:'wheel'}, 'gaming-cases':{type:'case'}, 'gaming-chargers-batteries':{category:'Gaming Accessories',q:'charge'} }
 
 // Landing pages that mirror real paths: [path, title, intro, filters, tiles?, sections?]
