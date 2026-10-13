@@ -9,9 +9,10 @@ import { recordOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { retailState, defaultAddress, saveAddress } from '../../lib/retail-state.js'
 import { installJourneys, safeReturn, customerOrder, rememberSelection, savedItems, savedAddressPicker, checkoutAddressValues } from './journeys.js'
-import { PRODUCTS, byId, bySlug, games, search, totals, productPath, findStores, storeById, postcodeState, stateName, STATES, SHIPPING_METHODS, COURIER_METHOD, COLLECTION_METHOD, findCollectionPoints, collectionPointById } from './data.js'
+import { PRODUCTS, LISTED, byId, bySlug, games, search, totals, productPath, findStores, storeById, postcodeState, stateName, STATES, SHIPPING_METHODS, COURIER_METHOD, COLLECTION_METHOD, findCollectionPoints, collectionPointById } from './data.js'
 import * as P from './pages.js'
 import { installSite, departmentStrip } from './site.js'
+import { installShelfArt } from './shelf-art.js'
 
 const NAME = 'JB Hi-Fi'
 const MAX_QTY = 5 // the cart quantity dropdown offers 1–5 (JB limits copies per order)
@@ -53,7 +54,8 @@ installJourneys(router, {render,notFound,cartIssue,changedCart})
 const orderNumber = () => String(randomInt(10_000_000, 100_000_000))
 
 // ---- browse ----
-// ASSUMPTION: the home page was not part of the research; it is a plain entry point with the header search.
+// ASSUMPTION: the home page was not part of the research. It is laid out like jbhifi.com.au's homepage:
+// rotating banners, category tiles and product carousels across departments (see site.js siteHome).
 router.get('/information', (req,res) => render(req,res,{ title: 'Shopping information', body: P.supportInformationPage(res.locals.base, typeof req.query.topic === 'string' ? req.query.topic : 'Shopping information') }))
 router.get('/', (req, res) => render(req, res, { title: 'JB Hi-Fi | Always Cheap Prices', body: P.homePage({ base: res.locals.base, products: PRODUCTS }) }))
 
@@ -66,10 +68,11 @@ function listing(req,res,{heading='',intro='',scope={},extra=''}={}) {
   render(req,res,{title:heading?`${heading} | JB Hi-Fi`:`Search results: '${q}' | JB Hi-Fi`,body:P.searchPage({base:res.locals.base,q,products:search(q,filters),self,filters,route,heading,intro,scope,extra})})
 }
 installSite(router,{render,notFound,tile:P.tile,trackOrderPage:P.trackOrderPage,findStores})
+installShelfArt(router,byId)
 router.get('/search',(req,res)=>listing(req,res))
 router.get('/brands',(req,res)=>render(req,res,{title:'Shop by brand | JB Hi-Fi',body:brandsHub(res.locals.base)}))
 router.get('/brands/:brand',(req,res)=>{
- const brand=PRODUCTS.find(p=>slugify(p.brand)===req.params.brand)?.brand
+ const brand=LISTED.find(p=>slugify(p.brand)===req.params.brand)?.brand
  if(!brand)return notFound(req,res)
  listing(req,res,{heading:brand,intro:`Explore ${brand} at JB.`,scope:{brand}})
 })
@@ -79,7 +82,7 @@ router.get(['/collections/:collection','/collections/:collection/:type'],(req,re
  if(!department&&!campaign)return notFound(req,res)
  const scope=department?{category:department.title}:{campaign:campaign.slug}
  if(req.params.type){
-  const type=PRODUCTS.find(p=>p.crumbs[0]===department?.title&&slugify(p.type)===req.params.type)?.type
+  const type=LISTED.find(p=>p.crumbs[0]===department?.title&&slugify(p.type)===req.params.type)?.type
   if(!type)return notFound(req,res)
   scope.type=type
  }

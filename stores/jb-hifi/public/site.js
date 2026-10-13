@@ -102,3 +102,15 @@ document.querySelectorAll('.jb-reference-recommendations').forEach(section => {
   new ResizeObserver(sync).observe(rail);
   sync();
 });
+// Homepage banner carousel: dots scroll the track (no page jump) and the banners advance every 7 seconds.
+document.querySelectorAll('.jb-hero-carousel').forEach(carousel => {
+  const track = carousel.querySelector('.jb-hero-track'), slides = [...track.children], dots = [...carousel.querySelectorAll('.jb-hero-dots a')];
+  let paused = false;
+  const current = () => Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+  const show = i => track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft, behavior: 'smooth' });
+  dots.forEach((dot, i) => dot.addEventListener('click', event => { event.preventDefault(); paused = true; show(i); }));
+  track.addEventListener('scroll', () => dots.forEach((dot, j) => dot.setAttribute('aria-current', String(current() === j))), { passive: true });
+  carousel.addEventListener('mouseenter', () => { paused = true; });
+  carousel.addEventListener('focusin', () => { paused = true; });
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => { if (!paused && !document.hidden) show((current() + 1) % slides.length); }, 7000);
+});

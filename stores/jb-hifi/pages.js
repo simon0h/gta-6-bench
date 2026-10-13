@@ -5,7 +5,9 @@ import { orderStatus } from '../../lib/retail-state.js'
 import { DEPARTMENT_DEFS, slugify, selectedProduct, lineKey, stockLimit } from './catalog.js'
 import { catalogHome, catalogListing, collectionFor } from './browsing.js'
 import { siteHeader, siteFooter, siteHome } from './site.js'
-import { PRODUCTS } from './data.js'
+import { LISTED } from './data.js'
+import { shelfImage, shelfGallery } from './shelf-art.js'
+import { DEPARTMENTS as SITE_DEPARTMENTS } from './site-data.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
 import { byId, productPath, STATES, SHIPPING_METHODS, COURIER_METHOD, PREORDER_BONUS } from './data.js'
 
@@ -91,9 +93,21 @@ function addedModal(base, p, closeHref) {
 function badges(p) { return p.badges.length ? `<div class="jb-badges">${p.badges.map(b => `<span class="jb-badge-tag is-${b.toLowerCase().replace(/[^a-z]+/g, '-')}">${esc(b)}</span>`).join('')}</div>` : '' }
 function stars(p) { return p.stars ? `<div class="jb-stars" aria-label="Rated ${p.stars} out of 5 from ${p.reviews} reviews">&#9733;&#9733;&#9733;&#9733;&#9733; <span>${p.stars} (${p.reviews})</span></div>` : '' }
 function priceTag(p, big = false) { return `<div class="jb-tag ${big ? 'jb-tag-big' : ''}"><span>${tagPrice(p.price)}</span></div>` }
-export function artwork(p,className='') { return productImage('jb-hifi',p,{className}) }
+export function artwork(p,className='') { return p.shelf ? shelfImage(p,{className}) : productImage('jb-hifi',p,{className}) }
 const optionText = p => p.variantId ? `<div class="jb-fine">${esc(p.variantLabel)}</div>` : ''
-function related(p) { return PRODUCTS.filter(u=>u.id!==p.id&&u.crumbs[0]===p.crumbs[0]).slice(0,6) }
+function related(p) {
+ if(fixtureCatalog) return LISTED.filter(u=>u.id!==p.id&&u.crumbs[0]===p.crumbs[0]).slice(0,6)
+ const pool=LISTED.filter(u=>u.id!==p.id&&u.crumbs[0]===p.crumbs[0]&&u.orderable!==false)
+ return [...pool.filter(u=>u.type===p.type),...pool.filter(u=>u.type!==p.type)].slice(0,6)
+}
+// Department and category links for a product's breadcrumb (all departments in the Products menu).
+function crumbHref(base,p,i) {
+ const dept=collectionFor(p.crumbs[0])
+ if(dept)return `${base}/collections/${dept.slug}${i?'/'+slugify(p.type):''}`
+ const site=SITE_DEPARTMENTS.find(d=>d.title===p.crumbs[0])
+ return `${base}/collections/${site?.slug||'all'}`
+}
+const wasPrice=p=>p.ticket&&p.ticket>p.price?`<div class="jb-was"><span class="jb-save">SAVE ${tagPrice(p.ticket-p.price)}</span> <s>${tagPrice(p.ticket)}</s></div>`:''
 function ctaForm(base, p, returnTo, block = true) {
   if (p.variants && !p.variantId) return `<a class="jb-btn ${block?'jb-btn-block':''}" href="${productPath(base,p)}">Choose options</a>`
   if (!p.orderable || p.stock === 0) return `<span class="jb-btn jb-btn-grey ${block ? 'jb-btn-block' : ''}" aria-disabled="true">${esc(p.cta)}</span>`
@@ -109,7 +123,7 @@ export function tile(base, p, returnTo) {
   <h3><a href="${detail}">${esc(p.title)}</a></h3>
   <div class="jb-subtitle">${esc(p.subtitle)}</div>${optionText(p)}
   ${stars(p)}
-  ${priceTag(p)}
+  ${priceTag(p)}${wasPrice(p)}
   ${p.deliveryFrom ? `<div class="jb-delivery-from">+ DELIVERY FROM ${tagPrice(p.deliveryFrom)}</div>` : ''}
   ${ctaForm(base, p, returnTo)}
 </article>`
@@ -139,12 +153,14 @@ export function productPage({ base, p, siblings, availability, stores = [], perk
 </aside>` : ''
   const referenceDlc = reference ? `<section class="jb-dlc jb-reference-dlc"><h2 class="jb-display">${esc(PREORDER_BONUS.heading)}</h2><img src="/static/reference/jb-hifi/preorder-dlc.jpg" alt="Pre-Order DLC!"><div><h3>${esc(PREORDER_BONUS.title)}</h3><p>${esc(PREORDER_BONUS.text)}</p><p class="jb-fine">${esc(PREORDER_BONUS.ends)}</p></div></section>` : ''
   const variants = siblings.map(s => `<a class="jb-variant ${s.id === p.id ? 'is-selected' : ''}" href="${productPath(base, s)}" aria-current="${s.id === p.id ? 'true' : 'false'}"><b>${esc(s.variantLabel)}</b><span>${tagPrice(s.price)}</span></a>`).join('')
-  const crumbs = [`<a href="${base}/">Home</a>`, ...p.crumbs.map((c,i) => `<a href="${base}/collections/${collectionFor(p.crumbs[0])?.slug||'gaming'}${i?'/'+slugify(p.type):''}">${esc(c)}</a>`), esc(p.title)].join(' &rsaquo; ')
+  const crumbs = [`<a href="${base}/">Home</a>`, ...p.crumbs.map((c,i) => `<a href="${crumbHref(base,p,i)}">${esc(c)}</a>`), esc(p.title)].join(' &rsaquo; ')
+  // Assortment games list the same title on its other consoles, like JB's "Primary Format - Games" buttons.
+  const formats = p.shelf && p.platformName && / games$/.test(p.type) ? LISTED.filter(u=>u.shelf&&u.title===p.title&&/ games$/.test(u.type)) : []
   return `<nav class="jb-crumbs" aria-label="Breadcrumb">${crumbs}</nav>
 <div class="jb-pdp${reference ? ' jb-reference-pdp' : ''}">
   <div class="jb-gallery">
     <div class="jb-gallery-top">${isGame ? '<span class="jb-badge-tag is-pre-order-dlc">PRE-ORDER DLC</span>' : ''}<a href="${base}/search?query=${encodeURIComponent(p.title)}" class="jb-fine">Similar items &rsaquo;</a></div>
-    ${productGallery('jb-hifi',p)}
+    ${p.shelf ? shelfGallery(p) : productGallery('jb-hifi',p)}
     ${p.variants?`<div class="jb-gallery-options" aria-label="Product image options">${p.variants.map(v=>`<a href="${productPath(base,p)}?variant=${v.id}" ${v.id===p.variantId?'aria-current="true"':''}>${artwork(selectedProduct(p,v.id))}<span>${esc(v.label)}</span></a>`).join('')}</div>`:''}
     ${referenceDlc}
   </div>
@@ -153,10 +169,11 @@ export function productPage({ base, p, siblings, availability, stores = [], perk
     ${isGame ? `<div class="jb-platform-logo">${reference ? `<img src="/static/reference/jb-hifi/${p.platform === 'ps5' ? 'ps5' : 'xbox'}-mark.png" alt="${esc(p.platformName)}">` : esc(p.platformName)}</div>` : ''}
     ${reference ? '' : `<a class="jb-brand-label" href="${base}/brands/${slugify(p.brand)}">${esc(p.brand)}</a>`}<h1>${esc(p.title)}</h1>${optionText(p)}${stars(p)}
     <div class="jb-ids">MODEL: ${esc(p.model ?? p.id)} &nbsp; SKU: ${esc(p.id)}${reference ? '' : ` &nbsp; PLU: ${esc(p.model ?? p.id)}`}</div>
-    ${reference ? `<div class="jb-tag jb-tag-big"><span><i class="jb-reference-currency">$</i><b class="jb-reference-amount">${esc(tagPrice(p.price).slice(1))}</b></span></div>` : priceTag(p, true)}
+    ${reference ? `<div class="jb-tag jb-tag-big"><span><i class="jb-reference-currency">$</i><b class="jb-reference-amount">${esc(tagPrice(p.price).slice(1))}</b></span></div>` : priceTag(p, true)+wasPrice(p)}
     <div class="jb-bnpl"><a href="${informationHref(base, 'afterpay')}" class="jb-bnpl-afterpay">${reference ? '<img src="/static/reference/jb-hifi/bnpl-afterpay.svg" alt="afterpay">' : 'afterpay'}</a><a href="${informationHref(base, 'zip')}" class="jb-bnpl-zip">${reference ? '<img src="/static/reference/jb-hifi/bnpl-zip.svg" alt="zip">' : 'zip'}</a><a href="${informationHref(base, 'PayPal')}" class="jb-bnpl-paypal">${reference ? '<img src="/static/reference/jb-hifi/bnpl-paypal.svg" alt="PayPal">' : 'PayPal'}</a></div>
     <div class="jb-coupon-row">${reference ? '<img class="jb-coupon-smile" src="/static/reference/jb-hifi/coupon-smile.svg" alt="">' : '&#127991;'} <div><a href="${base}/account/login?return_to=${encodeURIComponent(self)}">Log in</a> to see if you have coupons.</div></div>
     ${isGame ? `<div class="jb-variants"><div class="jb-label">Primary Format - Games</div><div class="jb-variant-row">${reference ? '' : `<a class="jb-variant" href="${base}/products/grand-theft-auto-vi-the-goodtime-state-vice-city-collection"><b>The Goodtime State - Vice City Collection</b><span>${tagPrice(699)}</span></a>`}${variants}</div></div>` : ''}
+    ${formats.length>1?`<div class="jb-variants"><div class="jb-label">Primary Format - Games</div><div class="jb-variant-row">${formats.map(u=>`<a class="jb-variant ${u.id===p.id?'is-selected':''}" href="${productPath(base,u)}" aria-current="${u.id===p.id}"><b>${esc(u.platformName)}</b><span>${tagPrice(u.price)}</span></a>`).join('')}</div></div>`:''}
     ${p.variants?`<form method="get" action="${productPath(base,p)}" class="jb-option-form"><label for="product-variant">Choose ${Object.keys(p.variants[0].attributes).join(' / ')}<select id="product-variant" name="variant">${p.variants.map(v=>`<option value="${v.id}" ${v.id===p.variantId?'selected':''}>${esc(v.label)} — ${tagPrice(v.price)}${v.stock===0?' · Out of stock':''}</option>`).join('')}</select></label><button class="jb-btn jb-btn-black">Update option</button></form>`:''}
     ${error?`<p class="jb-error" role="alert">${esc(error)}</p>`:''}${reference ? '' : `<p class="jb-fine">Sold by JB Hi-Fi · ${p.orderable&&p.stock>0?'Available to order':'Not currently available'}</p>`}
     <div class="jb-cta-row">${ctaForm(base, p, self, false)}<a class="jb-heart-btn" href="${base}/wishlist/add?id=${p.id}${p.variantId?'&variant='+encodeURIComponent(p.variantId):p.variants?'&variant='+encodeURIComponent(p.variants[0].id):''}" aria-label="Add to wishlist">&#9825;</a></div>
