@@ -102,7 +102,7 @@ for (const item of spec.items) {
 }
 
 // Crawl every internal GET link for liveness.
-const seen = new Map(), queue = [prefix + (spec.home_path || '/')], broken = []
+const seen = new Map(), queue = [prefix + (spec.home_path || '/')], broken = [], queued = new Set(), variants = new Map()
 const skip = /\/(sign-?out|log-?out|signout|logout)\b/i
 while (queue.length && seen.size < maxPages) {
   const url = queue.shift(); if (seen.has(url)) continue
@@ -127,7 +127,10 @@ while (queue.length && seen.size < maxPages) {
       if (isPage) broken.push({ url: h, status: 'leaves store', from: url })
       continue
     }
-    if (!seen.has(h)) queue.push(h)
+    // Sort/filter links multiply; a few query variants per path are enough to prove the route works.
+    const pathOnly = h.split('?')[0]
+    if (h.includes('?') && (variants.get(pathOnly) || 0) >= 5) continue
+    if (!seen.has(h) && !queued.has(h)) { queued.add(h); variants.set(pathOnly, (variants.get(pathOnly) || 0) + 1); queue.push(h) }
   }
 }
 
