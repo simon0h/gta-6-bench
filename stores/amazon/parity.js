@@ -1,11 +1,12 @@
 // Amazon.com site structure beyond the pre-order flow: the gateway homepage, department and
 // subcategory landings, the site directory and /sitemap.xml, Customer Service policy pages and
-// local summaries of Amazon programs and off-site destinations. No products are invented: grids
-// list only items the store catalog carries; everything else is navigation, copy and empty states.
+// local summaries of Amazon programs and off-site destinations. Grids and product rows list the
+// everyday assortment (shelf.js) together with the evidence-backed GTA 6 pre-orders.
 import { esc, money } from '../../lib/html.js'
 import { productPhoto } from '../../lib/product-photos.js'
 import { productImage } from '../../lib/product-assets.js'
-import { PRODUCTS, productPath, signinPath } from './data.js'
+import { PRODUCTS, ASSORTMENT, CATALOG, productPath, signinPath } from './data.js'
+import { productArt } from './art.js'
 import { DEPARTMENTS, departmentByNode, subcategoryByNode, HEADER_NAV, FOOTER, LEGAL, PROGRAMS, VIDEO_GAMES_PATH, GIFT_CARDS_PATH, HELP_PATH, helpNode, SITE_DIRECTORY, deptPath } from './sitemap.js'
 
 const photo = (key, label) => productPhoto(key, label, 'azp-photo') || `<span class="azp-photo azp-photo-blank" role="img" aria-label="${esc(label)}"></span>`
@@ -19,18 +20,38 @@ const single = (base, title, label, key, path, more) => `<section class="azp-car
 const D = deptPath
 const sub = (dept, label) => DEPARTMENTS.find(d => d.label === dept).subs.find(s => s.label === label).path
 
+// Product carousels (image strips) and the deal row of the homepage.
+const shelfIn = (...nodes) => ASSORTMENT.filter(p => nodes.includes(p.deptNode))
+const ratingCount = p => Number(String(p.rating?.count ?? 0).replaceAll(',', ''))
+const bestIn = (...nodes) => shelfIn(...nodes).slice().sort((a, b) => ratingCount(b) - ratingCount(a)).slice(0, 12)
+const alsoBought = () => ASSORTMENT.slice().sort((a, b) => a.rank - b.rank).filter((p, i) => i % 3 === 1).slice(0, 14)
+// The GTA 6 pre-orders appear inside the Video Games row (third and seventh), among other games.
+function gamingRow(games) {
+  const row = shelfIn('468642').filter(p => /Video Game|Console/.test(p.typeLabel)).sort((a, b) => ratingCount(b) - ratingCount(a)).slice(0, 12)
+  if (games[0]) row.splice(2, 0, games[0])
+  if (games[1]) row.splice(6, 0, games[1])
+  return row
+}
+const strip = (base, title, items, path, more) => items.length ? `<section class="azp-row"><div class="azp-row-head"><h2>${esc(title)}</h2><a href="${base}${path}">${esc(more)}</a></div><div class="azp-strip">${items.map(p => `<a href="${productPath(base, p)}" title="${esc(p.title)}">${productArt(p)}</a>`).join('')}</div></section>` : ''
+function dealRow(base) {
+  const deals = ASSORTMENT.filter(p => p.listPrice && p.price / p.listPrice <= 0.8).sort((a, b) => a.rank - b.rank).slice(0, 12)
+  if (!deals.length) return ''
+  return `<section class="azp-row azp-deal-row"><div class="azp-row-head"><h2>Today's Deals</h2><a href="${base}/gp/goldbox">See all deals</a></div><div class="azp-strip">${deals.map(p => `<a href="${productPath(base, p)}">${productArt(p)}<span class="azp-deal-line"><span class="azp-deal-pct">${Math.round((1 - p.price / p.listPrice) * 100)}% off</span><span class="azp-deal-tag">Limited time deal</span></span><span class="azp-deal-line"><b>${money(p.price)}</b><span class="az-fine">List: <s>${money(p.listPrice)}</s></span></span><span class="azp-deal-name">${esc(p.title)}</span></a>`).join('')}</div></section>`
+}
+
 export function gatewayHome({ base, user = null }) {
   const games = PRODUCTS.filter(p => p.kind === 'game')
   const signinCard = user
     ? `<section class="azp-card azp-signin-card"><h2>Hi, ${esc(user.first_name || 'there')}</h2><p>Pick up where you left off.</p><a class="az-btn az-btn-block" href="${base}/gp/css/order-history">Your Orders</a><a class="azp-card-more" href="${base}/gp/css/homepage.html">Your Account</a></section>`
     : `<section class="azp-card azp-signin-card"><h2>Sign in for the best experience</h2><a class="az-btn az-btn-block" href="${esc(base + signinPath('/'))}">Sign in securely</a><div class="azp-signin-art" aria-hidden="true">${photo('room-living', '')}</div><p class="az-fine">New to Amazon? <a href="${base}/ap/register">Start here.</a></p></section>`
+  const heroDeals = ASSORTMENT.filter(p => ['Apple 2025 MacBook Air 13-inch Laptop with M4 chip, 16GB Unified Memory, 256GB SSD – Midnight', 'Sony WH-1000XM5 Wireless Industry Leading Noise Canceling Headphones – Black'].includes(p.title))
   const heroes = [
-    ['azp-hero-gta', 'Pre-order Grand Theft Auto VI', 'Code in Box for PlayStation 5 and Xbox Series X|S. Delivers 11/12/26.', '/s?k=grand+theft+auto+vi', 'Shop now'],
-    ['azp-hero-gift', 'Amazon Gift Cards', 'The gift of choice, delivered by email, print at home or mail.', GIFT_CARDS_PATH, 'Shop gift cards'],
     ['azp-hero-deals', "Today's Deals", 'New deals every day across top departments.', '/gp/goldbox', 'Shop deals'],
+    ['azp-hero-gift', 'Amazon Gift Cards', 'The gift of choice, delivered by email, print at home or mail.', GIFT_CARDS_PATH, 'Shop gift cards'],
+    ['azp-hero-gta', 'Pre-order Grand Theft Auto VI', 'Code in Box for PlayStation 5 and Xbox Series X|S. Delivers 11/12/26.', '/s?k=grand+theft+auto+vi', 'Shop now'],
   ]
   return `<div class="azp-home">
-  <section class="azp-hero" aria-label="Featured" aria-roledescription="carousel">${heroes.map(([cls, h, p, path, cta], i) => `<a class="azp-hero-slide ${cls}" href="${base}${path}" data-hero ${i ? 'hidden' : ''} aria-label="${i + 1} of ${heroes.length}: ${esc(h)}"><div><${i ? 'h2' : 'h1'}>${esc(h)}</${i ? 'h2' : 'h1'}><p>${esc(p)}</p><span class="azp-hero-cta">${esc(cta)}</span></div>${i === 0 ? `<span class="azp-hero-art">${games.slice(0, 2).map(g => productImage('amazon', g)).join('')}</span>` : ''}</a>`).join('')}
+  <section class="azp-hero" aria-label="Featured" aria-roledescription="carousel">${heroes.map(([cls, h, p, path, cta], i) => `<a class="azp-hero-slide ${cls}" href="${base}${path}" data-hero ${i ? 'hidden' : ''} aria-label="${i + 1} of ${heroes.length}: ${esc(h)}"><div><${i ? 'h2' : 'h1'}>${esc(h)}</${i ? 'h2' : 'h1'}><p>${esc(p)}</p><span class="azp-hero-cta">${esc(cta)}</span></div>${cls === 'azp-hero-gta' ? `<span class="azp-hero-art">${games.slice(0, 2).map(g => productImage('amazon', g)).join('')}</span>` : cls === 'azp-hero-deals' ? `<span class="azp-hero-art">${heroDeals.map(d => productArt(d)).join('')}</span>` : ''}</a>`).join('')}
     <button type="button" class="azp-hero-prev" data-hero-prev aria-label="Previous slide" hidden>&#8249;</button><button type="button" class="azp-hero-next" data-hero-next aria-label="Next slide" hidden>&#8250;</button><div class="azp-hero-fade" aria-hidden="true"></div></section>
   <div class="azp-grid azp-grid-over">
     ${single(base, 'Get your game on', 'Shop gaming', 'ps5-console', VIDEO_GAMES_PATH, 'Shop gaming')}
@@ -42,14 +63,22 @@ export function gatewayHome({ base, user = null }) {
     ${card(base, 'New home arrivals under $50', [['Kitchen & dining', 'mug-set-cream', sub('Home & Kitchen', 'Kitchen & Dining')], ['Home improvement', 'ceramic-lamp', D('Tools & Home Improvement')], ['Décor', 'planter-stoneware-white', sub('Home & Kitchen', 'Home Décor')], ['Bedding & bath', 'bath-towels', sub('Home & Kitchen', 'Bath')]], ['Shop the latest from Home', D('Home & Kitchen')])}
     ${card(base, 'Top categories in Kitchen appliances', [['Cooker', 'dutch-oven', sub('Home & Kitchen', 'Kitchen & Dining')], ['Coffee', 'espresso-machine', sub('Home & Kitchen', 'Kitchen & Dining')], ['Pots and Pans', 'frying-pan', sub('Home & Kitchen', 'Kitchen & Dining')], ['Kettles', 'kettle', sub('Home & Kitchen', 'Kitchen & Dining')]], ['Explore all products in Kitchen', sub('Home & Kitchen', 'Kitchen & Dining')])}
   </div>
-  <section class="azp-row"><div class="azp-row-head"><h2>Customers also bought</h2><a href="${base}/s?k=grand+theft+auto+vi">See more</a></div><div class="azp-strip">${games.map(p => `<a href="${productPath(base, p)}" title="${esc(p.title)}">${productImage('amazon', p)}</a>`).join('')}</div></section>
+  ${dealRow(base)}
+  ${strip(base, 'Customers also bought', alsoBought(), '/gp/bestsellers', 'See more')}
   <div class="azp-grid">
     ${card(base, 'Homeroom to homework', [['Backpacks', 'backpack', sub('Luggage', 'Backpacks')], ['Notebooks', 'notebooks', sub('Office Products', 'Office & School Supplies')], ['Laptops', 'laptop', sub('Computers', 'Laptops')], ['Headphones', 'headphones', sub('Electronics', 'Headphones')]], ['Explore more', D('Office Products')])}
     ${card(base, 'The latest listens', [['Vinyl', 'vinyl-blue-hour', sub('CDs & Vinyl', 'Vinyl')], ['Headphones', 'headphones-cream', sub('Electronics', 'Headphones')], ['Speakers', 'speaker', sub('Electronics', 'Home Audio')], ['Amazon Music', 'earbuds-white', '/music/player']], ['Listen now', '/music/player'])}
     ${card(base, 'Wireless Tech', [['Smartphones', 'smartphone', sub('Electronics', 'Cell Phones & Accessories')], ['Watches', 'smartwatch-black', sub('Electronics', 'Wearable Technology')], ['Headphones', 'earbuds', sub('Electronics', 'Headphones')], ['Tablets', 'tablet', sub('Computers', 'Tablets')]], ['Discover more', D('Electronics')])}
     ${card(base, 'Fashion trends you like', [['Dresses', 'hoodie', sub("Women's Fashion", 'Clothing')], ['Knits', 'tshirt', sub("Men's Fashion", 'Clothing')], ['Jackets', 'windbreaker-blue', sub("Men's Fashion", 'Clothing')], ['Jewelry', 'analog-watch', sub("Women's Fashion", 'Jewelry')]], ['Explore more', '/amazon-fashion/b?node=7141123011'])}
   </div>
+  ${strip(base, 'Best Sellers in Home & Kitchen', bestIn('1055398'), D('Home & Kitchen'), 'See more')}
   <section class="azp-row"><div class="azp-row-head"><h2>Everyday essentials you might like</h2><a href="${base}${D('Health & Household')}">See more</a></div><div class="azp-strip azp-strip-cats">${[['Paper towels', 'paper-towels', 'Health & Household', 'Household Supplies'], ['Laundry', 'laundry-detergent', 'Health & Household', 'Household Supplies'], ['Trash bags', 'trash-bags', 'Health & Household', 'Household Supplies'], ['Dish soap', 'dish-soap', 'Health & Household', 'Household Supplies'], ['Cleaning wipes', 'cleaning-wipes', 'Health & Household', 'Household Supplies'], ['Coffee', 'coffee', 'Grocery & Gourmet Food', 'Beverages'], ['Snacks', 'cookies', 'Grocery & Gourmet Food', 'Snacks'], ['Pet food', 'dog-food', 'Pet Supplies', 'Dogs']].map(([label, key, d, s]) => `<a href="${base}${sub(d, s)}">${photo(key, label)}<span>${esc(label)}</span></a>`).join('')}</div></section>
+  ${strip(base, 'Best Sellers in Electronics', bestIn('172282', '541966', '2102313011'), D('Electronics'), 'See more')}
+  ${strip(base, 'Popular products in Video Games', gamingRow(games), VIDEO_GAMES_PATH, 'See more')}
+  ${strip(base, 'Top Sellers in Books for you', bestIn('283155'), D('Books'), 'See more')}
+  ${strip(base, 'Best Sellers in Toys & Games', bestIn('165793011'), D('Toys & Games'), 'See more')}
+  ${strip(base, 'Best Sellers in Beauty & Personal Care', bestIn('3760911'), D('Beauty & Personal Care'), 'See more')}
+  ${strip(base, 'Popular items in Pet Supplies', bestIn('2619533011'), D('Pet Supplies'), 'See more')}
   <section class="azp-row"><div class="azp-row-head"><h2>Explore more</h2><a href="${base}${SITE_DIRECTORY}">See all departments</a></div><div class="azp-strip azp-strip-cats">${DEPARTMENTS.slice(0, 12).map(d => `<a href="${base}${d.path}">${photo(d.photo, d.label)}<span>${esc(d.label)}</span></a>`).join('')}</div></section>
   ${user ? '' : `<section class="azp-perso"><div class="azp-perso-line"></div><h2>See personalized recommendations</h2><a class="az-btn azp-perso-btn" href="${esc(base + signinPath('/'))}">Sign in</a><p class="az-fine">New customer? <a href="${base}/ap/register">Start here.</a></p></section>`}
 </div><script>(()=>{const s=[...document.querySelectorAll('[data-hero]')];if(s.length<2)return;let i=0;const show=n=>{s[i].hidden=true;i=(n+s.length)%s.length;s[i].hidden=false};document.querySelectorAll('[data-hero-prev],[data-hero-next]').forEach(b=>{b.hidden=false;b.addEventListener('click',()=>show(i+(b.hasAttribute('data-hero-next')?1:-1)))})})()</script>`
@@ -73,38 +102,75 @@ const filterRail = (base, action, hidden, q) => {
 }
 const filterQuery = q => Object.fromEntries(['delivery', 'rating', 'price', 'deals', 'condition', 'oos'].map(k => [k, typeof q[k] === 'string' ? q[k] : '']))
 
+const PER_PAGE = 24
+const SORT_OPTIONS = [['', 'Featured'], ['price-asc-rank', 'Price: Low to High'], ['price-desc-rank', 'Price: High to Low'], ['review-rank', 'Avg. Customer Review'], ['date-desc-rank', 'Newest Arrivals'], ['exact-aware-popularity-rank', 'Best Sellers']]
+const PRICE_BANDS = { under25: [0, 25], '25to50': [25, 50], '50to100': [50, 100], '100to200': [100, 200], over200: [200, Infinity] }
+const listOf = v => (Array.isArray(v) ? v : v === undefined ? [] : [v]).map(String).filter(Boolean)
+function refine(products, q, brands) {
+  let list = products.filter(p => p.stock > 0 || q.oos)
+  if (q.delivery) list = list.filter(p => !p.release)
+  if (q.rating) list = list.filter(p => (p.rating?.stars ?? 0) >= Number(q.rating))
+  if (PRICE_BANDS[q.price]) { const [lo, hi] = PRICE_BANDS[q.price]; list = list.filter(p => p.price >= lo && p.price < hi) }
+  if (q.deals) list = list.filter(p => p.deal)
+  if (q.condition) list = list.filter(p => (p.condition || 'New').toLowerCase() === q.condition)
+  if (brands.length) list = list.filter(p => brands.includes(p.brand))
+  return list
+}
+function sortLanding(list, sort) {
+  const count = p => Number(String(p.rating?.count ?? 0).replaceAll(',', ''))
+  const featured = p => p.shelf ? p.rank : 4 * 40 + 0.5
+  const by = { 'price-asc-rank': (a, b) => a.price - b.price, 'price-desc-rank': (a, b) => b.price - a.price, 'review-rank': (a, b) => (b.rating?.stars ?? 0) - (a.rating?.stars ?? 0), 'date-desc-rank': (a, b) => String(b.addedDate).localeCompare(String(a.addedDate)), 'exact-aware-popularity-rank': (a, b) => count(b) - count(a) }[sort]
+  return list.slice().sort((a, b) => featured(a) - featured(b)).sort(by || (() => 0))
+}
+
 function landing({ base, req, dept, current, action, hidden, trail, sideTitle, sideLinks, tiles, products }) {
   const q = filterQuery(req.query)
-  const filtered = Object.values(q).some(Boolean)
-  const results = products.length
-    ? `<div class="azp-results-grid">${products.map(p => `<article class="azp-result"><a href="${productPath(base, p)}">${productImage('amazon', p)}</a><a class="azp-result-title" href="${productPath(base, p)}">${esc(p.title)}</a><b>${money(p.price)}</b><span class="az-fine">${esc(p.availability)}</span></article>`).join('')}</div>`
-    : `<div class="azp-noresults"><h3>No results for ${esc(current.label)}${filtered ? ' with these filters' : ''}.</h3><p>This storefront carries a small catalog, so there are no items to show in this category. Try checking your spelling or use more general terms, or shop a related category.</p><p>${L(base, VIDEO_GAMES_PATH, 'Shop Video Games')} &middot; ${L(base, '/gp/goldbox', "See Today's Deals")} &middot; ${L(base, SITE_DIRECTORY, 'See all departments')}</p></div>`
+  const brands = listOf(req.query.brand)
+  const sort = SORT_OPTIONS.some(([v]) => v && v === req.query.s) ? String(req.query.s) : ''
+  const filtered = Object.values(q).some(Boolean) || brands.length > 0
+  const all = refine(products, q, brands)
+  const sorted = sortLanding(all, sort)
+  const pages = Math.max(1, Math.ceil(sorted.length / PER_PAGE))
+  const page = Math.min(pages, Math.max(1, Number.parseInt(req.query.page, 10) || 1))
+  const shown = sorted.slice((page - 1) * PER_PAGE, page * PER_PAGE)
+  const state = { ...hidden, ...Object.fromEntries(Object.entries(q).filter(([, v]) => v)), ...(sort ? { s: sort } : {}) }
+  const href = (changes) => { const u = new URLSearchParams(); for (const [k, v] of Object.entries({ ...state, ...changes })) if (v !== '' && v !== undefined) u.append(k, v); for (const b of brands) u.append('brand', b); return `${base}${action}?${u.toString().replace(/%20/g, '+')}` }
+  const brandChoices = [...new Set(products.map(p => p.brand))].sort((a, b) => a.localeCompare(b))
+  const rail = filterRail(base, action, { ...hidden, ...(sort ? { s: sort } : {}) }, q).replace('<button class="az-btn az-btn-sm" type="submit">Apply</button></form>', `${brandChoices.length ? `<fieldset class="azp-facet-brands"><legend>Brands</legend>${brandChoices.map(b => `<label class="azp-filter"><input type="checkbox" name="brand" value="${esc(b)}" ${brands.includes(b) ? 'checked' : ''}> ${esc(b)}</label>`).join('')}</fieldset>` : ''}<button class="az-btn az-btn-sm" type="submit">Apply</button>${filtered ? ` <a class="azp-clear" href="${base}${action}?${new URLSearchParams(hidden)}">Clear</a>` : ''}</form>`)
+  const card = p => `<article class="azp-result" data-asin="${esc(p.asin)}"><a href="${productPath(base, p)}">${productArt(p)}</a><a class="azp-result-title" href="${productPath(base, p)}">${esc(p.title)}</a>${p.rating ? `<div class="az-stars"><span aria-hidden="true">${'★'.repeat(Math.round(p.rating.stars))}${'☆'.repeat(5 - Math.round(p.rating.stars))}</span> <span class="a-offscreen">${esc(p.rating.stars)} out of 5 stars</span><span class="az-static">${esc(p.rating.count)}</span></div>` : ''}${p.bought ? `<span class="az-fine">${esc(p.bought)}</span>` : ''}<b>${money(p.price)}</b>${p.listPrice ? `<span class="az-fine az-list-price">List: <s>${money(p.listPrice)}</s></span>` : ''}<span class="az-fine">${esc(p.release ? p.availability : p.delivery?.[0] || p.availability)}</span></article>`
+  const results = shown.length
+    ? `<div class="azp-results-grid">${shown.map(card).join('')}</div>${pages > 1 ? `<nav class="azp-pager" aria-label="Pagination">${page > 1 ? `<a href="${esc(href({ page: page - 1 }))}">&lsaquo; Previous</a>` : '<span class="is-disabled">&lsaquo; Previous</span>'}${Array.from({ length: pages }, (_, i) => i + 1).map(n => n === page ? `<span class="is-current" aria-current="page">${n}</span>` : `<a href="${esc(href({ page: n }))}">${n}</a>`).join('')}${page < pages ? `<a href="${esc(href({ page: page + 1 }))}">Next &rsaquo;</a>` : '<span class="is-disabled">Next &rsaquo;</span>'}</nav>` : ''}`
+    : `<div class="azp-noresults"><h3>No results for ${esc(current.label)}${filtered ? ' with these filters' : ''}.</h3><p>Try removing a filter, checking your spelling or using more general terms, or shop a related category.</p><p>${L(base, VIDEO_GAMES_PATH, 'Shop Video Games')} &middot; ${L(base, '/gp/goldbox', "See Today's Deals")} &middot; ${L(base, SITE_DIRECTORY, 'See all departments')}</p></div>`
+  const range = sorted.length ? `${(page - 1) * PER_PAGE + 1}-${(page - 1) * PER_PAGE + shown.length} of ${sorted.length} result${sorted.length === 1 ? '' : 's'}` : '0 results'
   return `${crumbs(base, trail)}
 <div class="azp-dept">
   <aside class="azp-rail" aria-label="Refine">
     <h3>Department</h3>
     <ul class="azp-rail-list">${sideTitle ? `<li>${sideTitle}</li>` : ''}${sideLinks.map(s => `<li class="${s.node === current.node ? 'is-current' : 'azp-indent'}">${s.node === current.node ? `<b>${esc(s.label)}</b>` : L(base, s.path, s.label)}</li>`).join('')}</ul>
-    ${filterRail(base, action, hidden, q)}
+    ${rail}
   </aside>
   <div class="azp-dept-main">
     <header class="azp-dept-hero"><div><p class="azp-kicker">${esc(dept.label)}</p><h1>${esc(current.label)}</h1><p>${esc(current.tagline || dept.tagline)}</p><a class="az-btn az-btn-sm" href="${base}/gp/goldbox">Shop deals</a></div>${photo(current.photo || dept.photo, current.label)}</header>
     ${tiles.length ? `<section class="azp-shopby"><h2>Shop by category</h2><div class="azp-circles">${tiles.map(s => `<a href="${base}${s.path}">${photo(s.photo, s.label)}<span>${esc(s.label)}</span></a>`).join('')}</div></section>` : ''}
     <nav class="azp-curated" aria-label="Collections">${L(base, '/gp/bestsellers', `Best Sellers in ${dept.label}`)}${L(base, '/gp/new-releases', 'New Releases')}${L(base, '/gp/goldbox', "Today's Deals")}${L(base, '/coupons', 'Coupons')}</nav>
-    <section class="azp-results"><div class="azp-results-head"><h2>Results</h2><form method="get" action="${base}${action}">${Object.entries(hidden).map(([k, v]) => `<input type="hidden" name="${k}" value="${esc(v)}">`).join('')}<label for="azp-sort">Sort by:</label> <select id="azp-sort" name="s"><option>Featured</option><option value="price-asc-rank">Price: Low to High</option><option value="price-desc-rank">Price: High to Low</option><option value="review-rank">Avg. Customer Review</option><option value="date-desc-rank">Newest Arrivals</option><option value="exact-aware-popularity-rank">Best Sellers</option></select> <button class="az-btn az-btn-sm az-btn-outline" type="submit">Go</button></form></div>
-      <p class="az-fine">${products.length} result${products.length === 1 ? '' : 's'} &middot; Check each product page for other buying options.</p>${results}</section>
+    <section class="azp-results"><div class="azp-results-head"><h2>Results</h2><form method="get" action="${base}${action}">${Object.entries({ ...hidden, ...Object.fromEntries(Object.entries(q).filter(([, v]) => v)) }).map(([k, v]) => `<input type="hidden" name="${k}" value="${esc(v)}">`).join('')}${brands.map(b => `<input type="hidden" name="brand" value="${esc(b)}">`).join('')}<label for="azp-sort">Sort by:</label> <select id="azp-sort" name="s">${SORT_OPTIONS.map(([v, l]) => `<option value="${v}"${v === sort ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select> <button class="az-btn az-btn-sm az-btn-outline" type="submit">Go</button></form></div>
+      <p class="az-fine">${range} &middot; Check each product page for other buying options.</p>${results}</section>
     <section class="azp-editorial"><h2>About ${esc(current.label)}</h2><p>Shop ${esc(current.label.toLowerCase())} at Amazon.com. ${esc(current.tagline || dept.tagline)} Find categories above, refine with the filters on the left, and compare options on each product page.</p></section>
   </div>
 </div>`
 }
 const gameProducts = node => node === '468642' || ['20972781011', '20972814011', '979455011'].includes(node) ? catalogItems().filter(p => p.kind === 'game' && (node === '468642' || node === '979455011' || (node === '20972781011' ? p.platform === 'ps5' : p.platform === 'xbox'))) : []
 
+const FASHION_NODES = ['7147440011', '7147441011', '7147442011', '7147443011']
+const nodeProducts = node => [...gameProducts(node), ...ASSORTMENT.filter(p => p.stock > 0 && (p.nodes.includes(node) || (node === '7141123011' && FASHION_NODES.includes(p.deptNode))))]
+
 export function departmentLanding(base, req, node) {
   const dept = node === FASHION.node ? FASHION : departmentByNode(node)
-  return landing({ base, req, dept, current: dept, action: `/${dept.slug}/b`, hidden: { node: dept.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path]], sideLinks: dept.subs, tiles: dept.subs, products: gameProducts(dept.node) })
+  return landing({ base, req, dept, current: dept, action: `/${dept.slug}/b`, hidden: { node: dept.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path]], sideLinks: dept.subs, tiles: dept.subs, products: nodeProducts(dept.node) })
 }
 export function subcategoryLanding(base, req, node) {
   const { dept, sub: current } = subcategoryByNode(node)
-  return landing({ base, req, dept, current, action: '/b', hidden: { node: current.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path], [current.label, current.path]], sideTitle: `<a href="${base}${dept.path}">&lsaquo; ${esc(dept.label)}</a>`, sideLinks: dept.subs, tiles: dept.subs.filter(s => s.node !== current.node), products: gameProducts(current.node) })
+  return landing({ base, req, dept, current, action: '/b', hidden: { node: current.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path], [current.label, current.path]], sideTitle: `<a href="${base}${dept.path}">&lsaquo; ${esc(dept.label)}</a>`, sideLinks: dept.subs, tiles: dept.subs.filter(s => s.node !== current.node), products: nodeProducts(current.node) })
 }
 // "Shop by category" row on the existing Video Games / catalog department pages.
 export function shopByCategory(base, nodeId) {

@@ -5,7 +5,7 @@ import { randomBytes, randomInt } from 'node:crypto'
 import { recordOrder, getOrder } from '../../lib/orders.js'
 import { luhn, cardBrand, last4 } from '../../lib/payment.js'
 import { authenticate, findAccount, createAccount, publicAccount } from '../../lib/accounts.js'
-import { byAsin, productPath, signinPath, search, cartLines, checkoutLines, totals, DELIVERY, STATES, PRODUCTS, deliveryOptions } from './data.js'
+import { byAsin, productPath, signinPath, search, cartLines, checkoutLines, totals, DELIVERY, STATES, CATALOG, deliveryOptions } from './data.js'
 import { categoryIntro, productRow } from './browse.js'
 import { FILTER_KEYS, values, nodeById, queryString } from './catalog.js'
 import * as P from './pages.js'
@@ -13,6 +13,7 @@ import { retailState, rememberProduct, saveAddress } from '../../lib/retail-stat
 import { registerJourneys, resumeWishlist, listsFor, savedInList, checkoutAddress, savedAddressChoices, accountOrders } from './journeys.js'
 import { deliveryLocation, registerLocation } from './location.js'
 import { registerParity, gatewayHome, collectionIntro } from './parity.js'
+import { registerShelfImages, deptForAlias } from './shelf.js'
 
 const NAME = 'Amazon'
 const router = Router()
@@ -70,6 +71,8 @@ router.use((req,res,next)=>{
   next()
 })
 
+registerShelfImages(router)
+registerShelfImages(router)
 registerParity(router, { render })
 registerJourneys(router, { render, notFound, addToCart, purchaseError })
 registerLocation(router, { render })
@@ -92,6 +95,10 @@ function browse(req,res,{node='',endpoint='/s',heading='',intro='',collection=''
 router.get('/s', (req,res)=>browse(req,res,{node:String(req.query.node ?? '')}))
 function departmentHandler(req,res) {
   const node=nodeById(String(req.query.node || 'videogames'))
+  // A search alias used as a node (e.g. "browse the department" from a search in Home & Kitchen)
+  // goes to that department's landing page.
+  const aliasDept=!node && !fixtureCatalog && deptForAlias(String(req.query.node ?? ''))
+  if(aliasDept) return res.redirect(`${res.locals.base}${aliasDept.path}`)
   if(!node) return notFound(req,res)
   browse(req,res,{node:node.id,endpoint:'/b',heading:node.title,intro:categoryIntro({base:res.locals.base,node})})
 }
@@ -111,9 +118,9 @@ router.get('/gp/new-releases/:department',(req,res)=>{
 })
 router.get('/gp/goldbox',(req,res)=>browse(req,res,{node:String(req.query.node||''),endpoint:'/gp/goldbox',heading:"Today's Deals",collection:'deals',intro:collectionIntro(res.locals.base,'deals')}))
 router.get('/stores/:brand',(req,res)=>{
-  const brand=[...new Set(PRODUCTS.map(p=>p.brand))].find(b=>b.toLowerCase().replace(/[^a-z0-9]/g,'')===req.params.brand.toLowerCase().replace(/[^a-z0-9]/g,''))
+  const brand=[...new Set(CATALOG.map(p=>p.brand))].find(b=>b.toLowerCase().replace(/[^a-z0-9]/g,'')===req.params.brand.toLowerCase().replace(/[^a-z0-9]/g,''))
   if(!brand) return notFound(req,res)
-  const products=PRODUCTS.filter(p=>p.brand===brand)
+  const products=CATALOG.filter(p=>p.brand===brand)
   render(req,res,`Amazon.com: ${brand} Store`,P.simplePage({title:`${brand} Store`,html:`<p>Explore products from this brand, compare options, and find your next favorite.</p><a href="${res.locals.base}/s?${queryString({brand})}">Search and refine this brand's products</a>`})+productRow(res.locals.base,'Shop the collection',products),{dept:products[0]?.department})
 })
 

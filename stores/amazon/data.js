@@ -2,8 +2,11 @@ import { scenarioProduct } from '../../lib/benchmark-scenarios.js'
 import { applyCatalogPolicy, fixtureCatalog } from '../../lib/catalog-policy.js'
 import { catalogEvidence } from './catalog-evidence.js'
 import { expandCatalog } from './expand500.js'
-import { EXTRA_PRODUCTS, enrichProduct, DEPARTMENTS, nodeById, values } from './catalog.js'
-export { DEPARTMENTS } from './catalog.js'
+import { EXTRA_PRODUCTS, enrichProduct, DEPARTMENTS as FIXTURE_DEPARTMENTS, nodeById, values } from './catalog.js'
+import { SHELF, SEARCH_DEPARTMENTS } from './shelf.js'
+// The search box's department list: amazon.com's search aliases in reference mode, the
+// historical fixture departments otherwise.
+export const DEPARTMENTS = fixtureCatalog ? FIXTURE_DEPARTMENTS : SEARCH_DEPARTMENTS
 // Listings as they appear on amazon.com (research/amazon.md + amazon.json, observed 2026-09-29).
 // Amazon US sells only the Standard edition, code in box, $79.99, one ASIN per platform.
 
@@ -214,7 +217,15 @@ if (!fixtureCatalog) for (const p of PRODUCTS) { p.catalogType = p.kind === 'gam
 
 export const CART_RECS = fixtureCatalog ? ['B0CRPS5SLM', 'B0DGRIPCAP', 'B0DCOOLSTD'] : []
 
-export const byAsin = (asin) => PRODUCTS.find(p => p.asin === String(asin ?? '').toUpperCase()) ?? null
+// Everyday Amazon.com merchandise shown around the GTA 6 listings (shelf.js). It is a separate
+// array: PRODUCTS above stays the evidence-backed GTA 6 set that inventory.js, /api/catalog and
+// applyCatalogPolicy describe. Fixture mode keeps its historical 500-row catalog unchanged.
+export const ASSORTMENT = fixtureCatalog ? [] : SHELF
+// Everything a shopper can browse, search, open and add to the cart.
+export const CATALOG = [...PRODUCTS, ...ASSORTMENT]
+const catalogIndex = new Map(CATALOG.map(p => [p.asin, p]))
+
+export const byAsin = (asin) => (fixtureCatalog ? PRODUCTS.find(p => p.asin === String(asin ?? '').toUpperCase()) : catalogIndex.get(String(asin ?? '').toUpperCase())) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 
 export function productPath(base, p) {
@@ -233,9 +244,24 @@ export const SORTS = [
 ]
 
 export function search(q, dept = '', sort = '', filters = {}, node = '') {
-  const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+  const norm = s => String(s ?? '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  let hits = PRODUCTS.filter(p => { const hay = norm([p.title,p.brand,p.keywords,DEPARTMENTS.find(([id])=>id===p.department)?.[1]].join(' ')); return tokens.every(t => hay.includes(t)) })
+  let hits
+  if (fixtureCatalog) hits = PRODUCTS.filter(p => { const hay = norm([p.title,p.brand,p.keywords,DEPARTMENTS.find(([id])=>id===p.department)?.[1]].join(' ')); return tokens.every(t => hay.includes(t)) })
+  else {
+    // Word-prefix matching (so "pan" does not match "expandable"), with a plural fallback.
+    const words = s => ` ${norm(s)}`
+    const has = (hay, t) => hay.includes(` ${t}`) || (t.length > 3 && t.endsWith('s') && hay.includes(` ${t.slice(0, -1)}`))
+    const scored = []
+    for (const p of CATALOG) {
+      const hay = words([p.title, p.brand, p.keywords, p.subLabel, DEPARTMENTS.find(([id]) => id === p.department)?.[1]].join(' '))
+      if (!tokens.every(t => has(hay, t))) continue
+      const title = words(p.title)
+      p.searchScore = tokens.length ? tokens.filter(t => has(title, t)).length + (title.includes(` ${tokens.join(' ')}`) ? tokens.length : 0) : 0
+      scored.push(p)
+    }
+    hits = scored
+  }
   if (dept) hits = hits.filter(p => p.department === dept)
   if (node) hits = hits.filter(p => p.nodes.includes(nodeById(node)?.id ?? node))
   for (const [key,field] of [['platform','platformKey'],['brand','brand'],['type','typeLabel'],['condition','condition'],['seller','seller'],['format','format']]) {
@@ -252,7 +278,8 @@ export function search(q, dept = '', sort = '', filters = {}, node = '') {
   if (filters.availability === 'in-stock') hits = hits.filter(p => p.stock > 0 && !p.release)
   if (filters.availability === 'preorder') hits = hits.filter(p => p.stock > 0 && p.release)
   if (filters.availability === 'unavailable') hits = hits.filter(p => p.stock === 0)
-  hits.sort((a,b)=>a.rank-b.rank)
+  if (fixtureCatalog) hits.sort((a,b)=>a.rank-b.rank)
+  else hits.sort((a,b)=>(tokens.length ? b.searchScore-a.searchScore : 0) || featuredRank(a, tokens.length)-featuredRank(b, tokens.length))
   if (sort === 'price-asc-rank') hits.sort((a, b) => a.price - b.price)
   if (sort === 'price-desc-rank') hits.sort((a, b) => b.price - a.price)
   if (sort === 'review-rank') hits.sort((a, b) => (b.rating?.stars ?? 0) - (a.rating?.stars ?? 0))
@@ -261,8 +288,14 @@ export function search(q, dept = '', sort = '', filters = {}, node = '') {
   return hits
 }
 
+// "Featured" order. Assortment rows interleave departments; on browse pages (no keywords) the
+// GTA 6 pre-orders sit among the top Video Games items instead of heading every list.
+function featuredRank(p, searching) {
+  if (p.shelf) return p.rank
+  return searching ? p.rank : 4 * 40 + 0.5
+}
 export function recommendations(p, count=6) {
-  return PRODUCTS.filter(x=>x.asin!==p.asin && x.stock>0).sort((a,b)=>Number(b.node===p.node)-Number(a.node===p.node) || Number(b.department===p.department)-Number(a.department===p.department) || a.rank-b.rank).slice(0,count)
+  return (fixtureCatalog ? PRODUCTS : CATALOG).filter(x=>x.asin!==p.asin && x.stock>0).sort((a,b)=>Number(b.node===p.node)-Number(a.node===p.node) || Number(b.department===p.department)-Number(a.department===p.department) || a.rank-b.rank).slice(0,count)
 }
 export function deliveryOptions(lines) {
   const releases = lines.map(l=>l.product.release).filter(Boolean).sort((a,b)=>Date.parse(b)-Date.parse(a))
