@@ -5,6 +5,7 @@ import { products } from './catalog.js'
 import { ikeaChrome } from './layout.js'
 import { ikeaDepth } from './depth.js'
 import { ikeaJourneys } from './journeys.js'
+import { ikeaSite } from './site.js'
 
 const fixtureConfig = {
   slug: 'ikea', name: 'IKEA', orderPrefix: 'IK', productOptionQueryPrefix: 'option_',
@@ -18,7 +19,7 @@ const fixtureConfig = {
   benefit: 'Make yourself at home', benefitText: 'Save your favorites and keep all your home ideas in one place.',
   delivery: 'Standard delivery is free in this shopping experience. Delivery dates and in-store collection are not offered.',
   nav: ['Products', 'Rooms', 'Deals', 'Design & ideas', 'Services'],
-  stylesheet: '/static/depth.css', chrome: ikeaChrome, extend(router, context) { ikeaJourneys(router, context); ikeaDepth(router, context) },
+  stylesheet: '/static/depth.css', chrome: ikeaChrome, extend(router, context) { ikeaJourneys(router, context); ikeaDepth(router, context); router.use(ikeaSite({ render: context.render, fixture: true })) },
 }
 
 export default fixtureCatalog ? unavailableStore(fixtureConfig) : referenceStore

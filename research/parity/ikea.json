@@ -1,0 +1,2352 @@
+{
+  "store": "ikea",
+  "real_home": "https://www.ikea.com/us/en/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.ikea.com/us/en/",
+    "https://www.ikea.com/us/en/customer-service/",
+    "https://www.ikea.com/us/en/cat/products-products/",
+    "https://www.ikea.com/us/en/rooms/",
+    "https://www.ikea.com/us/en/cat/bookcases-shelving-units-st002/",
+    "https://www.ikea.com/us/en/offers/",
+    "https://www.ikea.com/us/en/ideas/",
+    "https://www.ikea.com/us/en/customer-service/services/",
+    "https://www.ikea.com/us/en/stores/",
+    "https://www.ikea.com/us/en/customer-service/returns-claims/",
+    "https://www.ikea.com/us/en/customer-service/track-manage-order/",
+    "https://www.ikea.com/us/en/customer-service/gift-cards-pub3d1efe50/",
+    "https://www.ikea.com/us/en/ikea-family/",
+    "https://www.ikea.com/us/en/customer-service/faq/",
+    "https://www.ikea.com/us/en/customer-service/support/",
+    "https://www.ikea.com/us/en/customer-service/services/delivery/",
+    "https://www.ikea.com/us/en/this-is-ikea/",
+    "https://www.ikea.com/us/en/p/billy-bookcase-white-00263850/"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/us/en/sitemap/",
+  "notes": "Fetched with WebFetch on 2026-10-13. Blocked by robots.txt: /us/en/profile/login/ and /us/en/shoppingcart/ (sign-in and bag wording uses IKEA's usual labels and is unverified). sitemap.xml fetch failed; the department tree comes from /us/en/cat/products-products/. The product URL tried resolved to a BILLY series listing; no product page is checked because the reference catalog has 0 captured IKEA products (inventory out of scope). The homepage product carousel is omitted for the same reason. IKEA has no HTML site map; /us/en/sitemap/ is a clone-only page. Off-site footer links (Careers, IKEA Foundation, Credit Card Management, Children's Product Registration) are local summary pages. \"Cookie settings\" is a button, not a link, and is skipped. Store locator lists the first 30 locations seen on the real page.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "IKEA logo",
+      "real": "https://www.ikea.com/us/en/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Products",
+      "real": "https://www.ikea.com/us/en/cat/products-products/",
+      "path": "/us/en/cat/products-products/"
+    },
+    {
+      "kind": "header",
+      "label": "Rooms",
+      "real": "https://www.ikea.com/us/en/rooms/",
+      "path": "/us/en/rooms/"
+    },
+    {
+      "kind": "header",
+      "label": "Deals",
+      "real": "https://www.ikea.com/us/en/offers/",
+      "path": "/us/en/offers/"
+    },
+    {
+      "kind": "header",
+      "label": "Design & ideas",
+      "real": "https://www.ikea.com/us/en/ideas/",
+      "path": "/us/en/ideas/"
+    },
+    {
+      "kind": "header",
+      "label": "Services",
+      "real": "https://www.ikea.com/us/en/customer-service/services/",
+      "path": "/us/en/customer-service/services/"
+    },
+    {
+      "kind": "header",
+      "label": "Log in or sign up",
+      "real": "https://www.ikea.com/us/en/profile/login/",
+      "path": "/us/en/profile/login/"
+    },
+    {
+      "kind": "header",
+      "label": "Favorites",
+      "real": "https://www.ikea.com/us/en/favorites/",
+      "path": "/us/en/favorites/"
+    },
+    {
+      "kind": "header",
+      "label": "Shopping bag",
+      "real": "https://www.ikea.com/us/en/shoppingcart/",
+      "path": "/us/en/shoppingcart/"
+    },
+    {
+      "kind": "header",
+      "label": "Shop new arrivals",
+      "real": "https://www.ikea.com/us/en/new/new-products/",
+      "path": "/us/en/new/new-products/"
+    },
+    {
+      "kind": "header",
+      "label": "Select store",
+      "real": "https://www.ikea.com/us/en/stores/",
+      "path": "/us/en/stores/"
+    },
+    {
+      "kind": "header",
+      "label": "Enter ZIP code",
+      "real": "https://www.ikea.com/us/en/ (ZIP code modal)",
+      "path": "/location"
+    },
+    {
+      "kind": "header",
+      "label": "Accessibility",
+      "real": "https://www.ikea.com/us/en/customer-service/accessibility/",
+      "path": "/us/en/customer-service/accessibility/"
+    },
+    {
+      "kind": "header",
+      "label": "Winter holiday shopping",
+      "real": "https://www.ikea.com/us/en/cat/winter-holidays-wt001/",
+      "path": "/us/en/cat/winter-holidays-wt001/"
+    },
+    {
+      "kind": "header",
+      "label": "Storage & organization",
+      "real": "https://www.ikea.com/us/en/cat/storage-organization-st001/",
+      "path": "/us/en/cat/storage-organization-st001/"
+    },
+    {
+      "kind": "header",
+      "label": "Sofas & armchairs",
+      "real": "https://www.ikea.com/us/en/cat/sofas-armchairs-700640/",
+      "path": "/us/en/cat/sofas-armchairs-700640/"
+    },
+    {
+      "kind": "header",
+      "label": "Beds & mattresses",
+      "real": "https://www.ikea.com/us/en/cat/beds-mattresses-bm001/",
+      "path": "/us/en/cat/beds-mattresses-bm001/"
+    },
+    {
+      "kind": "header",
+      "label": "Lighting",
+      "real": "https://www.ikea.com/us/en/cat/lighting-li001/",
+      "path": "/us/en/cat/lighting-li001/"
+    },
+    {
+      "kind": "header",
+      "label": "Kitchen, appliances & supplies",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-appliances-ka001/",
+      "path": "/us/en/cat/kitchen-appliances-ka001/"
+    },
+    {
+      "kind": "header",
+      "label": "Rugs & home textiles",
+      "real": "https://www.ikea.com/us/en/cat/home-textiles-tl001/",
+      "path": "/us/en/cat/home-textiles-tl001/"
+    },
+    {
+      "kind": "header",
+      "label": "Tables & chairs",
+      "real": "https://www.ikea.com/us/en/cat/tables-chairs-fu002/",
+      "path": "/us/en/cat/tables-chairs-fu002/"
+    },
+    {
+      "kind": "header",
+      "label": "Desks & desk chairs",
+      "real": "https://www.ikea.com/us/en/cat/workspace-desks-chairs-fu004/",
+      "path": "/us/en/cat/workspace-desks-chairs-fu004/"
+    },
+    {
+      "kind": "header",
+      "label": "Kitchenware & tableware",
+      "real": "https://www.ikea.com/us/en/cat/cookware-tableware-kt001/",
+      "path": "/us/en/cat/cookware-tableware-kt001/"
+    },
+    {
+      "kind": "header",
+      "label": "Home decor & accessories",
+      "real": "https://www.ikea.com/us/en/cat/home-decor-de001/",
+      "path": "/us/en/cat/home-decor-de001/"
+    },
+    {
+      "kind": "header",
+      "label": "Baby & kids",
+      "real": "https://www.ikea.com/us/en/cat/baby-kids-bc001/",
+      "path": "/us/en/cat/baby-kids-bc001/"
+    },
+    {
+      "kind": "header",
+      "label": "Storage containers, organizers & baskets",
+      "real": "https://www.ikea.com/us/en/cat/storage-containers-st007/",
+      "path": "/us/en/cat/storage-containers-st007/"
+    },
+    {
+      "kind": "header",
+      "label": "Bathroom: furniture, supplies & more",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-ba001/",
+      "path": "/us/en/cat/bathroom-ba001/"
+    },
+    {
+      "kind": "header",
+      "label": "Outdoor",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-od001/",
+      "path": "/us/en/cat/outdoor-od001/"
+    },
+    {
+      "kind": "header",
+      "label": "Window treatments & coverings",
+      "real": "https://www.ikea.com/us/en/cat/window-treatments-tl002/",
+      "path": "/us/en/cat/window-treatments-tl002/"
+    },
+    {
+      "kind": "header",
+      "label": "Plants & planters",
+      "real": "https://www.ikea.com/us/en/cat/plants-planters-pp001/",
+      "path": "/us/en/cat/plants-planters-pp001/"
+    },
+    {
+      "kind": "header",
+      "label": "Laundry & cleaning",
+      "real": "https://www.ikea.com/us/en/cat/laundry-cleaning-lc001/",
+      "path": "/us/en/cat/laundry-cleaning-lc001/"
+    },
+    {
+      "kind": "header",
+      "label": "IKEA Food & Swedish restaurant",
+      "real": "https://www.ikea.com/us/en/cat/ikea-food-restaurant-fb001/",
+      "path": "/us/en/cat/ikea-food-restaurant-fb001/"
+    },
+    {
+      "kind": "header",
+      "label": "Home electronics",
+      "real": "https://www.ikea.com/us/en/cat/home-electronics-he001/",
+      "path": "/us/en/cat/home-electronics-he001/"
+    },
+    {
+      "kind": "header",
+      "label": "Home improvement",
+      "real": "https://www.ikea.com/us/en/cat/home-improvement-hi001/",
+      "path": "/us/en/cat/home-improvement-hi001/"
+    },
+    {
+      "kind": "header",
+      "label": "Pet products",
+      "real": "https://www.ikea.com/us/en/cat/pet-accessories-pt001/",
+      "path": "/us/en/cat/pet-accessories-pt001/"
+    },
+    {
+      "kind": "header",
+      "label": "Smart home",
+      "real": "https://www.ikea.com/us/en/cat/smart-home-hs001/",
+      "path": "/us/en/cat/smart-home-hs001/"
+    },
+    {
+      "kind": "header",
+      "label": "Outdoor",
+      "real": "https://www.ikea.com/us/en/rooms/outdoor/",
+      "path": "/us/en/rooms/outdoor/"
+    },
+    {
+      "kind": "header",
+      "label": "Kitchen",
+      "real": "https://www.ikea.com/us/en/rooms/kitchen/",
+      "path": "/us/en/rooms/kitchen/"
+    },
+    {
+      "kind": "header",
+      "label": "Bathroom",
+      "real": "https://www.ikea.com/us/en/rooms/bathroom/",
+      "path": "/us/en/rooms/bathroom/"
+    },
+    {
+      "kind": "header",
+      "label": "Living room",
+      "real": "https://www.ikea.com/us/en/rooms/living-room/",
+      "path": "/us/en/rooms/living-room/"
+    },
+    {
+      "kind": "header",
+      "label": "Bedroom",
+      "real": "https://www.ikea.com/us/en/rooms/bedroom/",
+      "path": "/us/en/rooms/bedroom/"
+    },
+    {
+      "kind": "header",
+      "label": "Dining room",
+      "real": "https://www.ikea.com/us/en/rooms/dining/",
+      "path": "/us/en/rooms/dining/"
+    },
+    {
+      "kind": "header",
+      "label": "Home office",
+      "real": "https://www.ikea.com/us/en/rooms/home-office/",
+      "path": "/us/en/rooms/home-office/"
+    },
+    {
+      "kind": "header",
+      "label": "Children's room",
+      "real": "https://www.ikea.com/us/en/rooms/childrens-room/",
+      "path": "/us/en/rooms/childrens-room/"
+    },
+    {
+      "kind": "header",
+      "label": "Gaming room",
+      "real": "https://www.ikea.com/us/en/rooms/gaming-room/",
+      "path": "/us/en/rooms/gaming-room/"
+    },
+    {
+      "kind": "header",
+      "label": "Hallway",
+      "real": "https://www.ikea.com/us/en/rooms/hallway/",
+      "path": "/us/en/rooms/hallway/"
+    },
+    {
+      "kind": "header",
+      "label": "Garage",
+      "real": "https://www.ikea.com/us/en/rooms/garage/",
+      "path": "/us/en/rooms/garage/"
+    },
+    {
+      "kind": "header",
+      "label": "Laundry",
+      "real": "https://www.ikea.com/us/en/rooms/laundry/",
+      "path": "/us/en/rooms/laundry/"
+    },
+    {
+      "kind": "footer",
+      "label": "Customer service",
+      "real": "https://www.ikea.com/us/en/customer-service/",
+      "path": "/us/en/customer-service/"
+    },
+    {
+      "kind": "footer",
+      "label": "FAQ",
+      "real": "https://www.ikea.com/us/en/customer-service/faq/",
+      "path": "/us/en/customer-service/faq/"
+    },
+    {
+      "kind": "footer",
+      "label": "My orders",
+      "real": "https://www.ikea.com/us/en/customer-service/track-manage-order/",
+      "path": "/us/en/customer-service/track-manage-order/"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact Us",
+      "real": "https://www.ikea.com/us/en/customer-service/support/",
+      "path": "/us/en/customer-service/support/"
+    },
+    {
+      "kind": "footer",
+      "label": "Product Recalls",
+      "real": "https://www.ikea.com/us/en/customer-service/product-support/recalls/",
+      "path": "/us/en/customer-service/product-support/recalls/"
+    },
+    {
+      "kind": "footer",
+      "label": "Return Policy",
+      "real": "https://www.ikea.com/us/en/customer-service/returns-claims/",
+      "path": "/us/en/customer-service/returns-claims/"
+    },
+    {
+      "kind": "footer",
+      "label": "Warranties",
+      "real": "https://www.ikea.com/us/en/customer-service/returns-claims/guarantee/",
+      "path": "/us/en/customer-service/returns-claims/guarantee/"
+    },
+    {
+      "kind": "footer",
+      "label": "Feedback",
+      "real": "https://www.ikea.com/us/en/customer-service/",
+      "path": "/us/en/customer-service/feedback/"
+    },
+    {
+      "kind": "footer",
+      "label": "Find a Location",
+      "real": "https://www.ikea.com/us/en/stores/",
+      "path": "/us/en/stores/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA Services",
+      "real": "https://www.ikea.com/us/en/customer-service/services/",
+      "path": "/us/en/customer-service/services/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA Family",
+      "real": "https://www.ikea.com/us/en/ikea-family/",
+      "path": "/us/en/ikea-family/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA for Business",
+      "real": "https://www.ikea.com/us/en/ikea-business/",
+      "path": "/us/en/ikea-business/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA Planning Tools",
+      "real": "https://www.ikea.com/us/en/planners/",
+      "path": "/us/en/planners/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA Brochures",
+      "real": "https://www.ikea.com/us/en/customer-service/catalogues/",
+      "path": "/us/en/customer-service/catalogues/"
+    },
+    {
+      "kind": "footer",
+      "label": "Buying guides",
+      "real": "https://www.ikea.com/us/en/customer-service/product-support/buying-guides/",
+      "path": "/us/en/customer-service/product-support/buying-guides/"
+    },
+    {
+      "kind": "footer",
+      "label": "Payment options",
+      "real": "https://www.ikea.com/us/en/customer-service/payment-options/",
+      "path": "/us/en/customer-service/payment-options/"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Cards",
+      "real": "https://www.ikea.com/us/en/customer-service/gift-cards-pub3d1efe50/",
+      "path": "/us/en/customer-service/gift-cards-pub3d1efe50/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA Credit Card Management",
+      "real": "https://d.comenity.net/ikea/",
+      "path": "/us/en/customer-service/services/finance-options/ikea-credit-card-management/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA Credit Cards",
+      "real": "https://www.ikea.com/us/en/customer-service/services/finance-options/ikea-credit-cards-pub9b4272b0/",
+      "path": "/us/en/customer-service/services/finance-options/ikea-credit-cards-pub9b4272b0/"
+    },
+    {
+      "kind": "footer",
+      "label": "Cash App Afterpay",
+      "real": "https://www.ikea.com/us/en/customer-service/services/finance-options/introducing-afterpay-pub5503e420/",
+      "path": "/us/en/customer-service/services/finance-options/introducing-afterpay-pub5503e420/"
+    },
+    {
+      "kind": "footer",
+      "label": "Explore the New IKEA App",
+      "real": "https://www.ikea.com/us/en/customer-service/mobile-apps/",
+      "path": "/us/en/customer-service/mobile-apps/"
+    },
+    {
+      "kind": "footer",
+      "label": "This is IKEA",
+      "real": "https://www.ikea.com/us/en/this-is-ikea/",
+      "path": "/us/en/this-is-ikea/"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://seeacareerwithus.com/",
+      "path": "/us/en/this-is-ikea/work-with-us/careers/"
+    },
+    {
+      "kind": "footer",
+      "label": "Newsroom",
+      "real": "https://www.ikea.com/us/en/newsroom/",
+      "path": "/us/en/newsroom/"
+    },
+    {
+      "kind": "footer",
+      "label": "Life at Home",
+      "real": "https://www.ikea.com/us/en/life-at-home/",
+      "path": "/us/en/life-at-home/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA Foundation",
+      "real": "https://ikeafoundation.org/",
+      "path": "/us/en/this-is-ikea/ikea-foundation/"
+    },
+    {
+      "kind": "footer",
+      "label": "Safety at Home",
+      "real": "https://www.ikea.com/us/en/safety-at-home/",
+      "path": "/us/en/safety-at-home/"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy & Security",
+      "real": "https://www.ikea.com/us/en/customer-service/privacy-and-security-pub8a9dd8e1/",
+      "path": "/us/en/customer-service/privacy-and-security-pub8a9dd8e1/"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy policy",
+      "real": "https://www.ikea.com/us/en/customer-service/privacy-policy/",
+      "path": "/us/en/customer-service/privacy-policy/"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms and conditions",
+      "real": "https://www.ikea.com/us/en/customer-service/terms-conditions/",
+      "path": "/us/en/customer-service/terms-conditions/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA Children's Product Registration",
+      "real": "https://info.ikea-usa.com/registration/",
+      "path": "/us/en/customer-service/product-support/childrens-product-registration/"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.ikea.com/us/en/customer-service/accessibility/",
+      "path": "/us/en/customer-service/accessibility/"
+    },
+    {
+      "kind": "footer",
+      "label": "IKEA SMÅLAND Privacy notice",
+      "real": "https://www.ikea.com/us/en/customer-service/privacy-policy/ikea-smaland-privacy-notice-pubf7ed5e70/",
+      "path": "/us/en/customer-service/privacy-policy/ikea-smaland-privacy-notice-pubf7ed5e70/"
+    },
+    {
+      "kind": "footer",
+      "label": "Join or log in",
+      "real": "https://www.ikea.com/us/en/profile/login",
+      "path": "/us/en/profile/login/"
+    },
+    {
+      "kind": "footer",
+      "label": "See more",
+      "real": "https://www.ikea.com/us/en/ikea-family/",
+      "path": "/us/en/ikea-family/"
+    },
+    {
+      "kind": "footer",
+      "label": "Cookie policy",
+      "real": "https://www.ikea.com/us/en/customer-service/cookie-policy/",
+      "path": "/us/en/customer-service/cookie-policy/"
+    },
+    {
+      "kind": "footer",
+      "label": "California Notice at Collection",
+      "real": "https://www.ikea.com/us/en/customer-service/privacy-policy/",
+      "path": "/us/en/customer-service/privacy-policy/#california-notice"
+    },
+    {
+      "kind": "page",
+      "label": "Department page",
+      "real": "https://www.ikea.com/us/en/cat/storage-organization-st001/",
+      "path": "/us/en/cat/storage-organization-st001/",
+      "expect": [
+        "Storage & organization",
+        "Shelving furniture",
+        "Sort",
+        "Remember to anchor furniture to the wall"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Category page",
+      "real": "https://www.ikea.com/us/en/cat/bookcases-shelving-units-st002/",
+      "path": "/us/en/cat/bookcases-shelving-units-st002/",
+      "expect": [
+        "Shelving furniture",
+        "Sort and Filter",
+        "Business owner? Join IKEA Business Network today",
+        "Click and collect",
+        "Taskrabbit Assembly"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "All products",
+      "real": "https://www.ikea.com/us/en/cat/products-products/",
+      "path": "/us/en/cat/products-products/",
+      "expect": [
+        "Products",
+        "Winter holiday shop",
+        "Storage & organization",
+        "Smart home"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results (gta 6)",
+      "real": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "path": "/us/en/search/?q=gta%206",
+      "expect": [
+        "There are no results for",
+        "More inspiration like this",
+        "Recommended categories"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shopping bag",
+      "real": "https://www.ikea.com/us/en/shoppingcart/",
+      "path": "/us/en/shoppingcart/",
+      "expect": [
+        "Shopping bag",
+        "Your bag is empty"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.ikea.com/us/en/profile/login/",
+      "path": "/us/en/profile/login/",
+      "expect": [
+        "Log in",
+        "Password",
+        "Create"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account",
+      "real": "https://www.ikea.com/us/en/profile/",
+      "path": "/us/en/profile/",
+      "expect": [
+        "Hej",
+        "Purchases",
+        "Favorites"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status",
+      "real": "https://www.ikea.com/us/en/customer-service/track-manage-order/",
+      "path": "/us/en/customer-service/track-manage-order/",
+      "expect": [
+        "Track and manage your order",
+        "Manage your order",
+        "Understand your order status",
+        "Preparing order",
+        "On its way"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Customer service",
+      "real": "https://www.ikea.com/us/en/customer-service/",
+      "path": "/us/en/customer-service/",
+      "expect": [
+        "Customer service",
+        "Planning Tools",
+        "Return or change products",
+        "Need an extra part?",
+        "Find an IKEA near you"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "FAQ",
+      "real": "https://www.ikea.com/us/en/customer-service/faq/",
+      "path": "/us/en/customer-service/faq/",
+      "expect": [
+        "Frequently asked questions",
+        "How can I check the status of my order?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store locator",
+      "real": "https://www.ikea.com/us/en/stores/",
+      "path": "/us/en/stores/",
+      "expect": [
+        "Find an IKEA location near you",
+        "IKEA locations",
+        "IKEA in Best Buy: A new way to plan and order",
+        "Pick-up locations (furniture/large orders)"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.ikea.com/us/en/customer-service/gift-cards-pub3d1efe50/",
+      "path": "/us/en/customer-service/gift-cards-pub3d1efe50/",
+      "expect": [
+        "Gift cards",
+        "About Your Card",
+        "Balance Inquiry",
+        "Expiration/Fees"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals",
+      "real": "https://www.ikea.com/us/en/offers/",
+      "path": "/us/en/offers/",
+      "expect": [
+        "IKEA Offers, Sales and Deals",
+        "IKEA Family members: Make your dream kitchen a reality",
+        "Get more savings in-store",
+        "Shop by offer"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Return policy",
+      "real": "https://www.ikea.com/us/en/customer-service/returns-claims/",
+      "path": "/us/en/customer-service/returns-claims/",
+      "expect": [
+        "Return policy",
+        "It's OK to change your mind!",
+        "How to return or exchange",
+        "Missing and damaged orders"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping and delivery",
+      "real": "https://www.ikea.com/us/en/customer-service/services/delivery/",
+      "path": "/us/en/customer-service/services/delivery/",
+      "expect": [
+        "Shipping and Delivery service",
+        "Small order shipping",
+        "Large item delivery",
+        "IKEA Shipping and Delivery basics"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Services",
+      "real": "https://www.ikea.com/us/en/customer-service/services/",
+      "path": "/us/en/customer-service/services/",
+      "expect": [
+        "Services",
+        "DIY the IKEA way",
+        "Assembly by Taskrabbit",
+        "IKEA Buyback & Resell Service"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Rooms",
+      "real": "https://www.ikea.com/us/en/rooms/",
+      "path": "/us/en/rooms/",
+      "expect": [
+        "IKEA Rooms",
+        "Living room",
+        "Gaming room",
+        "Laundry"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Design & ideas",
+      "real": "https://www.ikea.com/us/en/ideas/",
+      "path": "/us/en/ideas/",
+      "expect": [
+        "Home ideas and design inspiration",
+        "Inspiration by room",
+        "Plan your space in 3D"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "IKEA Family",
+      "real": "https://www.ikea.com/us/en/ikea-family/",
+      "path": "/us/en/ikea-family/",
+      "expect": [
+        "Welcome to IKEA Family!",
+        "IKEA Family benefits you’ll love!",
+        "How to use your IKEA Family benefits"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "This is IKEA",
+      "real": "https://www.ikea.com/us/en/this-is-ikea/",
+      "path": "/us/en/this-is-ikea/",
+      "expect": [
+        "This is IKEA",
+        "About us",
+        "Climate and environment"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.ikea.com/us/en/ (no HTML site map found)",
+      "path": "/us/en/sitemap/",
+      "expect": [
+        "Site map",
+        "Products",
+        "Rooms"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Product category carousel",
+      "expect": [
+        "Storage & organization",
+        "Sofas & armchairs",
+        "Beds & mattresses"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "IKEA Family price hero",
+      "expect": [
+        "IKEA Family price"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Holiday hosting promo",
+      "expect": [
+        "Holiday hosting?",
+        "Thanksgiving prep starts now"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "New designs",
+      "expect": [
+        "Fall in love with our newest designs"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Food deals",
+      "expect": [
+        "Delicious deals on your favorite foods"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "IKEA Family offers",
+      "expect": [
+        "IKEA Family offers"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Right now at IKEA",
+      "expect": [
+        "Right now at IKEA"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Accessories and rooms",
+      "expect": [
+        "Shop accessories for every room",
+        "Inspiration for every room"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Instagram gallery",
+      "expect": [
+        "As seen on Instagram"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Convenient shopping",
+      "expect": [
+        "Discover how convenient shopping at IKEA can be!",
+        "Need it fast? Try Click & collect!"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Buyback & Resell",
+      "expect": [
+        "Buyback & Resell"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Services and support",
+      "expect": [
+        "Services and support"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Sustainable home",
+      "expect": [
+        "Tips and ideas for a more sustainable home"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Product recalls",
+      "expect": [
+        "Product recalls"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "SEO copy",
+      "expect": [
+        "Design inspiration and modern home ideas"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Winter holiday shop",
+      "real": "https://www.ikea.com/us/en/cat/winter-holidays-wt001/",
+      "path": "/us/en/cat/winter-holidays-wt001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Holiday decor",
+      "real": "https://www.ikea.com/us/en/cat/winter-decoration-49149/",
+      "path": "/us/en/cat/winter-decoration-49149/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Christmas lights",
+      "real": "https://www.ikea.com/us/en/cat/winter-lights-49150/",
+      "path": "/us/en/cat/winter-lights-49150/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Holiday textiles",
+      "real": "https://www.ikea.com/us/en/cat/winter-textiles-49152/",
+      "path": "/us/en/cat/winter-textiles-49152/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Holiday tableware",
+      "real": "https://www.ikea.com/us/en/cat/winter-tableware-49153/",
+      "path": "/us/en/cat/winter-tableware-49153/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Winter plants",
+      "real": "https://www.ikea.com/us/en/cat/winter-pots-plants-49151/",
+      "path": "/us/en/cat/winter-pots-plants-49151/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Holiday food",
+      "real": "https://www.ikea.com/us/en/cat/holiday-foods-49227/",
+      "path": "/us/en/cat/holiday-foods-49227/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wrapping paper and bags",
+      "real": "https://www.ikea.com/us/en/cat/paper-shop-25227/",
+      "path": "/us/en/cat/paper-shop-25227/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Holiday baking tools",
+      "real": "https://www.ikea.com/us/en/cat/winter-cooking-baking-49154/",
+      "path": "/us/en/cat/winter-cooking-baking-49154/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Storage & organization",
+      "real": "https://www.ikea.com/us/en/cat/storage-organization-st001/",
+      "path": "/us/en/cat/storage-organization-st001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dressers & storage drawers",
+      "real": "https://www.ikea.com/us/en/cat/dressers-storage-drawers-st004/",
+      "path": "/us/en/cat/dressers-storage-drawers-st004/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shelving furniture",
+      "real": "https://www.ikea.com/us/en/cat/bookcases-shelving-units-st002/",
+      "path": "/us/en/cat/bookcases-shelving-units-st002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Storage solution systems",
+      "real": "https://www.ikea.com/us/en/cat/storage-solution-systems-46052/",
+      "path": "/us/en/cat/storage-solution-systems-46052/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Display & storage cabinets",
+      "real": "https://www.ikea.com/us/en/cat/display-storage-cabinets-st003/",
+      "path": "/us/en/cat/display-storage-cabinets-st003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Armoires & wardrobes",
+      "real": "https://www.ikea.com/us/en/cat/armoires-wardrobes-19053/",
+      "path": "/us/en/cat/armoires-wardrobes-19053/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV & media furniture",
+      "real": "https://www.ikea.com/us/en/cat/tv-media-furniture-10475/",
+      "path": "/us/en/cat/tv-media-furniture-10475/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Living room & entryway tables",
+      "real": "https://www.ikea.com/us/en/cat/sideboards-buffets-sofa-tables-30454/",
+      "path": "/us/en/cat/sideboards-buffets-sofa-tables-30454/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rolling utility & storage carts",
+      "real": "https://www.ikea.com/us/en/cat/utility-storage-carts-fu005/",
+      "path": "/us/en/cat/utility-storage-carts-fu005/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Garage storage solutions",
+      "real": "https://www.ikea.com/us/en/cat/garage-storage-700440/",
+      "path": "/us/en/cat/garage-storage-700440/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor storage: shelves, cabinets & boxes",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-organizing-21958/",
+      "path": "/us/en/cat/outdoor-organizing-21958/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Room dividers",
+      "real": "https://www.ikea.com/us/en/cat/room-dividers-46080/",
+      "path": "/us/en/cat/room-dividers-46080/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hallway furniture sets",
+      "real": "https://www.ikea.com/us/en/cat/hallway-furniture-sets-700411/",
+      "path": "/us/en/cat/hallway-furniture-sets-700411/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Filing cabinets",
+      "real": "https://www.ikea.com/us/en/cat/storage-cabinets-10385/",
+      "path": "/us/en/cat/storage-cabinets-10385/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoe cabinets",
+      "real": "https://www.ikea.com/us/en/cat/shoe-cabinets-10456/",
+      "path": "/us/en/cat/shoe-cabinets-10456/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids storage & organization",
+      "real": "https://www.ikea.com/us/en/cat/kids-storage-organization-18706/",
+      "path": "/us/en/cat/kids-storage-organization-18706/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sofas & armchairs",
+      "real": "https://www.ikea.com/us/en/cat/sofas-armchairs-700640/",
+      "path": "/us/en/cat/sofas-armchairs-700640/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sofas & sectionals",
+      "real": "https://www.ikea.com/us/en/cat/sofas-sectionals-fu003/",
+      "path": "/us/en/cat/sofas-sectionals-fu003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sleeper sofas & sofa beds",
+      "real": "https://www.ikea.com/us/en/cat/sleeper-sofas-10663/",
+      "path": "/us/en/cat/sleeper-sofas-10663/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Armchairs & accent chairs",
+      "real": "https://www.ikea.com/us/en/cat/armchairs-chaises-fu006/",
+      "path": "/us/en/cat/armchairs-chaises-fu006/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ottomans, footstools & poufs",
+      "real": "https://www.ikea.com/us/en/cat/ottomans-20926/",
+      "path": "/us/en/cat/ottomans-20926/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chaise lounges",
+      "real": "https://www.ikea.com/us/en/cat/chaise-lounges-57527/",
+      "path": "/us/en/cat/chaise-lounges-57527/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sofa & armchair cushions & headrests",
+      "real": "https://www.ikea.com/us/en/cat/sofa-cushions-57536/",
+      "path": "/us/en/cat/sofa-cushions-57536/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sofa legs",
+      "real": "https://www.ikea.com/us/en/cat/sofa-legs-31785/",
+      "path": "/us/en/cat/sofa-legs-31785/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sofa & armchairs covers",
+      "real": "https://www.ikea.com/us/en/cat/sofa-covers-10664/",
+      "path": "/us/en/cat/sofa-covers-10664/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Modular sofas",
+      "real": "https://www.ikea.com/us/en/cat/sofa-modules-31786/",
+      "path": "/us/en/cat/sofa-modules-31786/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beds & mattresses",
+      "real": "https://www.ikea.com/us/en/cat/beds-mattresses-bm001/",
+      "path": "/us/en/cat/beds-mattresses-bm001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beds",
+      "real": "https://www.ikea.com/us/en/cat/beds-bm003/",
+      "path": "/us/en/cat/beds-bm003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mattresses",
+      "real": "https://www.ikea.com/us/en/cat/mattresses-bm002/",
+      "path": "/us/en/cat/mattresses-bm002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bedding & bedding sets",
+      "real": "https://www.ikea.com/us/en/cat/bedding-tl004/",
+      "path": "/us/en/cat/bedding-tl004/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nightstands",
+      "real": "https://www.ikea.com/us/en/cat/nightstands-20656/",
+      "path": "/us/en/cat/nightstands-20656/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Underbed storage bags & bins",
+      "real": "https://www.ikea.com/us/en/cat/under-bed-storage-19059/",
+      "path": "/us/en/cat/under-bed-storage-19059/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bedroom furniture sets",
+      "real": "https://www.ikea.com/us/en/cat/bedroom-furniture-sets-54992/",
+      "path": "/us/en/cat/bedroom-furniture-sets-54992/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mattresses with bed frame included",
+      "real": "https://www.ikea.com/us/en/cat/beds-with-mattresses-included-700513/",
+      "path": "/us/en/cat/beds-with-mattresses-included-700513/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Headboards",
+      "real": "https://www.ikea.com/us/en/cat/headboards-19064/",
+      "path": "/us/en/cat/headboards-19064/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bed slats",
+      "real": "https://www.ikea.com/us/en/cat/bed-slats-24827/",
+      "path": "/us/en/cat/bed-slats-24827/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mattress foundations & bases",
+      "real": "https://www.ikea.com/us/en/cat/mattress-bases-24825/",
+      "path": "/us/en/cat/mattress-bases-24825/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bed frame & headboard covers",
+      "real": "https://www.ikea.com/us/en/cat/bed-headboard-covers-57280/",
+      "path": "/us/en/cat/bed-headboard-covers-57280/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bed legs",
+      "real": "https://www.ikea.com/us/en/cat/bed-legs-24822/",
+      "path": "/us/en/cat/bed-legs-24822/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Lighting",
+      "real": "https://www.ikea.com/us/en/cat/lighting-li001/",
+      "path": "/us/en/cat/lighting-li001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Lamps & light fixtures",
+      "real": "https://www.ikea.com/us/en/cat/lamps-light-fixtures-li002/",
+      "path": "/us/en/cat/lamps-light-fixtures-li002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Decorative lighting",
+      "real": "https://www.ikea.com/us/en/cat/decorative-lighting-14971/",
+      "path": "/us/en/cat/decorative-lighting-14971/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart lighting",
+      "real": "https://www.ikea.com/us/en/cat/smart-lighting-36812/",
+      "path": "/us/en/cat/smart-lighting-36812/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Integrated lighting",
+      "real": "https://www.ikea.com/us/en/cat/integrated-lighting-16280/",
+      "path": "/us/en/cat/integrated-lighting-16280/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "LED light bulbs",
+      "real": "https://www.ikea.com/us/en/cat/led-bulbs-20514/",
+      "path": "/us/en/cat/led-bulbs-20514/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom lighting",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-lighting-10736/",
+      "path": "/us/en/cat/bathroom-lighting-10736/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor lighting",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-lighting-17897/",
+      "path": "/us/en/cat/outdoor-lighting-17897/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ceiling fans",
+      "real": "https://www.ikea.com/us/en/cat/ceiling-fans-700600/",
+      "path": "/us/en/cat/ceiling-fans-700600/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen, appliances & supplies",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-appliances-ka001/",
+      "path": "/us/en/cat/kitchen-appliances-ka001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen systems",
+      "real": "https://www.ikea.com/us/en/cat/kitchens-ka003/",
+      "path": "/us/en/cat/kitchens-ka003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen cabinets",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-cabinets-700292/",
+      "path": "/us/en/cat/kitchen-cabinets-700292/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen doors & drawer fronts",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-doors-drawer-fronts-700293/",
+      "path": "/us/en/cat/kitchen-doors-drawer-fronts-700293/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen appliances",
+      "real": "https://www.ikea.com/us/en/cat/appliances-ka002/",
+      "path": "/us/en/cat/appliances-ka002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen countertops",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-countertops-24264/",
+      "path": "/us/en/cat/kitchen-countertops-24264/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen islands & carts",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-islands-carts-10471/",
+      "path": "/us/en/cat/kitchen-islands-carts-10471/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen cabinet & drawer organization",
+      "real": "https://www.ikea.com/us/en/cat/interior-fittings-24255/",
+      "path": "/us/en/cat/interior-fittings-24255/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen organization & wall storage",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-wall-storage-20676/",
+      "path": "/us/en/cat/kitchen-wall-storage-20676/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pantry shelving",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-pantry-storage-16200/",
+      "path": "/us/en/cat/kitchen-pantry-storage-16200/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen faucets",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-faucets-10482/",
+      "path": "/us/en/cat/kitchen-faucets-10482/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen sinks",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-sinks-24263/",
+      "path": "/us/en/cat/kitchen-sinks-24263/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Modular kitchens & kitchenettes",
+      "real": "https://www.ikea.com/us/en/cat/modular-kitchens-22957/",
+      "path": "/us/en/cat/modular-kitchens-22957/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Knobs and handles",
+      "real": "https://www.ikea.com/us/en/cat/cabinet-knobs-handles-pulls-16298/",
+      "path": "/us/en/cat/cabinet-knobs-handles-pulls-16298/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen lighting",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-lighting-16282/",
+      "path": "/us/en/cat/kitchen-lighting-16282/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "SEKTION cabinet shelves & drawers",
+      "real": "https://www.ikea.com/us/en/cat/sektion-cabinet-shelves-and-drawers-49117/",
+      "path": "/us/en/cat/sektion-cabinet-shelves-and-drawers-49117/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rugs & home textiles",
+      "real": "https://www.ikea.com/us/en/cat/home-textiles-tl001/",
+      "path": "/us/en/cat/home-textiles-tl001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Decorative pillows & couch cushion covers",
+      "real": "https://www.ikea.com/us/en/cat/decorative-pillows-cushion-covers-10659/",
+      "path": "/us/en/cat/decorative-pillows-cushion-covers-10659/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rugs",
+      "real": "https://www.ikea.com/us/en/cat/rugs-10653/",
+      "path": "/us/en/cat/rugs-10653/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Table linens",
+      "real": "https://www.ikea.com/us/en/cat/table-linen-20538/",
+      "path": "/us/en/cat/table-linen-20538/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Blankets & throws",
+      "real": "https://www.ikea.com/us/en/cat/blankets-throws-20528/",
+      "path": "/us/en/cat/blankets-throws-20528/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom textiles",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-textiles-tl003/",
+      "path": "/us/en/cat/bathroom-textiles-tl003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen linens & textiles",
+      "real": "https://www.ikea.com/us/en/cat/kitchen-textiles-18850/",
+      "path": "/us/en/cat/kitchen-textiles-18850/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Textiles for kids",
+      "real": "https://www.ikea.com/us/en/cat/kids-textiles-18730/",
+      "path": "/us/en/cat/kids-textiles-18730/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor cushions",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-cushions-17893/",
+      "path": "/us/en/cat/outdoor-cushions-17893/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chair pads & seat cushions",
+      "real": "https://www.ikea.com/us/en/cat/chair-pads-20542/",
+      "path": "/us/en/cat/chair-pads-20542/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing & accessories",
+      "real": "https://www.ikea.com/us/en/cat/clothing-accessories-42925/",
+      "path": "/us/en/cat/clothing-accessories-42925/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby textiles",
+      "real": "https://www.ikea.com/us/en/cat/baby-textiles-18690/",
+      "path": "/us/en/cat/baby-textiles-18690/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fabric & sewing accessories",
+      "real": "https://www.ikea.com/us/en/cat/fabrics-sewing-10655/",
+      "path": "/us/en/cat/fabrics-sewing-10655/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Lumbar support pillows",
+      "real": "https://www.ikea.com/us/en/cat/lumbar-support-700528/",
+      "path": "/us/en/cat/lumbar-support-700528/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tables & chairs",
+      "real": "https://www.ikea.com/us/en/cat/tables-chairs-fu002/",
+      "path": "/us/en/cat/tables-chairs-fu002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dining furniture",
+      "real": "https://www.ikea.com/us/en/cat/dining-furniture-700417/",
+      "path": "/us/en/cat/dining-furniture-700417/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tables",
+      "real": "https://www.ikea.com/us/en/cat/tables-700675/",
+      "path": "/us/en/cat/tables-700675/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chairs",
+      "real": "https://www.ikea.com/us/en/cat/chairs-700676/",
+      "path": "/us/en/cat/chairs-700676/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Benches",
+      "real": "https://www.ikea.com/us/en/cat/benches-700319/",
+      "path": "/us/en/cat/benches-700319/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bar furniture",
+      "real": "https://www.ikea.com/us/en/cat/bar-furniture-16244/",
+      "path": "/us/en/cat/bar-furniture-16244/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accent tables",
+      "real": "https://www.ikea.com/us/en/cat/accent-tables-10705/",
+      "path": "/us/en/cat/accent-tables-10705/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids tables",
+      "real": "https://www.ikea.com/us/en/cat/kids-tables-18768/",
+      "path": "/us/en/cat/kids-tables-18768/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "High chairs",
+      "real": "https://www.ikea.com/us/en/cat/high-chairs-45782/",
+      "path": "/us/en/cat/high-chairs-45782/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Stools",
+      "real": "https://www.ikea.com/us/en/cat/stools-22659/",
+      "path": "/us/en/cat/stools-22659/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Café furniture",
+      "real": "https://www.ikea.com/us/en/cat/cafe-furniture-19141/",
+      "path": "/us/en/cat/cafe-furniture-19141/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Step stools & step ladders",
+      "real": "https://www.ikea.com/us/en/cat/step-stools-step-ladders-20611/",
+      "path": "/us/en/cat/step-stools-step-ladders-20611/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vanity chairs",
+      "real": "https://www.ikea.com/us/en/cat/dressing-table-chairs-stools-59250/",
+      "path": "/us/en/cat/dressing-table-chairs-stools-59250/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Children's seating",
+      "real": "https://www.ikea.com/us/en/cat/childrens-chairs-bc004/",
+      "path": "/us/en/cat/childrens-chairs-bc004/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desks & desk chairs",
+      "real": "https://www.ikea.com/us/en/cat/workspace-desks-chairs-fu004/",
+      "path": "/us/en/cat/workspace-desks-chairs-fu004/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desks & computer desks",
+      "real": "https://www.ikea.com/us/en/cat/desks-computer-desks-20649/",
+      "path": "/us/en/cat/desks-computer-desks-20649/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desk chairs",
+      "real": "https://www.ikea.com/us/en/cat/desk-chairs-20652/",
+      "path": "/us/en/cat/desk-chairs-20652/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming furniture",
+      "real": "https://www.ikea.com/us/en/cat/gaming-furniture-55002/",
+      "path": "/us/en/cat/gaming-furniture-55002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Conference tables",
+      "real": "https://www.ikea.com/us/en/cat/mittzon-conference-meeting-tables-54173/",
+      "path": "/us/en/cat/mittzon-conference-meeting-tables-54173/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Conference table & chair sets",
+      "real": "https://www.ikea.com/us/en/cat/conference-table-chair-sets-700424/",
+      "path": "/us/en/cat/conference-table-chair-sets-700424/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desk & chair sets",
+      "real": "https://www.ikea.com/us/en/cat/desk-chair-sets-53249/",
+      "path": "/us/en/cat/desk-chair-sets-53249/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Conference chairs",
+      "real": "https://www.ikea.com/us/en/cat/conference-chairs-47068/",
+      "path": "/us/en/cat/conference-chairs-47068/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchenware & tableware",
+      "real": "https://www.ikea.com/us/en/cat/cookware-tableware-kt001/",
+      "path": "/us/en/cat/cookware-tableware-kt001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dinnerware",
+      "real": "https://www.ikea.com/us/en/cat/dinnerware-18860/",
+      "path": "/us/en/cat/dinnerware-18860/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Food storage & organizing",
+      "real": "https://www.ikea.com/us/en/cat/food-storage-organizing-15937/",
+      "path": "/us/en/cat/food-storage-organizing-15937/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cookware",
+      "real": "https://www.ikea.com/us/en/cat/cookware-kt003/",
+      "path": "/us/en/cat/cookware-kt003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Serveware",
+      "real": "https://www.ikea.com/us/en/cat/serveware-16043/",
+      "path": "/us/en/cat/serveware-16043/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Drinkware",
+      "real": "https://www.ikea.com/us/en/cat/drinkware-18868/",
+      "path": "/us/en/cat/drinkware-18868/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen & cooking accessories",
+      "real": "https://www.ikea.com/us/en/cat/cooking-baking-utensils-kt002/",
+      "path": "/us/en/cat/cooking-baking-utensils-kt002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Flatware & cutlery",
+      "real": "https://www.ikea.com/us/en/cat/flatware-18865/",
+      "path": "/us/en/cat/flatware-18865/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bakeware & accessories",
+      "real": "https://www.ikea.com/us/en/cat/bakeware-20636/",
+      "path": "/us/en/cat/bakeware-20636/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dishwashing accessories",
+      "real": "https://www.ikea.com/us/en/cat/dishwashing-accessories-15938/",
+      "path": "/us/en/cat/dishwashing-accessories-15938/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids tableware & dinnerware",
+      "real": "https://www.ikea.com/us/en/cat/kids-kitchenware-tableware-18714/",
+      "path": "/us/en/cat/kids-kitchenware-tableware-18714/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Coffee & tea accessories",
+      "real": "https://www.ikea.com/us/en/cat/coffee-tea-16044/",
+      "path": "/us/en/cat/coffee-tea-16044/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Knives & cutting boards",
+      "real": "https://www.ikea.com/us/en/cat/knives-chopping-boards-15934/",
+      "path": "/us/en/cat/knives-chopping-boards-15934/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Napkins & napkin holders",
+      "real": "https://www.ikea.com/us/en/cat/napkins-napkin-holders-20560/",
+      "path": "/us/en/cat/napkins-napkin-holders-20560/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor & picnic supplies",
+      "real": "https://www.ikea.com/us/en/cat/picnic-outdoor-recreation-42924/",
+      "path": "/us/en/cat/picnic-outdoor-recreation-42924/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nursing, feeding & eating",
+      "real": "https://www.ikea.com/us/en/cat/nursing-feeding-eating-31772/",
+      "path": "/us/en/cat/nursing-feeding-eating-31772/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home decor & accessories",
+      "real": "https://www.ikea.com/us/en/cat/home-decor-de001/",
+      "path": "/us/en/cat/home-decor-de001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wall décor",
+      "real": "https://www.ikea.com/us/en/cat/wall-decor-10757/",
+      "path": "/us/en/cat/wall-decor-10757/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mirrors",
+      "real": "https://www.ikea.com/us/en/cat/mirrors-20489/",
+      "path": "/us/en/cat/mirrors-20489/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Plants and flowers",
+      "real": "https://www.ikea.com/us/en/cat/plants-flowers-pp003/",
+      "path": "/us/en/cat/plants-flowers-pp003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Plant pots & stands",
+      "real": "https://www.ikea.com/us/en/cat/flower-pots-stands-pp004/",
+      "path": "/us/en/cat/flower-pots-stands-pp004/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home fragrances & scents",
+      "real": "https://www.ikea.com/us/en/cat/home-fragrance-42926/",
+      "path": "/us/en/cat/home-fragrance-42926/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Candle holders & candles",
+      "real": "https://www.ikea.com/us/en/cat/candle-holders-candles-10760/",
+      "path": "/us/en/cat/candle-holders-candles-10760/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vases & decorating bowls",
+      "real": "https://www.ikea.com/us/en/cat/vases-bowls-10769/",
+      "path": "/us/en/cat/vases-bowls-10769/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Storage boxes & organization bins",
+      "real": "https://www.ikea.com/us/en/cat/storage-boxes-baskets-10550/",
+      "path": "/us/en/cat/storage-boxes-baskets-10550/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bulletin boards, peg boards, pin boards & more",
+      "real": "https://www.ikea.com/us/en/cat/noticeboards-10574/",
+      "path": "/us/en/cat/noticeboards-10574/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clocks",
+      "real": "https://www.ikea.com/us/en/cat/clocks-10759/",
+      "path": "/us/en/cat/clocks-10759/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Table decor & decorative accessories",
+      "real": "https://www.ikea.com/us/en/cat/decorative-accessories-24924/",
+      "path": "/us/en/cat/decorative-accessories-24924/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby & kids",
+      "real": "https://www.ikea.com/us/en/cat/baby-kids-bc001/",
+      "path": "/us/en/cat/baby-kids-bc001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby",
+      "real": "https://www.ikea.com/us/en/cat/baby-bc002/",
+      "path": "/us/en/cat/baby-bc002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids",
+      "real": "https://www.ikea.com/us/en/cat/kids-bc003/",
+      "path": "/us/en/cat/kids-bc003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Storage containers, organizers & baskets",
+      "real": "https://www.ikea.com/us/en/cat/storage-containers-st007/",
+      "path": "/us/en/cat/storage-containers-st007/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothes organizers",
+      "real": "https://www.ikea.com/us/en/cat/clothes-organizers-10452/",
+      "path": "/us/en/cat/clothes-organizers-10452/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desk accessories",
+      "real": "https://www.ikea.com/us/en/cat/desk-accessories-10573/",
+      "path": "/us/en/cat/desk-accessories-10573/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom accessories & organizers",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-accessories-10555/",
+      "path": "/us/en/cat/bathroom-accessories-10555/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Paper & media organizers",
+      "real": "https://www.ikea.com/us/en/cat/paper-media-organizers-10551/",
+      "path": "/us/en/cat/paper-media-organizers-10551/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Recycling bins",
+      "real": "https://www.ikea.com/us/en/cat/recycling-bins-34470/",
+      "path": "/us/en/cat/recycling-bins-34470/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cable management & cord organizers",
+      "real": "https://www.ikea.com/us/en/cat/cable-management-accessories-16195/",
+      "path": "/us/en/cat/cable-management-accessories-16195/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wall shelves & hooks",
+      "real": "https://www.ikea.com/us/en/cat/wall-shelves-hooks-st006/",
+      "path": "/us/en/cat/wall-shelves-hooks-st006/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bags",
+      "real": "https://www.ikea.com/us/en/cat/bags-16248/",
+      "path": "/us/en/cat/bags-16248/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Moving supplies",
+      "real": "https://www.ikea.com/us/en/cat/moving-supplies-46078/",
+      "path": "/us/en/cat/moving-supplies-46078/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom: furniture, supplies & more",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-ba001/",
+      "path": "/us/en/cat/bathroom-ba001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom vanities",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-vanities-20719/",
+      "path": "/us/en/cat/bathroom-vanities-20719/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom systems",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-systems-700450/",
+      "path": "/us/en/cat/bathroom-systems-700450/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom shelving units",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-shelving-units-20804/",
+      "path": "/us/en/cat/bathroom-shelving-units-20804/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom wall cabinets",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-wall-cabinets-20808/",
+      "path": "/us/en/cat/bathroom-wall-cabinets-20808/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom faucets & sink taps",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-faucets-20724/",
+      "path": "/us/en/cat/bathroom-faucets-20724/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom mirrors",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-mirrors-20490/",
+      "path": "/us/en/cat/bathroom-mirrors-20490/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom countertop & drawer organizers",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-boxes-baskets-16233/",
+      "path": "/us/en/cat/bathroom-boxes-baskets-16233/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom storage carts",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-carts-20858/",
+      "path": "/us/en/cat/bathroom-carts-20858/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom stools & benches",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-stools-benches-20859/",
+      "path": "/us/en/cat/bathroom-stools-benches-20859/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom laundry",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-laundry-ba003/",
+      "path": "/us/en/cat/bathroom-laundry-ba003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom sinks",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-sinks-20723/",
+      "path": "/us/en/cat/bathroom-sinks-20723/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom shelves",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-shelves-20615/",
+      "path": "/us/en/cat/bathroom-shelves-20615/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom countertops",
+      "real": "https://www.ikea.com/us/en/cat/bathroom-countertops-30565/",
+      "path": "/us/en/cat/bathroom-countertops-30565/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Showers",
+      "real": "https://www.ikea.com/us/en/cat/showers-40690/",
+      "path": "/us/en/cat/showers-40690/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-od001/",
+      "path": "/us/en/cat/outdoor-od001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor patio furniture",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-patio-furniture-od003/",
+      "path": "/us/en/cat/outdoor-patio-furniture-od003/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor tiles & flooring",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-flooring-21957/",
+      "path": "/us/en/cat/outdoor-flooring-21957/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor kitchen & accessories",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-kitchens-700349/",
+      "path": "/us/en/cat/outdoor-kitchens-700349/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor patio accessories",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-accessories-34203/",
+      "path": "/us/en/cat/outdoor-accessories-34203/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor umbrellas, canopies, gazebos & more",
+      "real": "https://www.ikea.com/us/en/cat/umbrellas-gazebos-17887/",
+      "path": "/us/en/cat/umbrellas-gazebos-17887/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Plant accessories",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-pots-plants-31787/",
+      "path": "/us/en/cat/outdoor-pots-plants-31787/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor rugs",
+      "real": "https://www.ikea.com/us/en/cat/outdoor-rugs-34204/",
+      "path": "/us/en/cat/outdoor-rugs-34204/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Window treatments & coverings",
+      "real": "https://www.ikea.com/us/en/cat/window-treatments-tl002/",
+      "path": "/us/en/cat/window-treatments-tl002/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Curtains & drapes",
+      "real": "https://www.ikea.com/us/en/cat/curtains-10700/",
+      "path": "/us/en/cat/curtains-10700/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Window blinds and shades",
+      "real": "https://www.ikea.com/us/en/cat/blinds-10701/",
+      "path": "/us/en/cat/blinds-10701/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Curtain rods, rails & holders",
+      "real": "https://www.ikea.com/us/en/cat/curtain-rods-rails-18891/",
+      "path": "/us/en/cat/curtain-rods-rails-18891/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sewing supplies & accessories",
+      "real": "https://www.ikea.com/us/en/cat/sewing-accessories-14350/",
+      "path": "/us/en/cat/sewing-accessories-14350/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Window accessories",
+      "real": "https://www.ikea.com/us/en/cat/window-films-accessories-700628/",
+      "path": "/us/en/cat/window-films-accessories-700628/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Plants & planters",
+      "real": "https://www.ikea.com/us/en/cat/plants-planters-pp001/",
+      "path": "/us/en/cat/plants-planters-pp001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Plant stands",
+      "real": "https://www.ikea.com/us/en/cat/plant-stands-movers-20494/",
+      "path": "/us/en/cat/plant-stands-movers-20494/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Plant supplies & accessories",
+      "real": "https://www.ikea.com/us/en/cat/plant-supplies-accessories-24887/",
+      "path": "/us/en/cat/plant-supplies-accessories-24887/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Watering cans & plant misters",
+      "real": "https://www.ikea.com/us/en/cat/watering-cans-20493/",
+      "path": "/us/en/cat/watering-cans-20493/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Spray bottles & misters",
+      "real": "https://www.ikea.com/us/en/cat/spray-bottles-misters-700778/",
+      "path": "/us/en/cat/spray-bottles-misters-700778/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laundry & cleaning",
+      "real": "https://www.ikea.com/us/en/cat/laundry-cleaning-lc001/",
+      "path": "/us/en/cat/laundry-cleaning-lc001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Waste sorting",
+      "real": "https://www.ikea.com/us/en/cat/bins-bags-16213/",
+      "path": "/us/en/cat/bins-bags-16213/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laundry room cabinets & shelving",
+      "real": "https://www.ikea.com/us/en/cat/laundry-cabinets-shelving-48925/",
+      "path": "/us/en/cat/laundry-cabinets-shelving-48925/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laundry baskets, hampers & bags",
+      "real": "https://www.ikea.com/us/en/cat/laundry-baskets-20601/",
+      "path": "/us/en/cat/laundry-baskets-20601/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laundry accessories",
+      "real": "https://www.ikea.com/us/en/cat/laundry-accessories-55004/",
+      "path": "/us/en/cat/laundry-accessories-55004/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cleaning tools & essentials",
+      "real": "https://www.ikea.com/us/en/cat/cleaning-accessories-20609/",
+      "path": "/us/en/cat/cleaning-accessories-20609/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothes drying racks",
+      "real": "https://www.ikea.com/us/en/cat/drying-racks-20602/",
+      "path": "/us/en/cat/drying-racks-20602/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ironing boards & covers",
+      "real": "https://www.ikea.com/us/en/cat/ironing-boards-20608/",
+      "path": "/us/en/cat/ironing-boards-20608/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "IKEA Food & Swedish restaurant",
+      "real": "https://www.ikea.com/us/en/cat/ikea-food-restaurant-fb001/",
+      "path": "/us/en/cat/ikea-food-restaurant-fb001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Side dishes & sauces",
+      "real": "https://www.ikea.com/us/en/cat/side-dishes-sauces-49147/",
+      "path": "/us/en/cat/side-dishes-sauces-49147/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Snacks & sweets",
+      "real": "https://www.ikea.com/us/en/cat/snacks-sweets-46192/",
+      "path": "/us/en/cat/snacks-sweets-46192/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Meat",
+      "real": "https://www.ikea.com/us/en/cat/meat-25217/",
+      "path": "/us/en/cat/meat-25217/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fish & seafood",
+      "real": "https://www.ikea.com/us/en/cat/fish-seafood-25214/",
+      "path": "/us/en/cat/fish-seafood-25214/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bread & dairy",
+      "real": "https://www.ikea.com/us/en/cat/bread-dairy-25212/",
+      "path": "/us/en/cat/bread-dairy-25212/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pastries, desserts & cookies",
+      "real": "https://www.ikea.com/us/en/cat/pastries-desserts-cookies-25215/",
+      "path": "/us/en/cat/pastries-desserts-cookies-25215/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Condiments & spreads",
+      "real": "https://www.ikea.com/us/en/cat/condiments-cheese-jams-25216/",
+      "path": "/us/en/cat/condiments-cheese-jams-25216/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vegetarian & plant based",
+      "real": "https://www.ikea.com/us/en/cat/vegetarian-plant-based-25213/",
+      "path": "/us/en/cat/vegetarian-plant-based-25213/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beverages",
+      "real": "https://www.ikea.com/us/en/cat/beverages-25211/",
+      "path": "/us/en/cat/beverages-25211/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Summer food",
+      "real": "https://www.ikea.com/us/en/cat/summer-food-53254/",
+      "path": "/us/en/cat/summer-food-53254/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home electronics",
+      "real": "https://www.ikea.com/us/en/cat/home-electronics-he001/",
+      "path": "/us/en/cat/home-electronics-he001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wireless & home speakers",
+      "real": "https://www.ikea.com/us/en/cat/speakers-40842/",
+      "path": "/us/en/cat/speakers-40842/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cell phone, tablet & laptop accessories",
+      "real": "https://www.ikea.com/us/en/cat/mobile-tablet-accessories-40843/",
+      "path": "/us/en/cat/mobile-tablet-accessories-40843/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Charging accessories & power cords",
+      "real": "https://www.ikea.com/us/en/cat/cords-chargers-40845/",
+      "path": "/us/en/cat/cords-chargers-40845/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Air purifiers & filters",
+      "real": "https://www.ikea.com/us/en/cat/air-quality-products-49081/",
+      "path": "/us/en/cat/air-quality-products-49081/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart switches, plugs & sensors",
+      "real": "https://www.ikea.com/us/en/cat/smart-light-wireless-switch-36814/",
+      "path": "/us/en/cat/smart-light-wireless-switch-36814/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home improvement",
+      "real": "https://www.ikea.com/us/en/cat/home-improvement-hi001/",
+      "path": "/us/en/cat/home-improvement-hi001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "SKYTTA sliding door system",
+      "real": "https://www.ikea.com/us/en/cat/skytta-sliding-door-system-55984/",
+      "path": "/us/en/cat/skytta-sliding-door-system-55984/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tools and accessories",
+      "real": "https://www.ikea.com/us/en/cat/tools-hardware-16292/",
+      "path": "/us/en/cat/tools-hardware-16292/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Faucets",
+      "real": "https://www.ikea.com/us/en/cat/taps-700718/",
+      "path": "/us/en/cat/taps-700718/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wood treatment oils & furniture paint",
+      "real": "https://www.ikea.com/us/en/cat/oils-stains-product-care-42948/",
+      "path": "/us/en/cat/oils-stains-product-care-42948/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sound absorbing acoustic panels",
+      "real": "https://www.ikea.com/us/en/cat/acoustic-panels-46077/",
+      "path": "/us/en/cat/acoustic-panels-46077/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home safety locks, latches & more",
+      "real": "https://www.ikea.com/us/en/cat/safety-products-sp001/",
+      "path": "/us/en/cat/safety-products-sp001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pet products",
+      "real": "https://www.ikea.com/us/en/cat/pet-accessories-pt001/",
+      "path": "/us/en/cat/pet-accessories-pt001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat furniture & accessories",
+      "real": "https://www.ikea.com/us/en/cat/cats-39569/",
+      "path": "/us/en/cat/cats-39569/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog beds, toys & bowls",
+      "real": "https://www.ikea.com/us/en/cat/dogs-39570/",
+      "path": "/us/en/cat/dogs-39570/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart home",
+      "real": "https://www.ikea.com/us/en/cat/smart-home-hs001/",
+      "path": "/us/en/cat/smart-home-hs001/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart air purifiers",
+      "real": "https://www.ikea.com/us/en/cat/smart-air-purifiers-56472/",
+      "path": "/us/en/cat/smart-air-purifiers-56472/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor",
+      "real": "https://www.ikea.com/us/en/rooms/outdoor/",
+      "path": "/us/en/rooms/outdoor/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen",
+      "real": "https://www.ikea.com/us/en/rooms/kitchen/",
+      "path": "/us/en/rooms/kitchen/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom",
+      "real": "https://www.ikea.com/us/en/rooms/bathroom/",
+      "path": "/us/en/rooms/bathroom/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Living room",
+      "real": "https://www.ikea.com/us/en/rooms/living-room/",
+      "path": "/us/en/rooms/living-room/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bedroom",
+      "real": "https://www.ikea.com/us/en/rooms/bedroom/",
+      "path": "/us/en/rooms/bedroom/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dining room",
+      "real": "https://www.ikea.com/us/en/rooms/dining/",
+      "path": "/us/en/rooms/dining/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home office",
+      "real": "https://www.ikea.com/us/en/rooms/home-office/",
+      "path": "/us/en/rooms/home-office/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Children's room",
+      "real": "https://www.ikea.com/us/en/rooms/childrens-room/",
+      "path": "/us/en/rooms/childrens-room/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming room",
+      "real": "https://www.ikea.com/us/en/rooms/gaming-room/",
+      "path": "/us/en/rooms/gaming-room/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hallway",
+      "real": "https://www.ikea.com/us/en/rooms/hallway/",
+      "path": "/us/en/rooms/hallway/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Garage",
+      "real": "https://www.ikea.com/us/en/rooms/garage/",
+      "path": "/us/en/rooms/garage/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laundry",
+      "real": "https://www.ikea.com/us/en/rooms/laundry/",
+      "path": "/us/en/rooms/laundry/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Products",
+      "real": "https://www.ikea.com/us/en/cat/products-products/",
+      "path": "/us/en/cat/products-products/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rooms",
+      "real": "https://www.ikea.com/us/en/rooms/",
+      "path": "/us/en/rooms/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Deals",
+      "real": "https://www.ikea.com/us/en/offers/",
+      "path": "/us/en/offers/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Design & ideas",
+      "real": "https://www.ikea.com/us/en/ideas/",
+      "path": "/us/en/ideas/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Services",
+      "real": "https://www.ikea.com/us/en/customer-service/services/",
+      "path": "/us/en/customer-service/services/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Customer service",
+      "real": "https://www.ikea.com/us/en/customer-service/",
+      "path": "/us/en/customer-service/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Find a Location",
+      "real": "https://www.ikea.com/us/en/stores/",
+      "path": "/us/en/stores/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "IKEA Family",
+      "real": "https://www.ikea.com/us/en/ikea-family/",
+      "path": "/us/en/ikea-family/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.ikea.com/us/en/customer-service/gift-cards-pub3d1efe50/",
+      "path": "/us/en/customer-service/gift-cards-pub3d1efe50/"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Return Policy",
+      "real": "https://www.ikea.com/us/en/customer-service/returns-claims/",
+      "path": "/us/en/customer-service/returns-claims/"
+    }
+  ]
+}
