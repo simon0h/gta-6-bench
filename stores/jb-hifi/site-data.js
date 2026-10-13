@@ -11,18 +11,18 @@ export const DEPARTMENTS = [
   D('computers-tablets', 'Computers & Tablets', 'Laptops, tablets, desktops, monitors and everything to keep you working, studying and creating.', [
     ['laptops', 'Laptops', /laptop/i], ['tablets', 'Tablets', /tablet/i], ['desktop-computers', 'Desktop Computers', /desktop/i],
     ['monitors', 'Monitors', /monitor/i], ['printers-ink', 'Printers & Ink', /printer/i], ['networking', 'Networking', /network|router/i],
-    ['computer-accessories', 'Computer Accessories', /keyboard|mice|mouse|webcam|usb hub|storage/i]]),
+    ['computer-accessories', 'Computer Accessories', /accessor|keyboard|mice|mouse|webcam|usb hub|storage/i]]),
   D('mobile-phones', 'Mobile Phones', 'The latest iPhone and Android phones, prepaid handsets, plans and accessories.', [
-    ['iphone', 'iPhone', /iphone/i], ['android-phones', 'Android Phones', /unlocked|android|galaxy|pixel/i], ['prepaid-phones', 'Prepaid Phones', /prepaid/i],
+    ['iphone', 'iPhone', /^iphone/i], ['android-phones', 'Android Phones', /^(?:unlocked|android)/i], ['prepaid-phones', 'Prepaid Phones', /prepaid/i],
     ['phone-cases', 'Phone Cases', /phone case/i], ['phone-chargers', 'Phone Chargers', /charger/i], ['power-banks', 'Power Banks', /power bank/i]]),
   D('wearables', 'Wearables', 'Smart watches, fitness trackers and the bands to go with them.', [
     ['smart-watches', 'Smart Watches', /smartwatch|smart watch/i], ['fitness-trackers', 'Fitness Trackers', /fitness|tracker/i], ['watch-straps', 'Watch Straps', /strap/i]]),
   D('tvs-home-theatre', 'TVs & Home Theatre', 'Big screens and big sound: TVs, soundbars, projectors and streaming players.', [
-    ['tvs', 'TVs', /television|\btv\b/i], ['soundbars', 'Soundbars', /soundbar/i], ['projectors', 'Projectors', /projector/i],
+    ['tvs', 'TVs', /television|^tvs\b/i], ['soundbars', 'Soundbars', /soundbar/i], ['projectors', 'Projectors', /projector/i],
     ['streaming-players', 'Streaming Players', /streaming/i], ['blu-ray-players', 'Blu-ray & DVD Players', /blu-ray player|dvd player/i], ['tv-wall-brackets', 'TV Wall Brackets', /bracket|cable/i]]),
   D('headphones-audio', 'Headphones & Audio', 'Headphones, earbuds and speakers for home and on the go.', [
     ['headphones', 'Headphones', /headphone/i], ['earbuds', 'Earbuds', /earbud/i], ['portable-speakers', 'Portable Speakers', /portable speaker/i],
-    ['smart-speakers', 'Smart Speakers', /smart speaker/i], ['turntables', 'Turntables', /turntable/i], ['hi-fi-systems', 'Hi-Fi Systems', /hi-fi|\bspeakers\b/i]]),
+    ['smart-speakers', 'Smart Speakers', /smart speaker/i], ['turntables', 'Turntables', /turntable/i], ['hi-fi-systems', 'Hi-Fi Systems', /hi-fi|bookshelf speakers|stereo receiver/i]]),
   D('cameras', 'Cameras', 'Cameras, lenses and drones for every kind of shooter.', [
     ['mirrorless-cameras', 'Mirrorless Cameras', /mirrorless/i], ['dslr-cameras', 'DSLR Cameras', /dslr/i], ['action-cameras', 'Action Cameras', /action camera/i],
     ['instant-cameras', 'Instant Cameras', /instant/i], ['camera-lenses', 'Camera Lenses', /lens/i], ['drones', 'Drones', /drone/i]]),
@@ -31,7 +31,7 @@ export const DEPARTMENTS = [
     ['pc-gaming', 'PC Gaming', /pc gam/i], ['gaming-accessories', 'Gaming Accessories', /accessor|racing wheel|carry case|charging/i], ['game-pre-orders', 'Game Pre-orders', /pre-order/i]]),
   D('home-appliances', 'Home Appliances', 'Kitchen, laundry, floor care and climate control for every room.', [
     ['coffee-machines', 'Coffee Machines', /coffee/i], ['vacuums', 'Vacuums', /vacuum|floor care/i], ['kitchen-appliances', 'Kitchen Appliances', /kettle|microwave|kitchen/i],
-    ['fridges-freezers', 'Fridges & Freezers', /fridge|freezer/i], ['washing-machines-dryers', 'Washing Machines & Dryers', /washing|dryer/i], ['heating-cooling', 'Heating & Cooling', /climate|purifier|heater|fan/i]]),
+    ['fridges-freezers', 'Fridges & Freezers', /fridge|freezer/i], ['washing-machines-dryers', 'Washing Machines & Dryers', /washing|dryer/i], ['heating-cooling', 'Heating & Cooling', /climate|heating|purifier|heater|fan/i]]),
   D('smart-home', 'Smart Home', 'Security cameras, video doorbells, smart lighting and more for a connected home.', [
     ['security-cameras', 'Security Cameras', /security camera/i], ['video-doorbells', 'Video Doorbells', /doorbell/i], ['smart-lighting', 'Smart Lighting', /lighting|bulb/i],
     ['smart-plugs-power', 'Smart Plugs & Power', /smart plug|smart home device/i]]),
