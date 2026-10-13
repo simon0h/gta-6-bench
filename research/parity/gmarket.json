@@ -1,0 +1,664 @@
+{
+  "store": "gmarket",
+  "real_home": "https://www.gmarket.co.kr/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.gmarket.co.kr/",
+    "https://www.gmarket.co.kr/n/best",
+    "https://www.gmarket.co.kr/n/superdeal",
+    "https://www.gmarket.co.kr/n/stardelivery",
+    "https://www.gmarket.co.kr/n/emartmall",
+    "https://www.gmarket.co.kr/n/smilehome",
+    "https://www.gmarket.co.kr/n/search?keyword=ps5",
+    "https://www.gmarket.co.kr/n/list?category=100000048",
+    "https://m.gmarket.co.kr/",
+    "https://help.gmarket.co.kr/",
+    "https://help.gmarket.co.kr/Tcs/Main",
+    "https://signin.gmarket.co.kr/LogIn/LogIn",
+    "https://policy.gmarket.co.kr/terms-policy/buyer-use",
+    "https://cart.gmarket.co.kr/ko/pc/cart"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "notes": "Fetched with WebFetch on 2026-10-13. The PC header, category drawer and footer are rendered client-side, so WebFetch of www.gmarket.co.kr returned only skip links and the body sections. Footer company/legal text came from m.gmarket.co.kr (SSR footer) and the policy-menu names from policy.gmarket.co.kr; header utility links (로그인/회원가입/고객센터/마이페이지/최근본상품/장바구니) and the top menu tabs are reconstructed from the services the homepage links to plus known PC chrome, so exact labels/order are unverified. 회사소개/채용정보/판매자센터/광고센터/제휴서비스 are off-site on the real site and are local summary pages here. Not fetchable: help.gmarket.co.kr/Tcs/Faq (error page), www.gmarket.co.kr/n/help, sitemap.xml (fetch error), my.gmarket.co.kr (302 to login), cart (empty JS shell), membership gate (redirect to mobile showroom). web.archive.org is blocked for WebFetch; WebSearch returned nothing useful for the footer. Gmarket has no physical stores, so there is no store locator; gift cards are the e쿠폰 category. Department list = the 13 group tabs on /n/best (real group codes); subcategories are partly from the stardelivery/emartmall menus and e쿠폰 meta keywords, partly approximated.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "G마켓",
+      "real": "https://www.gmarket.co.kr/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "로그인",
+      "real": "https://signin.gmarket.co.kr/LogIn/LogIn",
+      "path": "/LogIn/LogIn"
+    },
+    {
+      "kind": "header",
+      "label": "회원가입",
+      "real": "https://signup.gmarket.co.kr/",
+      "path": "/signup"
+    },
+    {
+      "kind": "header",
+      "label": "고객센터",
+      "real": "https://help.gmarket.co.kr/Tcs/Main",
+      "path": "/help"
+    },
+    {
+      "kind": "header",
+      "label": "마이페이지",
+      "real": "https://my.gmarket.co.kr/ko/pc/main",
+      "path": "/myg"
+    },
+    {
+      "kind": "header",
+      "label": "최근본상품",
+      "real": "https://my.gmarket.co.kr/ko/pc/main (최근 본 상품)",
+      "path": "/myg/recent"
+    },
+    {
+      "kind": "header",
+      "label": "장바구니",
+      "real": "https://cart.gmarket.co.kr/ko/pc/cart",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "전체카테고리",
+      "real": "https://www.gmarket.co.kr/ (#button__category-all)",
+      "path": "/n/category"
+    },
+    {
+      "kind": "header",
+      "label": "베스트",
+      "real": "https://www.gmarket.co.kr/n/best",
+      "path": "/n/best"
+    },
+    {
+      "kind": "header",
+      "label": "슈퍼딜",
+      "real": "https://www.gmarket.co.kr/n/superdeal",
+      "path": "/n/superdeal"
+    },
+    {
+      "kind": "header",
+      "label": "이마트몰",
+      "real": "https://www.gmarket.co.kr/n/emartmall",
+      "path": "/n/emartmall"
+    },
+    {
+      "kind": "header",
+      "label": "스타배송",
+      "real": "https://www.gmarket.co.kr/n/stardelivery",
+      "path": "/n/stardelivery"
+    },
+    {
+      "kind": "header",
+      "label": "쿠폰/출첵",
+      "real": "https://www.gmarket.co.kr/n/smilehome",
+      "path": "/n/smilehome"
+    },
+    {
+      "kind": "header",
+      "label": "꼭 멤버십",
+      "real": "https://membership.gmarket.co.kr/gate",
+      "path": "/n/showroom/membership"
+    },
+    {
+      "kind": "header",
+      "label": "트레이더스",
+      "real": "https://www.gmarket.co.kr/n/expressshop/home",
+      "path": "/n/expressshop/home"
+    },
+    {
+      "kind": "header",
+      "label": "여행/항공",
+      "real": "https://gtour.gmarket.co.kr/",
+      "path": "/travel"
+    },
+    {
+      "kind": "header",
+      "label": "e쿠폰",
+      "real": "https://rpp.gmarket.co.kr/?exhib=60931",
+      "path": "/n/ecoupon"
+    },
+    {
+      "kind": "header",
+      "label": "홈쇼핑",
+      "real": "http://rpp.gmarket.co.kr/homeshopping",
+      "path": "/homeshopping"
+    },
+    {
+      "kind": "footer",
+      "label": "회사소개",
+      "real": "https://corp.gmarket.co.kr/",
+      "path": "/company"
+    },
+    {
+      "kind": "footer",
+      "label": "채용정보",
+      "real": "https://recruit.gmarket.co.kr/",
+      "path": "/company/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "구매회원 약관",
+      "real": "https://policy.gmarket.co.kr/terms-policy/buyer-use",
+      "path": "/terms-policy/buyer-use"
+    },
+    {
+      "kind": "footer",
+      "label": "판매회원 약관",
+      "real": "https://policy.gmarket.co.kr/terms-policy/seller-use",
+      "path": "/terms-policy/seller-use"
+    },
+    {
+      "kind": "footer",
+      "label": "개인정보 처리방침",
+      "real": "https://policy.gmarket.co.kr/terms-policy/privacy",
+      "path": "/terms-policy/privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "알기쉬운 개인정보 처리방침",
+      "real": "https://policy.gmarket.co.kr/terms-policy/easy-privacy",
+      "path": "/terms-policy/easy-privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "청소년보호 정책",
+      "real": "https://policy.gmarket.co.kr/terms-policy/youth",
+      "path": "/terms-policy/youth"
+    },
+    {
+      "kind": "footer",
+      "label": "납세관리 정책",
+      "real": "https://policy.gmarket.co.kr/terms-policy/tax-management",
+      "path": "/terms-policy/tax-management"
+    },
+    {
+      "kind": "footer",
+      "label": "전자금융거래 약관",
+      "real": "https://policy.gmarket.co.kr/ (전자금융거래 이용약관)",
+      "path": "/terms-policy/electronic-finance"
+    },
+    {
+      "kind": "footer",
+      "label": "고객센터 바로가기",
+      "real": "https://help.gmarket.co.kr/Tcs/Main",
+      "path": "/help"
+    },
+    {
+      "kind": "footer",
+      "label": "1:1 문의하기",
+      "real": "https://help.gmarket.co.kr/tcs/Inquiry/InquiryList",
+      "path": "/help/inquiry"
+    },
+    {
+      "kind": "footer",
+      "label": "공지사항",
+      "real": "https://help.gmarket.co.kr/Tcs/Notice",
+      "path": "/help/notice"
+    },
+    {
+      "kind": "footer",
+      "label": "판매자센터",
+      "real": "https://www.esmplus.com/Home/v2",
+      "path": "/seller-center"
+    },
+    {
+      "kind": "footer",
+      "label": "광고센터",
+      "real": "https://ad.esmplus.com",
+      "path": "/ad-center"
+    },
+    {
+      "kind": "footer",
+      "label": "제휴서비스",
+      "real": "https://corp.gmarket.co.kr/ (제휴 문의)",
+      "path": "/partnership"
+    },
+    {
+      "kind": "footer",
+      "label": "사업자정보확인",
+      "real": "http://www.ftc.go.kr/bizCommPop.do?wrkr_no=2208183676",
+      "path": "/business-info"
+    },
+    {
+      "kind": "footer",
+      "label": "웹접근성 신고센터",
+      "real": "https://help.gmarket.co.kr/tcs/main (웹접근성 신고센터)",
+      "path": "/help/accessibility"
+    },
+    {
+      "kind": "footer",
+      "label": "사이트맵",
+      "real": "https://www.gmarket.co.kr/ (site map)",
+      "path": "/sitemap"
+    },
+    {
+      "kind": "home",
+      "label": "Header search and skip navigation",
+      "expect": [
+        "검색창 바로가기",
+        "전체카테고리 바로가기",
+        "본문 바로가기"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Best ranking",
+      "expect": [
+        "지금 제일 잘 나가는 상품"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Emart mall block",
+      "expect": [
+        "지금부터의 신선마켓, 이마트몰",
+        "하나더",
+        "전단상품",
+        "오반장"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Star delivery block",
+      "expect": [
+        "오늘 주문 내일 도착보장, 스타배송",
+        "간편히 차린 집밥",
+        "대용량 알뜰관"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Star delivery best / free shipping rows",
+      "expect": [
+        "베스트 상품",
+        "무료배송 상품"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "G마켓 서비스 shortcuts",
+      "expect": [
+        "G마켓 서비스",
+        "꼭 현대카드",
+        "출석체크",
+        "뷰티내일도착",
+        "상생페스티벌"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Home shopping",
+      "expect": [
+        "홈쇼핑 모아보기",
+        "롯데홈쇼핑",
+        "현대홈쇼핑",
+        "SK스토아"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Footer company info",
+      "expect": [
+        "주식회사 지마켓",
+        "1566-5701",
+        "220-81-83676"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Best page",
+      "real": "https://www.gmarket.co.kr/n/best",
+      "path": "/n/best",
+      "expect": [
+        "G마켓 베스트",
+        "신선식품",
+        "디지털/가전",
+        "도서/음반"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Superdeal (deals)",
+      "real": "https://www.gmarket.co.kr/n/superdeal",
+      "path": "/n/superdeal",
+      "expect": [
+        "슈퍼딜",
+        "추천",
+        "패션의류",
+        "가전/컴퓨터"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Star delivery",
+      "real": "https://www.gmarket.co.kr/n/stardelivery",
+      "path": "/n/stardelivery",
+      "expect": [
+        "스타배송",
+        "오늘 주문, 내일 도착 보장",
+        "실시간 BEST 순위",
+        "Star Delivery 카테고리"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Emart mall",
+      "real": "https://www.gmarket.co.kr/n/emartmall",
+      "path": "/n/emartmall",
+      "expect": [
+        "이마트몰",
+        "지금 잘 나가는 신선식품 베스트는?",
+        "대한민국 장보기 국민반장 '오반장'",
+        "이마트몰 BEST"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Coupons / attendance (smilehome)",
+      "real": "https://www.gmarket.co.kr/n/smilehome",
+      "path": "/n/smilehome",
+      "expect": [
+        "스마일홈",
+        "출첵하고캐시받기",
+        "쿠폰 더보기",
+        "내 쿠폰함"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department page (디지털/가전)",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001007",
+      "path": "/n/list?category=100001007",
+      "expect": [
+        "디지털/가전",
+        "게임",
+        "낮은가격순"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results (captured query)",
+      "real": "https://www.gmarket.co.kr/n/search?keyword=ps5gta6",
+      "path": "/n/search?keyword=ps5gta6",
+      "expect": [
+        "ps5gta6",
+        "검색 결과",
+        "스타배송"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://item.gmarket.co.kr/Item?goodscode=4796016651",
+      "path": "/Item?goodscode=4796016651",
+      "expect": [
+        "PS5 GTA6 Grand Theft Auto VI",
+        "h2몰"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://cart.gmarket.co.kr/ko/pc/cart",
+      "path": "/cart",
+      "expect": [
+        "장바구니",
+        "주문/결제",
+        "주문완료"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://signin.gmarket.co.kr/LogIn/LogIn",
+      "path": "/LogIn/LogIn",
+      "expect": [
+        "로그인",
+        "아이디 저장",
+        "비회원으로 구매하기",
+        "아이디 찾기",
+        "비밀번호 재설정"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account (my page)",
+      "real": "https://my.gmarket.co.kr/ko/pc/main",
+      "path": "/myg",
+      "expect": [
+        "나의 G마켓",
+        "주문/배송조회",
+        "취소/반품/교환"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status (guest order lookup)",
+      "real": "https://signin.gmarket.co.kr/LogIn/LogIn (비회원 주문내역 조회)",
+      "path": "/myg/orders",
+      "expect": [
+        "주문/배송조회",
+        "주문자 이름",
+        "장바구니 번호"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Customer service",
+      "real": "https://help.gmarket.co.kr/Tcs/Main",
+      "path": "/help",
+      "expect": [
+        "G마켓이 도와드릴게요!",
+        "자주 묻는 질문을 확인하세요",
+        "간편하게 해결하세요",
+        "상담이 필요하신가요?",
+        "공지사항"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping help",
+      "real": "https://help.gmarket.co.kr/ (FAQ 배송)",
+      "path": "/help/faq/delivery",
+      "expect": [
+        "배송",
+        "자주 묻는 질문"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns / exchange help",
+      "real": "https://help.gmarket.co.kr/ (FAQ 취소/반품/교환)",
+      "path": "/help/faq/returns",
+      "expect": [
+        "취소/반품/교환",
+        "자주 묻는 질문"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards / e-coupons",
+      "real": "https://rpp.gmarket.co.kr/?exhib=60931",
+      "path": "/n/ecoupon",
+      "expect": [
+        "e쿠폰",
+        "커피/음료/카페",
+        "영화관람권",
+        "백화점/문화 상품권"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Buyer terms",
+      "real": "https://policy.gmarket.co.kr/terms-policy/buyer-use",
+      "path": "/terms-policy/buyer-use",
+      "expect": [
+        "구매회원 약관",
+        "제1조 (목적)",
+        "제3조 (용어의 정의)"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Privacy policy",
+      "real": "https://policy.gmarket.co.kr/terms-policy/privacy",
+      "path": "/terms-policy/privacy",
+      "expect": [
+        "개인정보 처리방침"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Membership",
+      "real": "https://membership.gmarket.co.kr/gate",
+      "path": "/n/showroom/membership",
+      "expect": [
+        "꼭 멤버십",
+        "무료반품"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.gmarket.co.kr/",
+      "path": "/sitemap",
+      "expect": [
+        "사이트맵",
+        "전체카테고리"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "신선식품",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100000006",
+      "path": "/n/list?category=100000006"
+    },
+    {
+      "kind": "sitemap",
+      "label": "가공식품",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100000005",
+      "path": "/n/list?category=100000005"
+    },
+    {
+      "kind": "sitemap",
+      "label": "생필품/육아",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100000007",
+      "path": "/n/list?category=100000007"
+    },
+    {
+      "kind": "sitemap",
+      "label": "생활/주방",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001001",
+      "path": "/n/list?category=100001001"
+    },
+    {
+      "kind": "sitemap",
+      "label": "패션/잡화",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100000001",
+      "path": "/n/list?category=100000001"
+    },
+    {
+      "kind": "sitemap",
+      "label": "뷰티",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100000003",
+      "path": "/n/list?category=100000003"
+    },
+    {
+      "kind": "sitemap",
+      "label": "디지털/가전",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001007",
+      "path": "/n/list?category=100001007"
+    },
+    {
+      "kind": "sitemap",
+      "label": "가구/홈",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001004",
+      "path": "/n/list?category=100001004"
+    },
+    {
+      "kind": "sitemap",
+      "label": "스포츠/건강",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001002",
+      "path": "/n/list?category=100001002"
+    },
+    {
+      "kind": "sitemap",
+      "label": "취미/문구/펫",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001003",
+      "path": "/n/list?category=100001003"
+    },
+    {
+      "kind": "sitemap",
+      "label": "도서/음반",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001009",
+      "path": "/n/list?category=100001009"
+    },
+    {
+      "kind": "sitemap",
+      "label": "e쿠폰",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001011",
+      "path": "/n/list?category=100001011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "여행",
+      "real": "https://www.gmarket.co.kr/n/best?groupCode=100001005",
+      "path": "/n/list?category=100001005"
+    },
+    {
+      "kind": "sitemap",
+      "label": "G마켓 베스트",
+      "real": "https://www.gmarket.co.kr/n/best",
+      "path": "/n/best"
+    },
+    {
+      "kind": "sitemap",
+      "label": "슈퍼딜",
+      "real": "https://www.gmarket.co.kr/n/superdeal",
+      "path": "/n/superdeal"
+    },
+    {
+      "kind": "sitemap",
+      "label": "이마트몰",
+      "real": "https://www.gmarket.co.kr/n/emartmall",
+      "path": "/n/emartmall"
+    },
+    {
+      "kind": "sitemap",
+      "label": "스타배송",
+      "real": "https://www.gmarket.co.kr/n/stardelivery",
+      "path": "/n/stardelivery"
+    },
+    {
+      "kind": "sitemap",
+      "label": "스마일홈",
+      "real": "https://www.gmarket.co.kr/n/smilehome",
+      "path": "/n/smilehome"
+    },
+    {
+      "kind": "sitemap",
+      "label": "꼭 멤버십",
+      "real": "https://membership.gmarket.co.kr/gate",
+      "path": "/n/showroom/membership"
+    },
+    {
+      "kind": "sitemap",
+      "label": "고객센터",
+      "real": "https://help.gmarket.co.kr/Tcs/Main",
+      "path": "/help"
+    },
+    {
+      "kind": "sitemap",
+      "label": "구매회원 약관",
+      "real": "https://policy.gmarket.co.kr/terms-policy/buyer-use",
+      "path": "/terms-policy/buyer-use"
+    }
+  ]
+}
