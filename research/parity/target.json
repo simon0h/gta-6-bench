@@ -1,0 +1,1685 @@
+{
+  "store": "target",
+  "real_home": "https://www.target.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.target.com/",
+    "https://www.target.com/c/shop-all-categories/-/N-5xsxf",
+    "https://www.target.com/c/video-games/-/N-5xtg5",
+    "https://www.target.com/c/electronics/-/N-5xtg6",
+    "https://www.target.com/c/top-deals/-/N-4xw74",
+    "https://www.target.com/c/gift-cards/-/N-5xsxu",
+    "https://www.target.com/guest/gift-card-balance",
+    "https://www.target.com/help",
+    "https://www.target.com/help/contact-us",
+    "https://www.target.com/store-locator/find-stores",
+    "https://www.target.com/returns",
+    "https://www.target.com/c/shipping-order-services/-/N-551st",
+    "https://www.target.com/c/free-2-day-shipping/-/N-49cz6",
+    "https://www.target.com/gift-registry",
+    "https://www.target.com/weekly-ad",
+    "https://www.target.com/l/target-circle/-/N-pzno9",
+    "https://www.target.com/circlecard",
+    "https://www.target.com/l/target-circle-360/-/N-2rguk",
+    "https://www.target.com/help/articles/news-safety/product-recalls",
+    "https://www.target.com/c/terms-conditions/-/N-4sr7l",
+    "https://www.target.com/c/target-privacy-policy/-/N-4sr7p",
+    "https://www.target.com/c/services/-/N-oq1wk",
+    "https://www.target.com/c/order-pickup/-/N-ng0a0",
+    "https://www.target.com/c/same-day-delivery/-/N-bswkz",
+    "https://www.target.com/c/drive-up/-/N-9d42z",
+    "https://www.target.com/c/target-app/-/N-4th2r",
+    "https://www.target.com/c/club-target/-/N-q6m3b",
+    "https://www.target.com/c/team-member-services/-/N-4srq9",
+    "https://www.target.com/orders",
+    "https://www.target.com/login",
+    "research/target.md"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "notes": "Captured with WebFetch on 2026-10-13. Blocked or empty: /s search results and /cart (robots disallowed) and /login, /orders, /account (client-rendered, no form in the fetch; web.archive.org is blocked for target.com). Search, product, cart and sign-in expectations come from research/target.md (2026-09-29/30 browser and JS-bundle capture). sitemap.xml returned a client error and target.com has no HTML site map, so the sitemap items use the Shop All Categories tree plus the main non-product sections; the clone serves its own /sitemap page and /sitemap.xml. /help/articles/returns-exchanges/return-exchange-policy returned Page not found; the /returns page was used instead. Signed-out /account and /orders go to sign in, as on the real site. Seasonal menu entries (Halloween, Christmas, Back to School, College) are rendered but not scored. Off-site footer links (corporate.target.com, roundel.com, partners.target.com, security.target.com, plus.target.com, bullseyeshop.com) are local summary pages; Feedback has no href on the real site and is a local page.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Target Circle™",
+      "real": "https://www.target.com/l/target-circle/-/N-pzno9",
+      "path": "/l/target-circle/-/N-pzno9"
+    },
+    {
+      "kind": "header",
+      "label": "Target Circle™ Card",
+      "real": "https://www.target.com/circlecard",
+      "path": "/circlecard"
+    },
+    {
+      "kind": "header",
+      "label": "Target Circle 360™",
+      "real": "https://www.target.com/l/target-circle-360/-/N-2rguk",
+      "path": "/l/target-circle-360/-/N-2rguk"
+    },
+    {
+      "kind": "header",
+      "label": "Registry & Wish List",
+      "real": "https://www.target.com/gift-registry",
+      "path": "/gift-registry"
+    },
+    {
+      "kind": "header",
+      "label": "Weekly Ad",
+      "real": "https://www.target.com/weekly-ad",
+      "path": "/weekly-ad"
+    },
+    {
+      "kind": "header",
+      "label": "Find Stores",
+      "real": "https://www.target.com/store-locator/find-stores",
+      "path": "/store-locator/find-stores"
+    },
+    {
+      "kind": "header",
+      "label": "Target home",
+      "real": "https://www.target.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Categories",
+      "real": "https://www.target.com/c/shop-all-categories/-/N-5xsxf",
+      "path": "/c/shop-all-categories/-/N-5xsxf"
+    },
+    {
+      "kind": "header",
+      "label": "Deals",
+      "real": "https://www.target.com/c/top-deals/-/N-4xw74",
+      "path": "/c/top-deals/-/N-4xw74"
+    },
+    {
+      "kind": "header",
+      "label": "Pickup & delivery",
+      "real": "https://www.target.com/c/order-pickup/-/N-ng0a0",
+      "path": "/c/order-pickup/-/N-ng0a0"
+    },
+    {
+      "kind": "header",
+      "label": "Account",
+      "real": "https://www.target.com/account",
+      "path": "/account"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.target.com/cart",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Target New Arrivals",
+      "real": "https://www.target.com/c/what-s-new/-/N-o9rnh",
+      "path": "/c/what-s-new/-/N-o9rnh"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Ideas",
+      "real": "https://www.target.com/c/gift-ideas/-/N-96d2i",
+      "path": "/c/gift-ideas/-/N-96d2i"
+    },
+    {
+      "kind": "header",
+      "label": "Clothing, Shoes & Accessories",
+      "real": "https://www.target.com/c/clothing-shoes-accessories/-/N-rdihz",
+      "path": "/c/clothing-shoes-accessories/-/N-rdihz"
+    },
+    {
+      "kind": "header",
+      "label": "Home & Decor",
+      "real": "https://www.target.com/c/home/-/N-5xtvd",
+      "path": "/c/home/-/N-5xtvd"
+    },
+    {
+      "kind": "header",
+      "label": "Kitchen & Dining",
+      "real": "https://www.target.com/c/kitchen-dining/-/N-hz89j",
+      "path": "/c/kitchen-dining/-/N-hz89j"
+    },
+    {
+      "kind": "header",
+      "label": "Patio, Lawn & Garden",
+      "real": "https://www.target.com/c/patio-lawn-garden/-/N-5xtq9",
+      "path": "/c/patio-lawn-garden/-/N-5xtq9"
+    },
+    {
+      "kind": "header",
+      "label": "Grocery",
+      "real": "https://www.target.com/c/grocery/-/N-5xt1a",
+      "path": "/c/grocery/-/N-5xt1a"
+    },
+    {
+      "kind": "header",
+      "label": "Household Essentials",
+      "real": "https://www.target.com/c/household-essentials/-/N-5xsz1",
+      "path": "/c/household-essentials/-/N-5xsz1"
+    },
+    {
+      "kind": "header",
+      "label": "Baby",
+      "real": "https://www.target.com/c/baby/-/N-5xtly",
+      "path": "/c/baby/-/N-5xtly"
+    },
+    {
+      "kind": "header",
+      "label": "Beauty",
+      "real": "https://www.target.com/c/beauty/-/N-55r1x",
+      "path": "/c/beauty/-/N-55r1x"
+    },
+    {
+      "kind": "header",
+      "label": "Target Beauty Studio",
+      "real": "https://www.target.com/c/target-beauty-studio/-/N-0cb2f",
+      "path": "/c/target-beauty-studio/-/N-0cb2f"
+    },
+    {
+      "kind": "header",
+      "label": "Personal Care",
+      "real": "https://www.target.com/c/personal-care/-/N-5xtzq",
+      "path": "/c/personal-care/-/N-5xtzq"
+    },
+    {
+      "kind": "header",
+      "label": "Sports & Outdoors",
+      "real": "https://www.target.com/c/sports-outdoors/-/N-5xt85",
+      "path": "/c/sports-outdoors/-/N-5xt85"
+    },
+    {
+      "kind": "header",
+      "label": "Pets",
+      "real": "https://www.target.com/c/pets/-/N-5xt44",
+      "path": "/c/pets/-/N-5xt44"
+    },
+    {
+      "kind": "header",
+      "label": "Health",
+      "real": "https://www.target.com/c/health/-/N-5xu1n",
+      "path": "/c/health/-/N-5xu1n"
+    },
+    {
+      "kind": "header",
+      "label": "Wellness",
+      "real": "https://www.target.com/c/health-wellbeing/-/N-sw90d",
+      "path": "/c/health-wellbeing/-/N-sw90d"
+    },
+    {
+      "kind": "header",
+      "label": "School & Office Supplies",
+      "real": "https://www.target.com/c/school-office-supplies/-/N-5xsxr",
+      "path": "/c/school-office-supplies/-/N-5xsxr"
+    },
+    {
+      "kind": "header",
+      "label": "Toys & Games",
+      "real": "https://www.target.com/c/toys-games/-/N-5xtb0",
+      "path": "/c/toys-games/-/N-5xtb0"
+    },
+    {
+      "kind": "header",
+      "label": "Electronics & Tech",
+      "real": "https://www.target.com/c/electronics/-/N-5xtg6",
+      "path": "/c/electronics/-/N-5xtg6"
+    },
+    {
+      "kind": "header",
+      "label": "Video Games",
+      "real": "https://www.target.com/c/video-games/-/N-5xtg5",
+      "path": "/c/video-games/-/N-5xtg5"
+    },
+    {
+      "kind": "header",
+      "label": "Books, Music & Movies",
+      "real": "https://www.target.com/c/movies-music-books/-/N-5xsxe",
+      "path": "/c/movies-music-books/-/N-5xsxe"
+    },
+    {
+      "kind": "header",
+      "label": "Party Supplies",
+      "real": "https://www.target.com/c/party-supplies/-/N-5xt3c",
+      "path": "/c/party-supplies/-/N-5xt3c"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Cards",
+      "real": "https://www.target.com/c/gift-cards/-/N-5xsxu",
+      "path": "/c/gift-cards/-/N-5xsxu"
+    },
+    {
+      "kind": "header",
+      "label": "Shop by Community",
+      "real": "https://www.target.com/c/shop-by-community/-/N-2qkae",
+      "path": "/c/shop-by-community/-/N-2qkae"
+    },
+    {
+      "kind": "header",
+      "label": "Target Optical",
+      "real": "https://www.target.com/c/target-optical/-/N-4y8o9",
+      "path": "/c/target-optical/-/N-4y8o9"
+    },
+    {
+      "kind": "header",
+      "label": "Clearance",
+      "real": "https://www.target.com/c/clearance/-/N-5q0ga",
+      "path": "/c/clearance/-/N-5q0ga"
+    },
+    {
+      "kind": "header",
+      "label": "New Arrivals",
+      "real": "https://www.target.com/c/what-s-new/-/N-o9rnh",
+      "path": "/c/what-s-new/-/N-o9rnh"
+    },
+    {
+      "kind": "header",
+      "label": "Top Deals",
+      "real": "https://www.target.com/c/top-deals/-/N-4xw74",
+      "path": "/c/top-deals/-/N-4xw74"
+    },
+    {
+      "kind": "header",
+      "label": "Target Circle Deals",
+      "real": "https://www.target.com/circle/deals",
+      "path": "/circle/deals"
+    },
+    {
+      "kind": "header",
+      "label": "Shop Order Pickup",
+      "real": "https://www.target.com/c/order-pickup/-/N-ng0a0",
+      "path": "/c/order-pickup/-/N-ng0a0"
+    },
+    {
+      "kind": "header",
+      "label": "Shop Same Day Delivery",
+      "real": "https://www.target.com/c/same-day-delivery/-/N-bswkz",
+      "path": "/c/same-day-delivery/-/N-bswkz"
+    },
+    {
+      "kind": "header",
+      "label": "Registry",
+      "real": "https://www.target.com/gift-registry",
+      "path": "/gift-registry"
+    },
+    {
+      "kind": "header",
+      "label": "RedCard",
+      "real": "https://www.target.com/redcard",
+      "path": "/redcard"
+    },
+    {
+      "kind": "header",
+      "label": "Target Circle",
+      "real": "https://www.target.com/l/target-circle/-/N-pzno9",
+      "path": "/l/target-circle/-/N-pzno9"
+    },
+    {
+      "kind": "footer",
+      "label": "About Target",
+      "real": "https://corporate.target.com/about",
+      "path": "/corporate/about"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://corporate.target.com/careers/",
+      "path": "/corporate/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "News & Blog",
+      "real": "https://corporate.target.com/news-features",
+      "path": "/corporate/news-features"
+    },
+    {
+      "kind": "footer",
+      "label": "Target Brands",
+      "real": "https://corporate.target.com/about/products-services/Target-Brands",
+      "path": "/corporate/target-brands"
+    },
+    {
+      "kind": "footer",
+      "label": "Bullseye Shop",
+      "real": "https://www.bullseyeshop.com/",
+      "path": "/bullseye-shop"
+    },
+    {
+      "kind": "footer",
+      "label": "Sustainability & Governance",
+      "real": "https://corporate.target.com/sustainability-governance",
+      "path": "/corporate/sustainability-governance"
+    },
+    {
+      "kind": "footer",
+      "label": "Press Center",
+      "real": "https://corporate.target.com/press",
+      "path": "/corporate/press"
+    },
+    {
+      "kind": "footer",
+      "label": "Advertise with Us",
+      "real": "https://roundel.com/",
+      "path": "/advertise-with-us"
+    },
+    {
+      "kind": "footer",
+      "label": "Investors",
+      "real": "https://corporate.target.com/investors",
+      "path": "/corporate/investors"
+    },
+    {
+      "kind": "footer",
+      "label": "Affiliates & Partners",
+      "real": "https://partners.target.com/",
+      "path": "/partners"
+    },
+    {
+      "kind": "footer",
+      "label": "Club Target",
+      "real": "https://www.target.com/c/club-target/-/N-q6m3b",
+      "path": "/c/club-target/-/N-q6m3b"
+    },
+    {
+      "kind": "footer",
+      "label": "Suppliers",
+      "real": "https://corporate.target.com/about/products-services/suppliers",
+      "path": "/corporate/suppliers"
+    },
+    {
+      "kind": "footer",
+      "label": "TargetPlus",
+      "real": "https://plus.target.com/",
+      "path": "/targetplus"
+    },
+    {
+      "kind": "footer",
+      "label": "Target Help",
+      "real": "https://www.target.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns",
+      "real": "https://www.target.com/returns",
+      "path": "/returns"
+    },
+    {
+      "kind": "footer",
+      "label": "Track Orders",
+      "real": "https://www.target.com/orders",
+      "path": "/orders"
+    },
+    {
+      "kind": "footer",
+      "label": "Recalls",
+      "real": "https://www.target.com/help/articles/news-safety/product-recalls",
+      "path": "/help/articles/news-safety/product-recalls"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact Us",
+      "real": "https://www.target.com/help/contact-us",
+      "path": "/help/contact-us"
+    },
+    {
+      "kind": "footer",
+      "label": "Feedback",
+      "real": "(no href on target.com: Feedback opens a form)",
+      "path": "/feedback"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.target.com/help/articles/compliances/accessibility",
+      "path": "/help/articles/compliances/accessibility"
+    },
+    {
+      "kind": "footer",
+      "label": "Security & Fraud",
+      "real": "https://security.target.com/",
+      "path": "/security"
+    },
+    {
+      "kind": "footer",
+      "label": "Team Member Services",
+      "real": "https://www.target.com/c/team-member-services/-/N-4srq9",
+      "path": "/c/team-member-services/-/N-4srq9"
+    },
+    {
+      "kind": "footer",
+      "label": "Legal & Privacy",
+      "real": "https://www.target.com/guest-privacy/legal-privacy",
+      "path": "/guest-privacy/legal-privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "Find a Store",
+      "real": "https://www.target.com/store-locator/find-stores",
+      "path": "/store-locator/find-stores"
+    },
+    {
+      "kind": "footer",
+      "label": "Clinic",
+      "real": "https://www.target.com/c/clinic/-/N-54x94",
+      "path": "/c/clinic/-/N-54x94"
+    },
+    {
+      "kind": "footer",
+      "label": "Pharmacy",
+      "real": "https://www.target.com/c/pharmacy-health/-/N-54y52",
+      "path": "/c/pharmacy-health/-/N-54y52"
+    },
+    {
+      "kind": "footer",
+      "label": "Target Optical",
+      "real": "https://www.target.com/c/optical/-/N-4y8o9",
+      "path": "/c/optical/-/N-4y8o9"
+    },
+    {
+      "kind": "footer",
+      "label": "More In-Store Services",
+      "real": "https://www.target.com/c/services/-/N-oq1wk",
+      "path": "/c/services/-/N-oq1wk"
+    },
+    {
+      "kind": "footer",
+      "label": "Target Circle™",
+      "real": "https://www.target.com/l/target-circle/-/N-pzno9",
+      "path": "/l/target-circle/-/N-pzno9"
+    },
+    {
+      "kind": "footer",
+      "label": "Target Circle™ Card",
+      "real": "https://www.target.com/circlecard",
+      "path": "/circlecard"
+    },
+    {
+      "kind": "footer",
+      "label": "Target Circle 360™",
+      "real": "https://www.target.com/l/target-circle-360/-/N-2rguk",
+      "path": "/l/target-circle-360/-/N-2rguk"
+    },
+    {
+      "kind": "footer",
+      "label": "Target App",
+      "real": "https://www.target.com/c/target-app/-/N-4th2r",
+      "path": "/c/target-app/-/N-4th2r"
+    },
+    {
+      "kind": "footer",
+      "label": "Registry",
+      "real": "https://www.target.com/gift-registry",
+      "path": "/gift-registry"
+    },
+    {
+      "kind": "footer",
+      "label": "Same Day Delivery",
+      "real": "https://www.target.com/c/same-day-delivery/-/N-bswkz",
+      "path": "/c/same-day-delivery/-/N-bswkz"
+    },
+    {
+      "kind": "footer",
+      "label": "Order Pickup",
+      "real": "https://www.target.com/c/order-pickup/-/N-ng0a0",
+      "path": "/c/order-pickup/-/N-ng0a0"
+    },
+    {
+      "kind": "footer",
+      "label": "Drive Up",
+      "real": "https://www.target.com/c/drive-up/-/N-9d42z",
+      "path": "/c/drive-up/-/N-9d42z"
+    },
+    {
+      "kind": "footer",
+      "label": "Free 2-Day Shipping",
+      "real": "https://www.target.com/c/free-2-day-shipping/-/N-49cz6",
+      "path": "/c/free-2-day-shipping/-/N-49cz6"
+    },
+    {
+      "kind": "footer",
+      "label": "Shipping & Delivery",
+      "real": "https://www.target.com/c/shipping-order-services/-/N-551st",
+      "path": "/c/shipping-order-services/-/N-551st"
+    },
+    {
+      "kind": "footer",
+      "label": "More Services",
+      "real": "https://www.target.com/c/services/-/N-oq1wk",
+      "path": "/c/services/-/N-oq1wk"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms",
+      "real": "https://www.target.com/c/terms-conditions/-/N-4sr7l",
+      "path": "/c/terms-conditions/-/N-4sr7l"
+    },
+    {
+      "kind": "footer",
+      "label": "CA Supply Chain",
+      "real": "https://www.target.com/help/articles/compliances/ca-transparency-in-supply-chains-act",
+      "path": "/help/articles/compliances/ca-transparency-in-supply-chains-act"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Policy",
+      "real": "https://www.target.com/c/target-privacy-policy/-/N-4sr7p",
+      "path": "/c/target-privacy-policy/-/N-4sr7p"
+    },
+    {
+      "kind": "footer",
+      "label": "Your CA Privacy Rights",
+      "real": "https://www.target.com/c/your-ca-privacy-rights-/N-m2wjt",
+      "path": "/c/your-ca-privacy-rights-/N-m2wjt"
+    },
+    {
+      "kind": "footer",
+      "label": "Your Privacy Choices",
+      "real": "https://www.target.com/guest-privacy",
+      "path": "/guest-privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "Interest Based Ads",
+      "real": "https://www.target.com/c/interest-based-advertising-privacy-policy/-/N-ztavm",
+      "path": "/c/interest-based-advertising-privacy-policy/-/N-ztavm"
+    },
+    {
+      "kind": "footer",
+      "label": "Health Privacy Policy",
+      "real": "https://www.target.com/c/health-policy/-/N-4gc0k",
+      "path": "/c/health-policy/-/N-4gc0k"
+    },
+    {
+      "kind": "page",
+      "label": "Shop all categories",
+      "real": "https://www.target.com/c/shop-all-categories/-/N-5xsxf",
+      "path": "/c/shop-all-categories/-/N-5xsxf",
+      "expect": [
+        "Shop All Categories",
+        "Clothing, Shoes & Accessories",
+        "Celebrations & more",
+        "Deals & more"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Video Games department",
+      "real": "https://www.target.com/c/video-games/-/N-5xtg5",
+      "path": "/c/video-games/-/N-5xtg5",
+      "expect": [
+        "Video Games",
+        "Shop favorite franchises",
+        "Video Game Pre-Orders",
+        "Trending Searches"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Electronics department",
+      "real": "https://www.target.com/c/electronics/-/N-5xtg6",
+      "path": "/c/electronics/-/N-5xtg6",
+      "expect": [
+        "Electronics & Tech",
+        "New & featured",
+        "Best-selling tech deals",
+        "Benefits of getting tech at Target"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.target.com/s?searchTerm=grand+theft+auto+vi",
+      "path": "/s?searchTerm=gta+6",
+      "expect": [
+        "gta 6",
+        "results for",
+        "Filter",
+        "Sort"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.target.com/p/grand-theft-auto-vi-playstation-5/-/A-1011529119",
+      "path": "/p/grand-theft-auto-vi-playstation-5/-/A-1011529119",
+      "expect": [
+        "Grand Theft Auto VI - PlayStation 5",
+        "At a glance",
+        "About this item",
+        "Preorder"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://www.target.com/cart",
+      "path": "/cart",
+      "expect": [
+        "Cart",
+        "Get top deals, latest trends, and more."
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.target.com/login",
+      "path": "/login",
+      "expect": [
+        "Sign in or create account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account (signed out goes to sign in)",
+      "real": "https://www.target.com/account",
+      "path": "/account",
+      "expect": [
+        "Sign in or create account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status (Track Orders)",
+      "real": "https://www.target.com/orders",
+      "path": "/orders",
+      "expect": [
+        "Sign in or create account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help",
+      "real": "https://www.target.com/help",
+      "path": "/help",
+      "expect": [
+        "Help",
+        "Have a question?",
+        "What would you like help with?",
+        "Track my order",
+        "Didn't find what you need? Contact us for help"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Contact us",
+      "real": "https://www.target.com/help/contact-us",
+      "path": "/help/contact-us",
+      "expect": [
+        "Contact Us",
+        "Let us know how we can help",
+        "Target.com order experience",
+        "Security concerns"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store locator",
+      "real": "https://www.target.com/store-locator/find-stores",
+      "path": "/store-locator/find-stores",
+      "expect": [
+        "Find a store",
+        "Enter ZIP or city, state",
+        "Filter by services"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.target.com/c/gift-cards/-/N-5xsxu",
+      "path": "/c/gift-cards/-/N-5xsxu",
+      "expect": [
+        "Gift Cards",
+        "Target GiftCards Help",
+        "How would you like it delivered?",
+        "Check your GiftCard balance"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift card balance",
+      "real": "https://www.target.com/guest/gift-card-balance",
+      "path": "/guest/gift-card-balance",
+      "expect": [
+        "Check a gift card balance",
+        "Card number",
+        "Access number",
+        "Check balance"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals",
+      "real": "https://www.target.com/c/top-deals/-/N-4xw74",
+      "path": "/c/top-deals/-/N-4xw74",
+      "expect": [
+        "Deals",
+        "Shop by category",
+        "Deals on bestsellers",
+        "Featured deals",
+        "Shop more deals"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Weekly Ad",
+      "real": "https://www.target.com/weekly-ad",
+      "path": "/weekly-ad",
+      "expect": [
+        "Weekly Ad"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns policy",
+      "real": "https://www.target.com/returns",
+      "path": "/returns",
+      "expect": [
+        "Target Return Policy",
+        "Free & convenient returns",
+        "Free returns, no matter how you do it",
+        "Special Items"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping & delivery",
+      "real": "https://www.target.com/c/shipping-order-services/-/N-551st",
+      "path": "/c/shipping-order-services/-/N-551st",
+      "expect": [
+        "Drive Up, Pickup & Delivery",
+        "Same-day delivery, easier than ever",
+        "Your order, shipped home",
+        "Returns made easy"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Free 2-Day Shipping",
+      "real": "https://www.target.com/c/free-2-day-shipping/-/N-49cz6",
+      "path": "/c/free-2-day-shipping/-/N-49cz6",
+      "expect": [
+        "Free 2-Day Shipping",
+        "When will my order arrive?",
+        "Which items can I get delivered in 2 days?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Registry & Wish List",
+      "real": "https://www.target.com/gift-registry",
+      "path": "/gift-registry",
+      "expect": [
+        "Registry & Wish List",
+        "Create or manage your registry and wish list",
+        "Find a registry or wish list",
+        "Registry & Wish List help"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Target Circle",
+      "real": "https://www.target.com/l/target-circle/-/N-pzno9",
+      "path": "/l/target-circle/-/N-pzno9",
+      "expect": [
+        "Your membership",
+        "Join free to save even more",
+        "Unlock added value"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Target Circle Card",
+      "real": "https://www.target.com/circlecard",
+      "path": "/circlecard",
+      "expect": [
+        "Target Circle card",
+        "Different cards, same great benefits",
+        "Get more as a Target Circle card holder"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Target Circle 360",
+      "real": "https://www.target.com/l/target-circle-360/-/N-2rguk",
+      "path": "/l/target-circle-360/-/N-2rguk",
+      "expect": [
+        "Target Circle 360",
+        "Free, fast shipping",
+        "Same-day delivery",
+        "Monthly freebies"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product recalls",
+      "real": "https://www.target.com/help/articles/news-safety/product-recalls",
+      "path": "/help/articles/news-safety/product-recalls",
+      "expect": [
+        "Product recalls",
+        "Recent recalls",
+        "Looking for a recall?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Terms & Conditions",
+      "real": "https://www.target.com/c/terms-conditions/-/N-4sr7l",
+      "path": "/c/terms-conditions/-/N-4sr7l",
+      "expect": [
+        "Terms & Conditions",
+        "License and Access",
+        "Gift Cards & Certificates"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Privacy Policy",
+      "real": "https://www.target.com/c/target-privacy-policy/-/N-4sr7p",
+      "path": "/c/target-privacy-policy/-/N-4sr7p",
+      "expect": [
+        "Target Privacy Policy",
+        "Categories of Information Collected",
+        "How Do You Contact Target?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Services",
+      "real": "https://www.target.com/c/services/-/N-oq1wk",
+      "path": "/c/services/-/N-oq1wk",
+      "expect": [
+        "Services",
+        "Get more done in your day",
+        "Health & Personal Care Services"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order Pickup",
+      "real": "https://www.target.com/c/order-pickup/-/N-ng0a0",
+      "path": "/c/order-pickup/-/N-ng0a0",
+      "expect": [
+        "Order Pickup",
+        "Top sellers"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Same Day Delivery",
+      "real": "https://www.target.com/c/same-day-delivery/-/N-bswkz",
+      "path": "/c/same-day-delivery/-/N-bswkz",
+      "expect": [
+        "Same Day Delivery",
+        "How same-day delivery works",
+        "Pick your delivery time"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Drive Up",
+      "real": "https://www.target.com/c/drive-up/-/N-9d42z",
+      "path": "/c/drive-up/-/N-9d42z",
+      "expect": [
+        "Drive Up",
+        "Fast, easy & always free",
+        "How it works",
+        "Use Drive Up for returns"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Target App",
+      "real": "https://www.target.com/c/target-app/-/N-4th2r",
+      "path": "/c/target-app/-/N-4th2r",
+      "expect": [
+        "Target App",
+        "The easiest way to shop and save",
+        "Download the Target app"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Hero banner",
+      "expect": [
+        "What's in for fall"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Halloween row",
+      "expect": [
+        "Save on Halloween must-haves"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Fall deals row",
+      "expect": [
+        "Deals for your fall routine"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Trending deals row",
+      "expect": [
+        "Now trending in deals"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Fall newness row",
+      "expect": [
+        "Next-level fall newness"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Celebrations row",
+      "expect": [
+        "Ready for every celebration"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Kids catalog promo",
+      "expect": [
+        "Discover the joy of the holiday kids' catalog"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Featured categories",
+      "expect": [
+        "Featured categories"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Email signup",
+      "expect": [
+        "Get top deals, latest trends, and more.",
+        "Sign up"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Women’s",
+      "real": "https://www.target.com/c/women/-/N-5xtd3",
+      "path": "/c/women/-/N-5xtd3"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Men’s",
+      "real": "https://www.target.com/c/men/-/N-18y1l",
+      "path": "/c/men/-/N-18y1l"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Young Adult",
+      "real": "https://www.target.com/c/young-adult/-/N-qh1tf",
+      "path": "/c/young-adult/-/N-qh1tf"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids’",
+      "real": "https://www.target.com/c/kids/-/N-xcoz4",
+      "path": "/c/kids/-/N-xcoz4"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toddler",
+      "real": "https://www.target.com/c/toddler-clothing-kids/-/N-23cj2",
+      "path": "/c/toddler-clothing-kids/-/N-23cj2"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby",
+      "real": "https://www.target.com/c/baby-clothing-kids/-/N-564pl",
+      "path": "/c/baby-clothing-kids/-/N-564pl"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home",
+      "real": "https://www.target.com/c/home/-/N-5xtvd",
+      "path": "/c/home/-/N-5xtvd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Living & Garden",
+      "real": "https://www.target.com/c/patio-garden/-/N-5xtq9",
+      "path": "/c/patio-garden/-/N-5xtq9"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen & Dining",
+      "real": "https://www.target.com/c/kitchen-dining/-/N-hz89j",
+      "path": "/c/kitchen-dining/-/N-hz89j"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Storage & Organization",
+      "real": "https://www.target.com/c/storage-organization-home/-/N-5xto8",
+      "path": "/c/storage-organization-home/-/N-5xto8"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Furniture",
+      "real": "https://www.target.com/c/furniture/-/N-5xtnr",
+      "path": "/c/furniture/-/N-5xtnr"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bath",
+      "real": "https://www.target.com/c/bath-home/-/N-5xtvc",
+      "path": "/c/bath-home/-/N-5xtvc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby",
+      "real": "https://www.target.com/c/baby/-/N-5xtly",
+      "path": "/c/baby/-/N-5xtly"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Car Seats",
+      "real": "https://www.target.com/c/car-seats-baby/-/N-5xtlx",
+      "path": "/c/car-seats-baby/-/N-5xtlx"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Strollers",
+      "real": "https://www.target.com/c/strollers-baby/-/N-5xtk7",
+      "path": "/c/strollers-baby/-/N-5xtk7"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Diapering",
+      "real": "https://www.target.com/c/diapering-baby/-/N-5xtlp",
+      "path": "/c/diapering-baby/-/N-5xtlp"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nursery",
+      "real": "https://www.target.com/c/nursery-baby/-/N-54v3g",
+      "path": "/c/nursery-baby/-/N-54v3g"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gear & Activity",
+      "real": "https://www.target.com/c/gear-activity-baby/-/N-5xtjv",
+      "path": "/c/gear-activity-baby/-/N-5xtjv"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electronics",
+      "real": "https://www.target.com/c/electronics/-/N-5xtg6",
+      "path": "/c/electronics/-/N-5xtg6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Games",
+      "real": "https://www.target.com/c/video-games/-/N-5xtg5",
+      "path": "/c/video-games/-/N-5xtg5"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV & Home Theater",
+      "real": "https://www.target.com/c/tvs-home-theater-electronics/-/N-5xtdw",
+      "path": "/c/tvs-home-theater-electronics/-/N-5xtdw"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cell Phones",
+      "real": "https://www.target.com/c/cell-phones-electronics/-/N-5xte8",
+      "path": "/c/cell-phones-electronics/-/N-5xte8"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wearable Tech",
+      "real": "https://www.target.com/c/wearable-technology-electronics/-/N-551ss",
+      "path": "/c/wearable-technology-electronics/-/N-551ss"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computers & Office",
+      "real": "https://www.target.com/c/computers-office-electronics/-/N-5xtfc",
+      "path": "/c/computers-office-electronics/-/N-5xtfc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wi-Fi & Networking",
+      "real": "https://www.target.com/c/wi-fi-networking-electronics/-/N-5s7dv",
+      "path": "/c/wi-fi-networking-electronics/-/N-5s7dv"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Home",
+      "real": "https://www.target.com/c/smart-home-electronics/-/N-556xa",
+      "path": "/c/smart-home-electronics/-/N-556xa"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tablets & E-readers",
+      "real": "https://www.target.com/c/tablets-e-readers-electronics/-/N-5xtf0",
+      "path": "/c/tablets-e-readers-electronics/-/N-5xtf0"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Headphones",
+      "real": "https://www.target.com/c/headphones-electronics/-/N-5xteg",
+      "path": "/c/headphones-electronics/-/N-5xteg"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Speakers & Audio Systems",
+      "real": "https://www.target.com/c/speakers-audio-systems-electronics/-/N-5xte2",
+      "path": "/c/speakers-audio-systems-electronics/-/N-5xte2"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cameras & Camcorders",
+      "real": "https://www.target.com/c/cameras-camcorders-electronics/-/N-5xtez",
+      "path": "/c/cameras-camcorders-electronics/-/N-5xtez"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids’ Electronics",
+      "real": "https://www.target.com/c/kids-electronics-toys/-/N-5xt9q",
+      "path": "/c/kids-electronics-toys/-/N-5xt9q"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pre-owned & Refurbished Electronics",
+      "real": "https://www.target.com/c/pre-owned-refurbished-electronics/-/N-4rtuu",
+      "path": "/c/pre-owned-refurbished-electronics/-/N-4rtuu"
+    },
+    {
+      "kind": "sitemap",
+      "label": "School & Office",
+      "real": "https://www.target.com/c/school-office-supplies/-/N-5xsxr",
+      "path": "/c/school-office-supplies/-/N-5xsxr"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Desk Organization",
+      "real": "https://www.target.com/c/desk-organization-school-office-supplies/-/N-5xtnz",
+      "path": "/c/desk-organization-school-office-supplies/-/N-5xtnz"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ready for School",
+      "real": "https://www.target.com/c/kids-back-to-school/-/N-5xtyp",
+      "path": "/c/kids-back-to-school/-/N-5xtyp"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All College",
+      "real": "https://www.target.com/c/on-to-college/-/N-5q0g0",
+      "path": "/c/on-to-college/-/N-5q0g0"
+    },
+    {
+      "kind": "sitemap",
+      "label": "At-Home Learning",
+      "real": "https://www.target.com/c/at-home-learning/-/N-wiae5",
+      "path": "/c/at-home-learning/-/N-wiae5"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home Office Solutions",
+      "real": "https://www.target.com/c/home-office-ideas/-/N-4sm54",
+      "path": "/c/home-office-ideas/-/N-4sm54"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys",
+      "real": "https://www.target.com/c/toys/-/N-5xtb0",
+      "path": "/c/toys/-/N-5xtb0"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Character Shop",
+      "real": "https://www.target.com/c/character-shop/-/N-5oux8",
+      "path": "/c/character-shop/-/N-5oux8"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Stuffed Animals",
+      "real": "https://www.target.com/c/stuffed-animals-plush-toys/-/N-5xtat",
+      "path": "/c/stuffed-animals-plush-toys/-/N-5xtat"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dolls & Dollhouses",
+      "real": "https://www.target.com/c/dolls-toys/-/N-5xt90",
+      "path": "/c/dolls-toys/-/N-5xt90"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Toys",
+      "real": "https://www.target.com/c/outdoor-toys/-/N-5xtai",
+      "path": "/c/outdoor-toys/-/N-5xtai"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vehicles & Remote Control",
+      "real": "https://www.target.com/c/vehicles-remote-control-toys/-/N-5xtaz",
+      "path": "/c/vehicles-remote-control-toys/-/N-5xtaz"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sports & Outdoors",
+      "real": "https://www.target.com/c/sports-outdoors/-/N-5xt85",
+      "path": "/c/sports-outdoors/-/N-5xt85"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Exercise & Fitness",
+      "real": "https://www.target.com/c/exercise-fitness-sports-outdoors/-/N-5xt7d",
+      "path": "/c/exercise-fitness-sports-outdoors/-/N-5xt7d"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sports Equipment",
+      "real": "https://www.target.com/c/sports-equipment-outdoors/-/N-5xt52",
+      "path": "/c/sports-equipment-outdoors/-/N-5xt52"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pools & Accessories",
+      "real": "https://www.target.com/c/swimming-pools-camping-outdoor-recreation-sports-outdoors/-/N-5xt5e",
+      "path": "/c/swimming-pools-camping-outdoor-recreation-sports-outdoors/-/N-5xt5e"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bikes",
+      "real": "https://www.target.com/c/bikes-sports-outdoors/-/N-5xt83",
+      "path": "/c/bikes-sports-outdoors/-/N-5xt83"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Camping Gear",
+      "real": "https://www.target.com/c/camping-outdoors-sports/-/N-5xt6e",
+      "path": "/c/camping-outdoors-sports/-/N-5xt6e"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Movies",
+      "real": "https://www.target.com/c/movies-music-books/-/N-5xsx0",
+      "path": "/c/movies-music-books/-/N-5xsx0"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV Shows",
+      "real": "https://www.target.com/c/tv-shows-movies-music-books/-/N-5xswt",
+      "path": "/c/tv-shows-movies-music-books/-/N-5xswt"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Music",
+      "real": "https://www.target.com/c/music-movies-books/-/N-5xswr",
+      "path": "/c/music-movies-books/-/N-5xswr"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Books",
+      "real": "https://www.target.com/c/books-movies-music/-/N-5xsxd",
+      "path": "/c/books-movies-music/-/N-5xsxd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Target Beauty Studio",
+      "real": "https://www.target.com/c/target-beauty-studio/-/N-0cb2f",
+      "path": "/c/target-beauty-studio/-/N-0cb2f"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beauty",
+      "real": "https://www.target.com/c/beauty/-/N-55r1x",
+      "path": "/c/beauty/-/N-55r1x"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Personal Care",
+      "real": "https://www.target.com/c/personal-care/-/N-5xtzq",
+      "path": "/c/personal-care/-/N-5xtzq"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Makeup",
+      "real": "https://www.target.com/c/makeup-beauty/-/N-5xu1e",
+      "path": "/c/makeup-beauty/-/N-5xu1e"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hair Care",
+      "real": "https://www.target.com/c/hair-care-beauty/-/N-5xu0k",
+      "path": "/c/hair-care-beauty/-/N-5xu0k"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Skincare",
+      "real": "https://www.target.com/c/skin-care-beauty/-/N-5xtzj",
+      "path": "/c/skin-care-beauty/-/N-5xtzj"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Health",
+      "real": "https://www.target.com/c/health/-/N-5xu1n",
+      "path": "/c/health/-/N-5xu1n"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vitamins & Supplements",
+      "real": "https://www.target.com/c/vitamins-supplements-health/-/N-5xu07",
+      "path": "/c/vitamins-supplements-health/-/N-5xu07"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Medicines & Treatments",
+      "real": "https://www.target.com/c/medicines-treatments-health/-/N-5xu09",
+      "path": "/c/medicines-treatments-health/-/N-5xu09"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nutrition & Weight Loss",
+      "real": "https://www.target.com/c/nutrition-weight-loss-health/-/N-5xu0d",
+      "path": "/c/nutrition-weight-loss-health/-/N-5xu0d"
+    },
+    {
+      "kind": "sitemap",
+      "label": "First Aid",
+      "real": "https://www.target.com/c/first-aid-health/-/N-5xu0c",
+      "path": "/c/first-aid-health/-/N-5xu0c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home Health Care",
+      "real": "https://www.target.com/c/home-health-care/-/N-5xu0a",
+      "path": "/c/home-health-care/-/N-5xu0a"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Household Essentials",
+      "real": "https://www.target.com/c/household-essentials/-/N-5xsz1",
+      "path": "/c/household-essentials/-/N-5xsz1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laundry Care",
+      "real": "https://www.target.com/c/laundry-care-household-essentials/-/N-5xsyr",
+      "path": "/c/laundry-care-household-essentials/-/N-5xsyr"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Paper Towels",
+      "real": "https://www.target.com/c/paper-towels-household-essentials/-/N-4y1o4",
+      "path": "/c/paper-towels-household-essentials/-/N-4y1o4"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toilet Paper",
+      "real": "https://www.target.com/c/tissue-toilet-paper-household-essentials/-/N-5xsyk",
+      "path": "/c/tissue-toilet-paper-household-essentials/-/N-5xsyk"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cleaning Supplies",
+      "real": "https://www.target.com/c/cleaning-supplies-household-essentials/-/N-5xsyy",
+      "path": "/c/cleaning-supplies-household-essentials/-/N-5xsyy"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pets",
+      "real": "https://www.target.com/c/pets/-/N-5xt44",
+      "path": "/c/pets/-/N-5xt44"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Supplies",
+      "real": "https://www.target.com/c/dog-supplies-pets/-/N-5xt3t",
+      "path": "/c/dog-supplies-pets/-/N-5xt3t"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Supplies",
+      "real": "https://www.target.com/c/cat-supplies-pets/-/N-5xt42",
+      "path": "/c/cat-supplies-pets/-/N-5xt42"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Small Animal Supplies",
+      "real": "https://www.target.com/c/small-animal-supplies-pets/-/N-5xt3d",
+      "path": "/c/small-animal-supplies-pets/-/N-5xt3d"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bird Supplies",
+      "real": "https://www.target.com/c/bird-supplies-pets/-/N-5xt43",
+      "path": "/c/bird-supplies-pets/-/N-5xt43"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fish Supplies",
+      "real": "https://www.target.com/c/fish-supplies-pets/-/N-5xt3e",
+      "path": "/c/fish-supplies-pets/-/N-5xt3e"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Grocery",
+      "real": "https://www.target.com/c/grocery/-/N-5xt1a",
+      "path": "/c/grocery/-/N-5xt1a"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Produce",
+      "real": "https://www.target.com/c/produce-grocery/-/N-u7fty",
+      "path": "/c/produce-grocery/-/N-u7fty"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Meat & Seafood",
+      "real": "https://www.target.com/c/meat-seafood-grocery/-/N-5xsyh",
+      "path": "/c/meat-seafood-grocery/-/N-5xsyh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dairy",
+      "real": "https://www.target.com/c/dairy-grocery/-/N-5xszm",
+      "path": "/c/dairy-grocery/-/N-5xszm"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Frozen Foods",
+      "real": "https://www.target.com/c/frozen-foods-grocery/-/N-5xszd",
+      "path": "/c/frozen-foods-grocery/-/N-5xszd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Snacks",
+      "real": "https://www.target.com/c/snacks-grocery/-/N-5xsy9",
+      "path": "/c/snacks-grocery/-/N-5xsy9"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Ideas",
+      "real": "https://www.target.com/c/gift-ideas/-/N-96d2i",
+      "path": "/c/gift-ideas/-/N-96d2i"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Party Supplies",
+      "real": "https://www.target.com/c/party-supplies/-/N-5xt3c",
+      "path": "/c/party-supplies/-/N-5xt3c"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Halloween",
+      "real": "https://www.target.com/c/halloween/-/N-5xt2o",
+      "path": "/c/halloween/-/N-5xt2o"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Christmas",
+      "real": "https://www.target.com/c/christmas/-/N-5xt30",
+      "path": "/c/christmas/-/N-5xt30"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Easter",
+      "real": "https://www.target.com/c/easter/-/N-5xt1n",
+      "path": "/c/easter/-/N-5xt1n"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mother’s Day",
+      "real": "https://www.target.com/c/gift-ideas-for-mothers/-/N-fh5dt",
+      "path": "/c/gift-ideas-for-mothers/-/N-fh5dt"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Deals",
+      "real": "https://www.target.com/c/top-deals/-/N-4xw74",
+      "path": "/c/top-deals/-/N-4xw74"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clearance",
+      "real": "https://www.target.com/c/clearance/-/N-5q0ga",
+      "path": "/c/clearance/-/N-5q0ga"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.target.com/c/gift-cards/-/N-5xsxu",
+      "path": "/c/gift-cards/-/N-5xsxu"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Black Friday",
+      "real": "https://www.target.com/c/target-black-friday/-/N-5q0f2",
+      "path": "/c/target-black-friday/-/N-5q0f2"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cyber Monday",
+      "real": "https://www.target.com/c/cyber-monday/-/N-5q0f1",
+      "path": "/c/cyber-monday/-/N-5q0f1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Circle Week",
+      "real": "https://www.target.com/l/target-circle-week/-/N-7196o",
+      "path": "/l/target-circle-week/-/N-7196o"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Furniture Assembly by Handy",
+      "real": "https://www.target.com/c/furniture-assembly-powered-by-handy/-/N-xluim",
+      "path": "/c/furniture-assembly-powered-by-handy/-/N-xluim"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Target Optical",
+      "real": "https://www.target.com/c/optical/-/N-4y8o9",
+      "path": "/c/optical/-/N-4y8o9"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Easy Install by HelloTech",
+      "real": "https://www.target.com/c/easy-install/-/N-raym1",
+      "path": "/c/easy-install/-/N-raym1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Parent Services by Tot Squad",
+      "real": "https://www.target.com/c/new-parent-services-by-tot-squad/-/N-vorfo",
+      "path": "/c/new-parent-services-by-tot-squad/-/N-vorfo"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Target Help",
+      "real": "https://www.target.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Weekly Ad",
+      "real": "https://www.target.com/weekly-ad",
+      "path": "/weekly-ad"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Registry & Wish List",
+      "real": "https://www.target.com/gift-registry",
+      "path": "/gift-registry"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Find a Store",
+      "real": "https://www.target.com/store-locator/find-stores",
+      "path": "/store-locator/find-stores"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Target Circle™",
+      "real": "https://www.target.com/l/target-circle/-/N-pzno9",
+      "path": "/l/target-circle/-/N-pzno9"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Target Circle™ Card",
+      "real": "https://www.target.com/circlecard",
+      "path": "/circlecard"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Target Circle 360™",
+      "real": "https://www.target.com/l/target-circle-360/-/N-2rguk",
+      "path": "/l/target-circle-360/-/N-2rguk"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Target Circle Deals",
+      "real": "https://www.target.com/circle/deals",
+      "path": "/circle/deals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift card balance",
+      "real": "https://www.target.com/guest/gift-card-balance",
+      "path": "/guest/gift-card-balance"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Returns",
+      "real": "https://www.target.com/returns",
+      "path": "/returns"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Track Orders",
+      "real": "https://www.target.com/orders",
+      "path": "/orders"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Contact Us",
+      "real": "https://www.target.com/help/contact-us",
+      "path": "/help/contact-us"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Account",
+      "real": "https://www.target.com/account",
+      "path": "/account"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cart",
+      "real": "https://www.target.com/cart",
+      "path": "/cart"
+    }
+  ]
+}
