@@ -1,0 +1,932 @@
+{
+  "store": "sephora",
+  "real_home": "https://www.sephora.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.sephora.com/",
+    "https://www.sephora.com/shop/makeup-cosmetics",
+    "https://www.sephora.com/shop/skincare",
+    "https://www.sephora.com/shop/hair-products",
+    "https://www.sephora.com/shop/fragrance",
+    "https://www.sephora.com/shop/bath-body",
+    "https://www.sephora.com/beauty/customer-service",
+    "https://www.sephora.com/beauty/order-status",
+    "https://www.sephora.com/beauty/returns-exchanges",
+    "https://www.sephora.com/beauty/shipping-information",
+    "https://www.sephora.com/beauty/giftcards",
+    "https://www.sephora.com/beauty/beauty-offers",
+    "https://www.sephora.com/beauty/about-us",
+    "https://www.sephora.com/beauty/contact-us",
+    "https://www.sephora.com/happening/stores/sephora-near-me",
+    "https://www.sephora.com/product/futureiq-hair-longevity-serum-for-graying-thinning-scalp-aging-P525639",
+    "https://www.sephora.com/sitemap.xml",
+    "https://www.sephora.com/sitemap/departments",
+    "https://www.sephora.com/brands-list",
+    "https://www.sephora.com/happening/home",
+    "https://www.sephora.com/profile/BeautyInsider"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap/departments",
+  "notes": "Fetched 2026-10-13 with WebFetch. Sephora renders its department menu, footer, homepage rows below the hero, the /sitemap/departments body, /brands-list, /happening/home and /profile/BeautyInsider client-side, so those bodies came back empty; /basket is robots-disallowed; web.archive.org is blocked; WebSearch returned nothing useful for the footer. Confirmed from fetched HTML: header utility links (AI Beauty Chat, Shop Store & Delivery, Services & Events, Sign In for FREE Shipping, Lists, Basket, Offers, New), the hero carousel copy, and the headings of the department, customer service, order status, returns, shipping, gift card, offers, about, contact, store locator and product pages. From prior knowledge of sephora.com rather than a live capture: the department menu labels, the footer columns (About Sephora / My Sephora / Help) and legal bar, the homepage rows below the hero (Chosen For You, New Arrivals, Beauty Offers, Selling Fast), the Beauty Insider tiers, Skincare subcategory URLs and the sign-in/basket wording. Off-site links (newsroom, careers, Sephora Accelerate) are local summary pages. Product inventory is out of scope: department pages show the real structure with a not-captured product grid.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Sephora",
+      "real": "https://www.sephora.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "AI Beauty Chat",
+      "real": "https://www.sephora.com/beauty/ai-beauty-chat",
+      "path": "/beauty/ai-beauty-chat"
+    },
+    {
+      "kind": "header",
+      "label": "Shop Store & Delivery",
+      "real": "https://www.sephora.com/happening/stores/sephora-near-me",
+      "path": "/happening/stores/sephora-near-me"
+    },
+    {
+      "kind": "header",
+      "label": "Services & Events",
+      "real": "https://www.sephora.com/happening/home",
+      "path": "/happening/home"
+    },
+    {
+      "kind": "header",
+      "label": "Sign In",
+      "real": "https://www.sephora.com/profile/MyAccount",
+      "path": "/profile/MyAccount"
+    },
+    {
+      "kind": "header",
+      "label": "Lists",
+      "real": "https://www.sephora.com/profile/Lists",
+      "path": "/profile/Lists"
+    },
+    {
+      "kind": "header",
+      "label": "Basket",
+      "real": "https://www.sephora.com/basket",
+      "path": "/basket"
+    },
+    {
+      "kind": "header",
+      "label": "Offers",
+      "real": "https://www.sephora.com/beauty/beauty-offers",
+      "path": "/beauty/beauty-offers"
+    },
+    {
+      "kind": "header",
+      "label": "New",
+      "real": "https://www.sephora.com/beauty/new-beauty-products",
+      "path": "/beauty/new-beauty-products"
+    },
+    {
+      "kind": "header",
+      "label": "Brands",
+      "real": "https://www.sephora.com/brands-list",
+      "path": "/brands-list"
+    },
+    {
+      "kind": "header",
+      "label": "Makeup",
+      "real": "https://www.sephora.com/shop/makeup-cosmetics",
+      "path": "/shop/makeup-cosmetics"
+    },
+    {
+      "kind": "header",
+      "label": "Skincare",
+      "real": "https://www.sephora.com/shop/skincare",
+      "path": "/shop/skincare"
+    },
+    {
+      "kind": "header",
+      "label": "Hair",
+      "real": "https://www.sephora.com/shop/hair-products",
+      "path": "/shop/hair-products"
+    },
+    {
+      "kind": "header",
+      "label": "Fragrance",
+      "real": "https://www.sephora.com/shop/fragrance",
+      "path": "/shop/fragrance"
+    },
+    {
+      "kind": "header",
+      "label": "Tools & Brushes",
+      "real": "https://www.sephora.com/shop/makeup-tools",
+      "path": "/shop/makeup-tools"
+    },
+    {
+      "kind": "header",
+      "label": "Bath & Body",
+      "real": "https://www.sephora.com/shop/bath-body",
+      "path": "/shop/bath-body"
+    },
+    {
+      "kind": "header",
+      "label": "Mini Size",
+      "real": "https://www.sephora.com/shop/travel-size-toiletries",
+      "path": "/shop/travel-size-toiletries"
+    },
+    {
+      "kind": "header",
+      "label": "Gifts",
+      "real": "https://www.sephora.com/shop/gifts",
+      "path": "/shop/gifts"
+    },
+    {
+      "kind": "header",
+      "label": "Sale & Offers",
+      "real": "https://www.sephora.com/sale",
+      "path": "/sale"
+    },
+    {
+      "kind": "footer",
+      "label": "About Sephora",
+      "real": "https://www.sephora.com/beauty/about-us",
+      "path": "/beauty/about-us"
+    },
+    {
+      "kind": "footer",
+      "label": "Newsroom",
+      "real": "https://www.sephora.com/beauty/newsroom",
+      "path": "/beauty/newsroom"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://www.sephora.com/beauty/careers",
+      "path": "/beauty/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Sephora Accelerate",
+      "real": "https://www.sephora.com/beauty/sephora-accelerate",
+      "path": "/beauty/sephora-accelerate"
+    },
+    {
+      "kind": "footer",
+      "label": "Supply Chain Transparency",
+      "real": "https://www.sephora.com/beauty/supply-chain-transparency",
+      "path": "/beauty/supply-chain-transparency"
+    },
+    {
+      "kind": "footer",
+      "label": "Affiliates",
+      "real": "https://www.sephora.com/beauty/affiliates",
+      "path": "/beauty/affiliates"
+    },
+    {
+      "kind": "footer",
+      "label": "Sephora Events",
+      "real": "https://www.sephora.com/happening/events",
+      "path": "/happening/events"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Cards",
+      "real": "https://www.sephora.com/beauty/giftcards",
+      "path": "/beauty/giftcards"
+    },
+    {
+      "kind": "footer",
+      "label": "Sephora Global Sites",
+      "real": "https://www.sephora.com/beauty/international-websites",
+      "path": "/beauty/international-websites"
+    },
+    {
+      "kind": "footer",
+      "label": "Beauty Insider",
+      "real": "https://www.sephora.com/profile/BeautyInsider",
+      "path": "/profile/BeautyInsider"
+    },
+    {
+      "kind": "footer",
+      "label": "Sephora Credit Card",
+      "real": "https://www.sephora.com/beauty/credit-card",
+      "path": "/beauty/credit-card"
+    },
+    {
+      "kind": "footer",
+      "label": "Community Profile",
+      "real": "https://www.sephora.com/community/profile",
+      "path": "/community/profile"
+    },
+    {
+      "kind": "footer",
+      "label": "Order Status",
+      "real": "https://www.sephora.com/profile/MyAccount/Orders",
+      "path": "/profile/MyAccount/Orders"
+    },
+    {
+      "kind": "footer",
+      "label": "Purchase History",
+      "real": "https://www.sephora.com/purchase-history",
+      "path": "/purchase-history"
+    },
+    {
+      "kind": "footer",
+      "label": "Account Settings",
+      "real": "https://www.sephora.com/profile/MyAccount",
+      "path": "/profile/MyAccount"
+    },
+    {
+      "kind": "footer",
+      "label": "Beauty Advisor Recommendations",
+      "real": "https://www.sephora.com/in-store-services",
+      "path": "/in-store-services"
+    },
+    {
+      "kind": "footer",
+      "label": "Beauty Offers",
+      "real": "https://www.sephora.com/beauty/beauty-offers",
+      "path": "/beauty/beauty-offers"
+    },
+    {
+      "kind": "footer",
+      "label": "Quiz & Buying Guides",
+      "real": "https://www.sephora.com/beauty/quizzes-buying-guides",
+      "path": "/beauty/quizzes-buying-guides"
+    },
+    {
+      "kind": "footer",
+      "label": "Rewards Bazaar",
+      "real": "https://www.sephora.com/rewards",
+      "path": "/rewards"
+    },
+    {
+      "kind": "footer",
+      "label": "Book a Reservation",
+      "real": "https://www.sephora.com/happening/reservations",
+      "path": "/happening/reservations"
+    },
+    {
+      "kind": "footer",
+      "label": "Customer Service",
+      "real": "https://www.sephora.com/beauty/customer-service",
+      "path": "/beauty/customer-service"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns & Exchanges",
+      "real": "https://www.sephora.com/beauty/returns-exchanges",
+      "path": "/beauty/returns-exchanges"
+    },
+    {
+      "kind": "footer",
+      "label": "Delivery and Pickup Options",
+      "real": "https://www.sephora.com/beauty/delivery-pickup-options",
+      "path": "/beauty/delivery-pickup-options"
+    },
+    {
+      "kind": "footer",
+      "label": "Shipping",
+      "real": "https://www.sephora.com/beauty/shipping-information",
+      "path": "/beauty/shipping-information"
+    },
+    {
+      "kind": "footer",
+      "label": "Billing",
+      "real": "https://www.sephora.com/beauty/billing",
+      "path": "/beauty/billing"
+    },
+    {
+      "kind": "footer",
+      "label": "International Shipments",
+      "real": "https://www.sephora.com/beauty/international-shipments",
+      "path": "/beauty/international-shipments"
+    },
+    {
+      "kind": "footer",
+      "label": "Beauty Services FAQ",
+      "real": "https://www.sephora.com/beauty/beauty-services-faq",
+      "path": "/beauty/beauty-services-faq"
+    },
+    {
+      "kind": "footer",
+      "label": "Sephora at Kohl",
+      "real": "https://www.sephora.com/beauty/sephora-at-kohls-faq",
+      "path": "/beauty/sephora-at-kohls-faq"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.sephora.com/beauty/accessibility",
+      "path": "/beauty/accessibility"
+    },
+    {
+      "kind": "footer",
+      "label": "Find a Store",
+      "real": "https://www.sephora.com/happening/stores/sephora-near-me",
+      "path": "/happening/stores/sephora-near-me"
+    },
+    {
+      "kind": "footer",
+      "label": "Get the App",
+      "real": "https://www.sephora.com/beauty/mobile",
+      "path": "/beauty/mobile"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Policy",
+      "real": "https://www.sephora.com/beauty/privacy-policy",
+      "path": "/beauty/privacy-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms of Use",
+      "real": "https://www.sephora.com/beauty/terms-of-use",
+      "path": "/beauty/terms-of-use"
+    },
+    {
+      "kind": "footer",
+      "label": "Sitemap",
+      "real": "https://www.sephora.com/sitemap/departments",
+      "path": "/sitemap/departments"
+    },
+    {
+      "kind": "footer",
+      "label": "Your Privacy Choices",
+      "real": "https://www.sephora.com/beauty/your-privacy-choices",
+      "path": "/beauty/your-privacy-choices"
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.sephora.com/search?keyword=gta%206",
+      "path": "/search?keyword=gta%206",
+      "expect": [
+        "Search Results",
+        "Results for",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.sephora.com/product/futureiq-hair-longevity-serum-for-graying-thinning-scalp-aging-P525639",
+      "path": "/product/futureiq-hair-longevity-serum-for-graying-thinning-scalp-aging-P525639?skuId=2994127",
+      "expect": [
+        "FutureIQ",
+        "Highlights",
+        "About the Product",
+        "Ingredients",
+        "How to Use"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Makeup",
+      "real": "https://www.sephora.com/shop/makeup-cosmetics",
+      "path": "/shop/makeup-cosmetics",
+      "expect": [
+        "Makeup",
+        "Browse More in Makeup",
+        "Makeup Palettes",
+        "Brushes & Applicators"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Skincare",
+      "real": "https://www.sephora.com/shop/skincare",
+      "path": "/shop/skincare",
+      "expect": [
+        "Skincare",
+        "Browse More in Skincare",
+        "Bestsellers"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Hair",
+      "real": "https://www.sephora.com/shop/hair-products",
+      "path": "/shop/hair-products",
+      "expect": [
+        "Hair",
+        "Browse More in Hair",
+        "Shampoo & Conditioner"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Fragrance",
+      "real": "https://www.sephora.com/shop/fragrance",
+      "path": "/shop/fragrance",
+      "expect": [
+        "Fragrance",
+        "Browse More in Fragrance",
+        "Shop by Fragrance Family"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Bath & Body",
+      "real": "https://www.sephora.com/shop/bath-body",
+      "path": "/shop/bath-body",
+      "expect": [
+        "Bath & Body",
+        "Browse More in Bath & Body",
+        "Body Moisturizers"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Basket",
+      "real": "https://www.sephora.com/basket",
+      "path": "/basket",
+      "expect": [
+        "Basket",
+        "Your basket is currently empty"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.sephora.com/login",
+      "path": "/login",
+      "expect": [
+        "Sign In",
+        "Email Address",
+        "Password",
+        "Create Account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account",
+      "real": "https://www.sephora.com/profile/MyAccount",
+      "path": "/profile/MyAccount",
+      "expect": [
+        "My Account",
+        "Sign In"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status & history",
+      "real": "https://www.sephora.com/beauty/order-status",
+      "path": "/beauty/order-status",
+      "expect": [
+        "Order Status & History",
+        "Tracking an Order",
+        "Order Statuses",
+        "Canceling or Modifying an Order",
+        "Partially Canceled Orders"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Customer service",
+      "real": "https://www.sephora.com/beauty/customer-service",
+      "path": "/beauty/customer-service",
+      "expect": [
+        "Sephora Customer Service",
+        "Popular Topics",
+        "Chat with Us",
+        "Call Us",
+        "All Topics"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Contact us",
+      "real": "https://www.sephora.com/beauty/contact-us",
+      "path": "/beauty/contact-us",
+      "expect": [
+        "Contact Customer Service",
+        "Call Us",
+        "Chat with Us",
+        "1-877-737-4672"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store locator",
+      "real": "https://www.sephora.com/happening/stores/sephora-near-me",
+      "path": "/happening/stores/sephora-near-me",
+      "expect": [
+        "Find a Sephora",
+        "Services and Events at Sephora",
+        "Explore Services and Events"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.sephora.com/beauty/giftcards",
+      "path": "/beauty/giftcards",
+      "expect": [
+        "Gift Cards",
+        "Shop Featured Digital Gift Cards",
+        "Shop Physical Gift Cards",
+        "Check Balance",
+        "Frequently Asked Questions",
+        "Corporate Gift Cards"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Beauty offers",
+      "real": "https://www.sephora.com/beauty/beauty-offers",
+      "path": "/beauty/beauty-offers",
+      "expect": [
+        "Beauty Offers",
+        "Get Your Beauty Insider Exclusive Offers",
+        "Explore Value",
+        "Rewards Bazaar"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns policy",
+      "real": "https://www.sephora.com/beauty/returns-exchanges",
+      "path": "/beauty/returns-exchanges",
+      "expect": [
+        "Returns & Exchanges",
+        "Returns Policy",
+        "Online Purchase Return Procedures",
+        "Gift Returns",
+        "Canadian Returns"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping policy",
+      "real": "https://www.sephora.com/beauty/shipping-information",
+      "path": "/beauty/shipping-information",
+      "expect": [
+        "Shipping Information (US)",
+        "Shipping Costs & Delivery Times",
+        "Hawaii & Alaska",
+        "APO/FPO/DPO Military Addresses",
+        "Tracking Orders"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "About Sephora",
+      "real": "https://www.sephora.com/beauty/about-us",
+      "path": "/beauty/about-us",
+      "expect": [
+        "About Sephora",
+        "Commitment to Diversity and Inclusion",
+        "Beauty Insider Benefits",
+        "Distribution Centers",
+        "Sephora Executives"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Beauty Insider",
+      "real": "https://www.sephora.com/profile/BeautyInsider",
+      "path": "/profile/BeautyInsider",
+      "expect": [
+        "Beauty Insider",
+        "Insider",
+        "VIB",
+        "Rouge"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Brands list",
+      "real": "https://www.sephora.com/brands-list",
+      "path": "/brands-list",
+      "expect": [
+        "Brands A-Z"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.sephora.com/sitemap/departments",
+      "path": "/sitemap/departments",
+      "expect": [
+        "Departments"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Greeting / Beauty Insider join strip",
+      "expect": [
+        "Join Beauty Insider to earn points with every purchase"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Hero carousel",
+      "expect": [
+        "Top Complexion Picks",
+        "Oil-Balancing Hydration",
+        "SHOP NOW"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Chosen For You row",
+      "expect": [
+        "Chosen For You"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "New Arrivals row",
+      "expect": [
+        "New Arrivals"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Beauty Offers row",
+      "expect": [
+        "Beauty Offers"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Selling Fast row",
+      "expect": [
+        "Selling Fast"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Beauty Insider promo",
+      "expect": [
+        "Beauty Insider",
+        "Rewards Bazaar"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Sephora Credit Card promo",
+      "expect": [
+        "Sephora Credit Card"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Email sign-up",
+      "expect": [
+        "Sign up for Sephora Emails"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "App promo",
+      "expect": [
+        "Get the App"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Makeup",
+      "real": "https://www.sephora.com/shop/makeup-cosmetics",
+      "path": "/shop/makeup-cosmetics"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Face",
+      "real": "https://www.sephora.com/shop/face-makeup",
+      "path": "/shop/face-makeup"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cheek",
+      "real": "https://www.sephora.com/shop/cheek-makeup",
+      "path": "/shop/cheek-makeup"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Lip",
+      "real": "https://www.sephora.com/shop/lips-makeup",
+      "path": "/shop/lips-makeup"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Eye",
+      "real": "https://www.sephora.com/shop/eye-makeup",
+      "path": "/shop/eye-makeup"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Makeup Palettes",
+      "real": "https://www.sephora.com/shop/makeup-palettes",
+      "path": "/shop/makeup-palettes"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Brushes & Applicators",
+      "real": "https://www.sephora.com/shop/makeup-brushes",
+      "path": "/shop/makeup-brushes"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessories",
+      "real": "https://www.sephora.com/shop/makeup-tools",
+      "path": "/shop/makeup-tools"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Skincare",
+      "real": "https://www.sephora.com/shop/skincare",
+      "path": "/shop/skincare"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Moisturizers",
+      "real": "https://www.sephora.com/shop/moisturizing-cream-oils-mists",
+      "path": "/shop/moisturizing-cream-oils-mists"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cleansers",
+      "real": "https://www.sephora.com/shop/cleanser",
+      "path": "/shop/cleanser"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Treatments",
+      "real": "https://www.sephora.com/shop/facial-treatments",
+      "path": "/shop/facial-treatments"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Masks",
+      "real": "https://www.sephora.com/shop/face-mask",
+      "path": "/shop/face-mask"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Eye Care",
+      "real": "https://www.sephora.com/shop/eye-treatment-dark-circle-treatment",
+      "path": "/shop/eye-treatment-dark-circle-treatment"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sunscreen",
+      "real": "https://www.sephora.com/shop/sunscreen-sun-protection",
+      "path": "/shop/sunscreen-sun-protection"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hair",
+      "real": "https://www.sephora.com/shop/hair-products",
+      "path": "/shop/hair-products"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shampoo & Conditioner",
+      "real": "https://www.sephora.com/shop/shampoo-conditioner",
+      "path": "/shop/shampoo-conditioner"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hair Styling & Treatments",
+      "real": "https://www.sephora.com/shop/hair-products-treatments",
+      "path": "/shop/hair-products-treatments"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tools",
+      "real": "https://www.sephora.com/shop/hair-styling-tools",
+      "path": "/shop/hair-styling-tools"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Brushes & Combs",
+      "real": "https://www.sephora.com/shop/hair-brushes",
+      "path": "/shop/hair-brushes"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fragrance",
+      "real": "https://www.sephora.com/shop/fragrance",
+      "path": "/shop/fragrance"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Women",
+      "real": "https://www.sephora.com/shop/fragrances-for-women",
+      "path": "/shop/fragrances-for-women"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Men",
+      "real": "https://www.sephora.com/shop/fragrances-for-men",
+      "path": "/shop/fragrances-for-men"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Unisex / Genderless",
+      "real": "https://www.sephora.com/shop/unisex-perfume-cologne",
+      "path": "/shop/unisex-perfume-cologne"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Candles & Home Scents",
+      "real": "https://www.sephora.com/shop/home-fragrance",
+      "path": "/shop/home-fragrance"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bath & Body",
+      "real": "https://www.sephora.com/shop/bath-body",
+      "path": "/shop/bath-body"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Body Moisturizers",
+      "real": "https://www.sephora.com/shop/body-moisturizers",
+      "path": "/shop/body-moisturizers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bath & Shower",
+      "real": "https://www.sephora.com/shop/bath-and-body-soap",
+      "path": "/shop/bath-and-body-soap"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wellness",
+      "real": "https://www.sephora.com/shop/wellness-products",
+      "path": "/shop/wellness-products"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Self Tanners",
+      "real": "https://www.sephora.com/shop/bronzer-self-tanner-bath-body",
+      "path": "/shop/bronzer-self-tanner-bath-body"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mini Size",
+      "real": "https://www.sephora.com/shop/travel-size-toiletries",
+      "path": "/shop/travel-size-toiletries"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gifts",
+      "real": "https://www.sephora.com/shop/gifts",
+      "path": "/shop/gifts"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tools & Brushes",
+      "real": "https://www.sephora.com/shop/makeup-tools",
+      "path": "/shop/makeup-tools"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New",
+      "real": "https://www.sephora.com/beauty/new-beauty-products",
+      "path": "/beauty/new-beauty-products"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Brands",
+      "real": "https://www.sephora.com/brands-list",
+      "path": "/brands-list"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sale",
+      "real": "https://www.sephora.com/sale",
+      "path": "/sale"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.sephora.com/beauty/giftcards",
+      "path": "/beauty/giftcards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beauty Insider",
+      "real": "https://www.sephora.com/profile/BeautyInsider",
+      "path": "/profile/BeautyInsider"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Services & Events",
+      "real": "https://www.sephora.com/happening/home",
+      "path": "/happening/home"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store Locator",
+      "real": "https://www.sephora.com/happening/stores/sephora-near-me",
+      "path": "/happening/stores/sephora-near-me"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Customer Service",
+      "real": "https://www.sephora.com/beauty/customer-service",
+      "path": "/beauty/customer-service"
+    }
+  ]
+}
