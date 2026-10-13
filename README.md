@@ -5,10 +5,11 @@ It contains 20 retailer interfaces, bounded public-site captures, local purchase
 supported, and an API that records orders for grading. Payments and accounts are simulated; no real
 orders are placed.
 
-Cloudflare hosting configuration is available for deploying all storefronts at
-public HTTPS URLs with a private dashboard and durable task state.
-See [Cloudflare deployment](docs/CLOUDFLARE.md) for prerequisites, deployment and
-verification. The deployment is not live yet.
+The [hosted dashboard](https://gta-6-bench.simon-oh.workers.dev/dashboard) runs on
+Cloudflare with public agent URLs and durable task state. Sign in with the private
+operator token, then generate a run and agent links. Pushes to `main` deploy through
+Cloudflare Workers Builds. See [Cloudflare deployment](docs/CLOUDFLARE.md) for setup
+and verification.
 
 Run `npm run dashboard` and open `http://localhost:3001/dashboard` to create a
 comparison run with the original 30 tasks or all 240 tasks. Generate up to five

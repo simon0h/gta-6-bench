@@ -4,11 +4,12 @@ This deployment runs all 20 storefronts in a Cloudflare Container behind an HTTP
 Worker. It uses the existing Node/Express application and reference catalog. The
 container has no outbound Internet access; purchases remain simulations.
 
-The configured destination is `gta-6-bench` in account
-`d0a68e3d8918b6b0d9e48c1659e9e450`. Its expected address after a successful deploy is
-`https://gta-6-bench.simon-oh.workers.dev`. **Configuration does not mean the site
-has been deployed.** Use the URL printed by Wrangler and verify it before giving
-it to agents.
+The deployed Worker is `gta-6-bench` in account
+`d0a68e3d8918b6b0d9e48c1659e9e450`. Open the
+[hosted dashboard](https://gta-6-bench.simon-oh.workers.dev/dashboard) and sign in
+with the `BENCHMARK_API_TOKEN` value from the private local `.dev.vars` file.
+The token is also installed as a Worker runtime secret; it is excluded from Git
+and the container image.
 
 ## Prerequisites and deploy
 
@@ -71,18 +72,18 @@ contain isolated dashboard task evidence. Read that evidence in the dashboard.
 
 ## Deploy from GitHub
 
-Cloudflare does not automatically watch an arbitrary GitHub repository. Connect
-this repository to Workers Builds and select the production branch explicitly.
-Configure its deploy command as `npm run deploy`; Cloudflare can build the
-container image remotely. Set `BENCHMARK_API_TOKEN` as a Worker runtime secret
-before admitting users. Local image builds require Docker; a connected remote
-build does not require Docker on this computer.
+Workers Builds is connected to `simon0h/gta-6-bench`, with `main` as the production
+branch, repository root `/`, no separate build command, and deploy command
+`npx wrangler deploy`. Cloudflare builds the container image remotely, so this
+workflow does not require Docker on your computer. The private runtime secret
+persists across deployments; it is not a build environment variable.
 
-Once configured, pushes to the selected production branch trigger deployment.
+Pushes to `main` trigger deployment.
 A pull request is not a production deployment until its changes reach that branch.
+Preview builds are currently disabled.
 Use a separate staging Worker and Durable Object namespace for previews so test
-builds cannot alter production state. The repository connection and live build
-are not configured by these files alone.
+builds cannot alter production state. A new Cloudflare account or Worker needs its
+own repository connection and runtime secret; these files alone do not create them.
 
 ## State and restart behavior
 
@@ -109,6 +110,12 @@ retention policy; archive and reset test data deliberately before a long campaig
 Deleting `/api/orders` only clears orders, not accounts or sessions.
 
 ## Verify the live deployment
+
+The initial live check on 2026-10-13 UTC passed: 20 reference stores, operator
+sign-in and sign-out, private evidence protection, large product images, run and
+agent-link creation, metadata edits, and a scripted browser purchase with a passing
+strict grade and zero environment errors. Its `deployment-smoke` run contains one
+completed task and 29 unstarted tasks. This validates deployment, not model quality.
 
 Check `/api/health` reports 20 stores and `catalog_mode: reference`. Confirm
 `/dashboard/api/runs` returns 401 without sign-in, `/api/orders` returns 401 without
