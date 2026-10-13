@@ -1,0 +1,107 @@
+/* IKEA shelf: product cards, carousels, product list, product page, bag and checkout. */
+.iks-row,.iks-grid{list-style:none;margin:0;padding:0}
+.iks-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);gap:24px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x mandatory}
+.iks-row>li{scroll-snap-align:start}
+.iks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:40px 24px}
+.iks-carousel-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.iks-carousel-head h2{margin:0 0 16px;font-size:22px}
+.iks-card{position:relative;display:flex;flex-direction:column;gap:4px;font-size:14px;min-width:0}
+.iks-card-link{display:flex;flex-direction:column;gap:4px;color:var(--ink,#111);text-decoration:none}
+.iks-card-link:hover .iks-name{text-decoration:underline}
+.iks-thumb{display:block;background:#f5f5f5;aspect-ratio:1/1;margin-bottom:8px}
+.iks-img{display:block;width:100%;height:100%;object-fit:contain}
+.iks-name{font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.01em}
+.iks-desc{color:#484848;font-size:14px;line-height:1.4}
+.iks-card-price{margin-top:4px}
+.iks-price{font-weight:700;font-size:24px;line-height:1;color:#111}
+.iks-price sup{font-size:.5em;vertical-align:top;position:relative;top:.15em}
+.iks-price-family{display:inline-block;align-self:flex-start;background:#0058a3;color:#fff;padding:2px 6px 4px}
+.iks-family{margin:0;display:flex;flex-direction:column;gap:4px}.iks-family>span:first-child{font-size:12px;font-weight:700;color:#0058a3}
+.iks-regular,.iks-prev{margin:4px 0 0;font-size:12px;color:#484848}
+.iks-badge{align-self:flex-start;font-size:12px;font-weight:700;color:#cc0008}
+.iks-badge-family{color:#0058a3}.iks-badge-new{color:#ca5008}
+.iks-rating{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#484848}
+.iks-stars{--r:80%;display:inline-block;width:72px;height:13px;background:linear-gradient(90deg,#111 var(--r),#dfdfdf var(--r));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 13'%3E%3Cg%3E%3Cpath id='s' d='M6.5 0l1.9 4.2 4.6.5-3.4 3.1 1 4.5-4.1-2.4-4.1 2.4 1-4.5L0 4.7l4.6-.5z'/%3E%3Cuse href='%23s' x='14.7'/%3E%3Cuse href='%23s' x='29.4'/%3E%3Cuse href='%23s' x='44.1'/%3E%3Cuse href='%23s' x='58.8'/%3E%3C/g%3E%3C/svg%3E") no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 13'%3E%3Cg%3E%3Cpath id='s' d='M6.5 0l1.9 4.2 4.6.5-3.4 3.1 1 4.5-4.1-2.4-4.1 2.4 1-4.5L0 4.7l4.6-.5z'/%3E%3Cuse href='%23s' x='14.7'/%3E%3Cuse href='%23s' x='29.4'/%3E%3Cuse href='%23s' x='44.1'/%3E%3Cuse href='%23s' x='58.8'/%3E%3C/g%3E%3C/svg%3E") no-repeat}
+.iks-quick{margin-top:6px}
+.iks-add{width:40px;height:40px;padding:0;min-width:0;border-radius:50%;border:0;background:#0058a3;color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.iks-add:hover{background:#004f93}
+.iks-add svg{flex:none;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.iks-filters fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto}
+.iks-filters label{font-size:14px;white-space:nowrap}
+.iks-filters small{color:#767676}
+.ik-pill.iks-active summary{background:#111;color:#fff}
+.iks-more{display:flex;flex-direction:column;align-items:center;gap:12px;margin:40px 0 8px;font-size:14px;color:#484848}
+.iks-more progress{width:220px;height:2px;accent-color:#111}
+.iks-tabs{display:flex;gap:24px;border-bottom:1px solid #dfdfdf;margin:0 0 8px;font-size:14px;font-weight:700}
+.iks-tabs>*{padding:10px 0;color:#484848;text-decoration:none}
+.iks-tabs [aria-current]{color:#111;border-bottom:2px solid #111}
+/* product page */
+.iks-toast{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#111;color:#fff;padding:12px 20px;border-radius:4px;margin:0 0 16px}
+.iks-pip{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:48px;margin:8px 0 48px}
+.iks-gallery-main{background:#f5f5f5;aspect-ratio:1/1}
+.iks-thumbs{display:flex;gap:8px;margin-top:8px}
+.iks-thumbs a{width:72px;height:72px;background:#f5f5f5;border:2px solid transparent}
+.iks-thumbs a[aria-current]{border-color:#111}
+.iks-buy{display:flex;flex-direction:column;gap:12px}
+.iks-title{margin:0;display:flex;flex-direction:column;gap:4px;font-size:16px;font-weight:400}
+.iks-title .iks-name{font-size:20px}
+.iks-pip-price .iks-price{font-size:36px}
+.iks-artno{font-size:12px;margin:0}
+.iks-artno-box{display:inline-block;background:#111;color:#fff;font-weight:700;font-size:12px;padding:2px 6px;letter-spacing:.04em}
+.iks-get{border:1px solid #dfdfdf;border-radius:4px;padding:12px 16px}
+.iks-get h2{font-size:16px;margin:0 0 8px}.iks-get ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.iks-get li{display:flex;flex-direction:column;font-size:14px}.iks-get li span{color:#0a8a00}
+.iks-buy-form{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.iks-buy-form label{width:100%;font-size:14px;font-weight:700}
+.iks-buy-form input{width:80px;padding:12px;border:1px solid #929292;border-radius:4px;font-size:16px}
+.iks-add-btn{flex:1;background:#0058a3;border-color:#0058a3;padding:16px 24px;font-size:16px}
+.iks-add-btn:hover{background:#004f93}
+.iks-section{border-top:1px solid #dfdfdf;padding:24px 0}
+.iks-section h2{font-size:20px;margin:0 0 12px}
+.iks-specs{display:grid;grid-template-columns:max-content 1fr;gap:6px 24px;font-size:14px}
+.iks-specs dt{font-weight:700}.iks-specs dd{margin:0}
+.iks-reviews dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;font-size:14px;max-width:420px}
+.iks-reviews dd{margin:0}.iks-score{display:flex;align-items:center;gap:12px}.iks-score strong{font-size:32px}
+/* bag and checkout */
+.iks-bag,.iks-checkout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:48px;align-items:start}
+.iks-bag-line{display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:20px;padding:20px 0;border-bottom:1px solid #dfdfdf}
+.iks-bag-thumb{background:#f5f5f5;width:120px;height:120px}
+.iks-bag-info{display:flex;flex-direction:column;gap:6px}
+.iks-bag-info p{margin:0}.iks-bag-info .iks-name{color:#111}
+.iks-bag-qty{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
+.iks-bag-qty input{width:64px;padding:8px;border:1px solid #929292;border-radius:4px}
+.iks-remove{background:none;border:0;text-decoration:underline;cursor:pointer;font-size:14px;color:#111;padding:0}
+.iks-bag-price{font-size:16px;display:flex;flex-direction:column;align-items:flex-end}.iks-bag-price small{font-weight:400;color:#484848;font-size:12px}
+.iks-summary{border:1px solid #dfdfdf;border-radius:4px;padding:20px;position:sticky;top:16px}
+.iks-summary h2{font-size:18px;margin:0 0 12px}
+.iks-summary-list{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:14px;margin:0 0 16px}
+.iks-summary-list dd{margin:0;text-align:right}
+.iks-summary-list .iks-total{font-weight:700;font-size:18px;border-top:1px solid #dfdfdf;padding-top:10px}
+.iks-checkout-btn,.iks-place{display:block;width:100%;text-align:center;background:#0058a3;border-color:#0058a3;padding:16px}
+.iks-panel{border-bottom:1px solid #dfdfdf;padding:8px 0 24px;margin-bottom:16px}
+.iks-panel h2{font-size:18px}
+.iks-field{display:flex;flex-direction:column;gap:4px;margin:0 0 12px;font-size:14px;flex:1}
+.iks-field label{font-weight:700}
+.iks-field input,.iks-field select{padding:12px;border:1px solid #929292;border-radius:4px;font-size:16px;width:100%;box-sizing:border-box;background:#fff}
+.iks-two,.iks-three{display:flex;gap:12px}
+.iks-options{border:0;padding:0;margin:0 0 12px;display:flex;flex-direction:column;gap:8px}
+.iks-options label{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid #dfdfdf;border-radius:4px;padding:12px;font-size:14px}
+.iks-options span{color:#484848;width:100%;padding-left:22px}
+.iks-mini{display:grid;grid-template-columns:64px 1fr;gap:12px;font-size:13px;margin-bottom:12px}
+.iks-mini img{width:64px;height:64px;background:#f5f5f5}.iks-mini p{margin:2px 0}
+.iks-thanks{background:#f5f5f5;padding:24px 32px;margin:0 0 24px}.iks-thanks h1{margin:0 0 8px}
+@media (max-width:900px){
+  .iks-pip,.iks-bag,.iks-checkout{grid-template-columns:1fr;gap:24px}
+  .iks-summary{position:static}
+}
+@media (max-width:600px){
+  .iks-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px}
+  .iks-row{grid-auto-columns:46%;gap:12px}
+  .iks-price{font-size:20px}
+  .iks-name,.iks-desc{font-size:13px}
+  .iks-bag-line{grid-template-columns:80px minmax(0,1fr)}
+  .iks-bag-thumb{width:80px;height:80px}
+  .iks-bag-price{grid-column:2;align-items:flex-start}
+  .iks-two,.iks-three{flex-direction:column;gap:0}
+  .iks-filters label{white-space:normal}
+}
