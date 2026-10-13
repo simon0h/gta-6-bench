@@ -1,6 +1,7 @@
 import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
 import { productImage, productGallery } from '../../lib/product-assets.js'
 import { productArt } from './art.js'
+import { shelfGallery } from './shelf.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
 import { productPath, signinPath, byAsin, games, STATES, DELIVERY, SORTS, DEPARTMENTS, PRODUCTS, recommendations, deliveryOptions } from './data.js'
 import { browseHome, browseResults, productRow } from './browse.js'
@@ -20,6 +21,10 @@ function price(n, cls = 'az-price') {
   const [d, c] = money(n).slice(1).split('.')
   return `<span class="${cls}"><span class="a-offscreen">${money(n)}</span><span aria-hidden="true"><span class="az-price-sym">$</span>${d}<sup>${c}</sup></span></span>`
 }
+
+// Assortment deals show Amazon's strike-through "List:" price and the percentage saved.
+const pctOff = p => Math.round((1 - p.price / p.listPrice) * 100)
+const listLine = p => p.listPrice ? `<div class="az-fine az-list-price">${p.deal ? '<span class="az-deal-badge">Limited time deal</span> ' : ''}List: <s>${money(p.listPrice)}</s></div>` : ''
 
 function logo() {
   return `<span class="az-logo-word">amazon</span><svg class="az-smile" viewBox="0 0 60 16" width="60" height="16" aria-hidden="true"><path d="M3 4c14 12 36 12 52 2" fill="none" stroke="#FF9900" stroke-width="3" stroke-linecap="round"/><path d="M49 2l7 3-3 6" fill="none" stroke="#FF9900" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`
@@ -168,7 +173,7 @@ function tile(base, p, ret, inCart) {
     ${stars(p.rating)}
     ${p.bought ? `<div class="az-bought">${esc(p.bought)}</div>` : ''}
     ${p.formatsLine ? `<div class="az-fine">${esc(p.formatsLine)}</div>` : `<div class="az-fine">${esc(p.typeLabel)}${p.platformLabel ? ` &middot; ${esc(p.platformLabel)}` : ''}</div>`}
-    ${price(p.price, 'az-price az-price-lg')}
+    ${price(p.price, 'az-price az-price-lg')}${listLine(p)}
     ${!p.stock ? '' : p.priceNote ? `<div class="az-fine">${esc(p.priceNote)}</div>` : `<div class="az-fine"><a href="${base}/help/delivery">See delivery options</a></div>`}
     ${p.stock?`<div class="az-delivery">${esc(p.delivery[0])}</div><div class="az-delivery">${esc(p.delivery[1])}</div>`:''}
     <div class="az-avail">${esc(p.availability)}</div>
@@ -186,8 +191,8 @@ export function productPage({ base, p, inCart = {}, listAdded = false, lists = [
   const preorder = !!p.release
   const pdp = productPath(base, p)
   const ret = pdp.slice(base.length)
-  const crumbs = ancestorNodes(p.node).map(n=>`<a href="${nodePath(base,n.id)}">${esc(n.title)}</a>`).join(' &rsaquo; ')
-  const buyForm = !p.stock ? `<p>This item is currently unavailable. <a href="${nodePath(base,p.node)}">See similar items</a></p>` : preorder
+  const crumbs = p.trail ? p.trail.map(([label,path])=>`<a href="${base}${esc(path)}">${esc(label)}</a>`).join(' &rsaquo; ') : ancestorNodes(p.node).map(n=>`<a href="${nodePath(base,n.id)}">${esc(n.title)}</a>`).join(' &rsaquo; ')
+  const buyForm = !p.stock ? `<p>This item is currently unavailable. <a href="${p.trail ? base + p.trail.at(-1)[1] : nodePath(base,p.node)}">See similar items</a></p>` : preorder
     ? `<form id="addToCart" method="post" action="${base}/gp/product/handle-buy-box">
       <input type="hidden" name="ASIN" value="${esc(p.asin)}">
       <div class="az-qty"><label for="quantity">Quantity:</label><select id="quantity" name="quantity">${Array.from({length:Math.min(5,p.stock)},(_,i)=>i+1).map(n => `<option value="${n}">${n}</option>`).join('')}</select></div>
@@ -206,7 +211,7 @@ export function productPage({ base, p, inCart = {}, listAdded = false, lists = [
 ${listAdded ? `<div class="az-notice" role="status">&#10004; Saved in <a href="${base}/hz/wishlist/ls">Your Lists</a></div>` : ''}
 <div class="az-pdp">
   <div class="az-gallery">
-    ${productGallery('amazon',p)}
+    ${p.shelf ? shelfGallery(p) : productGallery('amazon',p)}
   </div>
   <div class="az-center">
     <h1 class="az-title" id="productTitle">${esc(p.title)}</h1>
@@ -214,7 +219,7 @@ ${listAdded ? `<div class="az-notice" role="status">&#10004; Saved in <a href="$
     ${p.platformLabel ? `<div class="az-meta">Platform : ${esc(p.platformLabel)}${p.esrb ? ` | Rated: ${esc(p.esrb)}` : ''}</div>` : ''}
     ${stars(p.rating)}
     ${p.bought ? `<div class="az-bought">${esc(p.bought)}</div>` : ''}
-    <div class="az-price-block">${price(p.price, 'az-price az-price-xl')}</div>
+    <div class="az-price-block">${p.listPrice ? `<span class="az-savings-pct">-${pctOff(p)}%</span> ` : ''}${price(p.price, 'az-price az-price-xl')}${p.listPrice ? `<div class="az-fine">List Price: <s>${money(p.listPrice)}</s></div>` : ''}</div>
     <details class="az-returns"><summary>Return eligibility</summary><p>Check return options after delivery. An order that has not shipped can be canceled from Your Orders.</p><a href="${base}/help/returns">See return policy</a></details>
     ${p.priceNote ? `<div class="az-savings"><span class="az-savings-tag">Savings</span> ${esc(p.priceNote)} <a href="${base}/help/preorder">Terms</a></div>` : ''}
     ${isGame ? `<div class="az-swatches"><div class="az-swatch-label">Platform For Display: <b>${esc(p.swatchLabel)}</b></div>
