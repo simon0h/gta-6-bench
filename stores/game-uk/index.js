@@ -6,10 +6,11 @@ import { recordOrder, getOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { enterScenarioCart, scenarioProduct, scenarioPayment, scenarioAvailability, scenarioPickupEnabled } from '../../lib/benchmark-scenarios.js'
 import { authenticate, createAccount, findAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, quantityLimit, byId, bySlug, selectedProduct, cartProblem, eligibleMethods, search, sortProducts, SORTS, totals, hasPreorder, productPath, DELIVERY_METHODS, COLLECT_STORES, collectionStoreId, TITLES, MAX_QTY } from './data.js'
+import { CATALOG, quantityLimit, byId, bySlug, selectedProduct, cartProblem, eligibleMethods, search, sortProducts, SORTS, totals, hasPreorder, productPath, DELIVERY_METHODS, COLLECT_STORES, collectionStoreId, TITLES, MAX_QTY } from './data.js'
 import * as P from './pages.js'
 import { allLandings } from './site-data.js'
 import { installSite } from './site.js'
+import { installShelfMedia } from './shelf.js'
 
 const NAME = 'GAME'
 const router = Router()
@@ -52,10 +53,11 @@ router.use((req,res,next)=>{
 
 installJourneys(router, { render, invalidate, safeReturn })
 installSite(router, { render })
+installShelfMedia(router)
 
 // ---- browse ----
 router.get('/information', (req,res) => render(req,res,{ title: 'Shopping information', body: P.supportInformationPage(res.locals.base, typeof req.query.topic === 'string' ? req.query.topic : 'Shopping information') }))
-router.get('/', (req, res) => render(req, res, { title: 'GAME | Gaming Specialist For Consoles, Games & Accessories!', body: P.homePage({ base: res.locals.base, products: PRODUCTS }) }))
+router.get('/', (req, res) => render(req, res, { title: 'GAME | Gaming Specialist For Consoles, Games & Accessories!', body: P.homePage({ base: res.locals.base, products: CATALOG }) }))
 
 // The working search URL on game.co.uk is /searchresults?descriptionfilter=...; /search?q= is a 404 there too (it falls through to the product route below).
 function listing(req,res,{route='/searchresults',heading='Search Results',intro='',scope={},department=null,match=null}={}) {
@@ -76,7 +78,7 @@ for(const dept of DEPARTMENTS) {
   for(const category of dept.categories) router.get('/'+dept.id+'/'+categorySlug(category),(req,res)=>listing(req,res,{route:'/'+dept.id+'/'+categorySlug(category),heading:category,intro:dept.intro,scope:{department:dept.id,category},department:dept}))
 }
 for(const campaign of CAMPAIGNS) router.get('/campaign/'+campaign.id,(req,res)=>listing(req,res,{route:'/campaign/'+campaign.id,heading:campaign.title,intro:campaign.intro,scope:{campaign:campaign.id}}))
-for(const brand of new Set(PRODUCTS.map(p=>p.brand))) router.get('/brands/'+categorySlug(brand),(req,res)=>listing(req,res,{route:'/brands/'+categorySlug(brand),heading:brand,intro:'Explore games, accessories and more from '+brand+'.',scope:{brand}}))
+for(const brand of new Set(CATALOG.map(p=>p.brand))) router.get('/brands/'+categorySlug(brand),(req,res)=>listing(req,res,{route:'/brands/'+categorySlug(brand),heading:brand,intro:'Explore games, accessories and more from '+brand+'.',scope:{brand}}))
 for(const dept of DEPARTMENTS){registered.add('/'+dept.id);for(const c of dept.categories)registered.add('/'+dept.id+'/'+categorySlug(c))}
 // Landing pages from the real site's menus and /sitemap directory (see site-data.js).
 for(const [path,l] of LANDING_MAP) if(!registered.has(path)) router.get(path,(req,res)=>listing(req,res,{route:path,heading:l.h1,intro:l.intro||'',match:l.match}))

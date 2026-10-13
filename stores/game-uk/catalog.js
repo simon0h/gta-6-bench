@@ -4,8 +4,8 @@ import { expandGameUK } from './catalog500.js'
 export const DEPARTMENTS = [
   { id:'gaming', title:'Consoles & Video Games', intro:'Find your next adventure, choose a console and complete your setup.', photo:'ps5-console', categories:['Consoles','Video Games','Controllers','Headsets','Racing Wheels','Charging Docks','Carry Cases'] },
   { id:'digital', title:'Digital Gift Cards', intro:'Top up your account or choose a new digital adventure. Check the platform and UK region before buying.', photo:'game-pocket-garden', categories:['Digital Downloads','Gift Cards'] },
-  { id:'pc-gaming', title:'PC Gaming', intro:'Build a comfortable PC setup with keyboards, mice, displays and audio.', photo:'keyboard', categories:['Keyboards','Mice','PC Bundles','Monitors','Laptops','Headsets'] },
-  { id:'tech', title:'Tech', intro:'Everyday audio, storage and accessories for connected play.', photo:'headphones', categories:['Headphones','Storage','Cables','Webcams','Vinyl'] },
+  { id:'pc-gaming', title:'PC Gaming', intro:'Build a comfortable PC setup with keyboards, mice, displays and audio.', photo:'keyboard', categories:['Keyboards','Mice','PC Bundles','Monitors','Laptops','Headsets',...(fixtureCatalog?[]:['Gaming Chairs'])] },
+  { id:'tech', title:'Tech', intro:'Everyday audio, storage and accessories for connected play.', photo:'headphones', categories:['Headphones',...(fixtureCatalog?[]:['Speakers','Smart Lighting']),'Storage','Cables','Webcams','Vinyl'] },
   { id:'lego', title:'LEGO', intro:'Creative bricks, city builds and colourful display sets for imaginative builders.', photo:'building-bricks', categories:['Building Sets'] },
   { id:'toys', title:'Toys & Games', intro:'Make room for family game nights, imaginative play and favourite collectibles.', photo:'rc-car-red', categories:['Soft Toys','Board Games','Action Figures','RC Vehicles','Wooden Toys','Building Sets'] },
   { id:'toys/trading-cards', title:'Trading Cards', intro:'Ready-to-play decks, booster packs and storage for your collection.', photo:'card-binder-black', categories:['Trading Cards','Card Storage'] },
