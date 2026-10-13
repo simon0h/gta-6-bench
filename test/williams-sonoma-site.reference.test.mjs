@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { startServer } from './helpers.js'
 
-test('Williams Sonoma reference site reproduces the real chrome and key pages without purchase controls', async () => {
+test('Williams Sonoma reference site reproduces the real chrome and key pages; captured listings stay read-only', async () => {
   const server = await startServer()
   try {
     const client = server.client()
@@ -16,9 +16,11 @@ test('Williams Sonoma reference site reproduces the real chrome and key pages wi
 
     const espresso = await client.get('/williams-sonoma/shop/electrics/espresso-makers/?sort=price-asc')
     assert.equal(espresso.status, 200)
-    assert.match(espresso.text, /data-purchase-evidence="unverified"/)
-    assert.doesNotMatch(espresso.text, /add to cart/i)
-    const empty = await client.get('/williams-sonoma/shop/bakeware/cake-pans/')
+    // Category grids list the purchasable kitchen assortment (shelf.js), sorted as requested.
+    const prices = [...espresso.text.matchAll(/data-product-kind="other"[\s\S]*?class="wsx-price[^"]*">(?:<span class="wss-now">)?\$([\d,.]+)/g)].map(m => Number(m[1].replace(/,/g, '')))
+    assert.ok(prices.length >= 5)
+    assert.deepEqual(prices, prices.toSorted((x, y) => x - y))
+    const empty = await client.get('/williams-sonoma/shop/sale-special-offer/open-box-deals/')
     assert.match(empty.text, /0 Results/)
     assert.equal((await client.get('/williams-sonoma/shop/cookware/not-a-category/')).status, 404)
 
@@ -33,7 +35,9 @@ test('Williams Sonoma reference site reproduces the real chrome and key pages wi
     const signedIn = await client.post('/williams-sonoma/account/login.html', { email: 'tester@example.com', password: 'Password123!' })
     assert.equal(signedIn.status, 200)
     assert.match(signedIn.text, /Hi, Alex/)
+    // Captured "gta 6" search observations stay read-only.
     assert.equal((await client.post('/williams-sonoma/cart/add', { pid: 'breville-barista-express-impress-espresso' })).status, 409)
+    assert.match((await client.get('/williams-sonoma/products/breville-barista-express-impress-espresso/')).text, /Back to search results/)
     assert.deepEqual(await client.json('/api/orders?store=williams-sonoma'), [])
   } finally { await server.close() }
 })

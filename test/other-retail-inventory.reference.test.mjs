@@ -72,9 +72,14 @@ test('reference retail routes keep captured search and detail states, not artifi
       assert.doesNotMatch(detail.text, /action="[^\"]*\/(?:cart|checkout)/)
     }
   }
+  // Williams Sonoma searches its kitchen assortment (shelf.js) for terms other than the captured "gta 6".
+  const wsCoffee = await dispatch('williams-sonoma', '/search/results.html?words=coffee')
+  assert.equal(wsCoffee.status, 200)
+  assert.match(wsCoffee.text, /data-product-kind="other"/)
+  assert.doesNotMatch(wsCoffee.text, /data-reference-state="uncaptured"/)
   const ikea = await dispatch('ikea', '/us/en/search/?q=gta%206')
   assert.match(ikea.text, /We found 0 products and 0 content results/)
-  for (const [slug, path] of [['nike', '/w?q=GTA6'], ['ikea', '/us/en/search/?q=desk'], ['chewy', '/s?query=gta%206'], ['coupang', '/np/search?q=gta%206'], ['sephora', '/search?keyword=Grand+Theft+Auto+VI'], ['williams-sonoma', '/search/results.html?words=coffee']]) {
+  for (const [slug, path] of [['nike', '/w?q=GTA6'], ['ikea', '/us/en/search/?q=desk'], ['chewy', '/s?query=gta%206'], ['coupang', '/np/search?q=gta%206'], ['sephora', '/search?keyword=Grand+Theft+Auto+VI']]) {
     const result = await dispatch(slug, path)
     assert.equal(result.status, 200)
     assert.match(result.text, /data-reference-state="uncaptured"/)
