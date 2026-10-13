@@ -13,40 +13,37 @@ export const SONY_SIGNUP = '/my.account.sony.com/central/signup'
 export const signInUrl = (base, redirectUri) => `${base}${SONY_SIGNIN}/?redirect_uri=${encodeURIComponent(redirectUri)}`
 const signUpUrl = (base, redirectUri) => `${base}${SONY_SIGNUP}/?redirect_uri=${encodeURIComponent(redirectUri)}`
 const STORE_NAV = ['Latest', 'Collections', 'Deals', 'Subscriptions', 'Browse']
+// The global PlayStation.com header as rendered on store.playstation.com (captured 2026-10-13).
+// Links that leave the store on the real site point at local summaries of those pages (see pdc.js).
 const GLOBAL_NAV = [
-  ['Store', [['Browse all products','/en-us/pages/browse'],['Latest releases','/en-us/collection/new-games'],['Deals','/en-us/pages/deals'],['PlayStation Plus','/en-us/pages/subscriptions']]],
-  ['PS5', [['Explore PS5 games','/en-us/pages/browse?platform=PS5'],['PS5 Pro Enhanced','/en-us/pages/browse?feature=PS5+Pro+Enhanced'],['Game Library','/en-us/library'],['Download guidance','/en-us/support/downloads']]],
-  ['Games', [['Browse all games','/en-us/pages/browse'],['PlayStation Studios','/en-us/collection/studios'],['Free-to-play','/en-us/collection/free-to-play'],['Play together','/en-us/collection/together']]],
-  ['PS Plus', [['Discover PlayStation Plus','/en-us/pages/subscriptions'],['Game Catalog','/en-us/pages/browse?plus=Extra'],['Manage membership','/en-us/membership'],['Subscription support','/en-us/support/subscriptions']]],
-  ['Accessories', [['Consoles','/en-us/pages/browse?content=CONSOLE'],['Physical accessories','/en-us/pages/browse?content=ACCESSORY'],['Physical games','/en-us/pages/browse?content=PHYSICAL+GAME']]],
-  ['News', [['New games','/en-us/collection/new-games'],['Coming soon','/en-us/pages/browse?content=PRE-ORDER'],['Autumn Adventures','/en-us/collection/autumn']]],
-  ['Support', [['Support home','/en-us/support'],['Games and add-ons','/en-us/support/addons'],['Purchases and refunds','/en-us/support/refunds'],['Contact support','/en-us/support/contact']]],
+  ['Store', [['Explore hardware','/direct.playstation.com/en-us'],['Buy consoles','/direct.playstation.com/en-us/hardware/ps5'],['Buy accessories','/direct.playstation.com/en-us/accessories/ps5'],['Buy games','/en-us/pages/latest'],['Subscribe to PS Plus','/en-us/ps-plus'],['Buy merchandise','/direct.playstation.com/en-us/games/catalog']]],
+  ['PS5', [['PS5','/en-us/ps5'],['PS5 Pro','/en-us/ps5/ps5-pro'],['PlayStation Portal Remote Player','/en-us/accessories/playstation-portal-remote-player'],['Games','/en-us/ps5/games'],['Controllers','/en-us/accessories#controllers'],['Audio','/en-us/accessories#headsets']]],
+  ['Games', [['PS5','/en-us/ps5/games'],['PS4','/en-us/ps4/ps4-games'],['PS VR2','/en-us/ps-vr2/games'],['PC','/en-us/games/pc-games'],['PS Plus','/en-us/ps-plus/games']]],
+  ['PS Plus', [['Subscribe','/en-us/ps-plus'],["What's New",'/en-us/ps-plus/whats-new'],['All Games','/en-us/ps-plus/games']]],
+  ['Accessories', [['PS5 controllers','/en-us/accessories#controllers'],['PlayStation Portal Remote Player','/en-us/accessories/playstation-portal-remote-player'],['PS VR2','/en-us/ps-vr2'],['Audio','/en-us/accessories#headsets'],['All accessories','/en-us/accessories']]],
+  ['News', [['PS Blog','/blog.playstation.com'],['This Month on PlayStation','/en-us/editorial/this-month-on-playstation']]],
+  ['Support', [['Support','/en-us/support'],['Service Status','/status.playstation.com']]],
 ]
-const navigationMenus = base => GLOBAL_NAV.map(([name,links,note])=>`<details class="ps-nav-menu"><summary>${name}<span aria-hidden="true">⌄</span></summary><div class="ps-nav-panel"><p>${name==='Store'?'Explore PlayStation Store':esc(name)}</p><div>${links.map(([label,path])=>`<a href="${base}${path}">${label}<span aria-hidden="true">›</span></a>`).join('')}</div>${note?`<small>${note}</small>`:''}</div></details>`).join('')
+const navigationMenus = base => GLOBAL_NAV.map(([name,links])=>`<details class="ps-nav-menu"><summary>${name}<span aria-hidden="true">⌄</span></summary><div class="ps-nav-panel"><div>${links.map(([label,path])=>`<a href="${base}${path}">${esc(label)}<span aria-hidden="true">›</span></a>`).join('')}</div></div></details>`).join('')
+const mobileMenus = base => GLOBAL_NAV.map(([name,links])=>`<details><summary>${name}</summary>${links.map(([label,path])=>`<a href="${base}${path}">${esc(label)}</a>`).join('')}</details>`).join('')
 const FOOTER_LINKS = [
-  ['Support','/en-us/support'], ['Privacy Policy','/en-us/information/privacy'],
-  ['Do Not Share My Personal Information','/en-us/information/privacy-choices'], ['Website Terms of Use','/en-us/information/website-terms'],
-  ['Sitemap','/en-us/information/sitemap'], ['PlayStation Studios','/en-us/collection/studios'],
-  ['Legal','/en-us/information/legal'], ['About SIE','/en-us/information/about'],
-  ['PlayStation Terms of Service','/en-us/information/service-terms'], ['PS Store Cancellation Policy','/en-us/support/refunds'],
-  ['Health Warnings','/en-us/information/health'], ['About Ratings','/en-us/information/ratings'],
+  ['Support','/en-us/support'], ['Privacy Policy','/en-us/legal/privacy-policy'],
+  ['Do Not Share My Personal Information','/en-us/legal/third-party-ads'], ['Website Terms of Use','/en-us/legal/website-terms-of-use'],
+  ['Sitemap','/en-us/site-map'], ['PlayStation Studios','/en-us/corporate/playstation-studios'],
+  ['Legal','/en-us/legal'], ['About SIE','/en-us/corporate/about-us'],
+  ['PlayStation Terms of Service','/en-us/legal/psn-terms-of-service'], ['PS Store Cancellation Policy','/en-us/legal/playstation-store-cancellation-policy'],
+  ['Health Warnings','/en-us/legal/health-warning'], ['About Ratings','/en-us/support/account/age-ratings-playstation'],
 ]
-const INFORMATION = {
-  privacy: ['Privacy Policy','Read the official PlayStation privacy policy for information about Sony’s handling of personal information. This store’s profile preferences do not change a real PlayStation account.','https://www.playstation.com/en-us/legal/privacy-policy/'],
-  'privacy-choices': ['Do Not Share My Personal Information','Privacy requests to Sony are handled on the official PlayStation website. No privacy request is submitted by visiting this page.','https://www.playstation.com/en-us/legal/third-party-ads/'],
-  'website-terms': ['Website Terms of Use','Official website terms are available from PlayStation. The local storefront records simulated shopping actions only.','https://www.playstation.com/en-us/legal/website-terms-of-use/'],
-  legal: ['Legal','Explore official PlayStation legal notices and policies. Product pages list the publisher and the digital licenses included with each local purchase.','https://www.playstation.com/en-us/legal/'],
-  about: ['About Sony Interactive Entertainment','Sony Interactive Entertainment is the company behind PlayStation. Visit its official company pages for corporate information.','https://www.playstation.com/en-us/corporate/about-us/'],
-  'service-terms': ['PlayStation Terms of Service','A real PlayStation account and its services are governed by the official terms. Local account and membership controls do not activate Sony services.','https://www.playstation.com/en-us/legal/psn-terms-of-service/'],
-  health: ['Health Warnings','Read the official PlayStation health and safety information before playing, including guidance for virtual reality. Product pages identify their supported VR features.','https://www.playstation.com/en-us/legal/health-warning/'],
-  ratings: ['About Ratings','Age ratings help you choose suitable games. Check the rating and content information on each product page; online interactions and optional purchases can vary.','https://www.playstation.com/en-us/support/account/age-ratings-playstation/'],
-}
-export function informationPage({base,topic}) {
-  if(topic==='sitemap')return {title:'Sitemap',body:`<section class="ps-section ps-support-article"><h1>Sitemap</h1><h2>Discover games</h2><div class="ps-category-grid">${STORE_NAV.map(n=>`<a href="${base}/en-us/pages/${n.toLowerCase()}">${n}</a>`).join('')}</div><h2>Your PlayStation</h2><ul>${[['account','Account overview'],['library','Game Library'],['wishlist','Wishlist'],['transactions','Transaction History'],['membership','PlayStation Plus'],['support','Support']].map(([path,label])=>`<li><a href="${base}/en-us/${path}">${label}</a></li>`).join('')}</ul></section>`}
-  if(!Object.hasOwn(INFORMATION,topic))return null
-  const [title,copy,url]=INFORMATION[topic]
-  return {title,body:`<section class="ps-section ps-support-article"><p>PLAYSTATION INFORMATION</p><h1>${title}</h1><p>${copy}</p><p><a class="ps-link" href="${url}" target="_blank" rel="noopener noreferrer">Read on the official PlayStation website ↗</a></p><div class="ps-support-actions"><a href="${base}/en-us/support">Store support</a><a href="${base}/en-us/account/profile">Profile and preferences</a><a href="${base}/en-us/pages/browse">Browse games</a></div></section>`}
-}
+// The full PlayStation.com footer (www.playstation.com pages, captured 2026-10-13).
+const PDC_FOOTER = [
+  ['About', [['About SIE','/en-us/corporate/about-us'],['Careers','/en-us/corporate/playstation-careers'],['PlayStation Studios','/en-us/corporate/playstation-studios'],['PlayStation Productions','/en-us/playstation-productions'],['Corporate','/sie.com/en'],['History of PlayStation','/playstation-history/1994-ps-one']]],
+  ['Products', [['PS5','/en-us/ps5'],['PS4','/en-us/ps4'],['PS VR2','/en-us/ps-vr2'],['PS Plus','/en-us/ps-plus'],['Accessories','/en-us/accessories'],['Games','/en-us/ps5/games']]],
+  ['Values', [['Accessibility','/en-us/accessibility'],['Online safety','/en-us/privacy-security-safety'],['Diversity, equity & inclusion','/sie.com/en/csr/diversity']]],
+  ['Support', [['Support hub','/en-us/support'],['PlayStation Safety','/en-us/support/safety'],['Status','/status.playstation.com'],['PlayStation Repairs','/en-us/repairs'],['Password reset','/en-us/support/account/password-reset'],['Refund Request','/en-us/support/store/ps-store-refund-request'],['Manuals','/en-us/support/hardware/manuals']]],
+  ['Resources', [['Terms of service','/en-us/legal/psn-terms-of-service'],['PS Store cancellation policy','/en-us/legal/playstation-store-cancellation-policy'],['Age ratings','/en-us/support/account/age-ratings-playstation'],['Health warning','/en-us/legal/health-warning'],['Developers','/partners.playstation.net'],['Glossary','/en-us/editorial/playstation-ultimate-gaming-glossary'],['Official Licensing Program','/en-us/official-licensing-program']]],
+  ['Connect', [['PlayStation App','/en-us/playstation-app'],['Join our playtesting program','/research.playstation.com'],['Beta Program at PlayStation','/en-us/beta-program-at-playstation'],['PS Blog','/blog.playstation.com']]],
+]
+const PDC_LEGAL = [['Legal','/en-us/legal'],['Privacy policy','/en-us/legal/privacy-policy'],['Website terms of use','/en-us/legal/website-terms-of-use'],['Site map','/en-us/site-map'],['Do not share my personal information','/en-us/legal/third-party-ads']]
 const ICON_SEARCH = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>'
 const ICON_CART = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4h2l2.4 11.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>'
 
@@ -77,7 +74,7 @@ export function layout({ base, title, body, path = '/', user = null, cartCount =
 <header class="ps-header">
   <div class="ps-global">
     <a class="ps-logo" href="${base}/" aria-label="PlayStation"><img class="ps-reference-mark" src="/static/reference/playstation-store/playstation-mark.svg" alt=""></a>
-    <details class="ps-mobile-menu"><summary aria-label="Main menu"><span aria-hidden="true">☰</span></summary><nav aria-label="Mobile PlayStation"><a href="${base}/en-us/pages/browse">Browse games</a><a href="${base}/en-us/pages/collections">Collections</a><a href="${base}/en-us/pages/deals">Deals</a><a href="${base}/en-us/pages/subscriptions">PlayStation Plus</a><a href="${base}/en-us/account">Account overview</a><a href="${base}/en-us/library">Game Library</a><a href="${base}/en-us/wishlist">Wishlist</a><a href="${base}/en-us/support">Support</a></nav></details><nav class="ps-global-nav" aria-label="PlayStation">${navigationMenus(base)}</nav>
+    <details class="ps-mobile-menu"><summary aria-label="Main menu"><span aria-hidden="true">☰</span></summary><nav aria-label="Mobile PlayStation">${mobileMenus(base)}<a href="${base}/en-us/pages/browse">Browse games</a><a href="${base}/en-us/account">Account overview</a><a href="${base}/en-us/library">Game Library</a><a href="${base}/en-us/wishlist">Wishlist</a></nav></details><nav class="ps-global-nav" aria-label="PlayStation">${navigationMenus(base)}</nav>
     <div class="ps-global-right">
       <span class="ps-sony-wordmark">SONY</span>
       ${user
@@ -94,23 +91,31 @@ export function layout({ base, title, body, path = '/', user = null, cartCount =
           <button type="button" class="ps-cancel-search" onclick="this.closest('details').removeAttribute('open')">Cancel search</button>
         </form>
       </details>
-      ${user ? `<a class="ps-cart" href="${base}/en-us/checkout?return=${encodeURIComponent(path)}" aria-label="Cart, ${cartCount} item${cartCount === 1 ? '' : 's'}">${ICON_CART}<span>Cart</span>${cartCount ? `<b class="ps-cart-badge">${cartCount}</b>` : ''}</a>` : ''}
+      <a class="ps-cart" href="${base}/en-us/checkout?return=${encodeURIComponent(path)}" aria-label="Cart, ${cartCount} item${cartCount === 1 ? '' : 's'}">${ICON_CART}<span>Cart</span>${cartCount ? `<b class="ps-cart-badge">${cartCount}</b>` : ''}</a>
     </div>
   </div>
-  <div class="ps-store-bar">
+  ${chrome === 'pdc' ? '' : `<div class="ps-store-bar">
     <a class="ps-store-wordmark" href="${base}/en-us/pages/latest" aria-label="PlayStation Store"><img class="ps-reference-bag" src="/static/reference/playstation-store/store-bag.svg" alt=""><img class="ps-reference-wordmark" src="/static/reference/playstation-store/store-wordmark.svg" alt=""></a>
     <nav class="ps-store-nav" aria-label="PlayStation Store">${STORE_NAV.map(n => `<a href="${base}/en-us/pages/${n.toLowerCase()}"${path.split('?')[0].endsWith(`/pages/${n.toLowerCase()}`)||(n==='Latest'&&(path===base+'/'||path==='/'))?' aria-current="page"':''}>${esc(n)}</a>`).join('')}</nav>
-  </div>
+  </div>`}
 </header>
 <main class="ps-main" id="main">${body}</main>
-<footer class="ps-footer">
+${chrome === 'pdc' ? `<footer class="ps-footer ps-footer-pdc">
+  <div class="ps-footer-inner">
+    <div class="ps-pdc-footer-cols">${PDC_FOOTER.map(([h,links])=>`<nav aria-label="${h}"><h2>${h}</h2>${links.map(([label,p])=>`<a href="${base}${p}">${esc(label)}</a>`).join('')}</nav>`).join('')}</div>
+    <p class="ps-footer-region">Country / Region: <b>United States</b></p>
+    <nav class="ps-footer-legal" aria-label="Legal">${PDC_LEGAL.map(([label,p])=>`<a href="${base}${p}">${esc(label)}</a>`).join('')}</nav>
+    <p class="ps-footer-copy">&copy; 2026 Sony Interactive Entertainment LLC. All content, games titles, trade names and/or trade dress, trademarks, artwork and associated imagery are trademarks and/or copyright material of their respective owners. <a href="${base}/legal/copyright-and-trademark-notice">More info</a></p>
+    ${disclaimer(NAME)}
+  </div>
+</footer>` : `<footer class="ps-footer">
   <div class="ps-footer-inner">
     <p class="ps-footer-region">Country / Region: <b>United States</b></p>
     <nav class="ps-footer-links" aria-label="Legal">${FOOTER_LINKS.map(([label,path]) => `<a href="${base}${path}">${esc(label)}</a>`).join('')}</nav>
-    <p class="ps-footer-copy">&copy; 2026 Sony Interactive Entertainment LLC</p>
+    <p class="ps-footer-copy"><a href="${base}/legal/copyright-and-trademark-notice">&copy; 2026 Sony Interactive Entertainment LLC</a></p>
     ${disclaimer(NAME)}
   </div>
-</footer>
+</footer>`}
 </div>
 ${drawer ? `<a class="ps-drawer-backdrop" href="${closeHref ?? `${base}/`}" tabindex="-1" aria-hidden="true"></a>
 <aside class="ps-drawer" role="dialog" aria-modal="true" aria-label="Checkout" tabindex="-1">

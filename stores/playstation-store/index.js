@@ -9,6 +9,7 @@ import { enterScenarioCart, scenarioAvailability, scenarioPayment, scenarioKeepC
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
 import { PRODUCTS, filterProducts, CONCEPT_ID, STATES, byId, featured, search, cartLines, totals, productPath, conceptPath } from './data.js'
 import * as P from './pages.js'
+import { installPdc, INFORMATION_REDIRECTS } from './pdc.js'
 
 const router = Router()
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
@@ -76,11 +77,13 @@ function wallet(req) {
   return (all[req.store.user.id] ??= { instruments: [], selected: null })
 }
 
+installPdc(router, { render })
 installJourneys(router, { render, myOrders, wallet, returnPath })
 
 // ---- browse ----
 router.get(['/', '/en-us/pages/latest'], (req, res) => render(req, res, homeView(res)))
-router.get('/en-us/information/:topic',(req,res)=>{const page=P.informationPage({base:res.locals.base,topic:req.params.topic});return page?render(req,res,page):notFound(req,res)})
+// Older footer URLs: the real footer links to these PlayStation.com pages.
+router.get('/en-us/information/:topic',(req,res)=>Object.hasOwn(INFORMATION_REDIRECTS,req.params.topic)?res.redirect(301,`${res.locals.base}${INFORMATION_REDIRECTS[req.params.topic]}`):notFound(req,res))
 router.get('/en-us/pages/browse', (req, res) => render(req, res, browseView(res, req.query)))
 
 router.get('/en-us/pages/collections', (req,res)=>render(req,res,{title:'Collections',body:P.collectionsPage({base:res.locals.base,products:PRODUCTS})}))

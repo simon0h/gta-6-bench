@@ -1,0 +1,867 @@
+{
+  "store": "playstation-store",
+  "real_home": "https://store.playstation.com/en-us/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://store.playstation.com/en-us/pages/latest",
+    "https://store.playstation.com/en-us/pages/browse",
+    "https://store.playstation.com/en-us/pages/deals",
+    "https://store.playstation.com/en-us/pages/collections",
+    "https://store.playstation.com/en-us/pages/subscriptions",
+    "https://www.playstation.com/en-us/",
+    "https://www.playstation.com/en-us/site-map/",
+    "https://www.playstation.com/en-us/support/",
+    "https://www.playstation.com/en-us/support/store/",
+    "https://www.playstation.com/en-us/support/store/ps-store-refund-request/",
+    "https://www.playstation.com/en-us/legal/playstation-store-cancellation-policy/",
+    "https://www.playstation.com/en-us/playstation-gift-cards/",
+    "https://www.playstation.com/en-us/ps-plus/",
+    "https://www.playstation.com/en-us/ps5/",
+    "https://www.playstation.com/en-us/ps5/games/",
+    "https://www.playstation.com/en-us/accessories/",
+    "https://www.playstation.com/en-us/corporate/about-us/",
+    "https://www.playstation.com/en-us/corporate/playstation-studios/",
+    "https://www.playstation.com/en-us/legal/",
+    "research/playstation-store.md"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/en-us/site-map",
+  "notes": "Fetched with WebFetch on 2026-10-13. store.playstation.com pages (latest, browse, deals, collections, subscriptions) are client-rendered: WebFetch returned only the global PlayStation.com header (Store/PS5/Games/PS Plus/Accessories/News/Support menus with the short store variant of each menu), the store sub-nav (Latest/Collections/Deals/Subscriptions/Browse) and the short legal footer, with no shelves, tiles, filters or headings. Homepage sections are therefore limited to what is verifiable (menus, sub-nav, region line) plus the GTA VI pre-order hero, pre-orders shelf and PS Plus promo documented in research/playstation-store.md; shelf titles of the live Latest page are unverified. web.archive.org is blocked for WebFetch and WebSearch returned nothing useful. Product, search, sign-in and checkout-drawer content comes from research/playstation-store.md (my.account.sony.com and checkout.playstation.com cannot be fetched). PlayStation.com pages (support, store support, refund request, cancellation policy, gift cards, PS Plus, PS5, PS5 games, accessories, about SIE, studios, legal, site map) were fetched and their headings are quoted. status.playstation.com, blog.playstation.com and direct.playstation.com were not fetched; they are local summary pages kept under a host-named path (same convention as the clone's existing /my.account.sony.com sign-in). The store is digital-only, so there is no store locator; PlayStation Direct hardware/merchandise pages show the category structure with an empty state (no inventory). The search icon opens a form, so search is checked as a page item. The real header logo goes to www.playstation.com/en-us; the clone keeps it on the store home.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "PlayStation",
+      "real": "https://www.playstation.com/en-us",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Explore hardware",
+      "real": "https://direct.playstation.com/",
+      "path": "/direct.playstation.com/en-us"
+    },
+    {
+      "kind": "header",
+      "label": "Buy consoles",
+      "real": "https://direct.playstation.com/en-us/hardware/ps5",
+      "path": "/direct.playstation.com/en-us/hardware/ps5"
+    },
+    {
+      "kind": "header",
+      "label": "Buy accessories",
+      "real": "https://direct.playstation.com/en-us/accessories/ps5",
+      "path": "/direct.playstation.com/en-us/accessories/ps5"
+    },
+    {
+      "kind": "header",
+      "label": "Buy games",
+      "real": "https://store.playstation.com/en-us",
+      "path": "/en-us/pages/latest"
+    },
+    {
+      "kind": "header",
+      "label": "Subscribe to PS Plus",
+      "real": "https://www.playstation.com/en-us/ps-plus/",
+      "path": "/en-us/ps-plus"
+    },
+    {
+      "kind": "header",
+      "label": "Buy merchandise",
+      "real": "https://direct.playstation.com/en-us/games/catalog",
+      "path": "/direct.playstation.com/en-us/games/catalog"
+    },
+    {
+      "kind": "header",
+      "label": "PS5",
+      "real": "https://www.playstation.com/en-us/ps5/",
+      "path": "/en-us/ps5"
+    },
+    {
+      "kind": "header",
+      "label": "PS5 Pro",
+      "real": "https://www.playstation.com/en-us/ps5/ps5-pro/",
+      "path": "/en-us/ps5/ps5-pro"
+    },
+    {
+      "kind": "header",
+      "label": "PlayStation Portal Remote Player",
+      "real": "https://www.playstation.com/en-us/accessories/playstation-portal-remote-player/",
+      "path": "/en-us/accessories/playstation-portal-remote-player"
+    },
+    {
+      "kind": "header",
+      "label": "Games",
+      "real": "https://www.playstation.com/en-us/ps5/games/",
+      "path": "/en-us/ps5/games"
+    },
+    {
+      "kind": "header",
+      "label": "Controllers",
+      "real": "https://www.playstation.com/en-us/accessories/#controllers",
+      "path": "/en-us/accessories#controllers"
+    },
+    {
+      "kind": "header",
+      "label": "Audio",
+      "real": "https://www.playstation.com/en-us/accessories/#headsets",
+      "path": "/en-us/accessories#headsets"
+    },
+    {
+      "kind": "header",
+      "label": "PS4",
+      "real": "https://www.playstation.com/en-us/ps4/ps4-games/",
+      "path": "/en-us/ps4/ps4-games"
+    },
+    {
+      "kind": "header",
+      "label": "PS VR2",
+      "real": "https://www.playstation.com/en-us/ps-vr2/games/",
+      "path": "/en-us/ps-vr2/games"
+    },
+    {
+      "kind": "header",
+      "label": "PC",
+      "real": "https://www.playstation.com/en-us/games/pc-games/",
+      "path": "/en-us/games/pc-games"
+    },
+    {
+      "kind": "header",
+      "label": "PS Plus",
+      "real": "https://www.playstation.com/en-us/ps-plus/games/",
+      "path": "/en-us/ps-plus/games"
+    },
+    {
+      "kind": "header",
+      "label": "Subscribe",
+      "real": "https://www.playstation.com/en-us/ps-plus/",
+      "path": "/en-us/ps-plus"
+    },
+    {
+      "kind": "header",
+      "label": "What's New",
+      "real": "https://www.playstation.com/en-us/ps-plus/whats-new/",
+      "path": "/en-us/ps-plus/whats-new"
+    },
+    {
+      "kind": "header",
+      "label": "All Games",
+      "real": "https://www.playstation.com/en-us/ps-plus/games/",
+      "path": "/en-us/ps-plus/games"
+    },
+    {
+      "kind": "header",
+      "label": "PS5 controllers",
+      "real": "https://www.playstation.com/en-us/accessories/#controllers",
+      "path": "/en-us/accessories#controllers"
+    },
+    {
+      "kind": "header",
+      "label": "All accessories",
+      "real": "https://www.playstation.com/en-us/accessories/",
+      "path": "/en-us/accessories"
+    },
+    {
+      "kind": "header",
+      "label": "PS Blog",
+      "real": "https://blog.playstation.com/",
+      "path": "/blog.playstation.com"
+    },
+    {
+      "kind": "header",
+      "label": "This Month on PlayStation",
+      "real": "https://www.playstation.com/en-us/editorial/this-month-on-playstation/",
+      "path": "/en-us/editorial/this-month-on-playstation"
+    },
+    {
+      "kind": "header",
+      "label": "Support",
+      "real": "https://www.playstation.com/en-us/support/",
+      "path": "/en-us/support"
+    },
+    {
+      "kind": "header",
+      "label": "Service Status",
+      "real": "https://status.playstation.com/",
+      "path": "/status.playstation.com"
+    },
+    {
+      "kind": "header",
+      "label": "Sign In",
+      "real": "https://my.account.sony.com/central/signin/",
+      "path": "/my.account.sony.com/central/signin/?redirect_uri=%2Fplaystation-store%2F"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://checkout.playstation.com/",
+      "path": "/en-us/checkout?return=%2Fplaystation-store%2F"
+    },
+    {
+      "kind": "header",
+      "label": "PlayStation Store",
+      "real": "https://store.playstation.com/en-us/pages/latest",
+      "path": "/en-us/pages/latest"
+    },
+    {
+      "kind": "header",
+      "label": "Latest",
+      "real": "https://store.playstation.com/en-us/pages/latest",
+      "path": "/en-us/pages/latest"
+    },
+    {
+      "kind": "header",
+      "label": "Collections",
+      "real": "https://store.playstation.com/en-us/pages/collections",
+      "path": "/en-us/pages/collections"
+    },
+    {
+      "kind": "header",
+      "label": "Deals",
+      "real": "https://store.playstation.com/en-us/pages/deals",
+      "path": "/en-us/pages/deals"
+    },
+    {
+      "kind": "header",
+      "label": "Subscriptions",
+      "real": "https://store.playstation.com/en-us/pages/subscriptions",
+      "path": "/en-us/pages/subscriptions"
+    },
+    {
+      "kind": "header",
+      "label": "Browse",
+      "real": "https://store.playstation.com/en-us/pages/browse",
+      "path": "/en-us/pages/browse"
+    },
+    {
+      "kind": "footer",
+      "label": "Support",
+      "real": "https://www.playstation.com/en-us/support/",
+      "path": "/en-us/support"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Policy",
+      "real": "https://www.playstation.com/en-us/legal/privacy-policy/",
+      "path": "/en-us/legal/privacy-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Do Not Share My Personal Information",
+      "real": "https://www.playstation.com/en-us/legal/third-party-ads/",
+      "path": "/en-us/legal/third-party-ads"
+    },
+    {
+      "kind": "footer",
+      "label": "Website Terms of Use",
+      "real": "https://www.playstation.com/en-us/legal/website-terms-of-use/",
+      "path": "/en-us/legal/website-terms-of-use"
+    },
+    {
+      "kind": "footer",
+      "label": "Sitemap",
+      "real": "https://www.playstation.com/en-us/site-map/",
+      "path": "/en-us/site-map"
+    },
+    {
+      "kind": "footer",
+      "label": "PlayStation Studios",
+      "real": "https://www.playstation.com/en-us/corporate/playstation-studios/",
+      "path": "/en-us/corporate/playstation-studios"
+    },
+    {
+      "kind": "footer",
+      "label": "Legal",
+      "real": "https://www.playstation.com/en-us/legal/",
+      "path": "/en-us/legal"
+    },
+    {
+      "kind": "footer",
+      "label": "About SIE",
+      "real": "https://www.playstation.com/en-us/corporate/about-us/",
+      "path": "/en-us/corporate/about-us"
+    },
+    {
+      "kind": "footer",
+      "label": "PlayStation Terms of Service",
+      "real": "https://www.playstation.com/en-us/legal/psn-terms-of-service/",
+      "path": "/en-us/legal/psn-terms-of-service"
+    },
+    {
+      "kind": "footer",
+      "label": "PS Store Cancellation Policy",
+      "real": "https://www.playstation.com/en-us/legal/playstation-store-cancellation-policy/",
+      "path": "/en-us/legal/playstation-store-cancellation-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Health Warnings",
+      "real": "https://www.playstation.com/en-us/legal/health-warning/",
+      "path": "/en-us/legal/health-warning"
+    },
+    {
+      "kind": "footer",
+      "label": "About Ratings",
+      "real": "https://www.playstation.com/en-us/support/account/age-ratings-playstation/",
+      "path": "/en-us/support/account/age-ratings-playstation"
+    },
+    {
+      "kind": "footer",
+      "label": "Sony Interactive Entertainment LLC",
+      "real": "https://www.playstation.com/legal/copyright-and-trademark-notice/",
+      "path": "/legal/copyright-and-trademark-notice"
+    },
+    {
+      "kind": "page",
+      "label": "Latest (store home)",
+      "real": "https://store.playstation.com/en-us/pages/latest",
+      "path": "/en-us/pages/latest",
+      "expect": [
+        "Latest",
+        "Grand Theft Auto VI"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Collections",
+      "real": "https://store.playstation.com/en-us/pages/collections",
+      "path": "/en-us/pages/collections",
+      "expect": [
+        "Collections"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals",
+      "real": "https://store.playstation.com/en-us/pages/deals",
+      "path": "/en-us/pages/deals",
+      "expect": [
+        "Deals"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Subscriptions",
+      "real": "https://store.playstation.com/en-us/pages/subscriptions",
+      "path": "/en-us/pages/subscriptions",
+      "expect": [
+        "PlayStation Plus",
+        "Essential",
+        "Extra",
+        "Premium"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Browse",
+      "real": "https://store.playstation.com/en-us/pages/browse",
+      "path": "/en-us/pages/browse",
+      "expect": [
+        "Browse",
+        "Filter"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://store.playstation.com/en-us/search/Grand%20Theft%20Auto",
+      "path": "/en-us/search/Grand%20Theft%20Auto",
+      "expect": [
+        "You searched for",
+        "Grand Theft Auto VI"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Concept / product page",
+      "real": "https://store.playstation.com/en-us/en-us/concept/10000730",
+      "path": "/en-us/concept/10000730",
+      "expect": [
+        "Grand Theft Auto VI",
+        "Editions",
+        "Game and Legal Info"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart drawer (signed out)",
+      "real": "https://checkout.playstation.com/",
+      "path": "/en-us/checkout",
+      "expect": [
+        "Sign In To Proceed"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sony sign-in",
+      "real": "https://my.account.sony.com/central/signin/",
+      "path": "/my.account.sony.com/central/signin/",
+      "expect": [
+        "Sign In",
+        "Sign-In ID (Email Address)",
+        "Create New Account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Create account",
+      "real": "https://my.account.sony.com/central/signup/",
+      "path": "/my.account.sony.com/central/signup/",
+      "expect": [
+        "Create New Account",
+        "Date of Birth",
+        "Online ID"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account (redirects to sign-in when signed out)",
+      "real": "https://www.playstation.com/acct/",
+      "path": "/en-us/account",
+      "expect": [
+        "Sign In"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Transaction history (order status; signed out goes to sign-in)",
+      "real": "https://store.playstation.com/en-us/transaction-history",
+      "path": "/en-us/transactions",
+      "expect": [
+        "Sign In"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Support hub",
+      "real": "https://www.playstation.com/en-us/support/",
+      "path": "/en-us/support",
+      "expect": [
+        "PlayStation Support",
+        "Browse help by category",
+        "Account & Security",
+        "Subscriptions & Services",
+        "Hardware & Repairs",
+        "Important notices"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PS Store & Refunds support",
+      "real": "https://www.playstation.com/en-us/support/store/",
+      "path": "/en-us/support/store",
+      "expect": [
+        "PS Store & Refunds",
+        "What do you need help with?",
+        "Cancel a PS Store pre-order",
+        "Accepted payment methods"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Refund request",
+      "real": "https://www.playstation.com/en-us/support/store/ps-store-refund-request/",
+      "path": "/en-us/support/store/ps-store-refund-request",
+      "expect": [
+        "How to request a refund for a purchase on PlayStation Store",
+        "Pre-orders",
+        "When can I receive my refund?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PS Store cancellation policy",
+      "real": "https://www.playstation.com/en-us/legal/playstation-store-cancellation-policy/",
+      "path": "/en-us/legal/playstation-store-cancellation-policy",
+      "expect": [
+        "PlayStation Store cancellation policy",
+        "Pre-Orders for Digital Products",
+        "Subscription Services",
+        "Wallet top ups"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.playstation.com/en-us/playstation-gift-cards/",
+      "path": "/en-us/playstation-gift-cards",
+      "expect": [
+        "PlayStation Store gift cards",
+        "Buy a PlayStation Store gift card",
+        "PlayStation gift cards FAQ"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PlayStation Plus",
+      "real": "https://www.playstation.com/en-us/ps-plus/",
+      "path": "/en-us/ps-plus",
+      "expect": [
+        "Get more of what you love with PlayStation Plus",
+        "Compare membership plans",
+        "Essential",
+        "Extra",
+        "Premium"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PS5 console page",
+      "real": "https://www.playstation.com/en-us/ps5/",
+      "path": "/en-us/ps5",
+      "expect": [
+        "PlayStation®5",
+        "Play like never before",
+        "PS5 accessories"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PS5 games",
+      "real": "https://www.playstation.com/en-us/ps5/games/",
+      "path": "/en-us/ps5/games",
+      "expect": [
+        "PS5 Games",
+        "Pre-order and wishlist upcoming PS5 games",
+        "Grand Theft Auto VI"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Accessories",
+      "real": "https://www.playstation.com/en-us/accessories/",
+      "path": "/en-us/accessories",
+      "expect": [
+        "PlayStation accessories",
+        "Wireless controllers",
+        "Gaming audio"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "About SIE",
+      "real": "https://www.playstation.com/en-us/corporate/about-us/",
+      "path": "/en-us/corporate/about-us",
+      "expect": [
+        "About Sony Interactive Entertainment",
+        "Our values",
+        "PlayStation regional offices"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PlayStation Studios",
+      "real": "https://www.playstation.com/en-us/corporate/playstation-studios/",
+      "path": "/en-us/corporate/playstation-studios",
+      "expect": [
+        "PlayStation Studios",
+        "Our studios",
+        "Naughty Dog"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Legal",
+      "real": "https://www.playstation.com/en-us/legal/",
+      "path": "/en-us/legal",
+      "expect": [
+        "Legal",
+        "Website and Applications",
+        "PlayStation Terms of Service"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Service status",
+      "real": "https://status.playstation.com/",
+      "path": "/status.playstation.com",
+      "expect": [
+        "PSN Service Status"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.playstation.com/en-us/site-map/",
+      "path": "/en-us/site-map",
+      "expect": [
+        "Site map",
+        "PlayStation 5",
+        "Support"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PlayStation Direct hardware",
+      "real": "https://direct.playstation.com/en-us/hardware/ps5",
+      "path": "/direct.playstation.com/en-us/hardware/ps5",
+      "expect": [
+        "PlayStation Direct",
+        "PS5"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Global header menus",
+      "expect": [
+        "Store",
+        "PS5",
+        "Games",
+        "PS Plus",
+        "Accessories",
+        "News",
+        "Support"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Store sub-navigation",
+      "expect": [
+        "Latest",
+        "Collections",
+        "Deals",
+        "Subscriptions",
+        "Browse"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Featured hero (GTA VI pre-order campaign)",
+      "expect": [
+        "Grand Theft Auto VI",
+        "Pre-Order"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Pre-orders shelf",
+      "expect": [
+        "Pre-orders"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "PlayStation Plus promo",
+      "expect": [
+        "PlayStation Plus"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Region selector in footer",
+      "expect": [
+        "Country / Region",
+        "United States"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Latest",
+      "real": "https://store.playstation.com/en-us/pages/latest",
+      "path": "/en-us/pages/latest"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Collections",
+      "real": "https://store.playstation.com/en-us/pages/collections",
+      "path": "/en-us/pages/collections"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Deals",
+      "real": "https://store.playstation.com/en-us/pages/deals",
+      "path": "/en-us/pages/deals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Subscriptions",
+      "real": "https://store.playstation.com/en-us/pages/subscriptions",
+      "path": "/en-us/pages/subscriptions"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Browse",
+      "real": "https://store.playstation.com/en-us/pages/browse",
+      "path": "/en-us/pages/browse"
+    },
+    {
+      "kind": "sitemap",
+      "label": "About PlayStation",
+      "real": "https://www.playstation.com/en-us/corporate/about-us/",
+      "path": "/en-us/corporate/about-us"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation Studios",
+      "real": "https://www.playstation.com/en-us/corporate/playstation-studios/",
+      "path": "/en-us/corporate/playstation-studios"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Legal",
+      "real": "https://www.playstation.com/en-us/legal/",
+      "path": "/en-us/legal"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation and the environment",
+      "real": "https://www.playstation.com/en-us/corporate/playstation-and-the-environment/",
+      "path": "/en-us/corporate/playstation-and-the-environment"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessibility",
+      "real": "https://www.playstation.com/en-us/accessibility/",
+      "path": "/en-us/accessibility"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Online safety, account security and privacy",
+      "real": "https://www.playstation.com/en-us/privacy-security-safety/",
+      "path": "/en-us/privacy-security-safety"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation 4",
+      "real": "https://www.playstation.com/en-us/ps4/",
+      "path": "/en-us/ps4"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS4 Pro",
+      "real": "https://www.playstation.com/en-us/ps4/ps4-pro/",
+      "path": "/en-us/ps4/ps4-pro"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS4 games",
+      "real": "https://www.playstation.com/en-us/ps4/ps4-games/",
+      "path": "/en-us/ps4/ps4-games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation 5",
+      "real": "https://www.playstation.com/en-us/ps5/",
+      "path": "/en-us/ps5"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS5 games",
+      "real": "https://www.playstation.com/en-us/ps5/games/",
+      "path": "/en-us/ps5/games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS5 accessories",
+      "real": "https://www.playstation.com/en-us/ps5/accessories/",
+      "path": "/en-us/ps5/accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS5 features",
+      "real": "https://www.playstation.com/en-us/ps5/ps5-features/",
+      "path": "/en-us/ps5/ps5-features"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS5 entertainment",
+      "real": "https://www.playstation.com/en-us/ps5/ps5-entertainment/",
+      "path": "/en-us/ps5/ps5-entertainment"
+    },
+    {
+      "kind": "sitemap",
+      "label": "DualSense wireless controller",
+      "real": "https://www.playstation.com/en-us/accessories/dualsense-wireless-controller/",
+      "path": "/en-us/accessories/dualsense-wireless-controller"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation VR2",
+      "real": "https://www.playstation.com/en-us/ps-vr2/",
+      "path": "/en-us/ps-vr2"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Support",
+      "real": "https://www.playstation.com/en-us/support/",
+      "path": "/en-us/support"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PSN Status",
+      "real": "https://status.playstation.com/",
+      "path": "/status.playstation.com"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Manuals",
+      "real": "https://www.playstation.com/en-us/support/hardware/manuals/",
+      "path": "/en-us/support/hardware/manuals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Account & Security",
+      "real": "https://www.playstation.com/en-us/support/account/",
+      "path": "/en-us/support/account"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS Store & Refunds",
+      "real": "https://www.playstation.com/en-us/support/store/",
+      "path": "/en-us/support/store"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Games",
+      "real": "https://www.playstation.com/en-us/support/games/",
+      "path": "/en-us/support/games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hardware & Repairs",
+      "real": "https://www.playstation.com/en-us/support/hardware/",
+      "path": "/en-us/support/hardware"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Connectivity",
+      "real": "https://www.playstation.com/en-us/support/connectivity/",
+      "path": "/en-us/support/connectivity"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Safety",
+      "real": "https://www.playstation.com/en-us/support/safety/",
+      "path": "/en-us/support/safety"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation Plus",
+      "real": "https://www.playstation.com/en-us/ps-plus/",
+      "path": "/en-us/ps-plus"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation Network",
+      "real": "https://www.playstation.com/en-us/playstation-network/",
+      "path": "/en-us/playstation-network"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PS Store",
+      "real": "https://www.playstation.com/en-us/about-playstation-store/",
+      "path": "/en-us/about-playstation-store"
+    },
+    {
+      "kind": "sitemap",
+      "label": "This month on PlayStation",
+      "real": "https://www.playstation.com/en-us/editorial/this-month-on-playstation/",
+      "path": "/en-us/editorial/this-month-on-playstation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation Blog",
+      "real": "https://blog.playstation.com/",
+      "path": "/blog.playstation.com"
+    }
+  ]
+}
