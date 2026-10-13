@@ -4,12 +4,15 @@ import { randomBytes, randomInt } from 'node:crypto'
 import { recordOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, byTcin, games, sponsored, protectionPlan, productPath, search, refine, totals, STATES, PAYMENT_TYPES, PREORDER_ARRIVAL, ARRIVES, selectedProduct, stockLimit, lineKey, productForLine, cartIssues, arrivalSummary } from './data.js'
+import { PRODUCTS, CATALOG, ALL_DEPARTMENTS, byTcin, games, sponsored, protectionPlan, productPath, search, refine, totals, STATES, PAYMENT_TYPES, PREORDER_ARRIVAL, ARRIVES, selectedProduct, stockLimit, lineKey, productForLine, cartIssues, arrivalSummary } from './data.js'
 import * as P from './pages.js'
 import * as B from './browse.js'
 import * as S from './site.js'
 import { installSite } from './site-routes.js'
-import { DEPARTMENTS, CAMPAIGNS } from './catalog.js'
+import { CAMPAIGNS } from './catalog.js'
+import { shelfByTcin, shelfArtDescriptor } from './shelf.js'
+import { renderProductAsset } from '../../lib/product-asset-art.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { saveAddress } from '../../lib/retail-state.js'
 import { installJourneys, accountOrder, retailState, defaultAddress, addressValues, shippingAddressInput, rememberSelection, selectedStore, orderPage } from './journeys.js'
 
@@ -42,7 +45,7 @@ function withQuery(path, params) {
   for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v)
   return u.pathname + u.search
 }
-const recsFor = p => PRODUCTS.filter(x => x.tcin !== p?.tcin && !x.addon && stockLimit(x)>0 && (p ? x.department === p.department : !!x.family)).slice(0,4)
+const recsFor = p => CATALOG.filter(x => x.tcin !== p?.tcin && !x.addon && stockLimit(x)>0 && (p ? x.department === p.department : !!x.family)).slice(0,4)
 function drawerFor(req, res, closeHref) {
   const added = req.query.added ? selectedProduct(byTcin(req.query.added), String(req.query.addedVariant ?? '')) : null
   const notAdded = req.query.notadded ? byTcin(req.query.notadded) : null
@@ -92,7 +95,7 @@ router.use((req,res,next)=>{
 })
 
 // ---- browse ----
-router.get('/', (req,res)=>render(req,res,'Target : Expect More. Pay Less.',S.homePage({base:res.locals.base,catalog:B.catalogHome({base:res.locals.base})})+drawerFor(req,res,res.locals.base+'/')))
+router.get('/', (req,res)=>render(req,res,'Target : Expect More. Pay Less.',S.homePage({base:res.locals.base,catalog:B.catalogHome({base:res.locals.base}),rows:fixtureCatalog?{}:B.homeRows(res.locals.base)})+drawerFor(req,res,res.locals.base+'/')))
 const filterNames=['platform','category','type','material','size','price','availability','brand','format','rating','fulfillment','sort']
 function browseRender(req,res,{q='',pool=search(q),heading='',intro='',outro='',crumbs=true,emptyCategory=false}={}) {
   const base=res.locals.base
@@ -102,19 +105,28 @@ function browseRender(req,res,{q='',pool=search(q),heading='',intro='',outro='',
   const path=`${base}${req.path.startsWith('/s/')?'/s':req.path}${params.size?'?'+params:''}`
   render(req,res,`${heading||q||'Shop all products'} : Target`,B.listingPage({base,q,pool,products,filters,heading,intro,outro,crumbs,emptyCategory,page,backPath:path,drawer:drawerFor(req,res,path)}),{q})
 }
-installSite(router,{render,notFound,browseRender,products:PRODUCTS})
+// Locally rendered illustrations for the everyday assortment (see media.js).
+const shelfArtCache=new Map()
+router.get('/shelf-art/:tcin/:view.svg',(req,res)=>{
+  const p=fixtureCatalog?null:shelfByTcin.get(req.params.tcin), view=Number(req.params.view), variant=typeof req.query.variant==='string'?req.query.variant:''
+  if(!p||!/^[0-3]$/.test(req.params.view))return res.status(404).type('text').send('Product image not found')
+  const key=`${p.tcin}:${variant}:${view}`
+  if(!shelfArtCache.has(key)){if(shelfArtCache.size>=600)shelfArtCache.delete(shelfArtCache.keys().next().value);shelfArtCache.set(key,renderProductAsset(shelfArtDescriptor(p,variant),view))}
+  res.set('Cache-Control','public, max-age=3600').set('X-Product-Asset-Provenance','synthetic-illustration').type('image/svg+xml').send(shelfArtCache.get(key))
+})
+installSite(router,{render,notFound,browseRender,products:CATALOG})
 router.get('/s',(req,res)=>browseRender(req,res,{q:String(req.query.searchTerm??'').trim()}))
 router.get('/s/:term',(req,res)=>browseRender(req,res,{q:String(req.params.term).replace(/\+/g,' ').trim()}))
 router.get('/c',(req,res)=>render(req,res,'Shop all categories : Target',B.categoryDirectory({base:res.locals.base})))
 router.get('/c/:department',(req,res)=>{
-  const base=res.locals.base, department=DEPARTMENTS.find(d=>d.id===req.params.department),campaign=CAMPAIGNS.find(c=>c.id===req.params.department)
+  const base=res.locals.base, department=ALL_DEPARTMENTS.find(d=>d.id===req.params.department),campaign=CAMPAIGNS.find(c=>c.id===req.params.department)
   if(!department&&!campaign) return notFound(req,res)
-  const pool=PRODUCTS.filter(p=>!p.addon&&(department?p.department===department.id:campaign.select(p)))
+  const pool=CATALOG.filter(p=>!p.addon&&(department?p.department===department.id:campaign.select(p)))
   browseRender(req,res,{pool,heading:department?.name||campaign.name,intro:B.categoryIntro({base,department,campaign})})
 })
-router.get('/weekly-ad',(req,res)=>browseRender(req,res,{pool:PRODUCTS.filter(p=>p.deal),heading:'This week’s offers',intro:B.categoryIntro({base:res.locals.base,weekly:true})}))
+router.get('/weekly-ad',(req,res)=>browseRender(req,res,{pool:CATALOG.filter(p=>p.deal),heading:'This week’s offers',intro:B.categoryIntro({base:res.locals.base,weekly:true})}))
 router.get('/b/:brand',(req,res)=>{
-  const pool=PRODUCTS.filter(p=>!p.addon&&B.brandSlug(p.brand)===req.params.brand)
+  const pool=CATALOG.filter(p=>!p.addon&&B.brandSlug(p.brand)===req.params.brand)
   if(!pool.length)return notFound(req,res)
   browseRender(req,res,{pool,heading:pool[0].brand})
 })
