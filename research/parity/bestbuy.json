@@ -29,7 +29,7 @@
     "https://www.bestbuy.com/site/misc/mobile-app/pcmcat208500050016.c?id=pcmcat208500050016",
     "research/bestbuy.md"
   ],
-  "notes": "Fetched with WebFetch on 2026-10-13. Blocked or empty: /profile/ss/orderlookup and /cart (robots disallowed), /identity/global/signin (empty JS shell), /gift-card-balance (JS shell, no headings), the HTML site map (site-map URLs errored) and the JS-rendered Shop/Menu drawer contents. Stand-ins: sign-in, cart and product/search expectations come from research/bestbuy.md (browser capture 2026-09-29/30); order-lookup and gift-card-balance labels are the standard Best Buy form labels (unverified wording); the department tree comes from the captured TV, Video Games and Computers department pages plus the Top Deals and Outlet category tiles. Category paths whose numeric IDs were not observed keep the real URL shape with a slug only. The sitemap.xml index (76 product/review/category sitemaps) was fetched; the clone serves its own /sitemap.xml and an HTML /sitemap. Seasonal header promos (Fall Football, Halloween links) and social icons were skipped. Off-site footer links (corporate.bestbuy.com, jobs.bestbuy.com, bestbuyads.com, healthcare.bestbuy.com) map to local summary pages.",
+  "notes": "Fetched with WebFetch on 2026-10-13. Blocked or empty: /profile/ss/orderlookup and /cart (robots disallowed), /identity/global/signin (empty JS shell), /gift-card-balance (JS shell, no headings), the HTML site map (site-map URLs errored) and the JS-rendered Shop/Menu drawer contents (its department entries were reconstructed from the captured department pages and the Top Deals / Outlet category tiles). Stand-ins: sign-in, cart and product/search expectations come from research/bestbuy.md (browser capture 2026-09-29/30); order-lookup and gift-card-balance labels are the standard Best Buy form labels (unverified wording); the department tree comes from the captured TV, Video Games and Computers department pages plus the Top Deals and Outlet category tiles. Category paths whose numeric IDs were not observed keep the real URL shape with a slug only. The sitemap.xml index (76 product/review/category sitemaps) was fetched; the clone serves its own /sitemap.xml and an HTML /sitemap. Seasonal header promos (Fall Football, Halloween links) and social icons were skipped. Off-site footer links (corporate.bestbuy.com, jobs.bestbuy.com, bestbuyads.com, healthcare.bestbuy.com) map to local summary pages.",
   "items": [
     {
       "kind": "header",
@@ -102,6 +102,102 @@
       "label": "Best Buy Business",
       "real": "https://www.bestbuy.com/site/electronics/bestbuy-business/pcmcat230900050001.c?id=pcmcat230900050001",
       "path": "/site/electronics/bestbuy-business/pcmcat230900050001.c"
+    },
+    {
+      "kind": "header",
+      "label": "Appliances",
+      "real": "https://www.bestbuy.com/site/electronics/home-appliances/abcat0900000.c?id=abcat0900000",
+      "path": "/site/electronics/home-appliances/abcat0900000.c"
+    },
+    {
+      "kind": "header",
+      "label": "TV & Home Theater",
+      "real": "https://www.bestbuy.com/site/electronics/tv-video/abcat0100000.c?id=abcat0100000",
+      "path": "/site/electronics/tv-video/abcat0100000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Computers & Tablets",
+      "real": "https://www.bestbuy.com/site/electronics/computers-pcs/abcat0500000.c?id=abcat0500000",
+      "path": "/site/electronics/computers-pcs/abcat0500000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Cell Phones",
+      "real": "https://www.bestbuy.com/site/electronics/mobile-cell-phones/abcat0800000.c?id=abcat0800000",
+      "path": "/site/electronics/mobile-cell-phones/abcat0800000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Audio",
+      "real": "https://www.bestbuy.com/site/electronics/audio/abcat0200000.c?id=abcat0200000",
+      "path": "/site/electronics/audio/abcat0200000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Video Games",
+      "real": "https://www.bestbuy.com/site/electronics/video-games/abcat0700000.c?id=abcat0700000",
+      "path": "/site/electronics/video-games/abcat0700000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Cameras, Camcorders & Drones",
+      "real": "https://www.bestbuy.com/site/electronics/cameras-camcorders/abcat0400000.c?id=abcat0400000",
+      "path": "/site/electronics/cameras-camcorders/abcat0400000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Home, Furniture & Office",
+      "real": "https://www.bestbuy.com/site/electronics/home-furniture-office",
+      "path": "/site/electronics/home-furniture-office"
+    },
+    {
+      "kind": "header",
+      "label": "Smart Home, Security & Wi-Fi",
+      "real": "https://www.bestbuy.com/site/electronics/home-security-safety/pcmcat254000050002.c?id=pcmcat254000050002",
+      "path": "/site/electronics/home-security-safety/pcmcat254000050002.c"
+    },
+    {
+      "kind": "header",
+      "label": "Car Electronics & GPS",
+      "real": "https://www.bestbuy.com/site/electronics/car-electronics-gps/abcat0300000.c?id=abcat0300000",
+      "path": "/site/electronics/car-electronics-gps/abcat0300000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Wearable Technology",
+      "real": "https://www.bestbuy.com/site/electronics/wearable-technology/pcmcat332000050000.c?id=pcmcat332000050000",
+      "path": "/site/electronics/wearable-technology/pcmcat332000050000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Health, Wellness & Fitness",
+      "real": "https://www.bestbuy.com/site/electronics/health-wellness-fitness",
+      "path": "/site/electronics/health-wellness-fitness"
+    },
+    {
+      "kind": "header",
+      "label": "Outdoor Living",
+      "real": "https://www.bestbuy.com/site/electronics/outdoor-living",
+      "path": "/site/electronics/outdoor-living"
+    },
+    {
+      "kind": "header",
+      "label": "Toys, Games & Crafts",
+      "real": "https://www.bestbuy.com/site/electronics/toys-games-crafts",
+      "path": "/site/electronics/toys-games-crafts"
+    },
+    {
+      "kind": "header",
+      "label": "Movies & Music",
+      "real": "https://www.bestbuy.com/site/electronics/movies-music/abcat0600000.c?id=abcat0600000",
+      "path": "/site/electronics/movies-music/abcat0600000.c"
+    },
+    {
+      "kind": "header",
+      "label": "Electric Transportation",
+      "real": "https://www.bestbuy.com/site/electronics/electric-transportation",
+      "path": "/site/electronics/electric-transportation"
     },
     {
       "kind": "footer",
