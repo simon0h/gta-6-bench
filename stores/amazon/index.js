@@ -12,6 +12,7 @@ import * as P from './pages.js'
 import { retailState, rememberProduct, saveAddress } from '../../lib/retail-state.js'
 import { registerJourneys, resumeWishlist, listsFor, savedInList, checkoutAddress, savedAddressChoices, accountOrders } from './journeys.js'
 import { deliveryLocation, registerLocation } from './location.js'
+import { registerParity, gatewayHome, collectionIntro } from './parity.js'
 
 const NAME = 'Amazon'
 const router = Router()
@@ -69,13 +70,14 @@ router.use((req,res,next)=>{
   next()
 })
 
+registerParity(router, { render })
 registerJourneys(router, { render, notFound, addToCart, purchaseError })
 registerLocation(router, { render })
 
 // ---- browse ----
 router.get('/', (req, res) => {
   const recent = retailState(req).recent.map(byAsin).filter(Boolean).slice(0, 6)
-  render(req, res, 'Amazon.com. Spend less. Smile more.', P.homePage({ base: res.locals.base }) + (recent.length ? productRow(res.locals.base, 'Your recently viewed items', recent) + `<p><a href="${res.locals.base}/gp/history">View or edit your browsing history</a></p>` : ''))
+  render(req, res, 'Amazon.com. Spend less. Smile more.', (fixtureCatalog ? P.homePage({ base: res.locals.base }) : gatewayHome({ base: res.locals.base, user: req.store.user })) + (recent.length ? productRow(res.locals.base, 'Your recently viewed items', recent) + `<p><a href="${res.locals.base}/gp/history">View or edit your browsing history</a></p>` : ''))
 })
 
 function browse(req,res,{node='',endpoint='/s',heading='',intro='',collection=''}={}) {
@@ -94,17 +96,20 @@ function departmentHandler(req,res) {
   browse(req,res,{node:node.id,endpoint:'/b',heading:node.title,intro:categoryIntro({base:res.locals.base,node})})
 }
 router.get(['/b','/computer-video-games-hardware-accessories/b'],departmentHandler)
+router.get('/gp/bestsellers',(req,res)=>browse(req,res,{endpoint:'/gp/bestsellers',heading:'Best Sellers',collection:'bestsellers',intro:collectionIntro(res.locals.base,'bestsellers')}))
+router.get('/gp/new-releases',(req,res)=>browse(req,res,{endpoint:'/gp/new-releases',heading:'New Releases',collection:'new',intro:collectionIntro(res.locals.base,'new')}))
+router.get('/gp/movers-and-shakers',(req,res)=>browse(req,res,{endpoint:'/gp/movers-and-shakers',heading:'Movers & Shakers',collection:'bestsellers',intro:collectionIntro(res.locals.base,'movers')}))
 router.get('/gp/bestsellers/:department',(req,res)=>{
   const node=req.params.department==='all'?'':nodeById(req.params.department)?.id
   if(node===undefined) return notFound(req,res)
-  browse(req,res,{node,endpoint:`/gp/bestsellers/${req.params.department}`,heading:'Best Sellers',collection:'bestsellers'})
+  browse(req,res,{node,endpoint:`/gp/bestsellers/${req.params.department}`,heading:'Best Sellers',collection:'bestsellers',intro:collectionIntro(res.locals.base,'bestsellers')})
 })
 router.get('/gp/new-releases/:department',(req,res)=>{
   const node=req.params.department==='all'?'':nodeById(req.params.department)?.id
   if(node===undefined) return notFound(req,res)
-  browse(req,res,{node,endpoint:`/gp/new-releases/${req.params.department}`,heading:'New Arrivals',collection:'new'})
+  browse(req,res,{node,endpoint:`/gp/new-releases/${req.params.department}`,heading:'New Arrivals',collection:'new',intro:collectionIntro(res.locals.base,'new')})
 })
-router.get('/gp/goldbox',(req,res)=>browse(req,res,{node:String(req.query.node||''),endpoint:'/gp/goldbox',heading:"Today's Deals",collection:'deals'}))
+router.get('/gp/goldbox',(req,res)=>browse(req,res,{node:String(req.query.node||''),endpoint:'/gp/goldbox',heading:"Today's Deals",collection:'deals',intro:collectionIntro(res.locals.base,'deals')}))
 router.get('/stores/:brand',(req,res)=>{
   const brand=[...new Set(PRODUCTS.map(p=>p.brand))].find(b=>b.toLowerCase().replace(/[^a-z0-9]/g,'')===req.params.brand.toLowerCase().replace(/[^a-z0-9]/g,''))
   if(!brand) return notFound(req,res)

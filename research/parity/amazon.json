@@ -488,7 +488,7 @@
       "real": "https://www.amazon.com/s?k=grand+theft+auto+vi",
       "path": "/s?k=grand+theft+auto+vi",
       "expect": [
-        "results for",
+        "for \"grand theft auto vi\"",
         "Sort by",
         "Check each product page for other buying options."
       ]
@@ -667,11 +667,11 @@
     },
     {
       "kind": "page",
-      "label": "Returns Center",
+      "label": "Returns Center (guest is sent to sign-in)",
       "real": "https://www.amazon.com/gp/css/returns/homepage.html",
       "path": "/gp/css/returns/homepage.html",
       "expect": [
-        "Return"
+        "Sign in or create account"
       ]
     },
     {
