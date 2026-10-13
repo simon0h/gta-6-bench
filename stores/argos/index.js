@@ -6,7 +6,10 @@ import { authenticate, createAccount, publicAccount } from '../../lib/accounts.j
 import { recordOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { esc } from '../../lib/html.js'
-import { PRODUCTS, BRANDS, CAMPAIGNS, bySku, departmentById, slug, search, totals, selectedProduct, lineKey, validateCart, hasPreorder, orderEta, fulfilmentText, COLLECTION_POINTS, POSTCODE_RE, EMAIL_RE } from './data.js'
+import { PRODUCTS, BRANDS, CAMPAIGNS, bySku, departmentById, slug, search, totals, selectedProduct, lineKey, validateCart, hasPreorder, orderEta, fulfilmentText, COLLECTION_POINTS, POSTCODE_RE, EMAIL_RE, isShelfSku } from './data.js'
+import { shelfBySku } from './shelf.js'
+import { shelfArtSvg } from './shelf-art.js'
+import { MENU } from './site-data.js'
 import * as P from './pages.js'
 import * as J from './journeys.js'
 import * as S from './site.js'
@@ -14,7 +17,12 @@ import { retailState, rememberProduct } from '../../lib/retail-state.js'
 
 const router = Router()
 router.use((req,res,next) => {
- if (!fixtureCatalog && (req.path.startsWith('/checkout') || req.method === 'POST' && (req.path === '/trolley/add' || /^\/product\/[^/]+\/stock$/.test(req.path)))) {
+// Reference mode: the evidenced GTA VI listings remain listing-only (409 on every purchase route).
+ // Everyday assortment items (shelf.js) can be checked, added and ordered; a trolley holding anything
+ // else, or an empty trolley, cannot enter checkout.
+ const stockSku = req.path.match(/^\/product\/([^/]+)\/stock$/)?.[1]
+ const shelfOnlyCart = req.store.cart.length > 0 && req.store.cart.every(line => isShelfSku(line.sku))
+ if (!fixtureCatalog && (req.path.startsWith('/checkout') && !(shelfOnlyCart || req.method === 'GET' && /^\/checkout\/confirmation\//.test(req.path)) || req.method === 'POST' && (req.path === '/trolley/add' && !isShelfSku(req.body?.sku) || stockSku && !isShelfSku(stockSku)))) {
   return render(req,res,'Availability not verified','<h1>Availability not verified</h1><p>This listing does not have verified delivery or collection availability.</p>',409)
  }
  next()
@@ -73,6 +81,8 @@ router.get('/', (req,res)=>{ const s=S.homeSections(res.locals.base); render(req
 router.get('/search/:term',(req,res)=>browse(req,res,{q:String(req.params.term).replace(/[-+]+/g,' ').trim(),route:`${res.locals.base}/search`}))
 router.get('/search',(req,res)=>browse(req,res))
 router.get('/browse/:department',(req,res)=>{
+  const menu=!fixtureCatalog && MENU.find(m=>m.id===req.params.department||m.dept===req.params.department)
+  if(menu) return res.redirect(`${res.locals.base}${menu.path}`)
   const d=departmentById(req.params.department)
   if(!d) return notFound(req,res)
   render(req,res,d.name,P.department(res.locals.base,d))
@@ -92,6 +102,11 @@ router.get('/events/:event',(req,res)=>{
   const event=CAMPAIGNS.find(e=>e.id===req.params.event)
   if(!event) return notFound(req,res)
   browse(req,res,{departments:event.departments,deal:event.deal,title:event.title,description:event.text,route:`${res.locals.base}/events/${event.id}`})
+})
+router.get('/shelf-art/:sku/:view.svg', (req, res) => {
+  const p = shelfBySku(req.params.sku), view = Number(req.params.view)
+  if (!p || !/^[0-3]$/.test(req.params.view)) return res.status(404).type('text').send('Product image not found')
+  res.set('Cache-Control', 'public, max-age=3600').set('X-Product-Asset-Provenance', 'synthetic-illustration').type('image/svg+xml').send(shelfArtSvg(p, view))
 })
 router.get('/product/:sku', (req, res) => {
   const p = bySku(req.params.sku)

@@ -2,6 +2,7 @@ import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
 import { CATALOG_EVIDENCE } from './catalog-evidence.js'
 import { expandArgos, merchandisingPlatform } from './expansion.js'
 import { GAME, PLATFORMS } from '../../lib/catalog.js'
+import { SHELF, shelfBySku, popularity } from './shelf.js'
 
 export const release = GAME.release_date_text
 export const COLLECTION_POINTS = ['London Central Argos', 'Manchester City Centre Argos', 'Birmingham Central Argos']
@@ -77,9 +78,12 @@ if (fixtureCatalog) PRODUCTS.push(...expandArgos(PRODUCTS))
 applyCatalogPolicy('argos', PRODUCTS, CATALOG_EVIDENCE)
 if (!fixtureCatalog) for (const p of PRODUCTS) { delete p.stock; delete p.rating; delete p.reviews; p.purchaseLimit = 0; p.methods = [] }
 export const CATEGORIES = DEPARTMENTS.map(d=>d.name)
-export const bySku = sku => PRODUCTS.find(p => p.sku === String(sku))
+// Evidenced GTA VI listings first; in reference mode the everyday Argos assortment (shelf.js) is also addressable.
+export const bySku = sku => PRODUCTS.find(p => p.sku === String(sku)) || shelfBySku(sku)
+export const isShelfSku = sku => !!shelfBySku(sku)
+export const ALL_PRODUCTS = [...PRODUCTS, ...SHELF]
 export const departmentById = id => DEPARTMENTS.find(d=>d.id===id)
-export const BRANDS = [...new Set(PRODUCTS.map(p=>p.brand))].sort()
+export const BRANDS = [...new Set(ALL_PRODUCTS.map(p=>p.brand))].sort()
 export const CAMPAIGNS = [
   {id:'home-refresh',title:'Make room for what you love',text:'Layer textures, find clever storage and settle into Habitat comfort.',departments:['home-and-furniture'],image:'home'},
   {id:'playtime',title:'Big ideas for little adventures',text:'Creative building, family games and outdoor play.',departments:['toys'],image:'toys'},
@@ -101,7 +105,8 @@ export const fulfilmentText = (p,method='ship') => p.kind !== 'other' ? `From ${
 export const orderEta = (cart,method) => hasPreorder(cart) ? `Pre-orders from ${release}${cart.some(p=>p.kind==='other') ? '; other items have separate estimates shown below' : ''}` : cart.some(p=>p.bulky) ? 'Within 7–14 days' : method==='pickup' ? 'Usually ready within 2 days' : 'Within 3–5 working days'
 export function validateCart(cart,method) {
   const messages=[],aggregate=new Map(),variants=new Map(),trusted=[]
-  if (!fixtureCatalog && cart.length) return { messages:['Ordering availability has not been verified for these listings.'], cart:[] }
+  // Reference mode: the evidenced GTA VI listings stay unverified for purchase. Only assortment lines can be ordered.
+  if (!fixtureCatalog && cart.some(line => !shelfBySku(line?.sku))) return { messages:['Ordering availability has not been verified for these listings.'], cart:[] }
   for (const line of cart) {
     const product=bySku(line.sku), p=selectedProduct(product,line.variant_id)
     if (!p || !Number.isInteger(line.qty) || line.qty < 1 || line.qty > 5) { messages.push('An item or option in your trolley is no longer valid.'); continue }
@@ -120,6 +125,7 @@ export function validateCart(cart,method) {
 }
 const list = value => (Array.isArray(value)?value:[value]).filter(v=>typeof v==='string'&&v)
 export function search(q='',options={}) {
+  if (!fixtureCatalog) return referenceSearch(q,options)
   const terms=String(q).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().split(' ').filter(Boolean)
   const categories=list(options.category), brands=list(options.brand), families=list(options.family), methods=list(options.method)
   const found=PRODUCTS.filter(p=>(!options.platform||merchandisingPlatform(p)===options.platform)&&(!options.department||p.department===options.department)&&(!options.departments||options.departments.includes(p.department))&&(!categories.length||categories.includes(p.category))&&(!brands.length||brands.includes(p.brand))&&(!families.length||families.includes(slug(p.family)))&&(!options.deal||p.deal)&&(!options.new||p.new)&&terms.every(t=>`${p.title} ${p.sku} ${p.keywords} ${p.family} ${p.category} ${p.brand}`.toLowerCase().includes(t))&&(!options.min||p.unit_price>=Number(options.min))&&(!options.max||p.unit_price<=Number(options.max))&&(!options.rating||p.rating>=Number(options.rating))&&(!options.availability||options.availability!=='in-stock'||p.stock>0)&&(!methods.length||methods.some(m=>p.methods.includes(m)))&&(!options.capacity||p.specs.Capacity===options.capacity))
@@ -133,4 +139,48 @@ export function search(q='',options={}) {
 export function totals(cart) {
   const subtotal=Math.round(cart.reduce((sum,p)=>sum+p.unit_price*p.qty,0)*100)/100
   return {subtotal,shipping:0,tax:0,discount:0,total:subtotal}
+}
+
+// Reference-mode search over the GTA VI listings plus the everyday assortment, ranked by relevance.
+const stem = t => t.length > 3 && t.endsWith('s') ? t.slice(0,-1) : t
+const wordHit = (text, t) => new RegExp(`(?:^|[^a-z0-9])${stem(t).replace(/[^a-z0-9]/g,'')}`).test(text)
+export const rankPopularity = p => p.catalogEvidence ? 4.6 * Math.log10(510) : popularity(p)
+function referenceSearch(q='',options={}) {
+  const norm=String(q).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(), terms=norm.split(' ').filter(Boolean)
+  const categories=list(options.category), brands=list(options.brand), families=list(options.family), methods=list(options.method)
+  const scored=[]
+  for (const p of ALL_PRODUCTS) {
+    if (options.platform && merchandisingPlatform(p)!==options.platform) continue
+    if (options.department && p.department!==options.department) continue
+    if (options.departments && !options.departments.includes(p.department)) continue
+    if (categories.length && !categories.includes(p.category)) continue
+    if (brands.length && !brands.includes(p.brand)) continue
+    if (families.length && !families.includes(slug(p.family))) continue
+    if (options.deal && !p.deal) continue
+    if (options.new && !p.new) continue
+    if (options.min && !(p.unit_price>=Number(options.min))) continue
+    if (options.max && !(p.unit_price<=Number(options.max))) continue
+    if (options.rating && !((p.rating||0)>=Number(options.rating))) continue
+    if (options.availability==='in-stock' && !(p.stock>0)) continue
+    if (methods.length && !methods.some(m=>(p.methods||[]).includes(m))) continue
+    if (options.capacity && p.specs?.Capacity!==options.capacity) continue
+    let score=0
+    if (terms.length) {
+      const title=p.title.toLowerCase(), hay=`${title} ${p.sku} ${p.keywords||''} ${p.family} ${p.category} ${p.brand}`.toLowerCase()
+      if (!terms.every(t=>wordHit(hay,t) || hay.includes(t) && /\d/.test(t))) continue
+      for (const t of terms) score += wordHit(title,t) ? 3 : 1
+      if (title.includes(norm) || ` ${(p.keywords||'').toLowerCase()} `.includes(` ${norm} `)) score += 6
+      // The captured GTA queries (gta 6, grand theft auto) lead with the GTA VI listings, as on argos.co.uk.
+      if (p.catalogEvidence && /\bgta|grand theft|rockstar/.test(norm)) score += 2
+    }
+    scored.push({p,score})
+  }
+  scored.sort((a,b)=>b.score-a.score||rankPopularity(b.p)-rankPopularity(a.p))
+  const found=scored.map(x=>x.p)
+  if(options.sort==='price-asc') found.sort((a,b)=>a.unit_price-b.unit_price)
+  if(options.sort==='price-desc') found.sort((a,b)=>b.unit_price-a.unit_price)
+  if(options.sort==='name') found.sort((a,b)=>a.title.localeCompare(b.title))
+  if(options.sort==='rating') found.sort((a,b)=>(b.rating||0)-(a.rating||0)||(b.reviews||0)-(a.reviews||0))
+  if(options.sort==='newest') found.sort((a,b)=>Number(!!b.new||!!b.catalogEvidence)-Number(!!a.new||!!a.catalogEvidence))
+  return found
 }
