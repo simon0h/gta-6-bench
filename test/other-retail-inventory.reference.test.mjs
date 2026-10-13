@@ -74,7 +74,7 @@ test('reference retail routes keep captured search and detail states, not artifi
   }
   const ikea = await dispatch('ikea', '/us/en/search/?q=gta%206')
   assert.match(ikea.text, /We found 0 products and 0 content results/)
-  for (const [slug, path] of [['nike', '/w?q=GTA6'], ['ikea', '/us/en/search/?q=desk'], ['chewy', '/s?query=gta%206'], ['coupang', '/np/search?q=gta%206'], ['sephora', '/search?keyword=Grand+Theft+Auto+VI'], ['williams-sonoma', '/search/results.html?words=coffee']]) {
+  for (const [slug, path] of [['nike', '/w?q=GTA6'], ['ikea', '/us/en/search/?q=grand%20theft%20auto'], ['chewy', '/s?query=gta%206'], ['coupang', '/np/search?q=gta%206'], ['sephora', '/search?keyword=Grand+Theft+Auto+VI'], ['williams-sonoma', '/search/results.html?words=coffee']]) {
     const result = await dispatch(slug, path)
     assert.equal(result.status, 200)
     assert.match(result.text, /data-reference-state="uncaptured"/)
