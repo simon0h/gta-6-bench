@@ -427,7 +427,7 @@
    "kind": "page",
    "label": "Order receipts / order status help",
    "real": "https://support.rockstargames.com/articles/1v0gPkZJ8IiKarabrFPHZU/rockstar-store-order-receipts",
-   "path": "/support/articles/order-receipts",
+   "path": "/support/articles/receipts",
    "expect": [
     "Rockstar Store Order Receipts"
    ]
