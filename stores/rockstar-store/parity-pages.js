@@ -3,8 +3,9 @@
 // structure with a read-only "not available in this store" state and no prices or purchase controls.
 import { esc } from '../../lib/html.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
-import { GAME, PRODUCTS, LISTINGS } from './data.js'
-import { tile } from './depth-pages.js'
+import { GAME, PRODUCTS, LISTINGS, CATALOG, SHELF_ITEMS } from './data.js'
+import { tile, shelf as carouselShelf } from './depth-pages.js'
+import { money } from '../../lib/html.js'
 
 const REF = '/static/reference/rockstar-store/'
 const SUB = c => `/search?sort=date.desc&amp;subcategories%5Ball%5D=${c}`
@@ -67,22 +68,22 @@ export const ALL_GAMES = ['buy-gta-v', 'buy-red-dead-redemption-2', 'buy-red-dea
 const cover = (title, [a, b], small = '') => `<span class="rp-cover" style="--c1:${a};--c2:${b}" aria-hidden="true"><b>R<i>*</i></b><span>${esc(title)}</span>${small ? `<small>${esc(small)}</small>` : ''}</span>`
 // A link card for a title or category the reference catalog does not sell: no price, no purchase control.
 export const linkCard = (base, href, title, colors, note = 'View details') => `<article class="rs-tile rp-link-tile"><a class="rs-tile-visual" href="${base}${href}">${cover(title, colors)}</a><h3><a href="${base}${href}">${esc(title)}</a></h3><p class="rs-fine">${esc(note)}</p></article>`
-const titleCard = (base, slug) => linkCard(base, `/game/${slug}`, TITLES[slug].title, TITLES[slug].cover, 'PC · Rockstar Games Launcher')
+const titleCard = (base, slug) => shelfGame(slug) ? tile(base, shelfGame(slug)) : linkCard(base, `/game/${slug}`, TITLES[slug].title, TITLES[slug].cover, 'PC · Rockstar Games Launcher')
 const gtaviTile = base => tile(base, GAME)
 const unavailable = (base, text = NOT_SOLD) => `<div class="rp-unavailable" role="note"><b>Not available in this store</b><p>${esc(text)}</p><a class="rs-btn rs-btn-pill rs-btn-sm" href="${base}/game/buy-gta-vi">Shop Grand Theft Auto VI</a></div>`
 
-export function titlePage(base, slug) {
+export function titlePage(base, slug, buy = '') {
   const t = TITLES[slug]
   const nav = [['game-details', 'Game Details'], t.editions && ['compare-editions', 'Compare Editions'], t.features && ['key-features', 'Key Features'], t.media && ['media', t.media[0]], t.requirements && ['system-requirements', 'System Requirements'], ['faq', 'FAQ']].filter(Boolean)
   return `<section class="rp-title-hero" style="--c1:${t.cover[0]};--c2:${t.cover[1]}"><div class="rp-title-copy"><h1>${esc(t.h1)}</h1>
   <div class="rp-platforms"><span class="rs-platform-label">Platform</span>${t.platforms.map((p, i) => `<span class="rp-chip${i === 0 ? ' is-selected' : ''}">${esc(p)}</span>`).join('')}</div>
-  ${unavailable(base)}</div>${cover(t.title, t.cover)}</section>
+  ${buy || unavailable(base)}</div>${cover(t.title, t.cover)}</section>
 <nav class="rs-subnav" aria-label="Page sections">${nav.map(([id, l]) => `<a href="#${id}">${l}</a>`).join('')}</nav>
 <div class="rs-game-body">
 <section id="game-details" class="rs-section"><h2>Game Details</h2><p>${esc(t.details)}</p><dl class="rs-meta"><div><dt>Developer</dt><dd>Rockstar Games</dd></div><div><dt>Publisher</dt><dd>Rockstar Games</dd></div><div><dt>Platform</dt><dd>${esc(t.platforms.join(', '))}</dd></div></dl></section>
-${t.editions ? `<section id="compare-editions" class="rs-section"><h2>Compare Editions</h2><div class="rp-cards">${t.editions.map(e => `<article class="rp-card"><p class="rs-kicker">${esc(t.title)}</p><h3>${esc(e)}</h3><p class="rs-fine">Edition contents are listed on the real store page. Not sold in this store.</p></article>`).join('')}</div></section>` : ''}
+${t.editions ? `<section id="compare-editions" class="rs-section"><h2>Compare Editions</h2><div class="rp-cards">${t.editions.map(e => `<article class="rp-card"><p class="rs-kicker">${esc(t.title)}</p><h3>${esc(e)}</h3><p class="rs-fine">${buy ? "PC · Rockstar Games Launcher. Choose an edition at the top of this page." : "Edition contents are listed on the real store page. Not sold in this store."}</p></article>`).join('')}</div></section>` : ''}
 ${t.features ? `<section id="key-features" class="rs-section"><h2>Key Features</h2><div class="rp-cards">${t.features.map(f => `<article class="rp-card"><h3>${esc(f)}</h3></article>`).join('')}</div></section>` : ''}
-${t.addons ? `<section class="rs-section"><div class="rs-section-head"><h2>${esc(t.addons[0])}</h2><a href="${base}${t.addons[2]}">View all</a></div><ul class="rp-list">${t.addons[1].map(n => `<li>${esc(n)}</li>`).join('')}</ul><p class="rs-fine">Shown for reference only; these PC add-ons are not sold in this store.</p></section>` : ''}
+${t.addons ? `<section class="rs-section"><div class="rs-section-head"><h2>${esc(t.addons[0])}</h2><a href="${base}${t.addons[2]}">View all</a></div>${addonTiles(base, t.addons[2]) || `<ul class="rp-list">${t.addons[1].map(n => `<li>${esc(n)}</li>`).join('')}</ul><p class="rs-fine">Shown for reference only; these PC add-ons are not sold in this store.</p>`}</section>` : ''}
 <section id="media" class="rs-section">${t.media.map(m => `<h2>${esc(m)}</h2><div class="rp-media">${[1, 2, 3].map(i => `<span class="rp-shot" style="--c1:${t.cover[0]};--c2:${t.cover[1]}" aria-hidden="true">${m === 'Videos' ? '▶' : ''}</span>`).join('')}</div>`).join('')}</section>
 ${t.languages ? `<section class="rs-section"><h2>Supported Languages</h2><p class="rs-fine">${LANGS}</p></section>` : ''}
 <section id="system-requirements" class="rs-section">${t.requirements.map(r => `<h2>${esc(r)}</h2><div class="rp-cards"><article class="rp-card"><h3>Minimum</h3><p class="rs-fine">Windows PC. The exact minimum specification is listed on the real store page and was not captured for this simulation.</p></article><article class="rp-card"><h3>Recommended</h3><p class="rs-fine">See the real store page for the recommended specification.</p></article></div>`).join('')}</section>
@@ -106,8 +107,25 @@ export function currencyPage(base, kind) {
   const shark = kind === 'shark'
   const title = shark ? 'Grand Theft Auto Online: Shark Cash Cards' : 'Red Dead Online: Gold Bars'
   const colors = shark ? ['#06303d', '#21a0c6'] : ['#3d2a06', '#e3b23c']
-  return `<section class="rp-title-hero" style="--c1:${colors[0]};--c2:${colors[1]}"><div class="rp-title-copy"><p class="rs-eyebrow">GAME ADD-ONS</p><h1>${title}</h1><h2>${shark ? 'Shark Cards' : 'Gold Bars'}</h2><p>${shark ? 'Purchase GTA$ for Grand Theft Auto Online on PC. Requires Grand Theft Auto V for PC and a Rockstar Games account.' : 'Purchase Gold Bars for Red Dead Online on PC. Requires Red Dead Redemption 2 or Red Dead Online for PC and a Rockstar Games account.'}</p>${unavailable(base, 'In-game currency is sold on the real Rockstar Store for PC only. This store simulation does not sell currency.')}</div>${cover(shark ? 'Shark Cards' : 'Gold Bars', colors)}</section>
-<div class="rs-game-body"><section class="rs-section"><h2>${shark ? 'Buy Shark Cash Cards for PC' : 'Buy Gold Bars for PC'}</h2><div class="rs-grid">${(shark ? SHARK : GOLD).map(n => `<article class="rs-tile rp-link-tile">${cover(n, colors, 'PC')}<h3>${esc(n)}</h3><p class="rs-fine">PC · Not sold in this store</p></article>`).join('')}</div></section></div>`
+  const href = shark ? '/buy-gta-v-shark-cash-cards' : '/buy-red-dead-online-gold-bars'
+  const tiles = addonTiles(base, href)
+  return `<section class="rp-title-hero" style="--c1:${colors[0]};--c2:${colors[1]}"><div class="rp-title-copy"><p class="rs-eyebrow">GAME ADD-ONS</p><h1>${title}</h1><h2>${shark ? 'Shark Cards' : 'Gold Bars'}</h2><p>${shark ? 'Purchase GTA$ for Grand Theft Auto Online on PC. Requires Grand Theft Auto V for PC and a Rockstar Games account.' : 'Purchase Gold Bars for Red Dead Online on PC. Requires Red Dead Redemption 2 or Red Dead Online for PC and a Rockstar Games account.'}</p>${tiles ? `<p class="rs-fine">PC only. Currency is added to the Rockstar Games account you sign in with at checkout.</p><a class="rs-btn rs-btn-pill" href="#buy">${shark ? 'Choose a Shark Card' : 'Choose Gold Bars'}</a>` : unavailable(base, 'In-game currency is sold on the real Rockstar Store for PC only. This store simulation does not sell currency.')}</div>${cover(shark ? 'Shark Cards' : 'Gold Bars', colors)}</section>
+<div class="rs-game-body"><section class="rs-section" id="buy"><h2>${shark ? 'Buy Shark Cash Cards for PC' : 'Buy Gold Bars for PC'}</h2>${tiles || `<div class="rs-grid">${(shark ? SHARK : GOLD).map(n => `<article class="rs-tile rp-link-tile">${cover(n, colors, 'PC')}<h3>${esc(n)}</h3><p class="rs-fine">PC · Not sold in this store</p></article>`).join('')}</div>`}</section></div>`
+}
+
+// ---------- store assortment helpers (shelf.js; empty in fixture mode) ----------
+export const shelfOf = (collection, category) => SHELF_ITEMS.filter(p => p.collections.includes(collection) && (!category || p.category === category))
+export const newArrivals = () => SHELF_ITEMS.filter(p => p.collections.includes('new-arrivals'))
+const shelfGame = slug => SHELF_ITEMS.find(p => p.titleSlug === slug)
+// Priced add-on tiles for the Shark Card / Gold Bar pages and the GTA V / RDR2 add-on sections.
+export function addonTiles(base, href) {
+  const list = shelfOf(href.includes('shark') ? 'shark-cards' : 'gold-bars')
+  return list.length ? `<div class="rs-grid rp-grid">${list.map(p => tile(base, p)).join('')}</div>` : ''
+}
+// Buy panel used on title pages for games the assortment sells (replaces the read-only notice).
+export function titleBuyBox(base, p, variantId = '', error = '') {
+  const v = p.variants ? (p.variants.find(x => x.id === variantId) || p.variants[0]) : null
+  return `<div class="rp-buy" data-shelf-buy><div class="rs-price rs-price-lg">${money(v?.price ?? p.price)}</div>${p.variants ? `<fieldset class="rs-variants"><legend>${esc(p.optionLabel)}: ${esc(v.label)}</legend>${p.variants.map(o => `<a href="${base}${p.path}?variant=${o.id}" aria-pressed="${o.id === v.id}">${esc(o.label)} · ${money(o.price)}</a>`).join('')}</fieldset>` : ''}${error ? `<p role="alert" class="rs-error">${esc(error)}</p>` : ''}<form class="rs-buy-form" method="post" action="${base}/cart/add"><input type="hidden" name="sku" value="${esc(p.sku)}">${v ? `<input type="hidden" name="variant" value="${esc(v.id)}">` : ''}<div class="rs-buy-btns"><button class="rs-btn rs-btn-primary" formaction="${base}/buy-now">Buy Now</button><button class="rs-btn rs-btn-outline">Add to Cart</button></div></form><form method="post" action="${base}/wishlist"><input type="hidden" name="sku" value="${esc(p.sku)}"><button class="rs-btn rs-btn-text rs-wishlist-action">♡ Add to Wishlist</button></form><p class="rs-fine">PC · Rockstar Games Launcher. Added to the Rockstar Games account you sign in with at checkout. Console versions are sold by the PlayStation Store and Microsoft Store.</p></div>`
 }
 
 // ---------- listing pages ----------
@@ -121,31 +139,62 @@ ${sections.map(([heading, body, href]) => section(base, heading, body, href)).jo
 }
 
 export function collectionRoutes(base) {
-  const merch = name => empty(base, `${name} products`)
+  // Product grids from the store assortment; fixture mode has no assortment and keeps the empty state.
+  const merch = (name, list = []) => list.length ? grid(list.map(p => tile(base, p))) : empty(base, `${name} products`)
+  const na = newArrivals()
+  const games = slugs => grid(slugs.map(s => titleCard(base, s)))
   return {
-    '/new-arrivals': ['New Arrivals', { title: 'New Arrivals', art: '01_-_Vice_City_01.jpg', sections: [['New Arrivals', merch('New arrival'), SUB('apparel')]] }],
-    '/grand-theft-auto-vi-collection': ['Grand Theft Auto VI Collection', { eyebrow: 'Featured', title: 'Grand Theft Auto VI Collection', banner: 'Apparel, accessories and collectibles from Leonida.', art: '04_-_Leonida_Keys_01.jpg', sections: [['Grand Theft Auto VI', grid([gtaviTile(base)])], ['Apparel', merch('Apparel'), SUB('apparel')], ['Accessories', merch('Accessories'), SUB('accessories')], ['Collectibles', merch('Collectible'), SUB('collectible')]] }],
-    '/grand-theft-auto-collection': ['Grand Theft Auto', { title: 'Grand Theft Auto', art: '02_-_Jason_Duval_01.jpg', sections: [['Shop Grand Theft Auto VI', grid([gtaviTile(base)])], ['Shop Grand Theft Auto V', grid([titleCard(base, 'buy-gta-v')])], ['Shop Grand Theft Auto Trilogy', grid([titleCard(base, 'buy-grand-theft-auto-the-trilogy-the-definitive-edition'), titleCard(base, 'buy-grand-theft-auto-the-trilogy')])], ['Buy Shark Cash Cards for PC', grid([linkCard(base, '/buy-gta-v-shark-cash-cards', 'Grand Theft Auto Online: Shark Cash Cards', ['#06303d', '#21a0c6'], 'PC add-on')])], ['Games', grid([gtaviTile(base), titleCard(base, 'buy-gta-v'), titleCard(base, 'buy-grand-theft-auto-iv')]), '/view-all-games']] }],
-    '/red-dead-redemption-collection': ['Red Dead Redemption', { title: 'Red Dead Redemption', art: '08_-_Grassrivers_03.jpg', sections: [['Games', grid([titleCard(base, 'buy-red-dead-redemption-2'), titleCard(base, 'buy-red-dead-redemption')]), '/view-all-games'], ['Buy Gold Bars for PC', grid([linkCard(base, '/buy-red-dead-online-gold-bars', 'Red Dead Online: Gold Bars', ['#3d2a06', '#e3b23c'], 'PC add-on')])], ['Apparel', merch('Red Dead Redemption apparel'), SUB('apparel')], ['Collectibles', merch('Red Dead Redemption collectible'), SUB('collectible')]] }],
-    '/rockstar-collection': ['Rockstar Collection', { title: 'Rockstar Games', art: '06_-_Cal_Hampton_03.jpg', sections: [['Games', grid(['buy-bully-scholarship-edition', 'buy-max-payne-3', 'buy-la-noire'].map(s => titleCard(base, s))), '/view-all-games'], ['Apparel', merch('Rockstar Games apparel'), SUB('apparel')], ['Collectibles', merch('Rockstar Games collectible'), SUB('collectible')], ['Accessories', merch('Rockstar Games accessory'), SUB('accessories')]] }],
+    '/new-arrivals': ['New Arrivals', { title: 'New Arrivals', art: '01_-_Vice_City_01.jpg', sections: [['New Arrivals', merch('New arrival', na.filter(p => p.section === 'Gear').slice(0, 8)), SUB('apparel')], ['Apparel', merch('Apparel', na.filter(p => p.category === 'apparel')), SUB('apparel')], ['Accessories', merch('Accessories', na.filter(p => p.category === 'accessories')), SUB('accessories')], ['Collectibles', merch('Collectible', na.filter(p => p.category === 'collectibles')), SUB('collectible')]].filter(([h, , ], i) => i === 0 || na.length) }],
+    '/grand-theft-auto-vi-collection': ['Grand Theft Auto VI Collection', { eyebrow: 'Featured', title: 'Grand Theft Auto VI Collection', banner: 'Apparel, accessories and collectibles from Leonida.', art: '04_-_Leonida_Keys_01.jpg', sections: [['Grand Theft Auto VI', grid([gtaviTile(base)])], ['Apparel', merch('Apparel', shelfOf('gtavi', 'apparel')), SUB('apparel')], ['Accessories', merch('Accessories', shelfOf('gtavi', 'accessories')), SUB('accessories')], ['Collectibles', merch('Collectible', shelfOf('gtavi', 'collectibles')), SUB('collectible')]] }],
+    '/grand-theft-auto-collection': ['Grand Theft Auto', { title: 'Grand Theft Auto', art: '02_-_Jason_Duval_01.jpg', sections: [['Shop Grand Theft Auto VI', grid([gtaviTile(base)])], ['Shop Grand Theft Auto V', grid([titleCard(base, 'buy-gta-v')])], ['Shop Grand Theft Auto Trilogy', grid([titleCard(base, 'buy-grand-theft-auto-the-trilogy-the-definitive-edition'), titleCard(base, 'buy-grand-theft-auto-the-trilogy')])], ['Buy Shark Cash Cards for PC', addonTiles(base, '/buy-gta-v-shark-cash-cards') || grid([linkCard(base, '/buy-gta-v-shark-cash-cards', 'Grand Theft Auto Online: Shark Cash Cards', ['#06303d', '#21a0c6'], 'PC add-on')]), '/buy-gta-v-shark-cash-cards'], ['Games', grid([gtaviTile(base), titleCard(base, 'buy-gta-v'), titleCard(base, 'buy-grand-theft-auto-iv')]), '/view-all-games'], ...(SHELF_ITEMS.length ? [['Apparel', merch('Apparel', shelfOf('gta', 'apparel')), SUB('apparel')], ['Accessories', merch('Accessories', shelfOf('gta', 'accessories')), SUB('accessories')], ['Collectibles', merch('Collectible', shelfOf('gta', 'collectibles')), SUB('collectible')]] : [])] }],
+    '/red-dead-redemption-collection': ['Red Dead Redemption', { title: 'Red Dead Redemption', art: '08_-_Grassrivers_03.jpg', sections: [['Games', SHELF_ITEMS.length ? grid(shelfOf('rdr', 'full-game').map(p => tile(base, p))) : games(['buy-red-dead-redemption-2', 'buy-red-dead-redemption']), '/view-all-games'], ['Buy Gold Bars for PC', addonTiles(base, '/buy-red-dead-online-gold-bars') || grid([linkCard(base, '/buy-red-dead-online-gold-bars', 'Red Dead Online: Gold Bars', ['#3d2a06', '#e3b23c'], 'PC add-on')]), '/buy-red-dead-online-gold-bars'], ['Apparel', merch('Red Dead Redemption apparel', shelfOf('rdr', 'apparel')), SUB('apparel')], ['Collectibles', merch('Red Dead Redemption collectible', shelfOf('rdr', 'collectibles')), SUB('collectible')], ...(SHELF_ITEMS.length ? [['Accessories', merch('Accessories', shelfOf('rdr', 'accessories')), SUB('accessories')]] : [])] }],
+    '/rockstar-collection': ['Rockstar Collection', { title: 'Rockstar Games', art: '06_-_Cal_Hampton_03.jpg', sections: [['Games', games(['buy-bully-scholarship-edition', 'buy-max-payne-3', 'buy-la-noire']), '/view-all-games'], ['Apparel', merch('Rockstar Games apparel', shelfOf('rockstar', 'apparel')), SUB('apparel')], ['Collectibles', merch('Rockstar Games collectible', shelfOf('rockstar', 'collectibles')), SUB('collectible')], ['Accessories', merch('Rockstar Games accessory', shelfOf('rockstar', 'accessories')), SUB('accessories')]] }],
   }
 }
 
 export function allGamesPage(base) {
-  return `<div class="rs-listing"><p class="rs-eyebrow">Games</p><h1>All Games</h1>${grid([gtaviTile(base), ...ALL_GAMES.map(s => titleCard(base, s))])}</div>`
+  const extra = SHELF_ITEMS.filter(p => p.section === 'Games' && !ALL_GAMES.includes(p.titleSlug))
+  return `<div class="rs-listing"><p class="rs-eyebrow">Games</p><h1>All Games</h1>${grid([gtaviTile(base), ...ALL_GAMES.map(s => titleCard(base, s)), ...extra.map(p => tile(base, p))])}</div>`
 }
 export function addOnsPage(base) {
+  const sold = SHELF_ITEMS.filter(p => p.section === 'Add-Ons')
+  if (sold.length) return `<div class="rs-listing"><p class="rs-eyebrow">Game Add-Ons</p><h1>Game Add-Ons for PC</h1><section class="rs-section"><div class="rs-section-head"><h2>Grand Theft Auto Online: Shark Cash Cards</h2><a href="${base}/buy-gta-v-shark-cash-cards">View all</a></div>${grid(sold.filter(p => p.collections.includes('gta')).map(p => tile(base, p)))}</section><section class="rs-section"><div class="rs-section-head"><h2>Red Dead Online: Gold Bars</h2><a href="${base}/buy-red-dead-online-gold-bars">View all</a></div>${grid(sold.filter(p => p.collections.includes('rdr')).map(p => tile(base, p)))}</section><section class="rs-section"><h2>GTA+</h2>${grid([linkCard(base, '/game/gta-plus', 'GTA+', ['#3d0636', '#e33caf'], 'Membership · PlayStation 5 and Xbox Series X|S')])}</section></div>`
   return `<div class="rs-listing"><p class="rs-eyebrow">Game Add-Ons</p><h1>Game Add-Ons for PC</h1>${grid([linkCard(base, '/buy-gta-v-shark-cash-cards', 'Grand Theft Auto Online: Shark Cash Cards', ['#06303d', '#21a0c6'], 'PC add-on'), linkCard(base, '/buy-red-dead-online-gold-bars', 'Red Dead Online: Gold Bars', ['#3d2a06', '#e3b23c'], 'PC add-on'), linkCard(base, '/game/gta-plus', 'GTA+', ['#3d0636', '#e33caf'], 'Membership')])}</div>`
 }
 
 // ---------- homepage (reference catalog) ----------
 const promo = (base, { eyebrow, heading, text, href, cta, img, cls = '' }) => `<section class="rp-promo ${cls}" style="background-image:linear-gradient(90deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.55) 45%,rgba(0,0,0,0) 100%),url(${REF}${img})"><div class="rp-promo-copy"><p class="rs-eyebrow">${esc(eyebrow)}</p><h2>${esc(heading)}</h2><p>${esc(text)}</p><a class="rs-btn rs-btn-pill" href="${base}${href}">${esc(cta)}</a></div></section>`
+// Homepage product rows from the store assortment, in the order of the real homepage's shelves.
+const pick = (ids) => ids.map(id => CATALOG.find(p => p.id === id)).filter(Boolean)
+function assortmentRows(base, part) {
+  const row = (heading, list, href) => list.length ? carouselShelf(base, heading, list, href) : ''
+  if (part === 'top') return [
+    row('New Arrivals', newArrivals().filter(p => p.section === 'Gear').slice(0, 12), '/new-arrivals'),
+    row('Games', [GAME, ...ALL_GAMES.map(shelfGame).filter(Boolean)], '/view-all-games'),
+    row('Popular Items', pick(['great-white-shark-cash-card', 'grand-theft-auto-v-hoodie', 'white-grand-theft-auto-vi-macca-the-gator-tee', 'red-dead-redemption-2-glass-candle-by-joya', '150-gold-bars', 'rockstar-baseball-cap-navy-and-white', 'black-grand-theft-auto-vi-logo-tee', 'rockstar-varsity-crewneck', 'grand-theft-auto-vi-keychain', 'bull-shark-cash-card', 'rockstar-logo-water-bottle', 'red-dead-redemption-2-logo-hoodie']), '/search?collection=best-sellers'),
+  ].join('\n')
+  if (part === 'middle') return [
+    row('Apparel', SHELF_ITEMS.filter(p => p.category === 'apparel' && !p.collections.includes('gtavi')).slice(0, 12), SUB('apparel')),
+    row('Game Add-Ons', SHELF_ITEMS.filter(p => p.section === 'Add-Ons'), '/game-add-ons'),
+  ].join('\n')
+  return [
+    row('Red Dead Redemption Collection', shelfOf('rdr').filter(p => p.section === 'Gear').slice(0, 12), '/red-dead-redemption-collection'),
+    row('Accessories', SHELF_ITEMS.filter(p => p.category === 'accessories' && !p.collections.includes('rdr')).slice(0, 12), SUB('accessories')),
+    row('Collectibles', SHELF_ITEMS.filter(p => p.category === 'collectibles' && !p.collections.includes('gtavi')).slice(0, 12), SUB('collectible')),
+  ].join('\n')
+}
+// Fixture-mode homepage rows (no assortment).
+function oldRows(base, shelf) {
+  return `${shelf('Games', [gtaviTile(base), ...ALL_GAMES.slice(0, 4).map(s => titleCard(base, s))], '/view-all-games')}
+${shelf('New Arrivals', [linkCard(base, SUB('apparel'), 'Apparel', ['#30264a', '#ff7ab6'], 'Shop category'), linkCard(base, SUB('accessories'), 'Accessories', ['#173b4a', '#4fc3e0'], 'Shop category'), linkCard(base, SUB('collectible'), 'Collectibles', ['#4a3517', '#f2b84b'], 'Shop category')], '/new-arrivals')}
+${shelf('Popular Items', [gtaviTile(base), linkCard(base, '/game/gta-plus', 'GTA+', ['#3d0636', '#e33caf'], 'Membership'), linkCard(base, '/buy-gta-v-shark-cash-cards', 'Grand Theft Auto Online: Shark Cash Cards', ['#06303d', '#21a0c6'], 'PC add-on'), linkCard(base, '/buy-red-dead-online-gold-bars', 'Red Dead Online: Gold Bars', ['#3d2a06', '#e3b23c'], 'PC add-on')])}`
+}
 export function referenceHome(base) {
   const shelf = (heading, cards, href) => `<section class="rs-carousel"><div class="rs-section-head"><h2>${esc(heading)}</h2>${href ? `<a href="${base}${href}">See all</a>` : ''}</div><div class="rs-grid rp-shelf">${cards.join('')}</div></section>`
   return `<h1 class="visually-hidden">Rockstar Store</h1><section class="rs-hero-carousel" aria-label="Featured campaigns" data-hero>
   <div class="rs-hero-track" id="rs-featured-track">
     <article class="rs-hero rp-hero" id="slide-1" aria-label="1 of 2" style="background-image:linear-gradient(90deg,rgba(0,0,0,.85),rgba(0,0,0,.1)),url(${REF}01_-_Vice_City_01.jpg)">
-      <div class="rs-hero-text"><span class="rs-badge">COMING SOON</span><h2>Grand Theft Auto VI: The Goodtime State – Vice City&trade; Collection</h2><p>A premium Collector’s Box featuring all the essentials for a good time, inspired by Leonida’s hit TV show, Macca the Gator.</p><a class="rs-btn rs-btn-pill" href="${base}/grand-theft-auto-vi-collection">View Collection</a></div>
+      <div class="rs-hero-text"><span class="rs-badge">COMING SOON</span><h2>Grand Theft Auto VI: The Goodtime State – Vice City&trade; Collection</h2><p>A premium Collector’s Box featuring all the essentials for a good time, inspired by Leonida’s hit TV show, Macca the Gator.</p>${SHELF_ITEMS.some(p => p.id === 'gtavi-goodtime-state-vice-city-collection') ? `<a class="rs-btn rs-btn-pill" href="${base}/merchandise/gtavi-goodtime-state-vice-city-collection">Pre-Order Now</a>` : `<a class="rs-btn rs-btn-pill" href="${base}/grand-theft-auto-vi-collection">View Collection</a>`}</div>
     </article>
     <article class="rs-hero rp-hero" id="slide-2" aria-label="2 of 2" style="background-image:linear-gradient(90deg,rgba(0,0,0,.85),rgba(0,0,0,.1)),url(${REF}GTAVI_PreOrderWebstore_HeroBackground_3840x1646_R03.jpg)">
       <div class="rs-hero-text"><span class="rs-badge">COMING SOON</span><h2>Grand Theft Auto VI</h2><p>Reserve today to unlock exclusive benefits and be ready to play at launch.</p><a class="rs-btn rs-btn-pill" href="${base}${GAME.path}">Pre-Order Now</a></div>
@@ -154,12 +203,12 @@ export function referenceHome(base) {
   <div class="rs-hero-controls"><button class="rs-round" data-hero-step="-1" aria-label="Previous campaign" aria-controls="rs-featured-track">‹</button><div class="rs-hero-dots"><button data-hero-index="0" aria-label="Go to slide 1" aria-current="true"></button><button data-hero-index="1" aria-label="Go to slide 2"></button></div><button class="rs-round" data-hero-step="1" aria-label="Next campaign" aria-controls="rs-featured-track">›</button><span class="visually-hidden" data-hero-status aria-live="polite">Campaign 1 of 2</span></div>
 </section>
 ${promo(base, { eyebrow: 'Featured', heading: 'Grand Theft Auto VI Collection', text: 'Apparel, accessories and collectibles inspired by Vice City and the state of Leonida.', href: '/grand-theft-auto-vi-collection', cta: 'Shop Now', img: '04_-_Leonida_Keys_01.jpg' })}
-${shelf('Games', [gtaviTile(base), ...ALL_GAMES.slice(0, 4).map(s => titleCard(base, s))], '/view-all-games')}
-${shelf('New Arrivals', [linkCard(base, SUB('apparel'), 'Apparel', ['#30264a', '#ff7ab6'], 'Shop category'), linkCard(base, SUB('accessories'), 'Accessories', ['#173b4a', '#4fc3e0'], 'Shop category'), linkCard(base, SUB('collectible'), 'Collectibles', ['#4a3517', '#f2b84b'], 'Shop category')], '/new-arrivals')}
-${shelf('Popular Items', [gtaviTile(base), linkCard(base, '/game/gta-plus', 'GTA+', ['#3d0636', '#e33caf'], 'Membership'), linkCard(base, '/buy-gta-v-shark-cash-cards', 'Grand Theft Auto Online: Shark Cash Cards', ['#06303d', '#21a0c6'], 'PC add-on'), linkCard(base, '/buy-red-dead-online-gold-bars', 'Red Dead Online: Gold Bars', ['#3d2a06', '#e3b23c'], 'PC add-on')])}
+${SHELF_ITEMS.length ? assortmentRows(base, 'top') : oldRows(base, shelf)}
 ${promo(base, { eyebrow: 'Collections', heading: 'Rockstar Games Collection', text: 'Classic logos and essentials from across the Rockstar Games catalogue.', href: '/rockstar-collection', cta: 'Shop Now', img: '06_-_Cal_Hampton_03.jpg' })}
+${SHELF_ITEMS.length ? assortmentRows(base, 'middle') : ''}
 ${promo(base, { eyebrow: 'Coming Soon', heading: 'Grand Theft Auto VI: The Album', text: 'Music from the world of Grand Theft Auto VI. Find it in the Grand Theft Auto VI Collection.', href: '/grand-theft-auto-vi-collection', cta: 'Learn More', img: '05_-_Boobie_Ike_02.jpg' })}
-${promo(base, { eyebrow: 'Red Dead Redemption', heading: 'Shop Red Dead Redemption', text: 'Games, Gold Bars and essentials from the frontier.', href: '/red-dead-redemption-collection', cta: 'Shop Now', img: '08_-_Grassrivers_03.jpg', cls: 'rp-promo-red' })}`
+${promo(base, { eyebrow: 'Red Dead Redemption', heading: 'Shop Red Dead Redemption', text: 'Games, Gold Bars and essentials from the frontier.', href: '/red-dead-redemption-collection', cta: 'Shop Now', img: '08_-_Grassrivers_03.jpg', cls: 'rp-promo-red' })}
+${SHELF_ITEMS.length ? assortmentRows(base, 'bottom') : ''}`
 }
 
 // ---------- policy, corporate and leaving pages ----------
