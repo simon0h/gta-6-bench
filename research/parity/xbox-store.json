@@ -465,7 +465,7 @@
       "kind": "header",
       "label": "Sign in",
       "real": "https://login.live.com/oauth20_authorize.srf",
-      "path": "/login.live.com/oauth20_authorize.srf"
+      "path": "/login.live.com/oauth20_authorize.srf?prompt=select_account"
     },
     {
       "kind": "footer",
@@ -701,7 +701,7 @@
       "kind": "page",
       "label": "Sign-in (Microsoft account)",
       "real": "https://login.live.com/oauth20_authorize.srf",
-      "path": "/login.live.com/oauth20_authorize.srf",
+      "path": "/login.live.com/oauth20_authorize.srf?prompt=select_account",
       "expect": [
         "Sign in",
         "Email or phone number",

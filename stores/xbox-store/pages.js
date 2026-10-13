@@ -1,22 +1,15 @@
 import { productImage, productGallery } from '../../lib/product-assets.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { benchmarkDate } from '../../lib/payment.js'
 import { physicalPage, shippingFields, shippingReceipt } from '../playstation-store/physical.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
 import { productPath, byId, STATES, ESRB, RELEASE, isBuyable, PRODUCTS } from './data.js'
 import * as discovery from './discovery.js'
+import { megaNav, footerCols, homeHero, shopStrip, followXbox } from './site.js'
 
 const NAME = 'Xbox Store'
 const referenceCover = p => p.id === '9nnzsnhlr63l' ? 'gta-vi-ultimate-cover.jpg' : ['9p3h4968grsm','9nl3wwnzlzzn'].includes(p.id) ? 'gta-vi-cover.png' : null
 export const artwork = (p,cls='') => referenceCover(p) ? `<img class="${esc(cls)}" src="/static/reference/xbox-store/${referenceCover(p)}" alt="${esc(p.title)}">` : productImage('xbox-store',p,{className:cls})
-const NAV = [
-  ['Game Pass', [['Explore Game Pass','/en-US/xbox-game-pass'],['Compare plans','/en-US/xbox-game-pass#plans'],['Browse included games','/en-US/games/collection/game-pass'],['Manage subscription','/account/services']]],
-  ['Games', [['Browse all games','/en-US/games/browse'],['New releases','/en-US/games/collection/new-releases'],['Coming soon','/en-US/games/collection/coming-soon'],['Explore genres','/en-US/games/genres'],['Free to play','/en-US/games/collection/free-to-play']]],
-  ['Devices', [['Play with your devices','/en-US/games/platforms'],['Xbox Series X|S games','/en-US/games/platform/Xbox%20Series%20X%7CS'],['PC games','/en-US/games/platform/PC'],['Cloud games','/en-US/games/platform/Cloud']]],
-  ['Play', '/en-US/play'],
-  ['Store', [['Shop all products','/en-US/games/browse?type=all'],['Consoles and accessories','/en-US/consoles'],['Deals','/en-US/games/collection/deals'],['Add-ons','/en-US/search/results?type=add-ons'],['Wish list','/en-US/wishlist'],['Redeem a code','/en-US/redeem']]],
-  ['Community', [['Xbox community','/en-US/support'],['Xbox Support','/en-US/support'],['Purchases and refunds','/en-US/support/purchases'],['Install games and add-ons','/en-US/support/installation'],['Contact support','/en-US/support/contact']]],
-  ['More', [['Support','/en-US/support'],['Account overview','/account'],['My library','/account/library'],['Order history','/account/billing/orders'],['Services & subscriptions','/account/services']]],
-]
 const utilityIcon = name => name === 'search' ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h3l2 12h12l3-9H6"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>'
 const xboxMark = '<svg class="xb-mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="currentColor"/><path d="M5 7q5-3 11 3q6-6 11-3q-5 1-8 6q7 8 8 13q-6-6-11-10q-6 4-11 10q1-6 8-13Q10 8 5 7" fill="white"/></svg>'
 
@@ -30,7 +23,7 @@ const tileLabel = (p) => p.price === null ? p.title : p.listPrice ? `${p.title},
 const head = (base, title) => `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
-<link rel="stylesheet" href="${base}/static/style.css"></head>`
+<link rel="stylesheet" href="${base}/static/style.css"><link rel="stylesheet" href="${base}/static/site.css"></head>`
 
 export function layout({ base, title, body, cartCount = 0, user = null, theme = 'light', path = '' }) {
   return `${head(base, `${title} | XBOX`)}
@@ -38,12 +31,12 @@ export function layout({ base, title, body, cartCount = 0, user = null, theme = 
 <a class="xb-skip" href="#main-content">Skip to main content</a>
 <header class="xb-header">
   <div class="xb-header-inner">
-    <a class="xb-ms" href="${base}/" aria-label="Microsoft"><img class="xb-brand-ms" src="/static/reference/xbox-store/microsoft-logo.png" alt="Microsoft"></a>
+    <a class="xb-ms" href="${base}/en-US/all-microsoft" aria-label="Microsoft"><img class="xb-brand-ms" src="/static/reference/xbox-store/microsoft-logo.png" alt="Microsoft"></a>
     <span class="xb-divider" aria-hidden="true"></span>
     <a class="xb-logo" href="${base}/" aria-label="Xbox home"><img class="xb-brand-xbox" src="/static/reference/xbox-store/xbox-logo.png" alt="Xbox"></a>
-    <nav class="xb-nav" aria-label="Primary">${NAV.map(([n, links]) => typeof links === 'string' ? `<a href="${base}${links}">${esc(n)}</a>` : `<details class="xb-nav-menu xb-menu-host"><summary role="button" aria-expanded="false">${esc(n)} <span aria-hidden="true">⌄</span></summary><div class="xb-nav-panel">${links.map(([label,href])=>`<a href="${base}${href}">${esc(label)}</a>`).join('')}</div></details>`).join('')}</nav>
+    <nav class="xb-nav" aria-label="Primary">${megaNav(base)}</nav>
     <div class="xb-utils">
-      <a class="xb-allms" href="${base}/en-US/games/browse">All Microsoft <span aria-hidden="true">⌄</span></a>
+      <a class="xb-allms" href="${base}/en-US/all-microsoft">All Microsoft <span aria-hidden="true">⌄</span></a>
       <details class="xb-search xb-menu-host">
         <summary class="xb-search-toggle" role="button" aria-expanded="false" aria-label="Search Xbox.com">${utilityIcon('search')}</summary>
         <form class="xb-search-box" action="${base}/en-US/search/results" method="get" role="search">
@@ -55,19 +48,13 @@ export function layout({ base, title, body, cartCount = 0, user = null, theme = 
       <a class="xb-cart" href="${base}/en-US/cart" aria-label="Cart, ${cartCount} item${cartCount === 1 ? '' : 's'}">${utilityIcon('cart')}${cartCount ? `<span class="xb-badge">${cartCount}</span>` : ''}</a>
       ${user
         ? `<a class="xb-me" href="${base}/account" aria-label="Account manager for ${esc(user.first_name || user.email)}"><span class="xb-avatar" aria-hidden="true">${esc((user.first_name || user.email || '?').slice(0, 1).toUpperCase())}</span><span>${esc(user.first_name || 'Account')}</span></a><a class="xb-signout" href="${base}/signout">Sign out</a>`
-        : `<a class="xb-me" href="${signinUrl(base, path)}" aria-label="Sign in"><span class="xb-avatar" aria-hidden="true">ME</span><span>Sign in</span></a>`}
+        : `<a class="xb-me" href="${signinUrl(base, path === base || path === `${base}/` ? "" : path)}" aria-label="Sign in"><span class="xb-avatar" aria-hidden="true">ME</span><span>Sign in</span></a>`}
     </div>
   </div>
 </header>
 <main class="xb-main" id="main-content">${body}</main>
 <footer class="xb-footer">
-  <div class="xb-footer-cols">
-    <div><h4>Browse</h4><a href="${base}/en-US/games/browse">All games</a><a href="${base}/en-US/games/genres">Explore genres</a><a href="${base}/en-US/games/platforms">Play with your devices</a><a href="${base}/en-US/xbox-game-pass">Xbox Game Pass</a></div>
-    <div><h4>Discover</h4><a href="${base}/en-US/games/collection/new-releases">New releases</a><a href="${base}/en-US/games/collection/deals">Deals</a><a href="${base}/en-US/games/collection/free-to-play">Free to play</a><a href="${base}/en-US/games/collection/co-op">Co-op games</a></div>
-    <div><h4>Microsoft Store</h4><a href="${base}/account">Account</a><a href="${base}/account/library">My library</a><a href="${base}/account/billing/orders">Order history</a><a href="${base}/en-US/cart">Cart</a><a href="${base}/en-US/wishlist">Wish list</a><a href="${base}/en-US/games/collection/coming-soon">Coming soon</a></div>
-    <div><h4>Resources</h4><a href="${base}/en-US/support">Xbox Support</a><a href="${base}/en-US/redeem">Redeem a code</a><a href="${base}/account/services">Manage subscriptions</a><a href="${base}/en-US/xbox-game-pass#plans">Compare Game Pass plans</a></div>
-  </div>
-  <p class="xb-footer-legal">English (United States) &nbsp;·&nbsp; <a href="${base}/account/profile">Privacy preferences</a> &nbsp;·&nbsp; <a href="${base}/en-US/support/contact">Contact support</a> &nbsp;·&nbsp; <a href="${base}/en-US/privacy">Privacy</a> &nbsp;·&nbsp; <a href="${base}/en-US/terms">Terms of use</a> &nbsp;·&nbsp; &copy; Microsoft 2026</p>
+  ${footerCols(base)}
   ${disclaimer(NAME)}
 </footer>
 <script>${MENU_JS}</script>
@@ -199,7 +186,8 @@ const paymentLine = (payment) => payment.method === 'card' ? `${esc(payment.bran
 const addressLine = (b) => b ? `${esc(b.line1)}${b.line2 ? `, ${esc(b.line2)}` : ''}, ${esc(b.city)}, ${esc(b.state)} ${esc(b.postal_code)}` : ''
 
 // ---- pages ----
-export const homePage = props => discovery.home({...props,tile})
+export const homePage = props => (fixtureHome(props) ? '' : homeHero(props.base)) + discovery.home({...props,tile}) + shopStrip(props.base, props.user) + followXbox(props.base)
+const fixtureHome = () => fixtureCatalog
 export const searchPage = props => discovery.searchPage({...props,tile})
 export const gamePassPage = props => discovery.gamePass({...props,tile})
 export const hubPage = props => discovery.hubs(props)
