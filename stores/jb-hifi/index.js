@@ -11,6 +11,7 @@ import { retailState, defaultAddress, saveAddress } from '../../lib/retail-state
 import { installJourneys, safeReturn, customerOrder, rememberSelection, savedItems, savedAddressPicker, checkoutAddressValues } from './journeys.js'
 import { PRODUCTS, byId, bySlug, games, search, totals, productPath, findStores, storeById, postcodeState, stateName, STATES, SHIPPING_METHODS, COURIER_METHOD, COLLECTION_METHOD, findCollectionPoints, collectionPointById } from './data.js'
 import * as P from './pages.js'
+import { installSite, departmentStrip } from './site.js'
 
 const NAME = 'JB Hi-Fi'
 const MAX_QTY = 5 // the cart quantity dropdown offers 1–5 (JB limits copies per order)
@@ -57,13 +58,14 @@ router.get('/information', (req,res) => render(req,res,{ title: 'Shopping inform
 router.get('/', (req, res) => render(req, res, { title: 'JB Hi-Fi | Always Cheap Prices', body: P.homePage({ base: res.locals.base, products: PRODUCTS }) }))
 
 // Real URL: /search?query=grand+theft+auto+vi (also accept ?q= in case an agent guesses it).
-function listing(req,res,{heading='',intro='',scope={}}={}) {
+function listing(req,res,{heading='',intro='',scope={},extra=''}={}) {
   const q=str(req.query.query)||str(req.query.q)
   const filters={...Object.fromEntries(FILTER_KEYS.map(k=>[k,str(req.query[k])])),...scope}
   const route=res.locals.base+req.path
   const self=`${route}?${new URLSearchParams({query:q,...filters})}`
-  render(req,res,{title:heading?`${heading} | JB Hi-Fi`:`Search results: '${q}' | JB Hi-Fi`,body:P.searchPage({base:res.locals.base,q,products:search(q,filters),self,filters,route,heading,intro,scope})})
+  render(req,res,{title:heading?`${heading} | JB Hi-Fi`:`Search results: '${q}' | JB Hi-Fi`,body:P.searchPage({base:res.locals.base,q,products:search(q,filters),self,filters,route,heading,intro,scope,extra})})
 }
+installSite(router,{render,notFound,tile:P.tile,trackOrderPage:P.trackOrderPage,findStores})
 router.get('/search',(req,res)=>listing(req,res))
 router.get('/brands',(req,res)=>render(req,res,{title:'Shop by brand | JB Hi-Fi',body:brandsHub(res.locals.base)}))
 router.get('/brands/:brand',(req,res)=>{
@@ -81,7 +83,7 @@ router.get(['/collections/:collection','/collections/:collection/:type'],(req,re
   if(!type)return notFound(req,res)
   scope.type=type
  }
- listing(req,res,{heading:scope.type||(department||campaign).title,intro:(department||campaign).description,scope})
+ listing(req,res,{heading:scope.type||(department||campaign).title,intro:(department||campaign).description,scope,extra:department&&!scope.type?departmentStrip(res.locals.base,department.slug):''})
 })
 
 router.get('/reference-products/:id', (req,res) => {
