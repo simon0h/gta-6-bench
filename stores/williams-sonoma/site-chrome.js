@@ -64,7 +64,7 @@ export function siteFooter(req, base) {
 }
 
 export function siteChrome({ req, base, title, body, count }) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | Williams Sonoma</title><link rel="stylesheet" href="${base}/static/depth.css"><link rel="stylesheet" href="${base}/static/site.css"></head><body class="williams-sonoma wsx ws-reference-page"><a class="wsx-skip" href="#main">Skip to content</a>
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | Williams Sonoma</title><link rel="stylesheet" href="${base}/static/depth.css"><link rel="stylesheet" href="${base}/static/site.css"><link rel="stylesheet" href="${base}/static/shelf.css"></head><body class="williams-sonoma wsx ws-reference-page"><a class="wsx-skip" href="#main">Skip to content</a>
 ${siteHeader(req, base, count)}
 <main id="main">${body}</main>
 ${siteFooter(req, base)}</body></html>`
