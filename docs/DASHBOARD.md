@@ -6,13 +6,13 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
 
 ## Operator workflow
 
-1. Click **Generate new run**, choose a name, and select **Original 30 tasks**
+1. Click **New run**, choose a name, and select **Original 30 tasks**
    (the default) or **All 240 tasks**.
 2. Click **Add agent URL**. Select Grokbot, Dots or Muse and add optional tags and
    comments. You can generate up to five URLs per run, including repeated agents.
-3. Use **Copy agent prompt** or **Copy URL** and give the link to that agent.
+3. Use **Copy prompt** or **Copy URL** and give the link to that agent.
 4. Refresh the run to review progress and each submitted task's private grade.
-   Update labels, comments and comma-separated tags with **Save changes**.
+   Update labels, comments and comma-separated tags with **Save**.
 
 An agent label is operator-supplied metadata. The system does not identify the
 agent automatically or infer its underlying model. Record model/version, account

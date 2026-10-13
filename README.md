@@ -15,7 +15,7 @@ Run `npm run dashboard` and open `http://localhost:3001/dashboard` to create a
 comparison run with the original 30 tasks or all 240 tasks. Generate up to five
 agent URLs per run, label each Grokbot, Dots or Muse, and add tags and comments.
 Each URL progresses through isolated, timed tasks with private grading. Give each
-agent a separate browser session and use **Copy agent prompt** to share its link.
+agent a separate browser session and use **Copy prompt** to share its link.
 Progress and results persist in `data/dashboard/`; this directory is excluded from
 Git and deployment images. The local dashboard trusts localhost; hosted mode
 requires the operator token. See [dashboard workflow](docs/DASHBOARD.md).

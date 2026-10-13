@@ -49,10 +49,9 @@ orders, benchmark outputs, research files, credentials and Git history are exclu
 
 ## Create runs and give agents URLs
 
-Open `/dashboard` and sign in with `BENCHMARK_API_TOKEN`. Click **Generate new
-run**, choose the original 30 tasks or all 240, then create up to five agent URLs.
+Open `/dashboard` and sign in with `BENCHMARK_API_TOKEN`. Click **New run**, choose the original 30 tasks or all 240, then create up to five agent URLs.
 Each URL has an editable agent label (Grokbot, Dots or Muse), tags and comments.
-Share the generated URL or use **Copy agent prompt**. Do not share the operator
+Share the generated URL or use **Copy prompt**. Do not share the operator
 secret. See the [dashboard workflow](DASHBOARD.md) for task submission and grading.
 
 Each agent URL gets an isolated task worker, with private grading and a fixed
