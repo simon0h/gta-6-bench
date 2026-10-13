@@ -1,0 +1,199 @@
+{
+  "captured_at": "2026-10-06",
+  "page_url": "https://store.playstation.com/en-us/concept/10000730/",
+  "provenance": "Images, brand vectors and Latin fonts referenced by the official public PlayStation product page and its linked font stylesheet. Copyright remains with the respective owners; no endorsement or redistribution license implied.",
+  "assets": [
+    {
+      "file": "gta-vi-hero.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/1c8e3e304f0bad2d99ffed828ad460ebe5949608cb82a5dd.png",
+      "page_element": "gameBackgroundImage#heroImage#image-no-js",
+      "sha256": "26a65207dd0cfb234faafa7c89e5c62d2a02f2d280033d00204b4a3dbcefb648",
+      "bytes": 814212
+    },
+    {
+      "file": "gta-vi-screenshot-1.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/1b1bb3a94bbd1a8a4e7514763d016f510e24247b4d864ff6.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "4c2968c07cb8dbb73e3acc885bfc869b27e32550a14d127d573e35af51cafac6",
+      "bytes": 919621
+    },
+    {
+      "file": "gta-vi-screenshot-2.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/fc25469bbd7e674c1db234296d0697f77ab10dbd28174aba.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "54967540540588b7365a24069a8e33e9d72a7bba16eb4a16cc951b479b3f9d99",
+      "bytes": 591315
+    },
+    {
+      "file": "gta-vi-screenshot-3.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/efe905decdf3fee4483364656968be5a3de687e5c29dd03a.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "39bedeae02339bd5a0c06db0130239670975df20625390ec692d899ea9d1d8a2",
+      "bytes": 924721
+    },
+    {
+      "file": "gta-vi-screenshot-4.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/9106bb2a9b8835b8f617c892edbbe46312cb2e0e3d16b480.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "fa91620fc3d79f6788ab91fd07859dde48f3358b7e533736ba37641a84e8288a",
+      "bytes": 1460813
+    },
+    {
+      "file": "gta-vi-screenshot-5.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/5e641d4c505e5a7ebc604b58b5fc7c052571ef419a328637.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "2095e6a6458d2603b27afb3d2db4d25e36cab7b8713c538a204e5d289f8d019b",
+      "bytes": 1123672
+    },
+    {
+      "file": "gta-vi-screenshot-6.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/1f2d0373af9f1b6bace15d7d8462ee7843b3d42452e97d37.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "59e0fe0d631d2899af1f4d9467392746ae5d0f103055cce7fd4607f56ac33c15",
+      "bytes": 894438
+    },
+    {
+      "file": "gta-vi-screenshot-7.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/5d18cf5f59260666abe5029f450ba2b5a61d996b0503e1fc.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "134d5f55d45cb63cb9d1b9482452909183bedae19f0d69002b2e25904211d969",
+      "bytes": 1334230
+    },
+    {
+      "file": "gta-vi-screenshot-8.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/5de51b1e1cc3d3ea85e7bd8eba993be5c0c267316ca18147.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "7d25eb682642c59333cba6419de17fe30c0379bb250e0020453c64e71ad0b160",
+      "bytes": 1084728
+    },
+    {
+      "file": "gta-vi-screenshot-9.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/6e2a7c7eb29de1f04c32820823f66858fbc3d9ab9adf88a9.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "7bef622eb5ceb177b977156b411abcbd764abc486f63a555ade609d13b8596db",
+      "bytes": 948299
+    },
+    {
+      "file": "gta-vi-screenshot-10.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1821/3139bd312f0bfb208738dc2b752d17c3fb9d4ad50c2c25aa.jpg",
+      "page_element": "mfe-media-carousel#mediaFrame#image-no-js",
+      "sha256": "e60a37d36ecb4101b45310e175fef44a2346a45177f0d54415b777a8f3832af4",
+      "bytes": 759503
+    },
+    {
+      "file": "gta-vi-standard.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/4a35c9a8490c69fe89af0f52d4ac0249b230b4fdb12e8469.jpg",
+      "page_element": "mfeUpsell#productEdition0#media#image-no-js",
+      "sha256": "8dd9cda4f59f5b6885effbc4486260b426a5a0cbe8333988aca4f4c0c4b823bb",
+      "bytes": 1541440
+    },
+    {
+      "file": "gta-vi-ultimate.jpg",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1819/f3f45490aaf9b14352c53b5e80c5becc112a4b1fc2e878c0.jpg",
+      "page_element": "mfeUpsell#productEdition1#media#image-no-js",
+      "sha256": "a1f7727377235e7848642ac1bb982b2ed8467005be838dcb4cfeebf83809e7a1",
+      "bytes": 1353893
+    },
+    {
+      "file": "gta-vi-upgrade.png",
+      "source_url": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2313/2dc122bb8b96cb9735238df9d43e28111b1279939389a735.png",
+      "page_element": "add-ons-grid#0#game-art#image#image-no-js",
+      "sha256": "38a1c7f9cbfbaf631b255fe29168b03f7e3d429177d3b6d76822bd735428ac3b",
+      "bytes": 106410
+    },
+    {
+      "file": "sst-light.woff2",
+      "source_url": "https://static.playstation.com/font-stack/v1/fonts/SST/SST-Light-latin.3cce6.woff2",
+      "page_element": "font-face SST 300 Latin",
+      "sha256": "3cce6ebb5470433365a03ed4362bdb80c4b251023e3df635df71c38c8d5f0789",
+      "bytes": 41776
+    },
+    {
+      "file": "sst-roman.woff2",
+      "source_url": "https://static.playstation.com/font-stack/v1/fonts/SST/SST-Roman-latin.40348.woff2",
+      "page_element": "font-face SST 400 Latin",
+      "sha256": "4034879222b06b18006014e9e2932815c3e8a6906a7c4c852d81483d7a0541c6",
+      "bytes": 43685
+    },
+    {
+      "file": "sst-bold.woff2",
+      "source_url": "https://static.playstation.com/font-stack/v1/fonts/SST/SST-Bold-latin.7c968.woff2",
+      "page_element": "font-face SST 700 Latin",
+      "sha256": "7c968a885015ed746926bee5100f016ab6751c93c1ed50bad03c4c5a8faaf6d3",
+      "bytes": 38992
+    },
+    {
+      "file": "esrb-mature.png",
+      "source_url": "https://image.api.playstation.com/grc/images/ratings/4k/esrb/m17.png",
+      "page_element": "img alt ESRB Mature 17+",
+      "sha256": "5d1a05aefc2e9369711c420869be123f9fc296e8db1ca25ca1b8ace1e9800d6c",
+      "bytes": 6952
+    },
+    {
+      "file": "playstation-mark.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/",
+      "source_kind": "inline-svg",
+      "page_element": "Public navigation inline SVG, exported without path changes",
+      "sha256": "c5e136701aad37ec61b1b65f1a72293668db0e570938a86fe888ea8b73eac01f",
+      "bytes": 855
+    },
+    {
+      "file": "store-bag.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/",
+      "source_kind": "inline-svg",
+      "page_element": "Public navigation inline SVG, exported without path changes",
+      "sha256": "527421147dd088a794ae44be8e68b6973fc28b73d5c7e9fa7372e041c1603c47",
+      "bytes": 1697
+    },
+    {
+      "file": "store-wordmark.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/",
+      "source_kind": "inline-svg",
+      "page_element": "Public navigation inline SVG, exported without path changes",
+      "sha256": "45d3bcebe7f596de8d5bd2625a1ffb13a02a276ce9a38101c6b2e5142de2948f",
+      "bytes": 5247
+    },
+    {
+      "file": "feature-in-game-purchases.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/#ps-icon:in-game-purchases",
+      "page_element": "Compatibility notice symbol ps-icon:in-game-purchases",
+      "sha256": "f0c05fb6da3687fa770dd8afff6c254c16b8f72854b842c5d61ac0500f4e2108",
+      "bytes": 1558
+    },
+    {
+      "file": "feature-online-play.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/#ps-icon:online-play",
+      "page_element": "Compatibility notice symbol ps-icon:online-play",
+      "sha256": "77d35b90fde84bc8bcf76ea4c403715bace4ef44fa7fb3647ac5ab3d7ff470bb",
+      "bytes": 1879
+    },
+    {
+      "file": "feature-person.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/#ps-icon:person",
+      "page_element": "Compatibility notice symbol ps-icon:person",
+      "sha256": "c6ba937d727821d441a94a9456309f3b98f3ff5d2b76605303904d37a6715a82",
+      "bytes": 466
+    },
+    {
+      "file": "feature-app-remote-play.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/#ps-icon:app-remote-play",
+      "page_element": "Compatibility notice symbol ps-icon:app-remote-play",
+      "sha256": "10f2b4402d22bb0ba340384bcb2a7abebb8a9f66fbcbc1167c9afd842b4cf916",
+      "bytes": 1177
+    },
+    {
+      "file": "feature-trigger-effect-vibration.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/#ps-icon:trigger-effect-vibration",
+      "page_element": "Compatibility notice symbol ps-icon:trigger-effect-vibration",
+      "sha256": "a99394a5c5602ee263d046fe4001507b54a6123a9fc0d0340ae8f97aa9d627d0",
+      "bytes": 3472
+    },
+    {
+      "file": "feature-enhanced-graphics.svg",
+      "source_url": "https://store.playstation.com/en-us/concept/10000730/#ps-icon:enhanced-graphics",
+      "page_element": "Compatibility notice symbol ps-icon:enhanced-graphics",
+      "sha256": "c4bca510d462dbc1a97b827d6a2c92ab53bafd41e8b428b178c787fe1b0dc66c",
+      "bytes": 1568
+    }
+  ]
+}

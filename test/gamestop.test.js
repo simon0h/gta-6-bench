@@ -30,11 +30,13 @@ test('gamestop: guest pre-orders the PS5 code-in-box copy end to end', async () 
     assert.match(cart.text, /Proceed to Checkout/)
 
     const gate = await c.post('/gamestop/checkout/start')
-    assert.match(gate.url, /\/checkout\/login\/\?required=false$/)
-    assert.match(gate.text, /Checkout as Guest/)
+    assert.match(gate.url, /\/mrt\/checkout$/)
+    assert.match(gate.text, /name="customerName"/)
+    assert.match(gate.text, /Save &amp; Continue/)
+    assert.doesNotMatch(gate.text, /Checkout as Guest|name="cardNumber"/)
 
-    const co = await c.post('/gamestop/checkout/login/', { action: 'guest' })
-    assert.match(co.url, /\/gamestop\/checkout\/$/)
+    const co = await c.post('/gamestop/mrt/checkout/contact', { email: 'alex@example.com', customerName: 'Alex Tester', c_phone: ADDRESS.phone })
+    assert.match(co.url, /\/gamestop\/mrt\/checkout$/)
     assert.match(co.text, /Shipping Address/)
     assert.match(co.text, /Place Order/)
 
@@ -94,5 +96,27 @@ test('gamestop: signed-in shopper skips the guest gate and sees prefilled name',
     assert.equal(o.customer.guest, false)
     assert.equal(o.payment.method, 'paypal')
     assert.equal(o.totals.shipping, 9.99)
+  } finally { await srv.close() }
+})
+
+test('gamestop: new/pre-owned catalog, functional platform filters and standard product purchase CTA', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client()
+    const xbox = await c.get('/gamestop/search/?q=gta+6&platform=xbox&availability=preorder')
+    assert.equal(xbox.status, 200)
+    assert.match(xbox.text, /448297\.html/)
+    assert.doesNotMatch(xbox.text, /448295\.html|448310\.html/)
+    const preowned = await c.get('/gamestop/search/?q=grand+theft+auto&condition=Pre-Owned')
+    assert.match(preowned.text, /gs-gta-v-preowned/)
+    assert.doesNotMatch(preowned.text, /448295\.html|448297\.html/)
+    const pdp = await c.get('/gamestop/products/gs-gta-v-preowned')
+    assert.match(pdp.text, />Add to Cart<\/button>/)
+    assert.match(pdp.text, /Pre-owned physical disc/)
+    const empty = await c.get('/gamestop/search/?q=gta+6&fulfillment=pickup')
+    assert.match(empty.text, /couldn't find any results/)
+    assert.match(empty.text, /Clear all/)
+    assert.equal((await c.get('/gamestop/help')).status, 200)
+    assert.equal((await c.get('/gamestop/pro')).status, 200)
   } finally { await srv.close() }
 })

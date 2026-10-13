@@ -1,5 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { PRODUCTS } from '../stores/playstation-store/data.js'
 import { startServer, fieldValue } from './helpers.js'
 
 const S = '/playstation-store'
@@ -34,7 +35,7 @@ test('playstation-store: search -> concept page -> Standard Pre-Order -> Sony si
     assert.equal(results.url, `${srv.base}${S}/en-us/search/gta%206`)
     assert.match(results.text, /<title>PlayStation Store \| Search \| gta 6<\/title>/)
     assert.match(results.text, /You searched for: <em>gta 6<\/em>/)
-    assert.match(results.text, />Filter<\/button>/)
+    assert.match(results.text, />Filter and sort<\/summary>/)
     const tiles = [...results.text.matchAll(/class="ps-tile" href="([^"]+)"/g)].map(m => m[1])
     assert.deepEqual(tiles.slice(0, 3), [STD, ULT, `${S}/en-us/product/EP1004-PPSA01547_00-ULTEDTIONUPGRADE`], 'both editions and the add-on lead the results')
     assert.match(results.text, /Grand Theft Auto V \(PlayStation®5\)/, 'GTA V is listed next to the game')
@@ -292,4 +293,28 @@ test('playstation-store: a regular item goes through the Cart drawer and is reco
     const after = await c.get(`${S}/en-us/checkout`)
     assert.match(after.text, /Your cart is empty\./)
   } finally { await srv.close() }
+})
+
+test('playstation-store: browse filters, expanded catalogs and store navigation are functional', async () => {
+  const srv=await startServer()
+  try {
+    const c=srv.client(), base='/playstation-store'
+    const page=await c.get(`${base}/en-us/pages/browse?platform=PS4&content=FULL+GAME&sort=price-asc`)
+    assert.match(page.text,/Gran Turismo 7/)
+    assert.doesNotMatch(page.text,/class="ps-tile-title">ASTRO BOT/)
+    assert.doesNotMatch(page.text,/class="ps-tile-title">Grand Theft Auto VI/)
+    const prices=await c.get(`${base}/en-us/pages/browse?content=FULL+GAME&sort=price-asc`)
+    const prices2=await c.get(`${base}/en-us/pages/browse?content=FULL+GAME&sort=price-asc&page=2`)
+    const ordered=[...(`${prices.text}${prices2.text}`).matchAll(/class="ps-tile" href="[^"]+\/([^/"]+)"/g)].map(m=>PRODUCTS.find(p=>p.id===m[1]))
+    assert.equal(ordered.length,PRODUCTS.filter(p=>p.type==='FULL GAME').length)
+    assert.equal(new Set(ordered.map(p=>p.id)).size,ordered.length)
+    assert.deepEqual(ordered.map(p=>p.price),ordered.map(p=>p.price).sort((a,b)=>a-b))
+    assert.ok(ordered.findIndex(p=>p.title.startsWith('Grand Theft Auto Online'))<ordered.findIndex(p=>p.title==='Gran Turismo 7'))
+    for(const path of ['collections','deals','subscriptions'])assert.equal((await c.get(`${base}/en-us/pages/${path}`)).status,200)
+    const home=await c.get(base)
+    assert.match(home.text,/Autumn Adventures/)
+    assert.match(home.text,/ASTRO BOT/)
+    assert.doesNotMatch(home.text,/href="#"/)
+    assert.equal((await c.get(`${base}/en-us/support?topic=Downloads`)).status,200)
+  } finally {await srv.close()}
 })

@@ -1,10 +1,17 @@
+import { enterScenarioCart, scenarioAvailability, scenarioPayment } from '../../lib/benchmark-scenarios.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { Router } from 'express'
 import { randomBytes, randomInt } from 'node:crypto'
-import { recordOrder, getOrder, listOrders } from '../../lib/orders.js'
+import { recordOrder, getOrder } from '../../lib/orders.js'
 import { luhn, cardBrand, last4 } from '../../lib/payment.js'
 import { authenticate, findAccount, createAccount, publicAccount } from '../../lib/accounts.js'
-import { byAsin, productPath, signinPath, search, cartLines, checkoutLines, totals, DELIVERY, STATES } from './data.js'
+import { byAsin, productPath, signinPath, search, cartLines, checkoutLines, totals, DELIVERY, STATES, PRODUCTS, deliveryOptions } from './data.js'
+import { categoryIntro, productRow } from './browse.js'
+import { FILTER_KEYS, values, nodeById, queryString } from './catalog.js'
 import * as P from './pages.js'
+import { retailState, rememberProduct, saveAddress } from '../../lib/retail-state.js'
+import { registerJourneys, resumeWishlist, listsFor, savedInList, checkoutAddress, savedAddressChoices, accountOrders } from './journeys.js'
+import { deliveryLocation, registerLocation } from './location.js'
 
 const NAME = 'Amazon'
 const router = Router()
@@ -15,7 +22,7 @@ const STEP = { address: '/gp/buy/addressselect', pay: '/gp/buy/payselect', spc: 
 const checkoutWall = (step) => signinPath(STEP[step], 'amazon_checkout_us')
 
 // ---- helpers ----
-function render(req, res, title, body, { status = 200, chrome = 'full', ewc = false, subnav = false, q = '' } = {}) {
+function render(req, res, title, body, { status = 200, chrome = 'full', ewc = false, subnav = false, q = '', dept = '' } = {}) {
   const lines = cartLines(req.store)
   const cartCount = lines.reduce((n, l) => n + l.qty, 0)
   // The "everywhere cart" right rail (search + product pages). "Added to cart" shows once, right after an add.
@@ -25,7 +32,9 @@ function render(req, res, title, body, { status = 200, chrome = 'full', ewc = fa
   const checkoutCount = checkoutLines(req.store).reduce((n, l) => n + l.qty, 0)
   // "Hello, sign in" returns the shopper to the page they were on, as Amazon's openid.return_to does.
   const here = req.method === 'GET' ? (req.originalUrl.slice(res.locals.base.length) || '/') : '/'
-  res.status(status).type('html').send(P.layout({ base: res.locals.base, title, body, cartCount, user: req.store.user, chrome, ewc: panel, subnav, q, checkoutCount, here }))
+  const state = retailState(req), locationNotice = state.amazonLocationNotice
+  delete state.amazonLocationNotice
+  res.status(status).type('html').send(P.layout({ base: res.locals.base, title, body, cartCount, user: req.store.user, chrome, ewc: panel, subnav, q, checkoutCount, here, dept, destination: deliveryLocation(req), addresses: req.store.user ? state.addresses : [], locationNotice }))
 }
 // Amazon order numbers are 3-7-7 digits, e.g. 113-1234567-1234567.
 function orderNumber() { return `113-${String(randomInt(0, 1e7)).padStart(7, '0')}-${String(randomInt(0, 1e7)).padStart(7, '0')}` }
@@ -35,46 +44,97 @@ const safeRet = (ret) => (/^\/(?!\/)/.test(String(ret ?? '')) ? String(ret) : nu
 const inCartMap = (store) => Object.fromEntries(store.cart.map(l => [l.asin, l.qty]))
 function addToCart(store, asin, qty) {
   const line = store.cart.find(l => l.asin === asin)
-  if (line) line.qty = Math.min(5, line.qty + qty) // Amazon bumps the quantity of an ASIN already in the cart
+  if (line) line.qty = Math.min(5, byAsin(asin).stock, line.qty + qty) // Amazon bumps the quantity of an ASIN already in the cart
   else store.cart.push({ asin, qty })
 }
 function notFound(req, res) {
   render(req, res, 'Page Not Found', P.simplePage({ title: "Sorry! We couldn't find that page.", html: `<p>Try searching or <a href="${res.locals.base}/">go to Amazon's home page</a>.</p>` }), { status: 404 })
 }
 
-// ---- browse ----
-router.get('/', (req, res) => render(req, res, 'Amazon.com. Spend less. Smile more.', P.homePage({ base: res.locals.base })))
+function purchaseError(req,res) {
+  return render(req,res,'Check your selection',P.simplePage({title:'Check your selection',html:`<p>Choose an available item and a quantity from 1 to 5${fixtureCatalog?', within the available stock':', within the local per-order limit'}. No items were added.</p><a href="${res.locals.base}/cart">Review your cart</a> · <a href="${res.locals.base}/">Continue shopping</a>`}),{status:400})
+}
 
-router.get('/s', (req, res) => {
-  const q = String(req.query.k ?? '').trim()
-  const dept = String(req.query.i ?? ''), sort = String(req.query.s ?? '')
-  if (!q) return res.redirect(`${res.locals.base}/`)
-  // The header form always sends the department; "All" has no value, so drop it to keep Amazon's /s?k={q} URL.
-  if ('i' in req.query && !dept) return res.redirect(`${res.locals.base}/s?k=${encodeURIComponent(q).replaceAll('%20', '+')}${sort ? `&s=${encodeURIComponent(sort)}` : ''}`)
-  render(req, res, `Amazon.com : ${q}`, P.searchPage({ base: res.locals.base, q, dept, sort, results: search(q, dept, sort), inCart: inCartMap(req.store) }), { ewc: true, q })
+
+// Run-scoped availability changes are checked before every checkout boundary,
+// including direct legacy routes. They never mutate the shared catalog.
+router.use((req,res,next)=>{
+  const checkout=/^\/(?:checkout(?:\/|$)|mrt\/checkout|gp\/buy\/|gp\/cart\/desktop\/go-to-checkout)/.test(req.path)
+  if(checkout || (req.method==='GET' && /^\/(?:cart(?:\/|$)|gp\/cart\/view)/.test(req.path))) enterScenarioCart(req.store)
+  const selection=[...req.store.cart,...(req.store.checkout.buyNow?[req.store.checkout.buyNow]:[])]
+  const unavailable=selection.some(l=>scenarioAvailability(req.store,l.asin??l.tcin??l.pid,'shipping')===false)
+  const adding=req.method==='POST'&&['/cart/add','/buy-now','/gp/product/handle-buy-box'].includes(req.path)
+  const ids=[].concat(req.body?.asin??req.body?.ASIN??req.body?.tcin??req.body?.pid??[])
+  if((checkout&&unavailable)||(adding&&ids.some(id=>scenarioAvailability(req.store,id,'shipping')===false))) return render(req,res,'Review your cart',P.cartPage({base:res.locals.base,t:totals(checkoutLines(req.store)),user:req.store.user}),{status:409})
+  next()
+})
+
+registerJourneys(router, { render, notFound, addToCart, purchaseError })
+registerLocation(router, { render })
+
+// ---- browse ----
+router.get('/', (req, res) => {
+  const recent = retailState(req).recent.map(byAsin).filter(Boolean).slice(0, 6)
+  render(req, res, 'Amazon.com. Spend less. Smile more.', P.homePage({ base: res.locals.base }) + (recent.length ? productRow(res.locals.base, 'Your recently viewed items', recent) + `<p><a href="${res.locals.base}/gp/history">View or edit your browsing history</a></p>` : ''))
+})
+
+function browse(req,res,{node='',endpoint='/s',heading='',intro='',collection=''}={}) {
+  const q = String(req.query.k ?? '').trim(), dept = String(req.query.i ?? '')
+  const sort = String(req.query.s ?? (collection==='bestsellers'?'exact-aware-popularity-rank':collection==='new'?'date-desc-rank':''))
+  const filters = Object.fromEntries(FILTER_KEYS.map(k=>[k,['brand','platform','type','condition','seller','format'].includes(k)?values(req.query[k]):String(req.query[k] ?? '')]))
+  if (endpoint==='/s' && q && 'i' in req.query && !dept && !node && !Object.values(filters).some(v=>Array.isArray(v)?v.length:!!v) && !req.query.page) return res.redirect(`${res.locals.base}/s?k=${encodeURIComponent(q).replaceAll('%20','+')}${sort?`&s=${encodeURIComponent(sort)}`:''}`)
+  let results=search(q,dept,sort,filters,node)
+  if(collection==='deals') results=results.filter(p=>p.deal&&p.stock>0)
+  render(req,res,`Amazon.com : ${heading||q||'All Departments'}`,intro+P.searchPage({base:res.locals.base,q,dept,sort,filters,results,node,endpoint,heading,page:req.query.page,inCart:inCartMap(req.store)}),{ewc:true,q,dept:dept||nodeById(node)?.parent||node})
+}
+router.get('/s', (req,res)=>browse(req,res,{node:String(req.query.node ?? '')}))
+function departmentHandler(req,res) {
+  const node=nodeById(String(req.query.node || 'videogames'))
+  if(!node) return notFound(req,res)
+  browse(req,res,{node:node.id,endpoint:'/b',heading:node.title,intro:categoryIntro({base:res.locals.base,node})})
+}
+router.get(['/b','/computer-video-games-hardware-accessories/b'],departmentHandler)
+router.get('/gp/bestsellers/:department',(req,res)=>{
+  const node=req.params.department==='all'?'':nodeById(req.params.department)?.id
+  if(node===undefined) return notFound(req,res)
+  browse(req,res,{node,endpoint:`/gp/bestsellers/${req.params.department}`,heading:'Best Sellers',collection:'bestsellers'})
+})
+router.get('/gp/new-releases/:department',(req,res)=>{
+  const node=req.params.department==='all'?'':nodeById(req.params.department)?.id
+  if(node===undefined) return notFound(req,res)
+  browse(req,res,{node,endpoint:`/gp/new-releases/${req.params.department}`,heading:'New Arrivals',collection:'new'})
+})
+router.get('/gp/goldbox',(req,res)=>browse(req,res,{node:String(req.query.node||''),endpoint:'/gp/goldbox',heading:"Today's Deals",collection:'deals'}))
+router.get('/stores/:brand',(req,res)=>{
+  const brand=[...new Set(PRODUCTS.map(p=>p.brand))].find(b=>b.toLowerCase().replace(/[^a-z0-9]/g,'')===req.params.brand.toLowerCase().replace(/[^a-z0-9]/g,''))
+  if(!brand) return notFound(req,res)
+  const products=PRODUCTS.filter(p=>p.brand===brand)
+  render(req,res,`Amazon.com: ${brand} Store`,P.simplePage({title:`${brand} Store`,html:`<p>Explore products from this brand, compare options, and find your next favorite.</p><a href="${res.locals.base}/s?${queryString({brand})}">Search and refine this brand's products</a>`})+productRow(res.locals.base,'Shop the collection',products),{dept:products[0]?.department})
 })
 
 function productHandler(req, res) {
   const p = byAsin(req.params.asin)
   if (!p) return notFound(req, res)
-  const bundle = p.kind === 'game' ? [byAsin('B0H4ZELDOT'), byAsin('B0H4METRAV')] : []
-  render(req, res, `Amazon.com: ${p.title} : ${p.kind === 'game' ? 'Everything Else' : 'Video Games'}`, P.productPage({ base: res.locals.base, p, inCart: inCartMap(req.store), listAdded: req.query.added_to_list === '1', bundle }), { ewc: true, subnav: true })
+  if (retailState(req).preferences.history !== false) rememberProduct(req, p.asin)
+  const bundle = p.kind === 'game' ? [byAsin('B0H4ZELDOT'), byAsin('B0H4METRAV')].filter(Boolean) : []
+  render(req, res, `Amazon.com: ${p.title} : ${p.crumbs[0]}`, P.productPage({ base: res.locals.base, p, inCart: inCartMap(req.store), listAdded: savedInList(req, p.asin), lists: listsFor(req), destination: deliveryLocation(req), bundle }), { ewc: true, subnav: p.department==='videogames', dept:p.department })
 }
 router.get('/dp/:asin', productHandler)
 router.get('/gp/product/:asin', productHandler)
 router.get('/:slug/dp/:asin', productHandler)
 
-router.get('/tradein', (req, res) => render(req, res, 'Amazon Trade-In', P.simplePage({ title: 'Amazon Trade-In', html: '<p>Trade in your eligible games, consoles and devices for an Amazon.com Gift Card. Get an instant offer, ship it for free and get paid once we receive it.</p>' })))
+router.get('/tradein', (req, res) => render(req, res, 'Amazon Trade-In', P.simplePage({ title: 'Amazon Trade-In', html: `<p>Trade-in appraisal, shipping labels, and gift-card credit are not available in this storefront. You can browse accessories or contact Customer Service about a local order.</p><p><a href="${res.locals.base}/b?node=gaming-accessories">Browse gaming accessories</a> · <a href="${res.locals.base}/help">Customer Service</a></p>` })))
 
 // ---- cart ----
 // Search-tile "Add to cart" (and the PDP bundle button) add in place: the shopper is sent back to the
 // page they were on, where the tile shows "N in cart" and the right-rail cart panel fills in.
 router.post('/cart/add', (req, res) => {
-  const asins = [].concat(req.body.asin ?? []).map(a => String(a).toUpperCase())
-  const qty = clampQty(req.body.quantity)
-  let added = 0
-  for (const a of asins) if (byAsin(a)) { addToCart(req.store, a, qty); added++ }
-  if (added) req.store.flash = 'added'
+  const asins = [...new Set([].concat(req.body.asin ?? []).map(a => String(a).toUpperCase()))]
+  const qty = req.body.quantity===undefined?1:Number(req.body.quantity)
+  if (!asins.length || !Number.isInteger(qty) || qty<1 || qty>5 || asins.some(asin=>!byAsin(asin)||byAsin(asin).stock<qty)) return purchaseError(req,res)
+  for (const asin of asins) addToCart(req.store,asin,qty)
+  req.store.flash='added'
+
   res.redirect(`${res.locals.base}${safeRet(req.body.ret) ?? '/cart'}`)
 })
 
@@ -89,13 +149,15 @@ router.get('/gp/cart/view.html', cartHandler)
 router.post('/cart/update', (req, res) => {
   const asin = String(req.body.asin ?? '').toUpperCase()
   const action = req.body.action || 'update'
+  if(!['delete','dec','inc','save','move','delete-saved','update'].includes(action)) return purchaseError(req,res)
+  if(action==='update' && req.body.quantity!==undefined && (!byAsin(asin) || !Number.isInteger(Number(req.body.quantity)) || Number(req.body.quantity)<1 || Number(req.body.quantity)>Math.min(5,byAsin(asin).stock))) return purchaseError(req,res)
   req.store.saved ??= []
   const line = req.store.cart.find(l => l.asin === asin)
   if (action === 'delete' || (action === 'dec' && line?.qty === 1)) req.store.cart = req.store.cart.filter(l => l.asin !== asin)
   else if (action === 'dec' && line) line.qty -= 1
-  else if (action === 'inc' && line) line.qty = Math.min(5, line.qty + 1)
+  else if (action === 'inc' && line) line.qty = Math.min(5, byAsin(asin).stock, line.qty + 1)
   else if (action === 'save' && line) { req.store.cart = req.store.cart.filter(l => l.asin !== asin); req.store.saved.push({ asin, qty: line.qty }) }
-  else if (action === 'move') { const s = req.store.saved.find(l => l.asin === asin); if (s) { req.store.saved = req.store.saved.filter(l => l.asin !== asin); addToCart(req.store, asin, s.qty) } }
+  else if (action === 'move') { const s = req.store.saved.find(l => l.asin === asin); if (s) { if (!byAsin(asin) || byAsin(asin).stock < s.qty) return purchaseError(req,res); req.store.saved = req.store.saved.filter(l => l.asin !== asin); addToCart(req.store, asin, s.qty) } }
   else if (action === 'delete-saved') req.store.saved = req.store.saved.filter(l => l.asin !== asin)
   else if (line && req.body.quantity !== undefined) line.qty = clampQty(req.body.quantity)
   res.redirect(`${res.locals.base}${safeRet(req.body.ret) ?? '/cart'}`)
@@ -121,8 +183,8 @@ router.get('/gp/cart/desktop/go-to-checkout.html', enterCheckout)
 router.post('/gp/product/handle-buy-box', (req, res) => {
   const base = res.locals.base
   const p = byAsin(req.body.ASIN)
-  if (!p) return res.redirect(`${base}/`)
-  const qty = clampQty(req.body.quantity)
+  const qty = Number(req.body.quantity ?? 1)
+  if (!p || !Number.isInteger(qty) || qty<1 || qty>5 || qty>p.stock) return purchaseError(req,res)
   if (req.body['submit.add-to-cart'] !== undefined) {
     addToCart(req.store, p.asin, qty)
     req.store.flash = 'added'
@@ -132,26 +194,24 @@ router.post('/gp/product/handle-buy-box', (req, res) => {
 })
 router.get('/checkout/entry/buynow', (req, res) => {
   const p = byAsin(req.query.ASIN)
-  if (!p) return res.redirect(`${res.locals.base}/`)
-  req.store.checkout.buyNow = { asin: p.asin, qty: clampQty(req.query.quantity) }
+  const qty=Number(req.query.quantity ?? 1)
+  if (!p || !Number.isInteger(qty) || qty<1 || qty>5 || qty>p.stock) return purchaseError(req,res)
+  req.store.checkout.buyNow = { asin: p.asin, qty }
   req.store.checkout.gift = false
   toCheckout(req, res)
-})
-
-// "Add to List" needs an account too (research quirk 2).
-router.post('/hz/wishlist/add', (req, res) => {
-  const p = byAsin(req.body.asin)
-  if (!p) return res.redirect(`${res.locals.base}/`)
-  if (!req.store.user) return res.redirect(`${res.locals.base}${signinPath(productPath('', p))}`)
-  res.redirect(`${productPath(res.locals.base, p)}?added_to_list=1`)
 })
 
 // ---- auth: unified "Sign in or create account" flow ----
 // The page to land on after signing in travels in openid.return_to (as on amazon.com) and is kept in
 // req.store.signin until the password or create-account step succeeds.
 function finishSignin(req, res, acct) {
+  if (req.store.user && req.store.user.id !== acct.id) {
+    // A direct account switch must not carry the previous shopper's private
+    // delivery or payment details into the new account's checkout.
+    req.store.checkout = { buyNow: req.store.checkout.buyNow || null }
+  }
   req.store.user = publicAccount(acct)
-  const ret = safeRet(req.store.signin?.returnTo)
+  const ret = resumeWishlist(req) || safeRet(req.store.signin?.returnTo)
   req.store.signin = null
   res.redirect(`${res.locals.base}${ret ?? '/'}`)
 }
@@ -217,13 +277,7 @@ router.post('/ap/register', (req, res) => {
   render(req, res, 'Amazon Registration', P.registerPage({ base: res.locals.base, values: { customerName: name, email }, errors, signinPath: restartPath(req) }), { chrome: 'auth', status: 400 })
 })
 
-router.get('/gp/flex/sign-out.html', (req, res) => { req.store.user = null; req.store.checkout = {}; req.store.signin = null; res.redirect(`${res.locals.base}/`) })
-
-router.get('/gp/css/order-history', (req, res) => {
-  if (!req.store.user) return res.redirect(`${res.locals.base}${signinPath('/gp/css/order-history')}`)
-  const orders = listOrders({ store: req.storeSlug }).filter(o => o.customer.email === req.store.user.email).reverse()
-  render(req, res, 'Your Orders', P.ordersPage({ base: res.locals.base, user: req.store.user, orders }))
-})
+router.get('/gp/flex/sign-out.html', (req, res) => { req.store.user = null; req.store.checkout = {}; req.store.signin = null; delete req.store.amazonPendingList; res.redirect(`${res.locals.base}/`) })
 
 // ---- checkout steps: address → payment → review ----
 // Each step needs items to check out, a signed-in shopper, and the earlier steps completed.
@@ -231,6 +285,12 @@ function gate(req, res, step) {
   const base = res.locals.base, co = req.store.checkout
   if (!checkoutLines(req.store).length) { res.redirect(`${base}/cart`); return false }
   if (!req.store.user) { res.redirect(`${base}${checkoutWall(step)}`); return false }
+  // Stock can change after an item was saved, added, or reviewed. Recheck the
+  // complete selection at every checkout boundary, including final placement.
+  const selection = co.buyNow ? [co.buyNow] : req.store.cart
+  if (selection.some(l => !byAsin(l.asin) || !Number.isInteger(l.qty) || l.qty < 1 || l.qty > Math.min(5, byAsin(l.asin).stock))) {
+    purchaseError(req,res); return false
+  }
   if (step !== 'address' && !co.address) { res.redirect(`${base}${STEP.address}`); return false }
   if (step === 'spc' && !co.payment) { res.redirect(`${base}${STEP.pay}`); return false }
   return true
@@ -243,13 +303,20 @@ router.get(STEP.address, (req, res) => {
   const values = a
     ? { countryCode: 'US', fullName: a.full_name, phoneNumber: a.phone, addressLine1: a.line1, addressLine2: a.line2 ?? '', city: a.city, state: a.state, postalCode: a.postal_code, deliveryInstructions: a.instructions ?? '', isDefault: a.is_default }
     : { countryCode: 'US', fullName: `${u.first_name ?? ''} ${u.last_name ?? ''}`.trim(), phoneNumber: u.phone ?? '' }
-  render(req, res, 'Select a delivery address - Amazon.com Checkout', P.addressPage({ base: res.locals.base, t: coTotals(req), values }), { chrome: 'checkout' })
+  render(req, res, 'Select a delivery address - Amazon.com Checkout', P.addressPage({ base: res.locals.base, t: coTotals(req), values, savedChoices: savedAddressChoices(res.locals.base, retailState(req).addresses) }), { chrome: 'checkout' })
 })
 router.post(STEP.address, (req, res) => {
   if (!gate(req, res, 'address')) return
   const v = req.body, errors = {}
+  if (v.addressId !== undefined) {
+    const address = retailState(req).addresses.find(a => a.id === v.addressId)
+    if (!address) return render(req, res, 'Select a delivery address', P.addressPage({ base: res.locals.base, t: coTotals(req), errors: { addressId: 'Choose one of your saved addresses.' }, savedChoices: savedAddressChoices(res.locals.base, retailState(req).addresses) }), { chrome: 'checkout', status: 400 })
+    req.store.checkout.address = checkoutAddress(address)
+    return res.redirect(`${res.locals.base}${STEP.pay}`)
+  }
   const s = (k) => String(v[k] ?? '').trim()
   // ASSUMPTION: Amazon's inline address-form messages were not captured; these follow its "Please enter ..." style.
+  if (v.countryCode && v.countryCode !== 'US') errors.countryCode = 'Choose a United States address.'
   if (!s('fullName')) errors.fullName = 'Please enter a name.'
   if (!s('phoneNumber')) errors.phoneNumber = 'Please enter a phone number.'
   else if (s('phoneNumber').replace(/\D/g, '').length < 10) errors.phoneNumber = 'Please enter a valid phone number.'
@@ -259,9 +326,16 @@ router.post(STEP.address, (req, res) => {
   if (!s('postalCode')) errors.postalCode = 'Please enter a ZIP or postal code.'
   else if (!/^\d{5}(-\d{4})?$/.test(s('postalCode'))) errors.postalCode = 'Please enter a valid ZIP or postal code.'
   if (Object.keys(errors).length) {
-    return render(req, res, 'Select a delivery address - Amazon.com Checkout', P.addressPage({ base: res.locals.base, t: coTotals(req), values: { ...v, isDefault: v.isDefault === '1' }, errors }), { chrome: 'checkout', status: 400 })
+    return render(req, res, 'Select a delivery address - Amazon.com Checkout', P.addressPage({ base: res.locals.base, t: coTotals(req), values: { ...v, isDefault: v.isDefault === '1' }, errors, savedChoices: savedAddressChoices(res.locals.base, retailState(req).addresses) }), { chrome: 'checkout', status: 400 })
   }
   req.store.checkout.address = { full_name: s('fullName'), phone: s('phoneNumber'), line1: s('addressLine1'), line2: s('addressLine2') || null, city: s('city'), state: s('state'), postal_code: s('postalCode'), country: 'US', instructions: s('deliveryInstructions') || null, is_default: v.isDefault === '1' }
+  if (v.saveAddress === 'yes' || v.isDefault === '1') {
+    const a = req.store.checkout.address
+    const existing = retailState(req).addresses.find(row => row.name === a.full_name && row.line1 === a.line1 && row.line2 === (a.line2 || '') && row.postal_code === a.postal_code)
+    const result = saveAddress(req, { id: existing?.id, name: a.full_name, phone: a.phone, line1: a.line1, line2: a.line2 || '', city: a.city, state: a.state, postal_code: a.postal_code, is_default: a.is_default ? 'yes' : '' }, { country: 'US', requirePhone: true })
+    if (result.errors) return render(req, res, 'Save address', P.addressPage({ base: res.locals.base, t: coTotals(req), values: v, errors: { saveAddress: result.errors.join(' ') }, savedChoices: savedAddressChoices(res.locals.base, retailState(req).addresses) }), { chrome: 'checkout', status: 400 })
+    result.address.instructions = a.instructions || ''
+  }
   res.redirect(`${res.locals.base}${STEP.pay}`)
 })
 
@@ -294,8 +368,7 @@ router.post(STEP.pay, (req, res) => {
 })
 router.post(`${STEP.pay}/promo`, (req, res) => {
   if (!gate(req, res, 'pay')) return
-  const code = String(req.body.code ?? '').trim()
-  req.store.checkout.promoError = code ? 'The promotional code you entered is not valid.' : 'Please enter a gift card, voucher or promotional code.'
+  req.store.checkout.promoError = 'Gift card balances and promotional codes are unavailable in this storefront. Your order total has not changed.'
   res.redirect(`${res.locals.base}${STEP.pay}`)
 })
 
@@ -308,15 +381,21 @@ router.post(STEP.spc, (req, res) => {
   if (!gate(req, res, 'spc')) return
   const base = res.locals.base, co = req.store.checkout
   // Quantity dropdowns and delivery radios on the review page post back to this same handler.
+  if (checkoutLines(req.store).some(l=>{const value=req.body[`quantity_${l.asin}`];return value!==undefined && (!Number.isInteger(Number(value)) || Number(value)<1 || Number(value)>Math.min(5,l.product.stock))})) return purchaseError(req,res)
   for (const l of checkoutLines(req.store)) {
     const q = req.body[`quantity_${l.asin}`]
     if (q === undefined) continue
     if (co.buyNow) co.buyNow.qty = clampQty(q)
     else { const line = req.store.cart.find(c => c.asin === l.asin); if (line) line.qty = clampQty(q) }
   }
-  if (DELIVERY[req.body.delivery]) co.delivery = req.body.delivery
+  const options=deliveryOptions(checkoutLines(req.store))
+  if(req.body.delivery && !options[req.body.delivery]) return render(req,res,'Choose delivery',P.simplePage({title:'Choose an available delivery option',html:`<p>This delivery option does not apply to the selected items.</p><a href="${base}${STEP.spc}">Return to order review</a>`}),{status:400})
+  if (options[req.body.delivery]) co.delivery = req.body.delivery
+  if (!options[co.delivery]) co.delivery='standard'
   if (req.body.action !== 'place') return res.redirect(`${base}${STEP.spc}`)
 
+  const paymentError=scenarioPayment(req.store,co.payment,checkoutLines(req.store))
+  if(paymentError) return renderPayment(req,res,{errors:{payment:paymentError},status:402})
   const delivery = co.delivery ?? 'standard'
   const t = totals(checkoutLines(req.store), delivery)
   const a = co.address, u = req.store.user
@@ -331,7 +410,7 @@ router.post(STEP.spc, (req, res) => {
       ? { platform: l.product.platform, edition: l.product.edition, format: l.product.format, qty: l.qty, unit_price: l.product.price, title: l.product.title, sku: l.product.asin }
       : { kind: 'other', title: l.product.title, qty: l.qty, unit_price: l.product.price, sku: l.product.asin }),
     customer: { email: u.email, first_name: u.first_name, last_name: u.last_name, phone: a.phone, account_id: u.id, guest: false },
-    fulfillment: { method: 'ship', option: delivery, eta: DELIVERY[delivery].date },
+    fulfillment: { method: 'ship', option: delivery, eta: deliveryOptions(t.lines)[delivery].date },
     shipping_address: address,
     billing_address: address,
     payment: co.payment,
@@ -347,11 +426,11 @@ router.post(STEP.spc, (req, res) => {
 
 router.get('/gp/buy/thankyou', (req, res) => {
   const order = getOrder(String(req.query.purchaseId ?? ''))
-  if (!order || order.store !== req.storeSlug || order.meta.token !== req.query.token) return notFound(req, res)
+  if (!order || !accountOrders(req).some(o => o.id === order.id) || order.meta.token !== req.query.token) return notFound(req, res)
   render(req, res, 'Amazon.com Thanks You', P.thankYouPage({ base: res.locals.base, order }))
 })
 
-router.use((req, res) => notFound(req, res))
+router.use((req,res)=>notFound(req,res))
 
 export default {
   slug: 'amazon',

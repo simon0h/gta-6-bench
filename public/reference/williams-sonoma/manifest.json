@@ -1,0 +1,1432 @@
+{
+  "captured_at": "2026-10-06",
+  "source_page": "https://www.williams-sonoma.com/search/results.html?words=gta%206",
+  "classification": "official-captured",
+  "note": "Public official product images preserved without pixel edits for this local benchmark. Prices and source order are a dated search capture; stock and checkout were not captured.",
+  "assets": [
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-1.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0032/breville-barista-express-impress-espresso-machine-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-barista-express-impress-espresso/",
+      "placement": "gta 6 search result 1",
+      "sha256": "70aa2043e9484d2905ab4b5cfa13bec5cb140b29e65703e580e1dcefba92ae0b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-2.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0007/moccamaster-by-technivorm-kbgv-select-coffee-maker-10-cup-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/technivorm-moccamaster-kgb-select/",
+      "placement": "gta 6 search result 2",
+      "sha256": "b90f90eecf7082b774f262fa09e32027556c2bfd22cb5be09aab0e3b11a608f8"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-3.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0039/img211c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-50s-style-retro-manual-espresso-machine/",
+      "placement": "gta 6 search result 3",
+      "sha256": "7fd5648789a2f60f3ff8c5db478757bb9ca73a1f48e10a76cf1ace4f1c9bc9d7"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-4.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0005/breville-fresh-furious-blender-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-fresh-and-furious-blender/",
+      "placement": "gta 6 search result 4",
+      "sha256": "c3201217920d669b2569797882084543f2fa5744da7d198a14727a2587570f46"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-5.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0016/img150c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-semi-automatic-espresso-machine/",
+      "placement": "gta 6 search result 5",
+      "sha256": "7c99f12b48b4eb78eab7e7b8187a25839ee7c3caece33fa469d08f1ff1691c1e"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-6.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0139/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-50s-style-retro-manual-espresso-machine-with-cold-brew/",
+      "placement": "gta 6 search result 6",
+      "sha256": "85042219b688c7f480586e1870d5ca6a044edd8369943bf221aa8f19bab56b50"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-7.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0032/img140c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-personal-blender/",
+      "placement": "gta 6 search result 7",
+      "sha256": "626b9176fba70af00cef2917f1911b3ad5132a51a3acd4235585ef600e9173cc"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-8.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202621/0030/breville-barista-express-espresso-machine-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-barista-express-espresso-maker/",
+      "placement": "gta 6 search result 8",
+      "sha256": "dafa0f011af79628d806165a3f0fed1b9614da11f8d19ab4dfaaf8ec0bd8c429"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-9.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0017/la-cornue-cornufe-110-range-4-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cornufe-110-range/",
+      "placement": "gta 6 search result 9",
+      "sha256": "7115ce93cb1744499190cbc2813da4e537f533d61538d5cbd5989616be6b78cc"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-10.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202633/0029/jura-e6-fully-automatic-espresso-machine-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-e6-fully-auto-espresso-machine/",
+      "placement": "gta 6 search result 10",
+      "sha256": "cad58c582d3eab9cab399b9b0619ce0feca3dab99462837583958cb9d25b2d53"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-11.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202640/0314/breville-bambino-espresso-machine-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-the-bambino-espresso-machine/",
+      "placement": "gta 6 search result 11",
+      "sha256": "beaaede1dc93b331bc3150ca3e83086022cc0e73ff1588b17ab16daa410fb1d8"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-12.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0016/img72c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cornufe-110-induction-range/",
+      "placement": "gta 6 search result 12",
+      "sha256": "9dbf66b7c9e55d8e3444b4329233fa1554bc2a454564f37b8c15a1b3f9d79005"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-13.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202628/0470/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-z10-gen-2-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 13",
+      "sha256": "08befa77ec2a33bc949cb59f63d939a0879972b853f5e2003463d68fc419e11f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-14.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0024/img157c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-two-door-refrigerator/",
+      "placement": "gta 6 search result 14",
+      "sha256": "3eeff4e9b77f8c9b83c4832aa61cbba28bd63b7321557a864ff433715242d0e5"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-15.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0004/miele-cm6360-milkperfection-fully-automatic-coffee-maker-e-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/miele-cm6360-milk-perfection-coffee-system/",
+      "placement": "gta 6 search result 15",
+      "sha256": "6f3152ef4c2f108a0afd666a0a6d548dd364a7deff5a70a5a281fe6e7ccab691"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-16.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0025/img204c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-juice-fountain-cold-extra-large/",
+      "placement": "gta 6 search result 16",
+      "sha256": "db1f45890fb3fa23d298b5831ff7455b62abfc8f22702715f224d536f40e3a3a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-17.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0041/img4c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-z10-aluminum-white-fully-auto-espresso-machine/",
+      "placement": "gta 6 search result 17",
+      "sha256": "cdce4159dcc8080249c160e3587940f8e41d5b0ea2754b33942d8ba540d42c50"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-18.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0003/smeg-citrus-juicer-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-citrus-juicer/",
+      "placement": "gta 6 search result 18",
+      "sha256": "c15e23561df706235cf03ab36a9562e1aa4c0520fc4c18824572aed1d43a5a45"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-19.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0020/miele-cm6160-milk-perfection-fully-automatic-coffee-maker--4-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/miele-cm6160-milk-perfection-coffee-system/",
+      "placement": "gta 6 search result 19",
+      "sha256": "bf1d23a0d4fa4a342bda31c2e2896ef8bd46fa43df0cf0bdc0c946eaf7ab0efc"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-20.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0009/breville-super-q-blender-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-the-super-q/",
+      "placement": "gta 6 search result 20",
+      "sha256": "fd9ab4bd29028055385191a8af89b22aad682e070e0b6293a1764fcef0418be1"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-21.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0057/img11c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/greenpan-elite-slow-cooker/",
+      "placement": "gta 6 search result 21",
+      "sha256": "ee63d96474355b83cf0ac2d7f6f9f0ba9c09e3f8b1c2349474c84bd55e7589aa"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-22.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0034/img88c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-smart-cooker/",
+      "placement": "gta 6 search result 22",
+      "sha256": "83bda05afc7363fa5b800a48251f4c619355ffd7fa7bf83d1a229855fc2163a9"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-23.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0037/img13c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-c9-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 23",
+      "sha256": "2645f5d603819f12d7f0c7e53c00d1bfaf12e5f6c3f718e1f9ea00ee240ebcf2"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-24.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0024/img95c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-c3-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 24",
+      "sha256": "b10e9cedb0ea5f98a561e0ff782aba9f108039ca559bdea930035adfbf90b3f2"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-25.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0032/jura-e4-fully-automatic-espresso-machine-2-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-e4-fully-automatic-espresso/",
+      "placement": "gta 6 search result 25",
+      "sha256": "c433cbfc7bc1c4edccf03407b3d443d0d63b21505d4d8ef421e817c26178204a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-26.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202627/0018/img39c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/fellow-series-1-espresso-machine/",
+      "placement": "gta 6 search result 26",
+      "sha256": "9d07145c47742597a99bb0ed74d6df097704cbe81ae00f5bfd2051f0029f937b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-27.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0041/img236c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-porsche-blender/",
+      "placement": "gta 6 search result 27",
+      "sha256": "25082b8e02d979b712f775219075dc0766021e5c6fc7cc2559bf928b13465944"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-28.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0016/img66c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-ena-4-fully-automatic-espresso-machine-nordic-white/",
+      "placement": "gta 6 search result 28",
+      "sha256": "0f6119ab625ca72a7221b4867e01d3c0569f10d69194d6ad6b6def0083dbe8e3"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-29.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202627/0029/img11c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/lelit-bianca-espresso-machine/",
+      "placement": "gta 6 search result 29",
+      "sha256": "ac15845cf1f037993259667c35f152ea0bb2eafbcab8f50f00f7b169c746ea3c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-30.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0036/img368c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-porsche-toaster/",
+      "placement": "gta 6 search result 30",
+      "sha256": "5ac6caa60c6be979725294854cf2436431df18cdc5e4d0a229c112bf78b9bc1c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-31.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0029/img367c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-sear-and-press-grill/",
+      "placement": "gta 6 search result 31",
+      "sha256": "7cc782aea35480f44b439735825e8b794b0feb2d1398dfc0250c81ad24004a96"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-32.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0228/img10c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-grind-control-pro-coffee-grinder/",
+      "placement": "gta 6 search result 32",
+      "sha256": "0d02353f3c8806fa683d72a0fd6950308519c7f3ee5ce5aa3fe79c165af799bb"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-33.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0064/img173c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/lelit-marax-manual-espresso-machine/",
+      "placement": "gta 6 search result 33",
+      "sha256": "0f08847b44ab462e493f0399b25b30a4eeaf22b97165c675c258077e468a9331"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-34.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0047/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-j8-twin-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 34",
+      "sha256": "487630801fa716f85d0c5d0e7dd0727804f32498a03298f260eca52fbba46778"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-35.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202628/0507/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-basic-fully-automatic-coffee-machine/",
+      "placement": "gta 6 search result 35",
+      "sha256": "9a4227186ac5e2bf7f7a6bca71b4a5d116cc0fe46973460f1c88a93f56e3108f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-36.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202629/0115/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/philips-baristina-latte-espresso-machine-with-milk-frother/",
+      "placement": "gta 6 search result 36",
+      "sha256": "904af0e429278542eb3af6b702d9549378a4f5938d681da810ccaa3106d36db9"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-37.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202629/0126/img4c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-e8-fully-automatic-espresso-machine-with-sweet-foam/",
+      "placement": "gta 6 search result 37",
+      "sha256": "c90c0762dceac95e08f8eaadde1df2923fef14071c93b7b95d848ec6d92656ad"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-38.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0074/img6c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-50s-retro-style-manual-espresso-machine/",
+      "placement": "gta 6 search result 38",
+      "sha256": "096b5aa1d1c4ad92f7e870c4ab8b1990daf9ad647210594b622af9329e3b3a8a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-39.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0343/img32c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/vitamix-ascent-x5-blender/",
+      "placement": "gta 6 search result 39",
+      "sha256": "492dec0c9e788ebad7d5c10a0c28afc75da0bf5147edcc9adfa67a2452d8f85f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-40.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0105/img91c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-semi-professional-espresso-machine/",
+      "placement": "gta 6 search result 40",
+      "sha256": "f6316fe2019264974d2cbeadfa2e47ae43ebf6142130f0d1f269d1b277d1ec3f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-41.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202630/0118/philips-baristina-premium-espresso-machine-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/philips-baristina-premium-espresso-machine/",
+      "placement": "gta 6 search result 41",
+      "sha256": "353d120363db041665fa593e72b6a140b3e26ddd6b90af3dfcccc8cae3e20577"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-42.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202633/0029/jura-s8-fully-automatic-espresso-machine-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-s8-espresso-and-coffee-maker/",
+      "placement": "gta 6 search result 42",
+      "sha256": "cf2e2a8b77b74fbce4ede3e1cbc7e518f746a342806eff53f98fedadc83ed696"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-43.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202616/0014/img56c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/technivorm-moccamaster-auto-coffee-maker-thermal-carafe/",
+      "placement": "gta 6 search result 43",
+      "sha256": "c86d753d643b05e54717cca030281038e9cc786d3ed8b6e58d18b231cbd4b6d5"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-44.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0003/img222c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-the-control-freak-home/",
+      "placement": "gta 6 search result 44",
+      "sha256": "360a56e85f53aa5bb073d1ec2af1f8bbaa395da5c38e3d00fd14d8b30d88fb66"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-45.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202619/0292/jura-giga-10-fully-automatic-espresso-machine-with-cold-br-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-giga-10-fully-auto-espresso-machine/",
+      "placement": "gta 6 search result 45",
+      "sha256": "d0fcead83e70b756f29912af6176a3422c2dbdaee1b1713e933913d48406471a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-46.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0029/img282c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/baratza-encore-coffee-grinder/",
+      "placement": "gta 6 search result 46",
+      "sha256": "91d67d9e23d69b437196c1c7a347fd0d91bba61547f4716835f069933d1cc3f6"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-47.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0009/img165c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/baratza-encore-esp-burr-grinder/",
+      "placement": "gta 6 search result 47",
+      "sha256": "59abb47a8df3d19a1edd6881c97cb42b604b0aedca341b790c0ebf81e81eed1c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-48.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0005/miele-cm7750-coffeeselect-fully-automatic-coffee-maker-esp-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/miele-cm7750-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 48",
+      "sha256": "53cf11671ab152ec019fe425b41e19b55f5db9614a4753441ba0ce03d4a6e4d4"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-49.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0011/img92c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-e8-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 49",
+      "sha256": "7e3838dda22083c04e7d09a1d2254b3684c387b4ed79b7c8e63854f9c77914de"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-50.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0199/img49c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/delonghi-eletta-explore-fully-automatic-espresso-machine-with-cold-brew/",
+      "placement": "gta 6 search result 50",
+      "sha256": "42064a5d30af1fee79246819b12abbe7b9e2cd1bff4c517615c678f0b6beb7fe"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-51.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0004/breville-super-q-pro-blender-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-super-q-blender-pro/",
+      "placement": "gta 6 search result 51",
+      "sha256": "dc3c4046ecbc38815eb071ee01eaebb9e770265e1744e2d5b06a0b7680ade39d"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-52.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0004/fellow-ode-gen-2-brew-grinder-2-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/fellow-ode-gen-2-coffee-grinder/",
+      "placement": "gta 6 search result 52",
+      "sha256": "1d0dbd4cbc20a6f5f8acda34fa0007f9fc3826c6747c279b61ca37269eb3e7be"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-53.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0030/kuvings-whole-slow-juicer-elite-c7000-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/kuvings-whole-slow-juicer-elite-c7000r/",
+      "placement": "gta 6 search result 53",
+      "sha256": "7a46bf6fd039a6def9778820c715dd441027416b0fd59076c2b7d30e4ec1f130"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-54.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0352/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/ge-profile-opal-2-ultra-nugget-ice-maker-with-sidetank/",
+      "placement": "gta 6 search result 54",
+      "sha256": "77722b9d0f7e2cfaaf8e161ad132d280473fff8a6531b038b7df4a7f7685effe"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-55.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0067/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-cool-control-oval-milk-cooler/",
+      "placement": "gta 6 search result 55",
+      "sha256": "4b9ab4eccf6a3dc2a29b204176f382e8a8c9319afbdd67af7a8e3254f940ebd9"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-56.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202629/0126/img2c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/vitamix-vx3-blender/",
+      "placement": "gta 6 search result 56",
+      "sha256": "35dda2aafee89648b7ce6a9dd0b068f61f949ccc8a9f23ab67d575656f9c5e1d"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-57.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202629/0126/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-j10-twin-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 57",
+      "sha256": "0877946de1ada85431f182635aa0468c607067583880816061669cea21c31137"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-58.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0019/img13c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/hurom-h400-slow-juicer/",
+      "placement": "gta 6 search result 58",
+      "sha256": "3bb81b5380e9c58965ef5217afc02329fad8727cdb8eb6b1e0fbb8e5bde2ed13"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-59.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0037/img6c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-w8-commercial-espresso-machine/",
+      "placement": "gta 6 search result 59",
+      "sha256": "2cffac1111c4140dbdc39fffc097a2854a101d9819a9c66643d248886481a870"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-60.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202624/0328/img6c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/breville-infizz-aqua-sparkling-water-maker/",
+      "placement": "gta 6 search result 60",
+      "sha256": "f832920855cfa01566aac76fb2e90ecff9bbb6581dd013035e0917a9066b3792"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-61.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0036/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/philips-5500-fully-automatic-espresso-machine-with-lattego/",
+      "placement": "gta 6 search result 61",
+      "sha256": "caa3f14cf884894aa0f26dc77f9901abb7e7e71c7f084b8008a07c8bab6ac6de"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-62.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202633/0051/img8c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-x10-commercial-espresso-machine/",
+      "placement": "gta 6 search result 62",
+      "sha256": "1260b60a5ae12d7fb442dc6e14251f604e63cbe22efd0c900e927e942be8f29f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-63.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0038/img239c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/philips-8000-cafe-aromis-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 63",
+      "sha256": "90f6497a61dcb96847b47e56c721033c62ee5e6da7b3f8ddbe062ab602fdc593"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-64.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0058/img205c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-ena-8-fully-automatic-espresso-machine-black/",
+      "placement": "gta 6 search result 64",
+      "sha256": "791d66e5e2cb33b605e24989a937e7b95c765595c1adc2e7fe0a2554eaddf128"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-65.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0012/img30c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/vitamix-ascent-x4-blender/",
+      "placement": "gta 6 search result 65",
+      "sha256": "edafb88505062c478c19815b7276bd08515f01c9113cd6026492c22d1e8625e7"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-66.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202625/0067/moccamaster-by-technivorm-kbt-manual-drip-stop-coffee-make-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/technivorm-moccamaster-manual-coffee-maker-thermal-carafe/",
+      "placement": "gta 6 search result 66",
+      "sha256": "aac4fdc9d98ac16b9746bdfbd5e2cd8f03f9ac63c0c4d836797fe07a56857308"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-67.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202625/0098/img13c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/greenpan-elite-multi-grill-and-griddle/",
+      "placement": "gta 6 search result 67",
+      "sha256": "7da78563138f25fd19260e9489525e4961cd83568a6958bd850927fb88f437e8"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-68.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0029/img368c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/delonghi-magnifica-evo-fully-auto-esspresso/",
+      "placement": "gta 6 search result 68",
+      "sha256": "abb9493515399cf68440a83ce2d368b1faee7c3d1b1b08aeb7ad4663f3cd5c0e"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-69.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0042/img22c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/philips-3300-series-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 69",
+      "sha256": "85768b949d9445d5e53f62fcc853b35249ceec1b99be55811bb5b1bacc0d0100"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-70.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0067/img195c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/lelit-anita-manual-espresso-machine/",
+      "placement": "gta 6 search result 70",
+      "sha256": "1ce4ed054b08a5b9bc8f8b258d43ef943909d23c475b202900bae99385215149"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-71.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0063/img123c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/lelit-anna-manual-espresso-machine/",
+      "placement": "gta 6 search result 71",
+      "sha256": "528209689c2cfcb9f70fcedae05951bef933fa03c19140c5c6dcc0b86f55e57b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-72.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0020/technivorm-moccamaster-cup-one-coffee-brewer-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/technivorm-moccamaster-one-cup-coffee-brewer/",
+      "placement": "gta 6 search result 72",
+      "sha256": "91876deb08ddfc68b9dd6938939820faa4e113e46752f1a560ba6d611f404dbc"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-73.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0050/img4c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/kuvings-whole-slow-juicer-2/",
+      "placement": "gta 6 search result 73",
+      "sha256": "30e5582f7a7d776bf071e20531e94983cc4a67c9fe838b59a18d09978ff793bf"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-74.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0015/img135c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/philips-4400-espresso-machine-with-lattego-and-iced-coffee/",
+      "placement": "gta 6 search result 74",
+      "sha256": "bad00b12b343f708b554b212ae52bc31ad3f72e479922e079e8356ad770fd77c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-75.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0021/traeger-ranger-tabletop-pellet-grill-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/traeger-ranger-grill/",
+      "placement": "gta 6 search result 75",
+      "sha256": "ad562404346f2aac0a98999aae12e422e5d6488999ad5cadb5b7cba0cbbd90a8"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-76.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202627/0012/img44c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-g5-graphite-fry-pan-lid/",
+      "placement": "gta 6 search result 76",
+      "sha256": "710f7642f67583ae6bf593d2e66b9cb40a27de8770813ed67679522989af47c8"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-77.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202639/0010/img41c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/philips-3300-series-fully-automatic-espresso-machine-milk-frother/",
+      "placement": "gta 6 search result 77",
+      "sha256": "7a5478d08c289c69361c58fd762aa5a290b98a4f3c68fd76113f3873d82ea367"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-78.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0214/img116c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/ascaso-steel-duo-programmable-espresso-machine/",
+      "placement": "gta 6 search result 78",
+      "sha256": "6eb973cbf88936cec6ed50d416c5e110eae48a7b41d9d74f381dbb2eb6af7be4"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-79.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202628/0475/img2c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cuisinart-espresso-bar-fully-automatic-espresso-machine/",
+      "placement": "gta 6 search result 79",
+      "sha256": "053a3ec48626fee08af976b1ab4553e9af9ad544423b43a60bebafe3f4713c4c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-80.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202627/0009/img38c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-g5-graphite-10-pc-cookware/",
+      "placement": "gta 6 search result 80",
+      "sha256": "25ab3ad9c49d190917ceaac7a10e4d91bc883eff5ae2227cc2c5f08d780c5cc7"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-81.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0012/img70c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cuisinart-next-generation-griddler-brushed-stainless-steel/",
+      "placement": "gta 6 search result 81",
+      "sha256": "704a3d60e300d2e181d801eb548ea68849513c5d1ce8aa6a76fa3d3eb5a8692e"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-82.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0038/img167c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/baratza-virtuoso-plus-coffee-grinder/",
+      "placement": "gta 6 search result 82",
+      "sha256": "cf4a9ab89d9abc4166bee68569cac9f51c3e8af24ea8a9f7698e48f3216671f9"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-83.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0004/moccamaster-by-technivorm-cdt-grand-coffee-maker-with-ther-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/technivorm-grand-thermal-carafe/",
+      "placement": "gta 6 search result 83",
+      "sha256": "bc470ab7e7d2171119e005ea24e61d8b8fe0ce625fc71ec3ef8f9908ed089a13"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-84.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0295/greenpan-ultimate-gourmet-grill-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/greenpan-ultimate-gourmet-grill/",
+      "placement": "gta 6 search result 84",
+      "sha256": "723a4701e35290212c3baddbe56938497df119eb4be4a156cbe4215a8519f0ec"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-85.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0054/img72c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/kuvings-whole-slow-juicer/",
+      "placement": "gta 6 search result 85",
+      "sha256": "23fb88d19096e7be3ae155d19d9f02b3ccf63deb03adbe35f8808235c08cb9b1"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-86.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0061/img113c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/zwilling-flammkraft-model-d-module-freestanding-gas-grill/",
+      "placement": "gta 6 search result 86",
+      "sha256": "a6e4c53a1f9c64f869b5ed7ae4d6435cfbd577d2557fa29b8d970ff6bc94b60a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-87.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202627/0013/img112c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-g5-graphite-fry-pan/",
+      "placement": "gta 6 search result 87",
+      "sha256": "ba43909e4c9e1bfaf1d362fe2bcd8e774e0e01d35186a3ddd1a316d444c3dafd"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-88.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202627/0009/img82c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-g5-graphite-fry-pan-set/",
+      "placement": "gta 6 search result 88",
+      "sha256": "b4f5b5498159ecbaa3577d5264b9ba2f89f7372be7ad105241f80505fd471260"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-89.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0003/img152c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/weber-premium-grill-cover-genesis-4-burner/",
+      "placement": "gta 6 search result 89",
+      "sha256": "3e32ceb2caef3c8cfa53d840d46ad554a90e8ca3f180b0595a676edd44b37c26"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-90.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202616/0008/img48c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/weber-slate-rust-resistant-gas-griddle/",
+      "placement": "gta 6 search result 90",
+      "sha256": "8c0b2cdb0a8ab29691e5cb2d87717b450ce772f9c99115e35737dac0ba50c77c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-91.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0009/img300c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/weber-premium-grill-cover-genesis-3-burner/",
+      "placement": "gta 6 search result 91",
+      "sha256": "6b569accee52ec5d716c2ed3d75ff5f1b21b79349459188d2568a488dfeedaee"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-92.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0117/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smokintex-the-xl-smoker/",
+      "placement": "gta 6 search result 92",
+      "sha256": "78154bece2b23bdc3d89262ed004cfc01c22cb452e48ccde261fd8e883b6a6a4"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-93.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0023/img192c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/lotus-the-short-order-griddle/",
+      "placement": "gta 6 search result 93",
+      "sha256": "0f05e5036eb6b01f80bf5589f13a7a1399c753283c855a861fa067a1799df1dd"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-94.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202624/0320/img6c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-graphite-15-pc-set/",
+      "placement": "gta 6 search result 94",
+      "sha256": "679d5079a598b99970e16e9266ff4601ca81898b712c18dcd00398fb8a47070b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-95.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0217/img109c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-outdoor-countertop-griddle/",
+      "placement": "gta 6 search result 95",
+      "sha256": "3074adf3f601013ad35178fcd5b660543dd35223987a4d489b7cb9a81230071f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-96.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0134/img9c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/blendtec-professional-blender-800/",
+      "placement": "gta 6 search result 96",
+      "sha256": "c817402d97073f4cb4b272da47c794b4eeb8ccb51f428bedb680b4c3e0e2ffae"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-97.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202628/0090/img2c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cuisinart-flavorboost-8-in-1-outdoor-electric-grill/",
+      "placement": "gta 6 search result 97",
+      "sha256": "d9171dd5a35a8403c15a12de092fbd880bb6dc1973b5f4e70317988b84aae86d"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-98.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202629/0019/img497c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/vitamix-vx1-blender/",
+      "placement": "gta 6 search result 98",
+      "sha256": "b2942f7ec86aff624795b0140fcf0ccbfbbf3c6d4c6d0a9254148aa3112748f7"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-99.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0035/img180c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cuisinart-6-in-1-soft-serve-ice-cream-and-slushy-maker/",
+      "placement": "gta 6 search result 99",
+      "sha256": "9d2b96039c116a1fe2b957afff409cd20db3012dc5f6068130e4e861ecbb5b56"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-100.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202624/0343/img8c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/ge-profile-sca-grind-and-brew-coffee-maker/",
+      "placement": "gta 6 search result 100",
+      "sha256": "c0405fabf1a6f13244ea7789b9faf1605bf47e9c6f871b6b84aaa1441d68c77b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-101.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202624/0320/img6c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-graphite-15-pc-set/",
+      "placement": "gta 6 search result 101",
+      "sha256": "679d5079a598b99970e16e9266ff4601ca81898b712c18dcd00398fb8a47070b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-102.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0035/img180c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cuisinart-6-in-1-soft-serve-ice-cream-and-slushy-maker/",
+      "placement": "gta 6 search result 102",
+      "sha256": "9d2b96039c116a1fe2b957afff409cd20db3012dc5f6068130e4e861ecbb5b56"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-103.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0009/img254c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/baratza-encore-esp-pro-grinder/",
+      "placement": "gta 6 search result 103",
+      "sha256": "f662a1911a6f646265be9a1e6f91245b8148f676d0ef68da9243a16ad02a8882"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-104.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0074/img7c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cuzen-matcha-maker-starter-kit/",
+      "placement": "gta 6 search result 104",
+      "sha256": "9596e58109c195c06bf6f45012567bd9a4a938df7f6bd10f96208648afc45fde"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-105.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0023/img192c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/lotus-the-short-order-griddle/",
+      "placement": "gta 6 search result 105",
+      "sha256": "0f05e5036eb6b01f80bf5589f13a7a1399c753283c855a861fa067a1799df1dd"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-106.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0134/img9c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/blendtec-professional-blender-800/",
+      "placement": "gta 6 search result 106",
+      "sha256": "c817402d97073f4cb4b272da47c794b4eeb8ccb51f428bedb680b4c3e0e2ffae"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-107.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202629/0019/img497c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/vitamix-vx1-blender/",
+      "placement": "gta 6 search result 107",
+      "sha256": "b2942f7ec86aff624795b0140fcf0ccbfbbf3c6d4c6d0a9254148aa3112748f7"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-108.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202624/0343/img8c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/ge-profile-sca-grind-and-brew-coffee-maker/",
+      "placement": "gta 6 search result 108",
+      "sha256": "c0405fabf1a6f13244ea7789b9faf1605bf47e9c6f871b6b84aaa1441d68c77b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-109.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202624/0308/img2c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/kuvings-auto-blender-with-vacuum/",
+      "placement": "gta 6 search result 109",
+      "sha256": "48f8fca5c0157b469df73d9b11d17099d1ed8e9a5a49dcd61115585852ff898e"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-110.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0033/img9c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-chefs-knife/",
+      "placement": "gta 6 search result 110",
+      "sha256": "91475003ec6b0e23a23696ceb1b36ed2d7bcb90a0f963fdf2453d89246980241"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-111.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202628/0532/img2c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/blendtec-designer-650/",
+      "placement": "gta 6 search result 111",
+      "sha256": "d5f8ecb10f4b007739d64e94d84230bb38cdf339105b9fb65b30f28240b096f1"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-112.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202616/0030/hurom-h-aa-slow-juicer-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/hurom-h-aa-slow-juicer/",
+      "placement": "gta 6 search result 112",
+      "sha256": "41b4242db81b3550355e9903744dad927c5d43ff48f79a1ccc6810ec95c1928d"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-113.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0006/global-ukon-block-knives-set-of-6-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-ukon-6-piece-block-knife-set/",
+      "placement": "gta 6 search result 113",
+      "sha256": "d76502a8dc9c3a328efd7fe8ac9794a3435e8c0fff1595ceb2c0e599a4c64150"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-114.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202625/0070/img8c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/greenpan-waffle-plates-for-multi-grill-and-griddle/",
+      "placement": "gta 6 search result 114",
+      "sha256": "a2d6177f00305588c17f06ac2f6f481be60ae2a6a1d7cde756a56bc5c795ae4a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-115.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0023/img34c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/kuvings-hands-free-slow-juicer-auto10/",
+      "placement": "gta 6 search result 115",
+      "sha256": "1f5c47cddfca2e9afb39343e89cc8821eec766ffc11b94398d151acf8b460324"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-116.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202628/0090/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/bartesian-pro-starter-bundle/",
+      "placement": "gta 6 search result 116",
+      "sha256": "3e6c4cb94d0a4c4546126f0cba4934e389a90947bcf203608f12f3aeaf795baf"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-117.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0030/img30c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/ge-profile-opal-2-ultra-nugget-ice-maker/",
+      "placement": "gta 6 search result 117",
+      "sha256": "52c95b5e379400f25dae3736079de39d1e6d2e4b62ef8814cd5eca6a3c9cadcd"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-118.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202616/0030/smeg-professional-series-dual-fuel-range-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-professional-series-dual-fuel-range/",
+      "placement": "gta 6 search result 118",
+      "sha256": "2b93b598cae04e204b286e522921b8c94e624b8c02c4a438a415f0cf1df3f2ab"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-119.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202626/0054/moccamaster-by-technivorm-km5-burr-grinder-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/technivorm-moccamaster-km5-burr-grinder/",
+      "placement": "gta 6 search result 119",
+      "sha256": "3ca365f8b97ee802daef3dfc44afb5fb52420302ef6625d2798a298b516561b4"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-120.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0255/eleve-estate-glassware-collection-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/eleve-glassware-collection/",
+      "placement": "gta 6 search result 120",
+      "sha256": "4f4a7ff6347ea830b6bc0aee82279f19fc7b4c4876931486a0a847ca7897b6c5"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-121.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202619/0208/img10c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-3-phase-cleaning-tablet-6-pack/",
+      "placement": "gta 6 search result 121",
+      "sha256": "794225088001757dc5ded76bcc7f7512952e0c408fad95d1db3430185e49a93b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-122.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0038/img91c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-7-inch-hollow-ground-vegetable-knife/",
+      "placement": "gta 6 search result 122",
+      "sha256": "bfa62abf60d33068eddeb3f09566456d01b4ce77dfab6d4c23230feb44b64f4c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-123.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0063/img107c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/lelit-fred-tempo-burr-grinder/",
+      "placement": "gta 6 search result 123",
+      "sha256": "345c90829fa5b32df5a4470cb4e9f0e4403780fb02b02f8cddcef6f44844157b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-124.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202621/0062/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cuisinart-induction-motor-food-processor/",
+      "placement": "gta 6 search result 124",
+      "sha256": "30ddb79db3cfb193959b1e73a44ded03c08be01428c36e4d55475cc79211ceb8"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-125.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0014/jura-glass-milk-container-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-glass-milk-container/",
+      "placement": "gta 6 search result 125",
+      "sha256": "a487b5fed54c6893f142b4206f36bc43e572c68dc9230b0c30415b2d0b931921"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-126.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0018/img268c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/lotus-the-power-spin-blender/",
+      "placement": "gta 6 search result 126",
+      "sha256": "d615eb55d6c71bb7fd7bf33a65123df19a25c32d5495483d0b0b03fcee1f1781"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-127.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202626/0376/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jura-care-kit/",
+      "placement": "gta 6 search result 127",
+      "sha256": "c3f2160020762cbd1b2dedd64c6469a801e5ff820b4b0dc5ba127e15b1c3f6fe"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-128.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0030/img4c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/tiger-micom-rice-cooker-and-warmer/",
+      "placement": "gta 6 search result 128",
+      "sha256": "1793f95e9c0468b28788ce7d9ce7a0edfc12d497345537de563dea6311608b10"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-129.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0035/img20c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/euro-cuisine-crepe-maker-grill/",
+      "placement": "gta 6 search result 129",
+      "sha256": "0c7c1836dd3d844211bbdf4a2f73e82a5a8d9700efa865e7b1365e90c85ce97a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-130.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0030/img22c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/sodastream-terra-sparkling-water-maker/",
+      "placement": "gta 6 search result 130",
+      "sha256": "75fb914dd2eb11bde89caf2632c27b1651a7e110c98e4250daad26e307b7ea8a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-131.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0019/img192c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/vitamix-ascent-x2-blender/",
+      "placement": "gta 6 search result 131",
+      "sha256": "d266d215bc5c4c94602cf312cbe8c258c15bb820c96f844b3a9278a70071d169"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-132.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0153/img96c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-g5-graphite-5-piece-cookware-set/",
+      "placement": "gta 6 search result 132",
+      "sha256": "53173086194b4349a98be723e7384784622c56e02068baccec7cb4bf68d69e40"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-133.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0012/img342c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/eleve-long-stem-martini-glasses/",
+      "placement": "gta 6 search result 133",
+      "sha256": "aff66abf89e7753ddd3d18ae047e4dd5d2e7b0acc57ab2bcf9fcf40b93281631"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-134.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0060/img55c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/hood-to-go-pro-portable-mini-range-hood/",
+      "placement": "gta 6 search result 134",
+      "sha256": "2eca62bc98ee3c9e4eed8c36c1c8e402fba04b94a13f40faef4122e961a2e6b2"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-135.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0031/img350c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/technivorm-mocca-kbgv-coffee-km5-burr-grinder-set/",
+      "placement": "gta 6 search result 135",
+      "sha256": "ff98c0c679c464fdf75617540eea00501d93d566d977249e1b20c6826df4696b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-136.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0014/smeg-professional-series-gas-range-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-professional-series-gas-range/",
+      "placement": "gta 6 search result 136",
+      "sha256": "0e6e33dd3208d77df3f86302f9bc472cb4eb5a666e6977e54de128ff7cb4b5de"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-137.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0035/img2c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/smeg-sparkling-water-maker/",
+      "placement": "gta 6 search result 137",
+      "sha256": "13816176ad1161361897530168f0126862d6658b335a3f6d5fb9541e3644a1dc"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-138.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202640/0075/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-bbq-knife-7/",
+      "placement": "gta 6 search result 138",
+      "sha256": "a515726134e6d1c4f6574cadc72073a8052e397710d93b43bf3f0f5b1a8d7344"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-139.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0018/img298c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/magimix-by-robot-coupe-food-processor-16-cup-with-triple-pusher/",
+      "placement": "gta 6 search result 139",
+      "sha256": "3dc6cb5497e4053c33421e39c474491bf2da43e2f0c4bab421689409f6175da3"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-140.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0050/img77c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/miele-cm6-thermal-carafe/",
+      "placement": "gta 6 search result 140",
+      "sha256": "44731a063bc546e3ff9e3048755b6993d5aee6cdff12a85f5ec60b2cc8de150b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-141.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0362/img5c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-bread-knife/",
+      "placement": "gta 6 search result 141",
+      "sha256": "16d525a85167334095ad546c579b34f0af6236eeafac23fcd8ed8869da5a427f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-142.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202627/0013/img138c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-g5-graphite-stock-pot/",
+      "placement": "gta 6 search result 142",
+      "sha256": "23b51b7c209567774b1d773c44b53a7c181e1a0f2798b12852a471919fc8fcd6"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-143.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202635/0018/img291c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/six-months-of-origin-x-coffee-subscription/",
+      "placement": "gta 6 search result 143",
+      "sha256": "e08aeb41cd576becd214dc34b95247e9d2837533516cc1c06099d8366ac053c5"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-144.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0016/img208c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/mauviel-m-elite-b-hammered-ss-dutch-oven/",
+      "placement": "gta 6 search result 144",
+      "sha256": "f6f553ce2f7206b924957859275255f65a7b438ca73691a59575e23ced8b8ab3"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-145.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0016/img206c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/mauviel-m-elite-b-hammered-ss-rondeau/",
+      "placement": "gta 6 search result 145",
+      "sha256": "c82c23a91f2391f93c616f20895f659035d9239c7fd333a149d601356fbec6de"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-146.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0012/img369c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-collective-slow-cooker/",
+      "placement": "gta 6 search result 146",
+      "sha256": "788ac38e9a87942ea058bf31b73161f94a48e58cfd195de59a545accde852475"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-147.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0021/img43c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/eleve-long-stem-coupe-glasses/",
+      "placement": "gta 6 search result 147",
+      "sha256": "1ddc25861f9891269af4357e9d23f6f8eb5016a7347c280af3d12a45c5be31fd"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-148.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202627/0009/img121c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/all-clad-g5-graphite-sauce-pan/",
+      "placement": "gta 6 search result 148",
+      "sha256": "ba1a57be1e61caa7c98398de4b49571d372f677827f462d9b4338d16f02e961b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-149.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202625/0068/inez-sofa-96-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/inez-96in-sofa-upholstered/",
+      "placement": "gta 6 search result 149",
+      "sha256": "ad0409ee884e33bc0b5d7334687324990b355317feabfe43217203cfd1b72943"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-150.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0359/img10c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-cleaver-knife/",
+      "placement": "gta 6 search result 150",
+      "sha256": "cef164e41edf0eafcb3e1b9550aec64e9f8c5d6e7edd923a66835dbb82d715f8"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-151.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202619/0225/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/mauviel-interface-induction-disk/",
+      "placement": "gta 6 search result 151",
+      "sha256": "d5efbc76bb319403dad6d6d9f324fbbd336588493390a8e24a5a80c6ced99476"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-152.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202632/0120/martini-accent-table-11-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/martini-accent-table-polished-nickel/",
+      "placement": "gta 6 search result 152",
+      "sha256": "7b9cf4d19e243c09518047bac82e33cd084e2d6726cbbe4f1ed9e19c32caf092"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-153.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0002/odesa-accent-table-8-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/odesa-accent-table/",
+      "placement": "gta 6 search result 153",
+      "sha256": "acc827bdd934ad4d27995c0e186065ab0fa30799c712ff3dbeca925615f2470c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-154.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202634/0074/cypress-modular-sectional-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/cypress-corner-sectional-upholstered/",
+      "placement": "gta 6 search result 154",
+      "sha256": "4092871d1649db0833982b0b3022c146d617089a1c5165086f2c81d2a3406f10"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-155.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202616/0433/olsen-sofa-97-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/olsen-upholstered-sofa/",
+      "placement": "gta 6 search result 155",
+      "sha256": "f360ced17c066ef821efaa1e344b96a292fbf959dc8f916318710c46a81fece0"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-156.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0021/img44c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/coravin-timeless-model-6plus/",
+      "placement": "gta 6 search result 156",
+      "sha256": "111c9a5956864fea28a2949b48b2ea248281b067980c8333b0b2805efc2c6dbf"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-157.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0430/img22c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/williams-sonoma-estate-cabernet-glasses-buy-6-get-8-set/",
+      "placement": "gta 6 search result 157",
+      "sha256": "985e6459dfc926c27e7a00389a6954012bd29ec7143f1d277e44b712f99a0d29"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-158.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0027/img88c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-classic-limited-edition-z-chefs-knife-8/",
+      "placement": "gta 6 search result 158",
+      "sha256": "c388123d49fddf29e4c63508e1013e3259502eb9c72eceb7a351768dfa46b362"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-159.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202617/0344/img29c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/the-george-leather-chess-checkers/",
+      "placement": "gta 6 search result 159",
+      "sha256": "92b47ad9dadade698a454569cb09d6b312f51b0c1756534b6e376a663ede679b"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-160.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202631/0055/nfl-jacksonville-jaguars-collection-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/nfl-jacksonville-jaguars-collection/",
+      "placement": "gta 6 search result 160",
+      "sha256": "de8ffb05190083e2e661a644b24303aa7a8b352e06e6dd0ec66727b222b027e0"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-161.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0022/rowenta-ultimate-steam-pro-steam-station-dg8668u1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/rowenta-ultimate-steam-pro-steam-station/",
+      "placement": "gta 6 search result 161",
+      "sha256": "e496d6b79aecfe8be7c4f6f5c5c76fe84c6f5a9f8538f329545afba21f773e5d"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-162.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0004/global-40th-anniversary-knives-collection-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-40th-anniversary-knives-collection/",
+      "placement": "gta 6 search result 162",
+      "sha256": "579ea59a2889bbc70e8a5fc83ffd3b78f1c212510f46086b385eb4f3935c5e5c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-163.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0023/img320c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/vista-alegre-bicos-water-goblets/",
+      "placement": "gta 6 search result 163",
+      "sha256": "a2253bf3a88aee2e41ae3d9a823dbaad25783a932d46b352d892e54008976a1f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-164.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0011/img197c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/eleve-long-stem-cocktail-glasses/",
+      "placement": "gta 6 search result 164",
+      "sha256": "e54d2ec6eedf1a9d6319d237b12a35c0576c2cef2ce781c2ad6d0a1a86edf0e3"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-165.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0003/graphite-grid-series-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/graphite-grid-i/",
+      "placement": "gta 6 search result 165",
+      "sha256": "7a4c2f82e53220cd46e25f6080ead6e5554b741a4c8af56366e631742bcd1eef"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-166.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0430/img11c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/williams-sonoma-estate-red-wine-tumblers-buy-6-get-8-set/",
+      "placement": "gta 6 search result 166",
+      "sha256": "b8f4674848ec481b2fac1137c7ad092dcb72f0d3be1c5010517d389122618b70"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-167.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0029/img416c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-6-inch-serrated-utility-knife/",
+      "placement": "gta 6 search result 167",
+      "sha256": "e2a44107fe10620bf2b146d1722f8eeb8960814041dbf3ffa720cc77875ccc0e"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-168.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202617/0114/the-george-x-williams-sonoma-home-dominoes-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/the-george-board-game/",
+      "placement": "gta 6 search result 168",
+      "sha256": "b19d5ae155baf99644b733051d068bc6ec7067e6503aec0cfb0a09a103978be8"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-169.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202629/0222/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-classic-vegetable-knife-7/",
+      "placement": "gta 6 search result 169",
+      "sha256": "a7d3eae96a63678477684c40b6f0ec8ae7185dbd48effad48865124721f579aa"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-170.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0016/img52c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/porchetta-6lbs/",
+      "placement": "gta 6 search result 170",
+      "sha256": "15c6384289c5c605bd32cc4f3fc0249ce4e75caafc9f5224da507b9e35d1bda7"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-171.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0025/img222c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-40th-anniversary-knives-set-of-3/",
+      "placement": "gta 6 search result 171",
+      "sha256": "a202c9a6e99091f23cad99d62b689d19a5aba19c3799fc76a0485304f0c8346f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-172.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0422/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/global-classic-7-inch-fluted-chefs-knife/",
+      "placement": "gta 6 search result 172",
+      "sha256": "9d155b2e84c21b594d227e4c90d26f604cdf35507417ddcb9fe1b970bfcdcc5c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-173.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0367/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/sonoma-estate-champagne-wine-glass/",
+      "placement": "gta 6 search result 173",
+      "sha256": "d48fef4a0ec69bf7177d6e667e6f71c85bfb276a98c0cab4e615fd9b41eb52d3"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-174.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0038/img54c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/chocolate-croissant/",
+      "placement": "gta 6 search result 174",
+      "sha256": "bed3660c1ef3642b8fc116c4dbe6b48ac8ca1bf13f339fbb5eeff731c22654e5"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-175.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0343/img16c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/6-months-of-world-cheese-core/",
+      "placement": "gta 6 search result 175",
+      "sha256": "822e108ae9ba7c4be341a67b49c6a168451cf4422cebf7080d2571823d800cb6"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-176.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0042/img13c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/mastering-pizza-the-art-and-practice-of-handmade-pizza/",
+      "placement": "gta 6 search result 176",
+      "sha256": "296a931ef15491fc0f58fa55e018be2fbea551882664ed6e7f553b9ad2c3901c"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-177.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202633/0042/img424c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/bar-culture-martini-glasses/",
+      "placement": "gta 6 search result 177",
+      "sha256": "cbb8056fa96c7fe26a1c2bf653caab2e983beffbbb0086422ab71a8e8dff6e12"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-178.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0020/rowenta-perfect-steam-pro-dg8624u1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/rowenta-perfect-steam-pro-dg8624u1/",
+      "placement": "gta 6 search result 178",
+      "sha256": "fa428d57825865f481a6027f46f908170dbb2a4ed9567111d94ad5ec70290d57"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-179.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0305/williams-sonoma-estate-glassware-collection-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/williams-sonoma-estate-stemware-collection/",
+      "placement": "gta 6 search result 179",
+      "sha256": "382a1ef0586d4015e8a5422b332a0cb84dca95179726638d1deeefb831d9f0dc"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-180.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202625/0068/fern-forest-printed-jute-backgammon-1-c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/fern-forest-printed-jute-backgammon/",
+      "placement": "gta 6 search result 180",
+      "sha256": "e80ffda90528899e78b3c6492b4de3b681ea5a6ff28bc1ba0758df56640b7046"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-181.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202620/0009/img89c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/rory-dobner-zodiac-mug-gemini/",
+      "placement": "gta 6 search result 181",
+      "sha256": "a6bfed7a5e24317c84f717263d8738153b133d349070a250fb1c89e9f274721f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-182.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0343/img12c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/williams-sonoma-martini-glasses/",
+      "placement": "gta 6 search result 182",
+      "sha256": "7c23803f5d8add476ec0b641fbbc63c367a694ab9bbb3e2e34d03b3a44761a42"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-183.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0136/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/dyson-gen5-detect-vacuum/",
+      "placement": "gta 6 search result 183",
+      "sha256": "0775e450a6e8266336871c025ca8d75d7b5ed5e8de8da510db2e743685a0549f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-184.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0003/img316c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/rowenta-dg7661u1-compact-steam-pro-steam-iron/",
+      "placement": "gta 6 search result 184",
+      "sha256": "506ed89c634f19f01e8b438f7f1b39b1d6fc8769ec39695e91b2a774ce053e92"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-185.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202628/0500/img6c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/6-months-of-cheese-and-charcuterie-subscription/",
+      "placement": "gta 6 search result 185",
+      "sha256": "2923d9c13954cac6ef7541fc8820dcfa2a0c263f427b9677b87d8b206f30bcef"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-186.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0134/img4c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/dyson-wash-g1-wet-cleaner/",
+      "placement": "gta 6 search result 186",
+      "sha256": "aad1195cc143f906f7b42c255deeb92ad2e742ba02b4d28f6d276320858dba7a"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-187.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0021/img45c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/six-months-of-american-cheese-core/",
+      "placement": "gta 6 search result 187",
+      "sha256": "5b84417d77538f429edfc28ec6cb927cf03d1b8d8878389631f54b2f9688e721"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-188.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0256/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/holmegaard-perfection-beer-glasses/",
+      "placement": "gta 6 search result 188",
+      "sha256": "f75781c408b8b34f3ae2f5b26917d9ae1fb312597424740ad09191e69f51c1dc"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-189.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0025/img147c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/verve-coffee-roasters-sermon-coffee-beans/",
+      "placement": "gta 6 search result 189",
+      "sha256": "69b65be4cf293cc02e1808c001bf09dc31ca39dd5dbfb49bc0c30b969def9b0f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-190.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202621/0052/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jambalaya-arancini/",
+      "placement": "gta 6 search result 190",
+      "sha256": "01f5107ce2171b1278f61713479fee97a3b491cf969b63925bb26d5ce5d63670"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-191.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202618/0136/img1c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/bissell-surfacesense-allergen-pet-lift-off-vacuum/",
+      "placement": "gta 6 search result 191",
+      "sha256": "bf7afab446fefee043ec116a8b647f6d282b925a98bb89be6c7778d096561d90"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-192.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202636/0403/img3c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/vintage-etched-martini-glasses/",
+      "placement": "gta 6 search result 192",
+      "sha256": "ba514c8d4c6f4ef4855a772db1bbc1d0f69ebdd36460b645ecfe95c86d92380d"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-193.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0175/img17c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/jupiter-martini-glasses/",
+      "placement": "gta 6 search result 193",
+      "sha256": "a3358482d03bc5b42143b12ace80ff2007ce649cf5d527d75ba6e0ec65aa7003"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-194.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202624/0291/img6c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/tartine-pain-au-chocolat/",
+      "placement": "gta 6 search result 194",
+      "sha256": "9dcd8786428fa283bbe7853f6be777cdf1ab3b879af8d9ac53a82b772dc90ad0"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-195.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202641/0048/img76c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/verve-coffee-roasters-streetlevel-coffee-beans/",
+      "placement": "gta 6 search result 195",
+      "sha256": "d8779ae03753d2643ec48dd2fde63c1053d1300b2e66f39a66997fa11a3b0b7f"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-196.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202637/0013/img167c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/flavour-blaster-bubble-x-liquid-180ml/",
+      "placement": "gta 6 search result 196",
+      "sha256": "c77e04660fc73e517cdc67159b7951e3aea23751e6f4c05ac4f6c2d0904999cb"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-197.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202638/0254/img2c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/holmegaard-cabernet-beer-glasses/",
+      "placement": "gta 6 search result 197",
+      "sha256": "3e3fac614c7e0b3c2f61d30ee3ea9f7baddc40ccb452486c628befc55dc35b9e"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/search-product-198.jpg",
+      "source_url": "https://assets.wsimgs.com/wsimgs/rk/images/dp/wcm/202623/0012/img233c.jpg",
+      "product_url": "https://www.williams-sonoma.com/products/organized-living/",
+      "placement": "gta 6 search result 198",
+      "sha256": "10a6f65a51c43d65abd8cfc7b7ab5e2d90a6a13e79ee2878f91cdcdbbee09c1a"
+    }
+  ],
+  "fonts": [
+    {
+      "local_path": "public/reference/williams-sonoma/roboto-regular.woff2",
+      "source_url": "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
+      "sha256": "796de064b8d80eba7ccacb8ba67d77fdbcdf4b385c844645d452c24537b3108f",
+      "bytes": 11028,
+      "family": "Roboto",
+      "weight": 400,
+      "placement": "captured US search typography"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/roboto-medium.woff2",
+      "source_url": "https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fBBc4AMP6lQ.woff2",
+      "sha256": "bce2f309470952b7affa62ff4d91b454334c68cefa541429b502904d20696875",
+      "bytes": 11072,
+      "family": "Roboto",
+      "weight": 500,
+      "placement": "captured US search typography"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/roboto-light.woff2",
+      "source_url": "https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fBBc4AMP6lQ.woff2",
+      "sha256": "8d3251f4935896ec37ada153d20d0109828ad08523127f136415355b3fca2dcf",
+      "bytes": 11160,
+      "family": "Roboto",
+      "weight": 300,
+      "placement": "captured US search typography"
+    },
+    {
+      "local_path": "public/reference/williams-sonoma/roboto-bold.woff2",
+      "source_url": "https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4AMP6lQ.woff2",
+      "sha256": "0f53e8b0a717ca4ce313eec62b90d41db62c2f4946259a65c93bf8e84c5b0c44",
+      "bytes": 11040,
+      "family": "Roboto",
+      "weight": 700,
+      "placement": "captured US search typography"
+    }
+  ]
+}

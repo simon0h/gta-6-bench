@@ -1,0 +1,6 @@
+import { physicalFixtures } from '../playstation-store/physical.js'
+export function expandCatalog(products) {
+ for(const p of products){p.catalogType=p.type==='game'?'game':'accessory';p.catalogPlatform=p.platforms.includes('Xbox Series X|S')?'xbox':p.platforms.includes('Xbox One')?'xbox-one':'xbox';p.accessorySubtype=p.catalogType==='accessory'?'digital-add-on':null}
+ const additions=physicalFixtures(products).map((p,i)=>({...p,slug:p.id,type:p.catalogType==='game'?'game':'hardware',productType:p.catalogType,entitlement:null,accessorySubtype:p.catalogType==='accessory'?'physical':null,purchasable:true,shortTitle:p.title,rank:37+i,popularity:500-i,wishlisted:0,publisher:p.publisher||p.brand,developer:p.publisher||p.brand,release:p.release||'2026-09-01',description:[p.description],genres:p.genre?[p.genre]:['Hardware'],genre:p.genre||'Hardware',age:p.age||p.rating||'',ageNote:'',accessibility:[],languageList:p.catalogType==='game'?['English']:[],languages:p.catalogType==='game'?1:0,capabilities:[],subscriptions:[],modes:p.catalogType==='game'?['Single player',...(p.localPlayers>1?['Local multiplayer']:[])]:[],handheld:'Not evaluated',bundle:[],addons:[],gamesIncluded:[],addonsIncluded:[],listPrice:null,iap:false,ribbon:null,keywords:p.keywords||`${p.title} ${p.description}`}))
+ products.push(...additions)
+}

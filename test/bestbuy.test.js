@@ -74,7 +74,7 @@ test('bestbuy: guest pre-orders the PS5 code-in-box copy for shipping, search to
     assert.match(done.url, /\/bestbuy\/checkout\/r\/thank-you\?order=BBY01-\d{11}&token=/)
     assert.match(done.text, /Thanks for your order!/)
     assert.match(done.text, /Order #: <b data-order-number>BBY01-\d{11}<\/b>/)
-    assert.match(done.text, /sending a confirmation email to <b>alex@example\.com<\/b>/)
+    assert.match(done.text, /This local store is not sending a confirmation email to <b>alex@example\.com<\/b>/)
     assert.match(done.text, /Your order will arrive by Release Date: <b>11\/12\/2026<\/b>/)
     assert.match(done.text, /Create an account/)
     assert.doesNotMatch(done.text, /4242 4242 4242 4242|4242424242424242/)
@@ -244,5 +244,25 @@ test('bestbuy: search aliases, cart quirks and the five-step mixed checkout paid
     assert.deepEqual(o.meta.gift_options, [{ sku: PS5.sku, message: true, email: '', text: 'Happy birthday!' }])
     assert.deepEqual(o.payment, { method: 'paypal' })
     assert.deepEqual(o.totals, { subtotal: 159.98, shipping: 0, tax: 17.2, total: 177.18 })
+  } finally { await srv.close() }
+})
+
+test('bestbuy: working platform/format refinements, release pickup and product comparison', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client()
+    const xbox = await c.get('/bestbuy/site/searchpage.jsp?st=gta+6&platform=xbox&format=code-in-box&fulfillment=pickup')
+    assert.equal(xbox.status, 200)
+    assert.match(xbox.text, /sku\/6684969/)
+    assert.doesNotMatch(xbox.text, /sku\/6684968|sku\/6685012/)
+    const today = await c.get('/bestbuy/site/searchpage.jsp?st=gta+6&format=code-in-box&fulfillment=today')
+    assert.match(today.text, /didn't find any results/)
+    const compare = await c.get('/bestbuy/compare?sku=6684968&sku=6472245')
+    assert.equal(compare.status, 200)
+    assert.match(compare.text, /<h1>Compare Products<\/h1>/)
+    assert.match(compare.text, /<td>Physical \(Download Code Only\)<\/td>/)
+    assert.match(compare.text, /<td>Physical<\/td>/)
+    assert.match(compare.text, /<td>\$19\.99<\/td>/)
+    assert.equal((await c.get('/bestbuy/help')).status, 200)
   } finally { await srv.close() }
 })

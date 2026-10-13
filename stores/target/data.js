@@ -1,5 +1,10 @@
+import { scenarioProduct } from '../../lib/benchmark-scenarios.js'
+import { applyCatalogPolicy, fixtureCatalog } from '../../lib/catalog-policy.js'
+import { catalogEvidence } from './catalog-evidence.js'
+import { expandCatalog } from './expand500.js'
 // Listings as they appear on target.com (research/target.md and target.json, 2026-09-29/30).
 import { GAME } from '../../lib/catalog.js'
+import { ORDINARY_PRODUCTS, DEPARTMENTS } from './catalog.js'
 
 // Header context that drives the Pickup / Delivery / Shipping tabs on the real site.
 export const SHIP_ZIP = '95065'
@@ -10,7 +15,7 @@ export const STANDARD_SHIPPING = 5.99 // under the threshold
 // The real cart re-estimates tax from the shipping address during checkout.
 export const TAX_RATE = 0.0975
 // Stock items on the results page showed "Shipping arrives Fri, Oct 2" on 2026-09-30.
-export const ARRIVES = 'Fri, Oct 2'
+export const ARRIVES = 'in 3–5 business days'
 export const PREORDER_ARRIVAL = 'Arrives on or shortly after release date'
 
 const GTA_TERMS = 'gta 6 gta6 gta vi gtavi grand theft auto vi 6 six rockstar games video games preorder pre-order'
@@ -22,8 +27,8 @@ const GAME_HIGHLIGHTS = (platform) => [
   'Pre-order to receive the Vintage Vice City Pack.',
   'Grand Theft Auto VI is a single-player experience.',
 ]
-const GAME_DESCRIPTION = `Vice City, USA. Jason and Lucia have always known the deck is stacked against them. ${GAME.description}`
-const GAME_SPECS = [['Format', 'Download Code in Box'], ['Street Date', 'November 12, 2026'], ['Multiplayer', 'Single Player Only'], ['ESRB Rating', 'RP - rating pending']]
+const GAME_DESCRIPTION = GAME.description
+const GAME_SPECS = [['ESRB Age Rating', 'RP - rating pending'], ['ESRB Content Descriptors', 'RP - rating pending'], ['Electronics Condition', 'New'], ['Video Game Genre', 'Action, Adventure'], ['Format', 'Download Code in Box'], ['Edition', 'Standard'], ['Multiplayer', 'Single Player Only'], ['Battery', 'No Battery Used'], ['Street Date', 'November 12, 2026'], ['Origin', 'Made in the USA']]
 const NO_SHIP = 'We regret that this item cannot be shipped to PO Boxes, Alaska, Hawaii or U.S. territories.'
 const RETURNS = 'This item must be returned within 30 days of the date it was purchased in store, delivered to the guest, delivered by a Shipt shopper, or picked up by the guest.'
 
@@ -37,7 +42,7 @@ export const PRODUCTS = [
     crumbs: ['Video Games', 'PlayStation 5', 'PlayStation 5 Games'], platformLabel: 'PlayStation 5',
     glance: 'Compatible with PS5', upc: '710425673795', dpci: '207-44-8488',
     art: '/static/art/ps5-standard.svg', questions: 12, esp: true,
-    highlights: GAME_HIGHLIGHTS('ps5'), description: GAME_DESCRIPTION, specs: GAME_SPECS, shippingNote: NO_SHIP, returns: RETURNS,
+    highlights: GAME_HIGHLIGHTS('ps5'), description: GAME_DESCRIPTION, specs: [['Model Compatibility', 'PlayStation 5'], ...GAME_SPECS], shippingNote: NO_SHIP, returns: RETURNS,
     keywords: GTA_TERMS + ' playstation ps5 sony',
   },
   {
@@ -123,10 +128,47 @@ export const PRODUCTS = [
   },
 ]
 
+for (const p of PRODUCTS) {
+  p.department = p.addon ? 'services' : 'video-games'
+  p.type = p.addon ? 'Protection Plans' : /controller/i.test(p.title) ? 'Controllers' : 'Video Games'
+  p.stock = p.limit
+  p.restricted = !p.addon
+  p.seller = 'Target'
+  p.eta = p.preorder ? PREORDER_ARRIVAL : `Arrives ${ARRIVES}`
+}
+if (fixtureCatalog) { PRODUCTS.push(...ORDINARY_PRODUCTS); expandCatalog(PRODUCTS) }
+applyCatalogPolicy('target', PRODUCTS, catalogEvidence)
+if (!fixtureCatalog) for (const p of PRODUCTS) {
+  p.catalogType = p.kind === 'game' ? 'game' : 'accessory'; p.catalogPlatform = p.platform || null; p.simulatedStock = true
+  if (p.tcin === '1013468584') { p.questions = null; p.rating = null; p.ratingUnavailable = true; p.highlights = [p.title]; p.description = p.title; p.specs = [['Street Date', 'November 19, 2026']] }
+}
+
+export function selectedProduct(p, variantId = '') {
+  if (!p) return null
+  if (!p.variants) return variantId ? null : p
+  const variant = p.variants.find(v => v.id === variantId)
+  if (!variant) return null
+  const specs=p.specs.map(([key,value])=>variant.specs?.find(([k])=>k===key)||[key,value])
+  const highlights=p.highlights.map(h=>{const match=variant.specs?.find(([key])=>h.startsWith(key+':'));return match?match.join(': '):h})
+  return {...p,price:variant.price,unitAmount:variant.unitAmount??p.unitAmount,...(p.regularPrice?{regularPrice:Math.round((variant.price*1.2+1)*100)/100}:{}),stock:Math.min(p.stock,variant.stock),variantId:variant.id,selectedOptions:variant.options,specs,highlights,description:variant.specs?`${p.title}. ${highlights.join('. ')}.`:p.description}
+
+}
+export const stockLimit = p => Math.max(0, Math.min(p?.limit ?? 0, p?.stock ?? 0))
+export const lineKey = (tcin, variantId = '') => `${tcin}${variantId ? ':'+variantId : ''}`
+export const arrivalSummary = lines => [...new Set(lines.map(l=>l.product.eta))].join(' · ')
+export const productForLine = l => selectedProduct(byTcin(l.tcin), l.variantId || '')
+export function cartIssues(store) {
+  return store.cart.some(l => {
+    const p=productForLine(l)
+    const all=store.cart.filter(x=>x.tcin===l.tcin).reduce((sum,x)=>sum+x.qty,0)
+    return !p || !Number.isInteger(l.qty) || l.qty<1 || l.qty>stockLimit(p) || all>stockLimit(byTcin(l.tcin))
+  })
+}
+
 export const byTcin = (tcin) => PRODUCTS.find(p => p.tcin === String(tcin)) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 export const sponsored = () => PRODUCTS.find(p => p.sponsored)
-export const protectionPlan = () => PRODUCTS.find(p => p.addon)
+export const protectionPlan = () => fixtureCatalog ? PRODUCTS.find(p => p.addon) : { title: '2 Year Video Games Protection Plan ($75-$99.99) - Allstate', price: 13, readOnly: true }
 
 export function productPath(base, p) {
   return `${base}/p/${p.slug}/-/A-${p.tcin}`
@@ -135,13 +177,13 @@ export function productPath(base, p) {
 export function search(q) {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  if (!tokens.length) return []
-  const pool = PRODUCTS.filter(p => !p.sponsored && !p.addon)
+  const pool = PRODUCTS.filter(p => !p.addon)
+  if (!tokens.length) return pool
   const hits = p => { const hay = norm(p.title + ' ' + p.keywords); return tokens.filter(t => hay.includes(t)).length }
   const all = pool.filter(p => hits(p) === tokens.length)
-  // ASSUMPTION: Target's search is loose ("1,000+ results"): when no listing matches every word, show
-  // the ones matching at least half of them, so "gta 6 ultimate edition" still lists the Standard game.
-  return all.length ? all : pool.filter(p => hits(p) * 2 >= tokens.length)
+  if (all.length) return all
+  // Retain benchmark GTA alias behavior without turning unrelated empty queries into filler.
+  return /gta|grand theft auto/.test(norm(q)) ? pool.filter(p => !p.family && hits(p) * 2 >= tokens.length) : []
 }
 
 export const STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
@@ -157,7 +199,7 @@ export const PAYMENT_TYPES = {
 const round = n => Math.round(n * 100) / 100
 
 export function cartLines(store) {
-  return store.cart.map(l => ({ ...l, product: byTcin(l.tcin) })).filter(l => l.product)
+  return store.cart.map(l => ({ ...l, key:lineKey(l.tcin,l.variantId), product: scenarioProduct(store,productForLine(l)) })).filter(l => l.product)
 }
 
 export function totals(store) {
@@ -167,4 +209,37 @@ export function totals(store) {
   const shipping = !lines.length || subtotal >= FREE_SHIPPING_MIN ? 0 : STANDARD_SHIPPING
   const tax = round(subtotal * TAX_RATE)
   return { lines, count, subtotal, shipping, tax, total: round(subtotal + shipping + tax) }
+}
+
+// Every displayed refinement intersects the current search/category/campaign set.
+export function refine(products, filters = {}) {
+  let hits = products.map(p=>filters.size&&p.variants?selectedProduct(p,p.variants.find(v=>Object.values(v.options).includes(filters.size))?.id):p).filter(Boolean).filter(p => {
+    const text = `${p.title} ${p.keywords}`.toLowerCase()
+    if (filters.platform && p.catalogPlatform !== filters.platform) return false
+    if (filters.category && p.department !== filters.category && !(filters.category==='games'&&p.type==='Video Games') && !(filters.category==='accessories'&&p.type==='Controllers')) return false
+    if (filters.type && p.type !== filters.type) return false
+    if (filters.material && p.material !== filters.material) return false
+    if (filters.size && !p.variants?.some(v => Object.values(v.options).includes(filters.size))) return false
+    if (filters.price === 'under25' && p.price >= 25) return false
+    if (filters.price === '25to50' && !(p.price >= 25 && p.price < 50)) return false
+    if (filters.price === '50to100' && !(p.price >= 50 && p.price < 100)) return false
+    if (filters.price === 'over100' && p.price < 100) return false
+    if (filters.availability === 'preorder' && !p.preorder) return false
+    if (filters.availability === 'instock' && (p.preorder || stockLimit(p)<1)) return false
+    if (filters.availability === 'outofstock' && stockLimit(p)>0) return false
+    if (filters.brand && p.brand !== filters.brand) return false
+    if (filters.format === 'code-in-box' && p.format !== 'code-in-box') return false
+    if (filters.format === 'disc' && !(p.catalogType==='game' && (p.format==='disc'||!p.catalog500&&p.format!=='code-in-box'))) return false
+    if (['download','cartridge'].includes(filters.format) && p.format!==filters.format) return false
+    if (filters.rating && Number(p.rating?.score ?? 0) < Number(filters.rating)) return false
+    if (filters.fulfillment && filters.fulfillment !== 'shipping') return false
+    return true
+  })
+  const tie=(a,b)=>a.tcin.localeCompare(b.tcin)
+  if (filters.sort === 'price_low') hits.sort((a,b) => a.price - b.price || tie(a,b))
+  if (filters.sort === 'price_high') hits.sort((a,b) => b.price - a.price || tie(a,b))
+  if (filters.sort === 'rating') hits.sort((a,b) => Number(b.rating?.score??0) - Number(a.rating?.score??0) || tie(a,b))
+  if (filters.sort === 'name') hits.sort((a,b) => a.title.localeCompare(b.title) || tie(a,b))
+  if (filters.sort === 'release') hits.sort((a,b) => (Date.parse(a.release ?? '') || 0) - (Date.parse(b.release ?? '') || 0) || tie(a,b))
+  return hits
 }

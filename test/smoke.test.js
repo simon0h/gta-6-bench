@@ -12,6 +12,11 @@ test('server boots, index lists stores, API responds', async () => {
     assert.equal(health.ok, true)
     const stores = await c.json('/api/stores')
     assert.ok(Array.isArray(stores))
+    assert.deepEqual(stores.map(store => store.slug).sort(), [
+      'amazon', 'argos', 'bestbuy', 'chewy', 'coupang', 'eb-games-au', 'game-uk', 'gamestop', 'gmarket', 'ikea',
+      'jb-hifi', 'nike', 'playstation-store', 'rockstar-store', 'sephora', 'smyths-toys', 'target', 'walmart', 'williams-sonoma', 'xbox-store',
+    ], 'Every implemented retailer must load; a skipped import must not pass the smoke check')
+    assert.equal(health.stores, stores.length)
     for (const s of stores) {
       const r = await c.get(s.url)
       assert.equal(r.status, 200, `${s.slug} home should render`)

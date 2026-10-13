@@ -1,0 +1,217 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { startServer, fieldValue } from './helpers.js'
+import { getOrder } from '../lib/orders.js'
+
+const buyer = { email: 'tester@example.com', first_name: 'Alex', last_name: 'Tester', address: '123 Main Street', city: 'Austin', state: 'TX', postal_code: '78701', card_name: 'Alex Tester', card_number: '4242424242424242', card_expiry: '12/39', card_cvv: '123' }
+const login = c => c.post('/ikea/account', { email: 'tester@example.com', password: 'Password123!' })
+const register = (c, email) => c.post('/ikea/account', { mode: 'register', first_name: 'Jamie', last_name: 'Home', email, password: 'Password123!' })
+const path = result => new URL(result.url).pathname
+const list = async (c, name = 'Office project') => path(await c.post('/ikea/lists', { name, notes: 'Keep doorway clear' }))
+const project = async c => path(await c.post('/ikea/projects', { name: 'Bedroom plan', width: '100', depth: '120', budget: '200', notes: 'Measure before buying' }))
+const add = (c, url, id, options = {}, qty = '1') => c.post(`${url}/add`, { product_id: id, qty, ...options })
+const rowId = text => /data-row-id="([^"]+)"/.exec(text)?.[1]
+const projectRow = text => /data-project-row="([^"]+)"/.exec(text)?.[1]
+const order = async c => {
+  await c.post('/ikea/cart/add', { id: 'desk', qty: 1, option_Color: 'White' })
+  const review = await c.get('/ikea/checkout')
+  return path(await c.post('/ikea/checkout', { ...buyer, checkout_token: fieldValue(review.text, 'checkout_token') }))
+}
+
+test('IKEA lists keep options and authoritative subtotals; moves are atomic and invalidate checkout reviews', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(), l = await list(c)
+    assert.match((await add(c, l, 'desk', { option_Color: 'White', price: '0', kind: 'game' }, '2')).text, /data-list-total="179.98"/)
+    await add(c, l, 'desk', { option_Color: 'Oak effect' })
+    assert.match((await c.get(l)).text, /data-list-total="279.97"/)
+    assert.equal((await add(c, l, 'gta6')).status, 400)
+    assert.equal((await add(c, l, 'desk', { option_Color: 'Invisible' })).status, 400)
+    assert.equal((await add(c, l, 'desk', { option_Color: 'White' }, '1.5')).status, 400)
+    assert.equal((await c.post(`${l}/add`, new URLSearchParams([['product_id', 'desk'], ['option_Color', 'White'], ['option_Color', 'Oak effect'], ['qty', '1']]))).status, 400)
+    await c.post('/ikea/cart/add', { id: 'mug', qty: 1 })
+    const review = await c.get('/ikea/checkout')
+    assert.equal((await c.post(`${l}/bag`, { action: 'add' })).status, 200)
+    const stale = await c.post('/ikea/checkout', { ...buyer, checkout_token: fieldValue(review.text, 'checkout_token') })
+    assert.equal(stale.status, 409)
+    assert.doesNotMatch(stale.text, /4242424242424242/)
+    const fresh = await c.get('/ikea/checkout')
+    assert.equal((await c.post('/ikea/checkout', { ...buyer, checkout_token: fieldValue(fresh.text, 'checkout_token') })).status, 200)
+    const orders = await c.json('/api/orders?store=ikea')
+    assert.equal(orders.at(-1).totals.total, 283.96)
+    assert.ok(orders.at(-1).items.every(i => i.kind === 'other'))
+    assert.equal(orders.at(-1).items.find(i => i.sku === 'desk').unit_price, 89.99)
+    await add(c, l, 'sofa', { option_Color: 'Blue' })
+    const failed = await c.post(`${l}/bag`, { action: 'move' })
+    assert.equal(failed.status, 400)
+    assert.match(failed.text, /Your list has been kept/)
+    assert.match((await c.get('/ikea/cart')).text, /is empty/)
+    assert.equal([...failed.text.matchAll(/data-row-id=/g)].length, 3)
+    const blue = [...failed.text.matchAll(/data-row-id="([^"]+)"/g)].at(-1)[1]
+    await c.post(`${l}/items/${blue}`, { action: 'remove' })
+    await c.post(`${l}/bag`, { action: 'move' })
+    assert.doesNotMatch((await c.get(l)).text, /data-row-id=/)
+    assert.match((await c.get('/ikea/cart')).text, /Oak effect/)
+  } finally { await srv.close() }
+})
+
+test('IKEA lists and legacy favorites are private to the active owner and store; CRUD remains usable', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(), guest = await list(c, 'Guest reading corner')
+    await c.post('/ikea/favorites', { id: 'desk' })
+    assert.match((await c.get('/ikea/favorites')).text, /Choose options and save to a list/)
+    await login(c)
+    assert.equal((await c.get(guest)).status, 404)
+    assert.doesNotMatch((await c.get('/ikea/favorites')).text, /Choose options and save to a list/)
+    const a = await list(c, 'Account A private list')
+    await add(c, a, 'mug')
+    await c.post('/ikea/favorites', { id: 'mug' })
+    assert.equal((await srv.client().get(a)).status, 404)
+    await register(c, 'ikea-list-owner-b@example.com')
+    assert.equal((await c.post(`${a}/delete`)).status, 404)
+    assert.equal((await c.post(`${a}/bag`, { action: 'move' })).status, 404)
+    assert.doesNotMatch((await c.get('/ikea/lists')).text, /Account A private list|Guest reading corner/)
+    assert.doesNotMatch((await c.get('/nike/favorites')).text, /Account A private list/)
+    await login(c)
+    const renamed = await c.post(a, { name: 'Reading room', notes: '<script>private note</script>' })
+    assert.match(renamed.text, /Reading room/); assert.match(renamed.text, /&lt;script&gt;private note/)
+    const row = rowId(renamed.text)
+    await c.post(`${a}/items/${row}`, { action: 'update', qty: 3 })
+    assert.match((await c.get(a)).text, /data-list-total="11.97"/)
+    await c.post(`${a}/delete`)
+    assert.equal((await c.get(a)).status, 404)
+    await c.post('/ikea/logout')
+    assert.equal((await c.get(guest)).status, 200)
+    assert.match((await c.get('/ikea/favorites')).text, /Compact home office desk/)
+    assert.doesNotMatch((await c.get('/ikea/favorites')).text, /<h2><a[^>]*>Stoneware coffee mug/)
+  } finally { await srv.close() }
+})
+
+test('IKEA planner saves correct variant footprints, rotation, budget, fit warnings and transfer', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(), p = await project(c)
+    let result = await add(c, p, 'bed-frame', { option_Size: 'Full' })
+    assert.match(result.text, /data-footprint-width="59" data-footprint-depth="80"/)
+    assert.match(result.text, /data-project-total="229"/); assert.match(result.text, /\$29\.00 over budget/)
+    const first = projectRow(result.text)
+    result = await c.post(`${p}/items/${first}`, { action: 'update', x: '30', y: '10', rotation: '90' })
+    assert.match(result.text, /data-footprint-width="80" data-footprint-depth="59"/)
+    assert.match(result.text, /extends outside the room/)
+    assert.equal((await c.post(`${p}/items/${first}`, { action: 'update', x: 'NaN', y: '0', rotation: '45' })).status, 400)
+    await add(c, p, 'desk', { option_Color: 'White' })
+    assert.match((await c.get(p)).text, /overlaps another footprint/)
+    assert.equal((await add(c, p, 'mug')).status, 400)
+    assert.equal((await add(c, p, 'desk', { option_Color: 'Fake' })).status, 400)
+    const transfer = await c.post(`${p}/list`, { list_id: 'new' })
+    assert.match(transfer.text, /data-list-total="318.99"/)
+    assert.match(transfer.text, /Full/)
+    assert.equal((await srv.client().get(p)).status, 404)
+    await login(c)
+    assert.equal((await c.get(p)).status, 404)
+    assert.equal((await c.post(`${p}/list`, { list_id: 'new' })).status, 404)
+    await c.post('/ikea/logout')
+    assert.match((await c.get(p)).text, /data-footprint-width="80"/)
+    await c.post(`${p}/items/${first}`, { action: 'remove' })
+    assert.doesNotMatch((await c.get(p)).text, /data-footprint-width="80"/)
+    await c.post(`${p}/delete`); assert.equal((await c.get(p)).status, 404)
+  } finally { await srv.close() }
+})
+
+test('IKEA profile, Family and address CRUD isolate accounts and prefill the canonical checkout', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client()
+    assert.match((await c.get('/ikea/account/addresses')).text, /Sign in or join us/)
+    await login(c)
+    assert.equal((await c.post('/ikea/account/profile', { first_name: 'Sam', last_name: 'Room', phone: '555-555-1234', room: 'Bedroom', contact: 'email' })).status, 200)
+    assert.match((await c.get('/ikea/account')).text, /Hej, Sam/)
+    assert.equal((await c.post('/ikea/account/family', { action: 'join' })).status, 400)
+    assert.match((await c.post('/ikea/account/family', { action: 'join', consent: 'yes' })).text, /membership is active/)
+    const address = { label: 'Home', name: 'Sam Room', line1: '23 Oak Lane', city: 'Austin', state: 'TX', postal_code: '78701' }
+    let result = await c.post('/ikea/account/addresses', address)
+    const first = /data-address-id="([^"]+)"/.exec(result.text)[1]
+    result = await c.post('/ikea/account/addresses', { ...address, label: 'Studio', line1: '50 Work Road', postal_code: '78702', is_default: 'yes' })
+    const second = [...result.text.matchAll(/data-address-id="([^"]+)"/g)][1][1]
+    await c.post(`/ikea/account/addresses/${first}/default`)
+    await c.post('/ikea/cart/add', { id: 'mug', qty: '1' })
+    assert.equal(fieldValue((await c.get('/ikea/checkout')).text, 'address'), '23 Oak Lane')
+    assert.equal(fieldValue((await c.get(`/ikea/checkout?address_id=${second}`)).text, 'address'), '50 Work Road')
+    await c.post('/ikea/account/addresses', { ...address, id: first, line1: '24 Oak Lane' })
+    assert.match((await c.get('/ikea/account/addresses')).text, /24 Oak Lane/)
+    assert.equal((await c.post('/ikea/account/addresses', { ...address, postal_code: 'bad' })).status, 400)
+    await register(c, 'ikea-address-owner-b@example.com')
+    assert.doesNotMatch((await c.get('/ikea/account/addresses')).text, /Oak Lane|Work Road/)
+    assert.equal((await c.post(`/ikea/account/addresses/${first}/default`)).status, 404)
+    assert.equal((await c.get(`/ikea/checkout?address_id=${first}`)).status, 400)
+    assert.doesNotMatch((await c.get('/ikea/account/family')).text, /membership is active/)
+    await login(c)
+    assert.match((await c.get('/ikea/account')).text, /Hej, Sam/)
+    await c.post(`/ikea/account/addresses/${second}/delete`)
+    assert.doesNotMatch((await c.get('/ikea/account/addresses')).text, /50 Work Road/)
+    assert.match((await c.post('/ikea/account/family', { action: 'leave' })).text, /Join your local/)
+  } finally { await srv.close() }
+})
+
+test('IKEA orders, receipts and lifecycle require session, store and exact active owner', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(); await login(c)
+    const url = await order(c), id = url.split('/').at(-1)
+    assert.match((await c.get('/ikea/orders')).text, /Processing/)
+    assert.match((await c.get(`${url}/receipt`)).text, /\$89\.99/)
+    assert.doesNotMatch((await c.get(`${url}/receipt`)).text, /4242424242424242/)
+    assert.equal((await c.post(`${url}/action`, { action: 'return', reason: 'Does not fit' })).status, 400)
+    const otherSession = srv.client(); await login(otherSession)
+    assert.equal((await otherSession.get(url)).status, 404)
+    assert.equal((await otherSession.post(`${url}/action`, { action: 'cancel', reason: 'Wrong item' })).status, 404)
+    await register(c, 'ikea-order-owner-b@example.com')
+    assert.equal((await c.get(url)).status, 404)
+    assert.equal((await c.get(`${url}/receipt`)).status, 404)
+    assert.equal((await c.post(`${url}/action`, { action: 'cancel', reason: 'Wrong item' })).status, 404)
+    assert.doesNotMatch((await c.get('/ikea/orders')).text, /Compact home office desk/)
+    await login(c)
+    assert.match((await c.post(`${url}/action`, { action: 'cancel', reason: 'Room plan changed' })).text, /No delivery is scheduled/)
+    assert.match((await c.get('/ikea/orders')).text, /Cancelled/)
+    assert.equal((await c.post(`${url}/action`, { action: 'return', reason: 'Changed mind' })).status, 400)
+    const next = await order(c), nextId = next.split('/').at(-1)
+    // Test-only delivered setup: production has no delivery fabrication route.
+    getOrder(nextId).meta.lifecycle = [{ status: 'delivered', reason: 'Test-only eligibility setup' }]
+    assert.match((await c.post(`${next}/action`, { action: 'return', reason: 'Does not fit' })).text, /Return requested/)
+    assert.equal((await c.get(`/nike/order/${id}`)).status, 404)
+    await c.post('/ikea/logout')
+    assert.equal((await c.get(url)).status, 404)
+    const guest = await order(c)
+    assert.equal((await c.get(guest)).status, 200)
+    await login(c)
+    assert.equal((await c.get(guest)).status, 404)
+  } finally { await srv.close() }
+})
+
+test('IKEA help search, product guidance and private cases validate inputs and order ownership', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(); await login(c)
+    const url = await order(c), id = url.split('/').at(-1)
+    assert.match((await c.get('/ikea/help?q=hardware')).text, /Assembly, hardware and spare parts/)
+    assert.match((await c.get('/ikea/help?q=zzzz')).text, /No matching help articles/)
+    assert.equal((await c.get('/ikea/help/articles/materials')).status, 200)
+    assert.match((await c.get('/ikea/product/desk')).text, /Save selected options to a shopping list/)
+    assert.match((await c.get('/ikea/product/desk/assembly')).text, /Assembly overview/)
+    const input = { category: 'Assembly', subject: 'Desk hardware', message: 'Which booklet should I use?', email: 'tester@example.com', order_id: id, product_id: 'desk' }
+    assert.equal((await c.post('/ikea/help/contact', { ...input, message: 'short' })).status, 400)
+    assert.equal((await c.post('/ikea/help/contact', { ...input, category: '__proto__' })).status, 400)
+    assert.equal((await c.post('/ikea/help/contact', { ...input, product_id: 'gta6' })).status, 400)
+    const saved = await c.post('/ikea/help/contact', input), casePath = path(saved)
+    assert.match(saved.text, /Your help request is saved/)
+    assert.match(saved.text, /Compact home office desk/)
+    assert.equal((await srv.client().get(casePath)).status, 404)
+    await register(c, 'ikea-case-owner-b@example.com')
+    assert.equal((await c.get(casePath)).status, 404)
+    assert.equal((await c.post('/ikea/help/contact', input)).status, 400)
+    await login(c)
+    assert.equal((await c.get(casePath)).status, 200)
+    assert.match((await c.get('/ikea/help/cases')).text, /Desk hardware/)
+  } finally { await srv.close() }
+})

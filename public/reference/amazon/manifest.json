@@ -1,0 +1,200 @@
+{
+  "captured_at": "2026-10-06",
+  "page_url": "https://www.amazon.com/dp/B0H6K928WL",
+  "provenance": "Exact public image URLs observed in the official product page HTML. Copyright remains with the respective owners. No endorsement or redistribution license implied.",
+  "assets": [
+    {
+      "file": "gta-vi-ps5-1.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81471d-lR4L._SL1500_.jpg",
+      "label": "Product image 1",
+      "sha256": "873183f13be3804b8108ff6d63266cf767d60274cd7da9bf49b8ab389a22b0c7",
+      "bytes": 278972
+    },
+    {
+      "file": "gta-vi-ps5-2.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/71TiAyYvyYL._SL1500_.jpg",
+      "label": "Product image 2",
+      "sha256": "4158b775beddaddad95470ae44c1071d048b1e9a9c69db9046201b0d5111abd2",
+      "bytes": 104234
+    },
+    {
+      "file": "gta-vi-ps5-3.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/71CUbYK2m-L._SL1500_.jpg",
+      "label": "Product image 3",
+      "sha256": "5731725e1d46cb19775887db1b67cd9d897cd60a5ae4c5c003aa257c35ec4409",
+      "bytes": 111989
+    },
+    {
+      "file": "gta-vi-ps5-4.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81WW0AO6E3L._SL1500_.jpg",
+      "label": "Product image 4",
+      "sha256": "ee16d30db11e4008433bb1802d15b8c45a5e19da7c0822161a337ab7a7d480e9",
+      "bytes": 161500
+    },
+    {
+      "file": "gta-vi-ps5-5.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81hm4Jz6cEL._SL1500_.jpg",
+      "label": "Product image 5",
+      "sha256": "8a539a28f53045c6852ae320280fcf7d3937aaf4f33cdf6b5e1904eb18edaf2f",
+      "bytes": 137277
+    },
+    {
+      "file": "gta-vi-ps5-6.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81mnl4EgITL._SL1500_.jpg",
+      "label": "Product image 6",
+      "sha256": "6da6eeb6ab9535cd27c9d8da88e44c515c79f1c75da7f5474128f504a6bb4c64",
+      "bytes": 137749
+    },
+    {
+      "file": "gta-vi-ps5-7.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/71Zui1piYuL._SL1500_.jpg",
+      "label": "Product image 7",
+      "sha256": "41ea271e032818f5496a5eb76929802dbf2b217ceb8103c7bcf5eb9dc94c5cad",
+      "bytes": 103606
+    },
+    {
+      "file": "gta-vi-ps5-8.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/815sagGwHIL._SL1500_.jpg",
+      "label": "Product image 8",
+      "sha256": "a3e0e31e65075b24efd660b401c2353dae88a5ba490db9e6adf11cda9d28b88f",
+      "bytes": 210115
+    },
+    {
+      "file": "gta-vi-ps5-9.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81Ef8SeLvlL._SL1500_.jpg",
+      "label": "Product image 9",
+      "sha256": "14f280eb6ae96e92a37234b3e647d143d34f4bc453578ece23054edc2420f6b3",
+      "bytes": 199419
+    },
+    {
+      "file": "gta-vi-ps5-10.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/818gGH8umpL._SL1500_.jpg",
+      "label": "Product image 10",
+      "sha256": "9ad18ddc4e8f2710babb27d311d4ac726acf0dc07b2e93f962c3f29c5a333882",
+      "bytes": 209914
+    },
+    {
+      "file": "gta-vi-ps5-11.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/71hinHq5W0L._SL1500_.jpg",
+      "label": "Product image 11",
+      "sha256": "3e1d65d527a03c2147fe7af7fba564848ca92a6da90cbe7646b68e525ab70e9d",
+      "bytes": 105385
+    },
+    {
+      "file": "gta-vi-xbox-1.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81DeIOj6moL._SL1500_.jpg",
+      "label": "Product image 1",
+      "sha256": "52a4ca7f764eb4fde17fe4307e80370d3bbcf943726e48c9049c7b19ce357161",
+      "bytes": 268949
+    },
+    {
+      "file": "gta-vi-xbox-2.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/71TiAyYvyYL._SL1500_.jpg",
+      "label": "Product image 2",
+      "sha256": "4158b775beddaddad95470ae44c1071d048b1e9a9c69db9046201b0d5111abd2",
+      "bytes": 104234
+    },
+    {
+      "file": "gta-vi-xbox-3.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/71CUbYK2m-L._SL1500_.jpg",
+      "label": "Product image 3",
+      "sha256": "5731725e1d46cb19775887db1b67cd9d897cd60a5ae4c5c003aa257c35ec4409",
+      "bytes": 111989
+    },
+    {
+      "file": "gta-vi-xbox-4.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81WW0AO6E3L._SL1500_.jpg",
+      "label": "Product image 4",
+      "sha256": "ee16d30db11e4008433bb1802d15b8c45a5e19da7c0822161a337ab7a7d480e9",
+      "bytes": 161500
+    },
+    {
+      "file": "gta-vi-xbox-5.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81hm4Jz6cEL._SL1500_.jpg",
+      "label": "Product image 5",
+      "sha256": "8a539a28f53045c6852ae320280fcf7d3937aaf4f33cdf6b5e1904eb18edaf2f",
+      "bytes": 137277
+    },
+    {
+      "file": "gta-vi-xbox-6.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81mnl4EgITL._SL1500_.jpg",
+      "label": "Product image 6",
+      "sha256": "6da6eeb6ab9535cd27c9d8da88e44c515c79f1c75da7f5474128f504a6bb4c64",
+      "bytes": 137749
+    },
+    {
+      "file": "gta-vi-xbox-7.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/71Zui1piYuL._SL1500_.jpg",
+      "label": "Product image 7",
+      "sha256": "41ea271e032818f5496a5eb76929802dbf2b217ceb8103c7bcf5eb9dc94c5cad",
+      "bytes": 103606
+    },
+    {
+      "file": "gta-vi-xbox-8.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/815sagGwHIL._SL1500_.jpg",
+      "label": "Product image 8",
+      "sha256": "a3e0e31e65075b24efd660b401c2353dae88a5ba490db9e6adf11cda9d28b88f",
+      "bytes": 210115
+    },
+    {
+      "file": "gta-vi-xbox-9.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/81Ef8SeLvlL._SL1500_.jpg",
+      "label": "Product image 9",
+      "sha256": "14f280eb6ae96e92a37234b3e647d143d34f4bc453578ece23054edc2420f6b3",
+      "bytes": 199419
+    },
+    {
+      "file": "gta-vi-xbox-10.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/818gGH8umpL._SL1500_.jpg",
+      "label": "Product image 10",
+      "sha256": "9ad18ddc4e8f2710babb27d311d4ac726acf0dc07b2e93f962c3f29c5a333882",
+      "bytes": 209914
+    },
+    {
+      "file": "gta-vi-xbox-11.jpg",
+      "source_url": "https://m.media-amazon.com/images/I/71hinHq5W0L._SL1500_.jpg",
+      "label": "Product image 11",
+      "sha256": "3e1d65d527a03c2147fe7af7fba564848ca92a6da90cbe7646b68e525ab70e9d",
+      "bytes": 105385
+    }
+  ],
+  "products": [
+    {
+      "ids": [
+        "B0H6K928WL"
+      ],
+      "images": [
+        "gta-vi-ps5-1.jpg",
+        "gta-vi-ps5-2.jpg",
+        "gta-vi-ps5-3.jpg",
+        "gta-vi-ps5-4.jpg",
+        "gta-vi-ps5-5.jpg",
+        "gta-vi-ps5-6.jpg",
+        "gta-vi-ps5-7.jpg",
+        "gta-vi-ps5-8.jpg",
+        "gta-vi-ps5-9.jpg",
+        "gta-vi-ps5-10.jpg",
+        "gta-vi-ps5-11.jpg"
+      ]
+    },
+    {
+      "ids": [
+        "B0H6K49W6Y"
+      ],
+      "page_url": "https://www.amazon.com/dp/B0H6K49W6Y",
+      "images": [
+        "gta-vi-xbox-1.jpg",
+        "gta-vi-xbox-2.jpg",
+        "gta-vi-xbox-3.jpg",
+        "gta-vi-xbox-4.jpg",
+        "gta-vi-xbox-5.jpg",
+        "gta-vi-xbox-6.jpg",
+        "gta-vi-xbox-7.jpg",
+        "gta-vi-xbox-8.jpg",
+        "gta-vi-xbox-9.jpg",
+        "gta-vi-xbox-10.jpg",
+        "gta-vi-xbox-11.jpg"
+      ]
+    }
+  ]
+}

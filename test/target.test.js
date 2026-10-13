@@ -200,3 +200,42 @@ test('target: wrong password is rejected, sign-in works, and a new account can b
     assert.deepEqual(await c.json('/api/orders?store=target'), orders, 'the first shopper never placed an order')
   } finally { await srv.close() }
 })
+
+test('target: filtering excludes incompatible sponsored products and preserves refinements after an add', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client()
+    const path = '/target/s?searchTerm=GTA+6&platform=xbox&availability=preorder'
+    const result = await c.get(path)
+    assert.equal(result.status, 200)
+    assert.match(result.text, /1011545811/)
+    assert.doesNotMatch(result.text, /1011529119|82900531/)
+    assert.match(result.text, /value="xbox" selected/)
+    const added = await c.post('/target/cart/add', { tcin: '1011545811', back: path })
+    assert.match(added.url, /platform=xbox/)
+    assert.match(added.url, /availability=preorder/)
+    assert.match(added.text, /Added to cart/)
+    const empty = await c.get('/target/s?searchTerm=GTA+6&fulfillment=pickup')
+    assert.match(empty.text, /couldn&rsquo;t find a match/)
+    assert.match(empty.text, /Clear all/)
+    assert.equal((await c.get('/target/help')).status, 200)
+  } finally { await srv.close() }
+})
+
+
+test('target: shipping ZIP updates persist per shopper, validate input, and keep redirects in store', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client()
+    const bad = await c.post('/target/location', { zip: 'nope', returnTo: '/target/' })
+    assert.equal(bad.status, 400)
+    assert.match(bad.text, /Enter a valid 5-digit ZIP code/)
+    const changed = await c.post('/target/location', { zip: '33139', returnTo: '/target/p/grand-theft-auto-vi-playstation-5/-/A-1011529119' })
+    assert.match(changed.text, /Preorder for 33139/)
+    assert.match(changed.text, /Ship to 33139/)
+    const other = srv.client()
+    assert.match((await other.get('/target/')).text, /Ship to 95065/)
+    const safe = await c.post('/target/location', { zip: '90210', returnTo: 'https://example.com' })
+    assert.ok(safe.url.endsWith('/target/'))
+  } finally { await srv.close() }
+})

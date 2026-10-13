@@ -1,3 +1,4 @@
+import { search } from '../stores/jb-hifi/data.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { startServer } from './helpers.js'
@@ -24,7 +25,7 @@ test('jb-hifi: guest pre-orders the PS5 code-in-box copy end to end (AUD)', asyn
     const pdp = await c.get(PS5)
     assert.match(pdp.text, /<title>Grand Theft Auto VI Standard Edition on PS5 - Pre-Order Now - JB Hi-Fi<\/title>/)
     assert.match(pdp.text, /<h1>Grand Theft Auto VI<\/h1>/)
-    assert.match(pdp.text, /<span>\$129<\/span>/, 'yellow tag shows whole dollars')
+    assert.match(pdp.text, /class="jb-reference-currency">\$<\/i><b class="jb-reference-amount">129<\/b>/, 'yellow tag shows the observed separate currency and whole-dollar amount')
     assert.doesNotMatch(pdp.text, /A\$/)
     assert.match(pdp.text, />Pre-order<\/button>/)
     assert.match(pdp.text, /No Disc Included \(Code in Box\)\./)
@@ -57,7 +58,7 @@ test('jb-hifi: guest pre-orders the PS5 code-in-box copy end to end (AUD)', asyn
     assert.match(info.text, /Used for your order confirmation and cart reminders/)
     assert.match(info.text, /<label class="jb-method [^"]*" for="delivery_method_pickup"><input type="radio" id="delivery_method_pickup"/)
     assert.match(info.text, /Click &amp; Collect/)
-    assert.match(info.text, /<span>Shipping<\/span><span>Calculated at next step<\/span>/)
+    assert.match(info.text, /<span\b[^>]*>Shipping<\/span>\s*<span\b[^>]*>Calculated at next step<\/span>/, 'initial delivery summary defers the shipping price until the next step')
     assert.match(info.text, /<small>AUD<\/small> \$129\.00/)
     assert.match(info.text, />Continue to shipping<\/button>/)
 
@@ -194,4 +195,27 @@ test('jb-hifi: optional Log in (wrong password refused) then Click & Collect pre
     assert.deepEqual(o.totals, { subtotal: 129, shipping: 0, tax: 0, total: 129 })
     assert.match((await c.get('/jb-hifi/account')).text, new RegExp(`#${o.order_number}`))
   } finally { await srv.close() }
+})
+
+test('jb-hifi: browsing, facets and sorting submit real filters and preserve query state', async () => {
+ const srv = await startServer()
+ try {
+  const c = srv.client()
+  assert.match((await c.get('/jb-hifi/')).text,/UPGRADE YOUR EVERYDAY/)
+  const audio = await c.get('/jb-hifi/search?category=Headphones%20%26%20Audio')
+  assert.match(audio.text,/Sony Wireless Noise Cancelling Headphones/)
+  assert.doesNotMatch(audio.text,/href="\/jb-hifi\/products\/playstation-5-grand-theft-auto-vi"/)
+  const filtered = await c.get('/jb-hifi/search?query=gta+6&platform=ps5&price=50to150&sort=price-desc')
+  assert.match(filtered.text,/value="ps5" selected/)
+  assert.match(filtered.text,/value="price-desc" selected/)
+  assert.match(filtered.text,/playstation-5-grand-theft-auto-vi/)
+  assert.doesNotMatch(filtered.text,/href="\/jb-hifi\/products\/xbox-series-x-grand-theft-auto-vi"/)
+  const empty = await c.get('/jb-hifi/search?query=gta+6&category=Home%20Appliances')
+  assert.match(empty.text,/0 results/)
+  const sorted = await c.get('/jb-hifi/search?category=Gaming&sort=price-asc')
+  const ordered = search('',{category:'Gaming',sort:'price-asc'})
+  assert.ok(ordered.findIndex(p=>p.id==='569900') < ordered.findIndex(p=>p.id==='991106'))
+  const firstCards=[...sorted.text.matchAll(/<h3><a href="([^"]+)"/g)].map(m=>m[1])
+  assert.deepEqual(firstCards,ordered.slice(0,12).map(p=>'/jb-hifi/products/'+p.slug))
+ } finally { await srv.close() }
 })

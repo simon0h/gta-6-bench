@@ -1,0 +1,63 @@
+{
+  "description": "Official product marks used only to identify the benchmarked agents. Original assets are stored without alteration.",
+  "assets": [
+    {
+      "id": "grokbot",
+      "name": "Grok Bot",
+      "file": "grokbot.webp",
+      "kind": "product-icon",
+      "originalPageUrl": "https://x.ai/bot",
+      "sourcePageUrl": "https://apps.apple.com/us/app/grok-bot/id6794501026",
+      "discoveryChain": [
+        "https://x.ai/bot",
+        "https://docs.x.ai/",
+        "https://docs.x.ai/grok-bot/overview",
+        "https://docs.x.ai/grok-bot/mobile",
+        "https://apps.apple.com/us/app/grok-bot/id6794501026"
+      ],
+      "assetUrl": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/86/e7/37/86e73761-022f-3cfb-d799-c68d0716e7f9/Placeholder.mill/400x400bb.webp",
+      "description": "Official Grok Bot app icon from the App Store listing linked by the Grok Bot mobile documentation.",
+      "companyBrandFallback": false,
+      "width": 400,
+      "height": 400,
+      "sha256": "020aa34b40919917b4d1c82268f83295f0c05b289087d3f983a4d572a62b79de",
+      "bytes": 8626,
+      "retrievedOn": "2026-10-12",
+      "modified": false
+    },
+    {
+      "id": "dots",
+      "name": "Dots",
+      "file": "dots.svg",
+      "kind": "product-icon",
+      "originalPageUrl": "https://openai.com/index/introducing-dots/",
+      "sourcePageUrl": "https://openai.com/index/introducing-dots/",
+      "assetUrl": "https://images.ctfassets.net/kftzwdyauwt9/KKSjto3MtJguvsLQsM1Bp/1704a6937d22b1bb3cac38dc5f43f9df/dots-o.svg",
+      "description": "Official dots ring mark linked as the lead image of the introducing dots article.",
+      "companyBrandFallback": false,
+      "width": 81,
+      "height": 81,
+      "sha256": "f992e4672322d7f88e8fac7a61a6cffbbec400ed06e5b38f2299c9ce4711734b",
+      "bytes": 513,
+      "retrievedOn": "2026-10-12",
+      "modified": false
+    },
+    {
+      "id": "muse",
+      "name": "Muse",
+      "file": "muse.webp",
+      "kind": "product-icon",
+      "originalPageUrl": "https://ai.meta.com/muse/",
+      "sourcePageUrl": "https://ai.meta.com/muse/",
+      "assetUrl": "https://lookaside.fbsbx.com/elementpath/media/?media_id=1251723253746824&version=1788817246&transcode_extension=webp",
+      "description": "Official Muse product icon identified by alt text \"Muse icon\" in the product page.",
+      "companyBrandFallback": false,
+      "width": 512,
+      "height": 512,
+      "sha256": "1ef1ba65acf6de58e6bb2f300566433a91adc061a7d67fba06c865779a84a8dd",
+      "bytes": 6516,
+      "retrievedOn": "2026-10-12",
+      "modified": false
+    }
+  ]
+}

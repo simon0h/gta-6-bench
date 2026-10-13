@@ -1,5 +1,11 @@
+import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
-import { productPath, STATES, PAYMENT_TYPES, SHIP_ZIP, STORE_LOCATION, ARRIVES, PREORDER_ARRIVAL } from './data.js'
+import { productPath, STATES, PAYMENT_TYPES, SHIP_ZIP, STORE_LOCATION, ARRIVES, PREORDER_ARRIVAL, byTcin, selectedProduct, stockLimit, lineKey, PRODUCTS, arrivalSummary } from './data.js'
+
+import { DEPARTMENTS } from './catalog.js'
+import { catalogHome, catalogTile, listingPage, ordinaryProductPage } from './browse.js'
+import { productImage, optionText, targetIcon, productGallery } from './media.js'
 
 const NAME = 'Target'
 const UTILITY_NAV = ['Target Circle™', 'Target Circle™ Card', 'Target Circle 360™', 'Registry & Wish List', 'Weekly Ad', 'Find Stores']
@@ -10,26 +16,25 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`
 
 // ASSUMPTION: the red count badge only appears once the cart has items; the link keeps its
 // "cart 0 items" aria-label from the research either way.
-export function layout({ base, title, body, cartCount = 0, user = null, q = '', minimal = false }) {
+export function layout({ base, title, body, cartCount = 0, user = null, q = '', minimal = false, shipZip = SHIP_ZIP, storeLocation = STORE_LOCATION }) {
   const first = user?.first_name || 'there'
   const header = minimal
     ? `<header class="tg-header tg-header-min"><div class="tg-wrap"><a class="tg-logo" href="${base}/" aria-label="Target home" data-test="header-tgtLogo">${bullseye()}<span class="visually-hidden">Target</span></a></div></header>`
     : `<header class="tg-header">
   <div class="tg-utility"><div class="tg-wrap">
-    <div class="tg-util-left"><a href="#" class="tg-util-btn">&#128205; Ship to ${SHIP_ZIP}</a><a href="#" class="tg-util-btn">&#127978; ${STORE_LOCATION}</a></div>
-    <nav class="tg-util-right" aria-label="Target services">${UTILITY_NAV.map(n => `<a href="#">${esc(n)}</a>`).join('')}</nav>
+    <div class="tg-util-left"><a href="${base}/location" class="tg-util-btn">${targetIcon('pin')} Ship to ${esc(shipZip)}</a><a href="${base}/stores" class="tg-util-btn">${targetIcon('store')} ${esc(storeLocation)}</a></div>
+    <nav class="tg-util-right" aria-label="Target services">${UTILITY_NAV.map(n => `<a href="${base}${n.includes('Circle') ? '/circle' : n.includes('Registry') ? '/lists' : n === 'Weekly Ad' ? '/weekly-ad' : '/stores'}">${esc(n)}</a>`).join('')}</nav>
   </div></div>
   <div class="tg-wrap tg-main-row">
     <a class="tg-logo" href="${base}/" aria-label="Target home">${bullseye()}<span class="visually-hidden">Target</span></a>
-    <nav class="tg-nav" aria-label="Main menu"><a href="${base}/">&#9776; Categories</a><a href="${base}/s?searchTerm=deals">Deals</a><a href="#">Pickup &amp; delivery</a></nav>
+    <nav class="tg-nav" aria-label="Main menu"><details class="tg-native-menu"><summary>Categories</summary><div class="tg-menu-body"><a href="${base}/c"><b>Shop all categories</b></a>${DEPARTMENTS.map(d=>`<details name="departments"><summary>${esc(d.name)}</summary><div class="tg-menu-panel"><h2>${esc(d.name)}</h2><a href="${base}/c/${d.id}">Shop all ${esc(d.name)}</a>${[...new Set(PRODUCTS.filter(p=>p.department===d.id).map(p=>p.type))].map(t=>`<a href="${base}/c/${d.id}?type=${encodeURIComponent(t)}">${esc(t)}</a>`).join('')}</div></details>`).join('')}</div></details><a href="${base}/c/top-deals">Deals</a><a href="${base}/services/pickup-delivery">Pickup &amp; delivery</a></nav>
     <form class="tg-search" action="${base}/s" method="get" role="search">
-      <input type="search" name="searchTerm" value="${esc(q)}" placeholder="What can we help you find?" aria-label="search" autocomplete="off">
-      <button type="submit" aria-label="search">&#128269;</button>
+      <input type="search" name="searchTerm" value="${esc(q)}" placeholder="What can we help you find?" aria-label="search" autocomplete="off" list="tg-search-suggestions">
+      <datalist id="tg-search-suggestions">${['coffee','headphones','kitchen','pet bed','paper towels','GTA 6'].map(q=>`<option value="${q}">`).join('')}</datalist><button type="submit" aria-label="search">${targetIcon('search')}</button>
     </form>
-    <button type="button" class="tg-ask">Ask Target</button>
     <nav class="tg-account-nav" aria-label="Account and cart">
-      <a href="${user ? `${base}/account` : `${base}/login`}" class="tg-icon-link" aria-label="${user ? `Account, ${esc(first)}` : 'Account, sign in'}"><span aria-hidden="true">&#128100;</span><small>${user ? `Hi, ${esc(first)}` : 'Sign in'}</small></a>
-      <a href="${base}/cart" class="tg-icon-link tg-cart-link" aria-label="cart ${plural(cartCount, 'item')}"><span aria-hidden="true">&#128722;</span>${cartCount ? `<span class="tg-badge">${cartCount}</span>` : ''}</a>
+      <a href="${user ? `${base}/account` : `${base}/login`}" class="tg-icon-link" aria-label="${user ? `Account, ${esc(first)}` : 'Account, sign in'}">${targetIcon('account')}<small>${user ? `Hi, ${esc(first)}` : 'Sign in'}</small></a>
+      <a href="${base}/cart" class="tg-icon-link tg-cart-link" aria-label="cart ${plural(cartCount, 'item')}">${targetIcon('cart')}${cartCount ? `<span class="tg-badge">${cartCount}</span>` : ''}</a>
     </nav>
   </div>
 </header>`
@@ -39,43 +44,28 @@ export function layout({ base, title, body, cartCount = 0, user = null, q = '', 
 <link rel="stylesheet" href="${base}/static/style.css">
 <script>document.documentElement.className+=' js'</script></head>
 <body>
+<a class="tg-skip-link" href="#main-content">Skip to main content</a>
 ${header}
-<main class="tg-main ${minimal ? 'tg-main-min' : ''}">${body}</main>
+<main id="main-content" tabindex="-1" class="tg-main ${minimal ? 'tg-main-min' : ''}">${body}</main>
 <footer class="tg-footer${minimal ? ' tg-footer-min' : ''}">
   ${minimal ? '' : `<div class="tg-wrap tg-footer-cols">
-    <div><h4>About</h4><a href="#">About Target</a><a href="#">Careers</a><a href="#">News &amp; features</a><a href="#">Investors</a></div>
-    <div><h4>Help</h4><a href="#">Target Help</a><a href="#">Returns</a><a href="#">Track orders</a><a href="#">Contact us</a></div>
-    <div><h4>Stores</h4><a href="#">Find a store</a><a href="#">Pharmacy</a><a href="#">Target Optical</a><a href="#">Store services</a></div>
-    <div><h4>Services</h4><a href="#">Target Circle&trade;</a><a href="#">Target Circle&trade; Card</a><a href="#">Target Circle 360&trade;</a><a href="#">Same Day Delivery</a></div>
-    <div class="tg-footer-email"><h4>Get top deals, latest trends, and more.</h4><form onsubmit="return false"><label for="footer-email" class="visually-hidden">Email address</label><input id="footer-email" type="email" placeholder="Email address"><button type="button" class="tg-btn">Sign up</button></form></div>
+    <div><h4>About</h4><span class="tg-static">About Target</span><span class="tg-static">Careers</span><span class="tg-static">News &amp; features</span><span class="tg-static">Investors</span></div>
+    <div><h4>Help</h4><a href="${base}/help">Target Help</a><a href="${base}/help/articles/returns">Returns</a><a href="${base}/orders">Track orders</a><a href="${base}/help/contact">Contact us</a></div>
+    <div><h4>Stores</h4><a href="${base}/stores">Find a store</a><span class="tg-static">Pharmacy</span><span class="tg-static">Target Optical</span><a href="${base}/stores">Store services</a></div>
+    <div><h4>Services</h4><a href="${base}/circle">Target Circle&trade;</a><a href="${base}/circle">Target Circle&trade; Card</a><a href="${base}/circle">Target Circle 360&trade;</a><a href="${base}/services/pickup-delivery">Same Day Delivery</a></div>
+    <div class="tg-footer-email"><h4>Get top deals, latest trends, and more.</h4><p>Shop the latest offers and featured products above.</p></div>
   </div>`}
   <p class="tg-copy">&copy; 2026 Target Brands, Inc.</p>
   ${disclaimer(NAME)}
 </footer>
+<script src="${base}/static/ui.js" defer></script>
 </body></html>`
 }
 
-function tile(base, p, backPath) {
-  const href = productPath(base, p)
-  const cta = p.preorder ? 'Preorder' : 'Add to cart'
-  const badge = p.sponsored ? '<div class="tg-tile-badge">Sponsored</div>' : p.badge ? `<div class="tg-tile-badge">${esc(p.badge)} ${bullseye('tg-bullseye-xs')}</div>` : ''
-  const rating = p.rating
-    ? `<div class="tg-tile-rating"><span class="tg-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <b>${esc(p.rating.score)}</b> <span class="visually-hidden">${esc(p.rating.text)}</span> <span class="tg-fine">(${p.rating.count})</span> <span class="tg-loved">Loved for: ${esc(p.rating.loved)}</span></div>`
-    : ''
-  return `<article class="tg-tile">
-  <div class="tg-tile-media"><a href="${href}"><img src="${p.art}" alt="${esc(p.title)}"></a><button type="button" class="tg-heart" aria-label="sign in to favorite ${esc(p.title)} to keep tabs on it">&#9825;</button></div>
-  ${badge}
-  <div class="tg-tile-price">${money(p.price)}</div>
-  <a class="tg-tile-title" href="${href}">${p.tileBrand ? `<span class="tg-tile-brand">${esc(p.tileBrand)}</span> ` : ''}${esc(p.title)}</a>
-  ${rating}
-  <div class="tg-tile-ship">${p.preorder ? `Release date ${esc(p.release)}` : `Shipping arrives ${esc(ARRIVES)}`}</div>
-  <a class="tg-tile-free" href="#">Ships free - exclusions apply</a>
-  <form method="post" action="${base}/cart/add"><input type="hidden" name="tcin" value="${p.tcin}"><input type="hidden" name="back" value="${esc(backPath)}"><button type="submit" class="tg-btn tg-btn-block" aria-label="${cta} ${esc(p.title)}">${cta}</button></form>
-</article>`
-}
+function tile(base,p,backPath) { return catalogTile(base,p,backPath) }
 
 function miniCarousel(base, products) {
-  return `<div class="tg-mini-carousel">${products.map(p => `<a class="tg-mini-card" href="${productPath(base, p)}"><img src="${p.art}" alt=""><span>${esc(p.title)}</span><b>${money(p.price)}</b></a>`).join('')}</div>`
+  return `<div class="tg-mini-carousel">${products.map(p => `<a class="tg-mini-card" href="${productPath(base, p)}">${productImage(p)}<span>${esc(p.title)}</span><b>${money(p.price)}</b></a>`).join('')}</div>`
 }
 
 // Server-rendered version of Target's add-to-cart drawer (slides in from the right on desktop).
@@ -84,13 +74,13 @@ export function addedDrawer({ base, added, notAdded, closeHref, plan, recs }) {
   if (!p) return ''
   const ok = !!added
   const esp = ok && p.esp && plan
-    ? `<div class="tg-drawer-esp"><div><b>Protect your purchase</b><div class="tg-fine">${esc(plan.title)} &middot; ${money(plan.price)}</div></div><form method="post" action="${base}/cart/add"><input type="hidden" name="tcin" value="${plan.tcin}"><input type="hidden" name="back" value="${esc(closeHref)}"><button type="submit" class="tg-btn tg-btn-outline tg-btn-sm">Add</button></form></div>`
+    ? `<div class="tg-drawer-esp"><div><b>Protect your purchase</b><div class="tg-fine">${esc(plan.title)} &middot; ${money(plan.price)}</div></div>${plan.readOnly ? '' : `<form method="post" action="${base}/cart/add"><input type="hidden" name="tcin" value="${plan.tcin}"><input type="hidden" name="back" value="${esc(closeHref)}"><button type="submit" class="tg-btn tg-btn-outline tg-btn-sm">Add</button></form>`}</div>`
     : ''
-  return `<div class="tg-drawer-backdrop"><aside class="tg-drawer" role="dialog" aria-labelledby="drawer-title">
+  return `<div class="tg-drawer-backdrop"><aside class="tg-drawer" role="dialog" aria-modal="true" tabindex="-1" aria-labelledby="drawer-title">
   <div class="tg-drawer-head"><h2 id="drawer-title">${ok ? '<span class="tg-check-icon" aria-hidden="true">&#10003;</span> Added to cart' : 'Item not added to cart'}</h2><a class="tg-drawer-close" href="${closeHref}" aria-label="close">&times;</a></div>
   ${ok ? '' : '<p class="tg-error" role="alert">The maximum quantity of this item has already been added to your cart.</p>'}
-  <div class="tg-drawer-item"><img src="${p.art}" alt=""><div><b>${esc(p.title)}</b><div class="tg-fine">${money(p.price)}</div></div></div>
-  ${ok ? '<p class="tg-fine tg-drawer-note">Edit delivery method in cart</p>' : ''}
+  <div class="tg-drawer-item">${productImage(p)}<div><b>${esc(p.title)}</b><div class="tg-fine">${esc(optionText(p))}</div><div class="tg-fine">${money(p.price)}</div></div></div>
+  ${ok ? '<p class="tg-fine tg-drawer-note">Shipping details are shown in your cart</p>' : ''}
   ${esp}
   <a class="tg-btn tg-btn-block" href="${closeHref}">Continue shopping</a>
   <a class="tg-btn tg-btn-outline tg-btn-block" href="${base}/cart">View cart &amp; check out</a>
@@ -98,67 +88,43 @@ export function addedDrawer({ base, added, notAdded, closeHref, plan, recs }) {
 </aside></div>`
 }
 
-export function homePage({ base, products, games }) {
-  const [ps5] = games
-  return `<section class="tg-hero">
-  <div><p class="tg-eyebrow">Preorder now</p><h1>Grand Theft Auto VI</h1><p>Vice City, USA. Preorder the PlayStation 5 or Xbox Series X|S edition today. Code in Box, delivers 11/12/26, playable 11/19/26.</p><a class="tg-btn" href="${productPath(base, ps5)}">Preorder Grand Theft Auto VI</a></div>
-  <img src="${ps5.art}" alt="Grand Theft Auto VI box art placeholder">
-</section>
-<section class="tg-section"><h2>New &amp; trending in video games</h2><div class="tg-grid">${products.map(p => tile(base, p, `${base}/`)).join('')}</div></section>`
-}
+export function homePage(args) { return catalogHome(args) }
+export function searchPage(args) { return listingPage(args) }
 
-export function searchPage({ base, q, products, sponsored, backPath, drawer }) {
-  const chips = [['Pickup', 'Ready within 2 hours'], ['Same-day Delivery', 'Get it as soon as today with Shipt'], ['Shipping', 'Free with Target Circle™ Card or $35 orders'], ['Shop in store', 'Find items in stock'], ['Deals', ''], ['Compatibility', '']]
-  const tiles = products.length ? [sponsored, ...products].filter(Boolean).map(p => tile(base, p, backPath)).join('') : ''
-  return `${drawer ?? ''}<div class="tg-search-page">
-  <h1>${esc(q.toLowerCase())}</h1>
-  <div class="tg-toolbar">
-    <button type="button" class="tg-chip tg-chip-strong" aria-label="Filters Menu. 0 applied">Filter</button>
-    <button type="button" class="tg-chip tg-chip-strong">Sort</button>
-    ${chips.map(([l, s]) => `<button type="button" class="tg-chip"${s ? ` title="${esc(s)}"` : ''}>${esc(l)}${l === 'Compatibility' ? ' &#9662;' : ''}</button>`).join('')}
-  </div>
-  <p class="tg-count">${products.length ? `${plural(products.length + (sponsored ? 1 : 0), 'result')} for &ldquo;${esc(q)}&rdquo;` : `We couldn&rsquo;t find a match for your search.`}</p>
-  ${products.length ? `<div class="tg-grid">${tiles}</div><p class="tg-paging">page 1 of 1</p>` : `<p class="tg-fine">Check your spelling or try a different search term, like &ldquo;grand theft auto vi&rdquo;.</p>`}
-</div>`
-}
-
-export function productPage({ base, p, siblings, fulfillment = 'shipping', plan, recs, user, drawer, listMsg }) {
+export function productPage({ base, p, siblings, fulfillment = 'shipping', plan, recs, user, drawer, listMsg, shipZip = SHIP_ZIP, browseBack = '', storeLocation = STORE_LOCATION }) {
+  if(p.family)return ordinaryProductPage({base,p,recs,user,drawer,listMsg,shipZip,fulfillment,browseBack})
   const isGame = p.kind === 'game'
   const path = productPath(base, p)
+  const pickupKnown = fixtureCatalog || (isGame && storeLocation === STORE_LOCATION)
   const tabs = [
-    ['pickup', 'Pickup', 'Not available', '&#127978;'],
-    ['delivery', 'Delivery', 'Check availability', '&#128663;'],
-    ['shipping', 'Shipping', p.preorder ? 'Preorder' : `Arrives ${ARRIVES}`, '&#128230;'],
+    ['pickup', 'Pickup', pickupKnown ? 'Not available' : 'Availability unverified', targetIcon('store')],
+    ['delivery', 'Delivery', 'Check availability', targetIcon('delivery')],
+    ['shipping', 'Shipping', p.preorder ? 'Preorder' : `Arrives ${ARRIVES}`, targetIcon('shipping')],
   ]
   const cells = {
     shipping: p.preorder
-      ? `<div class="tg-cell-head"><h3>Preorder for ${SHIP_ZIP}</h3><a href="#">Edit ZIP code</a></div><p class="tg-green">Release date: ${esc(p.release)}</p><p class="tg-fine">Delivered on or shortly after release date</p><p class="tg-fine">Ships free with <b>Target Circle 360&trade;</b> or $35 orders</p>`
-      : `<div class="tg-cell-head"><h3>Ship to ${SHIP_ZIP}</h3><a href="#">Edit ZIP code</a></div><p class="tg-green">Arrives ${esc(ARRIVES)}</p><p class="tg-fine">Ships free with <b>Target Circle 360&trade;</b> or $35 orders</p>`,
-    pickup: `<div class="tg-cell-head"><h3>Pick up at ${STORE_LOCATION}</h3><a href="#">Change</a></div><p class="tg-orange">Not available</p><a href="#" class="tg-fine">Check other stores</a><p class="tg-fine">We&rsquo;re testing Order Pickup and Drive Up options for select preorder items and at select stores for release date pickup.</p>`,
-    delivery: `<div class="tg-cell-head"><h3>Same Day Delivery</h3><a href="#">Add address</a></div><p class="tg-orange">Check availability</p><p class="tg-fine">Select electronics &amp; video games are not available for Same Day Delivery. $9.99 per order, or free with Target Circle 360&trade; on $35+ orders.</p>`,
+      ? `<div class="tg-cell-head"><h3>Preorder for ${esc(shipZip)}</h3><a href="${base}/location?returnTo=${encodeURIComponent(path)}">Edit ZIP code</a></div><p class="tg-green">Release date: ${esc(p.release)}</p><p class="tg-fine">Delivered on or shortly after release date</p><p class="tg-fine">Ships free with <b>Target Circle 360&trade;</b> or $35 orders</p>`
+      : `<div class="tg-cell-head"><h3>Ship to ${esc(shipZip)}</h3><a href="${base}/location?returnTo=${encodeURIComponent(path)}">Edit ZIP code</a></div><p class="tg-green">Arrives ${esc(ARRIVES)}</p><p class="tg-fine">Ships free with <b>Target Circle 360&trade;</b> or $35 orders</p>`,
+    pickup: `<div class="tg-cell-head"><h3>Pick up at ${esc(storeLocation)}</h3><a href="${base}/stores">Change</a></div><p class="tg-orange">${pickupKnown ? 'Not available' : 'Availability unverified at this store'}</p><a href="${base}/stores" class="tg-fine">Check other stores</a><p class="tg-fine">We&rsquo;re testing Order Pickup and Drive Up options for select preorder items and at select stores for release date pickup.</p>`,
+    delivery: `<div class="tg-cell-head"><h3>Same Day Delivery</h3><a href="${base}/location?returnTo=${encodeURIComponent(path)}">Add address</a></div><p class="tg-orange">Check availability</p><p class="tg-fine">Select electronics &amp; video games are not available for Same Day Delivery. $9.99 per order, or free with Target Circle 360&trade; on $35+ orders.</p>`,
   }
   const canBuy = fulfillment === 'shipping'
   const cta = p.preorder ? 'Preorder' : 'Add to cart'
-  const qtyOptions = Array.from({ length: p.limit }, (_, i) => i + 1).map(n => `<option value="${n}">${n}</option>`).join('')
+  const qtyOptions = Array.from({ length: stockLimit(p) }, (_, i) => i + 1).map(n => `<option value="${n}">${n}</option>`).join('')
   const finance = isGame ? `<div class="tg-finance"><div><b>4 interest-free payments or as low as $15/mo</b><span>With Affirm</span></div><div><b>Pay in 4 interest-free payments of $20.00</b><span>PayPal Pay in 4</span></div></div>` : ''
-  const variants = isGame ? `<div class="tg-variant"><span class="tg-variant-label">Platform</span><div class="tg-pills">${siblings.map(s => `<a class="tg-pill ${s.tcin === p.tcin ? 'is-selected' : ''}" href="${base}/p/-/-/A-${s.tcin}" aria-current="${s.tcin === p.tcin ? 'true' : 'false'}">${esc(s.platformLabel)}</a>`).join('')}</div></div>
+  const variants = isGame ? `<div class="tg-variant"><span class="tg-variant-label">Platform</span><div class="tg-pills">${siblings.map(s => `<a class="tg-pill ${s.tcin === p.tcin ? 'is-selected' : ''}" href="${productPath(base, s)}" aria-current="${s.tcin === p.tcin ? 'true' : 'false'}">${esc(s.platformLabel)}</a>`).join('')}</div></div>
     <div class="tg-variant"><span class="tg-variant-label">Edition</span><div class="tg-pills"><span class="tg-pill is-selected" aria-current="true">Standard</span></div></div>` : ''
   const loginBack = `${base}/login?redirect=${encodeURIComponent(path)}`
   return `${drawer ?? ''}
 <nav class="tg-crumbs" aria-label="Breadcrumb"><a href="${base}/">Target</a>${p.crumbs.map(c => ` &rsaquo; <a href="${base}/s?searchTerm=${encodeURIComponent(c)}">${esc(c)}</a>`).join('')}</nav>
 ${listMsg ? `<p class="tg-toast" role="status">${esc(listMsg)}</p>` : ''}
 <div class="tg-pdp">
-  <div class="tg-gallery">
-    <a class="tg-skip" href="#info-and-fulfillment">Skip images</a>
-    <div class="tg-gallery-main"><img src="${p.art}" alt="${esc(p.title)}"><button type="button" class="tg-heart" aria-label="sign in to favorite ${esc(p.title)} to keep tabs on it">&#9825;</button><button type="button" class="tg-fullscreen">view full screen</button></div>
-    <div class="tg-gallery-thumbs">${Array.from({ length: 4 }, () => `<img src="${p.art}" alt="">`).join('')}</div>
-    <button type="button" class="tg-btn tg-btn-outline">Show more images</button>
-  </div>
+  ${productGallery(p)}
   <div class="tg-buybox" id="info-and-fulfillment">
     <a class="tg-brand" href="${base}/s?searchTerm=${encodeURIComponent(p.brand)}">Shop all ${esc(p.brand)}</a>
     <h1>${esc(p.title)}</h1>
-    <div class="tg-rating-row">${p.rating ? `<span class="tg-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <span>${esc(p.rating.text)}</span> <span>(${p.rating.count})</span>` : `<span class="tg-stars tg-stars-empty" aria-hidden="true">&#9734;&#9734;&#9734;&#9734;&#9734;</span> <span>0 out of 5 stars</span> <a href="#reviews">be the first!</a>`} <a href="#qa">${plural(p.questions, 'Question')}</a></div>
-    <div class="tg-price-module"><span class="tg-price">${money(p.price)}</span><a href="#" class="tg-fine">More info about pricing</a></div>
+    ${p.ratingUnavailable ? '' : `<div class="tg-rating-row">${p.rating ? `<span class="tg-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <span>${esc(p.rating.text)}</span> <span>(${p.rating.count})</span>` : `<span class="tg-stars tg-stars-empty" aria-hidden="true">&#9734;&#9734;&#9734;&#9734;&#9734;</span> <span>0 out of 5 stars</span> <a href="#reviews">be the first!</a>`} <a href="#qa">${plural(p.questions, 'Question')}</a></div>`}
+    <div class="tg-price-module"><span class="tg-price">${money(p.price)}</span><span class="tg-static">More info about pricing</span></div>
     ${finance}
     ${variants}
     <div class="tg-fulfillment">
@@ -166,16 +132,16 @@ ${listMsg ? `<p class="tg-toast" role="status">${esc(listMsg)}</p>` : ''}
       <div class="tg-cell" data-test="@web/AddToCart/Fulfillment/${p.preorder ? 'PreorderSellable' : 'Sellable'}">${cells[fulfillment] ?? cells.shipping}</div>
     </div>
     <form method="post" action="${base}/cart/add" class="tg-atc">
-      <input type="hidden" name="tcin" value="${p.tcin}"><input type="hidden" name="back" value="${esc(path)}">
+      <input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}<input type="hidden" name="back" value="${esc(path)}">
       <div class="tg-atc-row"><label class="tg-qty" for="qty">Qty</label><select id="qty" name="qty">${qtyOptions}</select>
       <button type="submit" class="tg-btn tg-btn-block" data-test="${p.preorder ? 'preorderButton' : 'addToCartButton'}" aria-label="${cta} ${esc(p.title)}"${canBuy ? '' : ' disabled aria-disabled="true"'}>${cta}</button></div>
-      ${p.esp && plan ? `<label class="tg-addon"><input type="checkbox" name="addon" value="${plan.tcin}"> <span><b>${esc(plan.title)}</b><br><span class="tg-fine">Add protection for ${money(plan.price)}</span></span></label>` : ''}
+      ${p.esp && plan ? plan.readOnly ? `<div class="tg-addon" data-reference-only="protection-plan"><span><b>${esc(plan.title)}</b><br><span class="tg-fine">${money(plan.price)}</span></span></div>` : `<label class="tg-addon"><input type="checkbox" name="addon" value="${plan.tcin}"> <span><b>${esc(plan.title)}</b><br><span class="tg-fine">Add protection for ${money(plan.price)}</span></span></label>` : ''}
     </form>
     ${user
-      ? `<form method="post" action="${base}/buy-now" class="tg-buy-now"><input type="hidden" name="tcin" value="${p.tcin}"><button type="submit" class="tg-btn tg-btn-outline tg-btn-block" data-test="buy-now-button"${canBuy ? '' : ' disabled'}>Buy now</button></form>`
+      ? `<form method="post" action="${base}/buy-now" class="tg-buy-now"><input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}<button type="submit" class="tg-btn tg-btn-outline tg-btn-block" data-test="buy-now-button"${canBuy ? '' : ' disabled'}>Buy now</button></form>`
       : `<a class="tg-btn tg-btn-outline tg-btn-block tg-buy-now" href="${loginBack}" data-test="buy-now-button">Sign in to buy now</a>`}
     ${p.preorder ? `<p class="tg-fine tg-charge-note">${CHARGE_POLICY}</p>` : ''}
-    <div class="tg-registry"><span>Eligible for registries and wish lists</span><div>${user ? '' : `<a class="tg-btn tg-btn-outline tg-btn-sm" href="${loginBack}">Sign in</a>`}${user ? `<form method="post" action="${base}/list/add"><input type="hidden" name="tcin" value="${p.tcin}"><button type="submit" class="tg-btn tg-btn-outline tg-btn-sm">Add to list</button></form>` : `<a class="tg-btn tg-btn-outline tg-btn-sm" href="${loginBack}">Add to list</a>`}</div></div>
+    <div class="tg-registry" id="save-to-list"><span>Eligible for registries and wish lists</span><div>${user ? '' : `<a class="tg-btn tg-btn-outline tg-btn-sm" href="${loginBack}">Sign in</a>`}${user ? `<form method="post" action="${base}/list/add"><input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}<button type="submit" class="tg-btn tg-btn-outline tg-btn-sm">Add to list</button></form>` : `<a class="tg-btn tg-btn-outline tg-btn-sm" href="${loginBack}">Add to list</a>`}</div></div>
     <div class="tg-glance"><h3>At a glance</h3><span class="tg-glance-badge">${esc(p.glance)}</span></div>
   </div>
 </div>
@@ -186,32 +152,32 @@ ${listMsg ? `<p class="tg-toast" role="status">${esc(listMsg)}</p>` : ''}
   </details>
   <details class="tg-acc"><summary>Specifications</summary><table class="tg-specs">${p.specs.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('')}<tr><th>TCIN</th><td>${p.tcin}</td></tr>${p.upc ? `<tr><th>UPC</th><td>${p.upc}</td></tr>` : ''}${p.dpci ? `<tr><th>Item Number (DPCI)</th><td>${p.dpci}</td></tr>` : ''}</table></details>
   <details class="tg-acc"><summary>Shipping &amp; Returns</summary><h3>Shipping details</h3><p>${esc(p.shippingNote)}</p><h3>Return details</h3><p>${esc(p.returns)}</p></details>
-  <details class="tg-acc" id="qa"><summary>Q&amp;A (${p.questions})</summary><p>${p.questions ? `${plural(p.questions, 'question')} from guests.` : 'No questions yet.'}</p><button type="button" class="tg-btn tg-btn-outline">Ask a question</button></details>
+  <details class="tg-acc" id="qa"><summary>Q&amp;A (${p.questions})</summary><p>${p.questions ? `${plural(p.questions, 'question')} from guests.` : 'No questions yet.'}</p><p class="tg-fine">For shipping and preorder questions, <a href="${base}/help">visit Target Help</a>.</p></details>
   <button type="button" class="tg-link-btn" onclick="document.querySelectorAll('.tg-acc').forEach(function(d){d.open=true})">Load all content at once</button>
 </section>
 <section class="tg-section"><h2>You may also like</h2>${miniCarousel(base, recs)}</section>
-<section class="tg-section" id="reviews"><h2>Guest ratings &amp; reviews (${p.rating ? p.rating.count : 0})</h2>${p.rating ? `<p>${esc(p.rating.text)}</p>` : '<p>Be the first to review this item.</p>'}<button type="button" class="tg-btn tg-btn-outline">Write a review</button></section>
+<section class="tg-section" id="reviews"><h2>Guest ratings &amp; reviews (${p.rating ? p.rating.count : 0})</h2>${p.rating ? `<p>${esc(p.rating.text)}</p>` : '<p>Be the first to review this item.</p>'}<p class="tg-fine">Guest ratings are shown when available.</p></section>
 <section class="tg-section tg-disclaimer"><h2>Disclaimer</h2><p class="tg-fine">Content on this site is for reference purposes only. Product details, pricing and availability are subject to change. Please review the item once you receive it.</p></section>`
 }
 
-function cartLine(base, l) {
+function cartLine(base, l, storeLocation) {
   const p = l.product
-  const qtyOptions = Array.from({ length: p.limit }, (_, i) => i + 1).map(n => `<option value="${n}" ${n === l.qty ? 'selected' : ''}>${n}</option>`).join('')
+  const qtyOptions = Array.from({ length: stockLimit(p) }, (_, i) => i + 1).map(n => `<option value="${n}" ${n === l.qty ? 'selected' : ''}>${n}</option>`).join('')
   return `<div class="tg-line">
-  <img src="${p.art}" alt="">
+  ${productImage(p)}
   <div class="tg-line-body">
-    <div class="tg-line-top"><a class="tg-line-title" href="${productPath(base, p)}">${esc(p.title)}</a>
-      <form method="post" action="${base}/cart/update"><input type="hidden" name="tcin" value="${p.tcin}"><button type="submit" name="action" value="remove" class="tg-line-x" aria-label="Remove item ${esc(p.title)}">&times;</button></form></div>
-    ${p.preorder ? `<div class="tg-line-release" data-test="preorderStreetDate">Release date ${esc(p.release)}</div>` : ''}${p.addon ? `<p class="tg-fine">Protection plan &middot; ${esc(p.shippingNote)}</p>` : `<a href="#" class="tg-fine">Ships free - exclusions apply</a>
+    <div class="tg-line-top"><a class="tg-line-title" href="${productPath(base, p)}${p.variantId?'?variant='+encodeURIComponent(p.variantId):''}">${esc(p.title)}</a>
+      <form method="post" action="${base}/cart/update"><input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}<button type="submit" name="action" value="remove" class="tg-line-x" aria-label="Remove item ${esc(p.title)}">&times;</button></form></div>
+    ${optionText(p)?`<p class="tg-fine">${esc(optionText(p))}</p>`:""}${p.preorder ? `<div class="tg-line-release" data-test="preorderStreetDate">Release date ${esc(p.release)}</div>` : ''}${p.addon ? `<p class="tg-fine">Protection plan &middot; ${esc(p.shippingNote)}</p>` : `<a href="${base}/services/pickup-delivery" class="tg-fine">Ships free - exclusions apply</a>
     <fieldset class="tg-methods"><legend class="visually-hidden">Delivery method</legend>
-      <label class="is-selected"><input type="radio" name="method-${p.tcin}" value="shipping" checked> <b>Shipping</b> <span class="tg-fine">${p.preorder ? PREORDER_ARRIVAL : `Arrives ${esc(ARRIVES)}`} &middot; Free</span></label>
-      <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="pickup" disabled> <b>Order Pickup</b> <span class="tg-fine">Not available at ${STORE_LOCATION}</span></label>
-      <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="driveup" disabled> <b>Drive Up</b> <span class="tg-fine">Not available at ${STORE_LOCATION}</span></label>
+      <label class="is-selected"><input type="radio" name="method-${p.tcin}" value="shipping" checked> <b>Shipping</b> <span class="tg-fine">${esc(p.eta)} &middot; ${p.price >= 35 ? "Free" : "Free on $35+ orders"}</span></label>
+      <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="pickup" disabled> <b>Order Pickup</b> <span class="tg-fine">${fixtureCatalog || (p.kind === 'game' && storeLocation === STORE_LOCATION) ? 'Not available' : 'Availability unverified'} at ${esc(storeLocation)}</span></label>
+      <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="driveup" disabled> <b>Drive Up</b> <span class="tg-fine">${fixtureCatalog || (p.kind === 'game' && storeLocation === STORE_LOCATION) ? 'Not available' : 'Availability unverified'} at ${esc(storeLocation)}</span></label>
     </fieldset>`}
     <form method="post" action="${base}/cart/update" class="tg-line-actions">
-      <input type="hidden" name="tcin" value="${p.tcin}">
-      <label for="qty-${p.tcin}">Qty</label><select id="qty-${p.tcin}" name="qty" onchange="this.form.submit()">${qtyOptions}</select>
-      ${l.qty >= p.limit ? '<span class="tg-fine">Max quantity reached</span>' : ''}
+      <input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}
+      <label for="qty-${lineKey(p.tcin,p.variantId)}">Qty</label><select id="qty-${lineKey(p.tcin,p.variantId)}" name="qty" onchange="this.form.submit()">${qtyOptions}</select>
+      ${l.qty >= stockLimit(p) ? '<span class="tg-fine">Max quantity reached</span>' : ''}
       <button type="submit" name="action" value="update" class="tg-link-btn tg-qty-update">Update</button>
       <button type="submit" name="action" value="save" class="tg-btn tg-btn-outline tg-btn-sm" aria-label="Save for later ${esc(p.title)}">Save for later</button>
       <button type="submit" name="action" value="remove" class="tg-link-btn">Remove item</button>
@@ -221,27 +187,29 @@ function cartLine(base, l) {
 </div>`
 }
 
-export function cartPage({ base, t, saved = [], user, promo, promoError, promoValue = '', recs }) {
+export function cartPage({ base, t, saved = [], user, promo, promoError, promoValue = '', recs, storeLocation = STORE_LOCATION }) {
+  const unavailable=t.lines.some(l=>scenarioStockFor(l.product,'shipping')===0)
+  const availabilityNotice=t.lines.some(l=>l.product.kind==='game') ? `<p class="benchmark-fulfillment" role="status">This local storefront supports shipping only; pickup checkout is unavailable.</p>${unavailable?'<p class="benchmark-availability" role="alert">Shipping unavailable. This item can no longer be purchased. No order has been placed.</p>':''}` : ''
   const promoDrawer = promo ? `<div class="tg-drawer-backdrop"><aside class="tg-drawer" role="dialog" aria-labelledby="promo-title" data-test="promo-code-modal-drawer">
   <div class="tg-drawer-head"><h2 id="promo-title">Add promo code</h2><a class="tg-drawer-close" href="${base}/cart" aria-label="close">&times;</a></div>
   <form method="post" action="${base}/cart/promo"><label for="promo">Promo code</label><input id="promo" name="code" type="text" minlength="4" maxlength="36" value="${esc(promoValue)}" ${promoError ? 'aria-invalid="true" aria-describedby="promo-err"' : ''}>${promoError ? `<span class="tg-error" id="promo-err" role="alert">${esc(promoError)}</span>` : ''}<button type="submit" class="tg-btn tg-btn-block">Apply</button></form>
 </aside></div>` : ''
   if (!t.lines.length && !saved.length) {
     return `<div class="tg-cart-empty"><h1>Your cart is empty</h1>${user ? '' : `<p><a href="${base}/login?redirect=${encodeURIComponent(base + '/cart')}">Sign in</a> to see items you may have added from another device.</p>`}
-  <div class="tg-email-box"><h2>Get top deals, latest trends, and more.</h2><form onsubmit="return false"><label for="cart-email" class="visually-hidden">Email address</label><input id="cart-email" type="email" placeholder="Email address"><button type="button" class="tg-btn">Sign up</button></form></div></div>`
+  <div class="tg-email-box"><h2>Get top deals, latest trends, and more.</h2><p>Shop the latest offers and featured products above.</p></div></div>`
   }
-  const savedRows = saved.map(p => `<div class="tg-saved-item"><img src="${p.art}" alt=""><div><a href="${productPath(base, p)}">${esc(p.title)}</a><div><b>${money(p.price)}</b></div></div>
-    <form method="post" action="${base}/cart/update"><input type="hidden" name="tcin" value="${p.tcin}"><button type="submit" name="action" value="restore" class="tg-btn tg-btn-outline tg-btn-sm">Move to cart</button> <button type="submit" name="action" value="removesaved" class="tg-link-btn">Remove</button></form></div>`).join('')
+  const savedRows = saved.map(p => `<div class="tg-saved-item">${productImage(p)}<div><a href="${productPath(base, p)}${p.variantId?'?variant='+encodeURIComponent(p.variantId):''}">${esc(p.title)}</a><div class="tg-fine">${esc(optionText(p))}</div><div><b>${money(p.price)}</b></div></div>
+    <form method="post" action="${base}/cart/update"><input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}<button type="submit" name="action" value="restore" class="tg-btn tg-btn-outline tg-btn-sm">Move to cart</button> <button type="submit" name="action" value="removesaved" class="tg-link-btn">Remove</button></form></div>`).join('')
   return `${promoDrawer}<div class="tg-cart">
-  <h1>Cart</h1>
-  <div class="tg-cart-sticky">${money(t.subtotal)} est. total &middot; ${plural(t.count, 'item')}</div>
+  <h1>Cart</h1>${availabilityNotice}
+  <div class="tg-cart-sticky">${money(t.total)} est. total &middot; ${plural(t.count, 'item')}</div>
   <div class="tg-cart-cols">
     <div class="tg-cart-main">
-      ${t.lines.length ? `<section class="tg-group"><h2>Shipping</h2><p class="tg-fine">${t.lines.some(l => l.product.preorder) ? PREORDER_ARRIVAL : `Arrives ${esc(ARRIVES)}`} &middot; Standard Shipping</p>${t.lines.map(l => cartLine(base, l)).join('')}</section>` : '<p class="tg-fine">Your cart is empty.</p>'}
-      <div class="tg-circle-banner"><div>${bullseye('tg-bullseye-sm')}</div><div><b>Target Circle&trade; Card</b><p>Save 5% instantly, in-store and online, plus free 2-day shipping on most items.</p></div><a href="#" aria-label="Learn more about Target Circle Card offer">Learn more</a></div>
+      ${t.lines.length ? `<section class="tg-group"><h2>Shipping</h2><p class="tg-fine">${esc(arrivalSummary(t.lines))} &middot; Standard Shipping</p>${t.lines.map(l => cartLine(base, l, storeLocation)).join('')}</section>` : '<p class="tg-fine">Your cart is empty.</p>'}
+      <div class="tg-circle-banner"><div>${bullseye('tg-bullseye-sm')}</div><div><b>Target Circle&trade; Card</b><p>Save 5% instantly, in-store and online, plus free 2-day shipping on most items.</p></div><a href="${base}/circle" aria-label="Learn more about Target Circle Card offer">Learn more</a></div>
       <section class="tg-saved"><h2>Save your items for later</h2>${saved.length ? savedRows : `<p class="tg-fine">If you aren&rsquo;t ready to buy, select Save for later. We&rsquo;ll keep the item safe here.</p>`}</section>
       <section class="tg-section"><h2>You may also like</h2>${miniCarousel(base, recs)}</section>
-      <div class="tg-circle-banner"><div>${bullseye('tg-bullseye-sm')}</div><div><b>Target Circle 360&trade;</b><p>Skip the $9.99 delivery fee all season long.</p></div><a href="#">Learn more</a></div>
+      <div class="tg-circle-banner"><div>${bullseye('tg-bullseye-sm')}</div><div><b>Target Circle 360&trade;</b><p>Skip the $9.99 delivery fee all season long.</p></div><a href="${base}/circle">Learn more</a></div>
     </div>
     <aside class="tg-summary">
       <h2>Order summary</h2>
@@ -252,7 +220,7 @@ export function cartPage({ base, t, saved = [], user, promo, promoError, promoVa
       ${t.shipping ? '' : `<div class="tg-freeship"><span class="tg-check-icon" aria-hidden="true">&#10003;</span><div><b>Free shipping</b><div class="tg-fine">Spend $35 or more using any payment method (excludes AK, HI and U.S. protectorates).</div></div></div>`}
       <p class="tg-fine">*Total savings may differ at checkout based on Target Circle&trade; Card savings and other discounts</p>
       <div class="tg-promo-cell"><span aria-hidden="true">&#127991;</span><h3>Promo code</h3><a href="${base}/cart?promo=1" aria-label="Add for promo code" data-test="add-promo-code-btn">Add</a></div>
-      ${t.lines.length ? `<a class="tg-btn tg-btn-block" href="${base}/checkout" data-test="checkout-button">${user ? 'Check out' : 'Sign in to check out'}</a>
+      ${t.lines.length&&!unavailable ? `<a class="tg-btn tg-btn-block" href="${base}/checkout" data-test="checkout-button">${user ? 'Check out' : 'Sign in to check out'}</a>
       <form method="post" action="${base}/cart/paypal"><button type="submit" class="tg-btn tg-btn-outline tg-btn-block tg-paypal" aria-label="Pay with PayPal" data-test="paypalButton"><span class="pp1">Pay</span><span class="pp2">Pal</span></button></form>
       ${user ? '' : '<p class="tg-fine">Check out with PayPal &mdash; Sign in to your Target account to use PayPal.</p>'}` : ''}
     </aside>
@@ -271,7 +239,7 @@ export function loginPage({ base, redirect = '', error, email = '' }) {
     <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required>
     <label class="tg-check"><input type="checkbox" name="keepSignedIn" value="1"> Keep me signed in</label>
     <button type="submit" class="tg-btn tg-btn-block">Sign in</button>
-    <a href="#" class="tg-fine">Forgot password?</a>
+    <span class="tg-static">Forgot password?</span>
   </form>
   <div class="tg-or">or</div>
   <a class="tg-btn tg-btn-outline tg-btn-block" href="${base}/login/passkey${r}">Sign in with passkey</a>
@@ -307,14 +275,14 @@ export function createAccountPage({ base, redirect = '', values = {}, errors = {
 </div>`
 }
 
-function summaryAside(t, { collapsible = false } = {}) {
+function summaryAside(base, t, { collapsible = false } = {}) {
   const rows = `<div class="tg-row"><span>Subtotal</span><span>${money(t.subtotal)}</span></div>
     <div class="tg-row"><span>Shipping</span><span>${t.shipping ? money(t.shipping) : 'Free'}</span></div>
     <div class="tg-row"><span>Estimated taxes</span><span>${money(t.tax)}</span></div>
     <div class="tg-row tg-total"><span>Total</span><span>${money(t.total)}</span></div>`
   return `<aside class="tg-summary">
     ${collapsible ? `<details open><summary><span>Order summary</span><b>${money(t.total)} total</b></summary>${rows}</details>` : `<h2>Order summary</h2>${rows}`}
-    <p class="tg-fine"><b>Target Circle&trade; Card holders:</b> save 5% instantly, in-store and online. <a href="#">Learn more</a></p>
+    <p class="tg-fine"><b>Target Circle&trade; Card holders:</b> save 5% instantly, in-store and online. <a href="${base}/circle">Learn more</a></p>
   </aside>`
 }
 
@@ -322,7 +290,7 @@ const addressBlock = (a) => `${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a
 
 // Target's checkout is one page: Shipping address → Payment → Review & place order, each step a
 // container with active / done / pending states that pushes its own /checkout/<step> URL.
-export function checkoutPage({ base, step, t, checkout, values = {}, errors = {} }) {
+export function checkoutPage({ base, step, t, checkout, values = {}, errors = {}, addresses = [] }) {
   const v = (n) => esc(values[n] ?? '')
   const err = (n) => errors[n] ? `<span class="tg-error" id="err-${n}">${esc(errors[n])}</span>` : ''
   const input = (name, label, type = 'text', extra = '') => `<div class="tg-field"><label for="${name}">${label}</label><input id="${name}" name="${name}" type="${type}" value="${v(name)}" ${extra}${errors[name] ? ` aria-invalid="true" aria-describedby="err-${name}"` : ''}>${err(name)}</div>`
@@ -330,12 +298,14 @@ export function checkoutPage({ base, step, t, checkout, values = {}, errors = {}
   const ship = checkout.shipping, pay = checkout.payment
   const state = (name) => step === name ? 'is-active' : (name === 'shipping' ? ship : name === 'payment' ? pay : false) ? 'is-done' : 'is-pending'
   const preorder = t.lines.some(l => l.product.preorder)
-  const arrival = preorder ? PREORDER_ARRIVAL : `Arrives ${ARRIVES}`
+  const arrival = arrivalSummary(t.lines)
   const errorSummary = Object.keys(errors).length ? `<div class="tg-error-box" role="alert"><b>Please fix the following to continue:</b><ul>${Object.values(errors).map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>` : ''
 
   const shippingBody = step === 'shipping'
     ? `${errorSummary}<div class="tg-service"><b>Standard Shipping</b><span class="tg-fine">${preorder ? `Release date ${esc(t.lines.find(l => l.product.preorder).product.release)} &middot; ${PREORDER_ARRIVAL}` : arrival}</span></div>
+    ${addresses.length ? `<form action="${base}/checkout/shipping" method="get" class="tg-address-picker"><label for="saved-address">Choose a saved address</label><select name="address_id" id="saved-address">${addresses.map(a=>`<option value="${esc(a.id)}"${values.address_id===a.id?' selected':''}>${esc(a.label||a.name)} · ${esc(a.line1)}${a.is_default?' (default)':''}</option>`).join('')}</select><button class="tg-btn tg-btn-outline tg-btn-sm">Use address</button><a href="${base}/account/addresses">Manage addresses</a></form>` : ''}
     <form method="post" action="${base}/checkout/shipping" novalidate>
+      ${values.address_id?`<input type="hidden" name="address_id" value="${esc(values.address_id)}">`:''}
       <div class="tg-2col">${input('firstName', 'First name', 'text', 'autocomplete="given-name" required')}${input('lastName', 'Last name', 'text', 'autocomplete="family-name" required')}</div>
       ${input('address1', 'Address line 1', 'text', 'autocomplete="address-line1" required')}
       <details class="tg-addr2" ${values.address2 ? 'open' : ''}><summary>+ Address line 2</summary>${input('address2', 'Address line 2 (optional)', 'text', 'autocomplete="address-line2"')}</details>
@@ -368,7 +338,7 @@ export function checkoutPage({ base, step, t, checkout, values = {}, errors = {}
           ${input('billingAddress1', 'Address line 1')}
           <div class="tg-3col">${input('billingZip', 'Zip code')}${input('billingCity', 'City')}${stateSelect('billingState', 'State')}</div>
         </div>
-        <label class="tg-check"><input type="checkbox" name="saveCard" value="1" ${values.saveCard ? 'checked' : ''}> Save as default payment card</label>
+        <p class="tg-fine">Enter your card for this checkout. A reusable payment card is not saved.</p>
       </div>
       <details class="tg-giftcard"${errors.giftCardNumber || values.giftCardNumber ? ' open' : ''}><summary>Add gift card</summary><h3>Pay with a Target GiftCard</h3><div class="tg-3col">${input('giftCardNumber', 'Card number')}${input('giftCardAccess', 'Access number')}<div class="tg-field tg-field-btn"><button type="submit" name="action" value="giftcard" class="tg-btn tg-btn-outline">Apply</button></div></div></details>
       <button type="submit" class="tg-btn">Save and continue</button>
@@ -380,13 +350,13 @@ export function checkoutPage({ base, step, t, checkout, values = {}, errors = {}
 
   const reviewBody = step === 'review'
     ? `<div class="tg-review-group"><h3>Shipping</h3><p class="tg-green">${arrival}</p>
-      ${t.lines.map(l => `<div class="tg-review-item"><img src="${l.product.art}" alt=""><div>${esc(l.product.title)}<div class="tg-fine">Qty ${l.qty} &middot; ${money(l.product.price * l.qty)}</div></div></div>`).join('')}
+      ${t.lines.map(l => `<div class="tg-review-item">${productImage(l.product)}<div>${esc(l.product.title)}<div class="tg-fine">${esc(optionText(l.product))}</div><div class="tg-fine">${esc(l.product.eta)}</div><div class="tg-fine">Qty ${l.qty} &middot; ${money(l.product.price * l.qty)}</div></div></div>`).join('')}
       <p class="tg-fine">${addressBlock(ship)}</p></div>
     <div class="tg-review-group"><h3>Payment</h3><p>${pay.type === 'card' ? `${esc(pay.brand)} ending in ${esc(pay.last4)}` : esc(PAYMENT_TYPES[pay.type].label)}</p></div>
-    <p class="tg-fine">${CHARGE_POLICY}</p>
+    <p class="tg-fine">${preorder?CHARGE_POLICY:"You won’t be charged for your order until it ships."}</p>
     <form method="post" action="${base}/checkout/place-order" class="tg-place">
       <button type="submit" class="tg-btn tg-btn-block ${pay.type === 'card' ? '' : 'tg-btn-outline'}" data-test="placeOrderButton">${pay.type === 'card' ? 'Place your order' : esc(PAYMENT_TYPES[pay.type].button)}</button>
-      <p class="tg-fine">By placing an order, you agree to the following: <a href="#">Target terms and conditions</a> and <a href="#">privacy policy</a>.</p>
+      <p class="tg-fine">By placing an order, you agree to the following: <span class="tg-static">Target terms and conditions</span> and <span class="tg-static">privacy policy</span>.</p>
     </form>`
     : ''
 
@@ -398,12 +368,12 @@ export function checkoutPage({ base, step, t, checkout, values = {}, errors = {}
   return `<div class="tg-checkout">
   <div class="tg-co-main">
     <h1 class="visually-hidden">Checkout</h1>
-    <details class="tg-cart-acc"><summary>Cart &middot; ${plural(t.count, 'item')}</summary>${t.lines.map(l => `<div class="tg-review-item"><img src="${l.product.art}" alt=""><div>${esc(l.product.title)}<div class="tg-fine">Qty ${l.qty} &middot; ${money(l.product.price * l.qty)}</div></div></div>`).join('')}<a href="${base}/cart" class="tg-fine">Return to cart</a></details>
+    <details class="tg-cart-acc"><summary>Cart &middot; ${plural(t.count, 'item')}</summary>${t.lines.map(l => `<div class="tg-review-item">${productImage(l.product)}<div>${esc(l.product.title)}<div class="tg-fine">${esc(optionText(l.product))}</div><div class="tg-fine">${esc(l.product.eta)}</div><div class="tg-fine">Qty ${l.qty} &middot; ${money(l.product.price * l.qty)}</div></div></div>`).join('')}<a href="${base}/cart" class="tg-fine">Return to cart</a></details>
     ${stepBox('shipping', 1, 'Shipping address', shippingBody, 'STEP_SHIPPING_CONTAINER')}
     ${stepBox('payment', 2, 'Payment', paymentBody, 'STEP_PAYMENT_CONTAINER')}
     ${stepBox('review', 3, 'Review &amp; place order', reviewBody, 'STEP_REVIEW_CONTAINER')}
   </div>
-  ${summaryAside(t, { collapsible: true })}
+  ${summaryAside(base, t, { collapsible: true })}
 </div>`
 }
 
@@ -419,7 +389,7 @@ export function confirmationPage({ base, order }) {
   <section class="tg-group">
     <h2>${plural(count, 'item')}</h2>
     <p class="tg-green">${esc(order.fulfillment.eta)}</p>
-    ${order.items.map(i => `<div class="tg-review-item"><img src="${i.kind === 'game' ? `/static/art/${i.platform}-${i.edition}.svg` : '/static/art/game-generic.svg'}" alt=""><div>${esc(i.title)}<div class="tg-fine">Qty ${i.qty} &middot; ${money(i.unit_price * i.qty)}</div></div></div>`).join('')}
+    ${order.items.map((i,index) => `<div class="tg-review-item">${productImage(selectedProduct(byTcin(i.sku),order.meta.options?.[index]?.variant_id||'')||byTcin(i.sku)||{title:i.title,art:"/static/art/game-generic.svg"})}<div>${esc(i.title)}<div class="tg-fine">${esc(Object.entries(order.meta.options?.[index]?.options||{}).map(([k,v])=>`${k}: ${v}`).join(" · "))}</div><div class="tg-fine">${esc(order.meta.options?.[index]?.eta||order.fulfillment.eta)}</div><div class="tg-fine">Qty ${i.qty} &middot; ${money(i.unit_price * i.qty)}</div></div></div>`).join('')}
     <p class="tg-fine"><b>Shipping to</b><br>${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a.line1)}${a.line2 ? `<br>${esc(a.line2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.postal_code)}</p>
     <p class="tg-fine"><b>Payment</b><br>${pay}</p>
   </section>
@@ -432,8 +402,8 @@ export function confirmationPage({ base, order }) {
     <div class="tg-row"><span>Estimated taxes</span><span>${money(order.totals.tax)}</span></div>
     <div class="tg-row tg-total"><span>Total</span><span>${money(order.totals.total)}</span></div>
   </aside>
-  <div class="tg-circle-banner"><div>${bullseye('tg-bullseye-sm')}</div><div><b>Target Circle 360&trade;</b><p>Skip the $9.99 delivery fee all season long. Try it free for 14 days.</p></div><a href="#">Learn more</a></div>
-  <div class="tg-survey"><b>Got shopping preferences?</b><p>Please share your experience.</p><button type="button" class="tg-btn tg-btn-outline tg-btn-sm">Take survey</button></div>
+  <div class="tg-circle-banner"><div>${bullseye('tg-bullseye-sm')}</div><div><b>Target Circle 360&trade;</b><p>Skip the $9.99 delivery fee all season long. Try it free for 14 days.</p></div><a href="${base}/circle">Learn more</a></div>
+  <div class="tg-survey"><b>Got shopping preferences?</b><p>Please share your experience.</p><p class="tg-fine">Thank you for shopping with us.</p></div>
 </div>`
 }
 
@@ -444,7 +414,7 @@ export function orderDetailsPage({ base, order }) {
   <h1>Order # ${esc(order.order_number)}</h1>
   <p class="tg-fine">Placed ${new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
   <section class="tg-group"><h2>Shipping</h2><p class="tg-green">${esc(order.fulfillment.eta)}</p>
-    ${order.items.map(i => `<div class="tg-review-item"><div>${esc(i.title)}<div class="tg-fine">Qty ${i.qty} &middot; ${money(i.unit_price * i.qty)}</div></div><button type="button" class="tg-btn tg-btn-outline tg-btn-sm">Request cancellation</button></div>`).join('')}
+    ${order.items.map((i,index) => `<div class="tg-review-item"><div>${esc(i.title)}<div class="tg-fine">${esc(Object.entries(order.meta.options?.[index]?.options||{}).map(([k,v])=>`${k}: ${v}`).join(" · "))}</div><div class="tg-fine">${esc(order.meta.options?.[index]?.eta||order.fulfillment.eta)}</div><div class="tg-fine">Qty ${i.qty} &middot; ${money(i.unit_price * i.qty)}</div></div><a href="${base}/help" class="tg-fine">Order help</a></div>`).join('')}
     <p class="tg-fine">${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a.line1)}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.postal_code)}</p></section>
   <aside class="tg-summary tg-summary-inline"><h2>Order summary</h2>
     <div class="tg-row"><span>Subtotal</span><span>${money(order.totals.subtotal)}</span></div>
@@ -464,4 +434,8 @@ export function accountPage({ base, user, orders }) {
 
 export function simplePage({ title, html }) {
   return `<div class="tg-simple"><h1>${esc(title)}</h1>${html}</div>`
+}
+
+export function locationPage({ base, zip = SHIP_ZIP, returnTo = '', error = '' }) {
+  return `<section class="tg-auth"><h1>Shipping location</h1><p>Enter your ZIP code to update your shopping location.</p>${error ? `<p class="tg-error" role="alert">${esc(error)}</p>` : ''}<form action="${base}/location" method="post"><input type="hidden" name="returnTo" value="${esc(returnTo)}"><label for="shopping-zip">ZIP code</label><input id="shopping-zip" name="zip" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}" maxlength="5" value="${esc(zip)}" required><button class="tg-btn" type="submit">Save</button></form><p class="tg-fine">Check the item’s delivery choices for availability. Add your complete shipping address at checkout.</p></section>`
 }

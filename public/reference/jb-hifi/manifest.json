@@ -1,0 +1,414 @@
+{
+  "captured_at": "2026-10-06",
+  "page_url": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+  "products": [
+    {
+      "ids": [
+        "903000"
+      ],
+      "images": [
+        "gta-vi-ps5-1.jpg",
+        "gta-vi-ps5-2.jpg",
+        "gta-vi-ps5-3.jpg",
+        "gta-vi-ps5-4.jpg",
+        "gta-vi-ps5-5.jpg",
+        "gta-vi-ps5-6.jpg",
+        "gta-vi-ps5-7.jpg",
+        "gta-vi-ps5-8.jpg",
+        "gta-vi-ps5-9.jpg",
+        "gta-vi-ps5-10.jpg",
+        "gta-vi-ps5-11.jpg"
+      ]
+    },
+    {
+      "ids": [
+        "903001"
+      ],
+      "images": [
+        "gta-vi-xbox-1.jpg",
+        "gta-vi-xbox-2.jpg",
+        "gta-vi-xbox-3.jpg",
+        "gta-vi-xbox-4.jpg",
+        "gta-vi-xbox-5.jpg",
+        "gta-vi-xbox-6.jpg",
+        "gta-vi-xbox-7.jpg",
+        "gta-vi-xbox-8.jpg",
+        "gta-vi-xbox-9.jpg",
+        "gta-vi-xbox-10.jpg",
+        "gta-vi-xbox-11.jpg"
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "file": "gta-vi-ps5-1.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-0-I-639179076603742896.jpg?v=1783468506",
+      "bytes": 536082,
+      "sha256": "d346f0ce118005fa7a7e5677f7efa79d724ccdd1d21d2cbae86c8a124c583845"
+    },
+    {
+      "file": "gta-vi-ps5-2.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-1-I-639179076602610808_a91ac9c6-5ecd-48d0-a242-e3b192c94ddd.jpg?v=1783468506",
+      "bytes": 191904,
+      "sha256": "cfcea8c1495a8ffcf37640667ca2ce42d9b90824812769ee274ba4719738a4a9"
+    },
+    {
+      "file": "gta-vi-ps5-3.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-2-I-639179076603482037.jpg?v=1783468506",
+      "bytes": 199986,
+      "sha256": "1679326a5d83ce441d674497ec0520688dd6e6d2d6fd1f32b8a4610201e80bef"
+    },
+    {
+      "file": "gta-vi-ps5-4.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-3-I-639179076603609286_9308b90f-149e-4bc2-b0c3-51f9c55a26fc.jpg?v=1783468506",
+      "bytes": 137701,
+      "sha256": "ce5cadbe5244005f789c51c0c41bd2a5a392ce5ffc7d1aa5dfae418b0da3210e"
+    },
+    {
+      "file": "gta-vi-ps5-5.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-4-I-639179076603437500.jpg?v=1783468506",
+      "bytes": 297179,
+      "sha256": "1526040d2cb4632b9d1db346ad5521a994b7862a4cb82f58d357f23b2065a800"
+    },
+    {
+      "file": "gta-vi-ps5-6.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-5-I-639179076603223867.jpg?v=1783468506",
+      "bytes": 247904,
+      "sha256": "f0cedbe7b01dfa8ee0e67e142d3ee958097f714a1e0cedc8033c04d37a69e7d3"
+    },
+    {
+      "file": "gta-vi-ps5-7.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-6-I-639179076603535695_1cccc2c3-1849-41ed-923a-8bd3d5f1d24a.jpg?v=1783468506",
+      "bytes": 252813,
+      "sha256": "527edee1c84bb9d9efbe0e13a1b0d1274fdd28afa5776db4f010bd619a3a7f7f"
+    },
+    {
+      "file": "gta-vi-ps5-8.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-7-I-639179392804586545.jpg?v=1783468506",
+      "bytes": 336291,
+      "sha256": "1fbaae3a52c7e996556f50743a83d7f0f7fc1f43de92ba50dd42f32903c0bab5"
+    },
+    {
+      "file": "gta-vi-ps5-9.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-8-I-639179392805556493_062c1412-8921-471d-b121-0288ec790a14.jpg?v=1783468506",
+      "bytes": 351921,
+      "sha256": "9bf1ecbba05a70318b1890c2dadfb2b7d5db7268380be3748215aa06c5ca05f9"
+    },
+    {
+      "file": "gta-vi-ps5-10.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-9-I-639179392806609766.jpg?v=1783468506",
+      "bytes": 371269,
+      "sha256": "445adccff89ffa4ee4951e650321be8636a0d75fc1bf5004a6a52a0d01ad9d83"
+    },
+    {
+      "file": "gta-vi-ps5-11.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903000-Product-10-I-639190652403950340.jpg?v=1783468506",
+      "bytes": 199810,
+      "sha256": "efae2102f7c647cc310c4fcce04385dbcdb04c0ddcd5850deb056f5a05e726dc"
+    },
+    {
+      "file": "gta-vi-xbox-1.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-0-I-639179079002157838.jpg?v=1783468658",
+      "bytes": 531961,
+      "sha256": "cbc6a331a21c4246f7bf77a7dba826221d87917ebbe9289f9af8d5d8bfa29aab"
+    },
+    {
+      "file": "gta-vi-xbox-2.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-1-I-639179074210217098.jpg?v=1783468658",
+      "bytes": 191904,
+      "sha256": "cfcea8c1495a8ffcf37640667ca2ce42d9b90824812769ee274ba4719738a4a9"
+    },
+    {
+      "file": "gta-vi-xbox-3.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-2-I-639179074210321709.jpg?v=1783468658",
+      "bytes": 199986,
+      "sha256": "1679326a5d83ce441d674497ec0520688dd6e6d2d6fd1f32b8a4610201e80bef"
+    },
+    {
+      "file": "gta-vi-xbox-4.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-3-I-639179074210355978_f0fd820c-7ef4-4bb3-8af8-e03b661355df.jpg?v=1783468658",
+      "bytes": 137701,
+      "sha256": "ce5cadbe5244005f789c51c0c41bd2a5a392ce5ffc7d1aa5dfae418b0da3210e"
+    },
+    {
+      "file": "gta-vi-xbox-5.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-4-I-639179074210435141.jpg?v=1783468658",
+      "bytes": 297179,
+      "sha256": "1526040d2cb4632b9d1db346ad5521a994b7862a4cb82f58d357f23b2065a800"
+    },
+    {
+      "file": "gta-vi-xbox-6.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-5-I-639179074210322186.jpg?v=1783468659",
+      "bytes": 247904,
+      "sha256": "f0cedbe7b01dfa8ee0e67e142d3ee958097f714a1e0cedc8033c04d37a69e7d3"
+    },
+    {
+      "file": "gta-vi-xbox-7.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-6-I-639179074210351514.jpg?v=1783468658",
+      "bytes": 252813,
+      "sha256": "527edee1c84bb9d9efbe0e13a1b0d1274fdd28afa5776db4f010bd619a3a7f7f"
+    },
+    {
+      "file": "gta-vi-xbox-8.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-7-I-639179392804649743.jpg?v=1783468658",
+      "bytes": 336291,
+      "sha256": "1fbaae3a52c7e996556f50743a83d7f0f7fc1f43de92ba50dd42f32903c0bab5"
+    },
+    {
+      "file": "gta-vi-xbox-9.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-8-I-639179392805069251.jpg?v=1783468658",
+      "bytes": 351921,
+      "sha256": "9bf1ecbba05a70318b1890c2dadfb2b7d5db7268380be3748215aa06c5ca05f9"
+    },
+    {
+      "file": "gta-vi-xbox-10.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-9-I-639179392802338677_f2adbfab-2483-4e23-b351-a89240b29fb4.jpg?v=1783468658",
+      "bytes": 371269,
+      "sha256": "445adccff89ffa4ee4951e650321be8636a0d75fc1bf5004a6a52a0d01ad9d83"
+    },
+    {
+      "file": "gta-vi-xbox-11.jpg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shop/files/903001-Product-10-I-639190652404453453.jpg?v=1783468658",
+      "bytes": 199810,
+      "sha256": "efae2102f7c647cc310c4fcce04385dbcdb04c0ddcd5850deb056f5a05e726dc"
+    },
+    {
+      "file": "ps5-mark.png",
+      "source_url": "https://brand-images.jbhifi.com.au/playstation5.png",
+      "bytes": 1618,
+      "sha256": "a91e9b78cb2b38d95ec6bd733a03f878e70781208d51f4e781735bd895148221"
+    },
+    {
+      "file": "xbox-mark.png",
+      "source_url": "https://brand-images.jbhifi.com.au/series_x-20200924.png",
+      "bytes": 2622,
+      "sha256": "039e60dcd1a6eb4fefbb2ddbf40d09f5cdad31d99a2844a4b20b1d1ba5963799"
+    },
+    {
+      "file": "preorder-dlc.jpg",
+      "source_url": "https://jbhallprdmsgapidataprod.blob.core.windows.net/uploads/04361ce2-3b2b-463d-b6c3-59a004a977ee.JPG",
+      "bytes": 217233,
+      "sha256": "55ab08baafc7080750d44d130606d3638165277b7d508e5110273603fb4d017a"
+    },
+    {
+      "file": "smashing-prices.woff2",
+      "source_url": "https://jbhcdn.azureedge.net/public/fonts/SmashingPricesJBV5.woff2",
+      "bytes": 2812,
+      "sha256": "89f6ec3dd485e562394b421a47f5bdda88c3b8afcfd53bb59f9dd4a48d3fe9a6"
+    },
+    {
+      "file": "jb-crazy.woff2",
+      "source_url": "https://jbhcdn.azureedge.net/public/fonts/JBCrazy.woff2",
+      "bytes": 23660,
+      "sha256": "17ecd8dea99ed63f7d28024d0da3ef7740ee9e69d24c5fcb793bb43e600a8d41"
+    },
+    {
+      "file": "jb-callout.woff2",
+      "source_url": "https://jbhcdn.azureedge.net/public/fonts/JB-Callout.woff2",
+      "bytes": 16212,
+      "sha256": "d9f0418cf8394c620eb38b2bdf4833beb3679532a1bdd483701fbebc51fa354e"
+    },
+    {
+      "file": "roboto-regular.woff2",
+      "source_url": "https://fonts.shopifycdn.com/roboto/roboto_n4.2019d890f07b1852f56ce63ba45b2db45d852cba.woff2?h1=amJoaWZpLmNvbS5hdQ&hmac=3a15daea950d33dcea0b84c04b0376d30eee6d7fa508263977cf98383f56f806",
+      "bytes": 30608,
+      "sha256": "770d0041328e2168095885f1211dcd8a4eb99793700b69c0536a1ae6bfdb92c4"
+    },
+    {
+      "file": "roboto-bold.woff2",
+      "source_url": "https://fonts.shopifycdn.com/roboto/roboto_n7.f38007a10afbbde8976c4056bfe890710d51dec2.woff2?h1=amJoaWZpLmNvbS5hdQ&hmac=1d37f5c1c71f9bca12745523b1b00f52431ecec89c4c5c6e1763332d5f28c405",
+      "bytes": 34472,
+      "sha256": "1d36beab13aec115f3f6da2230d3d323b907113d8af72fdfdcefcba4bf607807"
+    },
+    {
+      "file": "paypal.svg",
+      "source_url": "https://images.ctfassets.net/xa93kvziwaye/3cPPxiWLnkXEtXKia4V1cq/955a681e5ee05e4a64c81976c7e1e181/paypal-mark-color_2025.svg",
+      "bytes": 1007,
+      "sha256": "37aa5561ffdfdd6ad05701b401bb099fa7de6514b9b06a1ca2606beb6f3e9758"
+    },
+    {
+      "file": "afterpay.webp",
+      "source_url": "https://images.ctfassets.net/xa93kvziwaye/3n9v2y74dLbbyHdrLnKu6M/5f61491657140324beac2ad2411793f5/afterpay_lockup_blackonmint_2x.webp",
+      "bytes": 1780,
+      "sha256": "0262269ca6a87d8849e0bccd07f346bd37dd10d5e11abc3f948f948275bf0ff8"
+    },
+    {
+      "file": "zippay.svg",
+      "source_url": "https://images.ctfassets.net/xa93kvziwaye/6Wca3Ypbnw3iylu6Psygl6/ad543638070985e7c529f801b8a058a3/zippay.svg",
+      "bytes": 1018,
+      "sha256": "72ae5e628ce6e2dd18a3a2a1a9ad74af2adddc1ec9a1e39a821c593e5efe5588"
+    },
+    {
+      "file": "jb-logo.svg",
+      "source_url": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+      "page_element": "[data-testid=\"header-jb-logo\"] svg",
+      "bytes": 973,
+      "sha256": "0ed4e61ae0f14a70fcf8a8bca09697d3318621ae74294feb7e3cb561fdeabd1f"
+    },
+    {
+      "file": "bnpl-afterpay.svg",
+      "source_url": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+      "page_element": "#pdp-bnpl-afterpay svg",
+      "sha256": "e8cbd8c10161e02a88ac686d8e87d670175103fab95937c762a0d055807ef6e4",
+      "bytes": 4273
+    },
+    {
+      "file": "bnpl-zip.svg",
+      "source_url": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+      "page_element": "#pdp-bnpl-zip svg",
+      "sha256": "84f3a219f0a1a04ea7d7af6daf281477edce23e9f7657b6bbf922f3f4ea19d8e",
+      "bytes": 945
+    },
+    {
+      "file": "bnpl-paypal.svg",
+      "source_url": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+      "page_element": "#pdp-bnpl-paypal svg",
+      "sha256": "3d50c251d5da40487024eecd68730de1a2bb88ded1b0c9ecac04ace6f9d600e2",
+      "bytes": 1966
+    },
+    {
+      "file": "coupon-black.svg",
+      "source_url": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+      "page_element": "Hidden sprite g#couponBlack; paths preserved, standalone viewBox fitted to path bounds. Not the visible smiling coupon icon.",
+      "sha256": "e99113b2ad5b12537959167e2fe715a06d7d68bd3ff3efb47ba6f42b94398740",
+      "bytes": 988
+    },
+    {
+      "file": "coupon-smile.svg",
+      "source_url": "https://www.jbhifi.com.au/products/playstation-5-grand-theft-auto-vi",
+      "page_element": "Visible coupon offer SVG, viewBox 0 0 47 49; original paths preserved, palette primary variable resolved to JB yellow #FFEC0F",
+      "bytes": 5554,
+      "sha256": "7f6768c1048cf5b546b1deb63ccf30da8f32e92f36df0cb3d867f60418a54ad9"
+    },
+    {
+      "file": "checkout-cart.png",
+      "source_url": "https://jbhcdn.azureedge.net/public/icons/checkout/cart.png",
+      "page_element": "Public guest checkout first information step",
+      "bytes": 8766,
+      "sha256": "2eaea82a3efbd757285d2a2fff11eba7a74615f8b3cd20f91de5e14c4d77b81c"
+    },
+    {
+      "file": "checkout-logo.png",
+      "source_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/JB_logo_full_x320.png?v=1722349008",
+      "page_element": "Public guest checkout first information step",
+      "bytes": 1306,
+      "sha256": "c6637e7565a756837183622115dff46a05987d38fd264d4c6bd1c7b7c146a054"
+    },
+    {
+      "file": "checkout-delivery.svg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shopifycloud/checkout-web/assets/c1/assets/sprite.CxF41tjh.svg#truck",
+      "page_element": "Public guest checkout delivery-method icon; exact symbol paths preserved, inherited outline style resolved for standalone image",
+      "bytes": 656,
+      "sha256": "527c51e28643aea9966eafa71d2973a7f589052388a72b52ed90a3a3ec7ce513"
+    },
+    {
+      "file": "checkout-pickup.svg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shopifycloud/checkout-web/assets/c1/assets/sprite.CxF41tjh.svg#store",
+      "page_element": "Public guest checkout delivery-method icon; exact symbol paths preserved, inherited outline style resolved for standalone image",
+      "bytes": 791,
+      "sha256": "a4c349564581386a8e5810cd79481fb84892dd8b46c52203d1099e5b09243669"
+    },
+    {
+      "file": "checkout-collection.svg",
+      "source_url": "https://www.jbhifi.com.au/cdn/shopifycloud/checkout-web/assets/c1/assets/sprite.CxF41tjh.svg#location",
+      "page_element": "Public guest checkout delivery-method icon; exact symbol paths preserved, inherited outline style resolved for standalone image",
+      "bytes": 412,
+      "sha256": "4bd83bfd6df3d4674506259da9e9c802011b3121638ce7df2e97660ebce0fb34"
+    },
+    {
+      "file": "carrier-australia-post.png",
+      "source_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/carrier-australia-post.png?v=1716251220",
+      "page_element": "22px carrier mark in observed Melbourne 3000 collection-point results",
+      "bytes": 2730,
+      "sha256": "b9e28ce5c0a62cbca12e101a7d1f6afa7df4ca999e9fde7d9d1298c9b5888b6d"
+    },
+    {
+      "file": "recommendation-star-gold.svg",
+      "source_url": "https://www.jbhifi.com.au/cart",
+      "page_element": "Observed recommendation rating star; original path and viewBox, standalone fill resolved",
+      "bytes": 233,
+      "sha256": "d41843f939a08a8172d7fde00eb86f7c902a13923f6392987d8faaf41ccdd849"
+    },
+    {
+      "file": "recommendation-star-empty.svg",
+      "source_url": "https://www.jbhifi.com.au/cart",
+      "page_element": "Observed recommendation rating star; original path and viewBox, standalone fill resolved",
+      "bytes": 230,
+      "sha256": "96b47c00115df35dd807a02bab92fe56dba4c05c56bd96b4abd0ec642b1905e5"
+    },
+    {
+      "file": "recommendation-829262.jpg",
+      "source_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/829262-Product-0-I-638923893203775079.jpg?v=1790897346",
+      "observed_thumbnail_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/829262-Product-0-I-638923893203775079_32x32.jpg?v=1790897346",
+      "page_element": "Xbox GTA VI recommendation card; original-size CDN variant of the observed lazy thumbnail, downloaded and identified successfully",
+      "mime_type": "image/jpeg",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 234810,
+      "sha256": "ea30c25a1e13ff8efa21c731fe0297037326be74fb7e821baa73c5a6fe7165da"
+    },
+    {
+      "file": "recommendation-840499.jpg",
+      "source_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/840499-Product-0-I-638931607874802126.jpg?v=1757564107",
+      "observed_thumbnail_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/840499-Product-0-I-638931607874802126_32x32.jpg?v=1757564107",
+      "page_element": "Xbox GTA VI recommendation card; original-size CDN variant of the observed lazy thumbnail, downloaded and identified successfully",
+      "mime_type": "image/jpeg",
+      "width": 2000,
+      "height": 2000,
+      "bytes": 259695,
+      "sha256": "91cf744cc343c5930e9289f5d4e013ee8ccc9a15e0c5488a8d09e64b16c44410"
+    },
+    {
+      "file": "recommendation-896438.jpg",
+      "source_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/896438-Product-0-I-639180392406531489.jpg?v=1791256858",
+      "observed_thumbnail_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/896438-Product-0-I-639180392406531489_32x32.jpg?v=1791256858",
+      "page_element": "Xbox GTA VI recommendation card; original-size CDN variant of the observed lazy thumbnail, downloaded and identified successfully",
+      "mime_type": "image/jpeg",
+      "width": 2000,
+      "height": 2000,
+      "bytes": 193951,
+      "sha256": "5396b3bdcc854e8f4bb902c42f3e78f9a8422a2e694587b7f3b0ca2d4e843e06"
+    },
+    {
+      "file": "recommendation-896402.jpg",
+      "source_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/896402-Product-0-I-639148533605517434.jpg?v=1779256630",
+      "observed_thumbnail_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/896402-Product-0-I-639148533605517434_32x32.jpg?v=1779256630",
+      "page_element": "Xbox GTA VI recommendation card; original-size CDN variant of the observed lazy thumbnail, downloaded and identified successfully",
+      "mime_type": "image/jpeg",
+      "width": 1034,
+      "height": 1034,
+      "bytes": 34914,
+      "sha256": "9fba8a4642ed81d5eb5280bfa74fd5b0185d5aaf58149df2ade8683c67dd9edf"
+    },
+    {
+      "file": "recommendation-482005.jpg",
+      "source_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/products/482005-Product-0-I-637362926872100692.jpg?v=1600664965",
+      "observed_thumbnail_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/products/482005-Product-0-I-637362926872100692_32x32.jpg?v=1600664965",
+      "page_element": "Xbox GTA VI recommendation card; original-size CDN variant of the observed lazy thumbnail, downloaded and identified successfully",
+      "mime_type": "image/jpeg",
+      "width": 976,
+      "height": 976,
+      "bytes": 23823,
+      "sha256": "2730704aed78a1e3110f50b6563a5c133a6171a999724ad13e42d6604cce5b14"
+    },
+    {
+      "file": "recommendation-899532.jpg",
+      "source_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/899532-Product-0-I-639215832002304171.jpg?v=1785987007",
+      "observed_thumbnail_url": "https://cdn.shopify.com/s/files/1/0024/9803/5810/files/899532-Product-0-I-639215832002304171_32x32.jpg?v=1785987007",
+      "page_element": "Xbox GTA VI recommendation card; original-size CDN variant of the observed lazy thumbnail, downloaded and identified successfully",
+      "mime_type": "image/jpeg",
+      "width": 1920,
+      "height": 1920,
+      "bytes": 342279,
+      "sha256": "1e52498bbab60deee3a97dffcdbb3b858c0ccbb86396d6fd29a1a4c7173f4e07"
+    },
+    {
+      "file": "cart-trash.svg",
+      "source_url": "https://www.jbhifi.com.au/cart",
+      "page_element": "Captured cart Remove control SVG; original paths/viewBox preserved, inherited icon color resolved",
+      "mime_type": "image/svg+xml",
+      "bytes": 1530,
+      "sha256": "e00f17bf329697703f100ae19de1b76266f8cb5be5cbb74733c38061d5b57446"
+    }
+  ]
+}

@@ -282,3 +282,21 @@ test('walmart: picking a Walmart+ plan at checkout adds the $1 trial to the orde
     assert.equal(o.payment.expiration, '12/29')
   } finally { await srv.close() }
 })
+
+test('walmart: platform/format and fulfillment refinements affect listings, with stable price sorting', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client()
+    const xbox = await c.get('/walmart/search?q=gta+6&platform=xbox&format=code-in-box')
+    assert.equal(xbox.status, 200)
+    assert.match(xbox.text, /20459958275/)
+    assert.doesNotMatch(xbox.text, /20482917228|20486211904/)
+    assert.match(xbox.text, /value="xbox" checked/)
+    const empty = await c.get('/walmart/search?q=gta+6&fulfillment=pickup')
+    assert.match(empty.text, /There were no search results/)
+    assert.match(empty.text, /Clear all/)
+    const sorted = await c.get('/walmart/search?q=gta+6&sort=price_low')
+    assert.ok(sorted.text.indexOf('value="20486211905"') < sorted.text.indexOf('value="20482917228"'))
+    assert.equal((await c.get('/walmart/help')).status, 200)
+  } finally { await srv.close() }
+})

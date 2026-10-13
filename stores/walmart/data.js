@@ -1,3 +1,8 @@
+import { scenarioProduct } from '../../lib/benchmark-scenarios.js'
+import { applyCatalogPolicy, fixtureCatalog } from '../../lib/catalog-policy.js'
+import { catalogEvidence } from './catalog-evidence.js'
+import { expandCatalog } from './expand500.js'
+import { RETAIL_PRODUCTS, categorySlug } from './catalog.js'
 // Listings as they appear on walmart.com (research/walmart.md + walmart.json, 2026-09-29).
 // ASSUMPTION: the cart says taxes are "Calculated at checkout" and no rate was observed; 7% is the
 // combined Omaha, NE (68116) rate behind the header's default location. Applied once a delivery
@@ -22,7 +27,7 @@ const GAME_FEATURES = (platform) => [
   'Grand Theft Auto VI is a single-player experience.',
 ]
 
-export const PRODUCTS = [
+const LEGACY_PRODUCTS = [
   {
     id: '20482917228', kind: 'game', platform: 'ps5', edition: 'standard', format: 'code-in-box', rank: 1,
     slug: 'Grand-Theft-Auto-VI-PlayStation-5-Game',
@@ -70,7 +75,7 @@ export const PRODUCTS = [
     rating: null, ratings: 0, reviews: 0, esrb: null,
     releaseText: 'Release date Nov 19', shippingText: 'Free shipping, arrives by Nov 21',
     crumbs: ['Movies, Music & Books', 'Music', 'CDs'],
-    art: '/static/art/vinyl.svg',
+    art: '/walmart/static/cd.svg',
     features: ['Single-disc CD of the official Grand Theft Auto VI soundtrack.', 'Ships Nov 19; arrives by Nov 21.'],
     keywords: 'gta 6 gta6 gta vi gtavi grand theft auto album soundtrack cd music preorder pre-order',
   },
@@ -120,6 +125,47 @@ export const PRODUCTS = [
   },
 ]
 
+for (const p of LEGACY_PRODUCTS) {
+  p.department = p.crumbs[0] === 'Movies, Music & Books' ? 'music' : 'games'
+  p.category = p.department === 'music' ? (p.title.includes('Vinyl') ? 'Vinyl Records' : 'CDs') : p.esrb ? 'Video Games' : 'Gaming Accessories'
+  p.family = p.kind === 'game' ? 'gta-vi' : p.id
+  p.stock = 10
+  p.fulfillment = ['shipping']
+  p.sellerId = 'walmart'
+  p.arrival = p.kind === 'game' ? ARRIVAL : p.preorder ? {short:p.department === 'music' ? 'Nov 21' : 'Nov 19',day:p.department === 'music' ? 'Nov 21' : 'Nov 19',full:p.department === 'music' ? 'Nov 21, 2026' : 'Nov 19, 2026'} : {short:'tomorrow',day:'tomorrow',full:'tomorrow'}
+  p.returnPolicy = p.kind === 'game' ? 'Return within 30 days after delivery. Video game download codes are not returnable after redemption. Contact Customer Care for code support.' : 'Return eligible unopened items within 30 days of delivery. Opened music and software may be exchanged only when defective.'
+  p.reviewEntries = p.rating ? [{id:'legacy-a',stars:5,name:'Jordan',title:p.kind === 'game' ? 'Ready for preload':'Matches the description',body:p.kind === 'game' ? 'I chose the code-in-box edition after checking the release dates and platform. This listing does not include a disc.' : p.features[0],date:'2026-09-20'},{id:'legacy-b',stars:4,name:'Morgan',title:'Check the item details',body:p.kind === 'game' ? 'The download code and platform requirements are listed clearly. I will be ready for release day.' : `The listed ${p.category.toLowerCase()} features helped me choose this item.`,date:'2026-09-12'}] : []
+}
+export const PRODUCTS = [...LEGACY_PRODUCTS,...(fixtureCatalog ? RETAIL_PRODUCTS : [])]
+if (fixtureCatalog) expandCatalog(PRODUCTS)
+applyCatalogPolicy('walmart', PRODUCTS, catalogEvidence)
+if (!fixtureCatalog) for (const p of PRODUCTS) { p.catalogType = 'game'; p.catalogPlatform = p.platform; p.simulatedStock = true; p.reviewEntries = [] }
+export const arrivalFor = p => p.arrival
+export const arrivalPhrase = estimate => estimate==='tomorrow' || estimate.startsWith('in ') ? `Arrives ${estimate}` : `Arrives by ${estimate}`
+export function arrivalSummary(lines) {
+  const dates = [...new Set(lines.map(l=>arrivalFor(l.product).day))]
+  return dates.length === 1 ? dates[0] : 'the dates shown with each item'
+}
+export const optionText = p => p.selectedOptions ? Object.entries(p.selectedOptions).map(([k,v])=>`${k}: ${v}`).join(' · ') : ''
+export function selectedProduct(p, variantId) {
+  if (!p) return null
+  if (!p.variants) return variantId ? null : p
+  const v = p.variants.find(v=>v.id===String(variantId ?? ''))
+  if (!v) return null
+  const specs={...p.specs,...(p.family==='milk'?{Size:v.options.Pack}:p.family==='dog-food'?{Weight:v.options.Size}:p.family==='mug'?{Pack:v.options.Pack}:{}),...v.options,...v.specs}
+  return {...p,price:v.price,stock:Math.min(p.stock,v.stock),variantId:v.id,selectedOptions:v.options,specs,features:[p.features[0],...Object.entries(specs).map(([k,value])=>`${k}: ${value}`)]}
+}
+export const lineKey = (pid,variantId) => `${pid}${variantId ? `::${variantId}` : ''}`
+export const stockLimit = p => Math.min(10,Math.max(0,p?.stock ?? 0))
+export function validCart(store) {
+  const counts = new Map()
+  return store.cart.every(l=>{
+    const p = selectedProduct(byId(l.pid),l.variantId)
+    counts.set(l.pid,(counts.get(l.pid) ?? 0)+l.qty)
+    return p && Number.isInteger(l.qty) && l.qty>0 && l.qty<=stockLimit(p) && counts.get(l.pid)<=stockLimit(byId(l.pid))
+  })
+}
+
 export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 
@@ -128,15 +174,15 @@ export function productPath(base, p, from = null) {
   return `${base}/ip/${p.slug}/${p.id}${from ? '?classType=REGULAR&athbdg=L1200&from=/search' : ''}`
 }
 
-// Any-token match ranked by how many query tokens hit, so "gta 6" lists the game first and GTA V last,
-// like Walmart's fuzzy results. Sponsored-only items never show up in results.
+// Preserve fuzzy GTA synonyms and related game/music results. Ordinary searches require all
+// query tokens to match item details; numeric GTA tokens never pull unrelated groceries into results.
 export function search(q) {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = [...new Set(norm(q).split(' ').filter(Boolean))]
-  if (!tokens.length) return []
-  return PRODUCTS.filter(p => !p.sponsored)
+  if (!tokens.length) return PRODUCTS
+  return PRODUCTS.filter(p => !p.sponsored && (!/gta|grand\s+theft/i.test(String(q)) || /gta|grand theft/i.test(p.keywords)))
     .map(p => { const hay = norm(p.title + ' ' + p.keywords); return { p, hits: tokens.filter(t => hay.includes(t)).length } })
-    .filter(x => x.hits > 0)
+    .filter(x => /gta|grand\s+theft/i.test(String(q)) ? x.hits>0 : x.hits===tokens.length)
     .sort((a, b) => b.hits - a.hits || a.p.rank - b.p.rank)
     .map(x => x.p)
 }
@@ -146,7 +192,7 @@ export const STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','H
 const round = n => Math.round(n * 100) / 100
 
 export function cartLines(store) {
-  return store.cart.map(l => ({ ...l, product: byId(l.pid) })).filter(l => l.product)
+  return store.cart.map(l => ({ ...l, key:lineKey(l.pid,l.variantId), product:scenarioProduct(store,selectedProduct(byId(l.pid),l.variantId)) })).filter(l => l.product)
 }
 
 // Shipping is free for every listing. Tax is only known once a delivery address exists (taxed=true);
@@ -159,4 +205,39 @@ export function totals(store, { taxed = false, trial = false } = {}) {
   const tax = taxed ? round(subtotal * TAX_RATE) : 0
   const walmartPlus = trial ? WALMART_PLUS.trial : 0
   return { lines, count, subtotal, shipping, tax, taxed, walmartPlus, total: round(subtotal + shipping + tax + walmartPlus) }
+}
+
+// Deterministic catalog refinements; availability describes the local fixture, never live inventory.
+export function refine(products, filters = {}) {
+  let hits = products.filter(p => {
+    const text = `${p.title} ${p.keywords}`.toLowerCase()
+    if (filters.department && filters.department !== p.department) return false
+    if (filters.platform && p.catalogPlatform !== filters.platform) return false
+    const categories = {games:'Video Games',accessories:'Gaming Accessories',music:'music'}
+    if (filters.category && !(filters.category==='music' ? p.department==='music' : p.category===(categories[filters.category] ?? filters.category) || categorySlug(p.category)===filters.category)) return false
+    if (filters.price === 'under25' && p.price >= 25) return false
+    if (filters.price === '25to50' && !(p.price >= 25 && p.price <= 50)) return false
+    if (filters.price === '50to100' && !(p.price >= 50 && p.price <= 100)) return false
+    if (filters.price === 'over100' && p.price <= 100) return false
+    if (filters.availability === 'preorder' && !p.preorder) return false
+    if (filters.availability === 'instock' && (p.preorder || p.stock === 0)) return false
+    if (filters.availability === 'outofstock' && p.stock !== 0) return false
+    if (filters.brand && p.brand !== filters.brand) return false
+    if (filters.seller && p.sellerId !== filters.seller) return false
+    if (filters.format === 'code-in-box' && p.format !== 'code-in-box') return false
+    if (filters.format === 'disc' && !(p.catalogType==='game' && (p.format==='disc'||!p.catalog500&&p.format!=='code-in-box'))) return false
+    if (['download','cartridge'].includes(filters.format) && p.format!==filters.format) return false
+    if (filters.format === 'vinyl' && !/vinyl|2 lp/.test(text)) return false
+    if (filters.rating && (p.rating ?? 0) < Number(filters.rating)) return false
+    if (filters.fulfillment && !p.fulfillment.includes(filters.fulfillment)) return false
+    if (filters.deal === 'rollback' && !p.wasPrice) return false
+    if (filters.dietary && p.specs?.Dietary !== filters.dietary) return false
+    if (filters.size && !p.variants?.some(v=>v.options.Size===filters.size)) return false
+    return true
+  })
+  if (filters.sort === 'price_low') hits.sort((a,b) => a.price-b.price || a.rank-b.rank)
+  if (filters.sort === 'price_high') hits.sort((a,b) => b.price-a.price || a.rank-b.rank)
+  if (filters.sort === 'rating') hits.sort((a,b) => (b.rating ?? 0)-(a.rating ?? 0) || a.rank-b.rank)
+  if (filters.sort === 'bestseller') hits.sort((a,b) => b.ratings-a.ratings || a.rank-b.rank)
+  return hits
 }

@@ -1,0 +1,714 @@
+{
+  "captured_at": "2026-10-06",
+  "page_url": "https://www.sephora.com/search?keyword=gta%206&currentPage=2",
+  "provenance": "Images observed and exported from the public Sephora search page. Copyright remains with their owners; no endorsement or redistribution license implied.",
+  "assets": [
+    {
+      "file": "search-product-1.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2624369-main-zoom.jpg?imwidth=630",
+      "sha256": "716ede542f974880d6a14ddfb3d3136392940bf3f067a49f78a5cca99196d828",
+      "bytes": 8446,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-2.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3029667-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "66c29d4d6e76166d82cb5e1f7d08900de963b797c305533e8352f6f7ea6a89fc",
+      "bytes": 19816,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-3.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2533644-main-zoom.jpg?imwidth=630",
+      "sha256": "67fbd44b0609d98a6518d2af5ae13c40ed34d4cfdd57818e2553508e9e1e9e00",
+      "bytes": 12964,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-4.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2994127-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "d0d3b7dbbf4654f0420126c01b816120d13653a15deca66ddc5df35491514781",
+      "bytes": 15840,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-5.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2996403-main-zoom.jpg?imwidth=630",
+      "sha256": "6e69f43c739082078787270f5e4a734d2fb875516d9d4ece25cedd794d71d02e",
+      "bytes": 12464,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-6.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3039526-main-zoom.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "18c3c4a879fb6dedab773a6308abdefe7d139aeb3b9a4927add79114eb45b93f",
+      "bytes": 63914,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-7.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011194-main-zoom.jpg?imwidth=630",
+      "sha256": "1a93525862a1441c32a70fceb38f21bf6861f4756cc1010ba0c3f1a70e66e405",
+      "bytes": 7144,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-8.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2671618-main-zoom.jpg?imwidth=630",
+      "sha256": "dc8f0ca5a336197f3a8091f9243932bef7fdcb92940e4684c5b20ca59e9a283c",
+      "bytes": 6006,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-9.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2844942-main-zoom.jpg?imwidth=630",
+      "sha256": "9bf5f6f2cd89facc8430def4dc04623b183d2506377c0ed62d4eb3873f8de65f",
+      "bytes": 11656,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-10.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2421360-main-zoom.jpg?imwidth=630",
+      "sha256": "03d9c20c48296f2c3b306f1d2ed6b033d86d073ec6f344f20537f8ef847c1000",
+      "bytes": 10382,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-11.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3028263-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "13e4401a0688c4f8c69028490c1f30841bddfa0fddae981d2948ae130209ebc5",
+      "bytes": 19286,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-12.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2734002-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "70689788ed716a89c14d1923795b13b95e46c770c1f131f4da6eb0ee84ea9ac7",
+      "bytes": 14386,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-13.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3039609-main-zoom.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "4ddc046d72c43e9639920a8d59c9bce5232139ca6c33a87b562691fbf1ab362d",
+      "bytes": 22076,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-14.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2539302-main-zoom.jpg?imwidth=630",
+      "sha256": "7e28718f9cf7be2d9000cdac089085c8cdd936e236b192975af5b3764c74dd1e",
+      "bytes": 13332,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-15.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2895159-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "1d36bbfa33f662e2b2dd2371041de45b5baaec9d07225f79db12c57919f8b16c",
+      "bytes": 16576,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-16.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3010634-main-zoom.jpg?imwidth=630",
+      "sha256": "25b4a75830975415dca66a6c1f9708e87df644b44ea9196c4ef0121a84997fbe",
+      "bytes": 15954,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-17.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011376-main-zoom.jpg?imwidth=630",
+      "sha256": "42085961bfeec67c16f7c7908a096acdb4d016e0a7546beacea64f8a35fe748f",
+      "bytes": 16958,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-18.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2031383-main-zoom.jpg?imwidth=630",
+      "sha256": "1ab3048315014f2b5d941562342f4f4bb50267a75b5a5448cb2c565a346f80d4",
+      "bytes": 10280,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-19.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2844991-main-zoom.jpg?imwidth=630",
+      "sha256": "de4a9bb508f64679c89a4d397f29761c3ae4913aaddc329e4ba9dde21aa095a0",
+      "bytes": 8664,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-20.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2736247-main-zoom.jpg?imwidth=630",
+      "sha256": "1453a190360f1facbd1d7d7ce18a4fd9562bce8d18c07b4f3f20226c4192c3f4",
+      "bytes": 8376,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-21.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s1887298-main-zoom.jpg?imwidth=630",
+      "sha256": "b38e370739bc54fa4bf4dbb41a6804487f13e78bb13103c0948ddbb150431535",
+      "bytes": 11902,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-22.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2122158-main-zoom.jpg?imwidth=630",
+      "sha256": "59a668d486bb6b251911f33318ac6191f702ab119f5220c22680f3fad8a03f7a",
+      "bytes": 20560,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-23.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011160-main-zoom.jpg?imwidth=630",
+      "sha256": "e65ac561f95b63dc167471f46b48189bb3c5ac9a72faffdb72720793c2f8bfe7",
+      "bytes": 11060,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-24.avif",
+      "source_url": "https://www.sephora.com/productimages/sku/s2774933-main-zoom.jpg?pb=allure-2025-clean&imwidth=630",
+      "sha256": "fb742e44ab5af3d977498e19966a1cb20dc199c390e4bca5e54785545193a80a",
+      "bytes": 29355,
+      "content_type": "image/avif"
+    },
+    {
+      "file": "search-product-25.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2808855-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "360a42c576e9b16b5ea3a360353dc610571c84136b5d00b9038c8e6f6346c43c",
+      "bytes": 17542,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-26.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3039617-main-zoom.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "1ee28b95720a3bac2458c09691db3710936fe96023aca763547b7b56a0238177",
+      "bytes": 26032,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-27.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2956902-main-zoom.jpg?imwidth=630",
+      "sha256": "4a0bfebaa319644783b95203b625e763021f2fadfff53fba5bfd3c1f95829ed7",
+      "bytes": 8684,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-28.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3015039-main-zoom.jpg?imwidth=630",
+      "sha256": "b916566c550d77d2d04bda0fe68ab39859c730156b4a08fd269c842b3c5a19e2",
+      "bytes": 16894,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-29.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3028248-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "b2b6238d3fd1a7eb77444539c564582c3c4a286d96be89bd5e8dea837c3a716b",
+      "bytes": 26042,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-30.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011145-main-zoom.jpg?imwidth=630",
+      "sha256": "7419197b0e6483e51040175b4d7d5c4edd2c74b3092f91c5b83f58512d31af75",
+      "bytes": 9698,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-31.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2918068-main-zoom.jpg?imwidth=630",
+      "sha256": "b093eb94b27343f2dad76bd240bd58bb95832e9777cd3d164dc24f4c7279c11c",
+      "bytes": 14838,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-32.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2966935-main-zoom.jpg?imwidth=630",
+      "sha256": "2b9b0b9a0914d48f533ae28c37e78ec980b2e10465d9431d99f5cec257d24c98",
+      "bytes": 11196,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-33.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3029741-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "f71f40f6ae33c25a64b23aea94dd130120cac72c3f167be71f563b0eff7ca071",
+      "bytes": 23692,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-34.avif",
+      "source_url": "https://www.sephora.com/productimages/sku/s1448612-main-zoom.jpg?pb=allure-2024-bestofbeauty&imwidth=630",
+      "sha256": "7f170d90372d21cd6ce9b5b6d16b57820f3009b9f036965f8689e0c33bd02f6c",
+      "bytes": 12607,
+      "content_type": "image/avif"
+    },
+    {
+      "file": "search-product-35.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3030715-main-zoom-us.jpg?imwidth=630",
+      "sha256": "f54f770154dbef618e563304f3da4902f52566201216cb4d9f5bc0efb6bbcb77",
+      "bytes": 9852,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-36.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3039492-main-zoom.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "4fab50c6950db90f300d9ed34a7789b01bce90dbcba066f5ae2baf325c9567a1",
+      "bytes": 19894,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-37.avif",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011236-main-zoom.jpg?pb=best-of-beauty-2026&imwidth=630",
+      "sha256": "49ce4b42697a786ff3caf4e43a23cc017c7ce9b3389d2ef7bb32286274e856b4",
+      "bytes": 19465,
+      "content_type": "image/avif"
+    },
+    {
+      "file": "search-product-38.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3039591-main-zoom.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "9966b7d154abda827a0420ab231b0e1a8ca011eb3585f189da825880ccf292f6",
+      "bytes": 21746,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-39.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3039476-main-zoom.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "6a2e5095cbacc0ca5adfe963c8fb34ea3f7ab87cb0debb98322421aeebd955e3",
+      "bytes": 19800,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-40.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3029311-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "4a8d5b6a441a06a9389fd6ef3cc16fd27cb5721c3bcd61b96265487ee05ca7a5",
+      "bytes": 41732,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-41.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3028255-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "c338a74a5f14576b5845c31183167ca0e268c0c8b85ef3e218c53ed20e52cbdc",
+      "bytes": 15474,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-42.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3029915-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "7056632cb7dad6eb7f1825ce75e4b6da40deb7c7ba574afbcc730eb25fb35ba9",
+      "bytes": 30932,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-43.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3028222-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "6e64ccc23298775f5872ffe90136c4a3d828bfb91a710fab2ed931dde0d125c0",
+      "bytes": 22976,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-44.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011459-main-zoom.jpg?imwidth=630",
+      "sha256": "21659e9fe67e5f4215eca7d66d7cfda19305fa2d93786880c45cb98dfc206a89",
+      "bytes": 13072,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-45.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2950442-main-zoom.jpg?imwidth=630",
+      "sha256": "10fbe2c8d97897cdd42f20b8e13e2165d1cae2ac6b8dd350325563533885c66c",
+      "bytes": 4088,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-46.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3027786-main-zoom.jpg?imwidth=630",
+      "sha256": "db40b978403b133049f04746a2d4c0df42408ea557ae3500dce14e40718c4234",
+      "bytes": 10790,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-47.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2893642-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "558804ac0ab24576450b2ae151a6c74ea0d4d97070e9411b28a85580eb773e50",
+      "bytes": 13834,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-48.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011251-main-zoom.jpg?imwidth=630",
+      "sha256": "09b55d0079b63578ee4e4d2ccc88fb8b2af021323f06c0c4ddad9c5191548d0b",
+      "bytes": 12720,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-49.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011350-main-zoom-1.jpg?imwidth=630",
+      "sha256": "b7398acc6a5c2bda7bfc16b321d7f409bb943f87ab90b24fad106be2f30bccaa",
+      "bytes": 11288,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-50.jpg",
+      "source_url": "https://www.sephora.com/productimages/sku/s3029931-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "59c182acfabf803aee8b25db1c86e1427870a88529399f79b66cf7b02a73abd8",
+      "bytes": 103660,
+      "content_type": "image/jpeg"
+    },
+    {
+      "file": "search-product-51.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011129-main-zoom.jpg?imwidth=630",
+      "sha256": "5b7707a7d44d6e07d9810c13951bdfb505b8a16ea9e065ab66ce2399880aefeb",
+      "bytes": 9480,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-52.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011418-main-zoom.jpg?imwidth=630",
+      "sha256": "005c8e61b40b1f0895ddae205c06f36718851e485107ec0e7e93d4b7b3543f6d",
+      "bytes": 17178,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-53.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011178-main-zoom.jpg?imwidth=630",
+      "sha256": "99af3d1b7ec3ff7668b53db8b37a3b3e4c3457c79892561476c7e2385d02760e",
+      "bytes": 22048,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-54.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2640365-main-zoom.jpg?imwidth=630",
+      "sha256": "77097a2bd3382163ebeadf5312c74cee599c85517e234bbc978b8c82f4026e0e",
+      "bytes": 9634,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-55.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3011277-main-zoom.jpg?imwidth=630",
+      "sha256": "45d38f49be1fcae8c4bd27c5a0096b4a084ee176b8d83ec6f260cadcab065950",
+      "bytes": 18312,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-56.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2966877-main-zoom.jpg?imwidth=630",
+      "sha256": "b18709a7c8cc585a3370a8167f8a9700b04e71177ab312c87d05eb7ee68d6ebb",
+      "bytes": 11876,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-57.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2951127-main-zoom.jpg?imwidth=630",
+      "sha256": "93cadf7d6e569a770979fbb452fba99d324eff577e184bce505b9dbcdd9e8027",
+      "bytes": 9218,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-58.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2336485-main-zoom.jpg?imwidth=630",
+      "sha256": "0646f4167e73b82910d8d166501b22aa6040b3a96c5a72fd320eef84ec3452f3",
+      "bytes": 10870,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-59.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2941268-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "b4d81467d9d20645cd2d309e3b4dcd13c3f14143f0538f8bb253d9d3e23af108",
+      "bytes": 12400,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-60.avif",
+      "source_url": "https://www.sephora.com/productimages/sku/s2703080-main-zoom.jpg?pb=allure-2024-bestofbeauty&imwidth=630",
+      "sha256": "959614c1abcf24f766b259e98029fcd72a5e9b39e2fef4a647f10131650de101",
+      "bytes": 14686,
+      "content_type": "image/avif"
+    },
+    {
+      "file": "search-product-61.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2995082-main-zoom.jpg?imwidth=630",
+      "sha256": "96caec2a3af324cb01913525ee15024fa48019d4b5b0c47589ca21ca531f1ad8",
+      "bytes": 18074,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-62.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2966885-main-zoom.jpg?imwidth=630",
+      "sha256": "c1dbb9f456218e9f6e40a37f690565297addbb6235d6eca883bfb73afe4f984d",
+      "bytes": 13174,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-63.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2932333-main-zoom.jpg?imwidth=630",
+      "sha256": "511c80d475765978ab484dd682120154c0ca72ebe6e784f618985b84ae52b73e",
+      "bytes": 7488,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-64.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2411999-main-zoom.jpg?imwidth=630",
+      "sha256": "f32937269f42b8099fa248e9a18d23b1720c5583167dd0a67bd568b3cbfd1872",
+      "bytes": 12318,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-65.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2966943-main-zoom.jpg?imwidth=630",
+      "sha256": "62740835127f9e6ddbee26ec39df24625caa1462f865cb66bba5110ddb02709b",
+      "bytes": 8426,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-66.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2643195-main-zoom.jpg?imwidth=630",
+      "sha256": "23e8de88c393885d4dae6a44231f5222c81f0144c0b6c9c11480cf3b6cc0d02d",
+      "bytes": 13820,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-67.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2593283-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "d993330ea0dfaa49b8667aa394a057f753c767a5d833e0e050ddf93101edcaa4",
+      "bytes": 17184,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-68.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2966919-main-zoom.jpg?imwidth=630",
+      "sha256": "5692a5d7cbbc63015c74ef42db32d2feef68716d1de0fca73709d537b2d825ad",
+      "bytes": 5546,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-69.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2914687-main-zoom.jpg?imwidth=630",
+      "sha256": "4315e9482e96124aa96c6110de57f76a99e697219ceb5bd75bb6c385d3033c96",
+      "bytes": 6004,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-70.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3029253-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "29ca2406868ce463ea4d165e22cce3e053b5ba7607400dff2b0f72a1c7666cc2",
+      "bytes": 37676,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-71.avif",
+      "source_url": "https://www.sephora.com/productimages/sku/s2865079-main-zoom.jpg?pb=allure-2025-best-of-beauty-award-winner&imwidth=630",
+      "sha256": "68a86dc0d0f5081bca5d65e7c84d8970a9e2e2fad7d0fa9684f2dae9ae371f20",
+      "bytes": 15953,
+      "content_type": "image/avif"
+    },
+    {
+      "file": "search-product-72.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2714699-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "9b582245adad99d69d219c776748c0e389ae8299d2f35bbea1d72f0f68c03708",
+      "bytes": 22770,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-73.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3001849-main-zoom-1.jpg?imwidth=630",
+      "sha256": "d49b6c5616b38daa4182c958f3818a8a105d9dc15a9a2d6edf3b734701bb5b4c",
+      "bytes": 9994,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-74.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2941276-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "74d9780c5e1f1ba378001ebbe325cb259c74dad944138b321a8e1f34f9962369",
+      "bytes": 12084,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-75.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2458875-main-zoom.jpg?imwidth=630",
+      "sha256": "b33edf538f4cc88e887333a1aac6663740ce4a6e87673ef4f16c9080c6d19aa3",
+      "bytes": 9164,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-76.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2319333-main-zoom.jpg?imwidth=630",
+      "sha256": "ad52ff89d11424c19fc40b515e9eb75149cd28fb291ac382b2e753d23b3a0377",
+      "bytes": 20216,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-77.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s1681881-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "d525b02827c3391e07ac2190b3e4036702ec7fee0f3269c2af46478927dde767",
+      "bytes": 42508,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-78.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2941284-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "c9c07bdd09d03c5245f265051b7e0a5b2bb26bdd6f8bd913855df0c1d59cb518",
+      "bytes": 14272,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-79.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s3031952-main-zoom-us.jpg?pb=olive-young-kbeauty&imwidth=630",
+      "sha256": "bf87cea4f987ad993ec7065553f87fa3dcb3521e3bdbf34781cac945c6770d4a",
+      "bytes": 35680,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-80.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2868545-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "dc69ff60e8e5c1f9dc89eb53d23e9c76f9cac310107f5c9cfb5f3fcd6b6a5a27",
+      "bytes": 16306,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-81.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2868586-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "80f47f2b0a162bf5ecc81dcecaf5a52d982cde70e7a64bf80b34e062b97f3a52",
+      "bytes": 14930,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-82.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2868594-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "93f2396955cce711fbbff0ddec92c9568c6167dfd5e6032abaf481ab6cf39f98",
+      "bytes": 16538,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-83.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2868529-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "870b3a3f5882327cee8d5b3632c26eefc1f40b65e08caab4aa7b1afbe65ead23",
+      "bytes": 15926,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-84.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2189819-main-zoom.jpg?imwidth=630",
+      "sha256": "6bf7ad7ab0f422797b41e38fb768982c5484748701a91c53f9eebb8216071ffb",
+      "bytes": 8014,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-85.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2718716-main-zoom.jpg?imwidth=630",
+      "sha256": "e3ee677c5b7d008144cf501fa2f71f9f17703d00d4321797949acb8ac9ecf880",
+      "bytes": 39476,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-86.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2925501-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "a32bcd8d509dfa45241d7cff30a9df634a1e2690c3b15cdf87b612a5e1a5f8f6",
+      "bytes": 17508,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-87.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2031508-main-zoom.jpg?imwidth=630",
+      "sha256": "e491a4de9bf89386db7b18fb3858ac8d977f95166cc57b54c23b2bddfeeea02b",
+      "bytes": 14398,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-88.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2627198-main-zoom.jpg?imwidth=630",
+      "sha256": "cd9a954df3d497111d2d9b6a0ac0c200cbe8b96ce2b31dd2a3ebfe9eaf0d0ada",
+      "bytes": 7190,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-89.avif",
+      "source_url": "https://www.sephora.com/productimages/sku/s2767143-main-zoom.jpg?pb=allure-2025-best-of-beauty-award-winner&imwidth=630",
+      "sha256": "6f3f06a4e1702e8143a12abc8b0b10dc580b96222440c001ff92daac73f0fec2",
+      "bytes": 28012,
+      "content_type": "image/avif"
+    },
+    {
+      "file": "search-product-90.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2467843-main-zoom.jpg?imwidth=630",
+      "sha256": "f58a8720467a51255a90f5453d322b960e8ab3445a48a75a652c22668173bb29",
+      "bytes": 16658,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-91.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2025633-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "d1873907806872ccf2c84c4ec30749be768a777769cc72530319c29d977beac9",
+      "bytes": 15316,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-92.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2897221-main-zoom-1.jpg?imwidth=630",
+      "sha256": "b2da13bcbe6b7f71f377acd4f58113d40a1726d7667e6e7720acaedfec8853cc",
+      "bytes": 29740,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-93.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2210714-main-zoom.jpg?imwidth=630",
+      "sha256": "2688c260b572f3e12b40f8b3f462ebc1d95886b8863e330af88858bd15029471",
+      "bytes": 8128,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-94.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2031516-main-zoom.jpg?imwidth=630",
+      "sha256": "cbe89c165d76b0e747491beb28e86dfb2b5ce5cbf49094e51b76eb223f951824",
+      "bytes": 7482,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-95.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2828572-main-zoom.jpg?imwidth=630",
+      "sha256": "46fdaa9711f8acfc5f90c8d1bf0c91a3ba0f0b16ae1832750976966ea2a52539",
+      "bytes": 10090,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-96.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2968824-main-zoom-1.jpg?imwidth=630",
+      "sha256": "b4715691fecc32b15d3dbed3ed70adbd9ef37c75a5a36bce2d8fa79f745ac683",
+      "bytes": 25114,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-97.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2935732-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "6a03f88cee7b8236e9187f83df7c36de76271410607e74941b062303b7757130",
+      "bytes": 14188,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-98.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2857399-main-zoom.jpg?pb=clean-at-sephora&imwidth=630",
+      "sha256": "eace2dbf62128f120d3850002c23c57e655d2d4be99c21beb4c5062e1c894ab6",
+      "bytes": 13040,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-99.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s1499482-main-zoom.jpg?imwidth=630",
+      "sha256": "71df984d4fc4e7444d887a16abbad9a58ffc69e9534e3e62be78aad591d60e08",
+      "bytes": 44280,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-product-100.webp",
+      "source_url": "https://www.sephora.com/productimages/sku/s2734564-main-zoom.jpg?imwidth=630",
+      "sha256": "e933bef22b6ca53a8c84cd0cc07d4fb189893c82301c5e6626158f5598391dab",
+      "bytes": 120564,
+      "content_type": "image/webp"
+    },
+    {
+      "file": "search-banner.png",
+      "source_url": "https://www.sephora.com/img/ufe/rmn-fallback-970x90.png",
+      "sha256": "c4d8ef66da0f7d4bc8acc7afbbc70ac0ee14ce735ad1190341c5909e77a488e6",
+      "bytes": 31770,
+      "content_type": "image/png"
+    }
+  ]
+}

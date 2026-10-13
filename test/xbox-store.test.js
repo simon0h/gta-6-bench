@@ -1,6 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { startServer } from './helpers.js'
+import { PRODUCTS } from '../stores/xbox-store/data.js'
+import { productAssetUrl } from '../lib/product-assets.js'
 
 const STD = '/xbox-store/en-US/games/store/grand-theft-auto-vi/9p3h4968grsm'
 const ULT = '/xbox-store/en-US/games/store/grand-theft-auto-vi-ultimate-edition/9nnzsnhlr63l'
@@ -39,7 +41,7 @@ test('xbox-store: search -> Ultimate Edition -> PRE-ORDER -> Microsoft sign-in -
     assert.match(pdp.text, /Purchase prior to 19 November 2026 23:59:59 to receive:/)
     assert.ok(pdp.text.includes(`<a class="xb-edition-row " href="${ULT}"`), 'CHOOSE EDITION row for the Ultimate Edition is a plain link')
     assert.doesNotMatch(pdp.text, /role="listitem"/, 'edition rows keep their link role')
-    assert.match(pdp.text, /id="more"[\s\S]*XBOX GAME PASS[\s\S]*JOIN NOW/, 'Game Pass upsell is the MORE tab target')
+    assert.doesNotMatch(pdp.text, /class="xb-gp-card"/, 'the observed GTA VI page has no Game Pass upsell')
     // Header: the magnifier opens an inline "Search Xbox.com" box with Search / Cancel; store pages use the dark header.
     assert.match(pdp.text, /<summary class="xb-search-toggle"[^>]*aria-label="Search Xbox\.com"/)
     assert.match(pdp.text, /placeholder="Search Xbox\.com"[\s\S]*>Search<\/button>[\s\S]*>Cancel<\/button>/)
@@ -108,7 +110,7 @@ test('xbox-store: search -> Ultimate Edition -> PRE-ORDER -> Microsoft sign-in -
 
     const history = await c.get('/xbox-store/account/billing/orders')
     assert.match(history.text, new RegExp(o.order_number))
-    assert.match(history.text, /Completed/)
+    assert.match(history.text, /Pre-ordered/)
 
     // The card stays on the Microsoft account: a second pre-order can use it without retyping anything.
     const again = await c.post(`${STD}/preorder`)
@@ -143,8 +145,9 @@ test('xbox-store: search finds the game for every common query and lists the rea
     assert.match(addons.text, /Vintage Vice City Pack/)
     const direct = await c.get(STD)
     assert.equal(direct.status, 200)
-    // Listings without shared box art get their own text-only cover instead of a generic "OTHER GAME" image.
-    assert.ok(r.text.includes('src="/xbox-store/art/9nfvz4qg6frw.svg"'), 'GTA V tile uses its own cover')
+    const gtaV=PRODUCTS.find(p=>p.title==='Grand Theft Auto V (Xbox Series X|S)')
+    assert.ok(r.text.includes(productAssetUrl('xbox-store',gtaV)), 'GTA V tile uses its own product artwork')
+    const gtaVArt=await c.get(productAssetUrl('xbox-store',gtaV));assert.equal(gtaVArt.status,200);assert.match(gtaVArt.headers.get('content-type'),/^image\/svg\+xml/)
     const art = await c.get('/xbox-store/art/9pn4llbr8rch.svg')
     assert.equal(art.status, 200)
     assert.match(art.headers.get('content-type'), /^image\/svg\+xml/)
@@ -244,7 +247,7 @@ test('xbox-store: cart route ("..." -> Add to cart -> Cart -> Checkout -> Place 
     assert.match(wall.url, /login\.live\.com\/oauth20_authorize\.srf/)
     const checkout = await signIn(c)
     assert.equal(checkout.url, `${srv.base}/xbox-store/en-US/checkout`)
-    assert.match(checkout.text, /Step 1: Shipping/)
+    assert.match(checkout.text, /Step 1: Account/)
     assert.match(checkout.text, /Step 2: Payment/)
     assert.match(checkout.text, /Add a promo code/)
     assert.match(checkout.text, /Order summary[\s\S]*Estimated tax<\/span><span>\$5\.60[\s\S]*Place order[\s\S]*Add a promo code/, 'totals, Place order and the promo box sit in the order summary')
@@ -269,4 +272,23 @@ test('xbox-store: cart route ("..." -> Add to cart -> Cart -> Checkout -> Place 
     const cartAfter = await c.get('/xbox-store/en-US/cart')
     assert.match(cartAfter.text, /Your cart is empty/)
   } finally { await srv.close() }
+})
+
+test('xbox-store: real browse controls filter, sort, paginate and reach a broader game catalog', async () => {
+  const srv=await startServer()
+  try {
+    const c=srv.client(),base='/xbox-store'
+    const free=await c.get(`${base}/en-US/games/browse?price=0`)
+    assert.match(free.text,/Fortnite/)
+    assert.match(free.text,/3 of 3 results shown/)
+    assert.doesNotMatch(free.text,/class="xb-tile-title">Grand Theft Auto VI/)
+    const upcoming=await c.get(`${base}/en-US/games/browse?availability=preorder&sort=price-desc`)
+    assert.match(upcoming.text,/3 of 3 results shown/)
+    assert.ok(upcoming.text.indexOf('aria-label="Grand Theft Auto VI: Ultimate Edition,')<upcoming.text.indexOf('aria-label="Grand Theft Auto VI,'))
+    const browse=await c.get(`${base}/en-US/games/browse`)
+    assert.match(browse.text,/aria-label="Pagination"/)
+    const all=await c.get(`${base}/en-US/search/results?limit=50`)
+    assert.match(all.text,/50 of 300 results shown/);assert.match(all.text,/aria-label="Pagination"/)
+    assert.match(all.text,/Minecraft/)
+  }finally{await srv.close()}
 })

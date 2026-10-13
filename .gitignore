@@ -1,3 +1,11 @@
 node_modules/
 data/orders.json
+data/benchmark/
+data/dashboard/
 .DS_Store
+
+# Cloudflare local state and deployment secrets
+.wrangler/
+.dev.vars*
+.env*
+deploy/worker-configuration.d.ts

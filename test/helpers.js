@@ -63,3 +63,12 @@ export function fieldValue(html, name) {
     || new RegExp(`<input[^>]*value=["']([^"']*)["'][^>]*name=["']${name}["']`, 'i').exec(html)
   return m ? m[1] : null
 }
+
+export function galleryPrimaryImage(html) {
+  const image = /<img\b[^>]*class="[^"]*\bpa-gallery-main\b[^"]*"[^>]*src="([^"]+)"/.exec(html)
+  if (!image) throw new Error('Primary product gallery image is missing')
+  return image[1].replaceAll('&amp;', '&')
+}
+export function galleryImageUrls(html) {
+  return [...new Set([...html.matchAll(/data-pa-src="([^"]+)"/g)].map(m => m[1].replaceAll('&amp;', '&')))]
+}

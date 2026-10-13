@@ -1,14 +1,31 @@
+import { enterScenarioCart, scenarioPayment, scenarioAvailability, registerScenarioAdapter } from '../../lib/benchmark-scenarios.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
+import { catalogObservations, recommendationBySlug, recommendationById, recommendationPreview } from './reference-recommendations.js'
+import { DEPARTMENT_DEFS, CAMPAIGNS, FILTER_KEYS, slugify, selectedProduct, stockLimit, lineKey } from './catalog.js'
+import { brandsHub } from './browsing.js'
 import { Router } from 'express'
-import { randomBytes, randomInt } from 'node:crypto'
-import { recordOrder, getOrder, listOrders } from '../../lib/orders.js'
+import { randomBytes, randomInt, createHash } from 'node:crypto'
+import { recordOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
-import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, byId, bySlug, games, search, totals, productPath, findStores, storeById, postcodeState, stateName, STATES, SHIPPING_METHODS, COURIER_METHOD } from './data.js'
+import { retailState, defaultAddress, saveAddress } from '../../lib/retail-state.js'
+import { installJourneys, safeReturn, customerOrder, rememberSelection, savedItems, savedAddressPicker, checkoutAddressValues } from './journeys.js'
+import { PRODUCTS, byId, bySlug, games, search, totals, productPath, findStores, storeById, postcodeState, stateName, STATES, SHIPPING_METHODS, COURIER_METHOD, COLLECTION_METHOD, findCollectionPoints, collectionPointById } from './data.js'
 import * as P from './pages.js'
 
 const NAME = 'JB Hi-Fi'
 const MAX_QTY = 5 // the cart quantity dropdown offers 1–5 (JB limits copies per order)
 const router = Router()
+router.use((req, res, next) => {
+  enterScenarioCart(req.store)
+  const items = [...(req.store.cart || []), ...(req.store.buyNow ? [req.store.buyNow] : []), ...(req.store.gmarketPurchase?.items || [])]
+  if ((/checkout/.test(req.path) || req.method === 'GET' && /cart/.test(req.path)) && items.some(item => scenarioAvailability(req.store, item.sku ?? item.pid, 'shipping') === false)) {
+    const body = '<h1>Item unavailable</h1><p role="alert">Shipping unavailable. Availability changed after this item was selected. No order was placed.</p>'
+    render(req, res, { title: 'Item unavailable', body, status: 409 })
+    return
+  }
+  next()
+})
+
 
 // ---- helpers ----
 const str = (v) => (typeof v === 'string' ? v.trim() : '')
@@ -18,7 +35,7 @@ const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
 
 function render(req, res, { title, body, status = 200, checkout = null }) {
   // ?added=<sku> opens the full-screen "Item added to your cart!" modal (where POST /cart/add lands, no JS needed).
-  const added = !checkout && req.query.added && req.store.cart.some(l => l.pid === String(req.query.added)) ? byId(req.query.added) : null
+  const added = !checkout && req.query.added && req.store.cart.some(l => l.pid === String(req.query.added)) ? selectedProduct(byId(req.query.added), str(req.query.variant)) || byId(req.query.added) : null
   const here = new URL(req.originalUrl, 'http://jb.local')
   here.searchParams.delete('added')
   res.status(status).type('html').send(P.layout({ base: res.locals.base, title, body, cartCount: totals(req.store).count, user: req.store.user, added, closeHref: here.pathname + here.search, checkout }))
@@ -29,27 +46,59 @@ function notFound(req, res) {
 }
 
 // Only ever send the shopper back to a page inside this store.
-const safeReturn = (base, value, fallback) => (str(value).startsWith(`${base}/`) ? str(value) : fallback)
+installJourneys(router, {render,notFound,cartIssue,changedCart})
 
 // ASSUMPTION: the thank-you page was not observed. Shopify shows "Order #<digits>"; JB numbers are 8 digits here.
 const orderNumber = () => String(randomInt(10_000_000, 100_000_000))
 
 // ---- browse ----
 // ASSUMPTION: the home page was not part of the research; it is a plain entry point with the header search.
+router.get('/information', (req,res) => render(req,res,{ title: 'Shopping information', body: P.supportInformationPage(res.locals.base, typeof req.query.topic === 'string' ? req.query.topic : 'Shopping information') }))
 router.get('/', (req, res) => render(req, res, { title: 'JB Hi-Fi | Always Cheap Prices', body: P.homePage({ base: res.locals.base, products: PRODUCTS }) }))
 
 // Real URL: /search?query=grand+theft+auto+vi (also accept ?q= in case an agent guesses it).
-router.get('/search', (req, res) => {
-  const q = str(req.query.query) || str(req.query.q)
-  const self = `${res.locals.base}/search?query=${encodeURIComponent(q).replaceAll('%20', '+')}`
-  render(req, res, { title: `Search results: '${q}' | JB Hi-Fi`, body: P.searchPage({ base: res.locals.base, q, products: search(q), self }) })
+function listing(req,res,{heading='',intro='',scope={}}={}) {
+  const q=str(req.query.query)||str(req.query.q)
+  const filters={...Object.fromEntries(FILTER_KEYS.map(k=>[k,str(req.query[k])])),...scope}
+  const route=res.locals.base+req.path
+  const self=`${route}?${new URLSearchParams({query:q,...filters})}`
+  render(req,res,{title:heading?`${heading} | JB Hi-Fi`:`Search results: '${q}' | JB Hi-Fi`,body:P.searchPage({base:res.locals.base,q,products:search(q,filters),self,filters,route,heading,intro,scope})})
+}
+router.get('/search',(req,res)=>listing(req,res))
+router.get('/brands',(req,res)=>render(req,res,{title:'Shop by brand | JB Hi-Fi',body:brandsHub(res.locals.base)}))
+router.get('/brands/:brand',(req,res)=>{
+ const brand=PRODUCTS.find(p=>slugify(p.brand)===req.params.brand)?.brand
+ if(!brand)return notFound(req,res)
+ listing(req,res,{heading:brand,intro:`Explore ${brand} at JB.`,scope:{brand}})
+})
+router.get(['/collections/:collection','/collections/:collection/:type'],(req,res)=>{
+ const department=DEPARTMENT_DEFS.find(d=>d.slug===req.params.collection)
+ const campaign=CAMPAIGNS.find(c=>c.slug===req.params.collection)
+ if(!department&&!campaign)return notFound(req,res)
+ const scope=department?{category:department.title}:{campaign:campaign.slug}
+ if(req.params.type){
+  const type=PRODUCTS.find(p=>p.crumbs[0]===department?.title&&slugify(p.type)===req.params.type)?.type
+  if(!type)return notFound(req,res)
+  scope.type=type
+ }
+ listing(req,res,{heading:scope.type||(department||campaign).title,intro:(department||campaign).description,scope})
+})
+
+router.get('/reference-products/:id', (req,res) => {
+  const p = recommendationById(req.params.id)
+  if (!p) return notFound(req,res)
+  render(req,res,{title:`${p.title} | JB Hi-Fi`,body:recommendationPreview(res.locals.base,p)})
 })
 
 router.get('/products/:slug', (req, res) => {
   const base = res.locals.base
-  const p = bySlug(req.params.slug) ?? byId(req.params.slug)
+  const captured = recommendationBySlug(req.params.slug)
+  if (captured) return render(req, res, { title: `${captured.title} | JB Hi-Fi`, body: recommendationPreview(base, captured) })
+  let p = bySlug(req.params.slug) ?? byId(req.params.slug)
   if (!p) return notFound(req, res)
   if (p.slug !== req.params.slug) return res.redirect(productPath(base, p))
+  if(p.variants){p=selectedProduct(p,str(req.query.variant)||p.variants[0].id);if(!p)return notFound(req,res)}
+  rememberSelection(req,p)
   const perks = !req.store.perksSeen && !req.query.added // JB Perks popup on the first product page visit only
   req.store.perksSeen = true
   const availability = str(req.query.availability) || null
@@ -59,101 +108,61 @@ router.get('/products/:slug', (req, res) => {
   render(req, res, { title, body: P.productPage({ base, p, siblings: games(), availability, stores, perks }) })
 })
 
-router.get('/stores', (req, res) => render(req, res, { title: 'Store Finder | JB Hi-Fi', body: P.storesPage({ base: res.locals.base, query: str(req.query.q), stores: findStores(req.query.q) }) }))
-
-// Hearts link here. Guests get "You're one step away from having this in your wishlist!".
-router.get('/wishlist/add', (req, res) => {
-  const p = byId(req.query.id)
-  if (!p) return notFound(req, res)
-  if (req.store.user) req.store.wishlist = [...new Set([...(req.store.wishlist ?? []), p.id])]
-  render(req, res, { title: 'Wishlist | JB Hi-Fi', body: P.wishlistPage({ base: res.locals.base, p, user: req.store.user }) })
-})
+router.get('/stores', (req, res) => render(req, res, { title: 'Store Finder | JB Hi-Fi', body: P.storesPage({ base: res.locals.base, query: str(req.query.q), stores: findStores(str(req.query.q)) }) }))
 
 // ---- cart ----
+function cartError(req,res,message,status=400){render(req,res,{title:'Check your cart | JB Hi-Fi',status,body:`<p class="jb-error" role="alert">${message}</p>`+P.cartPage({base:res.locals.base,t:totals(req.store)})})}
+function cartIssue(store){
+ const aggregate=new Map(), variants=new Map()
+ for(const line of store.cart){
+  const base=byId(line.pid),p=selectedProduct(base,line.variant||'')
+  if(!p||!p.orderable||!Number.isInteger(line.qty)||line.qty<1||line.qty>stockLimit(p))return 'An item or option is no longer available in this quantity. Review your cart.'
+  aggregate.set(p.id,(aggregate.get(p.id)||0)+line.qty)
+  const key=lineKey(p.id,line.variant);variants.set(key,(variants.get(key)||0)+line.qty)
+  if(aggregate.get(p.id)>stockLimit(base)||variants.get(key)>stockLimit(p))return 'The requested quantity exceeds the purchase limit. Review your cart.'
+ }
+ return null
+}
+function changedCart(req){if(req.store.checkout.review)req.store.checkout.reviewInvalidated=true}
 router.post('/cart/add', (req, res) => {
-  const base = res.locals.base
-  const p = byId(req.body.id)
-  if (!p) return res.redirect(`${base}/`)
-  const back = new URL(safeReturn(base, req.body.return, productPath(base, p)), 'http://jb.local')
-  back.searchParams.delete('added')
-  if (p.orderable) {
-    // Shopify merges the same product into one line.
-    const line = req.store.cart.find(l => l.pid === p.id)
-    if (line) line.qty = Math.min(MAX_QTY, line.qty + 1)
-    else req.store.cart.push({ pid: p.id, qty: 1 })
-    back.searchParams.set('added', p.id)
-  }
-  res.redirect(back.pathname + back.search)
+ if(Object.values(req.body).some(value=>typeof value!=='string'))return cartError(req,res,'Submit one value per cart field.')
+ const base=res.locals.base,p=byId(str(req.body.id))
+ if(!p)return cartError(req,res,'Choose a valid product.')
+ const variant=str(req.body.variant),selected=selectedProduct(p,variant)
+ if(!selected)return cartError(req,res,'Choose a valid product option.')
+ if(!selected.orderable||selected.stock===0)return cartError(req,res,'This product option is not currently available.',409)
+ const quantity=req.body.qty===undefined?1:Number(req.body.qty)
+ if((req.body.qty!==undefined&&typeof req.body.qty!=='string')||!Number.isInteger(quantity)||quantity<1||quantity>MAX_QTY)return cartError(req,res,'Choose a whole quantity from 1 to 5.')
+ const next=req.store.cart.map(l=>({...l})),line=next.find(l=>l.pid===p.id&&(l.variant||'')===variant)
+ if(line)line.qty+=quantity
+ else next.push({pid:p.id,qty:quantity,...(variant?{variant}:{})})
+ const issue=cartIssue({cart:next})
+ if(issue)return cartError(req,res,issue,409)
+ req.store.cart=next;changedCart(req)
+ const back=new URL(safeReturn(base,req.body.return,productPath(base,p)),'http://jb.local')
+ back.searchParams.set('added',p.id)
+ if(variant)back.searchParams.set('variant',variant)
+ res.redirect(back.pathname+back.search)
 })
-
 router.get('/cart', (req, res) => {
-  // ASSUMPTION: coupon wording not observed (codes are JB Perks coupons; none exist here).
-  const couponError = { empty: 'Please enter a coupon code.', invalid: 'Sorry, this coupon code is invalid or has expired.' }[req.query.coupon] ?? null
-  render(req, res, { title: 'Your Shopping Cart', body: P.cartPage({ base: res.locals.base, t: totals(req.store), couponError }) })
+ const couponError={empty:'Please enter a coupon code.',invalid:'Sorry, this coupon code is invalid or has expired.'}[req.query.coupon]??null
+ render(req,res,{title:'Your Shopping Cart',body:P.cartPage({base:res.locals.base,t:totals(req.store),couponError})+savedItems(req)})
 })
-
-router.post('/cart/update', (req, res) => {
-  const line = req.store.cart.find(l => l.pid === String(req.body.id))
-  if (line) {
-    if (req.body.action === 'remove') req.store.cart = req.store.cart.filter(l => l !== line)
-    else { const q = Number(req.body.qty); if (Number.isInteger(q) && q >= 1 && q <= MAX_QTY) line.qty = q }
-  }
-  res.redirect(`${res.locals.base}/cart`)
+router.post('/cart/update',(req,res)=>{
+ if(Object.values(req.body).some(value=>typeof value!=='string'))return cartError(req,res,'Submit one value per cart field.')
+ const matches=req.store.cart.filter(l=>l.pid===str(req.body.id))
+ const line=req.body.line_key?matches.find(l=>lineKey(l.pid,l.variant)===str(req.body.line_key)):matches.length===1?matches[0]:null
+ if(!line)return cartError(req,res,'Choose the exact cart item to update.')
+ if(req.body.action==='remove'){req.store.cart=req.store.cart.filter(l=>l!==line);changedCart(req);return res.redirect(`${res.locals.base}/cart`)}
+ const quantity=Number(req.body.qty)
+ if(typeof req.body.qty!=='string'||!Number.isInteger(quantity)||quantity<1||quantity>MAX_QTY)return cartError(req,res,'Choose a whole quantity from 1 to 5.')
+ const next=req.store.cart.map(l=>l===line?{...l,qty:quantity}:{...l}),issue=cartIssue({cart:next})
+ if(issue)return cartError(req,res,issue,409)
+ req.store.cart=next;changedCart(req)
+ res.redirect(`${res.locals.base}/cart`)
 })
 
 router.post('/cart/coupon', (req, res) => res.redirect(`${res.locals.base}/cart?coupon=${str(req.body.code) ? 'invalid' : 'empty'}`))
-
-// ---- account (optional: checkout never asks for it) ----
-// ASSUMPTION: the login page (auth.jbhifi.com.au) was not opened; Email + Password with the usual Auth0-style error.
-router.get('/account/login', (req, res) => render(req, res, { title: 'Log in | JB Hi-Fi', body: P.loginPage({ base: res.locals.base, returnTo: safeReturn(res.locals.base, req.query.return_to, '') }) }))
-router.post('/account/login', (req, res) => {
-  const base = res.locals.base
-  const returnTo = safeReturn(base, req.body.return_to, '')
-  const acct = authenticate(req.storeSlug, str(req.body.email), req.body.password)
-  if (!acct) return render(req, res, { title: 'Log in | JB Hi-Fi', status: 401, body: P.loginPage({ base, email: str(req.body.email), returnTo, error: 'Wrong email or password.' }) })
-  req.store.user = publicAccount(acct)
-  res.redirect(returnTo || `${base}/account`)
-})
-router.get('/account/logout', (req, res) => { req.store.user = null; req.store.checkout = {}; res.redirect(`${res.locals.base}/`) })
-
-router.get('/account/register', (req, res) => render(req, res, { title: 'Create account | JB Hi-Fi', body: P.registerPage({ base: res.locals.base }) }))
-router.post('/account/register', (req, res) => {
-  const base = res.locals.base
-  const v = pick(req.body, ['email', 'first_name', 'last_name', 'phone'])
-  const password = typeof req.body.password === 'string' ? req.body.password : ''
-  const errors = {}
-  if (!EMAIL.test(str(v.email))) errors.email = 'Enter a valid email address.'
-  if (password.length < 8) errors.password = 'Your password must be at least 8 characters.'
-  if (!str(v.first_name)) errors.first_name = 'Enter your first name.'
-  if (!str(v.last_name)) errors.last_name = 'Enter your last name.'
-  if (str(v.phone) && phoneError(v.phone)) errors.phone = 'Enter a valid Australian mobile number.'
-  if (!Object.keys(errors).length) {
-    const acct = createAccount(req.storeSlug, { email: str(v.email), password, first_name: str(v.first_name), last_name: str(v.last_name), phone: str(v.phone) })
-    if (!acct.error) { req.store.user = publicAccount(acct); return res.redirect(`${base}/account`) }
-    errors.email = acct.error
-  }
-  render(req, res, { title: 'Create account | JB Hi-Fi', status: 400, body: P.registerPage({ base, values: v, errors }) })
-})
-
-router.get('/account', (req, res) => {
-  const base = res.locals.base, user = req.store.user
-  if (!user) return res.redirect(`${base}/account/login?return_to=${encodeURIComponent(`${base}/account`)}`)
-  const orders = listOrders({ store: req.storeSlug }).filter(o => o.customer.email === user.email)
-  render(req, res, { title: 'My account | JB Hi-Fi', body: P.accountPage({ base, user, orders }) })
-})
-
-// Header "Track order": logged-in shoppers see their orders; guests look one up by order number + email.
-router.get('/account/orders', (req, res) => {
-  if (req.store.user) return res.redirect(`${res.locals.base}/account`)
-  render(req, res, { title: 'Track your order | JB Hi-Fi', body: P.trackOrderPage({ base: res.locals.base }) })
-})
-router.post('/account/orders', (req, res) => {
-  const values = { order_number: str(req.body.order_number).replace(/^#/, ''), email: str(req.body.email).toLowerCase() }
-  const o = values.order_number ? getOrder(values.order_number) : null
-  const order = o && o.store === req.storeSlug && o.order_number === values.order_number && o.customer.email === values.email ? o : null
-  const error = order ? null : 'We couldn’t find an order with those details. Check your order number and email.'
-  render(req, res, { title: 'Track your order | JB Hi-Fi', status: order ? 200 : 404, body: P.trackOrderPage({ base: res.locals.base, values, order, error }) })
-})
 
 // ---- checkout: Shopify on the JB domain, guest-first, no sign-in screen ----
 // Real URLs: /checkouts/cn/<token>/en-us/information → …/shipping → …/payment (research step 5).
@@ -166,7 +175,7 @@ function checkoutUrls(base, token) {
 // Breadcrumb "Cart › Customer and Shipping Information › Shipping › Payment"; steps already done are links.
 function crumbs(req, res, current) {
   const u = res.locals.urls, order = ['information', 'shipping', 'payment']
-  const pickup = req.store.checkout.info?.method === 'pickup'
+  const pickup = ['pickup', 'collection_point'].includes(req.store.checkout.info?.method)
   return {
     current,
     steps: [{ id: 'cart', label: 'Cart', href: u.cart },
@@ -178,8 +187,9 @@ function crumbs(req, res, current) {
 function startCheckout(req, res) {
   const base = res.locals.base
   if (!req.store.cart.length) return res.redirect(`${base}/cart`)
+  const issue=cartIssue(req.store);if(issue)return cartError(req,res,issue,409)
   req.store.checkout.token ??= randomBytes(16).toString('hex')
-  res.redirect(checkoutUrls(base, req.store.checkout.token).information)
+  res.redirect(checkoutUrls(base, req.store.checkout.token).information+(req.query.address_id!==undefined?`?address_id=${encodeURIComponent(str(req.query.address_id))}`:''))
 }
 router.get('/checkout', startCheckout) // "Checkout" link in the add-to-cart modal
 router.post('/checkout', startCheckout) // "Checkout" button on the cart page
@@ -192,10 +202,17 @@ function checkoutStep(req, res, next) {
   res.locals.urls = checkoutUrls(base, req.params.token)
   next()
 }
-const needsInfo = (req, res, next) => (req.store.checkout.info ? next() : res.redirect(res.locals.urls.information))
+const needsInfo = (req, res, next) => {
+  if (!fixtureCatalog && req.store.checkout.info?.method === 'pickup') {
+    delete req.store.checkout.info
+    delete req.store.checkout.review
+    return renderInformation(req,res,{delivery_method:'delivery'},{errors:{delivery_method:'Store pickup availability has not been verified. Choose Delivery or a captured collection point.'}})
+  }
+  return req.store.checkout.info ? next() : res.redirect(res.locals.urls.information)
+}
 const needsShipping = (req, res, next) => {
   const co = req.store.checkout
-  return co.info.method === 'pickup' || SHIPPING_METHODS[co.shipping_method] ? next() : res.redirect(res.locals.urls.shipping)
+  return ['pickup', 'collection_point'].includes(co.info.method) || Object.hasOwn(SHIPPING_METHODS,co.shipping_method) ? next() : res.redirect(res.locals.urls.shipping)
 }
 
 // ASSUMPTION: no JB discount codes are known, so every code gets Shopify's refusal.
@@ -228,20 +245,35 @@ function phoneError(value) {
 }
 
 // -- step 1: Customer and Shipping Information --
-const INFO_KEYS = ['email', 'newsletter', 'delivery_method', 'first_name', 'last_name', 'company', 'address1', 'address2', 'suburb', 'state', 'postcode', 'phone', 'save_info', 'store_query', 'store_id', 'pickup_first_name', 'pickup_last_name', 'pickup_phone', 'point_query', 'discount_code']
+const INFO_KEYS = ['email', 'newsletter', 'delivery_method', 'first_name', 'last_name', 'company', 'address1', 'address2', 'suburb', 'state', 'postcode', 'phone', 'save_info', 'store_query', 'store_id', 'pickup_first_name', 'pickup_last_name', 'pickup_phone', 'point_query', 'point_id', 'discount_code']
+
+function collectionPointsFor(store, query) {
+  const lines = totals(store).lines
+  return lines.length && lines.every(line => ['903000', '903001'].includes(line.product.id)) ? findCollectionPoints(query) : []
+}
+function checkoutShipping(co) { return co.info?.method === 'pickup' ? null : co.info?.method === 'collection_point' ? COLLECTION_METHOD.id : co.shipping_method }
 
 function renderInformation(req, res, values, { errors = {}, discountError = null, pointSearched = false } = {}) {
   render(req, res, {
     title: 'Customer and Shipping Information - JB Hi-Fi - Checkout',
     status: Object.keys(errors).length || discountError ? 400 : 200,
     checkout: crumbs(req, res, 'information'),
-    body: P.informationPage({ urls: res.locals.urls, t: totals(req.store), values, errors, stores: findStores(values.store_query), storeQuery: values.store_query ?? '', pointQuery: pointSearched ? (values.point_query ?? '') : null, user: req.store.user, discountError }),
+    body: P.informationPage({ savedAddresses:savedAddressPicker(req,res.locals.urls.information), urls: res.locals.urls, t: totals(req.store), values, errors, stores: findStores(values.store_query), storeQuery: values.store_query ?? '', pointQuery: pointSearched || values.point_id ? (values.point_query ?? '') : null, points: collectionPointsFor(req.store, values.point_query), user: req.store.user, discountError }),
   })
 }
 
 router.get(`${STEP}/information`, checkoutStep, (req, res) => {
   const values = { ...(req.store.checkout.infoValues ?? {}) }
   const user = req.store.user
+  const selectedAddress=req.query.address_id!==undefined
+  if(selectedAddress&&!user)return renderInformation(req,res,values,{errors:{address:'Sign in to choose a saved address.'}})
+  if(user){
+    const address=selectedAddress?retailState(req).addresses.find(a=>a.id===str(req.query.address_id)):(!req.store.checkout.infoValues?defaultAddress(req):null)
+    if(selectedAddress&&!address)return renderInformation(req,res,values,{errors:{address:'Choose one of your saved addresses.'}})
+    if(address)Object.assign(values,checkoutAddressValues(address))
+    if(selectedAddress){delete req.store.checkout.info;delete req.store.checkout.shipping_method;req.store.checkout.reviewInvalidated=true;req.store.checkout.infoValues={...values}}
+    values.store_id??=retailState(req).preferences.store_id
+  }
   if (user) {
     values.email ||= user.email
     values.first_name ??= user.first_name; values.last_name ??= user.last_name
@@ -253,16 +285,20 @@ router.get(`${STEP}/information`, checkoutStep, (req, res) => {
 router.post(`${STEP}/information`, checkoutStep, (req, res) => {
   const co = req.store.checkout, b = req.body
   const v = pick(b, INFO_KEYS)
-  const method = ['delivery', 'pickup', 'collection_point'].includes(v.delivery_method) ? v.delivery_method : 'delivery'
+  const method = v.delivery_method===undefined?'delivery':v.delivery_method
   v.delivery_method = method
   if (b.apply_discount) return renderInformation(req, res, v, { discountError: DISCOUNT_ERROR })
   // "Use my location" / "Find stores" / "Search" only refresh the finder of the chosen delivery method.
+  if (method === 'pickup' && !fixtureCatalog) return renderInformation(req,res,v,{errors:{delivery_method:'Store pickup availability has not been verified. Choose Delivery or a captured collection point.'}})
   if (method === 'pickup' && (b.use_location || b.find_stores)) return renderInformation(req, res, v)
-  // ASSUMPTION: the collection-point search was never run in research; here it finds nothing for this pre-order.
+  // The captured Melbourne 3000 collection search refreshes without requiring customer details.
   if (method === 'collection_point' && (b.use_location_point || b.find_points)) return renderInformation(req, res, v, { pointSearched: true })
 
   const errors = {}
+  if(Object.values(b).some(value=>typeof value!=='string'))errors.form='Submit one value per checkout field'
   const email = str(v.email)
+  if(!['delivery','pickup','collection_point'].includes(method))errors.delivery_method='Choose a delivery method'
+  if(b.country!==undefined&&b.country!=='AU')errors.country='Delivery is available within Australia only'
   if (!email) errors.email = 'Enter an email'
   else if (!EMAIL.test(email)) errors.email = 'Enter a valid email'
   if (method === 'delivery') {
@@ -271,23 +307,33 @@ router.post(`${STEP}/information`, checkoutStep, (req, res) => {
     if (pe) errors.phone = pe
   } else if (method === 'pickup') {
     // The real "Continue to shipping" stays disabled until a store is picked.
+    if(totals(req.store).lines.some(l=>l.product.badges.includes('ONLINE ONLY')))errors.delivery_method='An online-only item cannot be collected. Choose Delivery.'
     if (!storeById(str(v.store_id))) errors.store_id = 'Choose a pickup location'
     if (!str(v.pickup_first_name)) errors.pickup_first_name = 'Enter a first name'
     if (!str(v.pickup_last_name)) errors.pickup_last_name = 'Enter a last name'
     const pe = phoneError(v.pickup_phone)
     if (pe) errors.pickup_phone = pe
-  } else {
-    errors.collection_point = 'No collection points available with your item. Choose Delivery or Click & Collect.'
+  } else if (method === 'collection_point') {
+    if (b.point_country !== undefined && b.point_country !== 'AU') errors.collection_point = 'Choose a collection point in Australia'
+    if (!collectionPointsFor(req.store, v.point_query).some(point => point.id === v.point_id)) errors.point_id = 'Choose a collection point'
   }
   if (Object.keys(errors).length) return renderInformation(req, res, v, { errors })
 
+  if(req.store.user && method==='delivery' && v.save_info==='1') {
+    const existing=retailState(req).addresses.find(a=>a.line1===str(v.address1)&&a.line2===str(v.address2)&&a.city===str(v.suburb)&&a.state===v.state&&a.postal_code===v.postcode)
+    const saved=saveAddress(req,{id:existing?.id,label:existing?.label||'Checkout address',name:`${str(v.first_name)} ${str(v.last_name)}`,phone:v.phone,line1:v.address1,line2:v.address2,city:v.suburb,state:v.state,postal_code:v.postcode},{country:'AU',requirePhone:true})
+    if(saved.errors)return renderInformation(req,res,v,{errors:{save_info:saved.errors.join(' ')}})
+  }
   delete v.discount_code
+  co.reviewInvalidated=true
+  delete co.shipping_method
   co.infoValues = v
   co.info = method === 'pickup'
     ? { method, email: email.toLowerCase(), newsletter: v.newsletter === '1', store_id: str(v.store_id), contact: { first_name: str(v.pickup_first_name), last_name: str(v.pickup_last_name), phone: str(v.pickup_phone) } }
+    : method === 'collection_point' ? { method, email: email.toLowerCase(), newsletter: v.newsletter === '1', point_id: v.point_id }
     : { method, email: email.toLowerCase(), newsletter: v.newsletter === '1', phone: str(v.phone), address: addressFrom(v) }
-  // ASSUMPTION: like Shopify local pickup, Click & Collect has no shipping step and goes straight to Payment.
-  res.redirect(method === 'pickup' ? res.locals.urls.payment : res.locals.urls.shipping)
+  // Collection-point checkout was observed to continue directly to payment.
+  res.redirect(['pickup', 'collection_point'].includes(method) ? res.locals.urls.payment : res.locals.urls.shipping)
 })
 
 // -- step 2: Shipping (Delivery only) --
@@ -302,20 +348,22 @@ function renderShipping(req, res, values, { errors = {}, discountError = null } 
 
 router.get(`${STEP}/shipping`, checkoutStep, needsInfo, (req, res) => {
   const co = req.store.checkout
-  if (co.info.method === 'pickup') return res.redirect(res.locals.urls.payment)
+  if (['pickup', 'collection_point'].includes(co.info.method)) return res.redirect(res.locals.urls.payment)
   renderShipping(req, res, { shipping_method: co.shipping_method ?? 'standard' })
 })
 
 router.post(`${STEP}/shipping`, checkoutStep, needsInfo, (req, res) => {
   const co = req.store.checkout
-  if (co.info.method === 'pickup') return res.redirect(res.locals.urls.payment)
+  if (['pickup', 'collection_point'].includes(co.info.method)) return res.redirect(res.locals.urls.payment)
   const v = { shipping_method: str(req.body.shipping_method) || 'standard', discount_code: str(req.body.discount_code) }
+  if(Object.values(req.body).some(value=>typeof value!=='string'))return renderShipping(req,res,{shipping_method:'standard'},{errors:{form:'Submit one value per checkout field'}})
   if (req.body.apply_discount) return renderShipping(req, res, v, { discountError: DISCOUNT_ERROR })
-  if (!SHIPPING_METHODS[v.shipping_method]) {
+  if (!Object.hasOwn(SHIPPING_METHODS,v.shipping_method)) {
     // JB help: pre-orders are not eligible for Courier Delivery.
     const msg = v.shipping_method === COURIER_METHOD.id ? `${COURIER_METHOD.name} is not available for pre-order items` : 'Choose a shipping method'
     return renderShipping(req, res, { ...v, shipping_method: 'standard' }, { errors: { shipping_method: msg } })
   }
+  if(co.shipping_method!==v.shipping_method)co.reviewInvalidated=true
   co.shipping_method = v.shipping_method
   res.redirect(res.locals.urls.payment)
 })
@@ -325,13 +373,19 @@ const PAYMENT_METHODS = ['card', 'paypal', 'afterpay', 'zip', 'latitude', 'giftc
 // Kept on a re-render. The card number, security code and gift card number/PIN are never echoed back.
 const PAY_KEYS = ['card_expiry', 'card_name', 'billing_first_name', 'billing_last_name', 'billing_company', 'billing_address1', 'billing_address2', 'billing_suburb', 'billing_state', 'billing_postcode', 'discount_code']
 
-function renderPayment(req, res, values, { errors = {}, discountError = null } = {}) {
-  const co = req.store.checkout, pickup = co.info.method === 'pickup'
+function reviewSignature(req){
+ const co=req.store.checkout,t=totals(req.store, checkoutShipping(co))
+ return createHash('sha256').update(JSON.stringify({items:t.lines.map(l=>({id:l.pid,variant:l.variant,qty:l.qty,price:l.product.price,options:l.product.attributes})),total:t.total,info:co.info,shipping:co.shipping_method,account:req.store.user?.id||null})).digest('hex')
+}
+function renderPayment(req, res, values, { errors = {}, discountError = null, status } = {}) {
+  const co = req.store.checkout, pickup = co.info.method === 'pickup', collection = co.info.method === 'collection_point'
+  const signature=reviewSignature(req)
+  if(co.reviewInvalidated||co.review?.signature!==signature){co.review={token:randomBytes(16).toString('hex'),signature};co.reviewInvalidated=false}
   render(req, res, {
     title: 'Payment - JB Hi-Fi - Checkout',
-    status: Object.keys(errors).length || discountError ? 400 : 200,
+    status: status || (Object.keys(errors).length || discountError ? 400 : 200),
     checkout: crumbs(req, res, 'payment'),
-    body: P.paymentPage({ urls: res.locals.urls, t: totals(req.store, pickup ? null : co.shipping_method), info: co.info, shipping: pickup ? null : SHIPPING_METHODS[co.shipping_method], pickupStore: pickup ? storeById(co.info.store_id) : null, values, errors, discountError }),
+    body: P.paymentPage({ urls: res.locals.urls, t: totals(req.store, checkoutShipping(co)), info: co.info, shipping: pickup ? null : collection ? COLLECTION_METHOD : SHIPPING_METHODS[co.shipping_method], collectionPoint: collection ? collectionPointById(co.info.point_id) : null, reviewToken:co.review.token, pickupStore: pickup ? storeById(co.info.store_id) : null, values, errors, discountError }),
   })
 }
 
@@ -342,14 +396,23 @@ router.get(`${STEP}/payment`, checkoutStep, needsInfo, needsShipping, (req, res)
 
 router.post(`${STEP}/payment`, checkoutStep, needsInfo, needsShipping, (req, res) => {
   const co = req.store.checkout, b = req.body
-  const pickup = co.info.method === 'pickup'
+  const pickup = co.info.method === 'pickup', collection = co.info.method === 'collection_point'
   const pm = PAYMENT_METHODS.includes(b.payment_method) ? b.payment_method : 'card'
   // Click & Collect has no shipping address, so the billing address is always entered.
-  const billingMode = pickup || b.billing === 'different' ? 'different' : 'same'
+  const billingMode = pickup || collection || b.billing === 'different' ? 'different' : 'same'
   const values = { ...pick(b, PAY_KEYS), payment_method: pm, billing: billingMode }
+  const issue=cartIssue(req.store)
+  if(issue)return cartError(req,res,issue,409)
+  if(collection&&!collectionPointsFor(req.store, co.infoValues?.point_query).some(point=>point.id===co.info.point_id))return renderPayment(req,res,values,{status:409,errors:{delivery:'Choose a delivery method for the current cart. Return to information.'}})
+  if(pickup&&totals(req.store).lines.some(l=>l.product.badges.includes('ONLINE ONLY')))return renderPayment(req,res,values,{status:409,errors:{delivery:'An online-only item cannot be collected. Return to information and choose Delivery.'}})
+  if(co.reviewInvalidated||(co.review&&co.review.signature!==reviewSignature(req))||(b.review_token!==undefined&&str(b.review_token)!==co.review?.token))return renderPayment(req,res,values,{status:409,errors:{review:'Your cart or checkout details changed. Review the current details and submit payment again.'}})
   if (b.apply_discount) return renderPayment(req, res, values, { discountError: DISCOUNT_ERROR })
 
   const errors = {}
+  if(Object.values(b).some(value=>typeof value!=='string'))errors.form='Submit one value per payment field'
+  if(b.payment_method!==undefined&&!PAYMENT_METHODS.includes(b.payment_method))errors.payment_method='Choose a payment method'
+  if(b.billing!==undefined&&!['same','different'].includes(b.billing))errors.billing='Choose a billing address option'
+  if(b.billing_country!==undefined&&b.billing_country!=='AU')errors.billing_country='Use an Australian billing address'
   let payment = { method: pm }
   if (pm === 'card') {
     // Shopify's expiry box formats "1229" as "12 / 29".
@@ -368,12 +431,16 @@ router.post(`${STEP}/payment`, checkoutStep, needsInfo, needsShipping, (req, res
   if (billingMode === 'different') Object.assign(errors, addressErrors(b, 'billing'))
   if (Object.keys(errors).length) return renderPayment(req, res, values, { errors })
 
+  const rejected = scenarioPayment(req.store, payment, req.store.cart)
+  if (rejected) return renderPayment(req,res,values,{status:402,errors:{payment:rejected}})
+
   const info = co.info
-  const t = totals(req.store, pickup ? null : co.shipping_method)
+  const t = totals(req.store, checkoutShipping(co))
   const game = t.lines.map(l => l.product).find(p => p.kind === 'game')
   const store = pickup ? storeById(info.store_id) : null
-  const ship = pickup ? null : SHIPPING_METHODS[co.shipping_method]
-  const person = pickup ? info.contact : info.address
+  const ship = pickup ? null : collection ? COLLECTION_METHOD : SHIPPING_METHODS[co.shipping_method]
+  const point = collection ? collectionPointById(info.point_id) : null
+  const person = pickup ? info.contact : collection ? addressFrom(b, 'billing') : info.address
   const order = recordOrder({
     store: req.storeSlug,
     order_number: orderNumber(),
@@ -381,16 +448,16 @@ router.post(`${STEP}/payment`, checkoutStep, needsInfo, needsShipping, (req, res
     items: t.lines.map(({ product: p, qty }) => p.kind === 'game'
       ? { platform: p.platform, edition: p.edition, format: p.format, qty, unit_price: p.price, title: p.title, sku: p.id }
       : { kind: 'other', title: p.title, qty, unit_price: p.price, sku: p.id }),
-    customer: { email: info.email, first_name: person.first_name, last_name: person.last_name, phone: pickup ? info.contact.phone : info.phone, account_id: req.store.user?.id ?? null, guest: !req.store.user },
+    customer: { email: info.email, first_name: person.first_name, last_name: person.last_name, phone: pickup ? info.contact.phone : info.phone ?? null, account_id: req.store.user?.id ?? null, guest: !req.store.user },
     fulfillment: pickup
       ? { method: 'pickup', option: 'click_and_collect', store_id: store.id, store_location: store.name, store_address: store.address, ready_from: game?.preloadFrom ?? null }
-      : { method: 'ship', option: ship.id, option_name: ship.name, carrier: ship.carrier, eta: ship.eta },
-    shipping_address: pickup ? null : { ...info.address, phone: info.phone },
+      : { method: 'ship', option: ship.id, option_name: ship.name, carrier: ship.carrier, eta: ship.eta ?? null, ...(collection ? { collection_point_id: point.id, collection_point_name: point.name, collection_point_address: point.address } : {}) },
+    shipping_address: pickup ? null : collection ? { first_name: person.first_name, last_name: person.last_name, line1: point.line1, city: point.city, state: point.state, postal_code: point.postal_code, country: point.country } : { ...info.address, phone: info.phone },
     billing_address: billingMode === 'different' ? addressFrom(b, 'billing') : { ...info.address },
     payment,
     totals: { subtotal: t.subtotal, shipping: t.shipping, tax: 0, total: t.total }, // prices include GST: no tax line
     currency: 'AUD',
-    meta: { token: co.token, gst_included: round(t.total / 11), charged: 'in full at order', newsletter: info.newsletter, release: game?.releaseLong ?? null, preload_from: game?.preloadFrom ?? null },
+    meta: { account_id:req.store.user?.id??null, preorder:t.lines.some(l=>l.product.cta==='Pre-order'), options:t.lines.map(l=>({sku:l.pid,variant_id:l.variant||null,options:l.product.variantId?Object.fromEntries(Object.keys(l.product.variants[0].attributes).map(k=>[k,l.product.attributes[k]])):{},quantity:l.qty,unit_price:l.product.price})), token: co.token, gst_included: round(t.total / 11), charged: 'in full at order', newsletter: info.newsletter, release: game?.releaseLong ?? null, preload_from: game?.preloadFrom ?? null },
   })
   req.store.cart = []
   req.store.checkout = {}
@@ -399,8 +466,8 @@ router.post(`${STEP}/payment`, checkoutStep, needsInfo, needsShipping, (req, res
 
 // Thank-you page, found by order number + checkout token (still works after a refresh).
 router.get(`${STEP}/thank-you`, (req, res) => {
-  const order = getOrder(str(req.query.order))
-  if (!order || order.store !== req.storeSlug || order.meta?.token !== req.params.token) return notFound(req, res)
+  const order = customerOrder(req,str(req.query.order))
+  if (!order || order.store !== req.storeSlug || order.meta?.token !== req.params.token || order.session_id!==req.session.id || (order.customer.account_id&&order.customer.account_id!==req.store.user?.id)) return notFound(req, res)
   render(req, res, { title: 'Thank you for your purchase! - JB Hi-Fi - Checkout', checkout: { steps: [] }, body: P.thankYouPage({ base: res.locals.base, order }) })
 })
 
@@ -408,9 +475,12 @@ router.use(notFound)
 
 export default {
   slug: 'jb-hifi',
+  catalog_observations: catalogObservations,
   name: NAME,
   country: 'AU',
   currency: 'AUD',
-  description: 'AU. Code-in-box PS5/Xbox at $129, full-screen add-to-cart modal, guest-first Shopify checkout (information → shipping → payment) with Delivery or Click & Collect.',
+  description: fixtureCatalog ? 'AU. Code-in-box PS5/Xbox at $129, full-screen add-to-cart modal, guest-first Shopify checkout (information → shipping → payment) with Delivery or Click & Collect.' : 'AU. Captured $129 PS5/Xbox preorders, guest-first checkout, and Melbourne 3000 Australia Post collection points. Store pickup availability is unverified.',
   router,
 }
+
+registerScenarioAdapter('jb-hifi', { seed(store, id, qty) { store.cart = [{ pid: id, qty }] } })

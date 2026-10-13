@@ -1,10 +1,15 @@
+import { enterScenarioCart, scenarioAvailability, scenarioPayment } from '../../lib/benchmark-scenarios.js'
 import { Router } from 'express'
 import { randomBytes, randomInt } from 'node:crypto'
-import { recordOrder, getOrder, listOrders } from '../../lib/orders.js'
+import { recordOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, byTcin, games, sponsored, protectionPlan, productPath, search, totals, STATES, PAYMENT_TYPES, PREORDER_ARRIVAL, ARRIVES } from './data.js'
+import { PRODUCTS, byTcin, games, sponsored, protectionPlan, productPath, search, refine, totals, STATES, PAYMENT_TYPES, PREORDER_ARRIVAL, ARRIVES, selectedProduct, stockLimit, lineKey, productForLine, cartIssues, arrivalSummary } from './data.js'
 import * as P from './pages.js'
+import * as B from './browse.js'
+import { DEPARTMENTS, CAMPAIGNS } from './catalog.js'
+import { saveAddress } from '../../lib/retail-state.js'
+import { installJourneys, accountOrder, retailState, defaultAddress, addressValues, shippingAddressInput, rememberSelection, selectedStore, orderPage } from './journeys.js'
 
 const NAME = 'Target'
 const router = Router()
@@ -12,10 +17,17 @@ const router = Router()
 // ---- helpers ----
 function render(req, res, title, body, { status = 200, minimal = false, q = '' } = {}) {
   const t = totals(req.store)
-  res.status(status).type('html').send(P.layout({ base: res.locals.base, title, body, cartCount: t.count, user: req.store.user, q, minimal }))
+  res.status(status).type('html').send(P.layout({ base: res.locals.base, title, body, cartCount: t.count, user: req.store.user, q, minimal, shipZip: req.store.locationZip, storeLocation: selectedStore(req).name }))
 }
 // ASSUMPTION: 15 digits with no separators (one public example: 902001863311107); shipped
 // Target.com orders appear to start with 102… (low confidence in the research).
+function activateAccount(req,acct) {
+  if(req.store.user?.id!==acct.id) {
+    const paypal=!req.store.user&&req.store.checkout.paymentValues?.paymentType==='paypal'
+    req.store.checkout=paypal?{paymentValues:{paymentType:'paypal'}}:{}
+  }
+  req.store.user=publicAccount(acct)
+}
 function orderNumber() { return '102' + String(randomInt(0, 1e12)).padStart(12, '0') }
 // Only ever redirect back to a path inside this store.
 function safePath(base, s, fallback) {
@@ -24,107 +36,149 @@ function safePath(base, s, fallback) {
 }
 function withQuery(path, params) {
   const u = new URL(path, 'http://x')
-  for (const k of ['added', 'notadded', 'list']) u.searchParams.delete(k)
+  for (const k of ['added', 'addedVariant', 'notadded', 'list']) u.searchParams.delete(k)
   for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v)
   return u.pathname + u.search
 }
-const recsFor = (p) => PRODUCTS.filter(x => x !== p && !x.addon).slice(0, 4)
+const recsFor = p => PRODUCTS.filter(x => x.tcin !== p?.tcin && !x.addon && stockLimit(x)>0 && (p ? x.department === p.department : !!x.family)).slice(0,4)
 function drawerFor(req, res, closeHref) {
-  const added = req.query.added ? byTcin(req.query.added) : null
+  const added = req.query.added ? selectedProduct(byTcin(req.query.added), String(req.query.addedVariant ?? '')) : null
   const notAdded = req.query.notadded ? byTcin(req.query.notadded) : null
   if (!added && !notAdded) return ''
   return P.addedDrawer({ base: res.locals.base, added, notAdded, closeHref, plan: protectionPlan(), recs: recsFor(added ?? notAdded) })
 }
+function invalidateCheckout(store) {
+  if (!store.checkout.shipping && !store.checkout.payment) return
+  // A changed basket needs fresh eligibility, totals and payment review.
+  // Keep ordinary address fields so the shopper can confirm or correct them.
+  store.checkout.shipping = null
+  store.checkout.payment = null
+  store.checkout.paymentValues = {}
+}
 function addToCart(store, p, qty) {
-  const line = store.cart.find(l => l.tcin === p.tcin)
-  if ((line ? line.qty : 0) + qty > p.limit) return false // purchase limit (2 for the game)
-  if (line) line.qty += qty; else store.cart.push({ tcin: p.tcin, qty })
+  if (!p || !Number.isInteger(qty) || qty<1 || qty>stockLimit(p)) return false
+  const line=store.cart.find(l=>lineKey(l.tcin,l.variantId)===lineKey(p.tcin,p.variantId))
+  const total=store.cart.filter(l=>l.tcin===p.tcin).reduce((n,l)=>n+l.qty,0)
+  if ((line?.qty||0)+qty>stockLimit(p) || total+qty>stockLimit(byTcin(p.tcin))) return false
+  if (line) line.qty+=qty; else store.cart.push({tcin:p.tcin,qty,...(p.variantId?{variantId:p.variantId}:{})})
+  invalidateCheckout(store)
   return true
+}
+function selection(body) {
+  if (body.fulfillment && body.fulfillment!=='shipping') return null
+  if (['size','color','option','options'].some(k=>Object.hasOwn(body,k))) return null
+  return selectedProduct(byTcin(body.tcin),String(body.variant||''))
+}
+function cartError(req,res,message='That option or quantity is unavailable. Check your selection and try again.') {
+  render(req,res,'Check your cart : Target',P.simplePage({title:'Item not added to cart',html:`<p role="alert">${message}</p><a class="tg-btn" href="${res.locals.base}/cart">Return to cart</a> <a href="${res.locals.base}/c">Continue shopping</a>`}),{status:400})
 }
 function notFound(req, res) {
   render(req, res, 'Page not found : Target', P.simplePage({ title: 'Oops! Something went wrong.', html: `<p>We can&rsquo;t find the page you&rsquo;re looking for.</p><a class="tg-btn" href="${res.locals.base}/">Go to homepage</a>` }), { status: 404 })
 }
 
+// Run-scoped availability changes are checked before every checkout boundary,
+// including direct legacy routes. They never mutate the shared catalog.
+router.use((req,res,next)=>{
+  const checkout=/^\/(?:checkout(?:\/|$)|mrt\/checkout|gp\/buy\/|gp\/cart\/desktop\/go-to-checkout)/.test(req.path)
+  if(checkout || (req.method==='GET' && /^\/(?:cart(?:\/|$)|gp\/cart\/view)/.test(req.path))) enterScenarioCart(req.store)
+  const selection=[...req.store.cart,...(req.store.checkout.buyNow?[req.store.checkout.buyNow]:[])]
+  const unavailable=selection.some(l=>scenarioAvailability(req.store,l.asin??l.tcin??l.pid,'shipping')===false)
+  const adding=req.method==='POST'&&['/cart/add','/buy-now','/gp/product/handle-buy-box'].includes(req.path)
+  const ids=[].concat(req.body?.asin??req.body?.ASIN??req.body?.tcin??req.body?.pid??[])
+  if((checkout&&unavailable)||(adding&&ids.some(id=>scenarioAvailability(req.store,id,'shipping')===false))) return render(req,res,'Review your cart',P.cartPage({base:res.locals.base,t:totals(req.store),user:req.store.user,recs:[]}),{status:409})
+  next()
+})
+
 // ---- browse ----
-router.get('/', (req, res) => render(req, res, 'Target : Expect More. Pay Less.', P.homePage({ base: res.locals.base, products: PRODUCTS.filter(p => !p.addon && !p.sponsored), games: games() })))
-
-function searchRender(req, res, q) {
-  const base = res.locals.base
-  const products = search(q)
-  const path = `${base}/s?searchTerm=${encodeURIComponent(q)}`
-  render(req, res, `${q} : Target`, P.searchPage({ base, q, products, sponsored: products.length ? sponsored() : null, backPath: path, drawer: drawerFor(req, res, path) }), { q })
+router.get('/', (req,res)=>render(req,res,'Target : Expect More. Pay Less.',B.catalogHome({base:res.locals.base})+drawerFor(req,res,res.locals.base+'/')))
+const filterNames=['platform','category','type','material','size','price','availability','brand','format','rating','fulfillment','sort']
+function browseRender(req,res,{q='',pool=search(q),heading='',intro=''}={}) {
+  const base=res.locals.base
+  const filters=Object.fromEntries(filterNames.map(k=>[k,String(req.query[k]??'')]))
+  const products=refine(pool,filters), page=Math.max(1,Number.parseInt(req.query.page,10)||1)
+  const params=new URLSearchParams({...((req.path==='/s'||req.path.startsWith('/s/'))?{searchTerm:q}:{}),...Object.fromEntries(Object.entries(filters).filter(([,v])=>v)),...(page>1?{page:String(page)}:{})})
+  const path=`${base}${req.path.startsWith('/s/')?'/s':req.path}${params.size?'?'+params:''}`
+  render(req,res,`${heading||q||'Shop all products'} : Target`,B.listingPage({base,q,pool,products,filters,heading,intro,page,backPath:path,drawer:drawerFor(req,res,path)}),{q})
 }
-router.get('/s', (req, res) => searchRender(req, res, String(req.query.searchTerm ?? '').trim()))
-// Curated collection URL, e.g. /s/gta+6
-router.get('/s/:term', (req, res) => searchRender(req, res, String(req.params.term).replace(/\+/g, ' ').trim()))
-
-router.get('/p/:slug/-/A-:tcin', (req, res) => {
-  const base = res.locals.base
-  const p = byTcin(req.params.tcin)
-  if (!p) return notFound(req, res)
-  const fulfillment = ['pickup', 'delivery', 'shipping'].includes(req.query.fulfillment) ? req.query.fulfillment : 'shipping'
-  const path = productPath(base, p)
-  render(req, res, `${p.title} : Target`, P.productPage({
-    base, p, siblings: games(), fulfillment, plan: protectionPlan(), recs: recsFor(p), user: req.store.user,
-    drawer: drawerFor(req, res, path), listMsg: req.query.list === 'added' ? 'Item added to your list.' : null,
-  }))
+router.get('/s',(req,res)=>browseRender(req,res,{q:String(req.query.searchTerm??'').trim()}))
+router.get('/s/:term',(req,res)=>browseRender(req,res,{q:String(req.params.term).replace(/\+/g,' ').trim()}))
+router.get('/c',(req,res)=>render(req,res,'Shop all categories : Target',B.categoryDirectory({base:res.locals.base})))
+router.get('/c/:department',(req,res)=>{
+  const base=res.locals.base, department=DEPARTMENTS.find(d=>d.id===req.params.department),campaign=CAMPAIGNS.find(c=>c.id===req.params.department)
+  if(!department&&!campaign) return notFound(req,res)
+  const pool=PRODUCTS.filter(p=>!p.addon&&(department?p.department===department.id:campaign.select(p)))
+  browseRender(req,res,{pool,heading:department?.name||campaign.name,intro:B.categoryIntro({base,department,campaign})})
+})
+router.get('/weekly-ad',(req,res)=>browseRender(req,res,{pool:PRODUCTS.filter(p=>p.deal),heading:'This week’s offers',intro:B.categoryIntro({base:res.locals.base,weekly:true})}))
+router.get('/b/:brand',(req,res)=>{
+  const pool=PRODUCTS.filter(p=>!p.addon&&B.brandSlug(p.brand)===req.params.brand)
+  if(!pool.length)return notFound(req,res)
+  browseRender(req,res,{pool,heading:pool[0].brand})
+})
+router.get('/p/:slug/-/A-:tcin',(req,res)=>{
+  // Target's search and brand pages link the grouped GTA VI parent; its default
+  // selection is the PS5 child TCIN. Swatches link the individual child listings.
+  const base=res.locals.base, original=byTcin(req.params.tcin==='1012260588'?'1011529119':req.params.tcin)
+  if(!original)return notFound(req,res)
+  const p=selectedProduct(original,String(req.query.variant??original.variants?.[0]?.id??''))
+  if(!p)return cartError(req,res,'That product option is not available. Return to the product and choose a listed option.')
+  rememberSelection(req,p)
+  const fulfillment=['pickup','delivery','shipping'].includes(req.query.fulfillment)?req.query.fulfillment:'shipping'
+  const browseBack=safePath(base,req.query.returnTo,'')
+  const path=withQuery(productPath(base,p),{...(p.variantId?{variant:p.variantId}:{}),...(browseBack?{returnTo:browseBack}:{})})
+  render(req,res,`${p.title} : Target`,P.productPage({base,p,browseBack,siblings:games(),fulfillment,shipZip:req.store.locationZip,storeLocation:selectedStore(req).name,plan:protectionPlan(),recs:recsFor(p),user:req.store.user,drawer:drawerFor(req,res,path),listMsg:req.query.list==='added'?'Item added to your list.':null}))
 })
 
 // ---- cart ----
-router.post('/cart/add', (req, res) => {
-  const base = res.locals.base
-  const p = byTcin(req.body.tcin)
-  if (!p) return res.redirect(`${base}/`)
-  const back = safePath(base, req.body.back, productPath(base, p))
-  const qty = Math.max(1, Math.min(p.limit, parseInt(req.body.qty, 10) || 1))
-  const ok = addToCart(req.store, p, qty)
-  const plan = ok && req.body.addon ? byTcin(req.body.addon) : null
-  if (plan?.addon) addToCart(req.store, plan, 1)
-  res.redirect(withQuery(back, ok ? { added: p.tcin } : { notadded: p.tcin }))
+router.post('/cart/add',(req,res)=>{
+  const base=res.locals.base,p=selection(req.body)
+  if(!p)return cartError(req,res)
+  const back=safePath(base,req.body.back,productPath(base,p)),qty=Number(req.body.qty??1)
+  const plan=req.body.addon&&p.esp?byTcin(req.body.addon):null
+  if(req.body.addon && !plan?.addon)return cartError(req,res,'That protection plan is not available in this catalog.')
+  if(!addToCart(req.store,p,qty))return cartError(req,res)
+  if(plan?.addon)addToCart(req.store,plan,1)
+  res.redirect(withQuery(back,{added:p.tcin,...(p.variantId?{addedVariant:p.variantId}:{})}))
 })
-
-// ASSUMPTION: Target's one-click "Buy now" drawer needs a saved address and card; here it adds the
-// item and goes straight to checkout. Guests get "Sign in to buy now" on the page instead.
-router.post('/buy-now', (req, res) => {
-  const base = res.locals.base
-  const p = byTcin(req.body.tcin)
-  if (!p) return res.redirect(`${base}/`)
-  if (!req.store.user) return res.redirect(`${base}/login?redirect=${encodeURIComponent(productPath(base, p))}`)
-  addToCart(req.store, p, 1)
+router.post('/buy-now',(req,res)=>{
+  const base=res.locals.base,p=selection(req.body)
+  if(!p)return cartError(req,res)
+  if(!req.store.user)return res.redirect(`${base}/login?redirect=${encodeURIComponent(productPath(base,p)+(p.variantId?'?variant='+p.variantId:''))}`)
+  if(!addToCart(req.store,p,1))return cartError(req,res)
   res.redirect(`${base}/checkout`)
 })
 
-router.post('/list/add', (req, res) => {
-  const base = res.locals.base
-  const p = byTcin(req.body.tcin)
-  if (!p) return res.redirect(`${base}/`)
-  if (!req.store.user) return res.redirect(`${base}/login?redirect=${encodeURIComponent(productPath(base, p))}`)
-  res.redirect(withQuery(productPath(base, p), { list: 'added' }))
-})
-
 router.get('/cart', (req, res) => {
-  const saved = (req.store.saved ?? []).map(byTcin).filter(Boolean)
+  const saved = (retailState(req).savedForLater ?? []).map(l=>typeof l==='string'?byTcin(l):productForLine(l)).filter(Boolean)
   render(req, res, 'Cart : Target', P.cartPage({
-    base: res.locals.base, t: totals(req.store), saved, user: req.store.user, recs: recsFor(null),
-    promo: !!req.query.promo, promoError: req.query.promoError, promoValue: req.query.code,
+    base: res.locals.base, t: totals(req.store), saved, user: req.store.user, recs: recsFor(productForLine(req.store.cart[0] || {})),
+    storeLocation:selectedStore(req).name, promo: !!req.query.promo, promoError: req.query.promoError, promoValue: req.query.code,
   }))
 })
 
-router.post('/cart/update', (req, res) => {
-  const tcin = String(req.body.tcin ?? ''), action = req.body.action || 'update', p = byTcin(tcin)
-  req.store.saved ??= []
-  const drop = () => { req.store.cart = req.store.cart.filter(l => l.tcin !== tcin) }
-  if (p) {
-    if (action === 'remove') drop()
-    else if (action === 'save') { drop(); if (!req.store.saved.includes(tcin)) req.store.saved.push(tcin) }
-    else if (action === 'restore') { req.store.saved = req.store.saved.filter(t => t !== tcin); addToCart(req.store, p, 1) }
-    else if (action === 'removesaved') req.store.saved = req.store.saved.filter(t => t !== tcin)
-    else {
-      const line = req.store.cart.find(l => l.tcin === tcin), q = parseInt(req.body.qty, 10)
-      if (line && q === 0) drop() // Target help: "reduce the qty to 0" removes the item
-      else if (line && q >= 1 && q <= p.limit) line.qty = q
-    }
+router.post('/cart/update',(req,res)=>{
+  const previousCart = JSON.stringify(req.store.cart)
+  const tcin=String(req.body.tcin??''),variantId=String(req.body.variant??''),key=lineKey(tcin,variantId),action=req.body.action||'update'
+  const p=selectedProduct(byTcin(tcin),variantId)
+  retailState(req).savedForLater??=[]
+  const matches=l=>lineKey(typeof l==='string'?l:l.tcin,typeof l==='string'?'':l.variantId)===key
+  const drop=()=>{req.store.cart=req.store.cart.filter(l=>!matches(l))}
+  if(!p)return cartError(req,res)
+  if(action==='remove')drop()
+  else if(action==='save') { const line=req.store.cart.find(matches);if(line){if(!retailState(req).savedForLater.some(matches))retailState(req).savedForLater.push({...line});drop()} }
+  else if(action==='restore') {
+    const saved=retailState(req).savedForLater.find(matches)
+    if(!saved||!addToCart(req.store,p,typeof saved==='string'?1:saved.qty))return cartError(req,res)
+    retailState(req).savedForLater=retailState(req).savedForLater.filter(l=>!matches(l))
+  } else if(action==='removesaved')retailState(req).savedForLater=retailState(req).savedForLater.filter(l=>!matches(l))
+  else {
+    const line=req.store.cart.find(matches),qty=Number(req.body.qty)
+    const others=req.store.cart.filter(l=>l.tcin===tcin&&!matches(l)).reduce((n,l)=>n+l.qty,0)
+    if(line&&qty===0)drop()
+    else if(line&&Number.isInteger(qty)&&qty>=1&&qty<=stockLimit(p)&&others+qty<=stockLimit(byTcin(tcin)))line.qty=qty
+    else return cartError(req,res)
   }
+  if (previousCart !== JSON.stringify(req.store.cart)) invalidateCheckout(req.store)
   res.redirect(`${res.locals.base}/cart`)
 })
 
@@ -156,7 +210,7 @@ router.post('/login', (req, res) => {
   const acct = authenticate(req.storeSlug, req.body.email, req.body.password)
   // ASSUMPTION: Target's exact wrong-password message was not captured.
   if (!acct) return render(req, res, 'Login: Target', P.loginPage({ base, redirect, email: req.body.email, error: 'We couldn’t sign you in. Check your email address and password and try again.' }), { ...AUTH, status: 401 })
-  req.store.user = publicAccount(acct)
+  activateAccount(req,acct)
   res.redirect(redirect || `${base}/account`)
 })
 router.get('/login/:kind', (req, res) => {
@@ -185,16 +239,9 @@ router.post('/account/create', (req, res) => {
   if (!Object.keys(errors).length) {
     const acct = createAccount(req.storeSlug, { email, password: pw, first_name: v.firstName.trim(), last_name: v.lastName.trim(), phone: String(v.phone ?? '').trim() })
     if (acct.error) errors.email = acct.error
-    else { req.store.user = publicAccount(acct); return res.redirect(redirect || `${base}/account`) }
+    else { activateAccount(req,acct); return res.redirect(redirect || `${base}/account`) }
   }
   render(req, res, 'Create account : Target', P.createAccountPage({ base, redirect, values: { ...v, password: '' }, errors }), { ...AUTH, status: 400 })
-})
-
-router.get('/account', (req, res) => {
-  const base = res.locals.base
-  if (!req.store.user) return res.redirect(`${base}/login?redirect=${encodeURIComponent(base + '/account')}`)
-  const orders = listOrders({ store: req.storeSlug }).filter(o => o.customer.email === req.store.user.email)
-  render(req, res, 'Account : Target', P.accountPage({ base, user: req.store.user, orders }))
 })
 
 // ---- checkout: Shipping address → Payment → Review & place order (one page, one URL per step) ----
@@ -202,14 +249,15 @@ function gate(req, res) {
   const base = res.locals.base
   if (!req.store.cart.length) { res.redirect(`${base}/cart`); return false }
   if (!req.store.user) { res.redirect(`${base}/login?redirect=${encodeURIComponent(base + '/checkout')}`); return false }
+  if (cartIssues(req.store)) { cartError(req,res,'An item or selected option is no longer available in the requested quantity. Please update your cart.'); return false }
   return true
 }
 function renderCheckout(req, res, step, { values, errors = {} } = {}, status = 200) {
   const c = req.store.checkout, u = req.store.user
   const defaults = step === 'shipping'
-    ? (c.shippingValues ?? { firstName: u.first_name, lastName: u.last_name, phone: u.phone })
+    ? (c.shippingValues ?? addressValues(defaultAddress(req)) ?? { firstName: u.first_name, lastName: u.last_name, phone: u.phone })
     : step === 'payment' ? (c.paymentValues ?? {}) : {}
-  render(req, res, 'Checkout : Target', P.checkoutPage({ base: res.locals.base, step, t: totals(req.store), checkout: c, values: values ?? defaults, errors }), { status, minimal: true })
+  render(req, res, 'Checkout : Target', P.checkoutPage({ base: res.locals.base, step, t: totals(req.store), checkout: c, values: values ?? defaults, errors, addresses: retailState(req).addresses }), { status, minimal: true })
 }
 function nextStep(c) { return !c.shipping ? 'shipping' : !c.payment ? 'payment' : 'review' }
 
@@ -217,24 +265,42 @@ const startCheckout = (req, res) => { if (gate(req, res)) res.redirect(`${res.lo
 router.get('/checkout', startCheckout)
 router.get('/checkout/start', startCheckout)
 
-router.get('/checkout/shipping', (req, res) => { if (gate(req, res)) renderCheckout(req, res, 'shipping') })
+router.get('/checkout/shipping', (req, res) => {
+  if (!gate(req,res)) return
+  if (req.query.address_id) {
+    const a=retailState(req).addresses.find(a=>a.id===req.query.address_id)
+    if(!a)return notFound(req,res)
+    req.store.checkout.shippingValues=addressValues(a)
+    // Choosing a different address requires review and payment entry again.
+    req.store.checkout.shipping=null
+    req.store.checkout.payment=null
+    req.store.checkout.paymentValues={}
+  }
+  renderCheckout(req,res,'shipping')
+})
 router.post('/checkout/shipping', (req, res) => {
   if (!gate(req, res)) return
   const v = req.body, errors = {}
+  if(v.address_id&&!retailState(req).addresses.some(a=>a.id===v.address_id))return notFound(req,res)
   const req_ = (k, label) => { if (!String(v[k] ?? '').trim()) errors[k] = `${label} is required` }
   req_('firstName', 'First name'); req_('lastName', 'Last name'); req_('address1', 'Address line 1'); req_('zip', 'Zip code'); req_('city', 'City'); req_('state', 'State'); req_('phone', 'Phone number')
   if (v.zip && !/^\d{5}(-\d{4})?$/.test(String(v.zip).trim())) errors.zip = 'Check your ZIP code and try again.'
   if (v.state && !STATES.includes(v.state)) errors.state = 'State is required'
   if (v.phone && String(v.phone).replace(/\D/g, '').length !== 10) errors.phone = 'Enter a valid 10-digit phone number'
   // This item cannot ship to PO Boxes, Alaska, Hawaii or US territories.
-  if (!errors.address1 && (['AK', 'HI'].includes(v.state) || /\bp\.?\s*o\.?\s*box\b/i.test(String(v.address1)))) errors.address1 = 'Can’t ship to your address. This item can’t be shipped to PO Boxes, Alaska, Hawaii or U.S. territories.'
+  if (totals(req.store).lines.some(l=>l.product.restricted) && !errors.address1 && (['AK', 'HI'].includes(v.state) || /\bp\.?\s*o\.?\s*box\b/i.test(String(v.address1)))) errors.address1 = 'Can’t ship to your address. This item can’t be shipped to PO Boxes, Alaska, Hawaii or U.S. territories.'
   if (Object.keys(errors).length) return renderCheckout(req, res, 'shipping', { values: v, errors }, 400)
   const c = req.store.checkout
   const shipping = { first_name: v.firstName.trim(), last_name: v.lastName.trim(), line1: v.address1.trim(), line2: String(v.address2 ?? '').trim() || null, city: v.city.trim(), state: v.state, postal_code: String(v.zip).trim(), country: 'US', phone: String(v.phone).trim() }
   // Target help: changing the shipping address during checkout forces CVV re-entry.
-  if (c.payment?.type === 'card' && c.shipping && JSON.stringify(c.shipping) !== JSON.stringify(shipping)) c.payment = null
+  if (c.payment && c.shipping && JSON.stringify(c.shipping) !== JSON.stringify(shipping)) { c.payment = null; c.paymentValues = {} }
+  if(v.defaultAddress) {
+    const saved=saveAddress(req,shippingAddressInput(v),{country:'US',requirePhone:true})
+    if(saved.errors)return renderCheckout(req,res,'shipping',{values:v,errors:{address1:saved.errors.join(' ')}},400)
+    v.address_id=saved.address.id
+  }
   c.shipping = shipping
-  c.shippingValues = v
+  c.shippingValues = Object.fromEntries(['address_id','firstName','lastName','address1','address2','zip','city','state','phone','defaultAddress','instructions'].map(k=>[k,String(v[k]??'')]))
   c.instructions = String(v.instructions ?? '').trim() || null
   res.redirect(`${res.locals.base}/checkout/${nextStep(c)}`)
 })
@@ -250,7 +316,7 @@ router.post('/checkout/payment', (req, res) => {
   if (!c.shipping) return res.redirect(`${res.locals.base}/checkout/shipping`)
   const v = req.body, errors = {}
   const type = PAYMENT_TYPES[v.paymentType] ? v.paymentType : 'card'
-  const kept = { ...v, cardNumber: '', cvv: '' } // never echo the card number or CVV
+  const kept = Object.fromEntries(['paymentType','expiry','nameOnCard','billingSame','billingFirstName','billingLastName','billingAddress1','billingZip','billingCity','billingState'].map(k=>[k,String(v[k]??'')])) // never echo the card number or CVV
   if (v.action === 'giftcard') {
     errors.giftCardNumber = 'We couldn’t find a gift card with that number. Check the card number and access number and try again.'
     return renderCheckout(req, res, 'payment', { values: kept, errors }, 400)
@@ -300,7 +366,8 @@ router.post('/checkout/place-order', (req, res) => {
   const payment = pay.type === 'card'
     ? { method: 'card', brand: pay.brand, last4: pay.last4, name_on_card: pay.name_on_card, expiration: pay.expiration }
     : { method: PAYMENT_TYPES[pay.type].method }
-  const preorder = t.lines.some(l => l.product.preorder)
+  const paymentError=scenarioPayment(req.store,payment,t.lines)
+  if(paymentError) return renderCheckout(req,res,'payment',{errors:{payment:paymentError}},402)
   const order = recordOrder({
     store: req.storeSlug,
     order_number: orderNumber(),
@@ -309,13 +376,13 @@ router.post('/checkout/place-order', (req, res) => {
       ? { platform: l.product.platform, edition: l.product.edition, format: l.product.format, qty: l.qty, unit_price: l.product.price, title: l.product.title, sku: l.product.tcin }
       : { kind: 'other', title: l.product.title, qty: l.qty, unit_price: l.product.price, sku: l.product.tcin }),
     customer: { email: u.email, first_name: u.first_name, last_name: u.last_name, phone: c.shipping.phone, account_id: u.id, guest: false },
-    fulfillment: { method: 'ship', option: 'standard', eta: preorder ? PREORDER_ARRIVAL : `Arrives ${ARRIVES}` },
+    fulfillment: { method: 'ship', option: 'standard', eta: arrivalSummary(t.lines) },
     shipping_address: c.shipping,
     billing_address: pay.billing_address,
     payment,
     totals: { subtotal: t.subtotal, shipping: t.shipping, tax: t.tax, total: t.total },
     currency: 'USD',
-    meta: { token, delivery_instructions: c.instructions ?? null, gift_card_entered: !!c.giftCardEntered },
+    meta: { token, account_id:u.id, delivery_instructions: c.instructions ?? null, gift_card_entered: !!c.giftCardEntered, options: t.lines.map(l=>({tcin:l.tcin,variant_id:l.variantId??null,options:l.product.selectedOptions??{},quantity:l.qty,eta:l.product.eta})) },
   })
   req.store.cart = []
   req.store.checkout = {}
@@ -323,18 +390,23 @@ router.post('/checkout/place-order', (req, res) => {
 })
 
 router.get('/order-confirmation', (req, res) => {
-  const order = getOrder(String(req.query.orderId ?? ''))
-  if (!order || order.store !== req.storeSlug || order.meta.token !== req.query.token) return notFound(req, res)
+  const order = accountOrder(req,String(req.query.orderId ?? ''))
+  if (!order || order.meta.token !== req.query.token) return notFound(req, res)
+  if(order.meta.lifecycle?.length)return render(req,res,'Order details : Target',orderPage(res.locals.base,order))
   render(req, res, 'Order confirmation : Target', P.confirmationPage({ base: res.locals.base, order }))
 })
 
-router.get('/orders/:number', (req, res) => {
-  const base = res.locals.base
-  if (!req.store.user) return res.redirect(`${base}/login?redirect=${encodeURIComponent(base + '/orders/' + req.params.number)}`)
-  const order = getOrder(String(req.params.number))
-  if (!order || order.store !== req.storeSlug || order.customer.email !== req.store.user.email) return notFound(req, res)
-  render(req, res, `Order # ${order.order_number} : Target`, P.orderDetailsPage({ base, order }))
+router.get('/location', (req, res) => render(req, res, 'Shipping location : Target', P.locationPage({ base: res.locals.base, zip: req.store.locationZip, returnTo: safePath(res.locals.base, req.query.returnTo, res.locals.base + '/') })))
+router.post('/location', (req, res) => {
+  const base = res.locals.base, zip = String(req.body.zip ?? '').trim(), returnTo = safePath(base, req.body.returnTo, base + '/')
+  if (!/^\d{5}$/.test(zip)) return render(req, res, 'Shipping location : Target', P.locationPage({ base, zip, returnTo, error: 'Enter a valid 5-digit ZIP code.' }), { status: 400 })
+  req.store.locationZip = zip
+  res.redirect(returnTo)
 })
+
+
+
+installJourneys(router,{render,notFound,selection,addToCart,cartError})
 
 export default {
   slug: 'target',

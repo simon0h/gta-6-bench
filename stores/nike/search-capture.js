@@ -1,0 +1,33 @@
+import { esc } from '../../lib/html.js'
+import { capturedSearchProducts } from './search-reference.js'
+import { capturedColorways } from './search-colorways.js'
+
+export const isCapturedQuery = query => typeof query === 'string' && query.trim().toLowerCase().replace(/\s+/g, ' ') === 'gta 6'
+const price = value => `$${Number.isInteger(value) ? value : value.toFixed(2)}`
+const sport = p => /Basketball/.test(p.subtitle) ? 'Basketball' : /Golf/.test(p.subtitle) ? 'Golf' : /Running/.test(p.subtitle) ? 'Running' : /Soccer/.test(p.subtitle) ? 'Soccer' : /Wrestling/.test(p.subtitle) ? 'Wrestling' : 'Lifestyle'
+const gender = p => /Women's/.test(p.subtitle) ? ['Women'] : /Big Kids/.test(p.subtitle) ? ['Boys', 'Girls'] : /Men's/.test(p.subtitle) ? ['Men'] : ['Women', 'Men']
+const productPrice = p => Number.isFinite(p.price) ? `<p class="nk-captured-price">${price(p.price)}${p.original_price ? ` <s>${price(p.original_price)}</s> <span>${esc(p.discount)}</span>` : ''}</p>${p.bag_price ? '<p>See Price in Bag</p>' : ''}` : ''
+const colorwayRow = (base, p) => !capturedColorways[p.id]?.length ? '' : `<div class="nk-captured-colorways" aria-label="${esc(p.title)} colors">${capturedColorways[p.id].map(color => `<a href="${base}${color.path}" aria-label="${esc(color.title)} – ${esc(color.alt)}" data-reference-colorway><img src="${color.image}" alt="${esc(color.alt)}" loading="lazy"></a>`).join('')}</div>`
+
+export function capturedProductAt(path) {
+  const primary = capturedSearchProducts.find(product => product.path === path)
+  if (primary) return primary
+  // Alternate-color facts come from the swatch itself, never inferred parent prices/stock.
+  const color = Object.values(capturedColorways).flat().find(color => color.path === path)
+  return color ? { ...color, kind: 'other', subtitle: '', price: null, original_price: null, bag_price: false } : undefined
+}
+
+export function capturedNikeSearch(base, query) {
+  let products = capturedSearchProducts.filter(p => (!query.gender || gender(p).includes(query.gender)) && (!query.sport || sport(p) === query.sport))
+  if (query.sort === 'price-asc') products = products.toSorted((a, b) => a.price - b.price)
+  if (query.sort === 'price-desc') products = products.toSorted((a, b) => b.price - a.price)
+  const link = (key, value) => `${base}/w?${esc(new URLSearchParams({ ...query, [key]: value }).toString())}`
+  const facet = (title, key, options, open = false) => `<details${open ? ' open' : ''}><summary>${title}</summary>${options.map(value => `<a class="nk-reference-check${query[key] === value ? ' selected' : ''}" href="${link(key, query[key] === value ? '' : value)}"><span aria-hidden="true"></span>${esc(value)}</a>`).join('')}</details>`
+  return `<section class="nk-captured-search"><div class="nk-captured-toolbar"><div><p>Search results for</p><h1>${esc(query.q)} (${products.length})</h1></div><div class="nk-captured-actions"><button type="button" data-reference-filters aria-expanded="true">Hide Filters <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 17h18"/><circle cx="9" cy="7" r="3"/><circle cx="16" cy="17" r="3"/></svg></button><form action="${base}/w"><input type="hidden" name="q" value="${esc(query.q)}">${query.gender ? `<input type="hidden" name="gender" value="${esc(query.gender)}">` : ''}${query.sport ? `<input type="hidden" name="sport" value="${esc(query.sport)}">` : ''}<label class="sr-only" for="nk-reference-sort">Sort By</label><select id="nk-reference-sort" name="sort" data-reference-sort><option value="">Sort By</option><option value="price-desc"${query.sort === 'price-desc' ? ' selected' : ''}>Price: High-Low</option><option value="price-asc"${query.sort === 'price-asc' ? ' selected' : ''}>Price: Low-High</option></select><noscript><button class="nk-reference-sort-apply">Apply</button></noscript></form></div></div><div class="nk-captured-browse"><aside class="nk-captured-filters" aria-label="Filter products"><a class="nk-captured-pickup" href="${base}/stores">Pick Up Today <span aria-hidden="true"></span></a>${facet('Sports', 'sport', [...new Set(capturedSearchProducts.map(sport))])}<details><summary>Color</summary><p>Color options are shown on each product.</p></details><details><summary>Best For</summary><a href="${link('sport', 'Running')}">Running</a><a href="${link('sport', 'Basketball')}">Basketball</a></details><details><summary>Brand</summary><a href="${base}/w?q=gta%206">Nike</a></details><details><summary>Width</summary><p>See product fit information.</p></details>${facet('Gender', 'gender', ['Women', 'Boys', 'Girls', 'Men'], true)}</aside><div class="nk-captured-products" aria-label="Product results" data-result-count="${products.length}">${products.map(p => `<article data-product-id="${esc(p.id)}" data-product-kind="other"><a href="${base}${p.path}"><img class="nk-captured-image" src="${p.image}" alt="${esc(p.alt)}"${products.indexOf(p) > 5 ? ' loading="lazy"' : ''}></a>${colorwayRow(base, p)}<a href="${base}${p.path}"><div class="nk-captured-copy">${p.badge ? `<p class="nk-captured-badge">${esc(p.badge)}</p>` : ''}<h2>${esc(p.title)}</h2><p class="nk-captured-subtitle">${esc(p.subtitle)}</p>${productPrice(p)}</div></a></article>`).join('')}</div></div></section>`
+}
+
+export function capturedNikeProduct(base, product) {
+  return `<section class="nk-captured-detail"><img src="${product.image}" alt="${esc(product.alt)}"><div><h1>${esc(product.title)}</h1><p>${esc(product.subtitle)}</p>${productPrice(product)}<p>Style: ${esc(product.id)}</p><a class="button" href="${base}/w?q=gta%206">Back to search results</a></div></section>`
+}
+
+export { capturedSearchProducts }

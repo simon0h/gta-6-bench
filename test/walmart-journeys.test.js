@@ -1,0 +1,287 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { startServer } from './helpers.js'
+import { RETAIL_PRODUCTS } from '../stores/walmart/catalog.js'
+import { byId } from '../stores/walmart/data.js'
+
+const base = '/walmart'
+const milk = RETAIL_PRODUCTS.find(p => p.family === 'milk')
+const shirt = RETAIL_PRODUCTS.find(p => p.family === 'tshirt')
+const ADDRESS = { firstName: 'Alex', lastName: 'Tester', address1: '123 Private Ocean Dr', city: 'Miami', state: 'FL', zip: '33139', phone: '3055550123' }
+const BOOK = { label: 'Private home', name: 'Alex Tester', line1: '123 Private Ocean Dr', line2: 'Apt 4', city: 'Miami', state: 'FL', postal_code: '33139', phone: '3055550123', is_default: 'yes' }
+const CARD = { method: 'card', cardNumber: '4242424242424242', expMonth: '12', expYear: '29', cvv: '123', firstName: 'Alex', lastName: 'Tester', phone: '3055550123', billingSame: '1' }
+async function login(c, email = 'tester@example.com', state = '/account') {
+  await c.post(`${base}/account/login?state=${encodeURIComponent(state)}`, { identifier: email })
+  return c.post(`${base}/account/signin/withpassword`, { password: 'Password123!' })
+}
+async function newAccount(c, email = 'second-owner@example.com') {
+  const gate = await c.post(`${base}/account/login`, { identifier: email })
+  if (gate.url.includes('/signin/withpassword')) return c.post(`${base}/account/signin/withpassword`, { password: 'Password123!' })
+  return c.post(`${base}/account/sign-up`, { firstName: 'Second', lastName: 'Owner', email, phone: '4025550199', password: 'Password123!' })
+}
+async function checkout(c, { pid = milk.id, variant = 'two-gallons', plus = false } = {}) {
+  await c.post(`${base}/cart/add`, { pid, ...(variant ? { variant } : {}) })
+  await login(c)
+  await c.post(`${base}/cart/checkout`, plus ? { plus: '1' } : {})
+  await c.post(`${base}/checkout/address`, ADDRESS)
+  await c.post(`${base}/checkout/payment`, CARD)
+  if (plus) {
+    assert.equal((await c.post(`${base}/checkout/plus`, { plan: 'constructor', agree: '1' })).status, 400)
+    await c.post(`${base}/checkout/plus`, { plan: 'annual', agree: '1' })
+  }
+  const done = await c.post(`${base}/checkout/place-order`, {})
+  assert.equal(done.status, 200)
+  assert.match(done.text, /Thanks for your order!/)
+  const orders = await c.json('/api/orders?store=walmart')
+  return { done, order: orders.at(-1) }
+}
+const addressIds = html => [...html.matchAll(/data-address-id="([^"]+)"/g)].map(m => m[1])
+
+test('walmart journeys: variant lists, Favorites, recent items and account isolation are functional', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(), other = srv.client()
+    assert.match((await c.get(`${base}/my-items`)).text, /Sign in to see your purchases/)
+    const gate = await c.get(`${base}/lists/add?pid=${shirt.id}&variant=large`)
+    assert.match(gate.url, /account\/login\?state=/)
+    await login(c, 'tester@example.com', `/lists/add?pid=${shirt.id}&variant=large`)
+    const picker = await c.get(`${base}/lists/add?pid=${shirt.id}&variant=large`)
+    assert.match(picker.text, /value="large" selected/)
+    assert.match(picker.text, /\?variant=large">Back to item/)
+    const created = await c.post(`${base}/lists`, { name: 'October essentials' })
+    const listId = new URL(created.url).pathname.split('/').at(-1)
+    assert.match(created.text, /This list is empty/)
+    assert.equal((await c.post(`${base}/lists/add`, { pid: shirt.id, variant: 'counterfeit', list_id: listId })).status, 400)
+    const saved = await c.post(`${base}/lists/add`, { pid: shirt.id, variant: 'large', list_id: listId, qty: '2', price: '0.01' })
+    assert.match(saved.text, /Size: L/)
+    assert.match(saved.text, /\?variant=large">Back to item/)
+    assert.match(saved.text, /\$7\.98 · Qty 2/)
+    const cart = await c.post(`${base}/lists/${listId}/items`, { line: `${shirt.id}::large`, action: 'cart' })
+    assert.match(cart.text, /\$15\.96/)
+    assert.equal((await c.post(`${base}/lists/${listId}/items`, { line: `${shirt.id}::large`, action: 'cart' })).status, 409)
+    await c.post(`${base}/lists/add`, { pid: shirt.id, variant: 'xl', list_id: 'favorites', qty: '1' })
+    assert.equal((await c.post(`${base}/lists/favorites/items`, { line: `${shirt.id}::xl`, action: 'cart' })).status, 409)
+    await c.get(`${base}/ip/${milk.id}?variant=two-gallons`)
+    assert.match((await c.get(`${base}/my-items/recent`)).text, /Pack: 2 × 1 gallon/)
+    assert.match((await c.get(`${base}/my-items/recent`)).text, new RegExp(`data-product="${milk.id}"`))
+    await c.post(`${base}/my-items/recent/clear`, {})
+    assert.doesNotMatch((await c.get(`${base}/my-items/recent`)).text, /data-product=/)
+    await c.post(`${base}/lists/${listId}`, { action: 'rename', name: 'Private weekend list' })
+    assert.match((await c.get(`${base}/lists`)).text, /Private weekend list/)
+    await login(other)
+    assert.equal((await other.get(`${base}/lists/${listId}`)).status, 404)
+    await newAccount(c)
+    assert.equal((await c.get(`${base}/lists/${listId}`)).status, 404)
+    assert.equal((await c.post(`${base}/lists/${listId}/items`, { line: `${shirt.id}::large`, action: 'remove' })).status, 404)
+    await login(c)
+    await c.post(`${base}/lists/${listId}/items`, { line: `${shirt.id}::large`, action: 'remove' })
+    assert.match((await c.get(`${base}/lists/${listId}`)).text, /This list is empty/)
+    await c.post(`${base}/lists/${listId}`, { action: 'delete' })
+    assert.equal((await c.get(`${base}/lists/${listId}`)).status, 404)
+  } finally { await srv.close() }
+})
+
+test('walmart journeys: address CRUD, default and prefill retain values and reject another owner', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(), other = srv.client()
+    await login(c)
+    const bad = await c.post(`${base}/account/addresses`, { ...BOOK, postal_code: 'bad' })
+    assert.equal(bad.status, 400)
+    assert.match(bad.text, /valid postal code/)
+    assert.match(bad.text, /value="123 Private Ocean Dr"/)
+    const saved = await c.post(`${base}/account/addresses`, BOOK), id = addressIds(saved.text)[0]
+    assert.ok(id)
+    const second = await c.post(`${base}/account/addresses`, { ...BOOK, label: 'Work', line1: '40 Work Place', is_default: '' })
+    const workId = addressIds(second.text)[1]
+    await c.post(`${base}/account/addresses/${workId}/default`, {})
+    assert.match((await c.get(`${base}/account/addresses?edit=${workId}`)).text, /value="40 Work Place"/)
+    await c.post(`${base}/account/addresses`, { ...BOOK, id: workId, label: 'Work', line1: '42 Work Place', is_default: 'yes' })
+    await c.post(`${base}/cart/add`, { pid: '20482917228' })
+    const co = await c.post(`${base}/cart/checkout`, {})
+    assert.match(co.text, /Use a saved address/)
+    assert.match(co.text, /value="42 Work Place"/)
+    assert.match(co.text, /id="form-address"/)
+    const pick = await c.get(`${base}/checkout/review-order?address_id=${id}`)
+    assert.match(pick.text, /value="123 Private Ocean Dr"/)
+    await c.post(`${base}/checkout/address`, { ...ADDRESS, addressId: id, preferred: '1' })
+    assert.equal(addressIds((await c.get(`${base}/account/addresses`)).text).length, 2, 'saving a preferred book address edits it without duplicating')
+    assert.equal((await c.get(`${base}/checkout/review-order?address_id=forged`)).status, 400)
+    await login(other)
+    assert.equal((await other.get(`${base}/account/addresses?edit=${id}`)).status, 404)
+    assert.equal((await other.post(`${base}/account/addresses/${id}/delete`, {})).status, 404)
+    await newAccount(c)
+    assert.doesNotMatch((await c.get(`${base}/account/addresses`)).text, /Private Ocean|Work Place/)
+    assert.equal((await c.get(`${base}/checkout/review-order?address_id=${id}`)).status, 400)
+    await login(c)
+    await c.post(`${base}/account/addresses/${workId}/delete`, {})
+    assert.match((await c.post(`${base}/cart/checkout`, {})).text, /value="123 Private Ocean Dr"/)
+    await c.post(`${base}/account/addresses/${id}/delete`, {})
+    assert.match((await c.get(`${base}/account/addresses`)).text, /No saved addresses yet/)
+  } finally { await srv.close() }
+})
+
+test('walmart journeys: orders require session and recorded account, reorder trusts variants, lifecycle is honest', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(), other = srv.client(), { done, order } = await checkout(c)
+    assert.equal(order.items[0].kind, 'other')
+    assert.equal(order.meta.account_id, order.customer.account_id)
+    const detailPath = `${base}/orders/${order.id}`
+    const details = await c.get(detailPath)
+    assert.match(details.text, /Pack: 2 × 1 gallon/)
+    assert.match(details.text, /Processing/)
+    assert.match((await c.get(`${detailPath}/tracking`)).text, /No carrier tracking number/)
+    assert.equal((await c.post(`${detailPath}/action`, { action: 'return', reason: 'Does not suit my needs' })).status, 400)
+    assert.equal((await c.post(`${detailPath}/action`, { action: 'cancel', reason: '' })).status, 400)
+    await login(other)
+    assert.doesNotMatch((await other.get(`${base}/orders`)).text, new RegExp(order.order_number))
+    assert.doesNotMatch((await other.get(`${base}/account`)).text, new RegExp(order.order_number))
+    assert.equal((await other.get(done.url)).status, 404)
+    assert.equal((await other.get(detailPath)).status, 404)
+    assert.equal((await other.post(`${detailPath}/action`, { action: 'cancel', reason: 'Forbidden' })).status, 404)
+    assert.equal((await other.post(`${detailPath}/reorder`, { item: '0' })).status, 404)
+    await newAccount(c)
+    assert.equal((await c.get(detailPath)).status, 404)
+    assert.equal((await c.get(done.url)).status, 404)
+    assert.equal((await c.post(`${detailPath}/action`, { action: 'cancel', reason: 'Forbidden' })).status, 404)
+    await login(c)
+    const reordered = await c.post(`${detailPath}/reorder`, { item: '0', price: '0.01', variant: 'gallon' })
+    assert.match(reordered.text, /Pack: 2 × 1 gallon/)
+    assert.match(reordered.text, /\$6\.72/)
+    const product = byId(milk.id), variant = product.variants.find(v => v.id === 'two-gallons'), originalStock = variant.stock
+    try {
+      variant.stock = 0
+      assert.equal((await c.post(`${detailPath}/reorder`, { item: '0' })).status, 409)
+    } finally { variant.stock = originalStock }
+    const cancelled = await c.post(`${detailPath}/action`, { action: 'cancel', reason: 'Changed my plans' })
+    assert.match(cancelled.text, /Cancelled/)
+    assert.match(cancelled.text, /Changed my plans/)
+    assert.match((await c.get(`${detailPath}/tracking`)).text, /No shipment is scheduled/)
+    const cancelledReceipt = await c.get(done.url)
+    assert.match(cancelledReceipt.text, /Shipping cancelled/)
+    assert.doesNotMatch(cancelledReceipt.text, /Arrives tomorrow|Estimated arrival|preordered item ships/)
+    await c.post(`${detailPath}/action`, { action: 'cancel', reason: 'Repeat request' })
+    const [recorded] = await c.json('/api/orders?store=walmart')
+    assert.equal(recorded.meta.lifecycle.length, 1)
+    assert.deepEqual(recorded.items, order.items)
+    await c.get(`${base}/account/logout`)
+    assert.equal((await c.get(done.url)).status, 404)
+  } finally { await srv.close() }
+})
+
+test('walmart journeys: direct account switch clears checkout details and preferences and trial stay owner-bound', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client()
+    const { order } = await checkout(c, { pid: '20482917228', variant: null, plus: true })
+    assert.equal(order.items[0].kind, 'game')
+    assert.equal(order.items[0].format, 'code-in-box')
+    assert.equal(order.meta.walmart_plus, 'annual')
+    assert.match((await c.get(`${base}/account/plus`)).text, /Local trial recorded/)
+    await c.post(`${base}/account/preferences`, { offers: 'yes', order_updates: 'yes' })
+    assert.match((await c.get(`${base}/account/preferences`)).text, /name="offers" value="yes" checked/)
+    await c.post(`${base}/cart/add`, { pid: '20459958275' })
+    await c.post(`${base}/cart/checkout`, {})
+    await c.post(`${base}/checkout/address`, ADDRESS)
+    await c.post(`${base}/checkout/payment`, CARD)
+    await c.post(`${base}/checkout/contact`, { email: 'private-contact@example.com', phone: '3055550123' })
+    await newAccount(c)
+    const checkoutPage = await c.get(`${base}/checkout/review-order`)
+    assert.match(checkoutPage.text, /id="form-address"/)
+    assert.doesNotMatch(checkoutPage.text, /Private Ocean|4242|private-contact@example.com/)
+    assert.match(checkoutPage.text, /second-owner@example.com/)
+    assert.match((await c.get(`${base}/account/plus`)).text, /No membership selected/)
+    assert.doesNotMatch((await c.get(`${base}/account/preferences`)).text, /name="offers" value="yes" checked/)
+    await login(c)
+    const cancelled = await c.post(`${base}/account/plus`, {})
+    assert.match(cancelled.text, /Renewal cancelled/)
+    assert.equal((await c.json('/api/orders?store=walmart'))[0].meta.walmart_plus, 'annual')
+    await c.post(`${base}/orders/${order.id}/action`, { action: 'cancel', reason: 'Cancel the test preorder' })
+    const receipt = await c.get(`${base}/thankyou?order=${order.order_number}&token=${order.meta.token}`)
+    assert.match(receipt.text, /Shipping cancelled/)
+    assert.doesNotMatch(receipt.text, /Arrives by Thu, Nov 12|preordered item ships/)
+  } finally { await srv.close() }
+})
+
+test('walmart journeys: searchable help, retained case errors and private local case confirmation', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(), other = srv.client(), { order } = await checkout(c)
+    const search = await c.get(`${base}/help?q=carrier`)
+    assert.match(search.text, /href="\/walmart\/help\/article\/track-your-order"/)
+    assert.doesNotMatch(search.text, /href="\/walmart\/help\/article\/reorder-and-lists"/)
+    assert.match((await c.get(`${base}/help?q=nonesuchquery`)).text, /No help articles match/)
+    assert.match((await c.get(`${base}/help/article/returns`)).text, /item page before ordering/)
+    assert.equal((await c.get(`${base}/help/article/unknown`)).status, 404)
+    const bad = await c.post(`${base}/help/contact`, { category: 'Orders', subject: 'My private question', email: 'tester@example.com', message: 'Short', order_id: order.id })
+    assert.equal(bad.status, 400)
+    assert.match(bad.text, /value="My private question"/)
+    assert.match(bad.text, />Short<\/textarea>/)
+    assert.equal((await c.post(`${base}/help/contact`, { category: 'Forged', subject: 'Question', message: 'A sufficiently long question' })).status, 400)
+    const saved = await c.post(`${base}/help/contact`, { category: 'Orders', subject: 'My private question', message: 'Please explain the shipping estimate for my order.', order_id: order.id })
+    assert.match(saved.text, /Help request saved/)
+    assert.match(saved.text, /No message has been sent/)
+    assert.match(saved.text, new RegExp(`href="${base}/orders/${order.id}"`))
+    await login(other)
+    assert.equal((await other.get(saved.url)).status, 404)
+    assert.equal((await other.post(`${base}/help/contact`, { category: 'Orders', subject: 'Question', message: 'A sufficiently long question', order_id: order.id })).status, 400)
+    await newAccount(c)
+    assert.equal((await c.get(saved.url)).status, 404)
+    assert.equal((await c.get(`${base}/help/contact?order_id=${order.id}`)).status, 404)
+    assert.equal((await c.post(`${base}/help/contact`, { category: 'Orders', subject: 'Question', message: 'A sufficiently long question', order_id: order.id })).status, 400)
+    assert.doesNotMatch((await c.get(`${base}/help/cases`)).text, /My private question/)
+    await login(c)
+    assert.match((await c.get(`${base}/help/cases`)).text, /My private question/)
+  } finally { await srv.close() }
+})
+
+test('walmart journeys: location validation, sample stores and shipping-only state agree across pages', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client(), other = srv.client()
+    const bad = await c.post(`${base}/location`, { zip: 'abc', method: 'shipping' })
+    assert.equal(bad.status, 400)
+    assert.match(bad.text, /value="abc"/)
+    assert.equal((await c.post(`${base}/location`, { zip: '33139', method: 'pickup', store_id: 'miami-beach' })).status, 400)
+    assert.equal((await c.post(`${base}/location`, { zip: '33139', method: 'shipping', store_id: 'omaha-central' })).status, 400)
+    const selected = await c.post(`${base}/location`, { zip: '33139', method: 'shipping', store_id: 'miami-beach' })
+    assert.match(selected.text, /Miami Beach sample store/)
+    const home = await c.get(`${base}/`)
+    assert.match(home.text, /aria-label="Shipping location: Miami Beach, 33139/)
+    assert.doesNotMatch((await other.get(`${base}/`)).text, /aria-label="Shipping location: Miami Beach/)
+    const pdp = await c.get(`${base}/ip/20482917228`)
+    assert.match(pdp.text, /Ships to Miami Beach, 33139/)
+    assert.match(pdp.text, /<b>Pickup<\/b><span>Check nearby/)
+    const availability = await c.get(`${base}/ip/20482917228/pickup?zip=33139`)
+    assert.equal(availability.status, 200)
+    assert.match(availability.text, /Pickup not available<\/b> near 33139/)
+    assert.match(availability.text, /Continue with shipping/)
+    const invalidPickup = await c.get(`${base}/ip/20482917228/pickup?zip=BAD`)
+    assert.equal(invalidPickup.status, 400)
+    assert.match(invalidPickup.text, /value="BAD"/)
+    assert.equal((await c.get(`${base}/ip/forged/pickup?zip=33139`)).status, 404)
+    await c.post(`${base}/cart/add`, { pid: '20482917228' })
+    assert.match((await c.get(`${base}/cart`)).text, /Shipping to Miami Beach, 33139/)
+    const store = await c.get(`${base}/store/miami-beach`)
+    assert.match(store.text, /href="\/walmart\/services\/auto-care"/)
+    for (const route of ['/services', '/services/photo', '/services/financial', '/services/auto-care', '/cp/pharmacy/5431']) assert.equal((await c.get(`${base}${route}`)).status, 200)
+    assert.equal((await c.get(`${base}/store/forged`)).status, 404)
+    const out = await c.post(`${base}/location`, { zip: '10001', method: 'shipping' })
+    assert.match(out.text, /No sample stores match/)
+    assert.match(out.text, /Shipping ZIP, 10001/)
+  } finally { await srv.close() }
+})
+
+test('walmart journeys: protected account and checkout entrypoints retain optional CAPTCHA boundaries', async () => {
+  const srv = await startServer({ captcha: { mode: 'on', stores: ['walmart'] } })
+  try {
+    for (const route of ['/account', '/account/login', '/account/sign-up', '/account/addresses', '/account/preferences', '/account/plus', '/checkout/review-order', `/lists/add?pid=${milk.id}`, '/help/contact', '/orders']) {
+      const c = srv.client(), response = await c.get(`${base}${route}`)
+      assert.match(response.text, /name="challenge_id"/, route)
+    }
+    for (const route of ['/my-items', '/lists', '/help', '/store-finder']) assert.doesNotMatch((await srv.client().get(`${base}${route}`)).text, /name="challenge_id"/)
+    const posted = await srv.client().post(`${base}/account/sign-up`, { firstName: 'No', lastName: 'Bypass', email: 'no-bypass@example.com', phone: '4025550199', password: 'Password123!' })
+    assert.match(posted.text, /name="challenge_id"/)
+  } finally { await srv.close() }
+})

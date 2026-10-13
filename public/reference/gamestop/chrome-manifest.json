@@ -1,0 +1,41 @@
+{
+  "captured_at": "2026-10-06",
+  "page_url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+  "provenance": "Unmodified inline SVG markup exported from the public GameStop PDP. Copyright remains with the respective owners.",
+  "assets": [
+    {
+      "file": "gamestop-logo.svg",
+      "source_url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+      "source_inline_id": "7a9f3edc74386a0e",
+      "source_name": "GameStop",
+      "placement": "Header wordmark",
+      "classification": "official-captured",
+      "content_type": "image/svg+xml",
+      "bytes": 4020,
+      "sha256": "3e8f30dc3c2659899f708214436eaa7f8d13d963524e993aeb9a92517ca26859"
+    },
+    {
+      "file": "gamestop-pro.svg",
+      "source_url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+      "source_inline_id": "69a880959acd5b38",
+      "source_name": "GameStop Pro Icon",
+      "placement": "Header Pro icon",
+      "classification": "official-captured",
+      "content_type": "image/svg+xml",
+      "bytes": 614,
+      "sha256": "6374cb821659886965d8c1bc158a1ee4a787f222adce5bd10c452469061e3586"
+    },
+    {
+      "file": "nav-chevron.svg",
+      "source_url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+      "source_inline_id": "e5e848e3317959bb",
+      "source_name": "svg-5",
+      "placement": "Category navigation chevrons",
+      "classification": "official-captured",
+      "content_type": "image/svg+xml",
+      "bytes": 246,
+      "sha256": "cefbe58da2e54e290e2c7d6093d671276b925cc94ad15729f243628015d4ef77",
+      "transformation": "Added XML SVG namespace for standalone image; original geometry and paths unchanged."
+    }
+  ]
+}

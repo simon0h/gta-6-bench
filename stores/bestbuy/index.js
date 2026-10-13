@@ -1,10 +1,16 @@
 import { Router } from 'express'
 import { randomBytes, randomInt } from 'node:crypto'
-import { recordOrder, getOrder, listOrders } from '../../lib/orders.js'
+import { recordOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, byId, search, totals, STATES, STORE_NAME, FULFILLMENT } from './data.js'
+import { PRODUCTS, byId, search, refine, totals, STATES, DEPARTMENTS, selectedProduct, cartIssue, stockFor, etaFor } from './data.js'
 import * as P from './pages.js'
+import * as D from './browse-pages.js'
+import { installJourneys, retailState, rememberProduct, privateOrder, signInAccount, afterSignIn, selectedAddress, checkoutAddress } from './journeys.js'
+import { saveAddress } from '../../lib/retail-state.js'
+import { localProduct, currentStore, locationContext } from './location.js'
+import { prepareReview, invalidateReview, currentReview } from './review.js'
+import { enterScenarioCart, scenarioPayment } from '../../lib/benchmark-scenarios.js'
 
 const router = Router()
 const HUB = '/site/video-game-franchises/grand-theft-auto/pcmcat301800050002.c'
@@ -22,7 +28,7 @@ const expiry = v => { const s = trim(v); return /^\d{4}$|^\d{6}$/.test(s) ? `${s
 const hasErrors = errors => Object.keys(errors).length > 0
 
 function render(req, res, title, body, { status = 200, chrome = 'full', back = null } = {}) {
-  res.status(status).type('html').send(P.layout({ base: res.locals.base, title, body, cartCount: totals(req.store).count, user: req.store.user, chrome, back }))
+  res.status(status).type('html').send(P.layout({ ...locationContext(req.store), base: res.locals.base, title, body, cartCount: totals(req.store).count, user: req.store.user, chrome, back, q: String(req.query.st ?? req.query.q ?? '') }))
 }
 function notFound(req, res) {
   render(req, res, 'Page Not Found - Best Buy', P.simplePage({ title: "Sorry, we can't find that page.", html: `<p>The page you requested may have moved or is no longer available.</p><p><a href="${res.locals.base}/">Go to the Best Buy home page</a></p>` }), { status: 404 })
@@ -51,7 +57,7 @@ const priorStepsDone = (steps, c) => steps.filter(s => s !== 'payment').every(s 
 function stepValues(req, step) {
   const c = co(req), u = req.store.user
   if (step === 'contact') return c.contact ?? (u ? { emailAddress: u.email, phoneNumber: u.phone } : {})
-  if (step === 'address') return c.address ?? (u ? { firstName: u.first_name, lastName: u.last_name } : {})
+  if (step === 'address') {const a=selectedAddress(req);return c.address ?? (a?checkoutAddress(a):u ? { firstName: u.first_name, lastName: u.last_name } : {})}
   if (step === 'pickup') return c.pickup?.person ?? {}
   if (step === 'payment') return c.paymentValues ?? (u ? { billingFirstName: u.first_name, billingLastName: u.last_name } : {})
   return {}
@@ -61,15 +67,19 @@ function renderCheckout(req, res, { active, values, errors = {}, gift, status = 
   const base = res.locals.base
   const t = totals(req.store), c = co(req), steps = stepsFor(t)
   active ??= activeStep(steps, c, req.query.step)
+  if (active === 'payment' && priorStepsDone(steps, c)) prepareReview(req.store)
   values ??= stepValues(req, active)
   const toast = c.toast
   delete c.toast
-  render(req, res, 'Checkout – Best Buy', P.checkoutPage({ base, user: req.store.user, t, steps, active, co: c, values, errors, toast, gift }),
+  render(req, res, 'Checkout – Best Buy', P.checkoutPage({ ...locationContext(req.store), addresses: req.store.user?retailState(req).addresses:[], base, user: req.store.user, t, steps, active, co: c, values, errors, toast, gift }),
     { status, chrome: 'checkout', back: { href: `${base}/cart`, label: 'Back to cart', count: t.count } })
 }
 
 // Checkout needs items plus a signed-in shopper or a "Continue as Guest" choice.
 function gate(req, res) {
+  enterScenarioCart(req.store)
+  const issue=cartIssue(req.store)
+  if(issue) { renderCart(req,res,issue,400);return false }
   if (!hasLines(req)) { res.redirect(`${res.locals.base}/cart`); return false }
   if (!req.store.user && !req.store.checkout.guest) { res.redirect(signinUrl(res.locals.base)); return false }
   return true
@@ -91,79 +101,118 @@ function validateAddress(v, { first, last, line1, city, state, zip }) {
   return e
 }
 
-router.use((req, res, next) => { req.body ??= {}; next() })
+router.use((req, res, next) => { req.body ??= {}; retailState(req); next() })
+installJourneys(router,{render,notFound})
 
 // ---- browse ----
-router.get('/', (req, res) => render(req, res, 'Best Buy | Official Online Store | Shop Now & Save', P.homePage({ base: res.locals.base, products: PRODUCTS })))
+router.get('/', (req, res) => render(req, res, 'Best Buy | Official Online Store | Shop Now & Save', D.homePage({ base: res.locals.base, user:req.store.user, featured:req.query.featured, products: PRODUCTS.map(p=>localProduct(p,req.store)) })))
 // Franchise hub the search banner and header band link to.
-router.get(HUB, (req, res) => render(req, res, 'Grand Theft Auto VI - Best Buy', P.homePage({ base: res.locals.base, products: PRODUCTS })))
+router.get(HUB, (req, res) => render(req, res, 'Grand Theft Auto VI - Best Buy', P.homePage({ base: res.locals.base, products: PRODUCTS.map(p=>localProduct(p,req.store)) })))
 
-router.get('/site/searchpage.jsp', (req, res) => {
-  const q = trim(req.query.st ?? req.query.q)
-  render(req, res, `${q || 'Search'} - Best Buy`, P.searchPage({ base: res.locals.base, q, products: search(q) }))
+const FILTERS = ['department','platform','category','price','availability','condition','brand','format','rating','fulfillment','offer','sort','page']
+function browse(req,res,defaults={},heading='',intro='') {
+  const q=trim(req.query.st??req.query.q)
+  const filters={...defaults,...Object.fromEntries(FILTERS.filter(k=>req.query[k]!==undefined).map(k=>[k,String(req.query[k])]))}
+  render(req,res,`${q||heading||'Shop'} - Best Buy`,D.searchPage({base:res.locals.base,q,filters,heading,intro,products:refine(search(q).map(p=>localProduct(p,req.store)),filters)}))
+}
+router.get('/site/searchpage.jsp',(req,res)=>browse(req,res))
+router.get('/search/suggestions',(req,res)=>res.json(search(trim(req.query.q)).slice(0,6).map(p=>({title:p.title,sku:p.sku,url:`${res.locals.base}/product/${p.slug}/${p.id}/sku/${p.sku}`}))))
+router.get('/departments',(req,res)=>render(req,res,'Departments - Best Buy',D.departmentsPage({products:PRODUCTS.map(p=>localProduct(p,req.store)),base:res.locals.base})))
+router.get('/departments/:slug',(req,res)=>{
+  const department=DEPARTMENTS.find(d=>d.id===req.params.slug)
+  if(!department) return notFound(req,res)
+  render(req,res,`${department.name} - Best Buy`,D.departmentsPage({products:PRODUCTS.map(p=>localProduct(p,req.store)),base:res.locals.base,department}))
 })
-
+router.get('/brands',(req,res)=>render(req,res,'Shop by Brand - Best Buy',D.brandsPage({base:res.locals.base})))
+for(const [path,offer,heading,intro] of [
+  ['/top-deals','deals','Top Deals','Save on useful tech and home upgrades from across our departments.'],
+  ['/deal-of-the-day','daily','Deal of the Day','A featured audio offer. Available while the listed inventory lasts.'],
+  ['/gift-ideas','gifts','Gift Ideas','Find something for the music fan, home cook or tech enthusiast in your life.'],
+  ['/outlet','outlet','Best Buy Outlet','Explore inspected open-box offers. Review condition, accessories and pickup availability before buying.'],
+]) router.get(path,(req,res)=>browse(req,res,{offer},heading,intro))
+const serviceInfo={
+  services:['Support & Services','Get help choosing compatible equipment, setting up new technology and caring for your purchase.','TV mounting requires a compatible wall and mount. Smart doorbells and thermostats require suitable wiring. Computer upgrades require compatible ports and components. Installation and repair appointments are not bookable in this local store.'],
+  membership:['My Best Buy Memberships','Compare membership benefits before joining.','The local catalog supports guest and account shopping. Paid Plus and Total enrollment, reward certificates and real membership benefits are not available here. Product offers show their own prices and conditions.'],
+  financing:['Financing & Rewards','Choose a payment method that works for you.','Card and simulated PayPal checkout are available. Credit applications, installment financing and external rewards accounts are not connected. Compare the full order total before placing an order.'],
+  'trade-in':['Trade-In','Learn what to prepare for a device trade-in.','Back up personal data, remove account locks and check your device condition. Trade-in valuations, mail-in kits and store appointments require services outside this local catalog.'],
+  business:['Best Buy Business','Technology for work and small teams.','Browse computers, displays, audio and accessories. Business quotes, volume pricing, tax-exempt enrollment and business credit accounts are not connected in this local store.'],
+  'gift-cards':['Gift Cards','Give the freedom to choose.','Gift card issuance and balance lookup are not supported in this local store. Browse gift ideas to purchase a physical item instead.'],
+}
+for(const [path,[title,lead,detail]] of Object.entries(serviceInfo)) router.get(`/${path}`,(req,res)=>render(req,res,`${title} - Best Buy`,P.simplePage({title,html:`<p>${lead}</p><p>${detail}</p><p><a href="${res.locals.base}/departments">Browse departments</a> · <a href="${res.locals.base}/help">Shopping help</a> · <a href="${res.locals.base}/gift-ideas">Gift ideas</a></p>`})))
 function productRoute(req, res) {
-  const p = byId(req.params.sku ?? '') ?? byId(req.params.id)
-  if (!p) return notFound(req, res)
-  const accessories = p.kind === 'game' ? PRODUCTS.filter(x => x.kind === 'other' && /The Album/.test(x.title)) : []
-  render(req, res, `${p.pageTitle} - Best Buy`, P.productPage({ base: res.locals.base, p, accessories }))
+  const source = byId(req.params.sku ?? req.params.id)
+  if (!source || (req.params.id && source.id!==req.params.id)) return notFound(req,res)
+  const p=localProduct(selectedProduct(source,req.query.variant),req.store)
+  if(!p) return render(req,res,'Invalid selection',P.simplePage({title:'Choose a valid product option.',html:`<a href="${res.locals.base}/product/${source.slug}/${source.id}/sku/${source.sku}">Return to product</a>`}),{status:400})
+  rememberProduct(req,p.sku)
+  const accessories=p.kind==='game'?PRODUCTS.filter(x=>/The Album/.test(x.title)):PRODUCTS.filter(x=>x.sku!==p.sku&&x.department===p.department&&!x.preorder).slice(0,4)
+  render(req,res,`${p.pageTitle} - Best Buy`,(p.model?D:P).productPage({...locationContext(req.store),base:res.locals.base,p,accessories:accessories.map(p=>localProduct(p,req.store))}))
 }
 router.get('/product/:slug/:id/sku/:sku', productRoute)
 router.get('/product/:slug/:id', productRoute)
 
+function renderCart(req,res,message='',status=200) {
+  enterScenarioCart(req.store)
+  const t=totals(req.store),inCart=new Set(t.lines.map(l=>l.product.sku))
+  const departments=new Set(t.lines.map(l=>l.product.department))
+  const alsoBought=PRODUCTS.filter(p=>!inCart.has(p.sku)&&(!departments.size||departments.has(p.department))).slice(0,4).map(p=>localProduct(p,req.store))
+  const saved=(retailState(req).savedForLater??[]).map(s=>({...s,product:selectedProduct(byId(s.pid),s.variant)})).filter(s=>s.product)
+  render(req,res,'Cart - Best Buy',P.cartPage({...locationContext(req.store),base:res.locals.base,t,alsoBought,saved,savedMsg:message||cartIssue(req.store)}),{status})
+}
+function validateCartChange(req,res,previous) {
+  const issue=cartIssue(req.store)
+  if(issue){req.store.cart=previous;renderCart(req,res,issue,400);return false}
+  const oldMethods=new Set(previous.map(l=>l.fulfillment)),methods=new Set(req.store.cart.map(l=>l.fulfillment))
+  if(!oldMethods.has('shipping')&&methods.has('shipping')) { delete co(req).done.address;delete co(req).done.shipdetails }
+  if(!oldMethods.has('pickup')&&methods.has('pickup')) delete co(req).done.pickup
+  if(JSON.stringify(previous)!==JSON.stringify(req.store.cart)) invalidateReview(req.store)
+  enterScenarioCart(req.store)
+  return true
+}
+
 // ---- cart ----
 // "Pre-order" adds the SKU with the chosen fulfillment and goes straight to the cart (no modal).
 router.post('/cart/add', (req, res) => {
-  const base = res.locals.base
-  const p = byId(req.body.pid)
-  if (!p) return res.redirect(`${base}/cart`)
-  const chosen = ['pickup', 'shipping'].includes(req.body.fulfillment) ? req.body.fulfillment : null
-  const line = req.store.cart.find(l => l.pid === p.sku)
-  if (line) {
-    line.qty = Math.min(line.qty + 1, MAX_QTY)
-    if (chosen) line.fulfillment = chosen
-  } else {
-    req.store.cartSeq = (req.store.cartSeq ?? 0) + 1
-    // Pickup is the default fulfillment (store auto-picked from location).
-    req.store.cart.push({ line: req.store.cartSeq, pid: p.sku, qty: 1, fulfillment: chosen ?? 'pickup' })
-  }
-  res.redirect(`${base}/cart`)
+  const p=localProduct(selectedProduct(byId(req.body.pid),req.body.variant),req.store)
+  if(!p) return renderCart(req,res,'Choose a valid product and option.',400)
+  if(req.body.qty!==undefined&&(!Number.isInteger(Number(req.body.qty))||Number(req.body.qty)<1||Number(req.body.qty)>MAX_QTY)) return renderCart(req,res,'Choose a valid quantity (1–3).',400)
+  const preferred=retailState(req).preferences.fulfillment
+  const chosen=req.body.fulfillment|| (preferred&&stockFor(p,preferred)?preferred:stockFor(p,'pickup')?'pickup':'shipping')
+  if(!['pickup','shipping'].includes(chosen)) return renderCart(req,res,'Choose pickup or shipping.',400)
+  const previous=structuredClone(req.store.cart),variant=p.variant||''
+  const line=req.store.cart.find(l=>l.pid===p.sku&&(l.variant||'')===variant)
+  const qty=Number(req.body.qty||1)
+  if(line) {line.qty=p.model?line.qty+qty:Math.min(line.qty+qty,MAX_QTY);line.fulfillment=chosen}
+  else {req.store.cartSeq=(req.store.cartSeq??0)+1;req.store.cart.push({line:req.store.cartSeq,pid:p.sku,qty,fulfillment:chosen,...(variant?{variant}:{})})}
+  if(!validateCartChange(req,res,previous)) return
+  res.redirect(`${res.locals.base}/cart`)
 })
-
-router.get('/cart', (req, res) => {
-  const t = totals(req.store)
-  const inCart = new Set(t.lines.map(l => l.product.sku))
-  const alsoBought = PRODUCTS.filter(p => !inCart.has(p.sku)).slice(0, 4)
-  const saved = (req.store.saved ?? []).map(s => ({ ...s, product: byId(s.pid) })).filter(s => s.product)
-  render(req, res, 'Cart - Best Buy', P.cartPage({ base: res.locals.base, t, alsoBought, saved }))
-})
-
-router.post('/cart/update', (req, res) => {
-  const item = req.store.cart.find(l => l.line === Number(req.body.line))
-  const action = req.body.action || 'update' // the selects/radios auto-submit without an action
-  if (item) {
-    if (action === 'remove' || action === 'save') req.store.cart = req.store.cart.filter(l => l !== item)
-    if (action === 'save') req.store.saved = [...(req.store.saved ?? []).filter(s => s.pid !== item.pid), { pid: item.pid, fulfillment: item.fulfillment }]
-    if (action === 'update') {
-      const q = Number(req.body.qty)
-      if (Number.isInteger(q) && q >= 1 && q <= MAX_QTY) item.qty = q
-      const f = req.body['availability-selection']
-      if (f === 'pickup' || f === 'shipping') item.fulfillment = f
-    }
+router.get('/cart',(req,res)=>renderCart(req,res))
+router.post('/cart/update',(req,res)=>{
+  const previous=structuredClone(req.store.cart)
+  const item=req.store.cart.find(l=>l.line===Number(req.body.line)),action=req.body.action||'update'
+  if(!item) return renderCart(req,res,'That item is no longer in your cart.',400)
+  if(action==='remove'||action==='save') req.store.cart=req.store.cart.filter(l=>l!==item)
+  if(action==='save') retailState(req).savedForLater=[...(retailState(req).savedForLater??[]).filter(s=>s.pid!==item.pid||(s.variant||'')!==(item.variant||'')),{...item}]
+  if(action==='remove'||action==='save') invalidateReview(req.store)
+  if(action==='update') {
+    if(req.body.qty!==undefined) item.qty=Number(req.body.qty)
+    if(req.body['availability-selection']!==undefined) item.fulfillment=req.body['availability-selection']
+    if(!validateCartChange(req,res,previous)) return
   }
   res.redirect(`${res.locals.base}/cart`)
 })
-
-router.post('/cart/saved', (req, res) => {
-  const s = (req.store.saved ?? []).find(x => x.pid === String(req.body.pid))
-  if (s) {
-    req.store.saved = req.store.saved.filter(x => x !== s)
-    if (req.body.action === 'move' && !req.store.cart.some(l => l.pid === s.pid)) {
-      req.store.cartSeq = (req.store.cartSeq ?? 0) + 1
-      req.store.cart.push({ line: req.store.cartSeq, pid: s.pid, qty: 1, fulfillment: s.fulfillment ?? 'pickup' })
-    }
-  }
+router.post('/cart/saved',(req,res)=>{
+  const saved=(retailState(req).savedForLater??[]).find(s=>s.pid===String(req.body.pid)&&(s.variant||'')===String(req.body.variant||''))
+  if(!saved) return renderCart(req,res,'That saved item could not be found.',400)
+  if(req.body.action==='move') {
+    const previous=structuredClone(req.store.cart)
+    const existing=req.store.cart.find(l=>l.pid===saved.pid&&(l.variant||'')===(saved.variant||''))
+    if(existing) existing.qty+=1
+    else {req.store.cartSeq=(req.store.cartSeq??0)+1;req.store.cart.push({...saved,line:req.store.cartSeq,qty:1})}
+    if(!validateCartChange(req,res,previous)) return
+  } else if(req.body.action!=='remove') return renderCart(req,res,'Choose a valid saved-item action.',400)
+  retailState(req).savedForLater=retailState(req).savedForLater.filter(s=>s!==saved)
   res.redirect(`${res.locals.base}/cart`)
 })
 
@@ -216,10 +265,8 @@ function signinHandler(mode) {
     if (!b.password) return page('password', email, 'Please enter your password.', 400)
     const acct = authenticate(req.storeSlug, email, b.password)
     if (!acct) return page('password', email, 'Oops! The email or password did not match our records. Please try again.', 401)
-    req.store.user = publicAccount(acct)
-    delete req.store.checkout.guest
-    if (req.store.checkout.contact) req.store.checkout.contact.emailAddress = acct.email // signed in mid-checkout
-    res.redirect(mode === 'checkout' && hasLines(req) ? checkoutUrl(base) : `${base}/`)
+    signInAccount(req,publicAccount(acct))
+    res.redirect(afterSignIn(req,base,mode === 'checkout' && hasLines(req) ? checkoutUrl(base) : `${base}/account`))
   }
 }
 router.get('/identity/signin', (req, res) => {
@@ -244,21 +291,21 @@ router.post('/identity/newAccount', (req, res) => {
   if (!hasErrors(errors)) {
     const acct = createAccount(req.storeSlug, { email: v.email, password: v.password, first_name: v.firstName, last_name: v.lastName, phone: phoneDigits(v.phone) })
     if (acct.error) errors.email = acct.error
-    else { req.store.user = publicAccount(acct); return res.redirect(`${res.locals.base}/account`) }
+    else { signInAccount(req,publicAccount(acct)); return res.redirect(afterSignIn(req,res.locals.base,`${res.locals.base}/account`)) }
   }
   render(req, res, 'Create an Account - Best Buy', P.createAccountPage({ base: res.locals.base, values: { ...v, password: '' }, errors }), { status: 400, chrome: 'slim' })
 })
 
-router.get('/account', (req, res) => {
-  if (!req.store.user) return res.redirect(`${res.locals.base}/identity/global/signin`)
-  const orders = listOrders({ store: req.storeSlug }).filter(o => o.customer.email === req.store.user.email)
-  render(req, res, 'Account Home - Best Buy', P.accountPage({ base: res.locals.base, user: req.store.user, orders }))
-})
-router.get('/logout', (req, res) => { req.store.user = null; req.store.checkout = {}; res.redirect(`${res.locals.base}/`) })
+router.get('/logout', (req, res) => { req.store.user = null; req.store.checkout = {}; delete req.store.pendingSave; delete req.store.afterSignIn; res.redirect(`${res.locals.base}/`) })
 
 // ---- checkout: one page, numbered steps ----
 router.get('/checkout/c/standard', (req, res) => {
   if (!gate(req, res)) return
+  if(req.query.address_id) {
+    const a=selectedAddress(req,String(req.query.address_id))
+    if(!a)return notFound(req,res)
+    co(req).address=checkoutAddress(a);co(req).addressId=a.id;delete co(req).done.address;delete co(req).done.shipdetails
+  }
   renderCheckout(req, res)
 })
 
@@ -288,6 +335,11 @@ router.post('/checkout/shipping-address', (req, res) => {
   }
   const errors = validateAddress(v, { first: 'firstName', last: 'lastName', line1: 'addressLine1', city: 'city', state: 'state', zip: 'postalCode' })
   if (hasErrors(errors)) return renderCheckout(req, res, { active: 'address', values: v, errors, status: 400 })
+  if(req.store.user && (v.saveToProfile==='1'||v.defaultAddress==='1')) {
+    const saved=saveAddress(req,{name:`${v.firstName} ${v.lastName}`,line1:v.addressLine1,line2:v.addressLine2,city:v.city,state:v.state,postal_code:v.postalCode,is_default:v.defaultAddress==='1'?'yes':''},{country:'US'})
+    if(saved.errors)return renderCheckout(req,res,{active:'address',values:v,errors:{addressLine1:saved.errors.join(' ')},status:400})
+    c.addressId=saved.address.id
+  }
   c.address = v
   c.done.address = true
   res.redirect(checkoutUrl(res.locals.base))
@@ -297,6 +349,7 @@ router.post('/checkout/shipping-address', (req, res) => {
 router.post('/checkout/shipping-details', (req, res) => {
   if (!gate(req, res)) return
   const c = co(req)
+  if(req.body.levelOfService&&req.body.levelOfService!=='standard')return renderCheckout(req,res,{active:'shipdetails',errors:{method:'Only standard shipping is available.'},status:400})
   if (totals(req.store).hasShipping) { c.levelOfService = 'standard'; c.done.shipdetails = true }
   res.redirect(checkoutUrl(res.locals.base))
 })
@@ -357,11 +410,16 @@ router.post('/checkout/payment', (req, res) => {
   if (!gate(req, res)) return
   const base = res.locals.base, b = req.body, c = co(req)
   const t = totals(req.store), steps = stepsFor(t)
+  if(b.paymentMethod&&!['card','paypal'].includes(b.paymentMethod))return renderCheckout(req,res,{active:'payment',errors:{method:'Choose card or PayPal. Other payment methods are not supported.'},status:400})
   if (b.action === 'paypal' || b.action === 'card') {
     c.paymentMethod = b.action
     return res.redirect(checkoutUrl(base))
   }
   if (!priorStepsDone(steps, c)) return res.redirect(checkoutUrl(base))
+  if (!currentReview(req.store, b.reviewToken)) {
+    invalidateReview(req.store)
+    return renderCheckout(req, res, { active: 'payment', errors: { review: 'Review the updated order and enter your payment details again.' }, status: 409 })
+  }
 
   const a = t.hasShipping ? c.address : null
   const billingFromShipping = !!a && a.useAsBilling === '1'
@@ -407,6 +465,11 @@ router.post('/checkout/payment', (req, res) => {
 })
 
 function placeOrder(req, res, { payment, billing }) {
+  enterScenarioCart(req.store)
+  const issue=cartIssue(req.store)
+  if(issue) return renderCart(req,res,issue,400)
+  const paymentError=scenarioPayment(req.store,payment)
+  if(paymentError) return renderCheckout(req,res,{active:'payment',errors:{payment:paymentError},status:402})
   const base = res.locals.base, c = co(req), u = req.store.user
   const t = totals(req.store)
   const a = t.hasShipping ? c.address : null
@@ -427,8 +490,8 @@ function placeOrder(req, res, { payment, billing }) {
     fulfillment: {
       method,
       option: t.hasShipping ? 'standard' : 'store_pickup',
-      store_location: t.hasPickup ? STORE_NAME : null,
-      eta: kinds.map(k => FULFILLMENT[k].eta).join(' / '),
+      store_location: t.hasPickup ? currentStore(req.store).name : null,
+      eta: [...new Set(t.lines.map(l=>etaFor(l.product,l.fulfillment)))].join(' / '),
     },
     shipping_address: a ? { first_name: a.firstName, last_name: a.lastName, line1: a.addressLine1, line2: a.addressLine2 || null, city: a.city, state: a.state, postal_code: a.postalCode, country: 'US', phone: c.contact.phoneNumber } : null,
     billing_address: billing,
@@ -437,6 +500,10 @@ function placeOrder(req, res, { payment, billing }) {
     currency: 'USD',
     meta: {
       token,
+      account_id: u?.id ?? null,
+      pickup_store_id: t.hasPickup ? currentStore(req.store).id : null,
+      shipping_zip: a?.postalCode || null,
+      product_details: t.lines.map(l=>({sku:l.product.sku,variant:l.variant||null,option:l.product.label||null,condition:l.product.condition,preorder:!!l.product.preorder,release:l.product.release||null,eta:etaFor(l.product,l.fulfillment)})),
       items_fulfillment: t.lines.map(l => ({ sku: l.product.sku, fulfillment: l.fulfillment })),
       pickup_person: person ? { first_name: person.firstName, last_name: person.lastName, email: person.emailAddress, phone: person.phoneNumber } : null,
       sms_opt_in: c.contact.smsOptIn === '1',
@@ -450,8 +517,8 @@ function placeOrder(req, res, { payment, billing }) {
 
 // ---- thank you ----
 function findOrder(req, number, token) {
-  const order = getOrder(String(number ?? ''))
-  return order && order.store === req.storeSlug && order.meta.token === String(token ?? '') ? order : null
+  const order = privateOrder(req,String(number ?? ''))
+  return order && order.meta.token === String(token ?? '') ? order : null
 }
 function orderNotFound(req, res) {
   render(req, res, 'Order Not Found - Best Buy', P.simplePage({ title: "We couldn't find that order.", html: `<p>Check your confirmation email for your order details.</p><p><a href="${res.locals.base}/">Continue shopping</a></p>` }), { status: 404 })
@@ -460,7 +527,7 @@ function orderNotFound(req, res) {
 router.get('/checkout/r/thank-you', (req, res) => {
   const order = findOrder(req, req.query.order, req.query.token)
   if (!order) return orderNotFound(req, res)
-  render(req, res, 'Thank You - Best Buy', P.thankYouPage({ base: res.locals.base, order }))
+  render(req, res, 'Thank You - Best Buy', P.thankYouPage({ base: res.locals.base, order, guestClaimed:!!req.store.receiptOwners?.[order.id] }))
 })
 
 // Guest "Create an account" block on the thank-you page.
@@ -468,15 +535,21 @@ router.post('/checkout/r/create-account', (req, res) => {
   const order = findOrder(req, req.body.order, req.body.token)
   if (!order) return orderNotFound(req, res)
   let accountCreated = null
-  if (order.customer.guest && req.body.save === '1') {
+  if (order.customer.guest && !req.store.user && req.body.save === '1') {
     const password = String(req.body.password ?? '')
     const acct = password.length >= 8
       ? createAccount(req.storeSlug, { email: order.customer.email, password, first_name: order.customer.first_name, last_name: order.customer.last_name, phone: order.customer.phone })
       : { error: 'short password' }
     if (acct.error) accountCreated = { ok: false, error: 'Sorry, but we were unable to create your account. Please try again.' }
-    else { req.store.user = publicAccount(acct); accountCreated = { ok: true } }
+    else { signInAccount(req,publicAccount(acct)); req.store.receiptOwners ||= {}; req.store.receiptOwners[order.id]=acct.id; accountCreated = { ok: true } }
   }
   render(req, res, 'Thank You - Best Buy', P.thankYouPage({ base: res.locals.base, order, accountCreated }), { status: accountCreated?.ok === false ? 400 : 200 })
+})
+
+router.get('/compare', (req, res) => {
+  const skus = [...new Set([].concat(req.query.sku ?? []).map(String))].slice(0, 3)
+  const products = skus.map(byId).filter(Boolean)
+  render(req, res, 'Compare Products - Best Buy', P.comparePage({ base: res.locals.base, products, catalog: PRODUCTS }))
 })
 
 router.use(notFound)

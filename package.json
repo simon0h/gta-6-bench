@@ -6,9 +6,22 @@
   "description": "Synthetic retailer environment for benchmarking AI agents on pre-ordering GTA 6",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test \"test/*.test.js\""
+    "dashboard": "node dashboard/server.js",
+    "dashboard:check": "node --test test/dashboard-*.test.js test/dashboard-*.reference.test.mjs",
+    "test": "node scripts/test-catalog-modes.mjs",
+    "benchmark": "node benchmark/cli.js",
+    "benchmark:verify": "RUN_BROWSER_TESTS=1 CATALOG_MODE=reference node --test test/benchmark-*.reference.test.mjs",
+    "hosting:start": "node deploy/server.js",
+    "hosting:check": "node --test test/deployment-*.test.js",
+    "deploy:check": "wrangler deploy --dry-run",
+    "deploy": "wrangler deploy",
+    "cf:typegen": "wrangler types deploy/worker-configuration.d.ts"
   },
   "dependencies": {
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "playwright": "1.64.0",
+    "wrangler": "^4.149.0"
   }
 }

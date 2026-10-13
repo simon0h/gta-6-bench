@@ -35,13 +35,14 @@ test('amazon: search → product → Pre-order now → sign in → address → p
     assert.match(pdp.text, /Visit the Rockstar Games Store/)
     assert.match(pdp.text, /FREE delivery Monday, November 16/)
     assert.match(pdp.text, /Or fastest Release Day delivery <b>Thursday, November 12<\/b>/)
-    assert.match(pdp.text, /Delivering to San Jose 95112 - <a href="#">Update location<\/a>/)
+    assert.match(pdp.text, /data-location-open href="\/amazon\/gp\/delivery-location\?ret=/)
     assert.match(pdp.text, /This item will be released on November 12, 2026\./)
     assert.match(pdp.text, /<label for="quantity">Quantity:<\/label>/)
     assert.match(pdp.text, /id="buy-now-button"[^>]*><span id="submit\.buy-now-announce">Pre-order now<\/span><\/button>/)
     assert.doesNotMatch(pdp.text, /add-to-cart-button/, 'the pre-order buy box has no Add to Cart (research quirk)')
     assert.match(pdp.text, /You're not charged until your order enters the shipping process\./)
-    assert.match(pdp.text, /Shipper \/ Seller<\/th><td>Amazon\.com/)
+    assert.match(pdp.text, /Shipper \/ Seller<\/th><td><details class="az-offer-details"><summary>Amazon\.com<\/summary>/)
+    assert.doesNotMatch(pdp.text, /<body class="az-has-ewc">/, 'the empty cart does not reserve a right sidebar')
     assert.match(pdp.text, />Add to List<\/button>/)
 
     // "Pre-order now" is Amazon's Buy Now: straight to checkout entry, which is the sign-in wall for a guest.
@@ -80,14 +81,14 @@ test('amazon: search → product → Pre-order now → sign in → address → p
     assert.match(review.text, /FREE delivery: Monday, November 16/)
     assert.match(review.text, /Release-Date Delivery: Thursday, November 12/)
     assert.match(review.text, /id="placeYourOrder">Place your order<\/button>/)
-    assert.match(review.text, /By placing your order, you agree to Amazon's <a href="#">privacy notice<\/a> and <a href="#">conditions of use<\/a>\./)
+    assert.match(review.text, /By placing your order, you agree to Amazon's <span class="az-static">privacy notice<\/span> and <span class="az-static">conditions of use<\/span>\./)
     assert.match(review.text, /Order total:<\/span><span>\$85\.59/)
     assert.doesNotMatch(review.text, /4242 4242|4242424242424242/, 'the full card number is never echoed')
 
     const done = await c.post('/amazon/gp/buy/spc', { [`quantity_${PS5}`]: '1', delivery: 'standard', action: 'place' })
     assert.match(done.url, /\/amazon\/gp\/buy\/thankyou\?purchaseId=\d{3}-\d{7}-\d{7}&token=/)
     assert.match(done.text, /<h1>Order placed, thanks!<\/h1>/)
-    assert.match(done.text, /Confirmation will be sent to <b>tester@example\.com<\/b>\./)
+    assert.match(done.text, /Order placed for <b>tester@example\.com<\/b>\. Your confirmation is saved in Your Orders\./)
     assert.match(done.text, /Delivering to Alex Tester, Miami, FL 33139/)
     const shown = /Order number: <span data-order-number>(\d{3}-\d{7}-\d{7})<\/span>/.exec(done.text)
     assert.ok(shown, 'order number in the 3-7-7 format is shown')
@@ -182,7 +183,7 @@ test('amazon: search-tile Add to cart adds in place, cart checkout, create an ac
     assert.match(review.text, /Shipping &amp; handling:<\/span><span>\$3\.99/)
     const done = await c.post('/amazon/gp/buy/spc', { [`quantity_${XBOX}`]: '2', delivery: 'release-date', action: 'place' })
     assert.match(done.text, /Order placed, thanks!/)
-    assert.match(done.text, /Confirmation will be sent to <b>jordan\.new@example\.com<\/b>\./)
+    assert.match(done.text, /Order placed for <b>jordan\.new@example\.com<\/b>\. Your confirmation is saved in Your Orders\./)
     assert.match(done.text, /Arriving Nov 12 \(Release-Date Delivery\)/)
 
     const [o] = await orders(c)
@@ -278,5 +279,24 @@ test('amazon: sign in with the test account, wrong password is rejected, header 
     assert.match(co.url, /\/amazon\/gp\/buy\/addressselect$/)
     assert.match(co.text, /Checkout \(2 items\)/)
     assert.deepEqual(await orders(c), [])
+  } finally { await srv.close() }
+})
+
+test('amazon: refinements narrow real results and retain filters through sorting and add-to-cart', async () => {
+  const srv = await startServer()
+  try {
+    const c = srv.client()
+    const filtered = await c.get('/amazon/s?k=grand+theft+auto&platform=ps5&price=under25&s=price-asc-rank')
+    assert.equal(filtered.status, 200)
+    assert.match(filtered.text, /B0BGTAV5P5/)
+    assert.doesNotMatch(filtered.text, /B0H6K928WL|B0H6K49W6Y/)
+    assert.match(filtered.text, /name="platform" value="ps5"/)
+    assert.match(filtered.text, /value="under25" selected/)
+    const empty = await c.get('/amazon/s?k=gta+6&i=music&platform=xbox')
+    assert.match(empty.text, /No results for/)
+    assert.match(empty.text, /Clear all filters/)
+    const added = await c.post('/amazon/cart/add', { asin: 'B0BGTAV5P5', quantity: '1', ret: '/s?k=grand+theft+auto&platform=ps5&price=under25&s=price-asc-rank' })
+    assert.match(added.url, /platform=ps5&price=under25/)
+    assert.match(added.text, /1 in cart/)
   } finally { await srv.close() }
 })

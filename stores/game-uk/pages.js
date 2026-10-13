@@ -1,27 +1,44 @@
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
+import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
+import { productImage, productGallery } from '../../lib/product-assets.js'
+import { productPhoto } from '../../lib/product-photos.js'
+import { DEPARTMENTS, CAMPAIGNS, categorySlug } from './catalog.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
 import {
-  byId, productPath, productHref, facets, countdown, SORTS, DELIVERY_METHODS, INTERNATIONAL_DELIVERY, PDP_DELIVERY_ORDER, CHECKOUT_DELIVERY_ORDER,
-  COLLECT_STORES, TITLES, MAX_QTY, RELEASE_TEXT, RELEASE_SHORT, DISPATCH_TEXT, PREORDER_NOTICE_1, PREORDER_NOTICE_2, LEGAL_TEXT,
+  PRODUCTS, quantityLimit, byId, selectedProduct, eligibleMethods, productPath, productHref, facets, countdown, SORTS, DELIVERY_METHODS, INTERNATIONAL_DELIVERY, PDP_DELIVERY_ORDER, CHECKOUT_DELIVERY_ORDER,
+  COLLECT_STORES, BENCHMARK_COLLECT_STORE, TITLES, MAX_QTY, RELEASE_TEXT, RELEASE_SHORT, DISPATCH_TEXT, PREORDER_NOTICE_1, PREORDER_NOTICE_2, LEGAL_TEXT,
 } from './data.js'
 
 const NAME = 'GAME'
+
+function informationHref(base, label) {
+ const text = label.replaceAll('&amp;', '&')
+ const routes = {"Track order":"/account/orders","Store Finder":"/stores","Help Home":"/help","Contact Us":"/contact","Delivery & Collection":"/help/categories/delivery","Returns & Cancellations":"/help/categories/returns","Frasers Plus":"/frasersplus"}
+ return base + (routes[text] || '/information?topic=' + encodeURIComponent(text))
+}
+export function supportInformationPage(base, topic = 'Shopping information') {
+ const title = String(topic).slice(0,100)
+ const q = title.toLowerCase()
+ let content
+ if (/password|signing in/.test(q)) content = '<p>Password recovery is unavailable in this shop. Sign in using an existing account or continue shopping as a guest where offered.</p>'
+ else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Financing applications and new gift-card purchases are unavailable in this shop.</p>'
+ else if (/cookie|privacy/.test(q)) content = '<p>This synthetic shop uses a session cookie to keep your basket, account and checkout together. Orders are recorded for the benchmark. Real retailer advertising and tracking services are not connected.</p>'
+ else if (/return|refund|cancel/.test(q)) content = '<p>Review the item, format, delivery choice and total before placing your order. Digital redemption codes may have different return conditions from physical products. You can save a support enquiry from your order details. This does not approve a cancellation or refund.</p>'
+ else if (/delivery|shipping|collection/.test(q)) content = '<p>Product pages show available fulfilment choices. Confirm your address or collection store at checkout to see the order-specific delivery estimate and charges. Pre-orders are fulfilled when available; wait for collection confirmation before visiting a store.</p>'
+ else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming. This is a synthetic shopping environment: local orders record your selected items without charging a real payment method.</p>'
+ else if (/read more/.test(q)) content = '<p>PEGI 18 identifies games intended for adults. You must confirm you are 18 or over before adding this age-rated game to your bag.</p>'
+ else if (/edit/.test(q)) content = '<p>Prices are displayed in pounds sterling and include VAT. Currency switching is unavailable in this UK shop.</p>'
+ else if (/mobile phones/.test(q)) content = '<p>Mobile phones are not included in this shop’s current catalogue. Browse the available technology and gaming departments instead.</p>'
+ else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat and telephone support are unavailable in this shop. Product availability and delivery options are shown on the product page and at checkout.</p>'
+ else content = '<p>This service is unavailable in this shop. You can browse products, check availability and complete the supported shopping flows.</p>'
+ return `<section><h1>${esc(title)}</h1>${content}<p><a href="${base}/">Continue shopping</a> · <a href="${base}/account">Your account and orders</a></p></section>`
+}
 const gbp = (n) => money(n, 'GBP')
-const NAV = ['Consoles & Video Games', 'Digital Gift Cards', 'PC Gaming', 'Tech', 'LEGO', 'Toys & Games', 'Trading Cards']
 const PROMOS = [
   'FC27 - Out now! Get in the game',
   'Coming Soon - Shop upcoming releases on games and more',
   'Spread the cost of gifting with Frasers Plus: Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable)',
 ]
-// "Consoles & Video Games" mega-menu. The research names the Trending column items and the
-// "Just Landed & Up Next" / PlayStation columns. ASSUMPTION: the other column items, and every
-// link target, are searches here; "GTA VI Pre-Order" (href not captured) opens the GTA VI results.
-const MEGA = [
-  ['Trending', [['GTA VI Pre-Order', 'grand theft auto vi'], ['EA Sports FC 27'], ['Call of Duty Modern Warfare 4 - Pre-Order'], ['LEGO Batman']]],
-  ['Just Landed & Up Next', [['Coming Soon'], ['Just Landed']]],
-  ['PlayStation', [['PlayStation Consoles'], ['PlayStation Games'], ['PlayStation Accessories']]],
-  ['Xbox', [['Xbox Consoles'], ['Xbox Games'], ['Xbox Accessories']]],
-]
-
 // Inline icons only (no external assets).
 const ICON = {
   search: '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
@@ -44,9 +61,9 @@ function minibag(base, t, closeHref) {
   return `<div class="gu-flyout" id="minibag" role="dialog" aria-label="My Bag">
   <div class="gu-flyout-head"><b>My Bag</b>${closeHref ? `<a class="gu-modal-close" href="${esc(closeHref)}" aria-label="Close">&times;</a>` : ''}</div>
   ${t.lines.map(l => `<div class="gu-mini-line">
-    <img src="${l.product.art}" alt="">
+    ${artwork(l.product)}
     <div><div class="gu-brand">${esc(l.product.brand)}</div><a href="${productHref(base, l.product)}">${esc(l.product.title)}</a>
-      <div class="gu-fine">Colour: ${esc(l.product.swatch)}<br>Size: One Size</div>
+      <div class="gu-fine">${esc(l.product.optionLabel||(l.product.kind==='game'?'Colour':'Selected'))}: ${esc(l.product.swatch)}</div>
       <form method="post" action="${base}/cart/update" class="gu-line-actions"><input type="hidden" name="line" value="${l.line}">
         <span class="gu-qty gu-qty-sm"><button type="submit" name="action" value="dec" aria-label="Reduce quantity">&minus;</button><span>${l.qty}</span><button type="submit" name="action" value="inc" aria-label="Increase quantity">+</button></span>
         <span>Price: <b>${gbp(l.product.price)}</b></span><span>Total: <b>${gbp(l.product.price * l.qty)}</b></span>
@@ -64,8 +81,9 @@ function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
   <div class="gu-row1">
     <a class="gu-logo" href="${base}/" aria-label="GAME home">GAME</a>
     <form class="gu-search" action="${base}/searchresults" method="get" role="search">
-      <input type="search" name="descriptionfilter" value="${esc(q)}" placeholder="Search product or brand" aria-label="Search product or brand">
+      <input type="search" name="descriptionfilter" value="${esc(q)}" placeholder="Search product or brand" aria-label="Search product or brand" list="gu-suggestions">
       <button type="submit" aria-label="Search">${ICON.search}</button>
+      <datalist id="gu-suggestions">${[...new Set(PRODUCTS.map(p=>p.brand)), "Nintendo", "headset", "LEGO", "gta 6", "monitor"].map(x=>`<option value="${esc(x)}">`).join('')}</datalist>
     </form>
     <nav class="gu-icons" aria-label="Account and bag">
       <a href="${base}/stores">${ICON.pin}<span>Stores</span></a>
@@ -77,10 +95,8 @@ function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
       </div>
     </nav>
   </div>
-  <nav class="gu-nav" aria-label="Shop by category">${NAV.map((n, i) => i === 0
-    ? `<div class="gu-mega-item"><a href="${searchHref(base, n)}">${esc(n)}</a><div class="gu-mega">${MEGA.map(([h, links]) => `<div><h4>${esc(h)}</h4>${links.map(([label, q = label]) => `<a href="${searchHref(base, q)}">${esc(label)}</a>`).join('')}</div>`).join('')}</div></div>`
-    : `<a href="${searchHref(base, n)}">${esc(n)}</a>`).join('')}</nav>
-  <div class="gu-promo" id="gu-promo"><a href="${base}/frasersplus">${esc(PROMOS[0])}</a></div>
+  <details class="gu-navigation" open><summary>Shop departments <span aria-hidden="true">☰</span></summary><nav class="gu-nav" aria-label="Shop by category">${DEPARTMENTS.map(d=>`<div class="gu-mega-item"><a href="${base}/${d.id}">${esc(d.title)}</a><details class="gu-menu-disclosure"><summary aria-label="Explore ${esc(d.title)}"><span aria-hidden="true">⌄</span></summary><div class="gu-mega"><div><h4>${esc(d.title)}</h4><a class="gu-shop-all" href="${base}/${d.id}">Shop all ${esc(d.title)}</a>${d.categories.map(c=>`<a href="${base}/${d.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div><div><h4>Discover</h4>${d.id==='gaming'?`<a href="${searchHref(base,'grand theft auto vi')}">GTA VI Pre-Order</a>`:''}${CAMPAIGNS.map(c=>`<a href="${base}/campaign/${c.id}">${esc(c.title)}</a>`).join('')}</div><a class="gu-menu-photo" href="${base}/${d.id}">${productPhoto(d.photo,d.title)}<b>Explore ${esc(d.title)} →</b></a></div></details></div>`).join('')}</nav></details>
+  <div class="gu-promo" id="gu-promo"><a href="${searchHref(base,'FC27')}">${esc(PROMOS[0])}</a></div>
 </header>`
 }
 
@@ -90,7 +106,7 @@ function slimHeader({ base, mode }) {
 
 function cookieBanner(base, back) {
   return `<div class="gu-cookies" role="region" aria-label="Our cookies">
-  <div><b>Our cookies</b><p>Our website uses cookies and similar technologies to personalise the ads that are shown to you and to help you get the best experience on our site. <a href="#">Cookie policy</a></p></div>
+  <div><b>Our cookies</b><p>Our website uses cookies and similar technologies to personalise the ads that are shown to you and to help you get the best experience on our site. <a href="${informationHref(base, 'Cookie policy')}">Cookie policy</a></p></div>
   <form method="post" action="${base}/cookies"><input type="hidden" name="back" value="${esc(back)}">
     <button type="submit" name="choice" value="manage" class="gu-link-btn">Manage cookies</button>
     <button type="submit" name="choice" value="reject" class="gu-btn gu-btn-black">Reject all</button>
@@ -101,10 +117,10 @@ function cookieBanner(base, back) {
 function footer(base, mode) {
   // ASSUMPTION: like the minimal auth.game.co.uk page, the sign-in and checkout steps carry
   // only a slim legal footer (no newsletter or link columns).
-  if (mode !== 'full') return `<footer class="gu-footer gu-footer-slim"><p class="gu-copy">&copy; 2026 Frasers Group Trading Limited &middot; <a href="#">Terms &amp; Conditions</a> &middot; <a href="#">Privacy Policy</a> &middot; <a href="#">Cookie Policy</a></p>${disclaimer(NAME)}</footer>`
-  const col = (h, links) => `<div><h4>${h}</h4>${links.map(l => `<a href="#">${l}</a>`).join('')}</div>`
+  if (mode !== 'full') return `<footer class="gu-footer gu-footer-slim"><p class="gu-copy">&copy; 2026 Frasers Group Trading Limited &middot; <a href="${informationHref(base, 'Terms &amp; Conditions')}">Terms &amp; Conditions</a> &middot; <a href="${informationHref(base, 'Privacy Policy')}">Privacy Policy</a> &middot; <a href="${informationHref(base, 'Cookie Policy')}">Cookie Policy</a></p>${disclaimer(NAME)}</footer>`
+  const col = (h, links) => `<div><h4>${h}</h4>${links.map(l => ['Careers','Affiliates','Corporate','Facebook','Instagram','X','YouTube','TikTok','Modern Slavery Statement'].includes(l) ? `<span class="gu-footer-unavailable">${l}</span>` : `<a href="${informationHref(base, l)}">${l}</a>`).join('')}</div>`
   return `<footer class="gu-footer">
-  <div class="gu-newsletter"><h4>Sign up to our newsletter</h4><form onsubmit="return false"><label for="nl-email" class="visually-hidden">Email address</label><input id="nl-email" type="email" placeholder="Enter your email address"><button type="button" class="gu-btn gu-btn-black">Sign up</button></form></div>
+  <div class="gu-newsletter"><h4>Sign up to our newsletter</h4><p>Newsletter signup is unavailable in this shop.</p></div>
   <div class="gu-footer-cols">
     ${col('Customer services', ['Help Home', 'Contact Us', 'Delivery &amp; Collection', 'Returns &amp; Cancellations', 'Track order'])}
     ${col('Information', ['Terms &amp; Conditions', 'Privacy Policy', 'Cookie Policy', 'Frasers Plus', 'Modern Slavery Statement'])}
@@ -112,7 +128,7 @@ function footer(base, mode) {
     ${col('Stay connected', ['Facebook', 'Instagram', 'X', 'YouTube', 'TikTok'])}
   </div>
   <div class="gu-ways"><span>Ways to pay</span>${['VISA', 'VISA Debit', 'Mastercard', 'Maestro', 'Apple Pay', 'PayPal', 'Gift Cards', 'Frasers+'].map(w => `<span class="gu-paylogo">${w}</span>`).join('')}</div>
-  <div class="gu-currency">&pound; GBP <a href="#">Edit</a></div>
+  <div class="gu-currency">&pound; GBP <a href="${informationHref(base, 'Edit')}">Edit</a></div>
   <p class="gu-copy">&copy; 2026 Frasers Group Trading Limited</p>
   <p class="gu-fca">*Frasers Plus is a credit product. Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable). Credit subject to status. Terms apply. 18+, UK residents only. Frasers Group Trading Limited acts as a credit broker and not a lender.</p>
   ${disclaimer(NAME)}
@@ -126,123 +142,131 @@ export function layout({ base, title, body, t, user = null, mode = 'full', cooki
 <link rel="stylesheet" href="${base}/static/style.css"></head>
 <body class="gu-mode-${esc(mode)}">
 ${mode === 'full' ? fullHeader({ base, t, user, q, flyoutOpen, closeHref }) : slimHeader({ base, mode })}
-<main class="gu-main">${body}</main>
+<a class="gu-skip" href="#main-content">Skip to content</a>
+<main class="gu-main" id="main-content">${body}</main>
 ${footer(base, mode)}
 ${cookieChoice ? '' : cookieBanner(base, back)}
 <script>
 (function(){
-  var promo=document.querySelector('#gu-promo a');if(promo){var msgs=${JSON.stringify(PROMOS)},i=0;setInterval(function(){i=(i+1)%msgs.length;promo.textContent=msgs[i]},4000)}
-  document.querySelectorAll('.gu-qty-btn').forEach(function(b){b.addEventListener('click',function(){var inp=b.parentNode.querySelector('input');var v=(parseInt(inp.value,10)||1)+parseInt(b.dataset.step,10);inp.value=Math.min(${MAX_QTY},Math.max(1,v))})});
+  var promo=document.querySelector('#gu-promo a');if(promo){var msgs=${JSON.stringify(PROMOS)},i=0;setInterval(function(){i=(i+1)%msgs.length;promo.textContent=msgs[i];promo.href=[${JSON.stringify(searchHref(base,'FC27'))},${JSON.stringify(base+'/campaign/coming-soon')},${JSON.stringify(base+'/frasersplus')}][i]},4000)}
+  var navigation=document.querySelector('.gu-navigation');if(matchMedia('(max-width:700px)').matches){if(navigation)navigation.open=false;document.querySelectorAll('.gu-facets details').forEach(function(facet){facet.open=!!facet.querySelector('.is-active')})}
+  var menus=[...document.querySelectorAll('.gu-menu-disclosure')];menus.forEach(function(menu){menu.addEventListener('toggle',function(){if(menu.open)menus.forEach(function(other){if(other!==menu)other.open=false})})});
+  document.addEventListener('click',function(e){if(!e.target.closest('.gu-nav'))menus.forEach(function(m){m.open=false})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')menus.forEach(function(m){if(m.open){m.open=false;m.querySelector('summary').focus()}})});
+  document.querySelectorAll('.gu-qty-btn').forEach(function(b){b.addEventListener('click',function(){var inp=b.parentNode.querySelector('input');var v=(parseInt(inp.value,10)||1)+parseInt(b.dataset.step,10);inp.value=Math.min(Number(inp.max)||${MAX_QTY},Math.max(1,v))})});
 })();
 </script>
 </body></html>`
 }
 
 // ---- browse ----
+export function artwork(p,className='') { return productImage('game-uk',{...p,variantId:p.option},{className}) }
+
 function tile(base, p, back) {
-  return `<article class="gu-tile">
+  return `<article class="gu-tile" data-product-id="${p.id}">
   <div class="gu-badges">${p.badges.map(b => `<span class="gu-flag">${esc(b)}</span>`).join('')}</div>
   <form method="post" action="${base}/wishlist/add" class="gu-tile-heart"><input type="hidden" name="pid" value="${p.id}"><input type="hidden" name="back" value="${esc(back)}"><button type="submit" aria-label="Add ${esc(p.title)} to wish list" title="Add to wish list">${ICON.heart}</button></form>
-  <a class="gu-tile-img" href="${productHref(base, p)}"><img src="${p.art}" alt="${esc(p.artAlt)}"></a>
+  <a class="gu-tile-img" href="${productHref(base, p)}">${artwork(p)}</a>
   <div class="gu-brand">${esc(p.brand)}</div>
   <a class="gu-tile-name" href="${productHref(base, p)}">${esc(p.title)}</a>
-  <div class="gu-tile-price">${gbp(p.price)}${p.ticketPrice > p.price ? ` <s>${gbp(p.ticketPrice)}</s>` : ''}</div>
+  <p class="gu-fine">${esc(p.browseCategory || (p.category==='Unclassified' ? p.style : p.category))} · ${p.catalogEvidence ? 'Pre-order' : p.stock ? (p.preorder ? 'Pre-order' : 'In stock') : 'Out of stock'}</p><div class="gu-tile-price">${gbp(p.price)}${p.ticketPrice > p.price ? ` <s>${gbp(p.ticketPrice)}</s>` : ''}</div>
 </article>`
 }
 
 export function homePage({ base, products }) {
-  const circles = ['Coming Soon', 'XBOX', 'PlayStation', 'Nintendo', 'Pokemon', 'LEGO', 'Toys', 'PC']
-  const gta = products.find(p => p.kind === 'game')
-  return `<section class="gu-circles">${circles.map(c => `<a href="${searchHref(base, c)}"><span class="gu-circle">${esc(c.slice(0, 2).toUpperCase())}</span><span>${esc(c)}</span></a>`).join('')}</section>
-<section class="gu-hero"><div><p class="gu-eyebrow">OUT NOW</p><h1>FC27</h1><p>Get in the game. The new season starts here.</p><a class="gu-btn gu-btn-black" href="${searchHref(base, 'FC27')}">Shop Now</a></div><div class="gu-hero-art" aria-hidden="true">FC<span>27</span></div></section>
-<section class="gu-gifts"><h2>Gifts for Gamers</h2><p>Find the perfect present for every player.</p><div class="gu-gift-btns">${['Games', 'PS5', 'XBOX', 'Switch'].map(g => `<a class="gu-btn gu-btn-black" href="${searchHref(base, g)}">${g}</a>`).join('')}</div></section>
-<section class="gu-fplus"><b>FRASERSPLUS</b><span class="gu-fplus-big">SPREAD THE COST OF GIFTING*</span><span>Buy now. Pay later. Earn rewards. Representative APR: 29.9% (variable). Credit subject to status. Terms apply.</span><a class="gu-btn" href="${base}/frasersplus">Find out more</a></section>
-<section class="gu-trending"><h2>Trending</h2><div class="gu-grid">${[gta, ...products.filter(p => p !== gta)].map(p => tile(base, p, `${base}/`)).join('')}</div></section>`
+  if (!fixtureCatalog) return `<h1>Coming Soon</h1><div class="gu-grid">${products.map(p=>tile(base,p)).join('')}</div>`
+  const section = (title, list, href) => `<section class="gu-trending"><div class="gu-section-title"><h2>${esc(title)}</h2><a href="${href}">Shop all →</a></div><div class="gu-grid gu-shelf">${list.slice(0,4).map(p=>tile(base,p,base+'/')).join('')}</div></section>`
+  const circles = [
+    ['Coming Soon','/campaign/coming-soon',byId('756802')],['Xbox','/gaming?platform=Xbox',byId('992004')],
+    ['PlayStation','/gaming?platform=PS5',byId('992003')],['Nintendo','/gaming?platform=Nintendo',byId('991202')],
+    ['Trading Cards','/toys/trading-cards',byId('992023')],['LEGO','/lego',byId('992018')],['Toys','/toys',byId('991207')],['PC','/pc-gaming',byId('991205')],
+  ]
+  const discoveries = [['Gaming PCs & Laptops','/pc-gaming/laptops','laptop'],['Plush & Soft Toys','/toys/soft-toys','plush-rabbit'],['Creative Building Sets','/lego/building-sets','brick-city-bus'],['Trading Card Storage','/toys/trading-cards/card-storage','card-binder-red']]
+  return `<section class="gu-circles" aria-label="Popular departments">${circles.map(([name,url,p])=>`<a href="${base}${url}"><span class="gu-circle">${artwork(p)}</span><span>${esc(name)}</span></a>`).join('')}</section>
+  <div class="gu-campaign-pair"><section class="gu-campaign gu-campaign-games"><div class="gu-campaign-covers" aria-hidden="true">${productImage('game-uk',byId('756802'))}${productImage('game-uk',byId('400064'))}</div><div class="gu-campaign-copy"><h1>Coming Soon</h1><p>Discover the next releases for PlayStation and Xbox.</p><a class="gu-btn" href="${base}/campaign/coming-soon">Shop upcoming releases</a></div></section><section class="gu-campaign gu-campaign-gifts"><div class="gu-campaign-copy"><h2>Gifts for Gamers</h2><p>Find their next game, console or favourite accessory.</p><div class="gu-campaign-links"><a class="gu-btn" href="${base}/campaign/gifts-for-gamers">Find a gift</a><a class="gu-btn" href="${base}/gaming?platform=PS5">PS5</a><a class="gu-btn" href="${base}/gaming?platform=Xbox">Xbox</a><a class="gu-btn" href="${base}/gaming?platform=Nintendo">Nintendo</a></div></div></section></div>
+  <section class="gu-fplus"><div><b>FRASERS<span>PLUS</span></b><h2>SPREAD THE COST OF GIFTING*</h2><p>Buy now. Pay in 3, interest free.</p><small>Representative APR 29.9% (variable). Credit subject to status. Terms apply.</small></div><a class="gu-btn gu-btn-light" href="${base}/frasersplus">About Frasers Plus</a></section>
+  ${section('Trending',products.filter(p=>['991202','992007','992001','991203'].includes(p.id)),base+'/gaming')}
+  <section class="gu-popular"><div class="gu-section-title"><h2>Popular Categories</h2><a href="${base}/searchresults">Shop all →</a></div><div class="gu-discoveries">${discoveries.map(([title,url,photo])=>`<a href="${base}${url}">${productPhoto(photo,title)}<h3>${title}</h3><span>Shop all →</span></a>`).join('')}</div></section>
+  ${section('Level up your PC setup',products.filter(p=>p.departments.includes('pc-gaming')),base+'/pc-gaming')}
+  ${section('Great finds under £30',products.filter(p=>p.campaigns.includes('under-30')&&!p.keywords.includes('gta')),base+'/campaign/under-30')}
+  ${section('Coming Soon',products.filter(p=>p.preorder),base+'/campaign/coming-soon')}`
 }
 
-export function searchPage({ base, q, products, filters = {}, sort = 'popular', hideFilters = false }) {
-  const f = facets(products)
-  // Every toolbar/facet link keeps the other choices (query, filters, sort, hidden rail).
-  const url = (over = {}) => {
-    const params = { descriptionfilter: q, platform: filters.platform, category: filters.category, sort: sort === 'popular' ? null : sort, hidefilters: hideFilters ? '1' : null, ...over }
-    return `${base}/searchresults?${Object.entries(params).filter(([, v]) => v).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&')}`
-  }
-  const here = url()
-  const facetLink = (key, val, n) => `<a class="gu-facet${filters[key] === val ? ' is-active' : ''}" href="${esc(url({ [key]: val }))}">${esc(val)} <span>(${n})</span></a>`
-  const active = Object.entries(filters).filter(([, v]) => v)
-  return `<div class="gu-search-page">
-  <h1>Search Results</h1>
-  <p class="gu-found">We found ${products.length} product${products.length === 1 ? '' : 's'} for ${esc(q)}</p>
-  ${active.length ? `<p class="gu-fine">Filtered by ${active.map(([k, v]) => `${esc(k)}: <b>${esc(v)}</b>`).join(', ')} &middot; <a href="${esc(url({ platform: null, category: null }))}">Clear filters</a></p>` : ''}
-  <div class="gu-toolbar"><a class="gu-link-btn" href="${esc(url({ hidefilters: hideFilters ? null : '1' }))}">${hideFilters ? 'Show Filters' : 'Hide Filters'}</a><span>${products.length} Products</span>
-    <details class="gu-sort"><summary>Sort By</summary><ul>${SORTS.map(s => `<li><a class="gu-sort-opt${s.key === sort ? ' is-active' : ''}" href="${esc(url({ sort: s.key === 'popular' ? null : s.key }))}"${s.key === sort ? ' aria-current="true"' : ''}>${esc(s.label)}</a></li>`).join('')}</ul></details></div>
-  <div class="gu-search-body${hideFilters ? ' gu-no-facets' : ''}">
-    <aside class="gu-facets"${hideFilters ? ' hidden' : ''}>
-      <details open><summary>Platform</summary>${Object.entries(f.platform).map(([k, n]) => facetLink('platform', k, n)).join('') || '<span class="gu-fine">None</span>'}</details>
-      <details open><summary>Category</summary>${Object.entries(f.category).map(([k, n]) => facetLink('category', k, n)).join('') || '<span class="gu-fine">None</span>'}</details>
-      <details open><summary>Style</summary>${Object.entries(f.style).map(([k, n]) => `<span class="gu-facet">${esc(k)} <span>(${n})</span></span>`).join('') || '<span class="gu-fine">None</span>'}</details>
-      <details open><summary>Price</summary>${f.price.map(b => `<span class="gu-facet">${esc(b.label)} <span>(${b.n})</span></span>`).join('') || '<span class="gu-fine">None</span>'}</details>
-    </aside>
-    <div class="gu-grid">${products.length ? products.map(p => tile(base, p, here)).join('') : `<p class="gu-empty">Sorry, we couldn't find any products matching "${esc(q)}". Try checking your spelling or using a different search term.</p>`}</div>
-  </div>
-  <div class="gu-fplus-banner"><b>FRASERSPLUS</b> Buy now. Pay later. Earn rewards. <small>Representative APR: 29.9% (variable). Credit subject to status. Terms apply.</small></div>
-</div>`
+export function searchPage({ base, q='', products, facetProducts=products, filters = {}, sort = 'popular', hideFilters = false, page=1, route='/searchresults', heading='Search Results', intro='', department=null }) {
+  const f=facets(facetProducts), size=12, pages=Math.max(1,Math.ceil(products.length/size)), current=Math.min(Math.max(1,page),pages)
+  const url=(over={})=>{const params={descriptionfilter:q,...filters,sort:sort==='popular'?null:sort,hidefilters:hideFilters?'1':null,...over};return `${base}${route}?${Object.entries(params).filter(([,v])=>v).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&')}`}
+  const here=url({page:current}), keys=['platform','brand','age','category','style','price','availability']
+  const facetLink=(key,val,n)=>`<a class="gu-facet${filters[key]===val?' is-active':''}" ${filters[key]===val?'aria-current="true"':''} href="${esc(url({[key]:filters[key]===val?null:val}))}">${esc(val)} <span>(${n})</span></a>`
+  const active=Object.entries(filters).filter(([k,v])=>keys.includes(k)&&v)
+  const reset=Object.fromEntries(keys.map(k=>[k,null]))
+  const pageLinks=()=>`<nav class="gu-pagination" aria-label="Results pages">${Array.from({length:pages},(_,i)=>`<a href="${esc(url({page:i+1}))}" ${i+1===current?'aria-current="page"':''}>${i+1}</a>`).join('')}</nav>`
+  return `<div class="gu-search-page"><nav class="gu-crumbs"><a href="${base}/">Home</a> / ${esc(heading)}</nav><h1>${esc(heading)}</h1>${intro?`<p class="gu-intro">${esc(intro)}</p>`:''}
+  ${department?`<div class="gu-chips">${department.categories.map(c=>`<a href="${base}/${department.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div>`:''}
+  <p class="gu-found">We found ${products.length} product${products.length===1?'':'s'}${route==='/searchresults'?` for ${esc(q)}`:''}</p>
+  ${active.length?`<p class="gu-active-filters">Filtered by ${active.map(([k,v])=>`${esc(k)}: <b>${esc(v)}</b> <a aria-label="Remove ${esc(k)} filter" href="${esc(url({[k]:null}))}">×</a>`).join(', ')} · <a href="${esc(url(reset))}">Clear filters</a></p>`:''}
+  <div class="gu-toolbar"><a class="gu-link-btn" href="${esc(url({hidefilters:hideFilters?null:'1',page:current}))}">${hideFilters?'Show Filters':'Hide Filters'}</a><span>${products.length} Products · Page ${current} of ${pages}</span><details class="gu-sort"><summary>Sort By</summary><ul>${SORTS.map(s=>`<li><a class="gu-sort-opt${s.key===sort?' is-active':''}" href="${esc(url({sort:s.key}))}"${s.key===sort?' aria-current="true"':''}>${esc(s.label)}</a></li>`).join('')}</ul></details></div>
+  <div class="gu-search-body${hideFilters?' gu-no-facets':''}"><aside class="gu-facets"${hideFilters?' hidden':''}>${keys.map(key=>`<details open><summary>${({age:'Age Rating',availability:'Availability'})[key]||key[0].toUpperCase()+key.slice(1)}</summary>${key==='price'?f.price.map(b=>facetLink(key,b.label,b.n)).join(''):Object.entries(f[key]).filter(([,n])=>n).map(([v,n])=>facetLink(key,v,n)).join('')||'<span class="gu-fine">None</span>'}</details>`).join('')}</aside>
+  <div>${products.length?`<div class="gu-grid">${products.slice((current-1)*size,current*size).map(p=>tile(base,p,here)).join('')}</div>${pageLinks()}`:`<div class="gu-empty"><h2>No matching products</h2><p>Try another search term or <a href="${esc(url(reset))}">clear your filters</a>.</p><p>Popular searches: ${['Nintendo','LEGO','headset','monitor'].map(x=>`<a href="${searchHref(base,x)}">${x}</a>`).join(' · ')}</p><a href="${base}/gaming">Browse gaming</a></div>`}</div></div></div>`
 }
 
-export function productPage({ base, p, modal = null, qty = 1, wished = false }) {
+export function productPage({ base, p, modal = null, qty = 1, wished = false, option = '', error = '' }) {
+  const original = p
+  p = selectedProduct(p,option) || p
+  const related = PRODUCTS.filter(x=>x.id!==p.id && x.family!==p.family && x.departments.some(d=>p.departments.includes(d))).sort((a,b)=>Number(b.category===p.category)-Number(a.category===p.category)).slice(0,4)
   const path = productPath(base, p)
   const isGame = p.kind === 'game'
   const hidden = (n, v) => `<input type="hidden" name="${n}" value="${esc(v)}">`
   // The real flow: "Pre-order now" opens a Pre-order modal, "Add to bag" then opens the PEGI-18
   // Age Verification modal, and only "I'm Old Enough" actually adds. Each modal is a server-rendered
   // state (?preorder=1 / ?agecheck=1) so the whole sequence works without JavaScript.
-  const addForm = (label, cls) => p.pegi
-    ? `<form method="get" action="${path}">${hidden('agecheck', '1')}${hidden('qty', qty)}<button class="${cls}" type="submit">${label}</button></form>`
-    : `<form method="post" action="${base}/cart/add">${hidden('pid', p.id)}${hidden('qty', qty)}<button class="${cls}" type="submit">${label}</button></form>`
+  const addForm = (label, cls) => p.pegi >= 18
+    ? `<form method="get" action="${path}">${hidden('agecheck', '1')}${hidden('qty', qty)}${hidden('option',option)}<button class="${cls}" type="submit">${label}</button></form>`
+    : `<form method="post" action="${base}/cart/add">${hidden('pid', p.id)}${hidden('qty', qty)}${hidden('option',option)}<button class="${cls}" type="submit">${label}</button></form>`
   let modalHtml = ''
   if (modal === 'preorder') {
     modalHtml = `<div class="gu-modal-backdrop"><div class="gu-modal" role="dialog" aria-labelledby="modal-title">
   <div class="gu-modal-head"><h2 id="modal-title">Pre-order</h2><a class="gu-modal-close" href="${path}" aria-label="Close">&times;</a></div>
-  <div class="gu-modal-body"><img src="${p.art}" alt=""><div><p>${PREORDER_NOTICE_1}</p><p><b>${RELEASE_TEXT}</b></p><p>${PREORDER_NOTICE_2}</p></div></div>
+  <div class="gu-modal-body">${productImage('game-uk',p)}<div><p>${PREORDER_NOTICE_1}</p><p><b>${RELEASE_TEXT}</b></p><p>${PREORDER_NOTICE_2}</p></div></div>
   <div class="gu-modal-foot"><a class="gu-btn gu-btn-black" href="${path}">Cancel</a>${addForm('Add to bag', 'gu-btn')}</div>
 </div></div>`
   } else if (modal === 'age') {
     modalHtml = `<div class="gu-modal-backdrop"><div class="gu-modal gu-modal-sm" role="dialog" aria-labelledby="modal-title">
   <div class="gu-modal-head"><h2 id="modal-title">Age Verification</h2><a class="gu-modal-close" href="${path}" aria-label="Close">&times;</a></div>
   <div class="gu-modal-body"><p>You must be 18 years old or older to purchase this item.</p></div>
-  <div class="gu-modal-foot gu-modal-foot-stack"><form method="post" action="${base}/cart/add">${hidden('pid', p.id)}${hidden('qty', qty)}${hidden('age_confirmed', '1')}<button class="gu-btn gu-btn-block" type="submit">I'm Old Enough</button></form><a class="gu-link" href="${path}">Cancel</a></div>
+  <div class="gu-modal-foot gu-modal-foot-stack"><form method="post" action="${base}/cart/add">${hidden('pid', p.id)}${hidden('qty', qty)}${hidden('option',option)}${hidden('age_confirmed', '1')}<button class="gu-btn gu-btn-block" type="submit">I'm Old Enough</button></form><a class="gu-link" href="${path}">Cancel</a></div>
 </div></div>`
   }
   // Primary CTA: pre-order items open the Pre-order modal, 18-rated stock items the age gate, anything else adds directly.
   const cta = p.preorder
     ? { method: 'get', action: path, hidden: hidden('preorder', '1'), label: 'Pre-order now' }
-    : p.pegi ? { method: 'get', action: path, hidden: hidden('agecheck', '1'), label: 'Add to bag' }
+    : p.pegi >= 18 ? { method: 'get', action: path, hidden: hidden('agecheck', '1'), label: 'Add to bag' }
       : { method: 'post', action: `${base}/cart/add`, hidden: hidden('pid', p.id), label: 'Add to bag' }
-  const crumbs = [`<a href="${base}/">Home</a>`, ...p.crumbs.map(c => `<a href="${searchHref(base, c)}">${esc(c)}</a>`), `<span>${esc(p.brand)} ${esc(p.title)}</span>`]
+  const crumbs = [`<a href="${base}/">Home</a>`, ...p.departments.slice(0,1).map(d=>`<a href="${base}/${d}">${esc(DEPARTMENTS.find(x=>x.id===d).title)}</a>`), `<a href="${base}/brands/${categorySlug(p.brand)}">${esc(p.brand)}</a>`, `<span>${esc(p.brand)} ${esc(p.title)}</span>`]
   const deliveryList = PDP_DELIVERY_ORDER.map(id => DELIVERY_METHODS[id]).map(m => `<li><b>${esc(m.name)}</b><span>${esc(m.detail)}</span><b>${gbp(m.price)}</b></li>`).join('')
-  const collectLine = p.preorder ? '' : `<li><b>${esc(DELIVERY_METHODS.collect.name)}</b><span>Delivered to your chosen store within 3 - 7 days.</span><b>${gbp(DELIVERY_METHODS.collect.price)}</b></li>`
+  const collectLine = !p.collect ? '' : `<li><b>${esc(DELIVERY_METHODS.collect.name)}</b><span>Delivered to your chosen store within 3 - 14 days.</span><b>${gbp(DELIVERY_METHODS.collect.price)}</b></li>`
   return `${modalHtml}
 <nav class="gu-crumbs" aria-label="Breadcrumb">${crumbs.join(' / ')}</nav>
 <div class="gu-pdp">
-  <div class="gu-gallery">
-    <div class="gu-gallery-main"><div class="gu-thumbs">${Array.from({ length: 6 }, () => `<img src="${p.art}" alt="">`).join('')}</div><div class="gu-hero-wrap"><span class="gu-art"><img class="gu-hero-img" src="${p.art}" alt="${esc(p.artAlt)}">${p.pegi ? `<span class="gu-pegi" title="PEGI ${p.pegi}">${p.pegi}</span>` : ''}</span></div></div>
-  </div>
+  <div class="gu-gallery">${productGallery('game-uk',{...p,variantId:p.option})}</div>
   <div class="gu-buybox">
     <div class="gu-badges gu-badges-buy">${p.badges.map(b => `<span class="gu-flag">${esc(b)}</span>`).join('')}</div>
     <div class="gu-brand">${esc(p.brand)}</div>
     <div class="gu-title-row"><h1>${esc(p.title)}</h1>
-      <form method="post" action="${base}/wishlist/add" class="gu-heart-form"><input type="hidden" name="pid" value="${p.id}"><input type="hidden" name="back" value="${esc(path)}"><button type="submit" aria-label="Add to wish list" title="Add to wish list">${ICON.heart}</button></form>
-      <a class="gu-share" href="${path}" title="Copy link" aria-label="Copy link">${ICON.share}</a></div>
-    ${wished ? '<p class="gu-notice">Added to your wish list. Wish lists are held for 30 days; sign in to sync yours to any device.</p>' : ''}
-    <div class="gu-price">${gbp(p.price)}${p.ticketPrice > p.price ? ` <s>${gbp(p.ticketPrice)}</s>` : ''}</div>
+      <form method="post" action="${base}/wishlist/add" class="gu-heart-form"><input type="hidden" name="pid" value="${p.id}"><input type="hidden" name="back" value="${esc(path)}"><input type="hidden" name="option" value="${esc(option)}"><button type="submit" aria-label="Add to wish list" title="Add to wish list">${ICON.heart}</button></form>
+      <button class="gu-share" type="button" id="gu-share" title="Copy link" aria-label="Copy link">${ICON.share}</button><span id="gu-share-result" role="status"></span></div>
+    ${wished ? '<p class="gu-notice">Added to your wish list for this browser session.</p>' : ''}
+    ${error?`<p class="gu-error" role="alert">${esc(error)}</p>`:''}<div class="gu-price">${gbp(p.price)}${p.ticketPrice > p.price ? ` <s>${gbp(p.ticketPrice)}</s>` : ''}</div>
     <form method="${cta.method}" action="${cta.action}" class="gu-buy-form" id="gu-buy-form">
-      <div class="gu-format"><span class="gu-label">Format:</span> <span class="gu-swatch is-selected" aria-current="true">${esc(p.swatch)}</span></div>
-      <div class="gu-qty"><button type="button" class="gu-qty-btn" data-step="-1" aria-label="Reduce quantity">&minus;</button><label for="qty" class="visually-hidden">Quantity</label><input id="qty" name="qty" type="number" min="1" max="${MAX_QTY}" value="${qty}" inputmode="numeric"><button type="button" class="gu-qty-btn" data-step="1" aria-label="Increase quantity">+</button></div>
+      <div class="gu-format"><span class="gu-label">${p.kind==='game'||p.category==='Video Games'?'Format:':'Selected:'}</span> <span class="gu-swatch is-selected" aria-current="true">${esc(original.options&&!option?'Choose an option':p.swatch)}</span></div>
+      ${original.options?`<label for="option">${esc(p.optionLabel)} <span aria-hidden="true">*</span></label><select id="option" name="option" required><option value="">Choose ${esc(p.optionLabel.toLowerCase())}</option>${original.options.map(v=>`<option value="${v.id}" ${option===v.id?'selected':''} ${!v.stock?'disabled':''}>${esc(v.label)} — ${gbp(v.price)}${!v.stock?' — Out of stock':''}</option>`).join('')}</select><button id="gu-option-preview" class="gu-link-btn" type="submit" formaction="${path}" formmethod="get">Update selection</button>`:''}
+      <p class="gu-stock${p.stock>0&&p.stock<10?' gu-low-stock':''}">${scenarioStockFor(p,'shipping')===0 ? (scenarioStockFor(p,'pickup')>0?'Shipping unavailable. Pickup available at '+esc(BENCHMARK_COLLECT_STORE)+'.':'Unavailable: shipping and pickup are no longer available.') : p.catalogEvidence ? 'Available to pre-order' : p.stock?`${p.preorder?'Available to pre-order':p.stock<10?'Running low':'In stock'} · ${p.stock} available`:'Out of stock'}</p>
+      <div class="gu-qty"><button type="button" class="gu-qty-btn" data-step="-1" aria-label="Reduce quantity">&minus;</button><label for="qty" class="visually-hidden">Quantity</label><input id="qty" name="qty" type="number" min="1" max="${Math.min(MAX_QTY,quantityLimit(p))}" value="${qty}" inputmode="numeric"><button type="button" class="gu-qty-btn" data-step="1" aria-label="Increase quantity">+</button></div>
       ${cta.hidden}
-      <button class="gu-btn gu-btn-block gu-cta" type="submit" ${modal ? 'disabled' : ''}>${modal ? 'Adding...' : cta.label}</button>
+      <button class="gu-btn gu-btn-block gu-cta" type="submit" ${modal||!quantityLimit(p) ? 'disabled' : ''}>${!quantityLimit(p)?'Out of stock':modal ? 'Adding...' : cta.label}</button>
     </form>
+    <script>document.getElementById('gu-share').addEventListener('click',async function(){var result=document.getElementById('gu-share-result');try{await navigator.clipboard.writeText(location.origin+${JSON.stringify(path+(option?'?option='+encodeURIComponent(option):''))});result.textContent='Link copied'}catch(e){result.textContent='Copy this address: '+location.origin+${JSON.stringify(path+(option?'?option='+encodeURIComponent(option):''))}}});${original.options?`document.getElementById('option').addEventListener('change',function(){document.getElementById('gu-buy-form').requestSubmit(document.getElementById('gu-option-preview'))})`:''}</script>
     ${p.preorder ? `<div class="gu-countdown"><b>Release Date: ${RELEASE_SHORT}</b><span>${countdown() ?? 'Out now'}</span></div>` : ''}
-    ${p.pegi ? `<p class="gu-pegi-line"><b>Pegi Rating:</b> Suitable for people aged 18 and over. <a href="#">Read More...</a></p>` : ''}
+    ${p.pegi ? `<p class="gu-pegi-line"><b>Pegi Rating:</b> Suitable for people aged ${p.pegi} and over. <a href="${informationHref(base, 'Read More...')}">Read More...</a></p>` : ''}
   </div>
   <div class="gu-pdp-info">
     <details class="gu-acc" open><summary>Description</summary><div class="gu-acc-body">
@@ -250,16 +274,18 @@ export function productPage({ base, p, modal = null, qty = 1, wished = false }) 
       <p>Product code: ${esc(p.id)}</p>
       <p><b>${esc(p.title)}</b></p>
       ${p.description.map(d => `<p>${esc(d)}</p>`).join('')}
+      <dl class="gu-specs">${Object.entries(p.specs).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
       ${isGame ? `<p class="gu-legal">${esc(LEGAL_TEXT)}</p>` : ''}
     </div></details>
     <details class="gu-acc"><summary>Delivery &amp; Returns</summary><div class="gu-acc-body">
-      <ul class="gu-delivery-list">${deliveryList}<li><b>${INTERNATIONAL_DELIVERY.name}</b><span>${INTERNATIONAL_DELIVERY.detail}</span><b></b></li>${collectLine}</ul>
-      ${p.preorder ? `<p class="gu-fine">Click &amp; Collect is not available for pre-order items. Pre-orders are dispatched via Express Delivery the day before the launch date.</p>` : ''}
+      <ul class="gu-delivery-list">${p.digital?`<li><b>Email delivery</b><span>UK redemption code. Check account region and compatibility before purchase.</span><b>Free</b></li>`:deliveryList}${collectLine}</ul>
+      ${p.benchmarkPickup ? '<p class="gu-fine">Benchmark scenario: Click &amp; Collect is an authored local simulation for this task. It is not a claim about live GAME pre-order collection availability.</p>' : p.preorder ? `<p class="gu-fine">Click &amp; Collect is not available for pre-order items. Pre-orders are dispatched via Express Delivery the day before the launch date.</p>` : ''}
       <p class="gu-fine">Returns: unwanted items can be returned within 28 days of delivery. Sealed software and digital codes cannot be returned once opened or redeemed.</p>
     </div></details>
   </div>
 </div>
-${modal ? '' : `<div class="gu-sticky" hidden><div class="gu-sticky-inner"><span>${esc(p.title)}</span><b>${gbp(p.price)}</b><button class="gu-btn" type="submit" form="gu-buy-form">${cta.label}</button></div></div>
+<section class="gu-related"><h2>You may also like</h2><div class="gu-grid">${related.map(x=>tile(base,x,path)).join('')}</div></section>
+${modal ? '' : `<div class="gu-sticky" hidden><div class="gu-sticky-inner"><span>${esc(p.title)}</span><b>${gbp(p.price)}</b><button class="gu-btn" type="submit" form="gu-buy-form"${!quantityLimit(p)?' disabled':''}>${!quantityLimit(p)?'Out of stock':cta.label}</button></div></div>
 <script>
 // The real PDP shows a sticky "title / price / CTA" bar once the buy button scrolls out of view.
 (function(){var bar=document.querySelector('.gu-sticky'),cta=document.querySelector('.gu-cta');if(!bar||!cta||!('IntersectionObserver' in window))return;
@@ -270,14 +296,15 @@ ${modal ? '' : `<div class="gu-sticky" hidden><div class="gu-sticky-inner"><span
 // ---- bag ----
 export function cartPage({ base, t, notice = null }) {
   if (!t.lines.length) {
-    return `<div class="gu-cart-empty">${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}<h1>Your Bag Is Empty</h1><div class="gu-empty-icon">${ICON.bag}</div><p>We'll hold your bag for 30 days.</p><p>Sign in or register to sync your bag to any device.</p><a class="gu-btn" href="${base}/login?returnurl=cart">Sign In</a></div>`
+    return `<div class="gu-cart-empty">${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}<h1>Your Bag Is Empty</h1><div class="gu-empty-icon">${ICON.bag}</div><p>Your bag is kept in this browser session.</p><p><a href="${base}/wishlist">View saved items</a> · <a href="${base}/recently-viewed">Recently viewed</a></p><a class="gu-btn" href="${base}/login?returnurl=cart">Sign In</a></div>`
   }
   const rows = t.lines.map(l => `<div class="gu-line">
-  <a href="${productHref(base, l.product)}"><img src="${l.product.art}" alt="${esc(l.product.artAlt)}"></a>
+  <a href="${productHref(base, l.product)}">${artwork(l.product)}</a>
   <div class="gu-line-info">
     <div class="gu-brand">${esc(l.product.brand)}</div>
     <a class="gu-line-name" href="${productHref(base, l.product)}">${esc(l.product.title)}</a>
-    <div class="gu-fine">Colour: ${esc(l.product.swatch)}</div><div class="gu-fine">Size: One Size</div>
+    <div class="gu-fine">${esc(l.product.optionLabel||(l.product.kind==='game'?'Colour':'Selected'))}: ${esc(l.product.swatch)}</div>
+    ${scenarioStockFor(l.product,'shipping')===0?`<p class="gu-cart-availability" role="status">Shipping unavailable. ${scenarioStockFor(l.product,'pickup')>0?'Pickup available at '+esc(BENCHMARK_COLLECT_STORE)+'. Choose Click &amp; Collect during checkout.':'Unavailable: this item cannot be purchased for shipping or pickup.'}</p>`:''}
     <form method="post" action="${base}/cart/update" class="gu-line-actions"><input type="hidden" name="line" value="${l.line}">
       <span class="gu-qty"><button type="submit" name="action" value="dec" aria-label="Reduce quantity">&minus;</button><span>${l.qty}</span><button type="submit" name="action" value="inc" aria-label="Increase quantity">+</button></span>
       <span>Price: <b>${gbp(l.product.price)}</b></span><span>Total: <b>${gbp(l.product.price * l.qty)}</b></span>
@@ -288,7 +315,7 @@ export function cartPage({ base, t, notice = null }) {
   </div>
 </div>`).join('')
   return `<div class="gu-cart">
-  <div class="gu-cart-main"><h1>My Bag</h1>${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}${rows}<p class="gu-hurry">Hurry! Items in bag aren't reserved! Don't miss out and checkout now!</p></div>
+  <div class="gu-cart-main"><h1>My Bag</h1><p><a href="${base}/wishlist">View saved items</a> · <a href="${base}/recently-viewed">Recently viewed</a></p>${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}${rows}<p class="gu-hurry">Hurry! Items in bag aren't reserved! Don't miss out and checkout now!</p></div>
   <aside class="gu-summary">
     <div class="gu-row"><span>Total (${t.count} item${t.count === 1 ? '' : 's'})</span><span>${gbp(t.subtotal)}</span></div>
     <div class="gu-row"><span>Discount:</span><span>${gbp(t.discount)}</span></div>
@@ -300,26 +327,17 @@ export function cartPage({ base, t, notice = null }) {
 </div>`
 }
 
-export function wishlistPage({ base, products }) {
-  return `<div class="gu-simple"><h1>My Wish List</h1><p class="gu-fine">We'll hold your wish list for 30 days. Sign in or register to sync it to any device.</p>
-  ${products.length ? `<div class="gu-grid">${products.map(p => tile(base, p, `${base}/wishlist`)).join('')}</div>` : '<p>Your wish list is empty.</p>'}</div>`
-}
-
-export function storesPage({ base }) {
-  return `<div class="gu-simple"><h1>Store Finder</h1><p>GAME is now in-store at selected Sports Direct and Frasers locations.</p><ul>${COLLECT_STORES.map(s => `<li>${esc(s)}</li>`).join('')}</ul><p class="gu-fine">Click &amp; Collect is available for most items (not pre-orders). <a href="${base}/">Back to shopping</a></p></div>`
-}
-
 // ---- sign in or register (stands in for auth.game.co.uk) ----
-function authShell(inner) {
+function authShell(base, inner) {
   return `<div class="gu-auth">
   <div class="gu-benefits"><div>${ICON.userBig}<span>Personalised experience</span></div><div>${ICON.bolt}<span>Speedy checkout</span></div><div>${ICON.tag}<span>Offers and promotions</span></div></div>
   <div class="gu-auth-box">${inner}</div>
-  <p class="gu-recaptcha">Protected by reCAPTCHA &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+  <p class="gu-recaptcha">Protected by reCAPTCHA &middot; <a href="${informationHref(base, 'Privacy')}">Privacy</a> &middot; <a href="${informationHref(base, 'Terms')}">Terms</a></p>
 </div>`
 }
 
 export function authEmailPage({ base, returnUrl, email = '', error = null }) {
-  return authShell(`<h1>Sign in or register</h1>
+  return authShell(base, `<h1>Sign in or register</h1>
     ${error ? `<p class="gu-error" role="alert">${esc(error)}</p>` : ''}
     <form method="post" action="${base}/account/login"><input type="hidden" name="returnUrl" value="${esc(returnUrl)}"><input type="hidden" name="action" value="email">
       <label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" placeholder="Enter email address" value="${esc(email)}" required>
@@ -332,13 +350,13 @@ export function authEmailPage({ base, returnUrl, email = '', error = null }) {
 // link, one pink "Continue securely" button, and "Continue as guest" underneath (per GAME's terms).
 export function authPasswordPage({ base, returnUrl, email, error = null }) {
   const change = `${base}/account/login?returnUrl=${encodeURIComponent(returnUrl)}`
-  return authShell(`<h1>Welcome back</h1>
+  return authShell(base, `<h1>Welcome back</h1>
     <p class="gu-fine">${esc(email)} <a href="${change}">Change</a></p>
     ${error ? `<p class="gu-error" role="alert">${esc(error)}</p>` : ''}
     <form method="post" action="${base}/account/login"><input type="hidden" name="returnUrl" value="${esc(returnUrl)}"><input type="hidden" name="action" value="signin"><input type="hidden" name="email" value="${esc(email)}">
       <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required>
       <button class="gu-btn gu-btn-block" type="submit">Continue securely</button>
-      <a class="gu-fine gu-forgot" href="#">Forgotten your password?</a>
+      <a class="gu-fine gu-forgot" href="${informationHref(base, 'Forgotten your password?')}">Forgotten your password?</a>
     </form>
     <div class="gu-or">or</div>
     <form method="post" action="${base}/account/login"><input type="hidden" name="returnUrl" value="${esc(returnUrl)}"><input type="hidden" name="action" value="guest"><input type="hidden" name="email" value="${esc(email)}"><button class="gu-btn gu-btn-black gu-btn-block" type="submit">Continue as guest</button></form>`)
@@ -347,7 +365,7 @@ export function authPasswordPage({ base, returnUrl, email, error = null }) {
 export function authRegisterPage({ base, returnUrl, email, values = {}, errors = {} }) {
   const change = `${base}/account/login?returnUrl=${encodeURIComponent(returnUrl)}`
   const f = (name, label, type, extra) => `<label for="${name}">${label}</label><input id="${name}" name="${name}" type="${type}" value="${esc(values[name] ?? '')}" ${extra}>${errors[name] ? `<span class="gu-error">${esc(errors[name])}</span>` : ''}`
-  return authShell(`<h1>Create an account</h1>
+  return authShell(base, `<h1>Create an account</h1>
     <p class="gu-fine">${esc(email)} <a href="${change}">Change</a></p>
     <p class="gu-fine">We couldn't find an account for this email address. Register in a few seconds, or continue as a guest.</p>
     <form method="post" action="${base}/account/login"><input type="hidden" name="returnUrl" value="${esc(returnUrl)}"><input type="hidden" name="action" value="register"><input type="hidden" name="email" value="${esc(email)}">
@@ -366,15 +384,17 @@ const steps = (current) => `<ol class="gu-steps">${['Sign in', 'Delivery', 'Paym
 const errorSummary = (errors) => Object.keys(errors).length ? `<div class="gu-error-summary" role="alert"><b>Please check the following:</b><ul>${Object.values(errors).map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>` : ''
 const fieldFactory = (values, errors) => (name, label, { type = 'text', extra = '', required = false } = {}) =>
   `<div class="gu-field"><label for="${name}">${label}${required ? ' <span class="gu-req" aria-hidden="true">*</span>' : ''}</label><input id="${name}" name="${name}" type="${type}" value="${esc(values[name] ?? '')}" ${extra}${required ? ' required' : ''}${errors[name] ? ` aria-invalid="true" aria-describedby="err-${name}"` : ''}>${errors[name] ? `<span class="gu-error" id="err-${name}">${esc(errors[name])}</span>` : ''}</div>`
-const summaryLines = (t) => t.lines.map(l => `<div class="gu-sum-item"><img src="${l.product.art}" alt=""><div><div class="gu-brand">${esc(l.product.brand)}</div>${esc(l.product.title)}<div class="gu-fine">Colour: ${esc(l.product.swatch)} &middot; Qty ${l.qty}</div></div><b>${gbp(l.product.price * l.qty)}</b></div>`).join('')
+const summaryLines = (t) => t.lines.map(l => `<div class="gu-sum-item">${artwork(l.product)}<div><div class="gu-brand">${esc(l.product.brand)}</div>${esc(l.product.title)}<div class="gu-fine">${esc(l.product.optionLabel||(l.product.kind==='game'?'Colour':'Selected'))}: ${esc(l.product.swatch)} &middot; Qty ${l.qty}</div></div><b>${gbp(l.product.price * l.qty)}</b></div>`).join('')
 
 export function deliveryPage({ base, t, email, guest, preorderInBag, values = {}, errors = {} }) {
   const input = fieldFactory(values, errors)
-  const method = DELIVERY_METHODS[values.deliveryMethod] ? values.deliveryMethod : 'standard'
-  const radios = CHECKOUT_DELIVERY_ORDER.map(id => {
+  const method = Object.hasOwn(DELIVERY_METHODS,values.deliveryMethod) ? values.deliveryMethod : t.lines.every(l=>l.product.digital)?'email':'standard'
+  const allDigital=t.lines.every(l=>l.product.digital), canCollect=t.lines.every(l=>l.product.collect&&scenarioStockFor(l.product,'pickup')!==0)
+  const canShip=t.lines.every(l=>scenarioStockFor(l.product,'shipping')!==0), benchmarkCollection=t.lines.some(l=>l.product.benchmarkPickup)
+  const radios = (allDigital?['email']:CHECKOUT_DELIVERY_ORDER).map(id => {
     const m = DELIVERY_METHODS[id]
-    const disabled = id === 'collect' && preorderInBag
-    return `<label class="gu-radio gu-ship${disabled ? ' is-disabled' : ''}"><input type="radio" name="deliveryMethod" value="${id}" data-price="${m.price}" ${method === id ? 'checked' : ''} ${disabled ? 'disabled' : ''}><span class="gu-ship-name"><b>${esc(m.name)}</b> <span class="gu-fine">${esc(m.detail)}</span>${disabled ? '<span class="gu-fine gu-unavailable">Not available for pre-order items</span>' : ''}</span><b class="gu-ship-price">${gbp(m.price)}</b></label>`
+    const disabled = id === 'collect' ? !canCollect : !canShip
+    return `<label class="gu-radio gu-ship${disabled ? ' is-disabled' : ''}"><input type="radio" name="deliveryMethod" value="${id}" data-price="${m.price}" ${method === id ? 'checked' : ''} ${disabled ? 'disabled' : ''}><span class="gu-ship-name"><b>${esc(m.name)}</b> <span class="gu-fine">${esc(m.detail)}</span>${disabled ? `<span class="gu-fine gu-unavailable">${id!=='collect'?'Shipping unavailable':preorderInBag?'Not available for pre-order items':'Not available for these items'}</span>` : ''}</span><b class="gu-ship-price">${gbp(m.price)}</b></label>`
   }).join('')
   return `<div class="gu-checkout">
   <form method="post" action="${base}/checkout/delivery" class="gu-co-form" novalidate>
@@ -398,9 +418,10 @@ export function deliveryPage({ base, t, email, guest, preorderInBag, values = {}
       <p class="gu-fine">We'll only use your mobile number for delivery updates.</p>
     </section>
     <section class="gu-co-section"><h2>Delivery method</h2>
-      ${preorderInBag ? `<p class="gu-preorder-info">${ICON.info} Your bag contains a pre-order item. Your whole order will be held and dispatched via Express Delivery the day before the launch date (${DISPATCH_TEXT}).</p>` : ''}
+      ${benchmarkCollection ? '<p class="gu-notice">Benchmark scenario: collection for this pre-order is an authored local simulation. Collection stock is available only at GAME London - Sports Direct, Oxford Street.</p>' : preorderInBag ? `<p class="gu-preorder-info">${ICON.info} Your bag contains a pre-order item. Your whole order will be held and dispatched via Express Delivery the day before the launch date (${DISPATCH_TEXT}).</p>` : ''}
       ${radios}
-      <div class="gu-field gu-collect-store"><label for="collectStore">Collection store</label><select id="collectStore" name="collectStore" ${preorderInBag ? 'disabled' : ''}><option value="">Select a store</option>${COLLECT_STORES.map(s => `<option value="${esc(s)}" ${values.collectStore === s ? 'selected' : ''}>${esc(s)}</option>`).join('')}</select>${errors.collectStore ? `<span class="gu-error">${esc(errors.collectStore)}</span>` : ''}</div>
+      <div class="gu-field gu-collect-store"><label for="collectStore">Collection store</label><select id="collectStore" name="collectStore" ${!canCollect ? 'disabled' : ''}><option value="">Select a store</option>${COLLECT_STORES.map(s => `<option value="${esc(s)}" ${values.collectStore === s ? 'selected' : ''} ${benchmarkCollection&&s!==BENCHMARK_COLLECT_STORE?'disabled':''}>${esc(s)}${benchmarkCollection&&s!==BENCHMARK_COLLECT_STORE?' — Unavailable':''}</option>`).join('')}</select>${errors.collectStore ? `<span class="gu-error">${esc(errors.collectStore)}</span>` : ''}
+      ${benchmarkCollection?`<h3>Pickup person</h3><p class="gu-fine">Name the person authorized to collect this order.</p><div class="gu-2col">${input('pickupFirstName','Pickup first name',{required:true})}${input('pickupLastName','Pickup last name',{required:true})}</div>${input('pickupEmail','Pickup email',{type:'email',required:true})}${input('pickupPhone','Pickup phone',{type:'tel',required:true})}`:''}</div>
       ${errors.deliveryMethod ? `<span class="gu-error">${esc(errors.deliveryMethod)}</span>` : ''}
     </section>
     <button class="gu-btn gu-btn-block" type="submit">Continue to payment</button>
@@ -422,7 +443,7 @@ export function deliveryPage({ base, t, email, guest, preorderInBag, values = {}
 </script>`
 }
 
-export function paymentPage({ base, t, delivery, preorderInBag, values = {}, errors = {} }) {
+export function paymentPage({ base, t, delivery, preorderInBag, values = {}, errors = {}, reviewToken = '' }) {
   const input = fieldFactory(values, errors)
   const pm = values.paymentMethod || 'card'
   const m = DELIVERY_METHODS[delivery.deliveryMethod]
@@ -430,24 +451,24 @@ export function paymentPage({ base, t, delivery, preorderInBag, values = {}, err
   // ASSUMPTION: Apple Pay and Frasers Plus are shown (GAME accepts both) but cannot be used here;
   // the research does not say whether Frasers Plus takes pre-orders, so it is marked unavailable.
   return `<div class="gu-checkout">
-  <form method="post" action="${base}/checkout/payment" class="gu-co-form" novalidate>
+  <form method="post" action="${base}/checkout/payment" class="gu-co-form" novalidate><input type="hidden" name="review_token" value="${esc(reviewToken)}">
     ${steps(2)}
     <h1>Payment</h1>
     ${errorSummary(errors)}
     <section class="gu-co-section"><h2>How would you like to pay?</h2>
       <div class="gu-paytabs">
         <label class="gu-paytab"><input type="radio" name="paymentMethod" value="card" ${pm === 'card' ? 'checked' : ''}><span><b>Credit/Debit card</b><small>VISA, VISA Debit, Mastercard, Maestro</small></span></label>
-        <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="applepay" disabled><span><b>Apple Pay</b><small>Available in Safari on Apple devices</small></span></label>
+        <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="applepay" disabled><span><b>Apple Pay</b><small>Unavailable in this shop</small></span></label>
         <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="frasersplus" disabled><span><b>Frasers Plus</b><small>Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable). Credit subject to status. Not available for this order.</small></span></label>
-        <label class="gu-paytab${preorderInBag ? ' is-disabled' : ''}"><input type="radio" name="paymentMethod" value="paypal" ${pm === 'paypal' ? 'checked' : ''} ${preorderInBag ? 'disabled' : ''}><span><b>PayPal</b><small>${preorderInBag ? 'PayPal is not available for pre-orders.' : 'You will be redirected to PayPal to complete your payment.'}</small></span></label>
+        <label class="gu-paytab${preorderInBag ? ' is-disabled' : ''}"><input type="radio" name="paymentMethod" value="paypal" ${pm === 'paypal' ? 'checked' : ''} ${preorderInBag ? 'disabled' : ''}><span><b>PayPal</b><small>${preorderInBag ? 'PayPal is not available for pre-orders.' : 'Recorded locally; no PayPal account is connected.'}</small></span></label>
       </div>
       <div class="gu-paypanel" data-panel="card">
         ${input('cardNumber', 'Card number', { extra: 'autocomplete="cc-number" inputmode="numeric" placeholder="0000 0000 0000 0000"', required: true })}
         <div class="gu-2col">${input('expiry', 'Expiry date (MM/YY)', { extra: 'autocomplete="cc-exp" placeholder="MM/YY"', required: true })}${input('cvv', 'Security code (CVV)', { extra: 'autocomplete="cc-csc" inputmode="numeric" maxlength="4"', required: true })}</div>
         ${input('nameOnCard', 'Name on card', { extra: 'autocomplete="cc-name"', required: true })}
-        <p class="gu-fine">${ICON.lock} Your card details are encrypted. 3D Secure payment authentication may be requested by your bank.</p>
+        <p class="gu-fine">${ICON.lock} Use test card details only. No bank authorisation or 3D Secure authentication is performed.</p>
       </div>
-      <div class="gu-paypanel" data-panel="paypal"><p>You will be redirected to PayPal to complete your payment.</p></div>
+      <div class="gu-paypanel" data-panel="paypal"><p>This choice records a local PayPal payment selection. No PayPal sign-in, redirect or payment takes place.</p></div>
     </section>
     <section class="gu-co-section"><h2>Billing address</h2>
       <label class="gu-check"><input type="checkbox" id="billingSame" name="billingSame" value="1" ${values.billingSame === undefined || values.billingSame ? 'checked' : ''}> Billing address same as delivery address</label>
@@ -461,9 +482,9 @@ export function paymentPage({ base, t, delivery, preorderInBag, values = {}, err
       <details ${values.giftCard || errors.giftCard ? 'open' : ''}><summary class="gu-link">use Gift Card/eVoucher</summary>${input('giftCard', 'Gift Card / eVoucher / Credit Note code')}</details>
       ${input('promoCode', 'Promo code')}
     </section>
-    <p class="gu-fine">On receipt of your order, an authorisation will be created on your account. This will show on your bank statement as a reservation of funds which allocates the money to your order but will not be taken until your order has been picked and processed. Pre-orders are held and dispatched via Express Delivery the day before the launch date.</p>
+    <p class="gu-fine">On receipt of your order, an authorisation will be created on your account. This will show on your bank statement as a reservation of funds which allocates the money to your order but will not be taken until your order has been picked and processed.${preorderInBag?' Pre-orders are held and dispatched via Express Delivery the day before the launch date.':''}</p>
     <button class="gu-btn gu-btn-block" type="submit">Pay now</button>
-    <p class="gu-fine">By clicking Pay now you agree to GAME's Terms &amp; Conditions and Privacy Policy. It is not possible to amend a pre-order once placed.</p>
+    <p class="gu-fine">By clicking Pay now you agree to GAME's Terms &amp; Conditions and Privacy Policy.${preorderInBag?' It is not possible to amend a pre-order once placed.':''}</p>
   </form>
   <aside class="gu-summary">
     <h2>Order summary</h2>${summaryLines(t)}
@@ -471,6 +492,7 @@ export function paymentPage({ base, t, delivery, preorderInBag, values = {}, err
     <address>${esc([a.title, a.firstName, a.lastName].filter(Boolean).join(' '))}<br>${esc(a.addressLine1)}${a.addressLine2 ? `<br>${esc(a.addressLine2)}` : ''}<br>${esc(a.town)}${a.county ? `, ${esc(a.county)}` : ''}<br>${esc(a.postcode)}<br>United Kingdom<br>${esc(a.mobile)}</address>
     <h3>Delivery method</h3>
     <p>${esc(m.name)} &middot; ${esc(m.eta)}${a.collectStore ? `<br><span class="gu-fine">${esc(a.collectStore)}</span>` : ''}</p>
+    ${a.pickupFirstName?`<h3>Pickup person</h3><p>${esc(a.pickupFirstName+' '+a.pickupLastName)}<br>${esc(a.pickupEmail)}<br>${esc(a.pickupPhone)}</p>`:''}
     <div class="gu-row"><span>Subtotal</span><span>${gbp(t.subtotal)}</span></div>
     <div class="gu-row"><span>Delivery</span><span>${gbp(t.delivery)}</span></div>
     <div class="gu-row gu-total"><span>Total</span><span>${gbp(t.total)}</span></div>
@@ -500,12 +522,14 @@ export function completePage({ base, order }) {
   <div class="gu-confirm-grid">
     <div>
       <h2>Items ordered</h2>
-      <table class="gu-table"><thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead><tbody>${order.items.map(it => {
-        const p = byId(it.sku)
-        return `<tr><td>${p ? `<div class="gu-brand">${esc(p.brand)}</div>` : ''}${esc(it.title)}${p ? `<div class="gu-fine">Colour: ${esc(p.swatch)} &middot; Size: One Size &middot; Product code: ${esc(p.id)}</div>` : ''}</td><td>${it.qty}</td><td>${gbp(it.unit_price * it.qty)}</td></tr>`
+      <table class="gu-table"><thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead><tbody>${order.items.map((it,index) => {
+        const source = byId(it.sku)
+        const chosen = order.meta.options?.[index]
+        const p = selectedProduct(source,chosen?.option) || source
+        return `<tr><td>${p ? `<div class="gu-brand">${esc(p.brand)}</div>` : ''}${esc(it.title)}${p ? `<div class="gu-fine">${esc(p.optionLabel||(p.kind==='game'?'Colour':'Selected'))}: ${esc(p.swatch)}${p.kind==='game'?' &middot; Size: One Size':''} &middot; Product code: ${esc(p.id)}</div>` : ''}</td><td>${it.qty}</td><td>${gbp(it.unit_price * it.qty)}</td></tr>`
       }).join('')}</tbody></table>
-      <h2>Delivery address</h2>
-      <address>${esc([a.title, a.first_name, a.last_name].filter(Boolean).join(' '))}<br>${esc(a.line1)}${a.line2 ? `<br>${esc(a.line2)}` : ''}<br>${esc(a.city)}${a.state ? `, ${esc(a.state)}` : ''}<br>${esc(a.postal_code)}<br>United Kingdom<br>${esc(a.phone)}</address>
+      ${a?`<h2>Delivery address</h2><address>${esc([a.title, a.first_name, a.last_name].filter(Boolean).join(' '))}<br>${esc(a.line1)}${a.line2 ? `<br>${esc(a.line2)}` : ''}<br>${esc(a.city)}${a.state ? `, ${esc(a.state)}` : ''}<br>${esc(a.postal_code)}<br>United Kingdom<br>${esc(a.phone)}</address>`:''}
+      ${order.meta.pickup_person?`<h2>Pickup person</h2><p>${esc(order.meta.pickup_person.first_name+' '+order.meta.pickup_person.last_name)}<br>${esc(order.meta.pickup_person.email)}<br>${esc(order.meta.pickup_person.phone)}</p>`:''}
       <h2>Delivery method</h2>
       <p>${esc(m.name)} &middot; ${esc(m.eta)} &middot; ${gbp(order.totals.shipping)}${order.fulfillment.store_location ? `<br>Collect from: ${esc(order.fulfillment.store_location)}` : ''}</p>
       <h2>Payment</h2>
@@ -517,16 +541,10 @@ export function completePage({ base, order }) {
       <div class="gu-row"><span>Discount</span><span>${gbp(order.totals.discount ?? 0)}</span></div>
       <div class="gu-row gu-total"><span>Total</span><span>${gbp(order.totals.total)}</span></div>
       <p class="gu-fine">Prices include VAT.</p>
-      <a class="gu-btn gu-btn-block" href="${base}/">Continue shopping</a>
+      <a class="gu-btn gu-btn-block" href="${base}/">Continue shopping</a><p><a href="${base}/orders/${order.id}">View order details and support</a></p>
     </aside>
   </div>
 </div>`
-}
-
-export function accountPage({ base, user, orders }) {
-  return `<div class="gu-simple"><h1>My Account</h1><p>Hello, ${esc(user.first_name)} &middot; ${esc(user.email)} &middot; <a href="${base}/logout">Sign out</a></p>
-  <h2>Order history</h2>
-  ${orders.length ? `<table class="gu-table"><thead><tr><th>Order number</th><th>Date</th><th>Items</th><th>Total</th></tr></thead><tbody>${orders.map(o => `<tr><td>${esc(o.order_number)}</td><td>${new Date(o.created_at).toLocaleDateString('en-GB')}</td><td>${o.items.map(i => esc(i.title)).join('<br>')}</td><td>${gbp(o.totals.total)}</td></tr>`).join('')}</tbody></table>` : '<p>You have no orders yet.</p>'}</div>`
 }
 
 export function notFoundPage({ base }) {

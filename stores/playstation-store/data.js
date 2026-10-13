@@ -1,5 +1,9 @@
+import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
+import { CATALOG_EVIDENCE } from './catalog-evidence.js'
+import { expandCatalog } from './expand500.js'
+import { enrichCatalogue, refineProducts } from './catalogue.js'
 // Listings as they appear on store.playstation.com (research/playstation-store.md, 2026-09-29/30).
-// Digital only, PS5 only. Product ids follow {publisherCode}-{titleId}_00-{sku}.
+// Native digital records retain their licenses; expanded physical offers ship separately.
 
 export const CONCEPT_ID = '10000730'
 
@@ -13,11 +17,14 @@ export const ACCOUNT_ADDRESS = { city: 'Miami', state: 'FL', postal_code: '33139
 // selected card / payment service ("your wallet funds are used first" applies to the $0.00).
 export const WALLET_BALANCE = 0
 
+// Release is localized to America/Los_Angeles; public UTC metadata is November 19.
 export const RELEASE = '11/18/2026'
 export const UNLOCK = '11/18/2026 09:00 PM PST'
 // ASSUMPTION: "Expected download date" in the drawer is the 7-day pre-load start.
 export const PRELOAD = '11/11/2026 09:00 PM PST'
 export const PROMO_LINE = '1-month GTA+ subscription with pre-order. Auto-renews. Check Game and Legal Info* below.'
+
+export const RATING_DESCRIPTORS = 'Blood and Gore, Intense Violence, Mature Humor, Nudity, Strong Language, Strong Sexual Content, Use of Drugs and Alcohol'
 
 export const COMPAT = ['In-game purchases optional', 'Offline play enabled', '1 player', 'Remote Play supported', 'PS5 Version', 'Vibration function and trigger effect supported (DualSense wireless controller)', 'PS5 Pro Enhanced']
 
@@ -40,7 +47,7 @@ export const LEGAL_TEXT = [
 ]
 
 // cta: 'preorder' (BUY_NOW drawer), 'cart' (regular Add to Cart), 'unavailable' (no button).
-export const PRODUCTS = [
+const BASE_PRODUCTS = [
   {
     id: 'EP1004-PPSA01547_00-GTAVISTANDARD001', kind: 'game', platform: 'ps5', edition: 'standard', format: 'digital',
     title: 'Grand Theft Auto VI', editionName: 'Standard Edition', type: 'PRE-ORDER', cta: 'preorder',
@@ -123,9 +130,21 @@ export const PRODUCTS = [
     art: '/playstation-store/static/art/shark-card.svg',
     keywords: 'gta grand theft auto online shark cash card great white gta$ virtual currency rockstar',
   },
+  // Additional catalog fixtures: products exist on the official store; prices, copy and art are local snapshots.
+  { id:'BENCH-ASTRO-BOT',kind:'other',title:'ASTRO BOT',type:'FULL GAME',cta:'cart',price:59.99,publisher:'Sony Interactive Entertainment',release:'9/6/2024',chips:['PS5'],genres:'Adventure',bullets:['A single-player platform adventure','DualSense wireless controller features'],art:'/playstation-store/static/astro-bot.svg',keywords:'astro bot platform adventure family ps5',rating:'E10+' },
+  { id:'UP9000-PPSA01317_00-GT7STD0000000PS5',kind:'other',title:'Gran Turismo 7',type:'FULL GAME',cta:'cart',price:69.99,publisher:'Sony Interactive Entertainment',release:'3/4/2022',chips:['PS5','PS4'],genres:'Driving/Racing',bullets:['Race and collect a wide range of cars','Online features require an internet connection'],art:'/playstation-store/static/gran-turismo.svg',keywords:'gran turismo 7 driving racing cars ps5 ps4',rating:'E' },
+  { id:'UP9000-PPSA01413_00-HELLDIVERS200000',kind:'other',title:'HELLDIVERS 2',type:'FULL GAME',cta:'cart',price:39.99,publisher:'Sony Interactive Entertainment',release:'2/8/2024',chips:['PS5'],genres:'Shooter',bullets:['Cooperative online action','Online multiplayer requires PlayStation Plus'],art:'/playstation-store/static/helldivers.svg',keywords:'helldivers 2 shooter multiplayer ps5',rating:'M' },
 ]
 
-export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
+const catalog = enrichCatalogue(BASE_PRODUCTS)
+export const PRODUCTS = applyCatalogPolicy('playstation-store', fixtureCatalog ? expandCatalog(catalog) : catalog, CATALOG_EVIDENCE)
+if (!fixtureCatalog) for (const p of PRODUCTS) {
+  p.catalogType = p.contentType === 'base-game' ? 'game' : 'accessory'
+  p.catalogPlatform = 'ps5'
+  p.accessorySubtype = p.catalogType === 'accessory' ? 'digital-add-on' : null
+  for (const key of ['ratingCount','distribution','score','bestRank','downloadRank']) delete p[key]
+}
+export const byId = (id) => typeof id === 'string' ? PRODUCTS.find(p => p.id === id) ?? null : null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 export const featured = () => byId('EP1004-PPSA01547_00-GTAVIULTIMATE001') // the concept page currently features the Ultimate Edition
 export const productPath = (base, p) => `${base}/en-us/product/${p.id}`
@@ -161,3 +180,5 @@ export function totals(lines) {
   const wallet = Math.min(WALLET_BALANCE, total)
   return { lines, count, subtotal, tax, total, wallet, remainder: round(total - wallet) }
 }
+
+export const filterProducts = refineProducts

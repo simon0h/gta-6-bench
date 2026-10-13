@@ -1,8 +1,14 @@
+import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
+import { productImage, productGallery } from '../../lib/product-assets.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
-import { productPath, STATES, LOCATION, ARRIVAL, PREORDER_PRICE_GUARANTEE, WALMART_PLUS } from './data.js'
+import { productPath, STATES, LOCATION, arrivalFor, arrivalSummary, arrivalPhrase, optionText, lineKey, PREORDER_PRICE_GUARANTEE, WALMART_PLUS } from './data.js'
+
+import { DEPARTMENTS, SELLERS, departmentPath, categorySlug } from './catalog.js'
+import * as Browse from './browse.js'
 
 const NAME = 'Walmart'
-const NAV = ['Rollbacks & More', 'Restaurants', 'Halloween', 'Get it Fast', 'Pharmacy', 'Walmart+', 'More']
+const NAV = [['Rollbacks & More','/shop/savings'],['Fall favorites','/shop/fall-home'],['Get it Fast','/shop/get-it-fast'],['Pharmacy','/cp/pharmacy/5431'],['Walmart+','/plus'],['More','/departments']]
 
 // Inline icons only (no external assets). The spark is six rounded yellow spokes, not Walmart's logo file.
 const ICON = {
@@ -21,38 +27,40 @@ const loginHref = (base, state) => `${base}/account/login${state ? `?state=${enc
 const SHOW_HIDE_JS = `<script>document.querySelectorAll('[data-toggle]').forEach(function(b){b.addEventListener('click',function(){var i=document.getElementById(b.getAttribute('data-toggle'));var show=i.type==='password';i.type=show?'text':'password';b.textContent=show?'Hide':'Show'})})</script>`
 
 // ---- layout ----
-export function layout({ base, title, body, t, user = null, variant = 'store', q = '' }) {
-  const header = variant === 'store' ? storeHeader({ base, t, user, q }) : variant === 'checkout' ? checkoutHeader({ base }) : identityHeader({ base })
-  const footer = variant === 'identity' ? identityFooter() : storeFooter()
+export function layout({ base, title, body, t, user = null, variant = 'store', q = '', location = LOCATION }) {
+  const header = variant === 'store' ? storeHeader({ base, t, user, q, location }) : variant === 'checkout' ? checkoutHeader({ base }) : identityHeader({ base })
+  const footer = variant === 'identity' ? identityFooter() : storeFooter(base)
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
 <link rel="stylesheet" href="${base}/static/style.css"></head>
 <body class="wm-body-${esc(variant)}">
 ${header}
-<main class="wm-main">${body}</main>
+<a class="wm-skip" href="#maincontent">Skip to Main Content</a>
+<main class="wm-main" id="maincontent" tabindex="-1">${body}</main>
 ${footer}
-${variant === 'store' ? `<a class="wm-sparky" href="#" aria-label="Sparky, Walmart's AI assistant: Ask me anything">${ICON.spark}<span>Ask me anything</span></a>` : ''}
+${variant === 'store' ? `<details class="wm-assistant"><summary class="wm-sparky">${ICON.spark}<span>Shopping help</span></summary><div class="wm-assistant-panel"><h2>Shopping help</h2><form action="${base}/search" method="get"><label for="wm-help-search">Find a product</label><input id="wm-help-search" name="q" type="search" placeholder="Search Walmart"><button class="wm-pill" type="submit">Search</button></form><a href="${base}/help">Preorder &amp; delivery questions</a><a href="${base}/account">Find your purchases</a></div></details>` : ''}
+<script src="${base}/static/storefront.js" defer></script>
 </body></html>`
 }
 
-function storeHeader({ base, t, user, q }) {
+function storeHeader({ base, t, user, q, location }) {
   return `<header class="wm-header">
   <div class="wm-header-top">
     <a class="wm-logo" href="${base}/" aria-label="Walmart Homepage">${ICON.spark}</a>
-    <a class="wm-loc" href="${base}/cart#pickup-delivery" aria-label="Pickup or delivery? ${esc(LOCATION.city)}, ${esc(LOCATION.zip)} &bull; ${esc(LOCATION.store)}">${ICON.pin}<span><b>Pickup or delivery?</b><small>${esc(LOCATION.city)}, ${esc(LOCATION.zip)} &bull; ${esc(LOCATION.store)}</small></span></a>
+    <details class="wm-header-menu wm-location-menu"><summary class="wm-loc" aria-label="Shipping location: ${esc(location.city)}, ${esc(location.zip)}">${ICON.pin}<span><b>How do you want your items?</b><small>${esc(location.city)}, ${esc(location.zip)} &bull; ${esc(location.store)}</small></span><span aria-hidden="true">⌄</span></summary><div class="wm-header-panel"><h2>Choose how you shop</h2><div class="wm-location-methods"><span>${ICON.truck}<b>Shipping</b><small>Available</small></span><span><b>Pickup</b><small>Unavailable</small></span><span><b>Delivery</b><small>Unavailable</small></span></div><p>Browse shipping options for your ZIP code. Review your full address at checkout.</p><form action="${base}/location" method="post"><label for="header-zip">ZIP code</label><input id="header-zip" name="zip" value="${esc(location.zip)}" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required><input type="hidden" name="method" value="shipping"><button class="wm-pill wm-pill-block">Save ZIP code</button></form><a href="${base}/store-finder">Choose a preferred sample store</a></div></details>
     <form class="wm-search" action="${base}/search" method="get" role="search">
-      <input type="search" name="q" placeholder="Search Walmart" aria-label="Search Walmart" value="${esc(q)}">
+      <input type="search" name="q" placeholder="Search Walmart" aria-label="Search Walmart" value="${esc(q)}" list="wm-search-suggestions"><datalist id="wm-search-suggestions">${["milk","coffee","headphones","storage","pet food","gta 6"].map(v=>`<option value="${v}">`).join('')}</datalist>
       <button type="submit" aria-label="Search icon">${ICON.search}</button>
     </form>
-    <a class="wm-util" href="${user ? `${base}/account` : `${base}/account/login`}" aria-label="Reorder My Items">${ICON.heart}<span><small>Reorder</small><b>My Items</b></span></a>
-    <a class="wm-util" href="${user ? `${base}/account` : `${base}/account/login`}" aria-label="${user ? `Hi, ${esc(user.first_name || 'there')} Account` : 'Sign In Account'}">${ICON.user}<span><small>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Sign In'}</small><b>Account</b></span></a>
+    <details class="wm-header-menu wm-my-items-menu"><summary class="wm-util" aria-label="Reorder My Items">${ICON.heart}<span><small>Reorder</small><b>My Items</b></span></summary><div class="wm-header-panel"><h2>Your everyday favorites</h2><a href="${base}/my-items">Reorder</a><a href="${base}/lists">Lists</a><a href="${base}/my-items/recent">Recently viewed</a><a href="${base}/registries">Registries</a></div></details>
+    <details class="wm-header-menu wm-account-menu"><summary class="wm-util" aria-label="${user ? `Hi, ${esc(user.first_name || 'there')} Account` : 'Sign In Account'}">${ICON.user}<span><small>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Sign In'}</small><b>Account</b></span></summary><div class="wm-header-panel"><h2>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Welcome to Walmart'}</h2><a class="wm-pill wm-pill-block" href="${user ? `${base}/account` : `${base}/account/login`}">${user?'Your account':'Sign in or create account'}</a><a href="${base}/orders">Purchase history</a><a href="${base}/account/addresses">Address book</a><a href="${base}/account/plus">Walmart+ membership</a><a href="${base}/help">Help center</a>${user?`<a href="${base}/account/logout">Sign out</a>`:''}</div></details>
     <a class="wm-cart-link" href="${base}/cart" aria-label="Cart contains ${t.count} item${t.count === 1 ? '' : 's'}, total ${money(t.subtotal)}">${ICON.cart}<span class="wm-cart-count">${t.count}</span><small>${money(t.subtotal)}</small></a>
   </div>
   <nav class="wm-header-nav" aria-label="Departments and services">
-    <button type="button" class="wm-nav-dd" aria-haspopup="true">&#9776; Departments &#9662;</button>
-    <button type="button" class="wm-nav-dd" aria-haspopup="true">&#9881; Services &#9662;</button>
-    ${NAV.map(n => `<a href="${base}/search?q=${encodeURIComponent(n)}">${esc(n)}</a>`).join('')}
+    <details class="wm-native-menu wm-header-menu wm-departments-menu"><summary class="wm-nav-dd">&#9776; Departments &#9662;</summary><div class="wm-header-panel wm-mega-panel"><div class="wm-menu-heading"><h2>Shop by department</h2><a href="${base}/departments">All departments</a></div><div class="wm-mega-grid">${DEPARTMENTS.map(d=>`<section><a class="wm-menu-dept" href="${departmentPath(base,d)}">${esc(d.name)}</a>${d.categories.map(c=>`<a href="${base}/browse/${categorySlug(c)}?department=${d.key}">${esc(c)}</a>`).join('')}</section>`).join('')}</div></div></details>
+    <details class="wm-native-menu wm-header-menu wm-services-menu"><summary class="wm-nav-dd">&#9881; Services &#9662;</summary><div class="wm-header-panel wm-service-menu-panel"><h2>Services for your everyday</h2><a href="${base}/services">All services</a><a href="${base}/cp/pharmacy/5431">Pharmacy</a><a href="${base}/services/auto-care">Auto Care Center</a><a href="${base}/services/photo">Photo Center</a><a href="${base}/services/financial">Financial services</a><a href="${base}/store-finder">Store finder</a><a href="${base}/help">Help center</a></div></details>
+    ${NAV.map(([n,path]) => `<a href="${base}${path}">${esc(n)}</a>`).join('')}
   </nav>
 </header>`
 }
@@ -65,11 +73,11 @@ function identityHeader({ base }) {
   return `<header class="wm-id-header"><a class="wm-wordmark" href="${base}/" aria-label="Walmart">${ICON.spark}<span>Walmart</span></a></header>`
 }
 
-function storeFooter() {
-  const links = ['All Departments', 'Store Directory', 'Careers', 'Our Company', 'Sell on Walmart.com', 'Help', 'Product Recalls', 'Accessibility', 'Tax Exempt Program', 'Get the Walmart App', 'Sign-up for Email', 'Safety Data Sheet', 'Terms of Use', 'Privacy Notice', 'California Supply Chain Act', 'Your Privacy Choices', 'Notice at Collection', 'AdChoices', 'Consumer Health Data Privacy Notices', 'Brand Shop Directory', 'Pharmacy', 'Walmart Business', '#IYWYK', 'Delete Account']
+function storeFooter(base) {
+  const links = [['All Departments','/departments'],['Store Directory','/store-directory'],['Services','/services'],['Help','/help'],['Account','/account'],['My Items','/my-items'],['Lists','/lists'],['Purchase history','/orders'],['Pharmacy','/cp/pharmacy/5431'],['Walmart+','/plus']]
   return `<footer class="wm-footer">
-  <div class="wm-feedback">We&rsquo;d love to hear what you think! <a href="#">Give feedback</a></div>
-  <nav class="wm-footer-links" aria-label="Footer">${links.map(l => `<a href="#">${esc(l)}</a>`).join('')}</nav>
+  <div class="wm-feedback">We&rsquo;d love to hear what you think! <a href="${base}/help/contact">Give feedback</a></div>
+  <nav class="wm-footer-links" aria-label="Footer">${links.map(([l,path]) => `<a href="${base}${path}">${esc(l)}</a>`).join('')}</nav>
   <p class="wm-copy">&copy; 2026 Walmart. All Rights Reserved.</p>
   ${disclaimer(NAME)}
 </footer>`
@@ -77,7 +85,7 @@ function storeFooter() {
 
 function identityFooter() {
   const links = ['Give feedback', 'Terms of Use', 'Privacy Notice', 'California Supply Chain Act', 'Your Privacy Choices', 'Customer Privacy Center', 'Notice at Collection']
-  return `<footer class="wm-id-footer"><p>&copy; 2026 Walmart. All Rights Reserved.</p><nav aria-label="Legal">${links.map(l => `<a href="#">${esc(l)}</a>`).join('')}</nav>${disclaimer(NAME)}</footer>`
+  return `<footer class="wm-id-footer"><p>&copy; 2026 Walmart. All Rights Reserved.</p><nav aria-label="Legal">${links.map(l => `<span class="wm-static">${esc(l)}</span>`).join('')}</nav>${disclaimer(NAME)}</footer>`
 }
 
 // ---- shared pieces ----
@@ -101,27 +109,30 @@ function ratingLine(p) {
 }
 
 // Product tile: badge ribbon, square image, heart, pill CTA, price, title, stars, Save with W+, fulfillment line, ESRB.
-function tile(base, p, { from = 'search', longCta = false } = {}) {
+export function tile(base, p, { from = 'search', longCta = false } = {}) {
   const href = productPath(base, p, from === 'search')
-  const cta = longCta && p.cta === 'Add' ? 'Add to cart' : p.cta
+  const cta = p.stock === 0 ? 'Out of stock' : p.variants ? 'Options' : longCta && p.cta === 'Add' ? 'Add to cart' : p.cta
   return `<article class="wm-tile">
   ${p.tileBadge ? `<span class="wm-badge">${esc(p.tileBadge)}</span>` : ''}
   <div class="wm-tile-media">
-    <a href="${href}" tabindex="-1"><img src="${p.art}" alt=""></a>
-    <a class="wm-heart" href="${base}/account/login" aria-label="Sign in to add to Favorites list">${ICON.heart}</a>
-    <form method="post" action="${base}/cart/add" class="wm-tile-cta"><input type="hidden" name="pid" value="${p.id}"><button type="submit" class="wm-pill wm-pill-sm" aria-label="${esc(cta)} ${esc(p.title)}">${esc(cta)}</button></form>
+    <a href="${href}" tabindex="-1">${productArt(p)}</a>
+    <a class="wm-heart" href="${base}/lists/add?pid=${p.id}${p.variantId?`&amp;variant=${encodeURIComponent(p.variantId)}`:''}" aria-label="Add ${esc(p.title)} to Favorites or a list">${ICON.heart}</a>
+    ${p.variants || p.stock===0 ? `<a class="wm-pill wm-pill-sm wm-tile-cta" href="${href}" aria-label="${esc(cta)} ${esc(p.title)}">${esc(cta)}</a>` : `<form method="post" action="${base}/cart/add" class="wm-tile-cta"><input type="hidden" name="pid" value="${p.id}"><button type="submit" class="wm-pill wm-pill-sm" aria-label="${esc(cta)} ${esc(p.title)}">${esc(cta)}</button></form>`}
   </div>
-  ${tilePrice(p)}
+  ${p.variants ? `<div class="wm-fine">From ${money(p.price)} · ${p.variants.length} options</div>` : ''}${tilePrice(p)}
   <h3 class="wm-tile-title"><a href="${href}">${esc(p.title)}</a></h3>
   ${ratingLine(p)}
   <div class="wm-save-wplus">Save with ${WPLUS}</div>
-  <div class="wm-tile-ful">${p.preorder ? '<b>Preorder</b><br>' : ''}${esc(p.shippingText)}</div>
+  <div class="wm-tile-ful">${p.preorder ? '<b>Preorder</b><br>' : ''}${esc(p.stock===0?'Currently unavailable':p.shippingText)}</div>
   ${p.esrb ? `<div class="wm-esrb">${esc(p.esrb)}</div>` : ''}
 </article>`
 }
 
+const selectedItemPath = (base,p) => `${productPath(base,p)}${p.variantId?`?variant=${encodeURIComponent(p.variantId)}`:''}`
+function productArt(p,alt=p.title) { return productImage('walmart',p,{alt}) }
+function lineInput(p) {return `<input type="hidden" name="pid" value="${p.id}"><input type="hidden" name="line" value="${esc(lineKey(p.id,p.variantId))}">`}
 function stepper(base, p, qty, next) {
-  return `<form method="post" action="${base}/cart/update" class="wm-stepper"><input type="hidden" name="pid" value="${p.id}"><input type="hidden" name="next" value="${esc(next)}"><button type="submit" name="action" value="dec" aria-label="Decrease quantity">&minus;</button><span aria-live="polite">${qty}</span><button type="submit" name="action" value="inc" aria-label="Increase quantity">+</button></form>`
+  return `<form method="post" action="${base}/cart/update" class="wm-stepper">${lineInput(p)}<input type="hidden" name="next" value="${esc(next)}"><button type="submit" name="action" value="dec" aria-label="Decrease quantity">&minus;</button><span aria-live="polite">${qty}</span><button type="submit" name="action" value="inc" aria-label="Increase quantity">+</button></form>`
 }
 
 function field({ name, label, type = 'text', values = {}, errors = {}, extra = '', id = name }) {
@@ -153,183 +164,138 @@ function errorSummary(errors = {}) {
 }
 
 // ---- browse ----
-export function homePage({ base, products }) {
-  const game = products.filter(p => p.kind === 'game')
-  const rest = products.filter(p => p.kind !== 'game' && !p.sponsored)
-  return `<section class="wm-hero-grid">
-  <div class="wm-hero wm-hero-gta">
-    <p class="wm-eyebrow">Preorder now</p>
-    <h1>Get Grand Theft Auto VI ready</h1>
-    <p>Everything you need to upgrade. Code in Box, delivers 11/12/26, playable 11/19/26. Free shipping, arrives by release date Nov 12.</p>
-    <a class="wm-pill wm-pill-white" href="${base}/search?q=grand+theft+auto+vi">Shop now</a>
-  </div>
-  <div class="wm-hero wm-hero-plus"><p class="wm-eyebrow">${WPLUS}</p><h2>Try Walmart+ for $1</h2><p>30 days of free delivery, free shipping with no order minimum &amp; more. T&amp;C apply.</p><a class="wm-pill wm-pill-white" href="#">Claim offer now</a></div>
-  <div class="wm-hero wm-hero-onepay"><p class="wm-eyebrow">OnePay</p><h2>CashRewards Card</h2><p>Earn unlimited 3% cash back at Walmart and 1.5% back on all other purchases.</p><a class="wm-pill wm-pill-white" href="#">Learn more</a></div>
-</section>
-<section><div class="wm-section-head"><h2>Preorder Grand Theft Auto VI</h2><a href="${base}/search?q=gta+vi">View all</a></div><div class="wm-grid">${game.map(p => tile(base, p, { from: 'home' })).join('')}</div></section>
-<section><div class="wm-section-head"><h2>Flash Deals &amp; more in Video Games</h2><a href="${base}/search?q=video+games">View all</a></div><div class="wm-grid">${rest.map(p => tile(base, p, { from: 'home' })).join('')}</div></section>`
+export function homePage(args) {return Browse.homePage({...args,tile})}
+export function searchPage(args) {return Browse.listingPage({...args,source:args.products,tile})}
+
+export function reviewsSection(p, {base='/walmart',rating='',sort='relevant'}={}) {
+  const all=p.reviewEntries ?? []
+  const shown=all.filter(r=>!rating || String(r.stars)===rating).sort((a,b)=>sort==='newest'?b.date.localeCompare(a.date):sort==='highest'?b.stars-a.stars:sort==='lowest'?a.stars-b.stars:0)
+  return `<section class="wm-reviews" id="reviews"><h2>Customer ratings &amp; reviews</h2><div class="wm-reviews-sum"><div class="wm-rev-score"><b>${p.rating ?? 'No ratings yet'}</b>${p.rating ? ` out of 5<br>${starGlyphs(p.rating)}<br><small>(${p.ratings} ratings | ${p.reviews} reviews)</small>`:''}</div><p>Explore the ratings and review details for this item.</p></div><form action="${base}/reviews/product/${p.id}" class="wm-review-filters"><label for="review-rating">Star rating</label><select id="review-rating" name="rating"><option value="">All ratings</option>${[5,4,3,2,1].map(n=>`<option value="${n}" ${String(n)===rating?'selected':''}>${n} stars</option>`).join('')}</select><label for="review-sort">Sort reviews</label><select id="review-sort" name="sort">${[['relevant','Most relevant'],['newest','Newest'],['highest','Highest rated'],['lowest','Lowest rated']].map(([v,l])=>`<option value="${v}" ${v===sort?'selected':''}>${l}</option>`).join('')}</select><button class="wm-pill wm-pill-sm">Apply</button></form>${shown.length?shown.map(r=>`<article class="wm-review">${starGlyphs(r.stars)}<b>${esc(r.title)}</b><p>${esc(r.body)}</p><small>${esc(r.name)} · ${esc(r.date)}</small></article>`).join(''):`<p>No reviews match this selection.</p><a href="${base}/reviews/product/${p.id}">Show all reviews</a>`}</section>`
 }
 
-export function searchPage({ base, q, products }) {
-  const chips = ['In-store', 'Get it fast', 'Price', 'Brand']
-  const quick = ['GTA VI', 'Memory', 'Consoles & bundles', 'Accessories', 'GTA Shop']
-  const suggested = ['Action & Adventure', 'Rockstar Games', 'Rating Pending']
-  const facets = ['Price', 'Brand', 'Video Game Platform', 'Product Category', 'Video Game Genre', 'Video Game Format', 'Game Collections', 'Compatible Devices', 'ESRB Rating', 'Rating', 'Number of Pieces', 'Availability', 'Departments', 'Customer Rating', 'Retailer', 'Gifting']
-  const related = ['gta 6 ps5', 'gta 6 xbox', 'grand theft auto vi', 'gta shop', 'ps5 games']
-  const chip = (c) => `<a class="wm-chip" href="${base}/search?q=${encodeURIComponent(c)}">${esc(c)}</a>`
-  return `<div class="wm-search-page">
-  <div class="wm-chip-row">${chips.map(c => `<button type="button" class="wm-chip">${esc(c)} &#9662;</button>`).join('')}<span class="wm-sort">Sort by | <b>Best Match</b> &#9662;</span></div>
-  <div class="wm-chip-row wm-quick">${quick.map(chip).join('')}<span class="wm-chip-label">Suggested</span>${suggested.map(chip).join('')}</div>
-  <div class="wm-search-body">
-    <aside class="wm-facets" aria-label="Filters">${facets.map(f => `<details><summary>${esc(f)}</summary><label><input type="checkbox"> Any</label></details>`).join('')}</aside>
-    <div>
-      <h1 class="wm-results-head">Results for &quot;${esc(q)}&quot;<span>(${products.length})</span></h1>
-      <p class="wm-fine">Uses item details. Price when purchased online</p>
-      ${products.length ? `<div class="wm-grid">${products.map(p => tile(base, p)).join('')}</div>` : `<p class="wm-empty">There were no search results for &quot;${esc(q)}&quot;. Check the spelling or try a different search.</p>`}
-      <div class="wm-banner"><b>Get Grand Theft Auto VI ready</b> &mdash; Everything you need to upgrade. <a href="${base}/search?q=gta+vi">Shop now</a></div>
-      <div class="wm-related"><b>Related searches</b> ${related.map(chip).join('')}</div>
-      <nav class="wm-pager" aria-label="Pagination"><span aria-current="page">1</span><span>2</span><span>3</span></nav>
-    </div>
-  </div>
-</div>`
-}
-
-function reviewsSection(p) {
-  if (!p.rating) return `<section class="wm-reviews" id="reviews"><h2>Customer ratings &amp; reviews</h2><p class="wm-fine">No reviews yet. Be the first to review this item.</p></section>`
-  const split = [0.38, 0.16, 0.14, 0.11, 0.21].map(f => Math.round(f * p.ratings))
-  return `<section class="wm-reviews" id="reviews">
-  <h2>Customer ratings &amp; reviews</h2>
-  <div class="wm-reviews-sum">
-    <div class="wm-rev-score"><b>${p.rating}</b> out of 5<br>${starGlyphs(p.rating)}<br><small>(${p.ratings} ratings | ${p.reviews} reviews)</small></div>
-    <div class="wm-histogram">${[5, 4, 3, 2, 1].map((n, i) => `<div class="wm-hist-row"><span>${n} stars</span><span class="wm-hist-bar"><i style="width:${Math.round(split[i] / p.ratings * 100)}%"></i></span><span>${split[i]}</span></div>`).join('')}</div>
-  </div>
-  <div class="wm-chip-row"><button type="button" class="wm-chip">All filters</button><button type="button" class="wm-chip">Star rating &#9662;</button><label class="wm-chip" for="verified-only"><input type="checkbox" id="verified-only"> Verified purchases only</label><span class="wm-sort">Sort by | <b>Most relevant</b> &#9662;</span></div>
-  <article class="wm-review">${starGlyphs(5)}<b>Ready for preload</b><p>Preordered the code-in-box copy so I can preload on the 12th. Free shipping by release date sealed it.</p><small>Review from samsclub.com</small></article>
-  <article class="wm-review">${starGlyphs(2)}<b>No disc in the box</b><p>Heads up: there is no disc, just a download code inside the case. Wish that was clearer up front.</p><small>Review from samsclub.com</small></article>
-</section>`
-}
-
-function buyBox({ base, p, sponsored }) {
-  const cta = p.cta === 'Add' ? 'Add to cart' : p.cta
+function buyBox({ base, p, sponsored, location }) {
+  const cta = p.stock===0 ? 'Out of stock' : p.preorder ? 'Preorder' : 'Add to cart'
+  const arrival=arrivalFor(p), seller=SELLERS[p.sellerId]
   return `<aside class="wm-buybox">
-  <div class="wm-onepay-banner"><b>OnePay</b> CashRewards Card &mdash; Earn unlimited 3% cash back at Walmart and 1.5% back on all other purchases &mdash; <a href="#">Learn More</a></div>
+  <div class="wm-onepay-banner"><b>OnePay</b> CashRewards Card &mdash; Earn unlimited 3% cash back at Walmart and 1.5% back on all other purchases &mdash; <a href="${base}/services/financial">About financial services</a></div>
   <div class="wm-price-big"><span class="sr-only">Current price is </span>${money(p.price)}</div>
   ${p.preorder ? ppg() : ''}
   <div class="wm-fine">Price when purchased online</div>
-  <div class="wm-fine">As low as $14/mo with <b>OnePay Later</b> <a href="#">Learn more</a></div>
-  <div class="wm-perks"><span>Free shipping</span><span>Free 30-day returns</span></div>
+  ${p.price >= 50 ? `<div class="wm-fine">Payment options available at checkout. <a href="${base}/help#payments">Learn more</a></div>` : ''}
+  <div class="wm-perks"><span>Free shipping</span><a href="#return-policy">View return policy</a></div>
   <form method="post" action="${base}/cart/add" class="wm-buy-form">
-    <input type="hidden" name="pid" value="${p.id}">
-    <button type="submit" class="wm-pill wm-pill-block wm-pill-lg">${esc(cta)}</button>
-    <h3 class="wm-h6">How you&rsquo;ll get this item:</h3>
+    <input type="hidden" name="pid" value="${p.id}">${p.variantId ? `<input type="hidden" name="variant" value="${esc(p.variantId)}">` : ''}${optionText(p)?`<p><b>${esc(optionText(p))}</b></p>`:''}${!p.stock?'<p class="wm-fine">Currently unavailable</p>':''}
+    <button type="submit" class="wm-pill wm-pill-block wm-pill-lg"${p.stock===0?' disabled':''}>${esc(cta)}</button>
+    <h3 class="wm-h6">How you’ll get this item:</h3>
     <label class="wm-check wm-plus-check" for="plus"><input type="checkbox" id="plus" name="plus" value="1" aria-label="I want delivery savings with Walmart+"> <span>I want delivery savings with ${WPLUS}<br><small>Try 30 days for just $1! Choose a plan at checkout.</small></span></label>
     <h3 class="wm-h6">How do you want your item?</h3>
     <div class="wm-ful-tiles">
-      <label class="wm-ful-tile is-selected" for="fulfillment-shipping"><input type="radio" id="fulfillment-shipping" name="fulfillment" value="shipping" aria-label="Shipping, Arrives ${esc(ARRIVAL.short)}, Free" checked>${ICON.truck}<b>Shipping</b><span>Arrives ${esc(ARRIVAL.short)}</span><span>Free</span></label>
-      <div class="wm-ful-tile is-disabled" aria-disabled="true"><b>Pickup</b><span>Check nearby</span></div>
-      <div class="wm-ful-tile is-disabled" aria-disabled="true"><b>Delivery</b><span>Not available</span></div>
+      <label class="wm-ful-tile is-selected" for="fulfillment-shipping"><input type="radio" id="fulfillment-shipping" name="fulfillment" value="shipping" aria-label="Shipping, ${esc(arrivalPhrase(arrival.short))}, Free" checked>${ICON.truck}<b>Shipping</b><span>${p.stock===0?'No delivery estimate':esc(arrivalPhrase(arrival.short))}</span><span>Free</span></label>
+      ${p.kind==='game'?`<a class="wm-ful-tile wm-pickup-check" href="${base}/ip/${p.id}/pickup?zip=${encodeURIComponent(location.zip)}"><b>Pickup</b><span>Check nearby</span></a>`:'<div class="wm-ful-tile is-disabled" aria-disabled="true"><b>Pickup</b><span>Not available</span></div>'}
+      <div class="wm-ful-tile is-disabled" aria-disabled="true"><b>Delivery</b><span>${fixtureCatalog || location.zip === LOCATION.zip ? 'Not available' : 'Availability unverified'}</span></div>
     </div>
   </form>
-  <p class="wm-fine">Ships to ${esc(LOCATION.city)}, ${esc(LOCATION.zip)} &nbsp;&middot;&nbsp; <b>Arrives by ${esc(ARRIVAL.full)}</b></p>
-  <p class="wm-fine">Sold and shipped by Walmart.com &nbsp;&middot;&nbsp; <a href="#">Report an issue with seller or item</a></p>
-  <details class="wm-ppg"><summary>Free 30-day returns <span class="wm-link">Details</span></summary><div class="wm-popover"><b>Return policy</b><br>Return within 30 days after item is delivered.<br>Returnable to store? Yes<br>Special return instructions: Video Game downloads are not returnable after purchase. If you are unable to locate or redeem your code, contact Customer Care.</div></details>
-  <p class="wm-fine">This item is gift eligible <a href="#">Learn more</a></p>
+  <p class="wm-fine"><a href="${base}/store-finder">Check nearby stores &amp; change location</a></p>
+  <p class="wm-fine">Ships to ${esc(location.city)}, ${esc(location.zip)} &nbsp;&middot;&nbsp; <b>${p.stock===0?'Shipping estimate available when back in stock':esc(arrivalPhrase(arrival.full))}</b></p>
+  <p class="wm-fine">Sold and shipped by <a href="${base}/seller/${seller.id}">${esc(seller.name)}</a> &nbsp;&middot;&nbsp; <a href="${base}/help">Get help with seller or item</a></p>
+  <details class="wm-ppg" id="return-policy"><summary>Return policy <span class="wm-link">Details</span></summary><div class="wm-popover">${esc(p.returnPolicy)}</div></details>
+  <p class="wm-fine"><a href="${base}/help/article/reorder-and-lists">Shopping for someone else? Explore lists</a></p>
   <p class="wm-fine">Packaging note: Ships in the manufacturer&rsquo;s original packaging, which may reveal the contents.</p>
-  <p class="wm-fine"><a href="${base}/account/login">Add to list</a> &nbsp;&middot;&nbsp; <a href="${base}/account/login">Add to registry</a></p>
-  <div class="wm-plus-banner">Try 30 days of ${WPLUS} for just $1! T&amp;C apply. <a href="#">Claim offer now</a></div>
-  ${sponsored ? `<div class="wm-sponsored"><small>Sponsored</small><img src="${sponsored.art}" alt=""><div><a href="${productPath(base, sponsored)}">${esc(sponsored.title)}</a><div class="wm-sponsored-price">${money(sponsored.price)}</div><form method="post" action="${base}/cart/add"><input type="hidden" name="pid" value="${sponsored.id}"><button type="submit" class="wm-pill wm-pill-sm">Add to cart</button></form></div></div>` : ''}
+  <p class="wm-fine"><a href="${base}/lists/add?pid=${p.id}${p.variantId?`&amp;variant=${encodeURIComponent(p.variantId)}`:''}">Add to list</a> &nbsp;&middot;&nbsp; <a href="${base}/registries">Registry information</a></p>
+  <div class="wm-plus-banner">Try 30 days of ${WPLUS} for just $1! T&amp;C apply. <a href="${base}/help#walmart-plus">Claim offer now</a></div>
+  ${sponsored ? `<div class="wm-sponsored"><small>Sponsored</small>${productImage('walmart',sponsored)}<div><a href="${productPath(base, sponsored)}">${esc(sponsored.title)}</a><div class="wm-sponsored-price">${money(sponsored.price)}</div><form method="post" action="${base}/cart/add"><input type="hidden" name="pid" value="${sponsored.id}"><button type="submit" class="wm-pill wm-pill-sm">Add to cart</button></form></div></div>` : ''}
 </aside>`
 }
 
-export function productPage({ base, p, similar, sponsored }) {
+export function productPage({ base, p, similar, sponsored, error='', location=LOCATION }) {
   const isGame = p.kind === 'game'
   const ratingText = p.rating ? `${p.rating} out of 5 stars (${p.rating}) | ${p.ratings} ratings` : 'No ratings yet'
-  return `<div class="wm-pdp">
-  <div class="wm-pdp-media">
-    <div class="wm-thumbs">${Array.from({ length: 5 }, () => `<img src="${p.art}" alt="">`).join('')}<a href="#" class="wm-thumb-more">+6<br>View all</a></div>
-    <div class="wm-hero-img"><img src="${p.art}" alt="${esc(p.title)}"><div class="wm-media-tools"><a href="#">Zoom image modal</a><a href="#">Share</a><a href="${base}/account/login" aria-label="Sign in to add to Favorites list">${ICON.heart}</a></div></div>
-  </div>
+  return `${error?`<div class="wm-error-summary" role="alert">${esc(error)}</div>`:''}<div class="wm-image-viewer" id="wm-image-viewer" role="dialog" aria-modal="true" aria-label="Product image"><a href="${productPath(base,p)}${p.variantId?`?variant=${encodeURIComponent(p.variantId)}`:''}#product-image" aria-label="Close image viewer">&times; Close</a>${productArt(p)}</div><div class="wm-pdp">
+  <div class="wm-pdp-media" id="product-image">${productGallery('walmart',p)}<div class="wm-media-tools"><a href="${base}/ip/${p.id}/gallery${p.variantId?`?variant=${encodeURIComponent(p.variantId)}`:''}">Gallery &amp; details</a><details><summary>Share</summary><label>Product link <input readonly value="${esc(productPath(base,p))}${p.variantId?`?variant=${encodeURIComponent(p.variantId)}`:''}"></label></details><a href="${base}/lists/add?pid=${p.id}${p.variantId?`&amp;variant=${encodeURIComponent(p.variantId)}`:''}" aria-label="Add ${esc(p.title)} to Favorites or a list">${ICON.heart}</a></div></div>
   <div class="wm-pdp-info">
     <div class="wm-badges">${p.pdpBadges.map(b => `<span class="wm-badge-inline">${esc(b)}</span>`).join('')}${p.preorder ? `<span class="wm-badge-inline wm-badge-pre">Preorder <span>${esc(p.releaseText)}</span></span>` : ''}</div>
     <a class="wm-brand" href="${base}/search?q=${encodeURIComponent(p.brand)}">${esc(p.brand)}</a>
     <h1 class="wm-pdp-title">${esc(p.title)}</h1>
     <div class="wm-rating-line">${p.rating ? `${starGlyphs(p.rating)} ` : ''}${esc(ratingText)}${p.esrb ? ` &nbsp;&middot;&nbsp; <span class="wm-esrb">${esc(p.esrb)}</span>` : ''}</div>
+    ${p.variants?`<form class="wm-product-options" method="get" action="${productPath(base,p)}"><label for="product-variant">Choose your options</label><select id="product-variant" name="variant">${p.variants.map(v=>`<option value="${v.id}" ${v.id===p.variantId?'selected':''}>${esc(Object.entries(v.options).map(([k,val])=>`${k}: ${val}`).join(' · '))} — ${money(v.price)}${v.stock===0?' — Out of stock':''}</option>`).join('')}</select><button class="wm-pill wm-pill-white">Update selection</button></form>`:''}
     <h2 class="wm-h6">Key item features</h2>
     <ul class="wm-features">${p.features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>
     <a href="#details" class="wm-link">View all item details</a>
     <div id="details" class="wm-details">
       <details class="wm-acc"><summary>About this item</summary><div class="wm-acc-body"><h3>Product details</h3><p>${esc(p.features.join(' '))}</p><p class="wm-fine">We aim to show you accurate product information. Manufacturers, suppliers and others provide what you see here, and we have not verified it.</p></div></details>
-      <details class="wm-acc"><summary>Specifications</summary><table class="wm-specs"><tr><th>Brand</th><td>${esc(p.brand)}</td></tr>${isGame ? `<tr><th>Video Game Platform</th><td>${p.platform === 'ps5' ? 'PlayStation 5' : 'Xbox Series X|S'}</td></tr><tr><th>Edition</th><td>Standard Edition</td></tr><tr><th>Video Game Format</th><td>Code in Box (no disc)</td></tr><tr><th>Release Date</th><td>Delivers 11/12/26, playable 11/19/26</td></tr>` : ''}${p.esrb ? `<tr><th>ESRB Rating</th><td>${esc(p.esrb)}</td></tr>` : ''}</table></details>
+      <details class="wm-acc"><summary>Specifications</summary><table class="wm-specs"><tr><th>Brand</th><td>${esc(p.brand)}</td></tr>${Object.entries({...p.specs,...p.selectedOptions}).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('')}${isGame ? `<tr><th>Video Game Platform</th><td>${p.platform === 'ps5' ? 'PlayStation 5' : 'Xbox Series X|S'}</td></tr><tr><th>Edition</th><td>Standard Edition</td></tr><tr><th>Video Game Format</th><td>Code in Box (no disc)</td></tr><tr><th>Release Date</th><td>Delivers 11/12/26, playable 11/19/26</td></tr>` : ''}${p.esrb ? `<tr><th>ESRB Rating</th><td>${esc(p.esrb)}</td></tr>` : ''}</table></details>
     </div>
   </div>
-  ${buyBox({ base, p, sponsored })}
+  ${buyBox({ base, p, sponsored, location })}
 </div>
 <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Similar items you might like</h2><span class="wm-fine">Based on what customers bought</span></div><div class="wm-carousel">${similar.map(s => tile(base, s, { from: 'pdp' })).join('')}</div></section>
-${reviewsSection(p)}
-<nav class="wm-crumbs" aria-label="Breadcrumb">${p.crumbs.map((c, i) => `<a href="${base}/search?q=${encodeURIComponent(c)}">${esc(c)}</a>${i < p.crumbs.length - 1 ? ' / ' : ''}`).join('')}</nav>`
+${reviewsSection(p,{base})}
+<nav class="wm-crumbs" aria-label="Breadcrumb">${p.crumbs.map((c, i) => `<a href="${i===0?departmentPath(base,DEPARTMENTS.find(d=>d.key===p.department)):`${base}/search?category=${encodeURIComponent(p.category)}`}">${esc(c)}</a>${i < p.crumbs.length - 1 ? ' / ' : ''}`).join('')}</nav>`
 }
 
 // "Added to cart!" interstitial at /pac (full-page redirect, no modal).
 export function addedPage({ base, p, qty, t, recommendations }) {
-  const next = `${base}/pac?id=${p.id}&ip=${p.price}&qt=${qty}`
+  const next = `${base}/pac?id=${p.id}&ip=${p.price}&qt=${qty}${p.variantId ? `&variant=${encodeURIComponent(p.variantId)}`:''}`
   return `<div class="wm-pac">
   <a class="sr-only" href="#pac-cart">Skip to Cart and Checkout Section</a>
   <h1 class="wm-pac-title">${ICON.check} Added to cart!</h1>
   <div class="wm-pac-item">
-    <img src="${p.art}" alt="">
-    <div class="wm-pac-info"><a href="${productPath(base, p)}">${esc(p.title)}</a><div class="wm-fine">${money(p.price)} ea</div></div>
+    ${productArt(p,'')}
+    <div class="wm-pac-info"><a href="${selectedItemPath(base, p)}">${esc(p.title)}</a><div class="wm-fine">${money(p.price)} ea${optionText(p)?` · ${esc(optionText(p))}`:''}</div></div>
     ${stepper(base, p, qty, next)}
   </div>
-  <div class="wm-onepay-banner"><b>OnePay</b> CashRewards Card &mdash; Earn unlimited 5% cash back at Walmart with Walmart+ and 1.5% back on all other purchases. <a href="#">Learn more</a></div>
+  <div class="wm-onepay-banner"><b>OnePay</b> CashRewards Card &mdash; Earn unlimited 5% cash back at Walmart with Walmart+ and 1.5% back on all other purchases. <a href="${base}/help#payments">Learn more</a></div>
   <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Product Recommendations</h2><span class="wm-fine">Customers also bought these products</span></div><div class="wm-carousel">${recommendations.map(r => tile(base, r, { from: 'pac', longCta: true })).join('')}</div></section>
   <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Customers also considered</h2></div><div class="wm-carousel">${[...recommendations].reverse().map(r => tile(base, r, { from: 'pac', longCta: true })).join('')}</div></section>
   <div class="wm-sticky-bar" id="pac-cart"><a class="wm-pill wm-pill-lg" href="${base}/cart">View cart (${t.count})</a></div>
 </div>`
 }
 
-export function cartPage({ base, t, saved, user, flags }) {
+export function cartPage({ base, t, saved, user, flags, location=LOCATION }) {
+  const unavailable=t.lines.some(l=>scenarioStockFor(l.product,'shipping')===0)
+  const availabilityNotice=t.lines.some(l=>l.product.kind==='game') ? `<p class="benchmark-fulfillment" role="status">This local storefront supports shipping only; pickup checkout is unavailable.</p>${unavailable?'<p class="benchmark-availability" role="alert">Shipping unavailable. This item can no longer be purchased. No order has been placed.</p>':''}` : ''
   if (!t.lines.length) {
     // ASSUMPTION: empty-cart copy was not captured; Walmart's current wording is "Time to start shopping!".
     return `<div class="wm-cart-empty"><h1>Time to start shopping!</h1><p>Your cart is empty.</p><a class="wm-pill" href="${base}/">Shop now</a>${savedSection(base, saved)}</div>`
   }
   const lines = t.lines.map(l => `<div class="wm-line">
-  <img src="${l.product.art}" alt="">
+  ${productArt(l.product,'')}
   <div class="wm-line-info">
-    <a href="${productPath(base, l.product)}" class="wm-line-title">${esc(l.product.title)}</a>
+    <a href="${selectedItemPath(base, l.product)}" class="wm-line-title">${esc(l.product.title)}</a>
     ${l.product.cartBadges.length ? `<div class="wm-badges">${l.product.cartBadges.map(b => `<span class="wm-badge-inline">${esc(b)}</span>`).join('')}</div>` : ''}
     ${l.product.preorder ? `<div class="wm-fine"><b>Preorder</b> &nbsp; ${esc(l.product.releaseText)}</div>` : ''}
-    <div class="wm-fine">Free 30-day returns</div>
+    <div class="wm-fine">${esc(optionText(l.product))}</div><div class="wm-fine">${esc(l.product.shippingText)}</div><div class="wm-fine">Sold by <a href="${base}/seller/${l.product.sellerId}">${esc(SELLERS[l.product.sellerId].name)}</a> · See item return policy</div>
     <div class="wm-fine">Gift eligible: original packaging</div>
     ${l.product.preorder ? ppg() : ''}
-    <form method="post" action="${base}/cart/update" class="wm-line-actions"><input type="hidden" name="pid" value="${l.product.id}"><button type="submit" name="action" value="remove" class="wm-link-btn">Remove</button><button type="submit" name="action" value="save" class="wm-link-btn">Save for later</button></form>
+    <form method="post" action="${base}/cart/update" class="wm-line-actions">${lineInput(l.product)}<button type="submit" name="action" value="remove" class="wm-link-btn">Remove</button><button type="submit" name="action" value="save" class="wm-link-btn">Save for later</button></form>
   </div>
   <div class="wm-line-right"><div class="wm-line-price">${money(l.product.price * l.qty)}</div>${stepper(base, l.product, l.qty, `${base}/cart`)}</div>
 </div>`).join('')
   return `<div class="wm-cart">
   <div class="wm-cart-main">
     <h1>Cart <span class="wm-cart-n">(${t.count} item${t.count === 1 ? '' : 's'})</span></h1>
-    <a class="sr-only" href="#checkout-section">Skip to Checkout Section</a>
-    <details class="wm-acc" id="pickup-delivery"><summary>Pickup and delivery options</summary><div class="wm-acc-body"><p>Shipping to ${esc(LOCATION.city)}, ${esc(LOCATION.zip)} is the only option for preorders. Pickup: Check nearby &middot; Delivery: Not available.</p></div></details>
+    ${availabilityNotice}<a class="sr-only" href="#checkout-section">Skip to Checkout Section</a>
+    <details class="wm-acc" id="pickup-delivery"><summary>Pickup and delivery options</summary><div class="wm-acc-body"><p>Shipping to ${esc(location.city)}, ${esc(location.zip)} is the available option for this assortment. Each item shows its delivery estimate. ${fixtureCatalog?'Pickup and same-day delivery: Not available.':'Pickup availability is unverified. Same-day delivery was unavailable in the captured Omaha 68116 session; other locations were not verified.'} <a href="${base}/store-finder">Change browsing location</a>. Confirm your full delivery address at checkout.</p></div></details>
     <div class="wm-group">
-      <div class="wm-group-head"><b>Free shipping, arrives by ${esc(ARRIVAL.day)}</b><button type="button" class="wm-zip">${esc(LOCATION.zip)}</button></div>
-      <div class="wm-fine">Sold and shipped by Walmart &nbsp;&middot;&nbsp; Free shipping</div>
+      <div class="wm-group-head"><b>Free shipping, ${esc(arrivalPhrase(arrivalSummary(t.lines)).replace(/^Arrives/,'arrives'))}</b><span class="wm-fine">${esc(location.zip)}</span></div>
+      <div class="wm-fine">Shipping estimates and sellers appear with each item &nbsp;&middot;&nbsp; Free shipping</div>
       ${lines}
     </div>
     ${savedSection(base, saved)}
-    <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Discover Great Brands</h2></div><div class="wm-carousel wm-carousel-brands">${['Rockstar Games', 'Sony PlayStation', 'Xbox', 'Turtle Beach', 'Logitech G'].map(b => `<a class="wm-brand-tile" href="${base}/search?q=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div></section>
+    <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Discover Great Brands</h2></div><div class="wm-carousel wm-carousel-brands">${['Great Value', 'Mainstays', 'Onn', 'Play Day', 'Rockstar Games'].map(b => `<a class="wm-brand-tile" href="${base}/search?q=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div></section>
   </div>
   <aside class="wm-summary" id="checkout-section">
     <form method="post" action="${base}/cart/checkout">
-      <button type="submit" class="wm-pill wm-pill-block wm-pill-lg">Continue to checkout</button>
+      <button type="submit" class="wm-pill wm-pill-block wm-pill-lg" ${unavailable?'disabled':''}>Continue to checkout</button>
       ${user ? '' : `<p class="wm-fine wm-center">For the best shopping experience, <a href="${base}/account/login?state=%2Fcart">sign in</a></p>`}
       <div class="wm-row"><span>Subtotal (${t.count} item${t.count === 1 ? '' : 's'})</span><span>${money(t.subtotal)}</span></div>
       <div class="wm-row"><span>Shipping</span><span class="wm-green">Free</span></div>
       <div class="wm-row"><span>Taxes</span><span>Calculated at checkout</span></div>
       <div class="wm-row wm-total"><span>Estimated total</span><span>${money(t.total)}</span></div>
-      <p class="wm-fine">As low as $14/mo &mdash; No credit impact to apply &mdash; <b>OnePay Later</b> <a href="#">Learn more</a></p>
+      ${t.subtotal>=50?`<p class="wm-fine">Review available payment methods at checkout.</p>`:''}
       <label class="wm-check wm-plus-box" for="plus"><input type="checkbox" id="plus" name="plus" value="1" aria-label="Try 30 days of Walmart+ for just $1! Claim offer" ${flags.plus ? 'checked' : ''}> <span>Try 30 days of ${WPLUS} for just $1! <b>Claim offer</b><br><small>You&rsquo;ll choose your plan at checkout.</small></span></label>
       <label class="wm-check" for="gift"><input type="checkbox" id="gift" name="gift" value="1" ${flags.gift ? 'checked' : ''}> This order is a gift.</label>
-      <p class="wm-fine">Earn ${money(Math.floor((75 + t.subtotal * 0.03) * 100 + 1e-6) / 100)} cash back! That&rsquo;s 3% cash back with the OnePay CashRewards Card including a $75 welcome bonus. <a href="#">Learn how</a></p>
+      <p class="wm-fine">Earn ${money(Math.floor((75 + t.subtotal * 0.03) * 100 + 1e-6) / 100)} cash back! That&rsquo;s 3% cash back with the OnePay CashRewards Card including a $75 welcome bonus. <a href="${base}/services/financial">About financial services</a></p>
     </form>
   </aside>
 </div>`
@@ -337,7 +303,7 @@ export function cartPage({ base, t, saved, user, flags }) {
 
 function savedSection(base, saved) {
   if (!saved.length) return ''
-  return `<section class="wm-saved"><h2>Saved for later (${saved.length})</h2>${saved.map(p => `<div class="wm-line wm-line-saved"><img src="${p.art}" alt=""><div class="wm-line-info"><a href="${productPath(base, p)}" class="wm-line-title">${esc(p.title)}</a><div class="wm-line-price">${money(p.price)}</div><form method="post" action="${base}/cart/update" class="wm-line-actions"><input type="hidden" name="pid" value="${p.id}"><button type="submit" name="action" value="move" class="wm-link-btn">Move to cart</button><button type="submit" name="action" value="forget" class="wm-link-btn">Remove</button></form></div></div>`).join('')}</section>`
+  return `<section class="wm-saved"><h2>Saved for later (${saved.length})</h2>${saved.map(({product:p,qty}) => `<div class="wm-line wm-line-saved">${productArt(p,'')}<div class="wm-line-info"><a href="${selectedItemPath(base, p)}" class="wm-line-title">${esc(p.title)}</a><div class="wm-fine">${esc(optionText(p))} · Qty ${qty}</div><div class="wm-line-price">${money(p.price*qty)}</div><form method="post" action="${base}/cart/update" class="wm-line-actions">${lineInput(p)}<button type="submit" name="action" value="move" class="wm-link-btn">Move to cart</button><button type="submit" name="action" value="forget" class="wm-link-btn">Remove</button></form></div></div>`).join('')}</section>`
 }
 
 // ---- identity (identity.walmart.com look) ----
@@ -348,11 +314,11 @@ export function loginPage({ base, state, error, identifier = '' }) {
     <p>Not sure if you have an account? Enter your phone number or email and we&rsquo;ll check for you.</p>
     <form method="post" action="${loginHref(base, state)}" novalidate>
       <div class="wm-field"><label for="identifier">Phone number or email (required)</label><input id="identifier" name="identifier" type="text" autocomplete="username" value="${esc(identifier)}" required ${error ? 'aria-invalid="true" aria-describedby="identifier-error"' : ''}>${error ? `<p class="wm-error" id="identifier-error" role="alert">${esc(error)}</p>` : ''}</div>
-      <p class="wm-fine">Securing your personal information is our priority. <a href="#">See our privacy measures.</a></p>
+      <p class="wm-fine">Securing your personal information is our priority. <span class="wm-static">See our privacy measures.</span></p>
       <button type="submit" class="wm-pill wm-pill-block">Continue</button>
     </form>
   </div>
-  <div class="wm-id-card wm-id-biz"><b>Walmart Business</b><p>Buying for work?</p><a class="wm-pill wm-pill-white" href="#">Create a business account</a></div>
+  <div class="wm-id-card wm-id-biz"><b>Walmart Business</b><p>Buying for work?</p><span class="wm-static">Create a business account</span></div>
 </div>`
 }
 
@@ -363,11 +329,11 @@ export function passwordPage({ base, identifier, isEmail, error, state }) {
   <form method="post" action="${base}/account/signin/withpassword" novalidate>
     <p class="wm-h6">Enter your password</p>
     <div class="wm-field"><label for="password">Password</label><div class="wm-pw"><input id="password" name="password" type="password" autocomplete="current-password" required ${error ? 'aria-invalid="true" aria-describedby="password-error"' : ''}><button type="button" class="wm-show" data-toggle="password">Show</button></div>${error ? `<p class="wm-error" id="password-error" role="alert">${esc(error)}</p>` : ''}</div>
-    <p><a href="#" class="wm-link">Forgot password</a></p>
+    <details class="wm-acc"><summary>Forgot password</summary><p>Use the local test account password or create another local account. Password reset emails and text messages are not connected.</p><a href="${base}/help/article/create-or-edit-an-account">Account help</a></details>
     <label class="wm-check" for="keep"><input type="checkbox" id="keep" name="keep" value="1" aria-label="Keep me signed in" checked> <span>Keep me signed in<br><small>Uncheck if using a public device.</small></span></label>
     <p class="wm-fine">We&rsquo;ll keep you signed in on this device. You may be asked to enter your password when modifying sensitive account information.</p>
     <button type="submit" class="wm-pill wm-pill-block">Sign in</button>
-    <button type="button" class="wm-pill wm-pill-white wm-pill-block">Sign in with passkey</button>
+    <p class="wm-fine">Use your email address and password to sign in.</p>
   </form>
 </div></div>${SHOW_HIDE_JS}`
 }
@@ -385,7 +351,7 @@ export function signupPage({ base, values = {}, errors = {}, state }) {
       <p class="wm-fine">Your password must include the following:</p><ul class="wm-pw-rules"><li>8-100 characters</li><li>Upper &amp; lowercase letters</li><li>At least one number or special character</li></ul></div>
     <label class="wm-check" for="keep"><input type="checkbox" id="keep" name="keep" value="1" aria-label="Keep me signed in" checked> <span>Keep me signed in<br><small>Uncheck if using a public device.</small></span></label>
     <label class="wm-check" for="marketing"><input type="checkbox" id="marketing" name="marketing" value="1" ${values.marketing ? 'checked' : ''}> Send me emails about new arrivals, hot items, daily savings, &amp; more.</label>
-    <p class="wm-fine">By clicking Create Account, you acknowledge you have read and agreed to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>. You also agree to receive account related text messages.</p>
+    <p class="wm-fine">By clicking Create Account, you acknowledge you have read and agreed to our <span class="wm-static">Terms of Use</span> and <span class="wm-static">Privacy Policy</span>. You also agree to receive account related text messages.</p>
     <button type="submit" class="wm-pill wm-pill-block">Create account</button>
     <p class="wm-center">Already have an account? <a href="${loginHref(base, state)}">Sign in</a></p>
   </form>
@@ -402,14 +368,14 @@ export function accountPage({ base, user, orders }) {
 
 // ---- checkout (/checkout/review-order): one page of cards, one form open at a time ----
 function fulfillmentCard({ base, t, c, open, values, errors }) {
-  const items = t.lines.map(l => `<div class="wm-co-item"><img src="${l.product.art}" alt=""><div><div class="wm-co-item-title">${esc(l.product.title)}</div><div class="wm-fine">Qty ${l.qty}${l.product.preorder ? ` &nbsp;&middot;&nbsp; Preorder, ${esc(l.product.releaseText)}` : ''}</div></div><div class="wm-co-item-price">${money(l.product.price * l.qty)}</div></div>`).join('')
+  const items = t.lines.map(l => `<div class="wm-co-item">${productArt(l.product,'')}<div><div class="wm-co-item-title">${esc(l.product.title)}</div><div class="wm-fine">Qty ${l.qty}${optionText(l.product)?` · ${esc(optionText(l.product))}`:''} · ${esc(l.product.shippingText)}${l.product.preorder ? ` &nbsp;&middot;&nbsp; Preorder, ${esc(l.product.releaseText)}` : ''}</div></div><div class="wm-co-item-price">${money(l.product.price * l.qty)}</div></div>`).join('')
   const a = c.address
   let addressBlock
   if (open === 'address') addressBlock = addressForm({ base, values, errors, editing: !!a })
   else if (a) addressBlock = `<div class="wm-co-sub"><div class="wm-co-sub-head"><h3>Delivery address</h3><a href="${base}/checkout/review-order?edit=address" class="wm-link">Change</a></div><address>${esc(a.firstName)} ${esc(a.lastName)}<br>${esc(a.address1)}${a.address2 ? `, ${esc(a.address2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.zip)}<br>${esc(a.phone)}</address></div>`
   else addressBlock = `<div class="wm-co-sub"><h3>Delivery address</h3><a class="wm-pill wm-pill-white" href="${base}/checkout/review-order?edit=address">Add address</a></div>`
   return `<section class="wm-card" id="shipping">
-  <div class="wm-card-head">${ICON.truck}<div><h2>Shipping</h2><p>Arrives by ${esc(ARRIVAL.day)}</p></div><a href="${base}/cart" class="wm-link">Edit items</a></div>
+  <div class="wm-card-head">${ICON.truck}<div><h2>Shipping</h2><p>${esc(arrivalPhrase(arrivalSummary(t.lines)))}</p></div><a href="${base}/cart" class="wm-link">Edit items</a></div>
   <details class="wm-co-items" open><summary>Items details</summary>${items}</details>
   ${addressBlock}
 </section>`
@@ -418,6 +384,7 @@ function fulfillmentCard({ base, t, c, open, values, errors }) {
 function addressForm({ base, values, errors, editing }) {
   return `<form method="post" action="${base}/checkout/address" id="form-address" class="wm-co-form" novalidate>
   <h3>${editing ? 'Edit delivery address' : 'Add address'}</h3>
+  ${values.addressId ? `<input type="hidden" name="addressId" value="${esc(values.addressId)}">` : ''}
   ${errorSummary(errors)}
   <div class="wm-2col">${field({ name: 'firstName', label: 'First name*', values, errors, extra: 'autocomplete="given-name" required' })}${field({ name: 'lastName', label: 'Last name*', values, errors, extra: 'autocomplete="family-name" required' })}</div>
   ${field({ name: 'address1', label: 'Street address*', values, errors, extra: 'autocomplete="address-line1" required' })}
@@ -452,7 +419,7 @@ function paymentForm({ base, values, errors, editing }) {
   ${field({ name: 'cardNumber', label: 'Card number *', values, errors, extra: 'autocomplete="cc-number" inputmode="numeric" required' })}
   <div class="wm-2col">${field({ name: 'firstName', label: 'First name *', values, errors, extra: 'autocomplete="cc-given-name" required' })}${field({ name: 'lastName', label: 'Last name *', values, errors, extra: 'autocomplete="cc-family-name" required' })}</div>
   <div class="wm-2col wm-end">${expirySelects({ values, errors })}${field({ name: 'cvv', label: 'CVV *', values, errors, extra: 'autocomplete="cc-csc" inputmode="numeric" maxlength="4" required' })}</div>
-  <p class="wm-fine">Discover, Mastercard and Visa: Use the 3 digits found on the back of your card. American Express: Use the 4 digits on the front of your card. <a href="#">Learn more about CVV</a></p>
+  <p class="wm-fine">Discover, Mastercard and Visa: Use the 3 digits found on the back of your card. American Express: Use the 4 digits on the front of your card. <span class="wm-static">Learn more about CVV</span></p>
   ${field({ name: 'phone', label: 'Phone number*', type: 'tel', values, errors, extra: 'autocomplete="tel" required' })}
   <h4>Billing address</h4>
   <label class="wm-check" for="billingSame"><input type="checkbox" name="billingSame" value="1" id="billingSame" ${same ? 'checked' : ''}> Same as delivery address</label>
@@ -461,9 +428,7 @@ function paymentForm({ base, values, errors, editing }) {
     ${field({ name: 'billingAddress2', label: 'Apt(optional)', values, errors, extra: 'autocomplete="billing address-line2"' })}
     <div class="wm-3col">${field({ name: 'billingCity', label: 'City*', values, errors, extra: 'autocomplete="billing address-level2"' })}${stateSelect({ name: 'billingState', label: 'State*', values, errors })}${field({ name: 'billingZip', label: 'Zip Code*', values, errors, extra: 'autocomplete="billing postal-code" inputmode="numeric"' })}</div>
   </div>
-  <label class="wm-check" for="saveCard"><input type="checkbox" id="saveCard" name="saveCard" value="1" ${values.saveCard === undefined || values.saveCard ? 'checked' : ''}> Save this card to your wallet</label>
-  <label class="wm-check" for="defaultCard"><input type="checkbox" id="defaultCard" name="defaultCard" value="1" ${values.defaultCard ? 'checked' : ''}> Set as default card</label>
-  <p class="wm-fine">This payment method will be added to your profile. You can edit or remove this card at any time in your Account settings.</p>
+  <p class="wm-fine">This card is used for this checkout. Only its brand and last four digits are retained; a saved wallet is not available.</p>
   <p class="wm-fine">*Required fields</p>
   <div class="wm-form-actions"><a href="${base}/checkout/review-order" class="wm-link-btn">Cancel</a><button type="submit" class="wm-pill">Save</button></div>
 </form>
@@ -491,7 +456,7 @@ function contactForm({ base, values, errors }) {
   ${field({ name: 'phone', label: 'Phone number (10 digits)', type: 'tel', values, errors, extra: 'autocomplete="tel" inputmode="numeric" required' })}
   <label class="wm-check" for="textUpdates"><input type="checkbox" id="textUpdates" name="textUpdates" value="1" ${values.textUpdates === undefined || values.textUpdates ? 'checked' : ''}> Text updates for this order</label>
   <label class="wm-check" for="marketing"><input type="checkbox" id="marketing" name="marketing" value="1" ${values.marketing ? 'checked' : ''}> Get emails about hot items, great savings, and more</label>
-  <p class="wm-fine">Go to Account &gt; Personal info to save your phone number for faster checkout next time.</p>
+  <p class="wm-fine">These contact details apply to this order. You can manage your saved communication choices in <a href="${base}/account/preferences">Preferences</a>.</p>
   <div class="wm-form-actions"><a href="${base}/checkout/review-order" class="wm-link-btn">Cancel</a><button type="submit" class="wm-pill">Save</button></div>
 </form>`
 }
@@ -506,7 +471,7 @@ function plusCard({ base, c, open, values, errors }) {
     <h3>Choose your plan</h3>
     ${errorSummary(errors)}
     <div class="wm-plans">${Object.values(WALMART_PLUS.plans).map(p => `<label class="wm-plan ${values.plan === p.id ? 'is-selected' : ''}" for="plan-${p.id}"><input type="radio" id="plan-${p.id}" name="plan" value="${p.id}" aria-label="${esc(p.name)}${p.badge ? `, ${esc(p.badge)}` : ''}: 30 days for $1, then ${esc(p.text)} plus applicable tax" ${values.plan === p.id ? 'checked' : ''}> <span><b>${esc(p.name)}</b>${p.badge ? ` <span class="wm-badge-inline">${esc(p.badge)}</span>` : ''}<br><small>30 days for $1, then ${esc(p.text)} plus applicable tax</small></span></label>`).join('')}</div>
-    <p class="wm-fine">By signing up, you agree that after the 30-day trial we will charge the fee of $12.95/month or $98/year for the plan you picked, plus applicable tax, until you cancel. <a href="#">See full terms</a></p>
+    <p class="wm-fine">By signing up, you agree that after the 30-day trial we will charge the fee of $12.95/month or $98/year for the plan you picked, plus applicable tax, until you cancel. <span class="wm-static">See full terms</span></p>
     <label class="wm-check" for="agree"><input type="checkbox" id="agree" name="agree" value="1" ${values.agree ? 'checked' : ''}> I agree to the terms (required)</label>
     <div class="wm-form-actions"><button type="submit" class="wm-pill">Continue</button></div>
   </form>
@@ -518,15 +483,16 @@ function plusCard({ base, c, open, values, errors }) {
     return `<section class="wm-card wm-plus-card" id="walmart-plus"><div class="wm-co-sub-head"><div><h2>${WPLUS}</h2><div>30-day trial &middot; ${esc(plan.name)} plan, then ${esc(plan.text)} plus applicable tax</div><div class="wm-fine">Savings/trial: ${money(WALMART_PLUS.trial)}</div></div><a href="${base}/checkout/review-order?edit=plus" class="wm-link">Change</a></div></section>`
   }
   if (pl.decided) return ''
-  return `<section class="wm-card wm-plus-card" id="walmart-plus"><h2>${WPLUS}</h2><p>Try 30 days for just $1! Finish picking a plan and verifying your phone number to join Walmart+.</p><div class="wm-form-actions wm-left"><a class="wm-pill wm-pill-white" href="${base}/checkout/review-order?edit=plus">Pick a plan</a>${decline}</div></section>`
+  return `<section class="wm-card wm-plus-card" id="walmart-plus"><h2>${WPLUS}</h2><p>Try 30 days for just $1! Choose a plan at checkout to record your local membership selection.</p><div class="wm-form-actions wm-left"><a class="wm-pill wm-pill-white" href="${base}/checkout/review-order?edit=plus">Pick a plan</a>${decline}</div></section>`
 }
 
 function summaryRail({ base, t, c, open, ctaLabel }) {
   const cta = open === 'review'
     ? `<form method="post" action="${base}/checkout/place-order" class="wm-place">
+      <input type="hidden" name="review_token" value="${esc(c.reviewToken)}">
       <label class="wm-check" for="gift"><input type="checkbox" id="gift" name="gift" value="1" ${c.gift ? 'checked' : ''}> This order is a gift.</label>
       <button type="submit" class="wm-pill wm-pill-block wm-pill-lg">Place order for ${money(t.total)}</button>
-      <p class="wm-fine wm-center">By placing this order, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></p>
+      <p class="wm-fine wm-center">By placing this order, you agree to our <span class="wm-static">Terms of Use</span> and <span class="wm-static">Privacy Policy</span></p>
       ${c.payment?.method === 'card' ? `<p class="wm-fine wm-center">We&rsquo;ll apply a temporary charge of ${money(t.total)} to your payment method.</p>` : ''}
     </form>`
     : `<button type="submit" form="form-${esc(open)}" class="wm-pill wm-pill-block wm-pill-lg">${esc(ctaLabel)}</button>`
@@ -544,7 +510,7 @@ function summaryRail({ base, t, c, open, ctaLabel }) {
 }
 
 export function checkoutPage({ base, t, c, open, ctaLabel, values = {}, errors = {} }) {
-  return `<div class="wm-co">
+  return `${errors.review ? errorSummary({ review: errors.review }) : ''}<div class="wm-co">
   <div class="wm-co-main">
     <h1 class="sr-only">Review your order</h1>
     ${fulfillmentCard({ base, t, c, open, values, errors })}
@@ -557,22 +523,22 @@ export function checkoutPage({ base, t, c, open, ctaLabel, values = {}, errors =
 }
 
 // ---- /thankyou ----
-export function thankyouPage({ base, order }) {
+export function thankyouPage({ base, order, status = 'processing' }) {
   const a = order.shipping_address, pay = order.payment, tt = order.totals
   const trialEnd = new Date(new Date(order.created_at).getTime() + 30 * 864e5).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   return `<div class="wm-ty">
-  <div class="wm-ty-head">${ICON.check}<div><h1>Thanks for your order!</h1><p>Now kick back and relax, we&rsquo;ll take care of the rest!</p><p class="wm-ty-num">Order# <span data-order-number>${esc(order.order_number)}</span></p></div></div>
-  <div class="wm-ty-actions"><a class="wm-pill" href="${base}/account">Track my order</a><a class="wm-pill wm-pill-white" href="${base}/account">View order details</a><a class="wm-pill wm-pill-white" href="${base}/">Keep shopping</a></div>
+  <div class="wm-ty-head">${ICON.check}<div><h1>Thanks for your order!</h1><p>${status === 'cancelled' ? 'This order has been cancelled. Your original receipt appears below.' : 'Your order has been recorded. View tracking for its current status.'}</p><p class="wm-ty-num">Order# <span data-order-number>${esc(order.order_number)}</span></p></div></div>
+  <div class="wm-ty-actions"><a class="wm-pill" href="${base}/orders/${order.id}/tracking">Track my order</a><a class="wm-pill wm-pill-white" href="${base}/orders/${order.id}">View order details</a><a class="wm-pill wm-pill-white" href="${base}/">Keep shopping</a></div>
   <div class="wm-ty-grid">
     <div>
-      <section class="wm-card"><div class="wm-card-head">${ICON.truck}<div><h2>Shipping</h2><p>Arrives by ${esc(order.fulfillment.eta)}</p></div></div>
-        ${order.items.map(it => `<div class="wm-co-item"><div><div class="wm-co-item-title">${esc(it.title)}</div><div class="wm-fine">Qty ${it.qty}</div></div><div class="wm-co-item-price">${money(it.unit_price * it.qty)}</div></div>`).join('')}
+      <section class="wm-card"><div class="wm-card-head">${ICON.truck}<div><h2>Shipping</h2><p>${status === 'cancelled' ? 'Shipping cancelled' : esc(arrivalPhrase(order.fulfillment.eta))}</p></div></div>
+        ${order.items.map((it,i) => `<div class="wm-co-item"><div><div class="wm-co-item-title">${esc(it.title)}</div><div class="wm-fine">Qty ${it.qty}${order.meta.options?.[i] ? ` · ${esc(Object.entries(order.meta.options[i].options).map(([k,v])=>`${k}: ${v}`).join(' · '))} · ${status === 'cancelled' ? 'Shipping cancelled' : esc(arrivalPhrase(order.meta.options[i].eta))}` : ''}</div></div><div class="wm-co-item-price">${money(it.unit_price * it.qty)}</div></div>`).join('')}
         <div class="wm-co-sub"><h3>Delivery address</h3><address>${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a.line1)}${a.line2 ? `, ${esc(a.line2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.postal_code)}<br>${esc(a.phone)}</address></div>
       </section>
       <section class="wm-card"><h2>Payment method</h2><p>${pay.method === 'card' ? `${esc(pay.brand)} ending in ${esc(pay.last4)}` : 'PayPal'}</p></section>
       <section class="wm-card"><h2>Contact</h2><p>${esc(order.customer.email)}<br><span class="wm-fine">Phone number ending in ${esc(String(order.customer.phone ?? '').replace(/\D/g, '').slice(-4))}</span></p></section>
-      ${order.meta.walmart_plus ? `<section class="wm-card wm-plus-card"><h2>${WPLUS}</h2><p>Your W+ trial membership has been created. Cancel anytime through your Account until ${esc(trialEnd)} to avoid charges.</p></section>` : ''}
-      <section class="wm-card"><h2>Get order updates</h2><p>Verify your phone number to secure your account and get order updates.</p><a class="wm-pill wm-pill-white" href="#">Verify phone number</a></section>
+      ${order.meta.walmart_plus ? `<section class="wm-card wm-plus-card"><h2>${WPLUS}</h2><p>Your W+ trial membership has been created in this local account. <a href="${base}/account/plus">Manage your selection</a> before the displayed trial end, ${esc(trialEnd)}. No real subscription or future charge is activated.</p></section>` : ''}
+      <section class="wm-card"><h2>Order updates</h2><p>Check <a href="${base}/orders/${order.id}/tracking">tracking</a> for the current local status. Text verification and outbound messages are not connected.</p></section>
     </div>
     <aside class="wm-summary">
       <h2>Order summary</h2>
@@ -581,7 +547,7 @@ export function thankyouPage({ base, order }) {
       <div class="wm-row"><span>Taxes</span><span>${money(tt.tax)}</span></div>
       ${tt.walmart_plus ? `<div class="wm-row"><span>Walmart+ 30-day trial</span><span>${money(tt.walmart_plus)}</span></div>` : ''}
       <div class="wm-row wm-total"><span>Total</span><span>${money(tt.total)}</span></div>
-      <p class="wm-fine">Unless you paid with a gift card or PayPal, you will not be charged until the preordered item ships.</p>
+      ${status !== 'cancelled' && order.items.some(it=>it.kind==='game')?`<p class="wm-fine">Unless you paid with a gift card or PayPal, you will not be charged until the preordered item ships.</p>`:''}
     </aside>
   </div>
 </div>`

@@ -276,3 +276,21 @@ test('game-uk: sign in with the seeded account (wrong password rejected) and pre
     assert.match(account.text, new RegExp(o.order_number))
   } finally { await srv.close() }
 })
+
+test('game-uk: homepage categories and price/style facets resolve actual catalog products', async () => {
+ const srv = await startServer()
+ try {
+  const c = srv.client()
+  const lego = await c.get('/game-uk/searchresults?descriptionfilter=LEGO')
+  assert.match(lego.text,/LEGO Classic Creative Bricks/)
+  assert.doesNotMatch(lego.text,/href="[^"]*grand-theft-auto-vi-756802/)
+  const football = await c.get('/game-uk/searchresults?descriptionfilter=FC27')
+  assert.match(football.text,/EA Sports FC 27/)
+  const filtered = await c.get('/game-uk/searchresults?descriptionfilter=gta+6&price=%C2%A310%20to%20%C2%A320&style=Action%20%2F%20Adventure')
+  assert.match(filtered.text,/Grand Theft Auto V/)
+  assert.doesNotMatch(filtered.text,/href="[^"]*grand-theft-auto-vi-756802/)
+  assert.match(filtered.text,/price: <b>£10 to £20/)
+  const noMatch = await c.get('/game-uk/searchresults?descriptionfilter=gta+6&category=Toys')
+  assert.match(noMatch.text,/We found 0 products/)
+ } finally { await srv.close() }
+})

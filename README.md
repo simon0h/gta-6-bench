@@ -1,17 +1,102 @@
 # GTA 6 pre-order bench
 
-A synthetic environment for benchmarking computer-use / browser agents (Muse, Grok bot, and the like)
-on one concrete task: **pre-order Grand Theft Auto VI**. It contains self-contained clones of real
-retailers' pre-order flows, researched from the live sites in September 2026, plus an API that reports
-exactly what each agent ordered so runs can be graded.
+A local environment for benchmarking browser agents on commerce tasks, centered on **pre-ordering Grand Theft Auto VI**.
+It contains 20 retailer interfaces, bounded public-site captures, local purchase simulations where
+supported, and an API that records orders for grading. Payments and accounts are simulated; no real
+orders are placed.
 
-Nothing here is real: no real payments, no real accounts, no real artwork or logos.
+Cloudflare hosting configuration is available for deploying all storefronts at
+public HTTPS URLs with a private dashboard and durable task state.
+See [Cloudflare deployment](docs/CLOUDFLARE.md) for prerequisites, deployment and
+verification. The deployment is not live yet.
+
+Run `npm run dashboard` and open `http://localhost:3001/dashboard` to create a
+comparison run with the original 30 tasks or all 240 tasks. Generate up to five
+agent URLs per run, label each Grokbot, Dots or Muse, and add tags and comments.
+Each URL progresses through isolated, timed tasks with private grading. Give each
+agent a separate browser session and use **Copy agent prompt** to share its link.
+Progress and results persist in `data/dashboard/`; this directory is excluded from
+Git and deployment images. The local dashboard trusts localhost; hosted mode
+requires the operator token. See [dashboard workflow](docs/DASHBOARD.md).
+
+The **executable benchmark** has 240 versioned tasks across all 20 stores,
+isolated trials, a private evaluator, strict outcome grading, and browser traces
+with JSON/HTML reports. Coverage includes payment rejection and backup recovery,
+changing availability, pickup requirements, and correcting a prefilled cart.
+Five storefronts also test authorized pickup fallback and named recipients;
+digital and shipping-only checkouts must refuse pickup requests. Specialist stores
+use ordinary merchandise rather than invented GTA listings. Each task pins either
+reference or explicitly authored fixture inventory. These controlled local
+scenarios do not claim to reproduce live retailer behavior.
+Run `npx playwright install chromium`
+after installing dependencies, then `npm run benchmark -- run --baseline reference`.
+Use `npm run benchmark:verify` for browser integration checks. The reference and
+noop baselines are scripted controls, not measured model results. See the
+[benchmark guide](docs/BENCHMARK.md) for agent adapters, task coverage and limits.
+
+The default **`CATALOG_MODE=reference`** excludes unsupported seed products and generated expansions.
+The current [reference inventory report](research/inventory-2026-10-06/README.md) records **30 active
+product rows, 23 with local purchase simulations**, plus separate read-only product observations.
+A listing or search card does not establish stock or purchase eligibility. Coupang and Chewy have
+unknown GTA availability; Gmarket, Argos and Smyths have observed listings with purchase eligibility
+unverified. These states are distinct from an observed unavailable-game scenario.
+
+The sites are **not exact replicas**. Removing invented inventory does not supply the retailers'
+complete catalogs or verify private checkout, location-specific stock, mobile layouts or every
+interaction. The [October 6 fidelity evidence matrix](research/fidelity-2026-10-06/README.md) records
+observed states, corrections and remaining gaps. Official images, logos and selected fonts are
+served locally with provenance.
+
+The exact captured `gta 6` query retains **330 displayed unrelated result records** across Nike (32),
+Sephora (100) and Williams Sonoma (198). The Williams Sonoma count includes six repeated cards.
+Captured product and variant links remain read-only where stock, options and purchase behavior were
+not observed. IKEA's captured query has zero products/content; unrecorded queries and Chewy's blank
+source response are coverage gaps, not fabricated zero-result responses.
+
+**`CATALOG_MODE=fixtures`** explicitly restores the historical 500 synthetic listings per retailer,
+10,000 total, and their older purchase/customer-service scenarios. Those catalogs include authored
+games, brands, ratings, stock and prices; PlayStation/Xbox physical offers exceed the real digital
+stores. They are retained for reproducing old benchmark runs, not presented as source-backed inventory.
+[Historical expansion notes](research/catalog500/README.md) and [fixture counts](research/catalog500/INVENTORY.md)
+document that mode. Regenerate its report with `CATALOG_MODE=fixtures node scripts/report-catalog500.mjs`.
+
+The **pre-inventory-filtering** fidelity snapshot passed **547 tests** with no failures/skips
+([historical output](research/fidelity-2026-10-06/full-suite.log)) and audited **10,000 base product pages,
+30,783 image URLs and zero failures** ([historical output](research/fidelity-2026-10-06/gallery-audit.log)).
+Those runs cover the earlier catalogs, including GameStop/JB gallery and guest-checkout improvements;
+they are not test counts for the new default reference mode. The same pass verified byte counts and
+hashes for 133 captured Amazon, Target, JB Hi-Fi and GameStop assets. `npm test` now runs the reference
+checks and historical fixture regressions separately.
+
+The inventory pass now passes **29 reference checks and 548 fixture regressions**, with no failures
+or skips. Its gallery audit covers all 30 active pages and 160 image URLs. See the
+[inventory verification](research/inventory-2026-10-06/verification.md) for logs, browser captures and
+the limits of these checks.
+
+Fresh desktop comparisons cover GameStop's added drawer, cart and guest-contact checkout, plus
+JB Hi-Fi's five captured Melbourne collection points at A$4.99 and A$133.99 total. Target's canonical
+local product renders successfully; the live source's Show more images action reached human
+verification, leaving its full 13-image gallery incomplete. The [comparison evidence](research/fidelity-2026-10-06/README.md#latest-desktop-comparisons)
+records the measured scope. Later payment screens remain unverified. The latest [viewport attempts](research/fidelity-2026-10-06/viewport-attempt-checks.json)
+stayed at 1280px and do not verify current mobile behavior.
+
+Earlier records remain available: [depth coverage](research/depth/COVERAGE.md) and its [agent ledger](research/depth/agent-ledger.json)
+document the five-pass rebuild and 451-test snapshot; [catalog expansion](research/catalog500/README.md)
+documents the 510-test snapshot; [product assets](research/product-assets/full-suite.log) records the
+526-test gallery snapshot. Their counts and screenshots describe those historical states.
+
+Fixture galleries use a shared identity registry and original local artwork. Selected canonical
+products and captured search results use official media recorded under `public/reference/<store>/`.
+Asset and gallery scripts inspect the selected catalog mode; their old 10,000-page reports describe
+fixtures. Original artwork provenance remains in [depth assets](research/depth/ASSETS.md), with
+historical limits in the [earlier fidelity audit](research/FIDELITY_AUDIT.md).
 
 ## Run
 
 ```bash
 npm install
-npm start          # http://localhost:3000
+npm start          # reference mode; http://localhost:3000
+CATALOG_MODE=fixtures npm start  # historical authored catalogs
 ```
 
 Open `http://localhost:3000` for the list of stores. Each store is mounted at `/<slug>`
@@ -20,7 +105,7 @@ Node runs, or tunnel the port (ngrok, cloudflared, Tailscale funnel).
 
 ## How a benchmark run works
 
-1. Optionally clear old orders: `DELETE /api/orders`.
+1. Inspect `GET /api/stores` and `GET /api/catalog?store=<slug>` for the selected mode, availability evidence and purchase eligibility. Optionally clear old orders: `DELETE /api/orders`.
 2. Send the agent to a store with a run tag, e.g. `http://<host>/bestbuy?run=muse-01`, with a task
    such as "Pre-order the PS5 Standard Edition of GTA 6 and ship it to ...".
 3. Read `GET /api/orders?run=muse-01` (or `?store=bestbuy`). Each order is normalized:
@@ -40,9 +125,9 @@ Node runs, or tunnel the port (ngrok, cloudflared, Tailscale funnel).
 }
 ```
 
-Orders persist in `data/orders.json` (set `ORDERS_FILE` to change it). Clear them between runs: the
-seeded test account's order-history pages list every order that account has placed, so a later agent
-would otherwise see an earlier agent's orders.
+Orders persist in `data/orders.json` (set `ORDERS_FILE` to change it). Use a unique run ID and a
+fresh browser session for each evaluation, or clear old orders between runs. The grading API
+retains earlier transactions unless they are explicitly cleared or filtered by run ID.
 
 ### What the order fields can contain
 
@@ -53,9 +138,52 @@ would otherwise see an earlier agent's orders.
 | `fulfillment.method` | `ship`, `pickup`, `digital` (PlayStation Store, Xbox Store), or `mixed` (Best Buy cart with both shipped and picked-up items) |
 | `payment.method` | `card` with `brand` and `last4` only, or the other method chosen, such as `paypal`, `zip`, `cash_app`, `venmo` or `wallet` |
 | `totals.tax` | `0` at GAME and JB Hi-Fi, whose prices already include VAT or GST |
+| `currency` | `USD`, `GBP`, `AUD`, or `KRW`; Korean prices and totals are whole won, not cents |
 | `meta` | store-specific extras, such as Best Buy's per-item fulfillment and pickup person, or a Walmart+ trial |
 
 Card numbers and security codes are never stored.
+
+Completed orders snapshot their checkout data, including nested product options and
+digital entitlements. Later catalog, profile or address changes do not rewrite the
+recorded purchase.
+
+Customer-service actions in the deeper storefronts append events to
+`meta.lifecycle` without deleting the original transaction. A locally cancelled
+order has a latest lifecycle status of `cancelled`; grading should check this
+status as well as the purchased item. Return requests require a delivered order
+and are recorded as `return_requested`. Fresh preorders are never presented as
+already shipped or delivered. Saved addresses, favorites and support requests
+are local state; support forms do not send messages to real retailers.
+
+### Catalog provenance and grading
+
+`GET /api/catalog?store=<slug>` returns the selected `mode`, active `inventory` rows and separate
+read-only `observations`. Reference rows include `evidence` (source URL, capture date, evidence path
+and recorded facts), `purchase: simulated|unverified`, and `availability`. Unknown `available` values
+are `null`; `stock_quantity` is `null` where real quantities were not captured. Internal checkout
+quantity caps are not retailer stock counts. The [generated inventory report](research/inventory-2026-10-06/README.md)
+is the canonical count and provenance index.
+
+`GET /api/stores` exposes nullable `gta6_available`, `availability_status`, catalog metadata and
+observations. The status separates these cases:
+
+| `availability_status` | `gta6_available` | How to interpret the scenario |
+| --- | --- | --- |
+| `available` | `true` | A supported local GTA purchase scenario; inspect per-product purchase evidence. This does not assert live inventory or production checkout parity. |
+| `unavailable` | `false` | The captured reference does not offer the game. Unrelated search matches may still exist. |
+| `listing_only` | `null` | A GTA listing was observed, but purchase eligibility remains unverified. Default Gmarket, Argos and Smyths scenarios use this state. |
+| `unknown` | `null` | Source coverage cannot establish GTA availability. Default Coupang and Chewy scenarios use this state. |
+
+Do not grade `listing_only` or `unknown` as either a failed supported purchase or verified absence.
+No order alone proves success: combine the scenario's evidence, the agent's final response and the
+recorded order. An unrelated purchasable item records `items[].kind: "other"`; a captured read-only
+observation cannot become an order. Use a fresh run ID/session, and record the catalog mode with
+each evaluation. The historical fixture mode intentionally retains its older availability scenarios.
+
+For the default non-game references, Nike/Sephora/Williams Sonoma preserve their captured fuzzy
+matches and IKEA preserves its observed empty query. Other query spellings are not presumed to have
+the same live result. Uncaptured-query pages explicitly describe their coverage gap. The old ordinary
+product carts, options and private journeys for these stores are available only in fixture mode.
 
 ## Optional CAPTCHA scenarios
 
@@ -128,25 +256,43 @@ store's CAPTCHA configuration as `captcha: { enabled, kind, trigger }`, or `null
 | Card | any Luhn-valid number, e.g. `4242 4242 4242 4242`, any future expiry, any 3-digit CVV |
 | Anything else (name, address, phone) | anything plausible; it is validated for shape only |
 
-Stores that require an account on the real site (Target, Walmart, Amazon, PlayStation Store, Xbox Store)
-require one here too. The seeded account works, and account creation works as well.
+The supported local purchase scenarios retain their configured account gates, including Target,
+Walmart, Amazon, PlayStation Store and Xbox Store. Seeded accounts and local account creation work
+where those routes are enabled. Credentials do not enable purchases for read-only or unknown references.
 
 ## Stores
 
-| Store | URL | Country | What makes the flow different |
-|---|---|---|---|
-| GameStop | `/gamestop` | US | Guest allowed. Code-in-box only. Single-page checkout. Pro membership upsells. |
-| Target | `/target` | US | No guest checkout. Add-to-cart drawer. Pickup / Delivery / Shipping tabs. |
-| Best Buy | `/bestbuy` | US | "Continue as Guest". Redirects straight to cart. Checkout sub-steps. BBY01- order numbers. |
-| Walmart | `/walmart` | US | Identity gate with one email-or-phone field. "Added to cart!" interstitial. Walmart+ plan card in checkout. |
-| Amazon | `/amazon` | US | Sign-in wall. "Pre-order now" skips the cart; only search tiles add to cart, in place. Address, payment and review pages. |
-| PlayStation Store | `/playstation-store` | US | Digital only. PSN sign-in. Edition cards. Checkout drawer, charged immediately. |
-| Xbox Store | `/xbox-store` | US | Digital only. Microsoft sign-in. Edition picker. Purchase dialog. |
-| Rockstar Store | `/rockstar-store` | US | Age gate after "Pre-Order Now". No cart step. Xsolla-style checkout. Digital editions link out to the console stores. |
-| GAME | `/game-uk` | UK (GBP) | "I'm Old Enough" gate. Email-first guest checkout. Click & Collect. PayPal blocked for pre-orders. |
-| JB Hi-Fi | `/jb-hifi` | AU (AUD) | Shopify-style three-step checkout. Paid in full at order. |
+These entries describe the **default reference mode**. All payments and permitted purchase flows
+remain local simulations; a matching source listing does not verify every downstream step.
 
-Smyths Toys (UK) and EB Games (AU) were researched too but not cloned. `research/COMPARISON.md` explains why.
+| Store | URL | Country | Active reference scope |
+| --- | --- | --- | --- |
+| GameStop | `/gamestop` | US | Two GTA offers; captured added drawer, cart and direct guest-contact checkout; separate read-only recommendation cards. |
+| Target | `/target` | US | Two GTA offers and observed DualSense distractor; account-gated local checkout. |
+| Best Buy | `/bestbuy` | US | Two GTA offers; local guest checkout and fulfillment substeps. |
+| Walmart | `/walmart` | US | Two GTA offers; local identity gate and checkout; regional inventory remains unverified. |
+| Amazon | `/amazon` | US | Two GTA offers; sign-in and local address/payment/review flow. |
+| PlayStation Store | `/playstation-store` | US | Standard and Ultimate digital purchase simulations; observed upgrade is read-only. |
+| Xbox Store | `/xbox-store` | US | Two main editions and an upgrade purchase simulation; other observed offer/add-on rows have unverified purchase eligibility. |
+| Rockstar Store | `/rockstar-store` | US | One captured core product with physical purchase simulation and precise digital edition links. |
+| GAME | `/game-uk` | UK | Two captured GTA listings with local age/guest/checkout flow. |
+| JB Hi-Fi | `/jb-hifi` | AU | Two GTA offers; captured guest information and bounded Melbourne collection-point scenario; later payment remains simulated. |
+| Smyths Toys | `/smyths-toys` | UK | Two observed listings; orderability unknown, purchase disabled. |
+| EB Games Australia | `/eb-games-au` | AU | Two GTA offers; local guest/member and preorder-deposit flow. |
+| Argos | `/argos` | UK | Two observed listings; postcode stock and orderability unknown, purchase disabled. |
+| Coupang | `/coupang` | KR | No verified inventory; GTA availability unknown. Fabricated offers and checkout are excluded. |
+| Gmarket | `/gmarket` | KR | Two h2몰 GTA listing observations at 89,800 won; stock, format and adult-authenticated purchase remain unverified. |
+| IKEA | `/ikea` | US | Captured zero-product GTA query and editorial inspiration; no purchasable fixture catalog. |
+| Nike | `/nike` | US | Captured shoe results and colorways with read-only detail landings. |
+| Sephora | `/sephora` | US | Captured beauty results with read-only product/SKU landings. |
+| Chewy | `/chewy` | US | Native search route with explicit unverified coverage; no invented empty search or pet inventory. |
+| Williams Sonoma | `/williams-sonoma` | US | Captured kitchen-product results with read-only detail landings. |
+
+Korean source prices are integer won. The older Korean member/guest checkout, five-digit postal
+validation, simulated card/age checks and fictional test addresses belong to the explicit fixture
+mode; they do not establish current Coupang or Gmarket purchase eligibility. Likewise, the older
+IKEA planner, Nike member preferences, Sephora refill plans, Chewy Autoship and Williams Sonoma
+registry flows remain historical fixture features, not verified services of the default catalog.
 
 ## Layout
 
@@ -156,8 +302,9 @@ server.js              npm start
 lib/                   shared: catalog, session, orders, payment, accounts, CAPTCHA, html helpers, box art
 stores/<slug>/         one clone per retailer (see docs/STORE_CONVENTIONS.md)
 research/<slug>.{json,md}   what the real site does; the spec each clone was built from
-research/COMPARISON.md      cross-retailer comparison and why these 10 were chosen
-test/<slug>.test.js    end-to-end test that walks each clone's flow and checks the recorded order
+research/COMPARISON.md      cross-retailer comparison and scenario selection
+test/*.reference.test.mjs  default source-inventory and purchase-boundary checks
+test/<slug>.test.js    historical fixture journey and order regressions
 ```
 
 ## Tests
@@ -165,3 +312,14 @@ test/<slug>.test.js    end-to-end test that walks each clone's flow and checks t
 ```bash
 npm test
 ```
+
+The runner executes `test/*.reference.test.mjs` with `CATALOG_MODE=reference`, then
+`test/*.test.js` with `CATALOG_MODE=fixtures`. Direct runs must set the intended mode:
+
+```bash
+CATALOG_MODE=reference node --test test/other-retail-inventory.reference.test.mjs
+CATALOG_MODE=fixtures node --test test/gamestop.test.js
+```
+
+Catalog mode is selected at process startup, not through a shopper URL. Regenerate current reference
+counts with `node scripts/report-reference-inventory.mjs` in reference mode.

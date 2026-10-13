@@ -1,0 +1,117 @@
+{
+  "captured_at": "2026-10-06",
+  "page_url": "https://www.xbox.com/en-US/games/store/p/9p3h4968grsm",
+  "provenance": "Original assets exported from the rendered official Xbox product page. Used for local benchmark reproduction. Copyright remains with the respective owners. No endorsement or redistribution license is implied.",
+  "assets": [
+    {
+      "file": "microsoft-logo.png",
+      "source_url": "https://uhf.microsoft.com/images/microsoft/RE1MmB8.png",
+      "content_type": "image/png",
+      "sha256": "b04635096e57ef154a30ba4446d1ca58619706784aea3a11b489ac733c09d99f",
+      "bytes": 3988
+    },
+    {
+      "file": "xbox-logo.png",
+      "source_url": "https://uhf.microsoft.com/images/xbox/RW8TP2.png",
+      "content_type": "image/png",
+      "sha256": "924f6058ccd6fa902d9d17f75a8d552ff8f4d1cb8fa9691535d357caf94e9699",
+      "bytes": 9780
+    },
+    {
+      "file": "gta-vi-background.jpg",
+      "source_url": "https://store-images.s-microsoft.com/image/apps.38523.14542422611289128.3b031337-27f7-4c9c-b048-a91f557bda40.67ebe180-f05d-4351-b574-d94b366e0d02?q=90&w=480&h=270",
+      "content_type": "image/jpeg",
+      "sha256": "4dce737fe7653fe64a702db84c07952a519b727d5c045a3842d63a7c0a0d15c3",
+      "bytes": 38722
+    },
+    {
+      "file": "gta-vi-cover.png",
+      "source_url": "https://store-images.s-microsoft.com/image/apps.47529.14542422611289128.2df5f2de-8c5b-4180-adca-60031b66133a.38261ecb-5ee5-4e30-8586-070dd6251f17?q=90&w=177&h=265",
+      "content_type": "image/png",
+      "sha256": "56e813a166b7e3d5bbc79659880bc8b0a6482694eabe5bc4fe549212920a74af",
+      "bytes": 121795
+    },
+    {
+      "file": "gta-vi-square.jpg",
+      "source_url": "https://store-images.s-microsoft.com/image/apps.182.14542422611289128.2df5f2de-8c5b-4180-adca-60031b66133a.ebf16897-415f-430c-8b57-c4cebc0b424d?q=90&w=177&h=177",
+      "content_type": "image/jpeg",
+      "sha256": "bc04fd4487bd4a7cbd5a59f7f6803c74096977cc4aa03d0f6cfc0a8a3de6874f",
+      "bytes": 19323
+    },
+    {
+      "file": "gta-vi-ultimate-cover.jpg",
+      "source_url": "https://store-images.s-microsoft.com/image/apps.23248.13733243493197803.a3412f95-9af3-40d3-b286-9282abd1d7a8.c6ebb25e-9167-4ffc-a84a-b95bfc7b820c?q=90&w=80&h=120",
+      "content_type": "image/jpeg",
+      "sha256": "b4cc43e30d7b087cd4e6e533e2dc0a8e05424a5a9747258ff6a6c0dbb3652331",
+      "bytes": 6461
+    },
+    {
+      "file": "esrb-mature.png",
+      "source_url": "https://store-images.microsoft.com/image/global.53975.image.32437939-2f27-4e79-8431-5f5866f32908.3dc74b18-4153-423c-b367-bdcfd34ac658?q=100&w=50&h=50",
+      "content_type": "image/png",
+      "sha256": "54e37ace7d1f20533dec7f077852567aa3fb193aac87e39349297505c71b8829",
+      "bytes": 1987
+    },
+    {
+      "file": "segoe-ui.woff2",
+      "source_url": "https://assets-xbxweb.xbox.com/xbox-web/static/media/normal.1a84982f.woff2",
+      "content_type": "font/woff2",
+      "sha256": "4f7f4afe26e71fa9ca1dac4a43b557a554a46f53251d849f07ed08a04829d74b",
+      "bytes": 34052
+    },
+    {
+      "file": "segoe-ui-semibold.woff2",
+      "source_url": "https://assets-xbxweb.xbox.com/xbox-web/static/media/semibold.c408ee08.woff2",
+      "content_type": "font/woff2",
+      "sha256": "d87d0a7a7fe2c36d1dc093bfe56e9b81b311988789dbd3b65abf811d551ef02f",
+      "bytes": 29388
+    },
+    {
+      "file": "bahnschrift.woff",
+      "source_url": "https://assets-xbxweb.xbox.com/xbox-web/static/media/Bahnschrift.30b0e116.woff",
+      "content_type": "font/woff",
+      "sha256": "ef737f5f2c87ed6f1180d3ec8870e46e20ac4c614c9f76260873c5f879a19f20",
+      "bytes": 180116
+    },
+    {
+      "file": "preorder-icon.svg",
+      "source_url": "https://www.xbox.com/en-US/games/store/p/9p3h4968grsm",
+      "content_type": "image/svg+xml",
+      "source_kind": "inline-svg",
+      "sha256": "14fd48bdfcebd4644a9aa644d24e9f67c698b85464cad4d4c7e34cfe3a2f3757",
+      "bytes": 996
+    },
+    {
+      "file": "languages-icon.svg",
+      "source_url": "https://www.xbox.com/en-US/games/store/p/9p3h4968grsm",
+      "content_type": "image/svg+xml",
+      "source_kind": "inline-svg",
+      "sha256": "2486239fcf5de09b782644ac28363f89c5bbeaaeaeb5f6d9359b994954614310",
+      "bytes": 2004
+    },
+    {
+      "file": "wishlist-icon.svg",
+      "source_url": "https://www.xbox.com/en-US/games/store/p/9p3h4968grsm",
+      "content_type": "image/svg+xml",
+      "source_kind": "inline-svg",
+      "sha256": "dab3a964835ae373b8f18aaacb638e79d038bf00171ff09dcc0306e87ba4afea",
+      "bytes": 749
+    },
+    {
+      "file": "chevron-down.svg",
+      "source_url": "https://www.xbox.com/en-US/games/store/p/9p3h4968grsm",
+      "content_type": "image/svg+xml",
+      "source_kind": "inline-svg",
+      "sha256": "bb78abbd6349c09f1501e3968314df6bea2c1916545b07b43959352b7f2a39b2",
+      "bytes": 318
+    },
+    {
+      "file": "xbox-mark.svg",
+      "source_url": "https://www.xbox.com/en-US/games/store/p/9p3h4968grsm",
+      "content_type": "image/svg+xml",
+      "source_kind": "inline-svg",
+      "sha256": "862b406fefa820103663567a5b34f38fba9f7605a21bfd3f984e7016cf0376ba",
+      "bytes": 2792
+    }
+  ]
+}

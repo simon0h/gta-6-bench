@@ -1,3 +1,9 @@
+import { scenarioProduct } from '../../lib/benchmark-scenarios.js'
+import { applyCatalogPolicy, fixtureCatalog } from '../../lib/catalog-policy.js'
+import { catalogEvidence } from './catalog-evidence.js'
+import { expandCatalog } from './expand500.js'
+import { EXTRA_PRODUCTS, enrichProduct, DEPARTMENTS, nodeById, values } from './catalog.js'
+export { DEPARTMENTS } from './catalog.js'
 // Listings as they appear on amazon.com (research/amazon.md + amazon.json, observed 2026-09-29).
 // Amazon US sells only the Standard edition, code in box, $79.99, one ASIN per platform.
 
@@ -13,7 +19,7 @@ export const AVAILABILITY = `This item will be released on ${RELEASE_DATE_TEXT}.
 // shown at checkout"); $3.99 is used here. It is FREE with Prime, which the test account lacks.
 export const DELIVERY = {
   standard: { id: 'standard', name: 'FREE delivery', date: 'Monday, November 16', short: 'Nov 16', price: 0, detail: 'Standard shipping' },
-  'release-date': { id: 'release-date', name: 'Release-Date Delivery', date: 'Thursday, November 12', short: 'Nov 12', price: 3.99, detail: 'Arrives on the release date. FREE with Prime.' },
+  'release-date': { id: 'release-date', name: 'Release-Date Delivery', date: 'Thursday, November 12', short: 'Nov 12', price: 3.99, detail: 'Arrives on the release date.' },
 }
 
 const GAME_DELIVERY = ['FREE delivery Mon, Nov 16', 'Or fastest delivery Thu, Nov 12']
@@ -64,7 +70,7 @@ export const PRODUCTS = [
     esrb: null, bought: '500+ bought in past month', rating: null,
     // ASSUMPTION: the album's street date was not captured; it is listed as a pre-order like the game.
     release: 'November 19, 2026', availability: 'This item will be released on November 19, 2026.', delivery: GAME_DELIVERY, priceNote: 'Pre-order Price Guarantee.',
-    art: '/static/art/vinyl.svg',
+    art: '/amazon/static/cd.svg',
     about: ['Official soundtrack album for Grand Theft Auto VI.', 'Audio CD edition; also available on MP3 and 2x LP vinyl.'],
     keywords: 'gta 6 gta6 gta vi gtavi grand theft auto vi album soundtrack music cd vinyl explicit rockstar',
   },
@@ -199,9 +205,14 @@ export const PRODUCTS = [
     release: null, availability: 'In Stock', delivery: STOCK_DELIVERY, priceNote: null, art: '/static/art/accessory.svg',
     about: ['Vertical stand with cooling fan and two controller charging docks.'], keywords: 'ps5 cooling stand fan controller charger charging station accessories',
   },
-]
+  ...(fixtureCatalog ? EXTRA_PRODUCTS : []),
+].map(enrichProduct)
 
-export const CART_RECS = ['B0CRPS5SLM', 'B0DGRIPCAP', 'B0DCOOLSTD']
+if (fixtureCatalog) expandCatalog(PRODUCTS)
+applyCatalogPolicy('amazon', PRODUCTS, catalogEvidence)
+if (!fixtureCatalog) for (const p of PRODUCTS) { p.catalogType = p.kind === 'game' ? 'game' : 'other'; p.catalogPlatform = p.platform || null; p.simulatedStock = true }
+
+export const CART_RECS = fixtureCatalog ? ['B0CRPS5SLM', 'B0DGRIPCAP', 'B0DCOOLSTD'] : []
 
 export const byAsin = (asin) => PRODUCTS.find(p => p.asin === String(asin ?? '').toUpperCase()) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
@@ -221,44 +232,64 @@ export const SORTS = [
   ['review-rank', 'Avg. Customer Review'], ['date-desc-rank', 'Newest Arrivals'], ['exact-aware-popularity-rank', 'Best Sellers'],
 ]
 
-export const DEPARTMENTS = [
-  ['', 'All'], ['videogames', 'Video Games'], ['electronics', 'Electronics'], ['music', 'CDs & Vinyl'], ['digital-music', 'Digital Music'],
-  ['toys-and-games', 'Toys & Games'], ['stripbooks', 'Books'], ['fashion', 'Clothing, Shoes & Jewelry'],
-]
-
-export function search(q, dept = '', sort = '') {
+export function search(q, dept = '', sort = '', filters = {}, node = '') {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  if (!tokens.length) return []
-  let hits = PRODUCTS.filter(p => { const hay = norm(p.title + ' ' + p.keywords); return tokens.every(t => hay.includes(t)) })
+  let hits = PRODUCTS.filter(p => { const hay = norm([p.title,p.brand,p.keywords,DEPARTMENTS.find(([id])=>id===p.department)?.[1]].join(' ')); return tokens.every(t => hay.includes(t)) })
   if (dept) hits = hits.filter(p => p.department === dept)
-  hits.sort((a, b) => a.rank - b.rank)
+  if (node) hits = hits.filter(p => p.nodes.includes(nodeById(node)?.id ?? node))
+  for (const [key,field] of [['platform','platformKey'],['brand','brand'],['type','typeLabel'],['condition','condition'],['seller','seller'],['format','format']]) {
+    const selected = values(filters[key]); if (selected.length) hits = hits.filter(p=>selected.includes(p[field]))
+  }
+  if (filters.price === 'under25') hits = hits.filter(p => p.price < 25)
+  if (filters.price === '25to50') hits = hits.filter(p => p.price >= 25 && p.price <= 50)
+  if (filters.price === '50to100') hits = hits.filter(p => p.price >= 50 && p.price <= 100)
+  if (filters.price === 'over100') hits = hits.filter(p => p.price > 100)
+  if (String(filters.min ?? '').trim() && Number.isFinite(Number(filters.min))) hits = hits.filter(p => p.price >= Number(filters.min))
+  if (String(filters.max ?? '').trim() && Number.isFinite(Number(filters.max))) hits = hits.filter(p => p.price <= Number(filters.max))
+  if (filters.delivery === 'tomorrow') hits = hits.filter(p => !p.release && p.stock > 0)
+  if (Number(filters.rating)) hits = hits.filter(p => (p.rating?.stars ?? 0) >= Number(filters.rating))
+  if (filters.availability === 'in-stock') hits = hits.filter(p => p.stock > 0 && !p.release)
+  if (filters.availability === 'preorder') hits = hits.filter(p => p.stock > 0 && p.release)
+  if (filters.availability === 'unavailable') hits = hits.filter(p => p.stock === 0)
+  hits.sort((a,b)=>a.rank-b.rank)
   if (sort === 'price-asc-rank') hits.sort((a, b) => a.price - b.price)
   if (sort === 'price-desc-rank') hits.sort((a, b) => b.price - a.price)
+  if (sort === 'review-rank') hits.sort((a, b) => (b.rating?.stars ?? 0) - (a.rating?.stars ?? 0))
+  if (sort === 'date-desc-rank') hits.sort((a, b) => b.addedDate.localeCompare(a.addedDate))
+  if (sort === 'exact-aware-popularity-rank') hits.sort((a, b) => Number(String(b.rating?.count ?? 0).replaceAll(',', '')) - Number(String(a.rating?.count ?? 0).replaceAll(',', '')))
   return hits
 }
 
+export function recommendations(p, count=6) {
+  return PRODUCTS.filter(x=>x.asin!==p.asin && x.stock>0).sort((a,b)=>Number(b.node===p.node)-Number(a.node===p.node) || Number(b.department===p.department)-Number(a.department===p.department) || a.rank-b.rank).slice(0,count)
+}
+export function deliveryOptions(lines) {
+  const releases = lines.map(l=>l.product.release).filter(Boolean).sort((a,b)=>Date.parse(b)-Date.parse(a))
+  if (lines.some(l=>l.product.kind==='game') && (!releases[0] || Date.parse(releases[0])<=Date.parse(RELEASE_DATE_TEXT))) return DELIVERY
+  return {standard:{id:'standard',name:'FREE delivery',date:releases[0] || 'Monday, October 5',short:releases[0] || 'Oct 5',price:0,detail:releases.length?'Ships when the pre-order is released.':'Standard shipping'}}
+}
 export const STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
 
 const round = n => Math.round(n * 100) / 100
 
 // Cart lines: { asin, qty } with the product attached. Amazon merges quantity when the same ASIN is re-added.
 export function cartLines(store) {
-  return store.cart.map(l => ({ ...l, product: byAsin(l.asin) })).filter(l => l.product)
+  return store.cart.map(l => ({ ...l, product: scenarioProduct(store,byAsin(l.asin)) })).filter(l => l.product)
 }
 
 // "Pre-order now" on the product page is Amazon's Buy Now: it checks out that one item on its own
 // and leaves the cart untouched. "Proceed to checkout" from the cart checks out the cart.
 export function checkoutLines(store) {
   const bn = store.checkout?.buyNow
-  if (bn) { const product = byAsin(bn.asin); return product ? [{ asin: bn.asin, qty: bn.qty, product }] : [] }
+  if (bn) { const product = scenarioProduct(store,byAsin(bn.asin)); return product ? [{ asin: bn.asin, qty: bn.qty, product }] : [] }
   return cartLines(store)
 }
 
 export function totals(lines, deliveryId = 'standard') {
   const count = lines.reduce((n, l) => n + l.qty, 0)
   const subtotal = round(lines.reduce((n, l) => n + l.qty * l.product.price, 0))
-  const shipping = count ? (DELIVERY[deliveryId] ?? DELIVERY.standard).price : 0
+  const shipping = count ? (deliveryOptions(lines)[deliveryId] ?? deliveryOptions(lines).standard).price : 0
   const tax = round(subtotal * TAX_RATE)
   return { lines, count, subtotal, shipping, tax, total: round(subtotal + shipping + tax) }
 }

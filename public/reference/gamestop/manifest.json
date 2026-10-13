@@ -1,0 +1,347 @@
+{
+  "captured_at": "2026-10-06",
+  "page_url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+  "products": [
+    {
+      "ids": [
+        "448295"
+      ],
+      "images": [
+        "gta-vi-ps5-1.png",
+        "gta-vi-ps5-2.jpg",
+        "gta-vi-ps5-3.jpg",
+        "gta-vi-ps5-4.jpg",
+        "gta-vi-ps5-5.jpg",
+        "gta-vi-ps5-6.jpg",
+        "gta-vi-ps5-7.jpg",
+        "gta-vi-ps5-8.jpg",
+        "gta-vi-ps5-9.jpg",
+        "gta-vi-ps5-10.jpg",
+        "gta-vi-ps5-11.jpg",
+        "gta-vi-ps5-12.jpg"
+      ],
+      "background": "#f7f7f7"
+    },
+    {
+      "ids": [
+        "448297"
+      ],
+      "images": [
+        "gta-vi-xbox-1.png",
+        "gta-vi-ps5-2.jpg",
+        "gta-vi-ps5-3.jpg",
+        "gta-vi-ps5-4.jpg",
+        "gta-vi-ps5-5.jpg",
+        "gta-vi-ps5-6.jpg",
+        "gta-vi-ps5-7.jpg",
+        "gta-vi-ps5-8.jpg",
+        "gta-vi-ps5-9.jpg",
+        "gta-vi-ps5-10.jpg",
+        "gta-vi-ps5-11.jpg",
+        "gta-vi-ps5-12.jpg"
+      ],
+      "background": "#f7f7f7",
+      "page_url": "https://www.gamestop.com/video-games/xbox-series-x%7Cs/products/grand-theft-auto-vi---xbox-series-x-s-code-in-box/448297.html"
+    }
+  ],
+  "assets": [
+    {
+      "file": "gta-vi-ps5-1.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131-680826cd?w=1536&h=1536&fmt=auto",
+      "sha256": "936ec1ca883342fab360c6fec10c097b7cf531a41aad21ec8e8f8d2f004265b9",
+      "bytes": 7026236
+    },
+    {
+      "file": "gta-vi-ps5-4.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR03?w=2512&h=1328&fmt=auto",
+      "sha256": "23450a37899523f346ae031da944defcf6689ea1ffdd8fcd2efef99bf647a98c",
+      "bytes": 238436
+    },
+    {
+      "file": "gta-vi-ps5-5.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR04?w=2512&h=1328&fmt=auto",
+      "sha256": "b54c094ddf984527eadbf4c1f8071a01edb1969b76e7c02229f1ef345dd09889",
+      "bytes": 315921
+    },
+    {
+      "file": "gta-vi-ps5-6.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR05?w=2512&h=1328&fmt=auto",
+      "sha256": "356c7245ef307723f3d136385ca56db79d88ce90f0d94f4f572a363cab1b0521",
+      "bytes": 161000
+    },
+    {
+      "file": "gta-vi-ps5-7.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR06?w=2512&h=1328&fmt=auto",
+      "sha256": "c9275e8561d86b7ca741d09e454e560fd274394fb966c106206bdcb23bb51134",
+      "bytes": 481081
+    },
+    {
+      "file": "gta-vi-ps5-8.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR07?w=2512&h=1328&fmt=auto",
+      "sha256": "09f02987664403639ca87f97f8dd92e731924e182576f53666a536f07ace3d23",
+      "bytes": 396136
+    },
+    {
+      "file": "gta-vi-ps5-2.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR01?w=2512&h=1328&fmt=auto",
+      "sha256": "64f491ced5c901669ea8f73714928e98e599ed0670df844aad80797b73553d97",
+      "bytes": 244104
+    },
+    {
+      "file": "gta-vi-ps5-3.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR02?w=2512&h=1328&fmt=auto",
+      "sha256": "4ab8e2874657c20496e877ec3b428df115fe4265f20779157a085406ea34d8e2",
+      "bytes": 237914
+    },
+    {
+      "file": "gta-vi-ps5-9.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR08?w=2512&h=1328&fmt=auto",
+      "sha256": "92406c01e7e7b5888299290991df2fdc6e6bae28c193198e303cd0db8348a490",
+      "bytes": 305846
+    },
+    {
+      "file": "gta-vi-ps5-10.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR09?w=2512&h=1328&fmt=auto",
+      "sha256": "49439c2d1df50c063ba897fa16ce9c8ab8532c15aed5b6410477469cc8e6286a",
+      "bytes": 454763
+    },
+    {
+      "file": "gta-vi-ps5-11.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR10?w=2512&h=1328&fmt=auto",
+      "sha256": "00cf66f05b38ff866d18287df78fd09c5db5d42ff66296d87c49aca8440e5674",
+      "bytes": 456324
+    },
+    {
+      "file": "gta-vi-ps5-12.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131_SCR11?w=2512&h=1328&fmt=auto",
+      "sha256": "add886e9b089dc20905972be6d937ff1a4b873f89d8282478ef4bd7fcb5304ae",
+      "bytes": 233870
+    },
+    {
+      "file": "material-menu.svg",
+      "source_url": "https://www.gamestop.com/on/demandware.static/Sites-gamestop-us-Site/-/default/dw8c59bafc/images/svg-icons/material-menu.svg",
+      "sha256": "b53e205fd5530dcec8bf87c806d2761536cac30e52d045792ff4731a9b01b48e",
+      "bytes": 213
+    },
+    {
+      "file": "material-search.svg",
+      "source_url": "https://www.gamestop.com/on/demandware.static/Sites-gamestop-us-Site/-/default/dw8c7501bf/images/svg-icons/material-search.svg",
+      "sha256": "43c99d0aa8813cced4f7d4aa6ef37ba2b8774dc3f030c1f42891344df54cc632",
+      "bytes": 406
+    },
+    {
+      "file": "material-repeat.svg",
+      "source_url": "https://www.gamestop.com/on/demandware.static/Sites-gamestop-us-Site/-/default/dw1d2591c8/images/svg-icons/material-repeat.svg",
+      "sha256": "52319868b1a5edc35e1bf7b28188366ccdd0c3c8d7199b6b2a676b65b29f77eb",
+      "bytes": 231
+    },
+    {
+      "file": "material-shopping-cart.svg",
+      "source_url": "https://www.gamestop.com/on/demandware.static/Sites-gamestop-us-Site/-/default/dwfd657c73/images/svg-icons/material-shopping-cart.svg",
+      "sha256": "4a8ef71504ee280839c35602753129e4d9df7a4de1ceffe1f94143393e628be3",
+      "bytes": 474
+    },
+    {
+      "file": "cart-blue.svg",
+      "source_url": "https://www.gamestop.com/on/demandware.static/Sites-gamestop-us-Site/-/default/dwd1318c58/images/svg-icons/cart_blue.svg",
+      "sha256": "77014647b89f2f6c9a2305ac0dc14caece828773e1d4ef0f7674815dacb8fb5b",
+      "bytes": 2853
+    },
+    {
+      "file": "gs-credit-card-icon.png",
+      "source_url": "https://www.gamestop.com/on/demandware.static/Sites-gamestop-us-Site/-/default/dwaf944188/images/gs-credit-card-icon.png",
+      "sha256": "e172c767e418f2f53eeb998e584a8d1f7223d30a288686c552b110ab5376c84e",
+      "bytes": 5716
+    },
+    {
+      "file": "rp.png",
+      "source_url": "https://www.gamestop.com/on/demandware.static/Sites-gamestop-us-Site/-/default/dw3ddf495d/images/esrb-ratings/RP.png",
+      "sha256": "81b73ee683121decc77889d887bf269f8ae1871c29b7d2ea9c30b581410b80dd",
+      "bytes": 14957
+    },
+    {
+      "file": "open-sans.css",
+      "source_url": "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,900",
+      "sha256": "b933519abd5ce73c3ec9c6272b23b9089d16521c11965c6350716ab4208cfb70",
+      "bytes": 738
+    },
+    {
+      "file": "poppins.css",
+      "source_url": "https://fonts.googleapis.com/css?family=Poppins:400,600,700,900",
+      "sha256": "3826457e94046e13d6db0d7de5fb0dcdb471a0711dc7e400e2672b2556df0276",
+      "bytes": 740
+    },
+    {
+      "file": "open-sans-400.ttf",
+      "source_url": "https://fonts.gstatic.com/s/opensans/v44/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf",
+      "sha256": "d8f99fb48842f2a6b113cb9934e41bde592193380396bf352aa85d634e77ce9f",
+      "bytes": 35316
+    },
+    {
+      "file": "open-sans-600.ttf",
+      "source_url": "https://fonts.gstatic.com/s/opensans/v44/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsgH1x4gaVc.ttf",
+      "sha256": "b041fef8e9aa6703e030f419cbc66322e00624ce708cd1279ee7487275a0517a",
+      "bytes": 35296
+    },
+    {
+      "file": "open-sans-700.ttf",
+      "source_url": "https://fonts.gstatic.com/s/opensans/v44/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4gaVc.ttf",
+      "sha256": "0da08354e9db8b0d47832c36325d314bbc8d41e0f6729cb15f9731181c8245bd",
+      "bytes": 35292
+    },
+    {
+      "file": "poppins-400.ttf",
+      "source_url": "https://fonts.gstatic.com/s/poppins/v24/pxiEyp8kv8JHgFVrJJfedw.ttf",
+      "sha256": "66807e8e108c648c970aeace0886706f8c95c616f036529a4b628525208f18e8",
+      "bytes": 16148
+    },
+    {
+      "file": "poppins-600.ttf",
+      "source_url": "https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLEj6Z1xlEA.ttf",
+      "sha256": "53eaa58cf4e7fc8d68a3b557ad8f67b8b6613e7431e87a6ca896948c53ef2d35",
+      "bytes": 16044
+    },
+    {
+      "file": "poppins-700.ttf",
+      "source_url": "https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLCz7Z1xlEA.ttf",
+      "sha256": "884d2cd5ba1b567924c3d174d5cb03f9ad49777bd3c4aa97ce01567acdcdf587",
+      "bytes": 15816
+    },
+    {
+      "file": "poppins-900.ttf",
+      "source_url": "https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLBT5Z1xlEA.ttf",
+      "sha256": "a27d2b3a061c351a397130d5d5b9b692845367f065e8c8a686b97b4fa6296278",
+      "bytes": 15664
+    },
+    {
+      "file": "recommendation-342264.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/11204091?h=480&w=240&sm=clamp",
+      "sha256": "356b709ccbe7392e90857c9ccc9afcb75519e4c7d814f9cc473ff522ad1bb258",
+      "bytes": 24445
+    },
+    {
+      "file": "recommendation-445643.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20008194-680826cd?h=480&w=240&sm=clamp",
+      "sha256": "263970430327474f51f31d8b5fc1afc76149b2f6c18e01de2c5cc0ef488e1c1d",
+      "bytes": 257238
+    },
+    {
+      "file": "recommendation-451381.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036747-680826cd?h=480&w=240&sm=clamp",
+      "sha256": "54eaf481172037f2e11ff3b552a45b8c32a5c812378e25695984cd56cf5aa6eb",
+      "bytes": 273276
+    },
+    {
+      "file": "recommendation-428031.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20015339-680826cd?h=480&w=240&sm=clamp",
+      "sha256": "5d8e6ca10f38f14ac32f14670838d001c35a930f65f188c87c351c839e15c3e9",
+      "bytes": 13739
+    },
+    {
+      "file": "recommendation-442527.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20032440-2e0ec255?h=480&w=240&sm=clamp",
+      "sha256": "c5c562670f7535aee900d8d037bdf2cdd38829594aeab5ae521466f64c7c4121",
+      "bytes": 281811
+    },
+    {
+      "file": "recommendation-429214.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20023728-2e0ec255?h=480&w=240&sm=clamp",
+      "sha256": "333cde149140ffdc149ad239d7dcd08082b76747015f561b0d1fc34460134bfa",
+      "bytes": 266251
+    },
+    {
+      "file": "recommendation-421114.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20013543-2e0ec255?h=480&w=240&sm=clamp",
+      "sha256": "71a6d1ad00c7526fd3be28b81e8d1fb5acf647092c0570e764ab912033f4a8dd",
+      "bytes": 275454
+    },
+    {
+      "file": "recommendation-451479.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20037775-680826cd?h=480&w=240&sm=clamp",
+      "sha256": "f628140b1f309da673254e0fcfed0104be67841dbefb4c624968ab73b493c3e9",
+      "bytes": 123356
+    },
+    {
+      "file": "recommendation-446838.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20035419-680826cd?h=480&w=240&sm=clamp",
+      "sha256": "6de2d3c421e5f42cd1c24d1060e3b3879d3f749f168a1d585db3734d373ff1c4",
+      "bytes": 11170
+    },
+    {
+      "file": "recommendation-450785.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/20037599/Hunting-Simulator-3?h=480&w=240&sm=clamp",
+      "sha256": "9f653eee7062f54f946e8ef973be1f1787d5e099475c8357769fbf5ed8493921",
+      "bytes": 8046
+    },
+    {
+      "file": "recommendation-447416.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20035716-2e0ec255?h=480&w=240&sm=clamp",
+      "sha256": "31f05f894d8373785ef4aac65e4f37ca1c8e5544b0611193fd797ceb36e53121",
+      "bytes": 266902
+    },
+    {
+      "file": "recommendation-443551.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20033522-c50d4c39?h=480&w=240&sm=clamp",
+      "sha256": "831a3fbdf4372d46871a154f13b4bbc4d2bfdd9e31f53f8302f0ab98b01dc764",
+      "bytes": 153054
+    },
+    {
+      "file": "recommendation-420634.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20010022-680826cd?h=480&w=240&sm=clamp",
+      "sha256": "7039a32c68e07ffe4c94fae35b8dd7daa8706b7c51f34c336e6ea50d8b764a78",
+      "bytes": 130909
+    },
+    {
+      "file": "recommendation-451511.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036094-680826cd?h=480&w=240&sm=clamp",
+      "sha256": "5888c173f575c3bc9db386205730987bb91703acbd2bebe295feb931eb8baf08",
+      "bytes": 358175
+    },
+    {
+      "file": "recommendation-295172.jpg",
+      "source_url": "https://media.gamestop.com/i/gamestop/11144247/Metro-Exodus-Complete-Edition---PlayStation-5?h=480&w=240&sm=clamp",
+      "sha256": "373c172d7948c93f3c8969971e1023a6d603e80a8b0f8ca7020056518ad04b05",
+      "bytes": 21585
+    },
+    {
+      "file": "gamestop-logo.svg",
+      "source_url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+      "source_inline_id": "7a9f3edc74386a0e",
+      "source_name": "GameStop",
+      "placement": "Header wordmark",
+      "classification": "official-captured",
+      "content_type": "image/svg+xml",
+      "bytes": 4020,
+      "sha256": "3e8f30dc3c2659899f708214436eaa7f8d13d963524e993aeb9a92517ca26859"
+    },
+    {
+      "file": "gamestop-pro.svg",
+      "source_url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+      "source_inline_id": "69a880959acd5b38",
+      "source_name": "GameStop Pro Icon",
+      "placement": "Header Pro icon",
+      "classification": "official-captured",
+      "content_type": "image/svg+xml",
+      "bytes": 614,
+      "sha256": "6374cb821659886965d8c1bc158a1ee4a787f222adce5bd10c452469061e3586"
+    },
+    {
+      "file": "nav-chevron.svg",
+      "source_url": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+      "source_inline_id": "e5e848e3317959bb",
+      "source_name": "svg-5",
+      "placement": "Category navigation chevrons",
+      "classification": "official-captured",
+      "content_type": "image/svg+xml",
+      "bytes": 246,
+      "sha256": "cefbe58da2e54e290e2c7d6093d671276b925cc94ad15729f243628015d4ef77",
+      "transformation": "Added XML SVG namespace for standalone image; original geometry and paths unchanged."
+    },
+    {
+      "file": "gta-vi-xbox-1.png",
+      "source_url": "https://media.gamestop.com/i/gamestop/20036131-3f0862c8?w=1536&h=1536&fmt=auto",
+      "sha256": "097b034f573aa82a87f0cb6cbf70a83f97038ffcabe55103b139e94835ac83a3",
+      "bytes": 7151033
+    }
+  ]
+}

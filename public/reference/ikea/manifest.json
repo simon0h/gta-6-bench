@@ -1,0 +1,214 @@
+{
+  "captured_at": "2026-10-06",
+  "source_page": "https://www.ikea.com/us/en/",
+  "classification": "official-captured",
+  "note": "Public official images preserved without pixel edits for this local synthetic benchmark. Not generated replacement art. Copyright and trademarks remain with their owners.",
+  "assets": [
+    {
+      "local_path": "public/reference/ikea/kitchen-accessories.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/5b190d9dd8981ba9/original/PE1012454.jpg",
+      "placement": "homepage secondary kitchen accessories campaign tile",
+      "sha256": "9298b79008e447e35fa4309c22adaa4ca6a0c9185cac29b214cc3e9d4f58e98b"
+    },
+    {
+      "local_path": "public/reference/ikea/kitchen-planning.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/6e5abd54fd8e16c7/original/PH186303-crop003.jpg",
+      "placement": "homepage secondary kitchen planning campaign tile",
+      "sha256": "d61f6e6b80d6e702a846377790aed86561c2bbde91f6648c3fa02192fd753d83"
+    },
+    {
+      "local_path": "stores/ikea/public/official-logo.svg",
+      "source_url": "https://www.ikea.com/global/assets/logos/brand/ikea.svg",
+      "placement": "storefront header",
+      "sha256": "e4f93deb71f7099a91265abfe4d4e09447fb4c098f5a3f2af235d2109c345d83"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-1.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/2c6c89da16acaad4/original/PH197502.JPG?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "079e64620a9ba927cb6e12f88dfdc0bc92ad2c890555bc6646f3e18fdd162392"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-2.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/70cbd3a986881015/original/PH193526.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "801a0a472ed4fd8e575518fe3c383475d52b61b7bae5dabd4f1359481bca6f4b"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-3.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/5d323755d0092c96/original/PH151174-crop001.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "4497b6c6652b75be2f7b60954c4b3e805cc0cbe148d985bb61ad01b46a4c330c"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-4.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/148bb20d5564c0a4/original/PH193326.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "c217976d629bb189cfd293aa9d28954c7eb064d400173959b42ea3849f7ce06a"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-5.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/35d25228f597cf3/original/PH165692-crop001.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "de19540d04fa8702b8644df76e04255193d1302ba3eac12f55d6367b509e7977"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-6.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/3eb646e10455a35c/original/PH189353.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "6f832b726bb1b871f2340c3ac3b5b665768b1308473f082702e19694fef3a563"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-7.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/5ef3dc93aec43ef5/original/PH166546-crop001.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "b277e7c146a71093cc296104154696c20b49e71f2d2c3ac97dee4dc01e77b878"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-8.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/779e1f21db66fd7e/original/PH190769.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "510b3eb2fe88349e398aa4ea8b4300958ebe61328a7fe507236ff3c80bf0cdd1"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-9.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/6f54ae20fe769f2b/original/PH176774-crop001.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "4b384281a343a552c72686eed1aad156007feaa3eb333378894153e6efaf961f"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-10.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/6a18c1e0168dcd19/original/PH193644.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "1c719f98278ddae43536962660dbcb93a045dce139db4d7a5be87635bd1d14e2"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-11.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/6d562ee4733ae8e8/original/PE816481-crop001.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "87a84a350f01b9147bf094a5f7f2d5c57ce8c5fce795687c098ccab26e245435"
+    },
+    {
+      "local_path": "public/reference/ikea/search-inspiration-12.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/795463d0ef5c6d5b/original/PH173179-crop001.jpg?f=l",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search inspiration masonry",
+      "sha256": "97f38896a720355fdeae42cbe9016f350c42024d29b6c28080f0362354efa5ce"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-1.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/5da6eddb62fb86ab/original/PH209667-crop003.jpg?f=m",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "aa9c7bf9587224b334bcfd5f53e94e3c44b5e22e9d22464712ad0438b13437f7"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-2.jpg",
+      "source_url": "https://www.ikea.com/global/assets/range-categorisation/images/food-beverages-fb001.jpeg?f=m",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "4f0b561ee146d749864b29e2f695e02f4ed7416a90ebc0cb5b832c38ea71d181"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-3.jpg",
+      "source_url": "https://www.ikea.com/global/assets/range-categorisation/images/smart-home-hs001.jpeg?f=m",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "d0d00727df96775373d71c0f98531c658934897ed4bd096894f74048d79c856e"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-4.jpg",
+      "source_url": "https://www.ikea.com/global/assets/range-categorisation/images/decoration-de001.jpeg?f=m",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "a404105c939c036007fc47161c58cdbe89421dac683010e190d2e924e26f3258"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-5.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/2d55193dde39a4c2/original/PH300279.jpg?f=m",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "045ccd2843009cdb007d00bd3164a675bc0fa1cbd561fa191682dbb81479a28e"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-6.jpg",
+      "source_url": "https://www.ikea.com/global/assets/range-categorisation/images/tables-chairs-fu002.jpeg?f=m",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "71b16d4b453813e0f0928912f33482f9ac4487f325781497e056ca6bf1c7fc75"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-7.jpg",
+      "source_url": "https://www.ikea.com/ext/ingkadam/m/34f7d7e1aa023741/original/PE885486.JPG?f=m",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "1de74194536395cb850bae25bb0bd60a49ab21d754f2676fb7845f983f203d4a"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-8.jpg",
+      "source_url": "https://www.ikea.com/global/assets/range-categorisation/images/baby-children-bc001.jpeg?f=xxxs",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "e0972dc3183e4cc13dbca20dbfab91d61df96d3ec2ba0b0c7420c823d741e399"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-9.jpg",
+      "source_url": "https://www.ikea.com/us/en/range-categorisation/images/pet-products-pt001.jpeg?f=xxxs",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "65b0794091fc967426cd6305d973c7019d011fb4928ab2b2c5cca125ee8c7bdc"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-10.jpg",
+      "source_url": "https://www.ikea.com/global/assets/range-categorisation/images/sofas-armchairs-700640.jpeg?f=xxxs",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "7e6d86e02ed845f28204c0d793f8bd6aa1e95ade229cf28f55a211376edf9628"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-11.jpg",
+      "source_url": "https://www.ikea.com/global/assets/range-categorisation/images/home-electronics-he001.jpeg?f=xxxs",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "67fa78d88b12ce8c15ac21b6c008d6448ef52fedd986dcb59fdfd50711ea4124"
+    },
+    {
+      "local_path": "public/reference/ikea/search-category-12.jpg",
+      "source_url": "https://www.ikea.com/us/en/range-categorisation/images/kitchen-appliances-ka001.jpeg?f=xxxs",
+      "source_page": "https://www.ikea.com/us/en/search/?q=gta%206",
+      "placement": "search recommended category rail",
+      "sha256": "f97c116b4bbe04890e1553f3848a028dfd704307609714275ff48f85975d4581"
+    }
+  ],
+  "fonts": [
+    {
+      "local_path": "public/reference/ikea/noto-ikea-regular.woff2",
+      "source_url": "https://www.ikea.com/global/assets/fonts/woff2/noto-ikea-400.latin.fa208442.woff2",
+      "sha256": "c11cbdfbbec9a2334750d085bf18d0fc204123ceb02787a3c8946414f311822c",
+      "bytes": 11264,
+      "family": "Noto IKEA",
+      "weight": 400,
+      "placement": "captured US query-empty page typography"
+    },
+    {
+      "local_path": "public/reference/ikea/noto-ikea-bold.woff2",
+      "source_url": "https://www.ikea.com/global/assets/fonts/woff2/noto-ikea-700.latin.5ba98ac3.woff2",
+      "sha256": "89e9a5c698b63b8ea4592edd3e7e76def3df6b5c1f257f42988a75e36f0fc9eb",
+      "bytes": 11132,
+      "family": "Noto IKEA",
+      "weight": 700,
+      "placement": "captured US query-empty page typography"
+    }
+  ]
+}

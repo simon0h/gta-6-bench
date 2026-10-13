@@ -1,15 +1,20 @@
+import { readShipping } from './physical.js'
+import { installJourneys, accountState, resumeWishlist, restoreProfile } from './journeys.js'
+import { COLLECTIONS } from './catalogue.js'
 import { Router } from 'express'
-import { randomBytes, randomInt } from 'node:crypto'
+import { randomBytes, randomInt, createHash } from 'node:crypto'
 import { recordOrder, getOrder, listOrders } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
+import { enterScenarioCart, scenarioAvailability, scenarioPayment, scenarioKeepCartOnSignIn, scenarioActive, registerScenarioAdapter } from '../../lib/benchmark-scenarios.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, CONCEPT_ID, STATES, byId, featured, search, cartLines, totals, productPath, conceptPath } from './data.js'
+import { PRODUCTS, filterProducts, CONCEPT_ID, STATES, byId, featured, search, cartLines, totals, productPath, conceptPath } from './data.js'
 import * as P from './pages.js'
 
 const router = Router()
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
 // ASSUMPTION: the <title> of store.playstation.com/en-us/pages/latest is not quoted in the research.
 const HOME_TITLE = 'Official PlayStation™Store US | Home of PlayStation games, content and more'
+registerScenarioAdapter('playstation-store', { lines: store => [...store.cart, ...(store.checkout.scenarioItems || [])] })
 
 // ---- helpers ----
 function render(req, res, { title, body, drawer = null, closeHref = null, chrome = 'store', status = 200 }) {
@@ -23,22 +28,26 @@ const takeFlash = (req) => { const f = req.store.flash ?? null; req.store.flash 
 // drawer, sign-in or sign-out URLs themselves.
 function returnPath(res, value) {
   const base = res.locals.base
-  const v = String(value ?? '')
-  const inStore = v === base || v.startsWith(`${base}/`) || v.startsWith(`${base}?`)
-  const rel = v.slice(base.length)
-  return inStore && !/^\/(en-us\/checkout|my\.account\.sony\.com|logout)/.test(rel) ? v : `${base}/`
+  if (typeof value !== 'string' || value.length > 2048 || value.includes('\\')) return `${base}/`
+  try {
+    const url = new URL(value, 'http://store.local')
+    const path = decodeURIComponent(url.pathname)
+    const inStore = path === base || path.startsWith(`${base}/`)
+    const rel = path.slice(base.length)
+    return url.origin === 'http://store.local' && inStore && !/^\/(en-us\/checkout|my\.account\.sony\.com|logout)/.test(rel) ? `${url.pathname}${url.search}${url.hash}` : `${base}/`
+  } catch { return `${base}/` }
 }
 
 // ---- page views (also used to draw the page underneath the drawer) ----
 const homeView = (res) => ({ title: HOME_TITLE, body: P.homePage({ base: res.locals.base, products: PRODUCTS }) })
-const searchView = (res, q) => ({ title: `PlayStation Store | Search | ${q}`, body: P.searchPage({ base: res.locals.base, q, products: search(q) }) })
-const browseView = (res) => ({ title: 'PlayStation Store | Browse', body: P.searchPage({ base: res.locals.base, q: '', products: PRODUCTS, heading: 'Browse' }) })
+const searchView = (res, q, options = {}) => ({ title: `PlayStation Store | Search | ${q}`, body: P.searchPage({ base: res.locals.base, q, products: filterProducts(search(q), options), options }) })
+const browseView = (res, options = {}) => ({ title: 'PlayStation Store | Browse', body: P.searchPage({ base: res.locals.base, q: '', products: filterProducts(PRODUCTS, options), heading: 'Browse', options }) })
 // The signed-in shopper's orders, from this visitor's session only: one benchmark run must never see
 // another run's pre-orders for the shared test account.
-const myOrders = (req) => req.store.user ? listOrders({ store: req.storeSlug }).filter(o => o.session_id === req.session.id && o.customer.email === req.store.user.email) : []
-const ownedSkus = (req) => new Set(myOrders(req).flatMap(o => o.items.map(i => i.sku)))
+const myOrders = (req) => req.store.user ? listOrders({ store: req.storeSlug }).filter(o => o.session_id === req.session.id && o.customer.email === req.store.user.email && o.customer.account_id === req.store.user.id && o.meta.account_id === req.store.user.id) : []
+const ownedSkus = (req) => new Set(myOrders(req).flatMap(o => [...o.items.filter(i=>!byId(i.sku)?.physical&&byId(i.sku)?.contentType!=='consumable').map(i => i.sku), ...(o.meta.entitlements||[]).flatMap(e=>e.includedSkus||[])]))
 // ASSUMPTION: product and concept pages are titled with the product name (the research does not quote the <title>).
-const productView = (req, res, p, here, toast = null) => ({ title: p.title, body: P.productPage({ base: res.locals.base, p, here, toast, owned: ownedSkus(req) }) })
+const productView = (req, res, p, here, toast = null) => ({ title: p.title, body: P.productPage({ base: res.locals.base, p: scenarioAvailability(req.store,p.id,'digital')===false ? {...p,available:false,cta:'unavailable'} : p, here, toast, owned: ownedSkus(req), saved: new Set(accountState(req)?.wishlist || []) }) })
 const libraryView = (req, res) => ({ title: 'Game Library', body: P.libraryPage({ base: res.locals.base, user: req.store.user, orders: myOrders(req) }) })
 const notFound = (req, res) => render(req, res, { title: 'PlayStation Store', body: P.fallbackPage({ base: res.locals.base }), status: 404 })
 
@@ -64,19 +73,31 @@ function drawer(req, res, title, html, status = 200) {
 // ASSUMPTION: the seeded account starts with no saved card or payment service.
 function wallet(req) {
   const all = (req.store.wallets ??= {})
-  return (all[req.store.user.email] ??= { instruments: [], selected: null })
+  return (all[req.store.user.id] ??= { instruments: [], selected: null })
 }
+
+installJourneys(router, { render, myOrders, wallet, returnPath })
 
 // ---- browse ----
 router.get(['/', '/en-us/pages/latest'], (req, res) => render(req, res, homeView(res)))
-router.get('/en-us/pages/browse', (req, res) => render(req, res, browseView(res)))
+router.get('/en-us/information/:topic',(req,res)=>{const page=P.informationPage({base:res.locals.base,topic:req.params.topic});return page?render(req,res,page):notFound(req,res)})
+router.get('/en-us/pages/browse', (req, res) => render(req, res, browseView(res, req.query)))
 
+router.get('/en-us/pages/collections', (req,res)=>render(req,res,{title:'Collections',body:P.collectionsPage({base:res.locals.base,products:PRODUCTS})}))
+router.get('/en-us/collection/:id',(req,res)=>{
+ const collection=COLLECTIONS.find(([id])=>id===req.params.id)
+ if(!collection)return notFound(req,res)
+ const [id,title,intro,predicate]=collection
+ render(req,res,{title,body:P.searchPage({base:res.locals.base,heading:title,intro,products:filterProducts(PRODUCTS.filter(predicate),req.query),options:req.query,action:`${res.locals.base}/en-us/collection/${id}`})})
+})
+router.get('/en-us/pages/deals',(req,res)=>render(req,res,{title:'Deals',body:P.searchPage({base:res.locals.base,heading:'Deals',intro:'Explore Autumn offers on full games and editions. Offers end October 15, 2026.',products:filterProducts(PRODUCTS.filter(p=>p.price!==null&&p.originalPrice>p.price),req.query),options:req.query,action:`${res.locals.base}/en-us/pages/deals`})}))
+router.get('/en-us/pages/subscriptions',(req,res)=>render(req,res,{title:'PlayStation Plus',body:P.subscriptionsPage({base:res.locals.base})}))
 // The header search field submits ?q=; the store's own search URL is a path: /en-us/search/{q}.
 router.get('/en-us/search', (req, res) => {
   const q = String(req.query.q ?? '').trim()
   res.redirect(q ? `${res.locals.base}/en-us/search/${encodeURIComponent(q)}` : `${res.locals.base}/`)
 })
-router.get('/en-us/search/:q', (req, res) => render(req, res, searchView(res, req.params.q.trim())))
+router.get('/en-us/search/:q', (req, res) => render(req, res, searchView(res, req.params.q.trim(), req.query)))
 
 // Edition-agnostic concept page: renders the featured edition (currently the Ultimate Edition).
 router.get('/en-us/concept/:id', (req, res) => {
@@ -95,6 +116,19 @@ function ctaTarget(req, res) {
   return { p, back: returnPath(res, req.body.returnTo || (p ? productPath(res.locals.base, p) : '')) }
 }
 
+router.post(['/en-us/preorder','/en-us/cart/add'],(req,res,next)=>{
+ const p=byId(req.body.sku)
+ const invalid=!p||!p.available||(p.physical&&p.stock<=0)||(req.body.platform!==undefined&&!p.platforms.includes(req.body.platform))||(req.body.edition!==undefined&&req.body.edition!==p.editionName)||(req.body.qty!==undefined&&req.body.qty!=='1')||req.body.options!==undefined
+ if(invalid)return render(req,res,{title:'Unable to add item',status:400,body:`<section class="ps-section"><h1>Unable to add item</h1><p>This item or edition is unavailable. Choose an available edition from the store.</p><a href="${res.locals.base}/en-us/pages/browse">Browse games</a></section>`})
+ next()
+})
+function setUser(req,user){
+ if(req.store.user?.id!==user.id){if(req.store.user || !scenarioKeepCartOnSignIn(req.store))req.store.cart=[];req.store.checkout={}}
+ req.store.user=user
+ req.store.user.online_id ||= P.onlineId(user)
+ restoreProfile(req)
+}
+
 // Pre-Order is a BUY_NOW action: signed out it goes to Sony sign-in (and back to this page);
 // signed in it opens the drawer straight on "Confirm Pre-Order" for that SKU (no cart step).
 router.post('/en-us/preorder', (req, res) => {
@@ -104,18 +138,6 @@ router.post('/en-us/preorder', (req, res) => {
   if (ownedSkus(req).has(p.id)) return res.redirect(back)
   req.store.checkout.returnTo = back
   res.redirect(`${res.locals.base}/en-us/checkout/buynow/${encodeURIComponent(p.id)}`)
-})
-
-// ASSUMPTION: the wishlist toast wording (research: "toggles the item ... and shows an inline toast").
-router.post('/en-us/wishlist', (req, res) => {
-  const { p, back } = ctaTarget(req, res)
-  if (!p) return res.redirect(back)
-  if (!req.store.user) return res.redirect(P.signInUrl(res.locals.base, back))
-  const list = (req.store.wishlist ??= [])
-  const had = list.includes(p.id)
-  req.store.wishlist = had ? list.filter(id => id !== p.id) : [...list, p.id]
-  req.store.flash = had ? `${p.title} was removed from your wishlist.` : `${p.title} was added to your wishlist.`
-  res.redirect(back)
 })
 
 // Regular (non pre-order) items: ADD_TO_CART is also a drawer action, so the cart view opens.
@@ -156,7 +178,8 @@ router.post(P.SONY_SIGNIN, (req, res) => {
   const acct = authenticate(req.storeSlug, email, req.body.password)
   // ASSUMPTION: Sony's wrong-password wording (the sign-in page itself was never observed).
   if (!acct) return sony(req, res, 'Sign In', P.signInPage({ base, step: 'password', email, redirectUri, error: 'The sign-in ID (email address) or password is incorrect.' }), 401)
-  req.store.user = publicAccount(acct)
+  setUser(req,publicAccount(acct))
+  resumeWishlist(req,redirectUri)
   res.redirect(redirectUri)
 })
 
@@ -189,17 +212,12 @@ router.post(P.SONY_SIGNUP, (req, res) => {
   if (!Object.keys(errors).length) {
     const acct = createAccount(req.storeSlug, { email: text('email'), password: String(v.password), first_name: text('firstName'), last_name: text('lastName'), online_id: text('onlineId'), date_of_birth: text('dob'), state: text('state'), country: 'US' })
     if (acct.error) errors.email = 'This sign-in ID (email address) is already in use.'
-    else { req.store.user = publicAccount(acct); return res.redirect(redirectUri) }
+    else { setUser(req,publicAccount(acct)); resumeWishlist(req,redirectUri); return res.redirect(redirectUri) }
   }
   sony(req, res, 'Create New Account', P.createAccountPage({ base: res.locals.base, values: { ...v, password: '' }, errors, redirectUri }), 400)
 })
 
-router.get('/logout', (req, res) => { req.store.user = null; req.store.checkout = {}; res.redirect(`${res.locals.base}/`) })
-
-router.get('/en-us/library', (req, res) => {
-  if (!req.store.user) return res.redirect(P.signInUrl(res.locals.base, `${res.locals.base}/en-us/library`))
-  render(req, res, libraryView(req, res))
-})
+router.get('/logout', (req, res) => { req.store.user = null; delete req.store.pendingWishlist; req.store.checkout = {}; req.store.cart = []; res.redirect(`${res.locals.base}/`) })
 
 // ---- the checkout drawer (checkout.playstation.com client, server-rendered as an overlay route) ----
 // Cart view: /en-us/checkout (header Cart icon). Buy-now view: /en-us/checkout/buynow/{sku} (Pre-Order).
@@ -218,20 +236,29 @@ function drawerCtx(req, res) {
 function drawerGate(req, res, c) {
   if (!req.store.user) { drawer(req, res, 'Sign In | Checkout', P.drawerSignIn({ base: c.base, returnTo: closeHref(req, res) }), req.method === 'POST' ? 401 : 200); return true }
   if (!c.lines) { drawer(req, res, 'Error | Checkout', P.drawerError({ closeHref: closeHref(req, res) }), 404); return true }
+  if (scenarioActive(req.store)) req.store.checkout.scenarioItems = c.lines.map(l=>({sku:l.product.id,qty:l.qty}))
+  enterScenarioCart(req.store, c.lines.map(l=>({sku:l.product.id,qty:l.qty})))
+  if(c.lines.some(l=>scenarioAvailability(req.store,l.product.id,'digital')===false)){drawer(req,res,'Unavailable | Checkout',P.drawerError({closeHref:closeHref(req,res),message:'This digital item became unavailable after it was selected. No order was placed.'}),409);return true}
   // ASSUMPTION: wording of the refusal when the licence is already owned (e.g. Back + resubmit after paying).
   if (c.mode === 'buynow' && ownedSkus(req).has(c.lines[0].product.id)) { drawer(req, res, 'Error | Checkout', P.drawerError({ closeHref: closeHref(req, res), message: 'You have already purchased this item. You can find it in your Game Library.' }), 409); return true }
+  if(c.lines.some(l=>!l.product.available||(l.product.physical&&l.product.stock<=0)||l.product.price===null||l.qty!==1)){drawer(req,res,'Error | Checkout',P.drawerError({closeHref:closeHref(req,res),message:'An item is no longer available. Please update your cart.'}),409);return true}
+  if(c.mode==='cart'&&c.lines.some(l=>ownedSkus(req).has(l.product.id))){drawer(req,res,'Error | Checkout',P.drawerError({closeHref:closeHref(req,res),message:'You have already purchased an item in this cart. Remove it to continue.'}),409);return true}
   if (!c.lines.length) { drawer(req, res, 'Cart | Checkout', P.drawerEmptyCart({ closeHref: closeHref(req, res) })); return true }
   return false
 }
 
-function showConfirm(req, res, c, { error = null, selected = null, status = 200 } = {}) {
+function reviewFingerprint(req,c){return createHash('sha256').update(JSON.stringify({account:req.store.user?.id,path:c.drawerPath,lines:c.lines.map(({product:p,qty})=>({id:p.id,qty,price:p.price,available:p.available,platforms:p.platforms,entitlements:p.entitlements,physical:p.physical,stock:p.stock,format:p.format})),totals:totals(c.lines)})).digest('hex')}
+
+function showConfirm(req, res, c, { error = null, selected = null, status = 200, shippingValues = req.store.checkout.shippingValues || {} } = {}) {
+  const review={token:randomBytes(18).toString('hex'),fingerprint:reviewFingerprint(req,c)}
+  req.store.checkout.review=review
   const w = wallet(req)
   const notice = req.store.checkout.notice ?? null
   req.store.checkout.notice = null
   const pick = selected ?? w.selected ?? w.instruments.find(i => i.default)?.id ?? null
   // ASSUMPTION: title of the buy-now view (the client documents "Cart | Checkout" and "Thank You | Checkout" only).
   const title = c.mode === 'cart' ? 'Cart | Checkout' : 'Confirm Pre-Order | Checkout'
-  drawer(req, res, title, P.drawerConfirm({ base: c.base, mode: c.mode, t: totals(c.lines), drawerPath: c.drawerPath, closeHref: closeHref(req, res), instruments: w.instruments, selected: pick, error, notice }), status)
+  drawer(req, res, title, P.drawerConfirm({ base: c.base, mode: c.mode, t: totals(c.lines), drawerPath: c.drawerPath, closeHref: closeHref(req, res), instruments: w.instruments, selected: pick, error, notice, reviewToken:review.token, shippingValues }), status)
 }
 
 router.get(DRAWER, (req, res) => {
@@ -243,13 +270,23 @@ router.get(DRAWER, (req, res) => {
 // "Pre-Order & Pay" (or "Confirm Purchase" for a cart without pre-orders): charged immediately.
 router.post(DRAWER, (req, res) => {
   const c = drawerCtx(req, res)
+  if(req.store.user&&req.body.review_token!==undefined&&(!req.store.checkout.review||typeof req.body.review_token!=='string'||req.body.review_token!==req.store.checkout.review.token))return drawer(req,res,'Review expired | Checkout',P.drawerError({closeHref:closeHref(req,res),message:'This checkout review has expired. Open your cart and review the latest details before confirming.'}),409)
   if (drawerGate(req, res, c)) return
+  const review=req.store.checkout.review
+  const sent=req.body.review_token
+  if((sent!==undefined&&(!review||typeof sent!=='string'||sent!==review.token))||(review&&review.fingerprint!==reviewFingerprint(req,c)))return showConfirm(req,res,c,{error:'Your cart or account changed. Review the updated details before confirming.',status:409})
   const t = totals(c.lines)
+  const shipping=c.lines.some(l=>l.product.physical)?readShipping(req.body):{address:null}
+  if(shipping.error)return showConfirm(req,res,c,{error:shipping.error,status:400,shippingValues:shipping.values})
+  if(shipping.address)req.store.checkout.shippingValues=shipping.values
   const w = wallet(req)
   const instrument = w.instruments.find(i => i.id === req.body.paymentMethod) ?? null
   // Wallet funds are used first; anything they do not cover needs a selected card or service.
   if (!instrument && t.remainder > 0) return showConfirm(req, res, c, { error: 'Please select a payment method.', status: 400 })
   if (instrument) w.selected = instrument.id
+  const payment = !instrument ? { method: 'wallet' } : instrument.type === 'card' ? { method: 'card', brand: instrument.brand, last4: instrument.last4, name_on_card: instrument.name } : { method: instrument.type }
+  const rejection = scenarioPayment(req.store, payment, c.lines.map(({ product, qty }) => ({ sku: product.id, qty })))
+  if (rejection) return showConfirm(req,res,c,{error:rejection,status:402})
 
   const user = req.store.user
   const token = randomBytes(12).toString('hex')
@@ -261,24 +298,23 @@ router.post(DRAWER, (req, res) => {
       ? { platform: p.platform, edition: p.edition, format: p.format, qty, unit_price: p.price, title: p.title, sku: p.id }
       : { kind: 'other', title: p.title, qty, unit_price: p.price, sku: p.id }),
     customer: { email: user.email, first_name: user.first_name, last_name: user.last_name, online_id: P.onlineId(user), account_id: user.id },
-    fulfillment: { method: 'digital' },
-    shipping_address: null,
+    fulfillment: { method: shipping.address?'shipping':'digital', ...(shipping.address?{eta:'3–5 business days',service:'Free standard shipping'}:{}) },
+    shipping_address: shipping.address,
     billing_address: instrument?.billing ?? null,
-    payment: !instrument ? { method: 'wallet' }
-      : instrument.type === 'card' ? { method: 'card', brand: instrument.brand, last4: instrument.last4, name_on_card: instrument.name }
-      : { method: instrument.type },
+    payment,
     totals: { subtotal: t.subtotal, shipping: 0, tax: t.tax, total: t.total },
     currency: 'USD',
-    meta: { token, view: c.mode, wallet_applied: t.wallet },
+    meta: { token, view: c.mode, wallet_applied: t.wallet, account_id:user.id, physical_items:c.lines.filter(l=>l.product.physical).map(l=>({sku:l.product.id,platform:l.product.catalogPlatform,format:l.product.formatLabel})), entitlements:c.lines.filter(l=>!l.product.physical).map(({product:p})=>({sku:p.id,contentType:p.contentType,platforms:[...p.platforms],release:p.release,preorder:p.cta==='preorder',baseId:p.baseId||null,includedSkus:[...(p.includedSkus||[])],licenses:[...p.entitlements]})) },
   })
   if (c.mode === 'cart') req.store.cart = []
   req.store.checkout.pendingCard = null
+  req.store.checkout.review = null
   res.redirect(`${c.base}/en-us/checkout/thankyou?order=${order.order_number}&token=${token}`)
 })
 
 router.get('/en-us/checkout/thankyou', (req, res) => {
   const order = getOrder(String(req.query.order ?? ''))
-  if (!order || order.store !== req.storeSlug || order.meta.token !== req.query.token) return drawer(req, res, 'Error | Checkout', P.drawerError({ closeHref: closeHref(req, res) }), 404)
+  if (!order || order.store !== req.storeSlug || order.session_id !== req.session.id || !req.store.user || order.customer.account_id !== req.store.user.id || order.meta.token !== req.query.token) return drawer(req, res, 'Error | Checkout', P.drawerError({ closeHref: closeHref(req, res) }), 404)
   drawer(req, res, 'Thank You | Checkout', P.drawerThankYou({ base: res.locals.base, order, closeHref: closeHref(req, res) }))
 })
 
@@ -302,8 +338,10 @@ router.get(sub('/payment/card'), (req, res) => {
 })
 router.post(sub('/payment/card'), (req, res) => {
   const c = payCtx(req, res); if (!c) return
+  // A failed replacement attempt must not leave a prior card ready to save.
+  req.store.checkout.pendingCard = null
   const v = req.body
-  const name = String(v.cardholderName ?? '').trim()
+  const name = typeof v.cardholderName === 'string' ? v.cardholderName.trim() : ''
   const card = validateCard({ number: v.cardNumber, exp_month: v.expMonth, exp_year: v.expYear, cvv: v.cvv })
   const errors = {}
   if (!card.ok) for (const [k, field] of [['number', 'cardNumber'], ['expiry', 'expiry'], ['cvv', 'cvv']]) if (card.errors[k]) errors[field] = card.errors[k]
@@ -311,7 +349,7 @@ router.post(sub('/payment/card'), (req, res) => {
   if (cardCount(wallet(req)) >= 3) errors.cardNumber = 'You have reached the maximum of three credit/debit cards on file.'
   if (Object.keys(errors).length) {
     // The card number and CVV are never echoed back into the page.
-    return drawer(req, res, 'Add a Credit/Debit Card | Checkout', P.drawerCardForm({ drawerPath: c.drawerPath, values: { cardholderName: name, expMonth: v.expMonth, expYear: v.expYear }, errors }), 400)
+    return drawer(req, res, 'Add a Credit/Debit Card | Checkout', P.drawerCardForm({ drawerPath: c.drawerPath, values: { cardholderName: name, expMonth: typeof v.expMonth==='string'?v.expMonth:'', expYear: typeof v.expYear==='string'?v.expYear:'' }, errors }), 400)
   }
   // Only what is needed to show and record the card is kept for the billing screen.
   req.store.checkout.pendingCard = { brand: card.brand, last4: card.last4, name, exp: `${String(v.expMonth).padStart(2, '0')}/${String(v.expYear).slice(-2)}` }
@@ -329,9 +367,14 @@ router.post(sub('/payment/card/billing'), (req, res) => {
   const c = payCtx(req, res); if (!c) return
   const card = req.store.checkout.pendingCard
   if (!card) return res.redirect(`${c.drawerPath}/payment/card`)
-  const v = { ...req.body, setDefault: req.body.setDefault === '1' }
-  const text = (k) => String(v[k] ?? '').trim()
+  const fields = ['firstName','lastName','address1','address2','city','state','zip','phone','country']
+  const v = Object.fromEntries(fields.map(k=>[k,typeof req.body[k]==='string'?req.body[k].trim():'']))
+  v.setDefault = req.body.setDefault === '1'
+  const text = (k) => v[k]
   const errors = {}
+  for(const k of fields)if(req.body[k]!==undefined&&typeof req.body[k]!=='string')errors[k]='Enter one value for this field.'
+  if(req.body.setDefault!==undefined&&req.body.setDefault!=='1')errors.firstName='Choose a valid default payment preference.'
+  if(v.country&&v.country!=='US')errors.state='Select a United States billing address.'
   for (const [k, msg] of [['firstName', 'Enter your first name.'], ['lastName', 'Enter your last name.'], ['address1', 'Enter your street address.'], ['city', 'Enter your city.'], ['state', 'Select your state.'], ['zip', 'Enter your ZIP code.'], ['phone', 'Enter your phone number.']]) if (!text(k)) errors[k] = msg
   if (text('state') && !STATES.includes(text('state'))) errors.state = 'Select your state.'
   if (text('zip') && !/^\d{5}(-\d{4})?$/.test(text('zip'))) errors.zip = 'Enter a valid ZIP code.'
@@ -356,6 +399,7 @@ router.post(sub('/payment/card/billing'), (req, res) => {
 // One payment service per account: adding PayPal replaces any other service.
 router.post(sub('/payment/service'), (req, res) => {
   const c = payCtx(req, res); if (!c) return
+  if(req.body.service!=='paypal')return drawer(req,res,'Add Payment Method | Checkout',P.drawerError({closeHref:closeHref(req,res),message:'Select a supported payment service.'}),400)
   const w = wallet(req)
   w.instruments = [...w.instruments.filter(i => i.type === 'card'), { id: 'paypal', type: 'paypal', default: false }]
   w.selected = 'paypal'
@@ -371,6 +415,7 @@ export default {
   name: 'PlayStation Store',
   country: 'US',
   currency: 'USD',
-  description: 'US. Digital-only PS5: concept + edition pages, Sony two-step sign-in (no guest), right-side checkout drawer with wallet-first payment, Add Payment Method, Pre-Order & Pay charged immediately.',
+  description: fixtureCatalog ? 'US. Native digital PlayStation licenses with Sony sign-in and wallet-first checkout; physical games, consoles and accessories require a shipping address and grant no digital license.' : 'US. Captured digital GTA VI editions and add-on. Sony sign-in and payment are local simulations; no physical inventory.',
   router,
 }
+import { fixtureCatalog } from '../../lib/catalog-policy.js'

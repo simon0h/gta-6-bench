@@ -1,3 +1,7 @@
+import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
+import { CATALOG_EVIDENCE } from './catalog-evidence.js'
+import { extendCatalog } from './catalog.js'
+import { scenarioProduct, scenarioStockFor } from '../../lib/benchmark-scenarios.js'
 // Listings as they appear on game.co.uk (research/game-uk.md, 2026-09-29).
 // GAME runs on the shared Frasers Group platform: each platform is its own
 // 6-digit product code (plus an 8-digit "colcode" variant), the platform is
@@ -110,6 +114,17 @@ export const PRODUCTS = [
   },
 ]
 
+
+// Surrounding catalog fixtures from researched department types; identities/prices/stock are simulated.
+PRODUCTS.push(...[{"id": "991201", "colcode": "99120199", "kind": "other", "slug": "ea-sports-fc-27-991201", "title": "EA Sports FC 27", "brand": "EA Sports", "price": 64.99, "ticketPrice": 64.99, "swatch": "PS5", "platformFacet": "PS5", "category": "Video Games", "style": "Sports", "badges": [], "preorder": false, "release": null, "pegi": null, "carrier": "Evri", "crumbs": ["Video Games"], "art": "/game-uk/static/catalog-game.svg", "artAlt": "EA Sports FC 27", "description": ["Football seasons, club management and local multiplayer on PlayStation 5."], "keywords": "ea sports fc27 fc 27 playstation ps5 games consoles video games"}, {"id": "991202", "colcode": "99120299", "kind": "other", "slug": "nintendo-switch-2-console-991202", "title": "Nintendo Switch 2 Console", "brand": "Nintendo", "price": 395.99, "ticketPrice": 395.99, "swatch": "Nintendo", "platformFacet": "Nintendo", "category": "Consoles", "style": "Hardware", "badges": [], "preorder": false, "release": null, "pegi": null, "carrier": "Evri", "crumbs": ["Consoles"], "art": "/game-uk/static/catalog-controller.svg", "artAlt": "Nintendo Switch 2 Console", "description": ["Nintendo gaming console. Games sold separately."], "keywords": "nintendo switch consoles video games gaming"}, {"id": "991203", "colcode": "99120399", "kind": "other", "slug": "lego-classic-creative-bricks-991203", "title": "LEGO Classic Creative Bricks", "brand": "LEGO", "price": 24.99, "ticketPrice": 24.99, "swatch": "Standard", "platformFacet": null, "category": "Toys", "style": "Building", "badges": [], "preorder": false, "release": null, "pegi": null, "carrier": "Evri", "crumbs": ["Toys"], "art": "/game-uk/static/catalog-bricks.svg", "artAlt": "LEGO Classic Creative Bricks", "description": ["Colourful LEGO bricks for creative play. Ages 4 and over."], "keywords": "lego toys games building"}, {"id": "991204", "colcode": "99120499", "kind": "other", "slug": "pok\u00e9mon-trading-card-game-battle-deck-991204", "title": "Pok\u00e9mon Trading Card Game Battle Deck", "brand": "Pokemon", "price": 13.99, "ticketPrice": 13.99, "swatch": "Standard", "platformFacet": null, "category": "Trading Cards", "style": "Trading Cards", "badges": [], "preorder": false, "release": null, "pegi": null, "carrier": "Evri", "crumbs": ["Trading Cards"], "art": "/game-uk/static/catalog-cards.svg", "artAlt": "Pok\u00e9mon Trading Card Game Battle Deck", "description": ["A ready-to-play deck for Pok\u00e9mon Trading Card Game fans."], "keywords": "pokemon trading cards toys games"}, {"id": "991205", "colcode": "99120599", "kind": "other", "slug": "gaming-keyboard-and-mouse-set-991205", "title": "Gaming Keyboard and Mouse Set", "brand": "Gaming", "price": 29.99, "ticketPrice": 29.99, "swatch": "Standard", "platformFacet": null, "category": "PC Gaming", "style": "Accessories", "badges": [], "preorder": false, "release": null, "pegi": null, "carrier": "Evri", "crumbs": ["PC Gaming"], "art": "/game-uk/static/catalog-laptop.svg", "artAlt": "Gaming Keyboard and Mouse Set", "description": ["Wired keyboard and mouse for everyday PC play."], "keywords": "pc gaming tech keyboard mouse accessories"}, {"id": "991206", "colcode": "99120699", "kind": "other", "slug": "xbox-wireless-controller---carbon-black-991206", "title": "Xbox Wireless Controller - Carbon Black", "brand": "Xbox", "price": 54.99, "ticketPrice": 54.99, "swatch": "Xbox", "platformFacet": "Xbox", "category": "Accessories", "style": "Hardware", "badges": [], "preorder": false, "release": null, "pegi": null, "carrier": "Evri", "crumbs": ["Accessories"], "art": "/game-uk/static/catalog-controller.svg", "artAlt": "Xbox Wireless Controller - Carbon Black", "description": ["Wireless controller for Xbox consoles and compatible PCs. Game not included."], "keywords": "xbox controllers accessories consoles video games"}, {"id": "991207", "colcode": "99120799", "kind": "other", "slug": "collectible-plush-toy-991207", "title": "Collectible Plush Toy", "brand": "Toys", "price": 14.99, "ticketPrice": 14.99, "swatch": "Standard", "platformFacet": null, "category": "Toys", "style": "Soft Toys", "badges": [], "preorder": false, "release": null, "pegi": null, "carrier": "Evri", "crumbs": ["Toys"], "art": "/game-uk/static/catalog-figure.svg", "artAlt": "Collectible Plush Toy", "description": ["A soft collectible plush for display or play."], "keywords": "toys games plush soft"}, {"id": "991208", "colcode": "99120899", "kind": "other", "slug": "gaming-monitor-27-inch-991208", "title": "Gaming Monitor 27-inch", "brand": "Gaming", "price": 119.99, "ticketPrice": 119.99, "swatch": "Standard", "platformFacet": null, "category": "Tech", "style": "Hardware", "badges": [], "preorder": false, "release": null, "pegi": null, "carrier": "Evri", "crumbs": ["Tech"], "art": "/game-uk/static/catalog-laptop.svg", "artAlt": "Gaming Monitor 27-inch", "description": ["27-inch monitor for a desktop gaming setup. HDMI cable included."], "keywords": "pc gaming monitor tech screen"}])
+extendCatalog(PRODUCTS)
+applyCatalogPolicy('game-uk', PRODUCTS, CATALOG_EVIDENCE)
+if (!fixtureCatalog) for (const p of PRODUCTS) {
+  delete p.stock; p.purchaseLimit = 99; p.catalogType = 'game'; p.catalogPlatform = p.platform
+  p.badges = p.badges.filter(b => b !== 'TRENDING')
+}
+export const quantityLimit = p => p?.purchaseLimit ?? p?.stock ?? 0
+
 export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
 
 // The real URL is /{brand}-{name}-{6-digit code}#colcode={8-digit variant}. Anything
@@ -120,23 +135,45 @@ export function bySlug(slug) {
 }
 
 export const productPath = (base, p) => `${base}/${p.slug}`
-export const productHref = (base, p) => `${base}/${p.slug}#colcode=${p.colcode}`
+export const productHref = (base, p) => `${base}/${p.slug}${p.option?'?option='+encodeURIComponent(p.option):''}#colcode=${p.colcode}`
 
 // Top-level nav department for each breadcrumb root, so the header nav and breadcrumb
 // links (which run a search here) land on the products that live under them.
 // ASSUMPTION: GAME files Shark Cash Cards under "Digital Gift Cards" in the nav.
-const DEPT = { 'PlayStation Gaming': 'Consoles & Video Games', 'Xbox Gaming': 'Consoles & Video Games', 'Digital Downloads': 'Digital Gift Cards', Tech: 'Tech' }
+const DEPT = { 'Video Games': 'Consoles & Video Games', Consoles: 'Consoles & Video Games', Accessories: 'Consoles & Video Games', Toys: 'Toys & Games', 'PlayStation Gaming': 'Consoles & Video Games', 'Xbox Gaming': 'Consoles & Video Games', 'Digital Downloads': 'Digital Gift Cards', Tech: 'Tech' }
 
-export function search(q, { platform, category } = {}) {
+export function search(q, { platform, category, price, style, brand, age, department, campaign, availability } = {}) {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  if (!tokens.length) return []
   return PRODUCTS.filter(p => {
     const hay = norm(`${p.brand} ${p.title} ${p.keywords} ${p.crumbs.join(' ')} ${DEPT[p.crumbs[0]] ?? ''} ${p.category} ${p.style ?? ''}`)
-    return tokens.every(t => hay.includes(t)) && (!platform || p.platformFacet === platform) && (!category || p.category === category)
+    return tokens.every(t => hay.includes(t)) && (!platform || p.platformFacet === platform) && (!category || p.category === category || p.browseCategory === category) && (!style || p.style === style) && (!brand || p.brand === brand) && (!age || p.age === age) && (!department || p.departments.includes(department)) && (!campaign || p.campaigns.includes(campaign)) && (!availability || (availability === 'In stock' ? p.stock > 0 : availability === 'Out of stock' && p.stock === 0)) && (!price || PRICE_BANDS.some(b => b.label === price && p.price >= b.min && p.price < b.max))
   })
 }
 
+export function selectedProduct(p, option) {
+  if (!p) return null
+  if (!p.options) return option ? null : p
+  const v = p.options.find(v=>v.id===option)
+  return v ? {...p,price:v.price,stock:Math.min(p.stock,v.stock),photo:v.photo??p.photo,swatch:v.label,option:v.id} : null
+}
+export function cartProblem(store) {
+  const totals = new Map()
+  for(const l of store.cart) {
+    const p=scenarioProduct(store,selectedProduct(byId(l.pid),l.option))
+    if(!p || !Number.isInteger(l.qty) || l.qty<1 || l.qty>MAX_QTY) return 'Please check the quantity and options in your bag.'
+    const key=p.id+':'+(l.option||''); totals.set(key,(totals.get(key)||0)+l.qty)
+    if(totals.get(key)>quantityLimit(p)) return `${p.title} is unavailable in the requested quantity.`
+  }
+  for(const id of new Set(store.cart.map(l=>l.pid))) if(store.cart.filter(l=>l.pid===id).reduce((n,l)=>n+l.qty,0)>quantityLimit(byId(id))) return 'The requested quantity exceeds the purchase limit.'
+  return null
+}
+export function eligibleMethods(store) {
+  const lines=cartLines(store)
+  if(lines.length && lines.every(l=>l.product.digital)) return ['email']
+  return CHECKOUT_DELIVERY_ORDER.filter(id=>lines.every(l=>
+    (id!=='collect'||l.product.collect) && scenarioStockFor(l.product,id==='collect'?'pickup':'shipping')!==0))
+}
 // "Sort By" options in the order the real toolbar lists them; 'popular' keeps listing order.
 const discount = p => p.ticketPrice - p.price
 export const SORTS = [
@@ -155,9 +192,11 @@ export function sortProducts(products, key) {
 }
 
 export const PRICE_BANDS = [
+  { label: 'Under £10', min: 0, max: 10 },
   { label: '£10 to £20', min: 10, max: 20 },
   { label: '£20 to £50', min: 20, max: 50 },
   { label: '£50 to £100', min: 50, max: 100 },
+  { label: '£100 and over', min: 100, max: Infinity },
 ]
 
 export function facets(products) {
@@ -166,6 +205,8 @@ export function facets(products) {
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])))
   return {
     platform: count('platformFacet'),
+    brand: count('brand'), age: count('age'),
+    availability: { 'In stock': products.filter(p=>p.stock>0).length, 'Out of stock': products.filter(p=>p.stock===0).length },
     category: count('category'),
     style: count('style'),
     price: PRICE_BANDS.map(b => ({ ...b, n: products.filter(p => p.price >= b.min && p.price < b.max).length })).filter(b => b.n),
@@ -175,11 +216,12 @@ export function facets(products) {
 // Delivery services from GAME's help centre "Delivery Options" table and the PDP
 // "Delivery & Returns" accordion. Prices include VAT.
 export const DELIVERY_METHODS = {
+  email: {id:'email',name:'Email Delivery',detail:'Your UK redemption code is delivered to your email address.',price:0,eta:'Email code',method:'digital'},
   standard: { id: 'standard', name: 'Standard Delivery', detail: 'Delivered within 3 - 7 days (excludes Public holidays).', price: 4.99, eta: '3 - 7 days', method: 'ship' },
   express: { id: 'express', name: 'Express Delivery - 48 Hours', detail: 'Order before 9pm (excludes Public holidays)', price: 7.99, eta: '48 hours', method: 'ship' },
   'nextday-evri': { id: 'nextday-evri', name: 'Next Day Delivery by Evri', detail: 'Order by 9pm for Next Day Delivery', price: 9.99, eta: 'Next day', method: 'ship' },
   'nextday-dpd': { id: 'nextday-dpd', name: 'Next Day Delivery by DPD', detail: 'Order by 9pm (excludes Public holidays)', price: 11.99, eta: 'Next day', method: 'ship' },
-  collect: { id: 'collect', name: 'Click & Collect (Store Delivery)', detail: 'Delivered to your chosen store within 3 - 7 days.', price: 4.99, eta: '3 - 7 days to store', method: 'pickup' },
+  collect: { id: 'collect', name: 'Click & Collect (Store Delivery)', detail: 'Delivered to your chosen store within 3 - 14 days.', price: 4.99, eta: '3 - 14 days to store', method: 'pickup' },
 }
 export const INTERNATIONAL_DELIVERY = { name: 'International Delivery', detail: 'International Delivery is available for this product. The cost and delivery time depend on the country.' }
 // Order the PDP accordion lists them in (research/game-uk.md §3).
@@ -197,6 +239,10 @@ export const COLLECT_STORES = [
   'GAME London - Sports Direct, Oxford Street',
   'GAME Manchester - Sports Direct, Arndale',
 ]
+// This location ID belongs to the authored benchmark collection scenario. The
+// ordinary reference offer does not claim verified GTA VI collection stock.
+export const BENCHMARK_COLLECT_STORE = 'GAME London - Sports Direct, Oxford Street'
+export const collectionStoreId = label => label === BENCHMARK_COLLECT_STORE ? 'oxford-street' : null
 
 export const TITLES = ['Mr', 'Mrs', 'Miss', 'Ms', 'Mx', 'Dr']
 
@@ -205,7 +251,7 @@ export const MAX_QTY = 99 // "Quantity default 1, max 99 per item" (terms)
 const round = n => Math.round(n * 100) / 100
 
 export function cartLines(store) {
-  return store.cart.map(l => ({ ...l, product: byId(l.pid) })).filter(l => l.product)
+  return store.cart.map(l => ({ ...l, product: scenarioProduct(store,selectedProduct(byId(l.pid),l.option)) })).filter(l => l.product)
 }
 
 export const hasPreorder = (store) => cartLines(store).some(l => l.product.preorder)

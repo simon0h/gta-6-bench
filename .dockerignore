@@ -1,0 +1,17 @@
+**
+!package.json
+!package-lock.json
+!app.js
+!server.js
+!benchmark/
+!benchmark/**
+!dashboard/
+!dashboard/**
+!lib/
+!lib/**
+!stores/
+!stores/**
+!public/
+!public/**
+!deploy/
+!deploy/**

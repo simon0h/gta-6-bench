@@ -34,7 +34,7 @@ test('rockstar-store: guest pre-orders the PS5 code-in-box straight from the pro
     // Picking a platform makes the digital editions link out to the platform-store clone and arms the code-in-box button.
     const ps5 = await c.get('/rockstar-store/game/buy-gta-vi?platform=ps5')
     assert.match(ps5.text, /role="button" aria-pressed="true">.*PS5</)
-    assert.match(ps5.text, /href="\/playstation-store\/" target="_blank"/, 'digital editions open the platform store in a new tab')
+    assert.match(ps5.text, /href="\/playstation-store\/en-us\/product\/EP1004-PPSA01547_00-GTAVISTANDARD001" target="_blank"/, 'digital editions open the platform store in a new tab')
     assert.doesNotMatch(ps5.text, /href="\/xbox-store\/"/)
     assert.match(ps5.text, /name="platform" value="ps5"/)
     assert.match(ps5.text, /<span>Pre-Order Now<\/span><small>\$79\.99<\/small>/)
@@ -98,7 +98,7 @@ test('rockstar-store: guest pre-orders the PS5 code-in-box straight from the pro
     const done = await c.post('/rockstar-store/checkout/payment', CARD)
     assert.match(done.url, /\/rockstar-store\/checkout\/status\?transaction_id=\d{10}&token=[0-9a-f]{24}$/)
     assert.match(done.text, /Thank you for your purchase!/)
-    assert.match(done.text, /Your pre-order has been placed\. Your order confirmation email is on the way/)
+    assert.match(done.text, /Your pre-order has been placed\. Your receipt is saved here/)
     assert.match(done.text, /Transaction ID: <b data-order-number>\d{10}<\/b>/)
     assert.match(done.text, /Visa ending in 4242/)
     assert.match(done.text, /3055550123 &middot; alex@example\.com<\/address>/)
@@ -212,7 +212,7 @@ test('rockstar-store: Social Club sign-in rejects a wrong password, then prefill
     await c2.post('/rockstar-store/verify-age', DOB)
     const header = await c2.post('/rockstar-store/signin', { email: 'tester@example.com', password: 'Password123!' })
     assert.match(header.url, /\/rockstar-store\/$/)
-    assert.match(header.text, /Welcome, Alex<\/p><a href="\/rockstar-store\/signout">Sign Out<\/a>/)
+    assert.match(header.text, /Welcome, Alex<\/p><a href="\/rockstar-store\/wishlist">Wishlist<\/a><a href="\/rockstar-store\/signout">Sign Out<\/a>/)
   } finally { await srv.close() }
 })
 
@@ -274,4 +274,23 @@ test('rockstar-store: merchandise goes through the cart and is recorded as a wro
     assert.deepEqual(o.items, [{ kind: 'other', qty: 1, unit_price: 3.99, title: 'The Loneliest Robot Greeting Card', sku: '355001-US' }])
     assert.match((await c.get('/rockstar-store/cart')).text, /Your cart is empty/)
   } finally { await srv.close() }
+})
+
+test('rockstar-store: merchandise facets and platform filters narrow real catalog results', async () => {
+  const srv=await startServer()
+  try {
+    const c=srv.client(),base='/rockstar-store'
+    const apparel=await c.get(`${base}/search?section=Gear&collection=apparel`)
+    assert.match(apparel.text,/7 results/)
+    const apparelPaths=[...apparel.text.matchAll(/<article class="rs-tile"><a[^>]* href="([^"]+)"/g)].map(m=>m[1].split('/').at(-1))
+    assert.deepEqual(new Set(apparelPaths),new Set(['vice-city-tee','san-andreas-tee','gta-iii-tee','midnight-club-tee','manhunt-tee','rockstar-crewneck','gta-v-hoodie']))
+    assert.match(apparel.text,/Vice City Screenshot Tee/)
+    assert.doesNotMatch(apparel.text,/class="rs-tile">[\s\S]*?href="\/rockstar-store\/game\/buy-gta-vi"/)
+    const pc=await c.get(`${base}/search?section=Games&platform=PC&sort=price-asc`)
+    assert.match(pc.text,/Bully: Scholarship Edition/)
+    assert.doesNotMatch(pc.text,/class="rs-tile">[\s\S]*?href="\/rockstar-store\/merchandise/)
+    assert.equal((await c.get(`${base}/merchandise/rockstar-cap`)).status,200)
+    for(const path of ['support','cookie-settings'])assert.equal((await c.get(`${base}/${path}`)).status,200)
+    assert.doesNotMatch((await c.get(base)).text,/href="#"/)
+  } finally {await srv.close()}
 })

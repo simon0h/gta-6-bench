@@ -1,13 +1,23 @@
+import { readShipping } from '../playstation-store/physical.js'
 import { Router } from 'express'
 import { randomBytes, randomInt } from 'node:crypto'
-import { recordOrder, getOrder, listOrders } from '../../lib/orders.js'
+import { recordOrder, getOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
+import { enterScenarioCart, scenarioAvailability, scenarioPayment, scenarioActive, registerScenarioAdapter } from '../../lib/benchmark-scenarios.js'
 import { authenticate, createAccount, findAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, byId, editions, search, totals, priceTotals, productPath, STATES, RELEASE } from './data.js'
+import { filterProducts, PRODUCTS, byId, editions, search, totals, priceTotals, productPath, STATES, RELEASE, isBuyable, familyEditions, COLLECTIONS, queryOptions, FACETS, facetValues } from './data.js'
 import * as P from './pages.js'
+import { installJourneys, resumeAccount } from './journeys.js'
+import { owns, lifecycle, token as serviceToken } from './journey-state.js'
+import { directFingerprint, cartValid, cartFingerprint, review, matchesReview, safeValues, toOrderItem, entitlements } from './purchase.js'
 
 const NAME = 'Xbox Store'
 const router = Router()
+registerScenarioAdapter('xbox-store', { lines: store => [...store.cart, ...(store.checkout.scenarioItems || [])] })
+router.use((req,res,next)=>{
+  if(req.method==='POST' && Object.values(req.body||{}).some(v=>typeof v!=='string')) return render(req,res,'Check your request',P.simplePage({title:'Check your request',html:'<p>Each form field must have a single value. Please return to the form and try again.</p>'}),{status:400})
+  next()
+})
 
 // ---- helpers ----
 function render(req, res, title, body, { status = 200, theme = 'light' } = {}) {
@@ -18,6 +28,13 @@ function renderAuth(req, res, title, body, status = 200) {
 }
 // ASSUMPTION: 10-digit numeric Microsoft Store order number (same shape as the 10-digit cart id).
 const tenDigits = () => String(randomInt(1_000_000_000, 10_000_000_000))
+function invalidateIdentityReviews(req) {
+  delete req.store.journeyReviews
+  delete req.store.pendingOrderAction
+  delete req.store.checkout.purchase
+  for(const key of ['paymentReview','cartReview']) if(req.store.checkout[key]) req.store.checkout[key]={token:'invalidated',fingerprint:'identity-changed'}
+}
+
 const savedMethods = (req) => (req.store.user && findAccount(req.storeSlug, req.store.user.email)?.payment_methods) || []
 function signinWall(req, res, returnTo) {
   req.store.checkout.returnTo = returnTo
@@ -27,14 +44,18 @@ const notFound = (req, res) => render(req, res, 'Page not found', P.simplePage({
 
 // Reads the payment picker (purchase dialog and cart checkout share it). Returns { payment, billing, values, errors }.
 function readPayment(req, saved) {
-  const v = { ...req.body }
+  const v = safeValues(req.body)
   const errors = {}
-  const chosen = v.pi !== undefined && v.pi !== 'new' ? saved[Number(v.pi)] : null
+  const chosen = typeof v.pi==='string' && /^(0|[1-9][0-9]*)$/.test(v.pi) ? saved[Number(v.pi)] : null
+  if(v.pi!==undefined && v.pi!=='new' && !chosen) errors.pi='Choose an available payment method.'
+  if(v.payType!==undefined && !['card','paypal','venmo'].includes(v.payType)) errors.payType='Choose a supported payment type.'
+  if(v.country!==undefined && v.country!=='US') errors.country='Choose United States for this store.'
+  if(Object.keys(errors).length) return {values:v,errors}
   if (chosen) return { payment: chosen.payment, billing: chosen.billing, values: v, errors }
   const payType = ['card', 'paypal', 'venmo'].includes(v.payType) ? v.payType : 'card'
   // ASSUMPTION: PayPal / Venmo would bounce to the provider's site; the clone treats them as approved eWallets.
   if (payType !== 'card') return { payment: { method: payType }, billing: null, values: v, errors }
-  const card = validateCard({ number: v.cardNumber, exp_month: v.expMonth, exp_year: v.expYear, cvv: v.cvv })
+  const card = validateCard({ number: req.body.cardNumber, exp_month: v.expMonth, exp_year: v.expYear, cvv: req.body.cvv })
   if (!card.ok) {
     if (card.errors.number) errors.cardNumber = card.errors.number
     if (card.errors.expiry) errors.expMonth = card.errors.expiry
@@ -53,23 +74,24 @@ function readPayment(req, saved) {
   return { payment, billing, values, errors }
 }
 
-function placeOrder(req, { items, payment, billing, t, path }) {
+function placeOrder(req, { items, payment, billing, t, path, shipping = null }) {
   const user = req.store.user
   const token = randomBytes(12).toString('hex')
   const preorder = items.some(i => byId(i.sku)?.ribbon === 'PRE-ORDER')
+  const unlocks = [...new Set(items.filter(i=>byId(i.sku)?.ribbon==='PRE-ORDER').map(i=>byId(i.sku).release))].join(', ')
   const order = recordOrder({
     store: req.storeSlug,
     order_number: tenDigits(),
     session: req.session,
     items,
     customer: { email: user.email, first_name: user.first_name ?? '', last_name: user.last_name ?? '', phone: user.phone ?? '', account_id: user.id, guest: false },
-    fulfillment: { method: 'digital', eta: preorder ? `Unlocks on release, ${RELEASE}; pre-download available before release` : 'Available now in My games & apps' },
-    shipping_address: null,
+    fulfillment: { method: shipping?'shipping':'digital', eta: shipping?'Free standard shipping · 3–5 business days':preorder ? `Unlocks on release, ${unlocks}; pre-download available before release` : 'Available now in My games & apps' },
+    shipping_address: shipping,
     billing_address: billing,
     payment,
     totals: { subtotal: t.subtotal, shipping: 0, tax: t.tax, total: t.total },
     currency: 'USD',
-    meta: { token, path, preorder, charge_timing: preorder && ['card', 'paypal', 'venmo'].includes(payment.method) ? 'about 10 days before release' : 'immediately' },
+    meta: { token, path, preorder, account_id:user.id, physical_items:items.filter(i=>byId(i.sku)?.physical).map(i=>({sku:i.sku,platform:byId(i.sku).catalogPlatform,format:byId(i.sku).formatLabel})), entitlements:entitlements(items), charge_timing: preorder && ['card', 'paypal', 'venmo'].includes(payment.method) ? shipping?'physical items immediately; digital pre-orders about 10 days before release':'about 10 days before release' : 'immediately' },
   })
   saveCard(req, payment, billing)
   return { order, token }
@@ -88,25 +110,38 @@ function saveCard(req, payment, billing) {
 // ---- browse ----
 router.get('/', (req, res) => render(req, res, 'Xbox Official Site: Consoles, Games, and Community', P.homePage({ base: res.locals.base, products: PRODUCTS })))
 
-router.get('/en-US/search/results', (req, res) => {
-  const q = String(req.query.q ?? '').trim()
-  const type = ['games', 'add-ons', 'subscriptions', 'hardware', 'support', 'general'].includes(req.query.type) ? req.query.type : 'games'
-  const results = search(q, type)
-  const counts = { games: search(q, 'games').length, addons: search(q, 'add-ons').length }
-  render(req, res, `Search results for: ${q}`, P.searchPage({ base: res.locals.base, q, type, results, counts }))
-})
-
-router.get('/en-US/games/all-games/console', (req, res) => render(req, res, 'Shop all console games', P.gridPage({ base: res.locals.base, title: 'Console games', intro: 'Shop all games for Xbox Series X|S.', products: PRODUCTS.filter(p => p.type === 'game') })))
-
-const STUBS = {
-  '/en-US/xbox-game-pass': ['Xbox Game Pass', '<p>Xbox Game Pass Essential $9.99/mo, Premium $14.99/mo and Ultimate $22.99/mo. A subscription, not a store discount: it does not change the price of Grand Theft Auto VI.</p>'],
-  '/en-US/consoles': ['Devices', '<p>Xbox Series X, Xbox Series S, controllers and accessories.</p>'],
-  '/en-US/play': ['Play', '<p>Xbox Cloud Gaming lets you play from the browser on supported devices.</p>'],
-  '/en-US/more': ['More', '<p>Store, Community, Support, My XBOX (Profile, Rewards, Wish list), Developers.</p>'],
-  '/en-US/support': ['Xbox Support', '<p>Help with purchases, billing and pre-orders. Pre-orders can be cancelled from Order history up to 10 days before release.</p>'],
-  '/en-US/redeem': ['Redeem a code', '<p>Enter the 25-character code from a gift card or prepaid code. The amount is added to your Microsoft account balance.</p>'],
+function browse(req,res,{title,scope=PRODUCTS,route}={}) {
+  const options=queryOptions(req.query), q=(options.q||'').trim(), type=['add-ons','hardware','all'].includes(options.type)?options.type:'games'
+  const matches=q?search(q,type):null
+  const count=t=>scope.filter(p=>(t==='all'||p.type===t)&&(!q||search(q,t==='all'?'all':t==='game'?'games':t==='hardware'?'hardware':'add-ons').some(x=>x.id===p.id))).length
+  const scopeIds=new Set(scope.map(p=>p.id))
+  const items=(matches||scope).filter(p=>scopeIds.has(p.id)&&(type==='all'||p.type===(type==='add-ons'?'add-on':type==='hardware'?'hardware':'game')))
+  render(req,res,title||'Browse games',P.searchPage({base:res.locals.base,q,type,title,route,results:filterProducts(items,options),counts:{games:count('game'),addons:count('add-on'),hardware:count('hardware'),all:count('all')},options}))
 }
-for (const [path, [title, html]] of Object.entries(STUBS)) router.get(path, (req, res) => render(req, res, title, P.simplePage({ title, html: html + `<p><a href="${res.locals.base}/">Back to Xbox home</a></p>` })))
+router.get('/en-US/search/results',(req,res)=>{
+  if(req.query.type==='subscriptions')return res.redirect(`${res.locals.base}/en-US/xbox-game-pass`)
+  if(req.query.type==='support')return res.redirect(`${res.locals.base}/en-US/support`)
+  browse(req,res)
+})
+router.get(['/en-US/games/all-games/console','/en-US/games/browse'],(req,res)=>browse(req,res,{route:req.baseUrl+req.path}))
+router.get('/en-US/games/collection/:collection',(req,res)=>{
+  const c=COLLECTIONS.find(c=>c.id===req.params.collection)
+  if(!c)return notFound(req,res)
+  browse(req,res,{title:c.title,scope:PRODUCTS.filter(c.test),route:req.baseUrl+req.path})
+})
+router.get(['/en-US/games/genres','/en-US/games/platforms'],(req,res)=>render(req,res,'Explore Xbox games',P.hubPage({base:res.locals.base,kind:req.path.endsWith('genres')?'genres':'platforms'})))
+router.get('/en-US/games/:dimension/:value',(req,res,next)=>{
+  if(!['genre','platform'].includes(req.params.dimension))return next()
+  const f=FACETS.find(f=>f.key===req.params.dimension),value=req.params.value
+  if(!facetValues(f).some(([v])=>v===value))return notFound(req,res)
+  browse(req,res,{title:`${value} games`,scope:PRODUCTS.filter(p=>p[f.field].includes(value)),route:req.baseUrl+req.path})
+})
+router.get('/en-US/xbox-game-pass',(req,res)=>render(req,res,'Xbox Game Pass',P.gamePassPage({base:res.locals.base})))
+router.get('/en-US/consoles',(req,res)=>res.redirect(`${res.locals.base}/en-US/games/browse?type=hardware`))
+router.get('/en-US/play',(req,res)=>res.redirect(`${res.locals.base}/en-US/games/platform/Cloud`))
+router.get('/en-US/more',(req,res)=>render(req,res,'Explore Xbox',P.hubPage({base:res.locals.base,kind:'genres'})))
+
+installJourneys(router, {render,signinWall,notFound})
 
 router.get('/art/:file', (req, res) => {
   const p = byId(String(req.params.file).replace(/\.svg$/, ''))
@@ -116,12 +151,16 @@ router.get('/art/:file', (req, res) => {
 
 function related(p) {
   const list = ids => (ids ?? []).map(byId).filter(Boolean)
-  return { bundle: list(p.bundle), includedIn: list(p.includedIn), addons: list(p.addons) }
+  return { bundle: list(p.bundle), includedIn: list(p.includedIn), addons: list(p.addons), recommendations:PRODUCTS.filter(x=>x.family!==p.family&&x.type==='game'&&isBuyable(x)&&x.genres.some(g=>p.genres.includes(g))).slice(0,4) }
+}
+function ownedResponse(req,res,p) {
+  return render(req,res,'You own this item',P.simplePage({title:'You already own this item',html:`<p>This digital license is in your account library.</p><a class="xb-btn xb-btn-buy" href="${res.locals.base}/account/library">View my library</a>`}),{status:409})
 }
 function productHtml(req, res, p) {
+  if(scenarioAvailability(req.store,p.id,'digital')===false)p={...p,available:false,purchasable:false}
   const menuOpen = req.store.menuOpen === p.id // one-shot flag set by the silent "Add to cart"
   delete req.store.menuOpen
-  return P.productPage({ base: res.locals.base, p, editions: editions(), related: related(p), inCart: req.store.cart.some(l => l.pid === p.id), menuOpen })
+  return P.productPage({ base: res.locals.base, p, editions: familyEditions(p), related: related(p), owned: owns(req,p), wishlistToken:req.store.user?serviceToken(req,`wishlist-${p.id}`,p.id):null, inCart: req.store.cart.some(l => l.pid === p.id), menuOpen })
 }
 
 router.get('/en-US/games/store/:slug/:id', (req, res) => {
@@ -134,54 +173,89 @@ router.get('/en-US/games/store/:slug/:id', (req, res) => {
 // ---- direct purchase: PRE-ORDER button -> sign-in wall -> Microsoft Store purchase dialog ----
 router.post('/en-US/games/store/:slug/:id/preorder', (req, res) => {
   const p = byId(req.params.id)
-  if (!p || !p.purchasable) return notFound(req, res)
+  if (!isBuyable(p) || req.params.slug !== p.slug) return notFound(req, res)
+  if(p.physical){if(!req.store.cart.some(l=>l.pid===p.id))req.store.cart.push({pid:p.id});return res.redirect(`${res.locals.base}/en-US/cart`)}
+  if (owns(req,p)) return ownedResponse(req,res,p)
   const buyUrl = `${productPath(res.locals.base, p)}/buy`
   if (!req.store.user) return signinWall(req, res, buyUrl)
   res.redirect(buyUrl)
 })
 
+// Direct checkout and final confirmation both check the selected offer.
+// Saving a payment instrument is separate from authorizing the purchase.
+router.use('/en-US/games/store/:slug/:id/buy', (req,res,next)=>{
+ const p=byId(req.params.id)
+ if(req.store.user&&isBuyable(p)&&req.params.slug===p.slug){
+  if(scenarioActive(req.store))req.store.checkout.scenarioItems=[{sku:p.id,qty:1}]
+  enterScenarioCart(req.store,[{sku:p.id,qty:1}])
+  if(scenarioAvailability(req.store,p.id,'digital')===false)return render(req,res,'Item unavailable',P.simplePage({title:'Item unavailable',html:`<p role="alert">This digital item became unavailable after it was selected. No order was placed.</p><a href="${productPath(res.locals.base,p)}">Return to product</a>`}),{status:409})
+ }
+ next()
+})
 router.get('/en-US/games/store/:slug/:id/buy', (req, res) => {
   const p = byId(req.params.id)
-  if (!p || !p.purchasable) return notFound(req, res)
+  if (!isBuyable(p) || req.params.slug !== p.slug) return notFound(req, res)
+  if(p.physical)return res.redirect(`${res.locals.base}/en-US/cart`)
   if (!req.store.user) return signinWall(req, res, `${productPath(res.locals.base, p)}/buy`)
-  const dialog = P.payDialog({ base: res.locals.base, p, t: priceTotals(p.price), saved: savedMethods(req) })
+  if (owns(req,p)) return ownedResponse(req,res,p)
+  const paymentToken = review(req,'paymentReview',directFingerprint(req,p))
+  const dialog = P.payDialog({ base: res.locals.base, p, t: priceTotals(p.price), saved: savedMethods(req), paymentToken })
   render(req, res, `Buy ${p.title}`, P.dialogOver({ pageBody: productHtml(req, res, p), dialog }), { theme: 'dark' })
 })
 
 router.post('/en-US/games/store/:slug/:id/buy', (req, res) => {
   const p = byId(req.params.id)
-  if (!p || !p.purchasable) return notFound(req, res)
+  if (!isBuyable(p) || req.params.slug !== p.slug) return notFound(req, res)
+  if(p.physical)return res.redirect(`${res.locals.base}/en-US/cart`)
   if (!req.store.user) return signinWall(req, res, `${productPath(res.locals.base, p)}/buy`)
+  if (owns(req,p)) return ownedResponse(req,res,p)
   const saved = savedMethods(req)
-  const { payment, billing, values, errors } = readPayment(req, saved)
+  if(!matchesReview(req,'paymentReview',directFingerprint(req,p),req.body.payment_token)) {
+    const paymentToken=review(req,'paymentReview',directFingerprint(req,p))
+    const dialog=P.payDialog({base:res.locals.base,p,t:priceTotals(p.price),saved,values:safeValues(req.body),errors:{review:'Your selection or account changed. Review the current details and try again.'},paymentToken})
+    return render(req,res,'Review your purchase',P.dialogOver({pageBody:productHtml(req,res,p),dialog}),{status:409,theme:'dark'})
+  }
+  const { payment, billing, values, errors } = p.price===0 ? {payment:{method:'free'},billing:null,values:{},errors:{}} : readPayment(req, saved)
   if (Object.keys(errors).length) {
-    const dialog = P.payDialog({ base: res.locals.base, p, t: priceTotals(p.price), values, errors, saved })
+    const dialog = P.payDialog({ base: res.locals.base, p, t: priceTotals(p.price), values, errors, saved, paymentToken:req.store.checkout.paymentReview?.token })
     return render(req, res, `Buy ${p.title}`, P.dialogOver({ pageBody: productHtml(req, res, p), dialog }), { status: 400, theme: 'dark' })
   }
   saveCard(req, payment, billing)
-  req.store.checkout.purchase = { pid: p.id, payment, billing }
+  req.store.checkout.purchase = { pid:p.id, payment, billing, fingerprint:directFingerprint(req,p,payment,billing), token:randomBytes(18).toString('hex') }
   res.redirect(`${productPath(res.locals.base, p)}/buy/confirm`)
 })
 
 router.get('/en-US/games/store/:slug/:id/buy/confirm', (req, res) => {
   const p = byId(req.params.id)
-  if (!p || !p.purchasable) return notFound(req, res)
+  if (!isBuyable(p) || req.params.slug !== p.slug) return notFound(req, res)
+  if(p.physical)return res.redirect(`${res.locals.base}/en-US/cart`)
   if (!req.store.user) return signinWall(req, res, `${productPath(res.locals.base, p)}/buy`)
+  if (owns(req,p)) return ownedResponse(req,res,p)
   const pending = req.store.checkout.purchase
   if (!pending || pending.pid !== p.id) return res.redirect(`${productPath(res.locals.base, p)}/buy`)
-  const dialog = P.confirmDialog({ base: res.locals.base, p, payment: pending.payment, billing: pending.billing, t: priceTotals(p.price) })
+  if(pending.fingerprint!==directFingerprint(req,p,pending.payment,pending.billing) || (req.method==='POST'&&req.body.confirm_token!==undefined&&req.body.confirm_token!==pending.token)) {
+    delete req.store.checkout.purchase
+    return render(req,res,'Review your purchase',P.simplePage({title:'Your purchase details changed',html:`<p>Review the current price, availability and account before placing your order.</p><a class="xb-btn xb-btn-buy" href="${productPath(res.locals.base,p)}/buy">Review purchase</a>`}),{status:409})
+  }
+  const dialog = P.confirmDialog({ base: res.locals.base, p, payment: pending.payment, billing: pending.billing, t: priceTotals(p.price), confirmToken:pending.token })
   render(req, res, `Confirm payment - ${p.title}`, P.dialogOver({ pageBody: productHtml(req, res, p), dialog }), { theme: 'dark' })
 })
 
 router.post('/en-US/games/store/:slug/:id/buy/confirm', (req, res) => {
   const p = byId(req.params.id)
-  if (!p || !p.purchasable) return notFound(req, res)
+  if (!isBuyable(p) || req.params.slug !== p.slug) return notFound(req, res)
+  if(p.physical)return res.redirect(`${res.locals.base}/en-US/cart`)
   if (!req.store.user) return signinWall(req, res, `${productPath(res.locals.base, p)}/buy`)
+  if (owns(req,p)) return ownedResponse(req,res,p)
   const pending = req.store.checkout.purchase
   if (!pending || pending.pid !== p.id) return res.redirect(`${productPath(res.locals.base, p)}/buy`)
-  const item = p.kind === 'game'
-    ? { platform: p.platform, edition: p.edition, format: p.format, qty: 1, unit_price: p.price, title: p.title, sku: p.id }
-    : { kind: 'other', title: p.title, qty: 1, unit_price: p.price, sku: p.id }
+  if(pending.fingerprint!==directFingerprint(req,p,pending.payment,pending.billing) || (req.method==='POST'&&req.body.confirm_token!==undefined&&req.body.confirm_token!==pending.token)) {
+    delete req.store.checkout.purchase
+    return render(req,res,'Review your purchase',P.simplePage({title:'Your purchase details changed',html:`<p>Review the current price, availability and account before placing your order.</p><a class="xb-btn xb-btn-buy" href="${productPath(res.locals.base,p)}/buy">Review purchase</a>`}),{status:409})
+  }
+  const item = toOrderItem(p)
+  const rejection=scenarioPayment(req.store,pending.payment,[item])
+  if(rejection)return render(req,res,'Payment declined',P.dialogOver({pageBody:productHtml(req,res,p),dialog:P.confirmDialog({base:res.locals.base,p,payment:pending.payment,billing:pending.billing,t:priceTotals(p.price),confirmToken:pending.token,error:rejection})}),{status:402,theme:'dark'})
   const { order, token } = placeOrder(req, { items: [item], payment: pending.payment, billing: pending.billing, t: priceTotals(p.price), path: 'direct' })
   delete req.store.checkout.purchase
   req.store.cart = req.store.cart.filter(l => l.pid !== p.id)
@@ -190,7 +264,8 @@ router.post('/en-US/games/store/:slug/:id/buy/confirm', (req, res) => {
 
 router.get('/en-US/purchase/complete', (req, res) => {
   const order = getOrder(String(req.query.order ?? ''))
-  if (!order || order.store !== req.storeSlug || order.meta.token !== req.query.token) return render(req, res, 'Order not found', P.simplePage({ title: 'Order not found', html: `<p>We couldn't find that order. Check <a href="${res.locals.base}/account/billing/orders">Order history</a>.</p>` }), { status: 404 })
+  if (!order || order.store !== req.storeSlug || order.meta.token !== req.query.token || order.session_id !== req.session.id || !req.store.user || order.customer.account_id !== req.store.user.id || order.meta.account_id !== req.store.user.id) return render(req, res, 'Order not found', P.simplePage({ title: 'Order not found', html: `<p>We couldn't find that order. Check <a href="${res.locals.base}/account/billing/orders">Order history</a>.</p>` }), { status: 404 })
+  if(['cancelled','return_requested'].includes(lifecycle(order)))return res.redirect(`${res.locals.base}/account/billing/orders/${order.order_number}`)
   const p = byId(order.items[0]?.sku)
   const body = order.meta.path === 'direct' && p
     ? P.dialogOver({ pageBody: productHtml(req, res, p), dialog: P.thanksCard({ base: res.locals.base, order, p }) })
@@ -201,7 +276,8 @@ router.get('/en-US/purchase/complete', (req, res) => {
 // ---- cart path: "..." -> Add to cart -> Cart -> Checkout ----
 router.post('/en-US/cart/add', (req, res) => {
   const p = byId(req.body.pid)
-  if (!p || !p.purchasable) return res.redirect(`${res.locals.base}/`)
+  if (!isBuyable(p)) return notFound(req,res)
+  if (owns(req,p)) return ownedResponse(req,res,p)
   // A digital licence is one per account: re-adding does not create a second line.
   if (!req.store.cart.some(l => l.pid === p.id)) req.store.cart.push({ pid: p.id })
   req.store.saved = (req.store.saved ?? []).filter(id => id !== p.id)
@@ -210,17 +286,20 @@ router.post('/en-US/cart/add', (req, res) => {
 })
 
 router.get('/en-US/cart', (req, res) => {
+  enterScenarioCart(req.store)
   req.store.cartId ??= tenDigits()
   const saved = (req.store.saved ?? []).map(id => ({ product: byId(id) })).filter(l => l.product)
-  render(req, res, 'Shopping cart', P.cartPage({ base: res.locals.base, t: totals(req.store), saved, cartId: req.store.cartId }), { theme: 'dark' })
+  const unavailable=req.store.cart.some(l=>scenarioAvailability(req.store,l.pid,'digital')===false)
+  render(req, res, 'Shopping cart', (unavailable?'<p class="xb-error-summary" role="alert">An item in your cart became unavailable. Remove it before checkout.</p>':'')+P.cartPage({ base: res.locals.base, t: totals(req.store), saved, cartId: req.store.cartId }), { theme: 'dark' })
 })
 
 router.post('/en-US/cart/update', (req, res) => {
   const pid = String(req.body.pid ?? '')
   const action = req.body.action
+  if(!['remove','save','move'].includes(action)||!byId(pid))return render(req,res,'Invalid cart update',P.simplePage({title:'Check your cart selection',html:`<p>Choose an available item and cart action.</p><a href="${res.locals.base}/en-US/cart">Return to cart</a>`}),{status:400})
   if (action === 'remove' || action === 'save') req.store.cart = req.store.cart.filter(l => l.pid !== pid)
-  if (action === 'save' && byId(pid) && !(req.store.saved ?? []).includes(pid)) req.store.saved = [...(req.store.saved ?? []), pid]
-  if (action === 'move' && byId(pid)) {
+  if (action === 'save' && isBuyable(byId(pid)) && !(req.store.saved ?? []).includes(pid)) req.store.saved = [...(req.store.saved ?? []), pid]
+  if (action === 'move' && isBuyable(byId(pid)) && !owns(req,byId(pid))) {
     req.store.saved = (req.store.saved ?? []).filter(id => id !== pid)
     if (!req.store.cart.some(l => l.pid === pid)) req.store.cart.push({ pid })
   }
@@ -234,10 +313,18 @@ router.post('/en-US/cart/checkout', (req, res) => {
   res.redirect(url)
 })
 
+router.use('/en-US/checkout',(req,res,next)=>{
+ if(scenarioActive(req.store))req.store.checkout.scenarioItems=[]
+ enterScenarioCart(req.store)
+ if(req.store.cart.some(l=>scenarioAvailability(req.store,l.pid,'digital')===false))return render(req,res,'Item unavailable',P.simplePage({title:'Item unavailable',html:`<p role="alert">A digital item in your cart became unavailable. No order was placed.</p><a href="${res.locals.base}/en-US/cart">Return to cart</a>`}),{status:409})
+ next()
+})
 router.get('/en-US/checkout', (req, res) => {
   if (!req.store.cart.length) return res.redirect(`${res.locals.base}/en-US/cart`)
   if (!req.store.user) return signinWall(req, res, `${res.locals.base}/en-US/checkout`)
-  render(req, res, 'Checkout', P.checkoutPage({ base: res.locals.base, user: req.store.user, t: totals(req.store), saved: savedMethods(req) }), { theme: 'dark' })
+  if(!cartValid(req))return render(req,res,'Cart changed',P.simplePage({title:'Review your cart',html:`<p>An item is no longer available to purchase.</p><a href="${res.locals.base}/en-US/cart">Return to cart</a>`}),{status:409})
+  const checkoutToken=review(req,'cartReview',cartFingerprint(req))
+  render(req, res, 'Checkout', P.checkoutPage({ base: res.locals.base, user: req.store.user, t: totals(req.store), saved: savedMethods(req), checkoutToken }), { theme: 'dark' })
 })
 
 router.post('/en-US/checkout', (req, res) => {
@@ -246,19 +333,28 @@ router.post('/en-US/checkout', (req, res) => {
   if (!req.store.user) return signinWall(req, res, `${base}/en-US/checkout`)
   const saved = savedMethods(req)
   const t = totals(req.store)
+  if(!cartValid(req) || !matchesReview(req,'cartReview',cartFingerprint(req),req.body.checkout_token)) {
+    const checkoutToken=review(req,'cartReview',cartFingerprint(req))
+    return render(req,res,'Review your cart',P.checkoutPage({base,user:req.store.user,t,saved,values:safeValues(req.body),errors:{review:'Your cart or account changed. Review the current items and total before placing your order.'},checkoutToken}),{status:409,theme:'dark'})
+  }
+  if(req.body.action!==undefined&&!['place','promo'].includes(req.body.action))return render(req,res,'Check your request',P.simplePage({title:'Invalid checkout action',html:'<p>Return to checkout and choose Place order.</p>'}),{status:400})
+  const checkoutToken=req.store.checkout.cartReview?.token || review(req,'cartReview',cartFingerprint(req))
   if (req.body.action === 'promo') {
     // ASSUMPTION: no promo code applies to this pre-order; the real wording of the rejection was not observed.
     const values = { ...req.body, cardNumber: '', cvv: '' }
     const promoError = String(req.body.promo ?? '').trim() ? 'That promo code isn\'t valid for the items in your cart.' : 'Enter a promo code.'
-    return render(req, res, 'Checkout', P.checkoutPage({ base, user: req.store.user, t, values, saved, promoError }), { theme: 'dark' })
+    return render(req, res, 'Checkout', P.checkoutPage({ base, user: req.store.user, t, values, saved, promoError, checkoutToken }), { theme: 'dark' })
   }
-  const { payment, billing, values, errors } = readPayment(req, saved)
-  if (Object.keys(errors).length) return render(req, res, 'Checkout', P.checkoutPage({ base, user: req.store.user, t, values, errors, saved }), { status: 400, theme: 'dark' })
-  const items = t.lines.map(l => l.product.kind === 'game'
-    ? { platform: l.product.platform, edition: l.product.edition, format: l.product.format, qty: 1, unit_price: l.product.price, title: l.product.title, sku: l.product.id }
-    : { kind: 'other', title: l.product.title, qty: 1, unit_price: l.product.price, sku: l.product.id })
-  const { order, token } = placeOrder(req, { items, payment, billing, t, path: 'cart' })
+  const { payment, billing, values, errors } = t.total===0 ? {payment:{method:'free'},billing:null,values:{},errors:{}} : readPayment(req, saved)
+  if (Object.keys(errors).length) return render(req, res, 'Checkout', P.checkoutPage({ base, user: req.store.user, t, values, errors, saved, checkoutToken }), { status: 400, theme: 'dark' })
+  const shipping=t.lines.some(l=>l.product.physical)?readShipping(req.body):{address:null}
+  if(shipping.error)return render(req,res,'Shipping address required',P.checkoutPage({base,user:req.store.user,t,values:{...values,...shipping.values},errors:{shipping:shipping.error},saved,checkoutToken}),{status:400,theme:'dark'})
+  const items = t.lines.map(l=>toOrderItem(l.product))
+  const rejection=scenarioPayment(req.store,payment,items)
+  if(rejection)return render(req,res,'Payment declined',P.checkoutPage({base,user:req.store.user,t,values,errors:{payment:rejection},saved,checkoutToken}),{status:402,theme:'dark'})
+  const { order, token } = placeOrder(req, { items, payment, billing, t, path: 'cart', shipping:shipping.address })
   req.store.cart = []
+  delete req.store.checkout.cartReview
   res.redirect(`${base}/en-US/purchase/complete?order=${order.order_number}&token=${token}`)
 })
 
@@ -286,6 +382,7 @@ router.post('/login.live.com/password.srf', (req, res) => {
   if (!email) return res.redirect(`${res.locals.base}/login.live.com/oauth20_authorize.srf`)
   const acct = authenticate(req.storeSlug, email, req.body.passwd)
   if (!acct) return renderAuth(req, res, SIGNIN_TITLE, P.signinPasswordPage({ base: res.locals.base, email, error: 'Your account or password is incorrect. If you don\'t remember your password, reset it now.' }), 401)
+  if(req.store.user?.id!==acct.id) invalidateIdentityReviews(req)
   req.store.user = publicAccount(acct)
   delete req.store.checkout.loginEmail
   res.redirect(req.store.skipKmsi ? `${res.locals.base}/auth/msa?action=loggedIn` : `${res.locals.base}/login.live.com/kmsi.srf`)
@@ -301,11 +398,12 @@ router.post('/login.live.com/kmsi.srf', (req, res) => {
 
 router.get('/auth/msa', (req, res) => {
   const base = res.locals.base
+  resumeAccount(req)
   const ru = req.store.checkout.returnTo
   delete req.store.checkout.returnTo
   res.redirect(req.store.user && typeof ru === 'string' && ru.startsWith(`${base}/`) ? ru : `${base}/`)
 })
-router.get('/signout', (req, res) => { req.store.user = null; req.store.checkout = {}; res.redirect(`${res.locals.base}/`) })
+router.get('/signout', (req, res) => { invalidateIdentityReviews(req); const {paymentReview,cartReview}=req.store.checkout; req.store.user = null; req.store.checkout = {paymentReview,cartReview}; res.redirect(`${res.locals.base}/`) })
 
 router.get('/signup.live.com/signup', (req, res) => renderAuth(req, res, 'Create account', P.signupPage({ base: res.locals.base })))
 router.post('/signup.live.com/signup', (req, res) => {
@@ -319,16 +417,9 @@ router.post('/signup.live.com/signup', (req, res) => {
   if (!Object.keys(errors).length) {
     const acct = createAccount(req.storeSlug, { email: v.email.trim(), password: pw, first_name: v.firstName.trim(), last_name: v.lastName.trim(), country: 'US', birthdate: `${v.birthYear}-${String(v.birthMonth).padStart(2, '0')}-${String(v.birthDay).padStart(2, '0')}` })
     if (acct.error) errors.email = 'Someone already has this email address. Try another name or sign in.'
-    else { req.store.user = publicAccount(acct); return res.redirect(`${res.locals.base}/auth/msa?action=loggedIn`) }
+    else { invalidateIdentityReviews(req); req.store.user = publicAccount(acct); return res.redirect(`${res.locals.base}/auth/msa?action=loggedIn`) }
   }
   renderAuth(req, res, 'Create account', P.signupPage({ base: res.locals.base, values: { ...v, password: '' }, errors }), 400)
-})
-
-// ---- account.microsoft.com > Payment & billing > Order history ----
-router.get('/account/billing/orders', (req, res) => {
-  if (!req.store.user) return signinWall(req, res, `${res.locals.base}/account/billing/orders`)
-  const orders = listOrders({ store: req.storeSlug }).filter(o => o.customer.email === req.store.user.email)
-  render(req, res, 'Order history', P.ordersPage({ base: res.locals.base, user: req.store.user, orders }))
 })
 
 export default {
@@ -336,6 +427,7 @@ export default {
   name: NAME,
   country: 'US',
   currency: 'USD',
-  description: 'US. Digital Xbox Series X|S only, Standard/Ultimate as separate pages, Microsoft-account wall (no guest), PRE-ORDER purchase dialog or cart checkout.',
+  description: fixtureCatalog ? 'US. Native digital Xbox licenses with Microsoft-account checkout; physical games, consoles and accessories ship separately without digital entitlements.' : 'US. Captured digital GTA VI offers. Microsoft sign-in and payment are local simulations; no physical inventory.',
   router,
 }
+import { fixtureCatalog } from '../../lib/catalog-policy.js'

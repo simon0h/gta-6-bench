@@ -1,0 +1,2 @@
+import { PRODUCTS } from './data.js'
+export const inventory=PRODUCTS.map(p=>({id:p.id,title:p.title,type:p.catalogType,platform:p.catalogType==='game'?p.catalogPlatform:null,available:p.catalogEvidence ? (p.catalogEvidence.availability === 'unknown' ? null : ['preorder','in_stock'].includes(p.catalogEvidence.availability)) : p.stock>0&&(!p.options?.length||p.options.some(v=>v.stock>0)),category:p.browseCategory||p.category}))

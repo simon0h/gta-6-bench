@@ -1,0 +1,612 @@
+{
+  "captured_at": "2026-10-06",
+  "source_page": "https://www.nike.com/w?q=gta%206",
+  "classification": "official-captured",
+  "note": "Public official product images preserved without pixel edits for a local benchmark. Search ranking and prices are a dated capture; stock and size availability were not captured.",
+  "assets": [
+    {
+      "local_path": "public/reference/nike/search-product-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/5736689f-71b0-40b5-9bd0-9834c59ed25b/INFINITY+TOUR+NEXT%25+2+GTX.png",
+      "product_url": "https://www.nike.com/t/infinity-tour-2-gore-tex-mens-waterproof-golf-shoes-MkIkD5z1/FV4897-003",
+      "placement": "gta 6 search result 1",
+      "sha256": "fffd004cde5c5fc2ef22deb7559e32f1c4eecb0378475d8aaeea62b330b3e8bc"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1b835544-4378-4471-9b56-4bad9709c2df/NIKE+TAWA.png",
+      "product_url": "https://www.nike.com/t/tawa-mens-wrestling-shoes-4sfLnK/CI2952-600",
+      "placement": "gta 6 search result 2",
+      "sha256": "a0699bda5cd36f32e4b7f47ba1f5651e136e9f1d9922f96da482a85a3197333f"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0fb8f394-014f-4130-8297-52a5574ed190/G.T.+FUTURE.png",
+      "product_url": "https://www.nike.com/t/gt-future-basketball-shoes-3q3PrMjK/FZ5590-601",
+      "placement": "gta 6 search result 3",
+      "sha256": "ebd3e9071b23a55da51281b429ffec15c88ead53dedaf9e6c4287720d4e1f170"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-4.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1b4ebfce-032c-48d6-8f06-df48f95b4e29/G.T.+CUT+4.png",
+      "product_url": "https://www.nike.com/t/gt-cut-4-basketball-shoes-oi4DptcF/HV9922-001",
+      "placement": "gta 6 search result 4",
+      "sha256": "d974a5df7b66c606e8a7135f4c24daee715649f902426ea2c6b631ce2e7d229f"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-5.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/60ab889c-4ced-4137-b620-11c049baed5a/G.T.+CUT+4+WNBA+30TH.png",
+      "product_url": "https://www.nike.com/t/gt-cut-4-wnba-30th-basketball-shoes-g6ukBsq1/II7530-400",
+      "placement": "gta 6 search result 5",
+      "sha256": "3976be9767b7a86ebfd989a163e325e2bbec635a1380117c6d651989fef51ec6"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-6.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c6aeb110-f060-4569-a007-d1ff1c3b739f/AIR+ZOOM+G.T.+CUT+ACADEMY.png",
+      "product_url": "https://www.nike.com/t/gt-cut-academy-basketball-shoes-HWCFvAob/FB2599-011",
+      "placement": "gta 6 search result 6",
+      "sha256": "7f7b9e51da70122460840a6d85804c5645fbd4295768c89ea094b9f796eff29e"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-7.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/debfb64d-a72e-4c55-a97f-aa8f975173cb/TOTAL+90.png",
+      "product_url": "https://www.nike.com/t/total-90-soccer-shoes-iYm7kMSK/IQ7631-001",
+      "placement": "gta 6 search result 7",
+      "sha256": "10424de2ce5d3356577255bfaa577a8f433e224cc5603ef9f6ee071f96edf44a"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-8.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/26977e05-0714-4e1a-8470-2bfb3ced8928/NIKE+GATO+LV8+TREBLE.png",
+      "product_url": "https://www.nike.com/t/gato-lv8-scorpion-mens-shoes-Ib4M9R5k/IQ7630-001",
+      "placement": "gta 6 search result 8",
+      "sha256": "df4cd8bc2ca24eb1ea086bfcb9dc2aa06e70da9473df0cd27128e562aa426b21"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-9.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/212bd41f-5f12-4dc4-b1ef-51b252bbfd43/G.T.+CUT+4+TB.png",
+      "product_url": "https://www.nike.com/t/gt-cut-4-basketball-shoes-a6H3KS51/IM4126-103",
+      "placement": "gta 6 search result 9",
+      "sha256": "740a3eafd8806278fe5e5d79b391b31fd0a993e65f8603006fbae32096368b5b"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-10.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/a50973dc-94b6-4a68-a416-311179c8dae5/GIANNIS+FREAK+8.png",
+      "product_url": "https://www.nike.com/t/giannis-freak-8-buckitos-basketball-shoes-tqR0ZyML/IM5150-600",
+      "placement": "gta 6 search result 10",
+      "sha256": "88e85a48c056f1e1570908688d8290a07b9c7445e32150cdb9d233e552a0d2bc"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-11.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/3fe7e3d7-dc4a-4bfe-8bde-4cdf90e812f2/TWELVE+TIME.png",
+      "product_url": "https://www.nike.com/t/ja-twelve-time-basketball-shoes-CfNmUQhu/IM4164-003",
+      "placement": "gta 6 search result 11",
+      "sha256": "36d08c000166a7262eba1af03465474c45b46a1553e0c4cf65466a45bf29c2c3"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-12.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7f041e38-a82f-41b1-a58e-82f528bd679e/NIKE+AIR+WINFLO+12+GTX.png",
+      "product_url": "https://www.nike.com/t/winflo-12-gore-tex-mens-waterproof-road-running-shoes-EA2CjqyY/IO7953-001",
+      "placement": "gta 6 search result 12",
+      "sha256": "35afe6cc139fc0b97926c1bc3e01c93bdee334c22e9fb291883eb2c5a39ddc39"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-13.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/53c40017-65a5-4b71-a98a-92b98c4972d6/NIKE+SFB+AIR+FIELD+UKIAH+R+GTX.png",
+      "product_url": "https://www.nike.com/t/sfb-air-field-ukiah-r-gore-tex-tactical-boots-m4Zpzk/FV0191-200",
+      "placement": "gta 6 search result 13",
+      "sha256": "ff69b9e805ca9485a3e8373384ecf147b73cd4f127df7453f40cb43f82e06942"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-14.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/817d7871-df54-4601-9037-47490c837b9c/AIR+ZOOM+G.T.+CUT+ACADEMY+2.png",
+      "product_url": "https://www.nike.com/t/gt-cut-academy-2-basketball-shoes-rlrCLIDG/HV9774-003",
+      "placement": "gta 6 search result 14",
+      "sha256": "ffd9590782822f7c32c87ecae724f7696d0a5422bcbcdda581041af485e0b9e9"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-15.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/223a7196-41bd-49cc-a1ed-216d91c58df2/NIKE+DUNK+LOW+GTX.png",
+      "product_url": "https://www.nike.com/t/dunk-low-gore-tex-mens-shoes-hbKMFmET/HQ2053-001",
+      "placement": "gta 6 search result 15",
+      "sha256": "a123bc46fa4d35b83958dd530c884a6236d91206dd3bcf8de25a27c8010aba1e"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-16.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/79475bbd-c6b0-4260-8574-411ce77d4e33/NIKE+ACG+ZEGAMA+TRAIL+GTX.png",
+      "product_url": "https://www.nike.com/t/acg-zegama-trail-gore-tex-mens-waterproof-trail-running-shoes-QDaHEUER/IO7932-001",
+      "placement": "gta 6 search result 16",
+      "sha256": "b52393e08479bae3f1cafbdbb1dfc2785c4a1dae28575cae017ee5c2cc872774"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-17.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/316731de-82bd-4e9d-85ec-a438d5ca7ff7/GIANNIS+IMMORTALITY+5.png",
+      "product_url": "https://www.nike.com/t/giannis-immortality-5-basketball-shoes-AmMQXev4/IM5130-102",
+      "placement": "gta 6 search result 17",
+      "sha256": "1c4000c86f60faa74cb5717eea8ded0de8f63158bc75bc8cbffa41c4bcadab2a"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-18.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/33d7509f-26f7-4b25-b47a-ea0ccca842e1/A%27TWO+NN.png",
+      "product_url": "https://www.nike.com/t/atwo-nike-nights-aja-wilson-basketball-shoes-RRj2XcCH/IX5205-001",
+      "placement": "gta 6 search result 18",
+      "sha256": "091a7957753cd0962ee32b40dc31d8039390391d1a3f4a360cab057825dfb755"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-19.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7ce2c1e9-b023-4a25-8c69-54becefff369/AIR+FORCE+1+GTX+VIBRAM.png",
+      "product_url": "https://www.nike.com/t/air-force-1-gore-tex-vibram-mens-shoes-ASaVZlAr/HV5953-002",
+      "placement": "gta 6 search result 19",
+      "sha256": "2a95a13997ac5e7310913b437c75c7f639c9368deb631b5de0a35719ed9cd523"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-20.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/299a5c6a-906a-47ca-906a-e4fb228d6dc5/G.T.+CUT+4+%28GS%29.png",
+      "product_url": "https://www.nike.com/t/gt-cut-4-big-kids-basketball-shoes-d36nV9rx/IQ2349-001",
+      "placement": "gta 6 search result 20",
+      "sha256": "8b989198f28d03296b4f7373f2a0f6ea92c0c288b570bc1f00822bc89a0b0720"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-21.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/a34f23df-0ca7-4257-9667-abbef8777dd8/NIKE+VOMERO+18+GTX+VIS.png",
+      "product_url": "https://www.nike.com/t/vomero-18-gore-tex-mens-waterproof-road-running-shoes-aJHWes9w/IQ0456-100",
+      "placement": "gta 6 search result 21",
+      "sha256": "f2d9ae3fbc5e34055e58b06b1abbff0c63a427db29a78e9bae1d13db755560b6"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-22.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d2138fa2-9761-4aac-ad70-9c51ee51fe8c/PEGASUS+1+G+GTX.png",
+      "product_url": "https://www.nike.com/t/pegasus-1-g-gore-tex-mens-waterproof-golf-shoes-I9D76kUt/IQ5694-001",
+      "placement": "gta 6 search result 22",
+      "sha256": "a95c9a889cb20e8d359e4e967c3063584efa86c166402bce4ae041433c3ec4d0"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-23.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/241f1a9d-ddcb-4278-bf51-b6a6e2dc5323/NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "product_url": "https://www.nike.com/t/acg-pegasus-trail-gore-tex-mens-waterproof-trail-running-shoes-T29yijhw/IQ1084-002",
+      "placement": "gta 6 search result 23",
+      "sha256": "74eec6667816771070ad89948c0bea7807f1adf39716d146260cc0ed958efe3f"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-24.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/df9143ef-8255-40ad-a094-9c1de91f3d03/W+NIKE+AIR+WINFLO+12+GTX.png",
+      "product_url": "https://www.nike.com/t/winflo-12-gore-tex-womens-waterproof-road-running-shoes-mLywHzgd/IO7960-601",
+      "placement": "gta 6 search result 24",
+      "sha256": "0cc26717ff256171da639034bfb6df19f8975c74b81ca461371cecc20a0286ec"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-25.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/57fed7bf-6b68-46a1-b63f-9969f15babdb/KD+VI+%28GS%29.png",
+      "product_url": "https://www.nike.com/t/kd-6-meteorology-big-kids-shoes-2tvyMG7w/IU1287-001",
+      "placement": "gta 6 search result 25",
+      "sha256": "f45a8c3a6f55381731341b1326264e41655f73bf1a69133a38285d6d999e323a"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-26.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/23bdf15e-09ed-46d2-9ec6-0e8892b02fe0/W+NIKE+VOMERO+18+GTX+VIS.png",
+      "product_url": "https://www.nike.com/t/vomero-18-gore-tex-womens-road-running-shoes-OJzhrrju/IQ0467-001",
+      "placement": "gta 6 search result 26",
+      "sha256": "f7eede6fcb8fed9110d1134aa8ecc7442af97313aa670859480b6b70834af90b"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-27.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ea3ad6ed-9ff1-46a0-856b-d022b224857b/W+NIKE+ACG+ZEGAMA+TRAIL+GTX.png",
+      "product_url": "https://www.nike.com/t/acg-zegama-trail-gore-tex-womens-waterproof-trail-running-shoes-N1D8AuGu/IO7933-002",
+      "placement": "gta 6 search result 27",
+      "sha256": "b52393e08479bae3f1cafbdbb1dfc2785c4a1dae28575cae017ee5c2cc872774"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-28.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/035b8480-263f-4452-aaff-7af09161ad25/AIR+ZOOM+PEGASUS+42+GORE-TEX.png",
+      "product_url": "https://www.nike.com/t/pegasus-42-gore-tex-mens-waterproof-road-running-shoes-Q8TUua54/IQ0450-005",
+      "placement": "gta 6 search result 28",
+      "sha256": "fba919e198e87a96d1b8956eeec9b0f53a8de6f0108ede30964aa69a7d709c5c"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-29.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ca4f9031-9078-4143-bb4c-e83b66409e76/NIKE+VOMERO+18+GTX.png",
+      "product_url": "https://www.nike.com/t/vomero-18-gore-tex-mens-waterproof-road-running-shoes-with-reflective-accents-HzOmdRVa/HQ7001-005",
+      "placement": "gta 6 search result 29",
+      "sha256": "c6cd4528a1b2597d22c3aa6acb829bbd1cf7055595dbf94b4d782e65f98fae6b"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-30.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/5824dff6-ac36-4a64-a2c1-f1113dabfc9f/W+NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "product_url": "https://www.nike.com/t/acg-pegasus-trail-gore-tex-womens-waterproof-trail-running-shoes-JR5QA6yA/IQ1394-003",
+      "placement": "gta 6 search result 30",
+      "sha256": "780a65cb7466bfb89b92a4142a917aec6d647067a575efbadef20c521c00ec82"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-31.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ea72ab11-af27-4c8e-afe6-8c7cf5f05904/W+AIR+ZOOM+PEGASUS+42+GTX+VIS.png",
+      "product_url": "https://www.nike.com/t/pegasus-42-gore-tex-womens-waterproof-road-running-shoes-2yqPS6pc/IQ0465-001",
+      "placement": "gta 6 search result 31",
+      "sha256": "3a73101fa0e99c35db5b69086f8eb730d6a79695f6c0d14a14e3ea50a964e227"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-32.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/9f051852-dc50-4737-893b-4e7080bc8da2/AIR+FORCE+1+MID+%2707+GTX+VIBRAM.png",
+      "product_url": "https://www.nike.com/t/air-force-1-mid-07-gore-tex-vibram-mens-shoes-JNrJFwJw/IO1875-700",
+      "placement": "gta 6 search result 32",
+      "sha256": "5ee062e6b9be854f963f1b2f165726e53d7ad42e129cf0a98fb2a115e15dea3c"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-3-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0fb8f394-014f-4130-8297-52a5574ed190/G.T.+FUTURE.png",
+      "placement": "search card 3 colorway 1",
+      "sha256": "ebd3e9071b23a55da51281b429ffec15c88ead53dedaf9e6c4287720d4e1f170"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-3-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/9491c158-5879-4409-8435-8cd38f6b8258/G.T.+FUTURE.png",
+      "placement": "search card 3 colorway 2",
+      "sha256": "f1ee3f9bc70683b09d96c9c6e75bace37be10fdbdc43582ac6f9a0003438d058"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-4-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1b4ebfce-032c-48d6-8f06-df48f95b4e29/G.T.+CUT+4.png",
+      "placement": "search card 4 colorway 1",
+      "sha256": "d974a5df7b66c606e8a7135f4c24daee715649f902426ea2c6b631ce2e7d229f"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-4-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ae1f0f47-14ee-457b-8e2d-efbe397aea26/G.T.+CUT+4+CNY.png",
+      "placement": "search card 4 colorway 2",
+      "sha256": "da7ec39959cd67a933ad4ee492712326b20f74cec2b7e717ddb599ad6b292535"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-4-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1b8c3093-2fb2-4d09-99b9-f48417c2d68a/G.T.+CUT+4+PREHEAT.png",
+      "placement": "search card 4 colorway 3",
+      "sha256": "1f81e5848a4484b0e37a4d3861e5371b1b858d75e60d6e24afab0c82bef9b65d"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-5-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/60ab889c-4ced-4137-b620-11c049baed5a/G.T.+CUT+4+WNBA+30TH.png",
+      "placement": "search card 5 colorway 1",
+      "sha256": "3976be9767b7a86ebfd989a163e325e2bbec635a1380117c6d651989fef51ec6"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-5-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c9e4016f-362d-4ad8-a136-02f012947262/G.T.+CUT+4+LX.png",
+      "placement": "search card 5 colorway 2",
+      "sha256": "a5f12fc1e69e5cecbd295b37a2fe4cf4aaae425d4fa6e9b4758a4813f82201d4"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-5-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e7aa59eb-dc96-49fc-9b10-891d1edec438/G.T.+CUT+4+DH.png",
+      "placement": "search card 5 colorway 3",
+      "sha256": "87fda108bacbfee517a9a16fdfa4787ffa21fc80c47be36d37e4c8c70f8c09e7"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-5-color-4.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0bf16e28-22e6-4c40-bf76-b38a14b184f9/G.T.+CUT+4+VW.png",
+      "placement": "search card 5 colorway 4",
+      "sha256": "e5778d25ad218fa04cc29c8e1940f9ba5c354924b40b74eba5120c57623c5b27"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-5-color-5.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/9f0e15bc-a8dd-4028-8cb2-8bd7ab50c2f4/G.T.+CUT+4+EYBL.png",
+      "placement": "search card 5 colorway 5",
+      "sha256": "fcb2907561e2bc403170b573914930353039e49f982246ed241cd14cd72be511"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-9-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/212bd41f-5f12-4dc4-b1ef-51b252bbfd43/G.T.+CUT+4+TB.png",
+      "placement": "search card 9 colorway 1",
+      "sha256": "740a3eafd8806278fe5e5d79b391b31fd0a993e65f8603006fbae32096368b5b"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-9-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/523e5b8b-d29b-4bfb-bfeb-6cc6d1a345c5/G.T.+CUT+4+TB.png",
+      "placement": "search card 9 colorway 2",
+      "sha256": "d80189d3d8e9699e6e3ce974f14bc2d8222d9bddb843966289eba8c0a9c12fe9"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-9-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/6e74bcef-c7d5-4e99-b8ee-a493428f3f25/G.T.+CUT+4+TB.png",
+      "placement": "search card 9 colorway 3",
+      "sha256": "9a694a1ecf4eb5c6408030a77d1e2c5664252c77f148674205e50afc84f282e0"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-9-color-4.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/0b2cbc30-2c37-4820-aefd-d92a5476c134/G.T.+CUT+4+TB.png",
+      "placement": "search card 9 colorway 4",
+      "sha256": "9f471e26671ff50daba02e3b976d28b10048475fa0354a3135c378d69d01f9b0"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-11-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/3fe7e3d7-dc4a-4bfe-8bde-4cdf90e812f2/TWELVE+TIME.png",
+      "placement": "search card 11 colorway 1",
+      "sha256": "36d08c000166a7262eba1af03465474c45b46a1553e0c4cf65466a45bf29c2c3"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-11-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/fd9ce7b3-c59e-493a-95a4-b63c222d79fb/TWELVE+TIME.png",
+      "placement": "search card 11 colorway 2",
+      "sha256": "a8f2b47fced9e9e463ef8949cdade36a2023e413319e2133ad3bf7eff4863902"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-12-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7f041e38-a82f-41b1-a58e-82f528bd679e/NIKE+AIR+WINFLO+12+GTX.png",
+      "placement": "search card 12 colorway 1",
+      "sha256": "35afe6cc139fc0b97926c1bc3e01c93bdee334c22e9fb291883eb2c5a39ddc39"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-12-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/845c84a2-6051-47f9-b161-ecd630ca718e/NIKE+AIR+WINFLO+12+GTX.png",
+      "placement": "search card 12 colorway 2",
+      "sha256": "80c3bfbe609cbce7790b791ea5ea716bd4c48117b2aae46d0db77ec11b3f3c23"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-12-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/31f0d7e6-e0a0-4c02-a7cc-34a92ebed677/NIKE+AIR+WINFLO+12+GTX.png",
+      "placement": "search card 12 colorway 3",
+      "sha256": "2bfdfbd0a8bd906a8c09179cff28a30ba805f2770acfaee6b3292995835b8f6d"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-14-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/817d7871-df54-4601-9037-47490c837b9c/AIR+ZOOM+G.T.+CUT+ACADEMY+2.png",
+      "placement": "search card 14 colorway 1",
+      "sha256": "ffd9590782822f7c32c87ecae724f7696d0a5422bcbcdda581041af485e0b9e9"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-14-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/4a2d056a-4614-41dc-9d3c-4fe4ee8a122a/AIR+ZOOM+G.T.+CUT+ACADEMY+2.png",
+      "placement": "search card 14 colorway 2",
+      "sha256": "2f9a0b9d28edafaa27c7e4a4b17b13044ecf1e78970247825ea887469c94bbd4"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-16-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/79475bbd-c6b0-4260-8574-411ce77d4e33/NIKE+ACG+ZEGAMA+TRAIL+GTX.png",
+      "placement": "search card 16 colorway 1",
+      "sha256": "b52393e08479bae3f1cafbdbb1dfc2785c4a1dae28575cae017ee5c2cc872774"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-16-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/12ee2be3-5e6d-45d5-9dec-6b0ef549ec2d/NIKE+ACG+ZEGAMA+TRAIL+GTX.png",
+      "placement": "search card 16 colorway 2",
+      "sha256": "efb268af3003326aa1c0bc3a93d563c7810f2ee2ede73a2ba88939eb7e27cf50"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-16-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d582b666-dd1a-4fb7-a54b-0968f99a9551/NIKE+ACG+ZEGAMA+TRAIL+GTX.png",
+      "placement": "search card 16 colorway 3",
+      "sha256": "e45d686317cbf8bc6ad6a82d3ca5c1ccf402dd9fcfa262a2451b48b999ea6188"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-17-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/316731de-82bd-4e9d-85ec-a438d5ca7ff7/GIANNIS+IMMORTALITY+5.png",
+      "placement": "search card 17 colorway 1",
+      "sha256": "1c4000c86f60faa74cb5717eea8ded0de8f63158bc75bc8cbffa41c4bcadab2a"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-17-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/9017df86-25c0-47d5-b9a9-c4bce134d5cd/GIANNIS+IMMORTALITY+5.png",
+      "placement": "search card 17 colorway 2",
+      "sha256": "459775f1e8fa5b4a79e7a3e6fab3d9668adccb57c85a80dc85f008f101f8e235"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-17-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/2c2d715c-3370-4639-b789-270ee125f0a1/GIANNIS+IMMORTALITY+5.png",
+      "placement": "search card 17 colorway 3",
+      "sha256": "0386261f7ed509d3cfbb4e64c1ca2fe824170db0045dc54146dba64394b0b43c"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-17-color-4.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/cec34a70-ae9a-4983-b54b-5dc6e7a0b945/GIANNIS+IMMORTALITY+5.png",
+      "placement": "search card 17 colorway 4",
+      "sha256": "7f3cf88a96b0d54672272c295e2d619b69d02027e27ec527afe559a63b6d005c"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-19-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7ce2c1e9-b023-4a25-8c69-54becefff369/AIR+FORCE+1+GTX+VIBRAM.png",
+      "placement": "search card 19 colorway 1",
+      "sha256": "2a95a13997ac5e7310913b437c75c7f639c9368deb631b5de0a35719ed9cd523"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-19-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/70990dd9-d79e-4f2d-8c98-dc50569ac5a6/AIR+FORCE+1+GTX+VIBRAM.png",
+      "placement": "search card 19 colorway 2",
+      "sha256": "933d7ab6332b666b562dbd8ffdccdd55143da1926af6d55c726c78493676a30e"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-19-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/97b48652-54ae-401e-969d-a2e799f98101/AIR+FORCE+1+GTX+VIBRAM.png",
+      "placement": "search card 19 colorway 3",
+      "sha256": "1093521964fa78cca99686cb410b55bf272b4db8cf7cfd258c3c5130cbac6823"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-19-color-4.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/a97aaeee-e955-4d22-b1e7-cab21b246b6b/AIR+FORCE+1+GTX+VIBRAM.png",
+      "placement": "search card 19 colorway 4",
+      "sha256": "d51cb87cf3a10a90dd66a3135922d4297c69567bf15529b3014de1b5a02c77da"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-22-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d2138fa2-9761-4aac-ad70-9c51ee51fe8c/PEGASUS+1+G+GTX.png",
+      "placement": "search card 22 colorway 1",
+      "sha256": "a95c9a889cb20e8d359e4e967c3063584efa86c166402bce4ae041433c3ec4d0"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-22-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1dfdbdad-c4a2-4842-aa8a-cfc0acf0e9f2/PEGASUS+1+G+GTX.png",
+      "placement": "search card 22 colorway 2",
+      "sha256": "cc26fea0545203cba7e06dad0c0304193a82b9aaad374bef31fc6b99c127d834"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-23-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/241f1a9d-ddcb-4278-bf51-b6a6e2dc5323/NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 23 colorway 1",
+      "sha256": "74eec6667816771070ad89948c0bea7807f1adf39716d146260cc0ed958efe3f"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-23-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e26a0dc8-11cf-4c37-adee-49e61cb2c1a8/NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 23 colorway 2",
+      "sha256": "815d64ef7cf8cbf8741e36d11d7092008c60d9ec3d9281365199e933cb063e6c"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-23-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/59ffc4bf-efdf-4a1d-99d9-58351afdb79e/NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 23 colorway 3",
+      "sha256": "23fc53189220b0e710d7f8b9ca1710357f0f2534837ec41e9750f67f1e22ac39"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-23-color-4.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/fb7e8b3f-40a9-4334-ba7f-833c53af30af/NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 23 colorway 4",
+      "sha256": "a8b9d9a69f48caae308250a05e13d32fc47fb63d5f73775fd2c85e164ed50326"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-23-color-5.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/fc66cd7e-6f0c-4ac8-a00c-4e781d4f8d08/NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 23 colorway 5",
+      "sha256": "3e60abddc3d3079a8a3aa369419c25b41523e08b08396eb4d09da557ee6d80f5"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-23-color-6.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/cfe10609-ebc0-426d-9aea-b7483cb17bd8/NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 23 colorway 6",
+      "sha256": "49c183a1f3d9175af2b6d23cc2347ec80c23173055438b6bade5281e9d115da6"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-23-color-7.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c008db2c-0d0a-427d-a9d7-c97c62f4f95e/NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 23 colorway 7",
+      "sha256": "9a496648a9de00d768b06fbee11e0a5f5246286d8649aec9a97d4bcbdc451804"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-24-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/df9143ef-8255-40ad-a094-9c1de91f3d03/W+NIKE+AIR+WINFLO+12+GTX.png",
+      "placement": "search card 24 colorway 1",
+      "sha256": "0cc26717ff256171da639034bfb6df19f8975c74b81ca461371cecc20a0286ec"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-24-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d1e06977-c833-44f6-a86f-04f3a8b24592/W+NIKE+AIR+WINFLO+12+GTX.png",
+      "placement": "search card 24 colorway 2",
+      "sha256": "dc24bedac18b04e9521a3bd54bed4b581c5b1df84eadba79c428874b70c07316"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-26-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/23bdf15e-09ed-46d2-9ec6-0e8892b02fe0/W+NIKE+VOMERO+18+GTX+VIS.png",
+      "placement": "search card 26 colorway 1",
+      "sha256": "f7eede6fcb8fed9110d1134aa8ecc7442af97313aa670859480b6b70834af90b"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-26-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ca74989f-fa6c-4d39-891d-610bc3a5f60c/W+NIKE+VOMERO+18+GTX.png",
+      "placement": "search card 26 colorway 2",
+      "sha256": "d684166c4298ab607a9b377e0fc663e37a01a6d52fd6fffee4d0d0d9b73ac8e5"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-26-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/908a913a-5956-4324-a226-62c87891549b/W+NIKE+VOMERO+18+GTX.png",
+      "placement": "search card 26 colorway 3",
+      "sha256": "4053991a8cc7a87f954e541c672baa6c88350909f92065860042d9ed5c00842b"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-27-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ea3ad6ed-9ff1-46a0-856b-d022b224857b/W+NIKE+ACG+ZEGAMA+TRAIL+GTX.png",
+      "placement": "search card 27 colorway 1",
+      "sha256": "b52393e08479bae3f1cafbdbb1dfc2785c4a1dae28575cae017ee5c2cc872774"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-27-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7ca04ae1-d5bf-4210-8adb-6d591a80c63c/W+NIKE+ACG+ZEGAMA+TRAIL+GTX.png",
+      "placement": "search card 27 colorway 2",
+      "sha256": "8280ef1e13647de093a8be2b583e8ee68db3e67ba80bdbc305cfb2c25d0777ef"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-28-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/035b8480-263f-4452-aaff-7af09161ad25/AIR+ZOOM+PEGASUS+42+GORE-TEX.png",
+      "placement": "search card 28 colorway 1",
+      "sha256": "fba919e198e87a96d1b8956eeec9b0f53a8de6f0108ede30964aa69a7d709c5c"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-28-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ab68d7cf-4e94-41f2-833b-d483d8e961a7/AIR+ZOOM+PEGASUS+42+GTX+VIS.png",
+      "placement": "search card 28 colorway 2",
+      "sha256": "58b21cd1e0fe4e6bfad9bd4c4a3435c92fdf678dccf7cff5f1b06382ba3c6960"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-28-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/3461b927-b06b-4d04-adb5-b344fa9efcb3/AIR+ZOOM+PEGASUS+42+GORE-TEX.png",
+      "placement": "search card 28 colorway 3",
+      "sha256": "a38014a648d68b5c8ff2f5f709144f6189c2af1d9826f664df3a6f0e5223ca38"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-30-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/5824dff6-ac36-4a64-a2c1-f1113dabfc9f/W+NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 30 colorway 1",
+      "sha256": "780a65cb7466bfb89b92a4142a917aec6d647067a575efbadef20c521c00ec82"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-30-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7cc66ea2-1b46-4fa5-a530-ff94fbd17895/W+NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 30 colorway 2",
+      "sha256": "c840528d15a5bb151169f8eaa6722b3b67a7c4c5752e118064fbfb1d3149715e"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-30-color-3.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/f1b07e28-4d9e-45c2-8527-f6cda05f6583/W+NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 30 colorway 3",
+      "sha256": "822d23dc5c1978296e11c372d1b7fa51783e5fa68f40605d62c1c027a6a40d8d"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-30-color-4.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/3cb69c01-6c78-424a-8b03-9e677c824d69/W+NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 30 colorway 4",
+      "sha256": "00337c1055636722441e39238f5f2b66a4d48c65285ad3e902da13017daf00f2"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-30-color-5.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/4cde9c86-8642-4030-b590-9274b0ba6528/W+NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 30 colorway 5",
+      "sha256": "8765808e31a5906a48e542b0a27318a2be0c926990340e360f6de8dd2d4f6800"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-30-color-6.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ef66a3e8-a41c-47e7-ae73-b7646391ff0d/W+NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 30 colorway 6",
+      "sha256": "157e5371d8bd804bbe8544ae710757cb9822f451a092f375a40e7fe8610789a9"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-30-color-7.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/7c4104fa-385d-4aa1-8318-594119d92145/W+NIKE+ACG+PEGASUS+TRAIL+GTX.png",
+      "placement": "search card 30 colorway 7",
+      "sha256": "960435abab8dceb185983bbdf379cefd023e8e84fb912ec3d79b520ad4a5c0ff"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-31-color-1.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ea72ab11-af27-4c8e-afe6-8c7cf5f05904/W+AIR+ZOOM+PEGASUS+42+GTX+VIS.png",
+      "placement": "search card 31 colorway 1",
+      "sha256": "3a73101fa0e99c35db5b69086f8eb730d6a79695f6c0d14a14e3ea50a964e227"
+    },
+    {
+      "local_path": "public/reference/nike/search-product-31-color-2.jpg",
+      "source_url": "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/8cf94f93-0ead-4283-9bf2-7561d1c5cd15/W+AIR+ZOOM+PEGASUS+42+GORE-TEX.png",
+      "placement": "search card 31 colorway 2",
+      "sha256": "2e6a7e94d3815abfa0ca93e9cb85e210315be251f18fdf9736945643fc0d44f9"
+    }
+  ],
+  "fonts": [
+    {
+      "local_path": "public/reference/nike/helvetica-now-text.woff2",
+      "source_url": "https://www.nike.com/static/ncss/nike-design-system-fonts/dotcom/fonts/HelveticaNowTextNDL.woff2",
+      "sha256": "432f903ca521ba3cf2853501457f6fdaacd3a81dc8f90859c64106650c29e832",
+      "bytes": 45712,
+      "family": "Helvetica Now Text",
+      "weight": 400,
+      "placement": "captured US search typography"
+    },
+    {
+      "local_path": "public/reference/nike/helvetica-now-text-medium.woff2",
+      "source_url": "https://www.nike.com/static/ncss/nike-design-system-fonts/dotcom/fonts/HelveticaNowTextNDL-Md.woff2",
+      "sha256": "b80017117f1fb0d3c3380cb34a0f7110d44b3825fe992ffd36fb665dd058c797",
+      "bytes": 48808,
+      "family": "Helvetica Now Text",
+      "weight": 500,
+      "placement": "captured US search typography"
+    }
+  ]
+}

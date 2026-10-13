@@ -1,3 +1,7 @@
+import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
+import { CATALOG_EVIDENCE } from './catalog-evidence.js'
+import { expandJB } from './expansion.js'
+import { enrichProducts, filterCatalog, selectedProduct } from './catalog.js'
 // Listings as they appear on jbhifi.com.au (research/jb-hifi.md, 2026-09-29).
 // JB sells both GTA VI listings as "Code in Box" at A$129 (below the A$129.95 RRP); prices include GST.
 
@@ -137,6 +141,13 @@ export const PRODUCTS = [
   },
 ]
 
+
+// Department breadth fixtures: categories observed on the official homepage; SKUs, stock and prices simulated.
+PRODUCTS.push(...[{"id": "991101", "kind": "other", "slug": "sony-wireless-noise-cancelling-headphones", "title": "Sony Wireless Noise Cancelling Headphones", "subtitle": "Headphones & Audio", "crumbs": ["Headphones & Audio"], "price": 149, "deliveryFrom": null, "badges": [], "cta": "Add to cart", "orderable": true, "release": null, "releaseLong": null, "rating": null, "art": "/jb-hifi/static/catalog-headphones.svg", "notice": [], "description": ["Over-ear wireless headphones with active noise cancellation and a rechargeable battery."], "specs": [["Brand", "Sony"], ["Category", "Headphones & Audio"]], "keywords": "headphones audio sony music"}, {"id": "991102", "kind": "other", "slug": "samsung-55-inch-4k-smart-tv", "title": "Samsung 55-inch 4K Smart TV", "subtitle": "TVs & Home Theatre", "crumbs": ["TVs & Home Theatre"], "price": 699, "deliveryFrom": null, "badges": [], "cta": "Add to cart", "orderable": true, "release": null, "releaseLong": null, "rating": null, "art": "/jb-hifi/static/catalog-laptop.svg", "notice": [], "description": ["A 55-inch 4K television with smart streaming apps. Internet connection and subscriptions may be required."], "specs": [["Brand", "Samsung"], ["Category", "TVs & Home Theatre"]], "keywords": "tv television home theatre samsung"}, {"id": "991103", "kind": "other", "slug": "lenovo-14-inch-everyday-laptop", "title": "Lenovo 14-inch Everyday Laptop", "subtitle": "Computers & Tablets", "crumbs": ["Computers & Tablets"], "price": 649, "deliveryFrom": null, "badges": [], "cta": "Add to cart", "orderable": true, "release": null, "releaseLong": null, "rating": null, "art": "/jb-hifi/static/catalog-laptop.svg", "notice": [], "description": ["A portable 14-inch notebook for everyday study, browsing and productivity."], "specs": [["Brand", "Lenovo"], ["Category", "Computers & Tablets"]], "keywords": "computer laptop tablet lenovo"}, {"id": "991104", "kind": "other", "slug": "russell-hobbs-1.7l-kettle", "title": "Russell Hobbs 1.7L Kettle", "subtitle": "Home Appliances", "crumbs": ["Home Appliances"], "price": 49, "deliveryFrom": null, "badges": [], "cta": "Add to cart", "orderable": true, "release": null, "releaseLong": null, "rating": null, "art": "/jb-hifi/static/catalog-kettle.svg", "notice": [], "description": ["Cordless kettle with a removable filter and water-level window."], "specs": [["Brand", "Russell Hobbs"], ["Category", "Home Appliances"]], "keywords": "kitchen home appliances kettle"}, {"id": "991105", "kind": "other", "slug": "lego-classic-creative-bricks", "title": "LEGO Classic Creative Bricks", "subtitle": "Collectibles & Merchandise", "crumbs": ["Collectibles & Merchandise"], "price": 39, "deliveryFrom": null, "badges": [], "cta": "Add to cart", "orderable": true, "release": null, "releaseLong": null, "rating": null, "art": "/jb-hifi/static/catalog-bricks.svg", "notice": [], "description": ["Build and rebuild colourful creations. Suitable for ages 4 and over."], "specs": [["Brand", "LEGO"], ["Category", "Collectibles & Merchandise"]], "keywords": "lego toys collectibles merchandise"}, {"id": "991106", "kind": "other", "slug": "nintendo-switch-2-console", "title": "Nintendo Switch 2 Console", "subtitle": "Gaming", "crumbs": ["Gaming"], "price": 699, "deliveryFrom": null, "badges": [], "cta": "Add to cart", "orderable": true, "release": null, "releaseLong": null, "rating": null, "art": "/jb-hifi/static/catalog-controller.svg", "notice": [], "description": ["Nintendo gaming console. Games and additional controllers sold separately."], "specs": [["Brand", "Nintendo"], ["Category", "Gaming"]], "keywords": "gaming console nintendo switch"}])
+enrichProducts(PRODUCTS)
+if (fixtureCatalog) PRODUCTS.push(...expandJB(PRODUCTS))
+applyCatalogPolicy('jb-hifi', PRODUCTS, CATALOG_EVIDENCE)
+if (!fixtureCatalog) for (const p of PRODUCTS) { delete p.stock; delete p.stars; delete p.reviews; p.purchaseLimit = 5 }
 export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
 export const bySlug = (slug) => PRODUCTS.find(p => p.slug === String(slug)) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
@@ -144,12 +155,8 @@ export const upsells = () => PRODUCTS.filter(p => p.upsell)
 
 export function productPath(base, p) { return `${base}/products/${p.slug}` }
 
-export function search(q) {
-  const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
-  const tokens = norm(q).split(' ').filter(Boolean)
-  if (!tokens.length) return []
-  return PRODUCTS.filter(p => { const hay = norm(p.title + ' ' + p.subtitle + ' ' + p.keywords); return tokens.every(t => hay.includes(t)) })
-}
+export function search(q, filters = {}) { return filterCatalog(PRODUCTS, q, filters) }
+export const DEPARTMENTS = [...new Set(PRODUCTS.map(p=>p.crumbs[0]))]
 
 // State/territory select, in the order the checkout lists them.
 export const STATES = [
@@ -178,14 +185,30 @@ export const SHIPPING_METHODS = {
 // Shown but not selectable: JB's help page says pre-orders are not eligible for Courier Delivery.
 export const COURIER_METHOD = { id: 'courier', name: 'Courier Delivery', eta: 'next business day', note: 'Not available for pre-order items' }
 
-// Click & Collect stores offered by the checkout store finder (any suburb/postcode returns the nearest of these).
-export const STORES = [
+// Observed public guest checkout, 2026-10-06: Melbourne 3000 search only.
+// Local IDs are benchmark identifiers; names, addresses and fee are captured source data.
+export const COLLECTION_METHOD = { id: 'collection_point', name: 'Ship to collection point', carrier: 'Australia Post', price: 4.99 }
+export const COLLECTION_POINTS = [
+  { id: 'melbourne-gpo-boxes', name: 'MELBOURNE GPO BOXES', address: 'Collect at Post, Shop 17e, MELBOURNE VIC 3000', line1: 'Shop 17e' },
+  { id: 'melbourne-gpo-parcels', name: 'Melbourne GPO Parcels Post Office', address: 'Collect at Post, Shop 17e, MELBOURNE VIC 3000', line1: 'Shop 17e' },
+  { id: 'qv-parcel-locker', name: 'QV Parcel Locker', address: 'Collect at Locker, 213-219 Little Lonsdale St, MELBOURNE VIC 3000', line1: '213-219 Little Lonsdale St' },
+  { id: 'flinders-st-parcel-locker', name: '452 Flinders St Parcel Locker', address: 'Collect at Locker, G 452 Flinders St, MELBOURNE VIC 3000', line1: 'G 452 Flinders St' },
+  { id: 'queen-victoria-market-parcel-locker', name: 'Queen Victoria Market Parcel Locker', address: 'Collect at Locker, 465 Queen St, MELBOURNE VIC 3000', line1: '465 Queen St' },
+].map(point => Object.freeze({ ...point, city: 'MELBOURNE', state: 'VIC', postal_code: '3000', country: 'AU', carrier: COLLECTION_METHOD.carrier, price: COLLECTION_METHOD.price }))
+export const collectionPointById = id => COLLECTION_POINTS.find(point => point.id === id) ?? null
+export function findCollectionPoints(query) {
+  const q = String(query ?? '').trim().replace(/[,\s]+/g, ' ')
+  return /^(?:melbourne(?: vic)? )?3000$/i.test(q) ? [...COLLECTION_POINTS] : []
+}
+
+// Authored location fixtures, not captured retail-store pickup availability.
+export const STORES = fixtureCatalog ? [
   { id: 'melbourne-central', name: 'JB Hi-Fi Melbourne Central', address: 'Shop 1, Melbourne Central, 211 La Trobe St, Melbourne VIC 3000', state: 'VIC' },
   { id: 'sydney-city', name: 'JB Hi-Fi Sydney City', address: 'Ground Floor, 39 Pitt St, Sydney NSW 2000', state: 'NSW' },
   { id: 'brisbane-city', name: 'JB Hi-Fi Brisbane City', address: 'Level 1, 172 Queen St, Brisbane QLD 4000', state: 'QLD' },
   { id: 'perth-city', name: 'JB Hi-Fi Perth City', address: '702 Hay St, Perth WA 6000', state: 'WA' },
   { id: 'adelaide-rundle', name: 'JB Hi-Fi Adelaide Rundle Mall', address: 'Level 1, 23–25 Rundle Mall, Adelaide SA 5000', state: 'SA' },
-]
+] : []
 export const storeById = (id) => STORES.find(s => s.id === id) ?? null
 
 // ASSUMPTION: the real finder geolocates and sorts by distance. Here a postcode, state or suburb puts the matching
@@ -202,7 +225,7 @@ export function findStores(query) {
 const round = n => Math.round(n * 100) / 100
 
 export function cartLines(store) {
-  return store.cart.map(l => ({ ...l, product: byId(l.pid) })).filter(l => l.product)
+  return store.cart.map(l => ({ ...l, product: selectedProduct(byId(l.pid), l.variant || '') })).filter(l => l.product)
 }
 
 // Prices include GST, so there is no separate tax line (tax is recorded as 0).
@@ -210,6 +233,6 @@ export function totals(store, shippingMethod = null) {
   const lines = cartLines(store)
   const count = lines.reduce((n, l) => n + l.qty, 0)
   const subtotal = round(lines.reduce((n, l) => n + l.qty * l.product.price, 0))
-  const shipping = SHIPPING_METHODS[shippingMethod]?.price ?? 0
+  const shipping = shippingMethod === COLLECTION_METHOD.id ? COLLECTION_METHOD.price : Object.hasOwn(SHIPPING_METHODS, shippingMethod) ? SHIPPING_METHODS[shippingMethod].price : 0
   return { lines, count, subtotal, shipping, tax: 0, total: round(subtotal + shipping) }
 }

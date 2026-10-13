@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "gta-6-bench",
+  "account_id": "d0a68e3d8918b6b0d9e48c1659e9e450",
+  "main": "deploy/worker.js",
+  "compatibility_date": "2026-10-09",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "containers": [{
+    "class_name": "Storefront",
+    "scheduling_policy": "durable_object",
+    "images": { "app": { "dockerfile": "./Dockerfile", "build_context": "." } }
+  }],
+  "durable_objects": { "bindings": [{ "name": "STOREFRONT", "class_name": "Storefront" }] },
+  "exports": { "Storefront": { "type": "durable-object", "storage": "sqlite" } }
+}

@@ -1,13 +1,19 @@
+import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
+import { CATALOG_EVIDENCE } from './catalog-evidence.js'
+import { expandCatalog } from './expand500.js'
+import { ORDINARY_PRODUCTS, ORDINARY_EXTRAS, EXISTING_DETAILS, FACETS, SORTS, COLLECTIONS, PLAN_DATA } from './catalog.js'
+export { FACETS, SORTS, COLLECTIONS, PLAN_DATA }
 // Listings as they appear on xbox.com (research/xbox-store.md, 2026-09-29).
-// The Xbox Store sells only the Xbox Series X|S digital version; the two editions are
-// separate product pages. Everything the real search shows next to them is kept as a distractor.
+// Canonical GTA VI editions remain Xbox Series X|S digital offers. Expanded physical
+// games and hardware ship separately and grant no native digital licenses.
 
 // ASSUMPTION: the real tax comes from the billing address of the payment method; the research
 // never saw a taxed total, so a flat estimated rate is used and shown as "Estimated tax".
 export const TAX_RATE = 0.07
 
-export const RELEASE = '11/18/2026' // xbox.com shows 11/18 even though the description says 19 November
-export const ESRB = { short: 'RATING PENDING LIKELY MATURE 17+', note: 'May contain content inappropriate for children. Visit ESRB.org for rating information.' }
+// Live US page rendered in America/Los_Angeles on 2026-10-06 (UTC metadata is November 19).
+export const RELEASE = '11/18/2026'
+export const ESRB = { short: 'MATURE 17+', note: 'Blood and Gore, Intense Violence, Mature Humor, Nudity, Strong Language, Strong Sexual Content, Use Of Drugs And Alcohol' }
 
 const PREORDER_BONUS = [
   'Purchase prior to 19 November 2026 23:59:59 to receive:',
@@ -35,7 +41,7 @@ export const PRODUCTS = [
     platform: 'xbox', edition: 'standard', format: 'digital',
     title: 'Grand Theft Auto VI', shortTitle: 'Grand Theft Auto VI',
     price: 79.99, listPrice: null, iap: true, ribbon: 'PRE-ORDER', purchasable: true,
-    publisher: 'Rockstar Games', developer: 'Rockstar Games', genre: 'Action & adventure', rating: '4.9', ratingCount: '6.0K',
+    publisher: 'Rockstar Games', developer: 'Rockstar Games', genre: 'Action & adventure', rating: '4.9', ratingCount: '6.2K',
     release: RELEASE, languages: 13, art: '/static/art/xbox-standard.svg',
     description: [...PREORDER_BONUS, ...STORY, LICENSE],
     gamesIncluded: ['Grand Theft Auto VI'],
@@ -49,7 +55,7 @@ export const PRODUCTS = [
     platform: 'xbox', edition: 'ultimate', format: 'digital',
     title: 'Grand Theft Auto VI: Ultimate Edition', shortTitle: 'Grand Theft Auto VI: Ultimate Edition',
     price: 99.99, listPrice: null, iap: true, ribbon: 'PRE-ORDER', purchasable: true,
-    publisher: 'Rockstar Games', developer: 'Rockstar Games', genre: 'Action & adventure', rating: '4.9', ratingCount: '6.0K',
+    publisher: 'Rockstar Games', developer: 'Rockstar Games', genre: 'Action & adventure', rating: '4.9', ratingCount: '6.2K',
     release: RELEASE, languages: 13, art: '/static/art/xbox-ultimate.svg',
     description: [
       ...PREORDER_BONUS,
@@ -68,7 +74,7 @@ export const PRODUCTS = [
     id: '9nl3wwnzlzzn', slug: 'grand-theft-auto-vi', kind: 'other', type: 'game', rank: 3,
     title: 'Grand Theft Auto VI', shortTitle: 'Grand Theft Auto VI',
     price: null, listPrice: null, iap: true, ribbon: null, cta: 'View game', purchasable: false,
-    publisher: 'Rockstar Games', developer: 'Rockstar Games', genre: 'Action & adventure', rating: '4.9', ratingCount: '6.0K',
+    publisher: 'Rockstar Games', developer: 'Rockstar Games', genre: 'Action & adventure', rating: '4.9', ratingCount: '6.2K',
     release: RELEASE, languages: 13, art: '/static/art/xbox-standard.svg',
     description: [...STORY, LICENSE],
     includedIn: ['9p3h4968grsm', '9nnzsnhlr63l'],
@@ -78,7 +84,7 @@ export const PRODUCTS = [
     id: '9pn4llbr8rch', slug: 'grand-theft-auto-vi-ultimate-edition-upgrade', kind: 'other', type: 'add-on', rank: 4,
     title: 'Grand Theft Auto VI: Ultimate Edition Upgrade', shortTitle: 'Ultimate Edition Upgrade',
     price: 20.00, listPrice: null, iap: false, ribbon: 'PRE-ORDER', purchasable: true,
-    publisher: 'Rockstar Games', developer: 'Rockstar Games', genre: 'Action & adventure', rating: '4.7', ratingCount: '312',
+    publisher: 'Rockstar Games', developer: 'Rockstar Games', genre: 'Action & adventure', rating: null, ratingCount: null,
     release: RELEASE, languages: 13, art: storeArt('9pn4llbr8rch'),
     description: [
       'Upgrade Grand Theft Auto VI to the Ultimate Edition and receive exclusive in-game bonuses. Requires Grand Theft Auto VI (sold separately).',
@@ -128,9 +134,59 @@ export const PRODUCTS = [
     // The real search surfaces RDR2 for GTA queries (same publisher), so it carries those terms too.
     keywords: 'red dead redemption 2 rdr2 rockstar games xbox one series x s digital western gta grand theft auto',
   },
+  // Local background catalog snapshots; cover artwork and merchandising are original synthetic assets.
+  {id:'9mvxmvt8zkwc',slug:'minecraft',kind:'other',type:'game',rank:9,title:'Minecraft',shortTitle:'Minecraft',price:19.99,listPrice:null,iap:true,ribbon:null,purchasable:true,publisher:'Xbox Game Studios',developer:'Mojang Studios',genre:'Action & adventure',rating:'4.5',ratingCount:'12K',release:'9/20/2017',languages:28,art:'/xbox-store/static/minecraft.svg',description:['Build, explore and survive in worlds shaped by your imagination.','Online features may require a subscription.'],keywords:'minecraft blocks crafting survival xbox one series x s'},
+  {id:'bt5p2x999vh2',slug:'fortnite',kind:'other',type:'game',rank:10,title:'Fortnite',shortTitle:'Fortnite',price:0,listPrice:null,iap:true,ribbon:null,purchasable:true,publisher:'Epic Games',developer:'Epic Games',genre:'Shooter',rating:'4.2',ratingCount:'18K',release:'7/21/2017',languages:18,art:'/xbox-store/static/fortnite.svg',description:['Explore a collection of competitive and creative multiplayer experiences.','Internet connection required. Optional in-game purchases.'],keywords:'fortnite free shooter battle royale multiplayer xbox one series x s'},
 ]
 
-export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
+// Every SKU has explicit digital metadata; `kind` remains the benchmark classification.
+for (const [i, p] of PRODUCTS.entries()) {
+  const canonicalFamily = i < 5
+  Object.assign(p, {
+    family: canonicalFamily ? 'gta-vi' : p.id,
+    productType: p.type === 'add-on' ? 'dlc' : !p.purchasable ? 'base-listing' : canonicalFamily ? 'bundle' : 'game',
+    entitlement: p.type === 'add-on' ? 'dlc' : canonicalFamily && p.purchasable ? 'bundle' : 'game',
+    available: p.purchasable, platforms: ['Xbox Series X|S'], modes: ['Single player'], players: '1 player',
+    age: 'M17+', ageNote: canonicalFamily ? ESRB.short : 'Mature 17+',
+    ...(canonicalFamily ? { contentDescriptors: ESRB.note } : {}),
+    accessibility: canonicalFamily ? [] : ['Volume controls'], languageList: ['English'], capabilities: canonicalFamily ? ['Optimized for Xbox Series X|S'] : [],
+    subscriptions: [], handheld: 'Not evaluated', ...EXISTING_DETAILS[p.id],
+    ...(canonicalFamily && p.type === 'add-on' ? { requires:'9p3h4968grsm' } : {}),
+  })
+}
+PRODUCTS.push(...ORDINARY_PRODUCTS.map((p,i)=>({...p,rank:11+i})))
+for (const extra of ORDINARY_EXTRAS) {
+  const source = PRODUCTS.find(p=>p.id===extra.source)
+  PRODUCTS.push({...source, bundle:[], addons:[], includedIn:[], editions:[], gamesIncluded:[], addonsIncluded:[], ...extra, slug:extra.id, rank:PRODUCTS.length+1, art:source.photo ? source.art : `/xbox-store/art/${extra.id}.svg`})
+}
+for (const p of PRODUCTS) {
+  p.genres = p.genres || [p.genre]
+  p.languageList ||= ['English']
+  p.languages = p.family === 'gta-vi' ? p.languages : p.languageList.length
+  p.gamesIncluded ||= p.type === 'game' ? [p.title] : []
+  p.addonsIncluded ||= []
+  p.popularity = p.popularity ?? 10000 - p.rank * 173
+  p.wishlisted = p.wishlisted ?? ((p.rank * 7919) % 10000)
+  if (p.listPrice > p.price && p.price !== null) p.discount = `-${Math.round((1-p.price/p.listPrice)*100)}%`
+}
+
+if (fixtureCatalog) expandCatalog(PRODUCTS)
+applyCatalogPolicy('xbox-store', PRODUCTS, CATALOG_EVIDENCE)
+if (!fixtureCatalog) for (const p of PRODUCTS) {
+  p.catalogType = p.type === 'game' ? 'game' : 'accessory'
+  p.catalogPlatform = 'xbox'
+  p.accessorySubtype = p.catalogType === 'accessory' ? 'digital-add-on' : null
+  delete p.popularity; delete p.wishlisted
+  if (p.catalogEvidence.purchase === 'unverified') { p.purchasable = false; p.available = false }
+}
+
+export const isBuyable = p => Boolean(p && p.purchasable && p.available !== false && (!p.physical || p.stock > 0) && Number.isFinite(p.price) && p.price >= 0)
+export const familyEditions = p => p.family === 'gta-vi' ? editions() : (p.editions || []).map(byId).filter(isBuyable)
+export const facetValues = facet => facet.values || [...new Set(PRODUCTS.flatMap(p=>Array.isArray(p[facet.field]) ? p[facet.field] : [p[facet.field]]).filter(Boolean))].sort().map(v=>[v,v])
+export const queryOptions = query => Object.fromEntries(['q','type','sort','limit','page','availability',...FACETS.map(f=>f.key)].filter(k=>typeof query[k]==='string'&&query[k].length<=200).map(k=>[k,query[k]]))
+export const suggestions = q => PRODUCTS.filter(p=>p.type==='game'&&p.purchasable&&(!q||p.title.toLowerCase().includes(q.toLowerCase()))).slice(0,6)
+
+export const byId = (id) => (typeof id === 'string' ? PRODUCTS.find(p => p.id === id) : null) ?? null
 export const editions = () => PRODUCTS.filter(p => p.kind === 'game')
 
 export function productPath(base, p) {
@@ -143,9 +199,9 @@ export function search(q, type = 'games') {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9|]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
   if (!tokens.length) return []
-  const wanted = type === 'add-ons' ? 'add-on' : type === 'games' ? 'game' : null
+  const wanted = type === 'add-ons' ? 'add-on' : type === 'games' ? 'game' : type === 'hardware' ? 'hardware' : null
   const scored = PRODUCTS
-    .filter(p => wanted === null ? false : p.type === wanted)
+    .filter(p => wanted === null ? type==='all' : p.type === wanted)
     .map(p => {
       const hay = norm(p.title + ' ' + p.keywords)
       const hits = tokens.filter(t => hay.includes(t))
@@ -162,7 +218,7 @@ const round = n => Math.round(n * 100) / 100
 
 // Digital licences: one copy per account, no quantity stepper. A cart line is just { pid }.
 export function cartLines(store) {
-  return store.cart.map(l => ({ ...l, product: byId(l.pid), qty: 1 })).filter(l => l.product)
+  return store.cart.map(l => ({ ...l, product: byId(l.pid), qty: 1 })).filter(l => isBuyable(l.product))
 }
 
 export function totals(store) {
@@ -176,4 +232,35 @@ export function priceTotals(price) {
   const subtotal = round(price)
   const tax = round(subtotal * TAX_RATE)
   return { subtotal, shipping: 0, tax, total: round(subtotal + tax) }
+}
+
+export function filterProducts(items, options = {}) {
+  const o = queryOptions(options)
+  let result=items.filter(p=>FACETS.every(f=>{
+    const value=o[f.key]
+    if(!value || value==='all') return true
+    if(f.key==='price') {
+      if(p.price===null) return false
+      if(value==='sale') return p.listPrice>p.price
+      if(value==='0') return p.price===0
+      if(value==='under5') return p.price>0&&p.price<5
+      if(value==='60plus') return p.price>=60
+      if(['5-10','10-20','20-40','40-60'].includes(value)) {const [min,max]=value.split('-').map(Number); return p.price>=min&&p.price<max}
+      return /^\d+(\.\d+)?$/.test(value)&&p.price<=Number(value) // inherited maximum-price URLs
+    }
+    return Array.isArray(p[f.field]) ? p[f.field].includes(value) : p[f.field]===value
+  })&&(!o.availability||o.availability==='preorder'&&p.ribbon==='PRE-ORDER'||o.availability==='available'&&isBuyable(p)&&p.ribbon!=='PRE-ORDER'))
+  const discount=p=>p.listPrice&&p.price!==null ? 1-p.price/p.listPrice : 0
+  const compare={
+    'price-asc':(a,b)=>(a.price??Infinity)-(b.price??Infinity),
+    'price-desc':(a,b)=>(b.price??-1)-(a.price??-1),
+    name:(a,b)=>a.title.localeCompare(b.title),
+    'name-desc':(a,b)=>b.title.localeCompare(a.title),
+    release:(a,b)=>new Date(b.release)-new Date(a.release),
+    popular:(a,b)=>b.popularity-a.popularity,
+    wishlisted:(a,b)=>b.wishlisted-a.wishlisted,
+    discount:(a,b)=>discount(b)-discount(a),
+  }[o.sort]
+  if(compare) result.sort((a,b)=>compare(a,b)||a.rank-b.rank)
+  return result
 }

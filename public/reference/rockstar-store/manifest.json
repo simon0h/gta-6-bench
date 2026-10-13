@@ -1,0 +1,112 @@
+{
+  "captured_at": "2026-10-06",
+  "page_url": "https://store.rockstargames.com/game/buy-gta-vi",
+  "provenance": "Exact public image URLs observed in the official product page HTML. Copyright remains with the respective owners. No endorsement or redistribution license implied.",
+  "assets": [
+    {
+      "file": "RockstarLogoResized.png",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/4pNfQzKEBflOPfvnLwx1s9/6a9133c5e3bff7b92d78213619452e9a/RockstarLogoResized.png",
+      "label": "Rockstar Logo",
+      "sha256": "4dcf4ef1de3975a9138a10ed9ef5f7ae99694b52c2eb5d576319713e3a3d9916",
+      "bytes": 9453
+    },
+    {
+      "file": "GTAVI_PreOrderWebstore_HeroBackground_3840x1646_R03.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/6DDt8GD2eOt8L0p3cmEfBX/1dfa343edde7f6baae2e7df6e48bbdd2/GTAVI_PreOrderWebstore_HeroBackground_3840x1646_R03.jpg",
+      "label": "Hero Background",
+      "sha256": "33ffd4f97e4b645c994a152b54ffdb5b3f7965024ad3f2335d555a1345d9b392",
+      "bytes": 827768
+    },
+    {
+      "file": "GTAVI_PreOrderWebstore_GamesGrid_FOB_1212x1497_R01.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/2Jdz0iAM18p5xmLns5yGLC/5a43ecf3763a9db84504fc32b8417c4f/GTAVI_PreOrderWebstore_GamesGrid_FOB_1212x1497_R01.jpg",
+      "label": "Game Logo",
+      "sha256": "e49a17494d31adfb2ffaa393f69377f0a6030fe93603091270bf90aba93db8f3",
+      "bytes": 901755
+    },
+    {
+      "file": "eng_us-ca_icons-m.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/5qQ7uHK7w7hqn8Oo7pj62a/22e68c8bfb386469e736507c0f97a650/eng_us-ca_icons-m.jpg",
+      "label": "ESRB Mature",
+      "sha256": "24db57be450b9341eb74b9202aed9b8a744a85398b66ac8d16e295687384e160",
+      "bytes": 18780
+    },
+    {
+      "file": "01_-_Vice_City_01.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/5d4fHCy1aK8wi6CgsOddln/07dbfb881a8511304031627ae86181ce/01_-_Vice_City_01.jpg",
+      "label": "Vice City sign with plane flying over",
+      "sha256": "6cf14b23ae2c205799067464904f8c9dc99f87935632ef6924b87f59af7a6225",
+      "bytes": 492097
+    },
+    {
+      "file": "02_-_Jason_Duval_01.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/7zDbmT7wDNEoMFiioNkEtr/81ec30f2edd179aa0f04555d2e0faaf6/02_-_Jason_Duval_01.jpg",
+      "label": "Green motorcyle with Jason standing to the right",
+      "sha256": "cb7d23238b49c7130507412ba63ce11055474dcc944f7eaff02a004c1a386728",
+      "bytes": 439420
+    },
+    {
+      "file": "03_-_Lucia_Caminos_01.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/5zPpF5MY73vX7yVA2m7cao/dd6c2aaef11d2c8c151c952b1de0c5ff/03_-_Lucia_Caminos_01.jpg",
+      "label": "Lucia in a punching stance",
+      "sha256": "f79d4a251166dbf99efce8cd9c3198d28b2c829373413c8f98621e61dc6e361c",
+      "bytes": 301343
+    },
+    {
+      "file": "04_-_Leonida_Keys_01.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/4J82PfLuwL3o3tOAww68ba/941a232acda3ecadb92d5ec1a04125f3/04_-_Leonida_Keys_01.jpg",
+      "label": "Leonida Keys",
+      "sha256": "90bb51136148ee7c4c44750e54fb77cf1cb9790c584e904e0c5839094769e2e1",
+      "bytes": 846989
+    },
+    {
+      "file": "05_-_Boobie_Ike_02.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/6v2JTUd2v42B11Zr4VcMlg/1fcc79999e9de192d9f76bf82712f9a7/05_-_Boobie_Ike_02.jpg",
+      "label": "Boobie Ike",
+      "sha256": "9b766e593cdb4821e886f9e8b5506929c577f6d7f7ffd5919f8390b9a3253202",
+      "bytes": 647843
+    },
+    {
+      "file": "06_-_Cal_Hampton_03.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/Rv3M6YC6fqcA8asG7AzxN/599a55e2861b74efaefff4925497e219/06_-_Cal_Hampton_03.jpg",
+      "label": "Cal Hampton",
+      "sha256": "76848e909e95568ac650877676adde75841484ef7e1a01bb0efb94955f348f89",
+      "bytes": 609075
+    },
+    {
+      "file": "07_-_Brian_Heder_03.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/2Vz00jUYoeP5NkKe8Ndxjl/501679ea0108fe303eacfdc9e105f9f8/07_-_Brian_Heder_03.jpg",
+      "label": "Brian Heder",
+      "sha256": "9c27c7cc9d7c204e15001cd761dceb65460b5d563683e746c5d9985d11375e62",
+      "bytes": 458032
+    },
+    {
+      "file": "08_-_Grassrivers_03.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/5kRNXiO9oSU1AyAhkG5RmL/a4db57e837e080601745f4820d62327a/08_-_Grassrivers_03.jpg",
+      "label": "Grassrivers",
+      "sha256": "8120c16f300f27500fca1360d561c69c9185bd8a3611d9258bf7b7e90517b79d",
+      "bytes": 884187
+    },
+    {
+      "file": "UltimateEdition_07_en_us_R04_Deliv.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/6BWQSfnOYTcVVsRj8ay2ML/8e51ba006c8d309d0c6a1b582c44b041/UltimateEdition_07_en_us_R04_Deliv.jpg",
+      "label": "Grand Theft Auto VI Ultimate Edition",
+      "sha256": "5bfccc008707a3438832433d89b3b1bcd1f27fa9e6402a0d6e6c555b26e0cb1f",
+      "bytes": 318633
+    },
+    {
+      "file": "GTAVI_PreOrderWebstore_CompareEditionsThumbnail_Standard_1280x720_R01.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/2bQ11ydObxmD2CvRyUlII6/e6e94f08f74e6a439e8937421653245e/GTAVI_PreOrderWebstore_CompareEditionsThumbnail_Standard_1280x720_R01.jpg",
+      "label": "Grand Theft Auto VI ",
+      "sha256": "75d47581057d5b11316d705b58ca5c100642df9eeef66a699ad19e1cb10c9d55",
+      "bytes": 502301
+    },
+    {
+      "file": "GTAVI_PreOrderWebstore_CodeInABox_Flat_NR_SONY_300x374_R04.jpg",
+      "source_url": "https://images.ctfassets.net/h1rqp7q66d54/3FsVRdtaqmQJGIxXjyehoF/b4c7032f8c9a7429f710acd2019a15d6/GTAVI_PreOrderWebstore_CodeInABox_Flat_NR_SONY_300x374_R04.jpg",
+      "label": "GTAVI PreOrderWebstore CodeInABox Flat NR SONY 300x374 R04",
+      "sha256": "98d78b2a1e9b765414ae887548f30165bb9a94f3e9eb982306c5e326ab6fb060",
+      "bytes": 169397
+    }
+  ]
+}

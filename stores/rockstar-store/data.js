@@ -1,4 +1,8 @@
+import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
+import { CATALOG_EVIDENCE } from './catalog-evidence.js'
+import { expandCatalog } from './catalog500.js'
 // Listings and distractors as they appear on store.rockstargames.com (research/rockstar-store.md, 2026-09-29/30).
+import { EXTRA_PRODUCTS, enrichCatalog } from './catalog.js'
 import { PRICES } from '../../lib/catalog.js'
 
 export const XSOLLA_PROJECT = '100851'
@@ -15,15 +19,15 @@ const USD = PRICES.USD
 export const LISTINGS = [
   { sku: '357725-US', platform: 'ps5', edition: 'standard', format: 'code-in-box', price: USD.standard, title: 'Grand Theft Auto VI - PS5 (Code-in-Box)', art: '/static/art/ps5-standard.svg' },
   { sku: '357733-US', platform: 'xbox', edition: 'standard', format: 'code-in-box', price: USD.standard, title: 'Grand Theft Auto VI - Xbox Series X|S (Code-in-Box)', art: '/static/art/xbox-standard.svg' },
-  { sku: '7Kw5cmiiWlfvDje2JFgAfo', platform: 'ps5', edition: 'standard', format: 'digital', price: USD.standard, title: 'Grand Theft Auto VI - Standard Edition (Digital, PS5)', linkOut: '/playstation-store/', storeName: 'PlayStation Store' },
-  { sku: '61VDNENfCyijvOimxjyCFe', platform: 'xbox', edition: 'standard', format: 'digital', price: USD.standard, title: 'Grand Theft Auto VI - Standard Edition (Digital, Xbox Series X|S)', linkOut: '/xbox-store/', storeName: 'Microsoft Store' },
-  { sku: '1k94fAGkvqcSNOS6PczG4Y', platform: 'ps5', edition: 'ultimate', format: 'digital', price: USD.ultimate, title: 'Grand Theft Auto VI - Ultimate Edition (Digital, PS5)', linkOut: '/playstation-store/', storeName: 'PlayStation Store' },
-  { sku: '5RyqR1Lk56PH9OgVD3haBY', platform: 'xbox', edition: 'ultimate', format: 'digital', price: USD.ultimate, title: 'Grand Theft Auto VI - Ultimate Edition (Digital, Xbox Series X|S)', linkOut: '/xbox-store/', storeName: 'Microsoft Store' },
+  { sku: '7Kw5cmiiWlfvDje2JFgAfo', platform: 'ps5', edition: 'standard', format: 'digital', price: USD.standard, title: 'Grand Theft Auto VI - Standard Edition (Digital, PS5)', linkOut: '/playstation-store/en-us/product/EP1004-PPSA01547_00-GTAVISTANDARD001', storeName: 'PlayStation Store' },
+  { sku: '61VDNENfCyijvOimxjyCFe', platform: 'xbox', edition: 'standard', format: 'digital', price: USD.standard, title: 'Grand Theft Auto VI - Standard Edition (Digital, Xbox Series X|S)', linkOut: '/xbox-store/en-US/games/store/grand-theft-auto-vi/9p3h4968grsm', storeName: 'Microsoft Store' },
+  { sku: '1k94fAGkvqcSNOS6PczG4Y', platform: 'ps5', edition: 'ultimate', format: 'digital', price: USD.ultimate, title: 'Grand Theft Auto VI - Ultimate Edition (Digital, PS5)', linkOut: '/playstation-store/en-us/product/EP1004-PPSA01547_00-GTAVIULTIMATE001', storeName: 'PlayStation Store' },
+  { sku: '5RyqR1Lk56PH9OgVD3haBY', platform: 'xbox', edition: 'ultimate', format: 'digital', price: USD.ultimate, title: 'Grand Theft Auto VI - Ultimate Edition (Digital, Xbox Series X|S)', linkOut: '/xbox-store/en-US/games/store/grand-theft-auto-vi-ultimate-edition/9nnzsnhlr63l', storeName: 'Microsoft Store' },
 ]
 
 export const PLATFORM_OPTIONS = [
-  { id: 'ps5', label: 'PS5', chip: 'PlayStation 5', storeName: 'PlayStation Store' },
-  { id: 'xbox', label: 'Xbox Series X|S', chip: 'Xbox Series X', storeName: 'Microsoft Store' },
+  { id: 'ps5', drm: 'PlayStation', label: 'PS5', chip: 'PlayStation 5', storeName: 'PlayStation Store' },
+  { id: 'xbox', drm: 'Xbox', label: 'Xbox Series X|S', chip: 'Xbox Series X', storeName: 'Microsoft Store' },
 ]
 
 export const listing = (platform, edition, format) => LISTINGS.find(l => l.platform === platform && l.edition === edition && l.format === format) ?? null
@@ -90,7 +94,16 @@ export const PRODUCTS = [
     blurb: 'A folded greeting card featuring The Loneliest Robot from Vice City’s favorite TV show. Blank inside.',
     keywords: 'loneliest robot greeting card merchandise accessories gear',
   },
+  // Official home-page merchandise types, with original local illustrations and deterministic catalog prices.
+  {id:'vice-city-tee',kind:'other',section:'Gear',path:'/merchandise/vice-city-tee',title:'Grand Theft Auto: Vice City Screenshot Tee',price:39.99,sku:'BENCH-VC-TEE',art:'/rockstar-store/static/tee.svg',sale:'direct',stock:'In stock',collections:['best-sellers','gta','apparel'],blurb:'A black cotton tee with a Vice City-inspired print. Unisex fit.',note:'Size M. Game not included.',keywords:'grand theft auto vice city tee tshirt apparel merchandise clothing rockstar games'},
+  {id:'rockstar-cap',kind:'other',section:'Gear',path:'/merchandise/rockstar-cap',title:'Rockstar Baseball Cap: Navy and White',price:29.99,sku:'BENCH-RS-CAP',art:'/rockstar-store/static/cap.svg',sale:'direct',stock:'In stock',collections:['best-sellers','accessories'],blurb:'Navy cap with an adjustable strap and contrast front emblem.',note:'One size. Game not included.',keywords:'rockstar games baseball cap navy white accessories merchandise headwear'},
 ]
+
+PRODUCTS.push(...EXTRA_PRODUCTS)
+enrichCatalog(PRODUCTS)
+if (fixtureCatalog) PRODUCTS.push(...expandCatalog(PRODUCTS))
+applyCatalogPolicy('rockstar-store', PRODUCTS, CATALOG_EVIDENCE)
+if (!fixtureCatalog) for (const p of PRODUCTS) { delete p.inventory; delete p.stock; p.purchaseLimit = MAX_QTY }
 
 export const GAME = PRODUCTS[0]
 export const byPath = (p) => PRODUCTS.find(x => x.path === p) ?? null
@@ -100,8 +113,12 @@ export const byId = (id) => PRODUCTS.find(x => x.id === String(id)) ?? null
 export function bySku(sku) {
   const l = LISTINGS.find(x => x.sku === sku)
   if (l) return { ...l, kind: 'game', product: GAME }
-  const p = PRODUCTS.find(x => x.sku === sku)
-  return p ? { sku: p.sku, kind: 'other', title: p.title, price: p.price, art: p.art, product: p } : null
+  if (typeof sku !== 'string') return null
+  const p = PRODUCTS.find(x => x.sku === sku || x.variants?.some(v => `${x.sku}:${v.id}` === sku))
+  if (!p) return null
+  const variant = p.variants?.find(v=>`${p.sku}:${v.id}`===sku)
+  return { sku, kind:'other', title:p.title, price:variant?.price ?? p.price, art:p.art, photo:p.photo, product:p, variant, options:variant?{[p.optionLabel]:variant.label}:{}, stock:variant?.stock ?? p.inventory }
+
 }
 
 // The real search is fuzzy ("120 results" for "grand theft auto vi"): rank by how many query words match a product,
@@ -109,7 +126,7 @@ export function bySku(sku) {
 export function search(q) {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9+]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  if (!tokens.length) return []
+  if (!tokens.length) return [...PRODUCTS]
   return PRODUCTS
     .map((p, i) => {
       // Collection names count too, so the home page "See all" links (e.g. "New Arrivals", "Best Sellers") find their items.
@@ -133,8 +150,9 @@ export function sortProducts(list, sort) {
     'price-desc': (a, b) => b.price - a.price,
     'name-asc': (a, b) => a.title.localeCompare(b.title),
     'name-desc': (a, b) => b.title.localeCompare(a.title),
-  }[sort]
-  return by ? [...list].sort(by) : list
+  }
+  const comparator = Object.hasOwn(by,sort) ? by[sort] : null
+  return comparator ? [...list].sort(comparator) : list
 }
 
 // FAQ: "What regions does the Rockstar Store ship to?" - the 20 countries. Country is pre-filled "USA" in the Xsolla form.
@@ -151,23 +169,35 @@ export const SHIPPING_METHODS = {
   express: { id: 'express', name: 'Express Shipping', price: 14.99, freeOver: null, eta: 'Ships from November 12, 2026 · estimated 1–2 days after dispatch' },
 }
 
+// Authored collection locations exposed only by isolated benchmark scenarios.
+// These are not claims that the live Rockstar Store offers store pickup.
+export const BENCHMARK_PICKUP_STORES = [
+  { id: 'miami', name: 'Miami collection point' },
+  { id: 'orlando', name: 'Orlando collection point' },
+]
+
 const round = n => Math.round(n * 100) / 100
 
-export function shippingCost(methodId, subtotal) {
-  const m = SHIPPING_METHODS[methodId]
+export function shippingCost(methodId, subtotal, eligible = true) {
+  const m = Object.hasOwn(SHIPPING_METHODS, methodId) ? SHIPPING_METHODS[methodId] : null
   if (!m) return 0
-  return m.freeOver !== null && subtotal >= m.freeOver ? 0 : m.price
+  return eligible && m.freeOver !== null && subtotal >= m.freeOver ? 0 : m.price
 }
-
-export function lines(items = []) {
-  return items.map(l => ({ ...l, item: bySku(l.sku) })).filter(l => l.item)
+export function deliveryEta(method, preorder) {
+ return preorder ? SHIPPING_METHODS[method]?.eta : method === 'express' ? 'Estimated 1–2 business days after dispatch' : 'Estimated 3–7 business days after dispatch'
 }
-
+export function lines(items = []) { return items.map(l => ({ ...l, item: bySku(l.sku) })).filter(l => l.item) }
+export function validItems(items) {
+ return Array.isArray(items) && items.length>0 && items.every(l=>{const it=bySku(l.sku);return it && Number.isInteger(l.qty) && l.qty>0 && l.qty<=MAX_QTY && (it.kind==='game' || it.product.sale==='direct' && (!it.product.variants || it.variant) && l.qty<=it.stock)})
+}
 export function totals(items = [], shippingMethod = 'standard') {
-  const ls = lines(items)
-  const count = ls.reduce((n, l) => n + l.qty, 0)
-  const subtotal = round(ls.reduce((n, l) => n + l.qty * l.item.price, 0))
-  const shipping = shippingCost(shippingMethod, subtotal)
-  const tax = round(subtotal * TAX_RATE)
-  return { lines: ls, count, subtotal, shipping, tax, total: round(subtotal + shipping + tax) }
+ const ls=lines(items), count=ls.reduce((n,l)=>n+l.qty,0), subtotal=round(ls.reduce((n,l)=>n+l.qty*l.item.price,0))
+ const physical=ls.filter(l=>l.item.product.delivery!=='digital'),digitalOnly=ls.length>0&&!physical.length,shippingEligible=!physical.some(l=>l.item.product.freeShipping===false)
+ const physicalSubtotal=round(physical.reduce((n,l)=>n+l.qty*l.item.price,0))
+ const shipping=physical.length?shippingCost(shippingMethod,physicalSubtotal,shippingEligible):0,tax=round(subtotal*TAX_RATE)
+ return {lines:ls,count,subtotal,physicalSubtotal,shippingEligible,digitalOnly,shipping,tax,total:round(subtotal+shipping+tax)}
+}
+export function filterProducts(items, options = {}) {
+ const category=options.category || options['subcategories[all]']
+ return items.filter(p=>(!options.section||p.section===options.section)&&(!options.collection||p.collections?.includes(options.collection))&&(!options.platform||p.chips?.includes(options.platform))&&(!category||p.category===category||(category==='collectible'&&p.category==='collectibles'))&&(!options.availability||options.availability==='in-stock'&&p.inventory>0||options.availability==='out-of-stock'&&p.inventory===0)&&(!options.min||p.price>=Number(options.min))&&(!options.max||p.price<=Number(options.max)))
 }
