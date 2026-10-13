@@ -509,7 +509,7 @@
       "real": "https://www.playstation.com/en-us/ps5/",
       "path": "/en-us/ps5",
       "expect": [
-        "PlayStation 5",
+        "PlayStation®5",
         "Play like never before",
         "PS5 accessories"
       ]
