@@ -5,8 +5,9 @@ import { recordOrder } from '../../lib/orders.js'
 import { retailState } from '../../lib/retail-state.js'
 import { validateCard } from '../../lib/payment.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, byId, search, refine, totals, SHIPPING_METHODS, STATES, selectedProduct, cartError, shippingEta, parseFilters, collection, DEPARTMENTS, HUBS, productPath } from './data.js'
+import { PRODUCTS, ALL, byId, search, refine, totals, SHIPPING_METHODS, STATES, selectedProduct, cartError, shippingEta, parseFilters, collection, DEPARTMENTS, HUBS, productPath } from './data.js'
 import * as P from './pages.js'
+import { shelfAssetSvg } from './shelf-art.js'
 import { LANDINGS, FACETS, EXTRA_COLLECTIONS, GIFT_BRANDS, INFO, landingHeader, subLanding, preownedLanding, infoPage, sitemapPage, sitemapXml } from './site.js'
 import { proPage, tradePage, creditPage, gradingPage, digitalPage } from './marketing.js'
 import { capturedRecommendations } from './recommendation-reference.js'
@@ -41,7 +42,7 @@ router.use((req,res,next)=>{
 registerJourneys(router, { render, invalidateReview })
 
 // ---- browse ----
-router.get('/', (req, res) => render(req, res, 'Power to the Players', P.homePage({ base: res.locals.base, products: PRODUCTS, user: req.store.user })))
+router.get('/', (req, res) => render(req, res, 'Power to the Players', P.homePage({ base: res.locals.base, products: ALL, user: req.store.user })))
 
 function browse(req,res,hub=null) {
   const q = String(req.query.q ?? '')
@@ -57,7 +58,7 @@ function withLanding(base,hub,path,extra={}) {
   return {...hub,name,facets:FACETS[landing.facets]||FACETS.default,landingHtml:landingHeader(base,{name,crumbs:landing.crumbs||[],top:landing.top})}
 }
 function landingBrowse(req,res,{name,crumbs=[],top,filter,facets}) {
-  browse(req,res,{name,description:'',products:PRODUCTS.filter(filter),facets:FACETS[facets]||FACETS.default,landingHtml:landingHeader(res.locals.base,{name,crumbs,top})})
+  browse(req,res,{name,description:'',products:ALL.filter(filter),facets:FACETS[facets]||FACETS.default,landingHtml:landingHeader(res.locals.base,{name,crumbs,top})})
 }
 router.get('/search',(req,res)=>browse(req,res))
 for (const slug of [...DEPARTMENTS.map(d=>d.id),...Object.keys(HUBS),'gaming-accessories/controllers']) router.get('/'+slug,(req,res)=>browse(req,res,withLanding(res.locals.base,collection(slug),'/'+slug,slug==='gaming-accessories/controllers'?{crumbs:[['Gaming Accessories','/gaming-accessories']]}:{})))
@@ -83,7 +84,7 @@ router.post('/newsletter',(req,res)=>{
   render(req,res,'Sign Up',P.simplePage({title:ok?"You're on the list!":'Sign Up',html:ok?`<p>Thanks for signing up. This local storefront does not send email; your address was not stored.</p><a class="gs-btn" href="${res.locals.base}/">Continue Shopping</a>`:`<p class="gs-error" role="alert">Enter a valid email address.</p><form method="post" action="${res.locals.base}/newsletter" class="gs-inline-form"><label for="gs-signup-retry">Email address</label><input id="gs-signup-retry" name="email" type="email" autocomplete="email" value="${P.escapeText(email)}" required><button class="gs-btn">Join</button></form>`}),ok?200:400)
 })
 router.get('/brands/:brand',(req,res)=>{
-  const products=PRODUCTS.filter(p=>p.brand.toLowerCase()===req.params.brand.toLowerCase())
+  const products=ALL.filter(p=>p.brand.toLowerCase()===req.params.brand.toLowerCase())
   if(!products.length) return render(req,res,'Brand not found',P.simplePage({title:'Brand not found',html:`<a href="${res.locals.base}/search">Browse all products</a>`}),404)
   browse(req,res,{name:products[0].brand,description:'Browse games, gear and collectibles from this brand.',products})
 })
@@ -101,6 +102,19 @@ function productHandler(req,res) {
 }
 router.get('/video-games/:category/products/:name/:id.html',productHandler)
 router.get('/products/:id',productHandler)
+// gamestop.com product URLs: /<department>/<category>[/<sub>]/products/<slug>/<item>.html
+router.get(/^\/((?:[a-z0-9-]+\/){1,3})products\/([^/]+)\/(\d{5,9})\.html$/,(req,res,next)=>{
+  const p=byId(req.params[2])
+  if(!p?.shelf) return next()
+  req.params.id=req.params[2]
+  productHandler(req,res)
+})
+// Shelf product pictures (synthetic illustrations rendered locally).
+router.get('/shelf-assets/:id/:view.svg',(req,res)=>{
+  const p=byId(req.params.id)
+  if(!p?.shelf || !/^[0-3]$/.test(req.params.view)) return res.status(404).type('text').send('Product image not found')
+  res.set('Cache-Control','public, max-age=3600').set('X-Content-Type-Options','nosniff').type('image/svg+xml').send(shelfAssetSvg(p,Number(req.params.view)))
+})
 
 router.get('/trade-in', (req, res) => render(req, res, 'Trade-In', tradePage(res.locals.base)))
 
