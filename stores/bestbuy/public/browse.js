@@ -25,10 +25,10 @@ if (searchInput && suggestions) {
 }
 // Native menus remain keyboard-operable and dismiss with Escape.
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') document.querySelectorAll('.bb-native-menu[open]').forEach(menu => { menu.open = false; menu.querySelector('summary').focus() })
+  if (event.key === 'Escape') document.querySelectorAll('.bb-native-menu[open],.bbx-menu[open],.bbx-account[open]').forEach(menu => { menu.open = false; menu.querySelector('summary').focus() })
 })
 
-const utilityMenus = [...document.querySelectorAll('.bb-native-menu')]
+const utilityMenus = [...document.querySelectorAll('.bb-native-menu,.bbx-menu,.bbx-account')]
 for (const menu of utilityMenus) {
   menu.addEventListener('toggle', () => {
     if (menu.open) utilityMenus.forEach(other => { if (other !== menu) other.open = false })

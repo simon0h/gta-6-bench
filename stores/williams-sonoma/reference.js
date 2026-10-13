@@ -1,18 +1,34 @@
+import { Router } from 'express'
 import { referenceRetailStore, observedProduct, capturedPhrase } from '../reference-retail.js'
-import { williamsChrome } from './layout.js'
 import { capturedWilliamsSearch, capturedWilliamsProduct, capturedSearchProducts } from './search-capture.js'
+import { siteChrome } from './site-chrome.js'
+import { installSite, homepage } from './site-routes.js'
 
 const unique = [...new Map(capturedSearchProducts.map(p => [p.path, p])).values()]
 export const catalogObservations = unique.map(p => observedProduct(p, { source: p.source_url,
   evidence: 'research/fidelity-2026-10-06/other-retail.md#williams-sonoma', facts: ['title', 'native_path', 'displayed_price', 'sale_label', 'image'] }))
-export default referenceRetailStore({ slug: 'williams-sonoma', name: 'Williams Sonoma', availability: 'unavailable', chrome: williamsChrome,
+let site
+const store = referenceRetailStore({ slug: 'williams-sonoma', name: 'Williams Sonoma', availability: 'unavailable', chrome: siteChrome,
   observations: catalogObservations, prepare(req) { req.williamsCapturedSearch = true },
   queryKeys: ['words', 'q'], searchRoutes: ['/search/results.html', '/search'], matches: capturedPhrase, capturedSearch: '/search/results.html?words=gta%206',
   search(req, res, { render, base, query }) { render(req, res, `Search results for ${query}`, capturedWilliamsSearch(base, { ...req.query, words: query })) },
-  install(router, { render, coverage, baseOf }) {
+  install(router, context) {
+    site = context
     router.get('/products/:slug', (req, res) => {
       const p = unique.find(p => p.id === req.params.slug)
-      return p ? render(req, res, p.title, capturedWilliamsProduct(baseOf(res), p)) : coverage(req, res, 'Product has not been captured', 404)
+      return p ? context.render(req, res, p.title, capturedWilliamsProduct(context.baseOf(res), p)) : context.coverage(req, res, 'Product has not been captured', 404)
     })
+    installSite(router, context)
   },
 })
+
+// The shared reference adapter serves its captured-catalog page at '/'. The real
+// homepage is rendered first; the captured catalog stays at /reference/catalog.
+const router = Router()
+router.get('/', (req, res, next) => {
+  if (Object.values(req.query).some(value => typeof value !== 'string')) return next()
+  site.render(req, res, 'Cookware, Cooking Utensils, Kitchen Decor & Gourmet Foods', homepage(site.baseOf(res)))
+})
+router.use(store.router)
+
+export default { ...store, router }

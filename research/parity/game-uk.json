@@ -1,0 +1,1206 @@
+{
+  "store": "game-uk",
+  "real_home": "https://www.game.co.uk/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.game.co.uk/",
+    "https://www.game.co.uk/gaming",
+    "https://www.game.co.uk/digital",
+    "https://www.game.co.uk/digital/gift-cards",
+    "https://www.game.co.uk/pc-gaming",
+    "https://www.game.co.uk/tech",
+    "https://www.game.co.uk/lego",
+    "https://www.game.co.uk/toys",
+    "https://www.game.co.uk/toys/trading-cards",
+    "https://www.game.co.uk/playstation",
+    "https://www.game.co.uk/nintendo",
+    "https://www.game.co.uk/deals",
+    "https://www.game.co.uk/coming-soon",
+    "https://www.game.co.uk/sitemap",
+    "https://www.game.co.uk/stores",
+    "https://www.game.co.uk/blog",
+    "https://www.game.co.uk/affiliates",
+    "https://www.game.co.uk/terms-and-conditions",
+    "https://www.game.co.uk/frasersplus",
+    "https://www.game.co.uk/rockstar-games-grand-theft-auto-vi-756802",
+    "https://help.game.co.uk/hc/en-gb",
+    "https://help.game.co.uk/hc/p/contact_us",
+    "https://help.game.co.uk/hc/en-gb/categories/6009547425951-Delivery-Collection",
+    "https://help.game.co.uk/hc/en-gb/categories/6009583054751-Returns-Refunds",
+    "https://help.game.co.uk/hc/en-gb/articles/6017076415775-Delivery-Options",
+    "research/game-uk.md"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "notes": "Captured with WebFetch on 2026-10-13. robots.txt blocked WebFetch for /searchresults, /cart, /login (and auth.game.co.uk) and /accountinformation; their expectations come from research/game-uk.md (2026-09-29 browser capture). The header account dropdown links (Account details, Track orders, Manage payments, Address book, Change password, Contact preferences) are in the real header markup. The mega-menu column contents were not in the fetched HTML, so header items list the department links only; the seasonal \"Christmas & Gifting\" entry (it links to the homepage) is skipped. Help centre links (help.game.co.uk), Careers (frasers.group) and the App Store / Google Play badges are off-site on the real site and become local pages. The real /sitemap page is a category directory; sitemap items use its Categories tree (top level and main children; third-level and Black Friday/Christmas/Events children omitted) plus the header departments and main non-product sections. /pc-gaming, /tech, /lego, /playstation and /nintendo have no H1 on the real site; their page titles/H2 stand in. Product inventory is out of scope: the clone lists only the source-backed GTA VI rows in reference mode.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "GAME home",
+      "real": "https://www.game.co.uk/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Stores",
+      "real": "https://www.game.co.uk/stores",
+      "path": "/stores"
+    },
+    {
+      "kind": "header",
+      "label": "Sign In",
+      "real": "https://www.game.co.uk/login",
+      "path": "/login"
+    },
+    {
+      "kind": "header",
+      "label": "My Wish List",
+      "real": "https://www.game.co.uk/wishlist",
+      "path": "/wishlist"
+    },
+    {
+      "kind": "header",
+      "label": "My Bag",
+      "real": "https://www.game.co.uk/cart",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Consoles & Video Games",
+      "real": "https://www.game.co.uk/gaming",
+      "path": "/gaming"
+    },
+    {
+      "kind": "header",
+      "label": "Digital Gift Cards",
+      "real": "https://www.game.co.uk/digital",
+      "path": "/digital"
+    },
+    {
+      "kind": "header",
+      "label": "PC Gaming",
+      "real": "https://www.game.co.uk/pc-gaming",
+      "path": "/pc-gaming"
+    },
+    {
+      "kind": "header",
+      "label": "Tech",
+      "real": "https://www.game.co.uk/tech",
+      "path": "/tech"
+    },
+    {
+      "kind": "header",
+      "label": "LEGO",
+      "real": "https://www.game.co.uk/lego",
+      "path": "/lego"
+    },
+    {
+      "kind": "header",
+      "label": "Toys & Games",
+      "real": "https://www.game.co.uk/toys",
+      "path": "/toys"
+    },
+    {
+      "kind": "header",
+      "label": "Trading Cards",
+      "real": "https://www.game.co.uk/toys/trading-cards",
+      "path": "/toys/trading-cards"
+    },
+    {
+      "kind": "header",
+      "label": "Account details",
+      "real": "https://www.game.co.uk/accountinformation",
+      "path": "/accountinformation"
+    },
+    {
+      "kind": "header",
+      "label": "Track orders",
+      "real": "https://www.game.co.uk/accountinformation/orderhistorysummary",
+      "path": "/accountinformation/orderhistorysummary"
+    },
+    {
+      "kind": "header",
+      "label": "Manage payments",
+      "real": "https://www.game.co.uk/accountinformation/managecards",
+      "path": "/accountinformation/managecards"
+    },
+    {
+      "kind": "header",
+      "label": "Address book",
+      "real": "https://www.game.co.uk/accountinformation/manageaddressbook",
+      "path": "/accountinformation/manageaddressbook"
+    },
+    {
+      "kind": "header",
+      "label": "Change password",
+      "real": "https://www.game.co.uk/accountinformation/changepassword",
+      "path": "/accountinformation/changepassword"
+    },
+    {
+      "kind": "header",
+      "label": "Contact preferences",
+      "real": "https://www.game.co.uk/accountinformation/contactpreferences",
+      "path": "/accountinformation/contactpreferences"
+    },
+    {
+      "kind": "footer",
+      "label": "Help Home",
+      "real": "https://help.game.co.uk/hc",
+      "path": "/help"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact Us",
+      "real": "https://help.game.co.uk/hc/p/contact_us",
+      "path": "/contact"
+    },
+    {
+      "kind": "footer",
+      "label": "Delivery & Collection",
+      "real": "https://help.game.co.uk/hc/en-gb/categories/6009547425951-Delivery-Collection",
+      "path": "/help/categories/delivery"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns & Cancellations",
+      "real": "https://help.game.co.uk/hc/en-gb/categories/6009583054751-Returns-Refunds",
+      "path": "/help/categories/returns"
+    },
+    {
+      "kind": "footer",
+      "label": "Track order",
+      "real": "https://www.game.co.uk/accountinformation/orderhistorysummary",
+      "path": "/accountinformation/orderhistorysummary"
+    },
+    {
+      "kind": "footer",
+      "label": "My account",
+      "real": "https://www.game.co.uk/accountinformation",
+      "path": "/accountinformation"
+    },
+    {
+      "kind": "footer",
+      "label": "Game Blog",
+      "real": "https://www.game.co.uk/blog",
+      "path": "/blog"
+    },
+    {
+      "kind": "footer",
+      "label": "Find your local store",
+      "real": "https://www.game.co.uk/stores",
+      "path": "/stores"
+    },
+    {
+      "kind": "footer",
+      "label": "Cookie preferences",
+      "real": "OneTrust preference centre button (no href)",
+      "path": "/cookie-preferences"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://frasers.group/careers/jobs",
+      "path": "/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Affiliates",
+      "real": "https://www.game.co.uk/affiliates",
+      "path": "/affiliates"
+    },
+    {
+      "kind": "footer",
+      "label": "Promotional terms",
+      "real": "https://www.game.co.uk/terms-and-conditions",
+      "path": "/terms-and-conditions"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms & conditions",
+      "real": "https://help.game.co.uk/hc/articles/6018141569823-offers-promotions-and-competitions",
+      "path": "/help/articles/offers-promotions-and-competitions"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Policy",
+      "real": "https://help.game.co.uk/hc/sections/6009723089439",
+      "path": "/help/categories/legal"
+    },
+    {
+      "kind": "footer",
+      "label": "Sitemap",
+      "real": "https://www.game.co.uk/sitemap",
+      "path": "/sitemap"
+    },
+    {
+      "kind": "footer",
+      "label": "App Store",
+      "real": "https://apps.apple.com/gb/app/game-mobile-app/id567772794",
+      "path": "/mobile-app"
+    },
+    {
+      "kind": "footer",
+      "label": "Google Play",
+      "real": "https://play.google.com/store/apps/details?id=co.uk.game.mobileapp",
+      "path": "/mobile-app"
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.game.co.uk/searchresults?descriptionfilter=grand+theft+auto+vi",
+      "path": "/searchresults?descriptionfilter=grand+theft+auto+vi",
+      "expect": [
+        "Search Results",
+        "We found",
+        "Hide Filters",
+        "Sort By"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.game.co.uk/rockstar-games-grand-theft-auto-vi-756802",
+      "path": "/rockstar-games-grand-theft-auto-vi-756802",
+      "expect": [
+        "Rockstar Games",
+        "Grand Theft Auto VI",
+        "Pre-order now",
+        "Release Date: 19/11/26",
+        "Delivery & Returns"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Bag (empty)",
+      "real": "https://www.game.co.uk/cart",
+      "path": "/cart",
+      "expect": [
+        "Your Bag Is Empty",
+        "We'll hold your bag for 30 days.",
+        "Sign In"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in or register",
+      "real": "https://auth.game.co.uk/account/login",
+      "path": "/account/login",
+      "expect": [
+        "Sign in or register",
+        "Email address",
+        "Continue securely",
+        "Speedy checkout"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "My account (signed out)",
+      "real": "https://www.game.co.uk/accountinformation",
+      "path": "/accountinformation",
+      "expect": [
+        "Sign in or register"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order tracking (signed out)",
+      "real": "https://www.game.co.uk/accountinformation/orderhistorysummary",
+      "path": "/accountinformation/orderhistorysummary",
+      "expect": [
+        "Sign in or register"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Wish list",
+      "real": "https://www.game.co.uk/wishlist",
+      "path": "/wishlist",
+      "expect": [
+        "My Wish List"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help centre",
+      "real": "https://help.game.co.uk/hc/en-gb",
+      "path": "/help",
+      "expect": [
+        "How can we help you?",
+        "Delivery & Collection",
+        "Orders & Payments",
+        "Returns & Refunds",
+        "Financial Services",
+        "Legal & Privacy"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Contact us",
+      "real": "https://help.game.co.uk/hc/p/contact_us",
+      "path": "/contact",
+      "expect": [
+        "Contact Us",
+        "What do you need help with?",
+        "Our team is here to help"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Delivery & Collection help",
+      "real": "https://help.game.co.uk/hc/en-gb/categories/6009547425951-Delivery-Collection",
+      "path": "/help/categories/delivery",
+      "expect": [
+        "Delivery & Collection",
+        "Delivery Methods",
+        "Delivery FAQ's",
+        "Click & Collect Exceptions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Delivery options",
+      "real": "https://help.game.co.uk/hc/en-gb/articles/6017076415775-Delivery-Options",
+      "path": "/help/articles/delivery-options",
+      "expect": [
+        "Delivery Options",
+        "Standard Delivery",
+        "Next Day Delivery by DPD",
+        "2 Man Delivery"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns & Refunds help",
+      "real": "https://help.game.co.uk/hc/en-gb/categories/6009583054751-Returns-Refunds",
+      "path": "/help/categories/returns",
+      "expect": [
+        "Returns & Refunds",
+        "Can I exchange an online order?",
+        "When will I receive a refund?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store finder",
+      "real": "https://www.game.co.uk/stores",
+      "path": "/stores",
+      "expect": [
+        "Store Finder",
+        "within",
+        "View A-Z Directory"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.game.co.uk/digital/gift-cards",
+      "path": "/digital/gift-cards",
+      "expect": [
+        "Gift Cards",
+        "Frasers Group Multi-Store Gift Card",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals",
+      "real": "https://www.game.co.uk/deals",
+      "path": "/deals",
+      "expect": [
+        "Deals",
+        "In This Section",
+        "2 for £20",
+        "Warehouse Clearance",
+        "Filter By"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Gaming",
+      "real": "https://www.game.co.uk/gaming",
+      "path": "/gaming",
+      "expect": [
+        "Gaming",
+        "Game Consoles",
+        "Gaming Accessories",
+        "Filter By",
+        "Available Products"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Digital",
+      "real": "https://www.game.co.uk/digital",
+      "path": "/digital",
+      "expect": [
+        "Digital",
+        "GAME e-Vouchers",
+        "Xbox Game Pass",
+        "Digital Subscriptions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: PC Gaming",
+      "real": "https://www.game.co.uk/pc-gaming",
+      "path": "/pc-gaming",
+      "expect": [
+        "PC Gaming",
+        "Shop by Category",
+        "Mouse Mats / Surfaces",
+        "Streaming"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Tech",
+      "real": "https://www.game.co.uk/tech",
+      "path": "/tech",
+      "expect": [
+        "Tech",
+        "Shop by Category",
+        "Smart Watches",
+        "Virtual Reality"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: LEGO",
+      "real": "https://www.game.co.uk/lego",
+      "path": "/lego",
+      "expect": [
+        "Welcome to the GAME LEGO Store",
+        "Shop all LEGO",
+        "NEW LEGO Sets"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Toys",
+      "real": "https://www.game.co.uk/toys",
+      "path": "/toys",
+      "expect": [
+        "Toys",
+        "Shop By Category",
+        "Plushies",
+        "Outdoor Toys"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Trading Cards",
+      "real": "https://www.game.co.uk/toys/trading-cards",
+      "path": "/toys/trading-cards",
+      "expect": [
+        "Trading Cards",
+        "Trading Card Booster Packs",
+        "Collect, trade and play"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PlayStation",
+      "real": "https://www.game.co.uk/playstation",
+      "path": "/playstation",
+      "expect": [
+        "Shop PlayStation Gaming",
+        "PS5 Disc Console",
+        "PlayStation Gift Cards"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Nintendo",
+      "real": "https://www.game.co.uk/nintendo",
+      "path": "/nintendo",
+      "expect": [
+        "Nintendo",
+        "Memory Cards",
+        "Joy-Cons"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Coming Soon",
+      "real": "https://www.game.co.uk/coming-soon",
+      "path": "/coming-soon",
+      "expect": [
+        "Coming Soon",
+        "Keep an eye on what's coming next at GAME.",
+        "Trading Cards Coming Soon"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Frasers Plus",
+      "real": "https://www.game.co.uk/frasersplus",
+      "path": "/frasersplus",
+      "expect": [
+        "Frasers Plus",
+        "Pick a plan to suit you",
+        "Earn points every time you shop",
+        "Frequently asked questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Blog",
+      "real": "https://www.game.co.uk/blog",
+      "path": "/blog",
+      "expect": [
+        "GAME Blog",
+        "Featured Blogs"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Affiliates",
+      "real": "https://www.game.co.uk/affiliates",
+      "path": "/affiliates",
+      "expect": [
+        "GAME's Affiliate Program",
+        "How do I sign up?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Promotion terms",
+      "real": "https://www.game.co.uk/terms-and-conditions",
+      "path": "/terms-and-conditions",
+      "expect": [
+        "Terms & Conditions - Current Promotions",
+        "Terms & Conditions - Past Promotions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.game.co.uk/sitemap",
+      "path": "/sitemap",
+      "expect": [
+        "Sitemap",
+        "Categories"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Category shortcuts row",
+      "expect": [
+        "Coming Soon",
+        "PlayStation",
+        "Xbox",
+        "Nintendo",
+        "Pokemon",
+        "LEGO",
+        "Toys",
+        "PC"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Coming Soon hero",
+      "expect": [
+        "Coming Soon",
+        "Shop Now"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Gifts For Gamers panel",
+      "expect": [
+        "Gifts For Gamers",
+        "Games",
+        "PS5",
+        "XBOX",
+        "Switch"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Frasers Plus band",
+      "expect": [
+        "SPREAD THE COST OF GIFTING*"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Trending strip",
+      "expect": [
+        "Trending",
+        "Grand Theft Auto VI"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Gift Shop",
+      "expect": [
+        "Gift Shop"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Promo strip",
+      "expect": [
+        "Representative APR 29.9%"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Newsletter",
+      "expect": [
+        "Sign up to our newsletter"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Ways to pay",
+      "expect": [
+        "Ways to pay"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Cookie banner",
+      "expect": [
+        "Our cookies",
+        "Manage cookies",
+        "Reject all",
+        "Allow all"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Consoles & Video Games",
+      "real": "https://www.game.co.uk/gaming",
+      "path": "/gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital Gift Cards",
+      "real": "https://www.game.co.uk/digital",
+      "path": "/digital"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PC Gaming",
+      "real": "https://www.game.co.uk/pc-gaming",
+      "path": "/pc-gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tech",
+      "real": "https://www.game.co.uk/tech",
+      "path": "/tech"
+    },
+    {
+      "kind": "sitemap",
+      "label": "LEGO",
+      "real": "https://www.game.co.uk/lego",
+      "path": "/lego"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys & Games",
+      "real": "https://www.game.co.uk/toys",
+      "path": "/toys"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trading Cards",
+      "real": "https://www.game.co.uk/toys/trading-cards",
+      "path": "/toys/trading-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation",
+      "real": "https://www.game.co.uk/playstation",
+      "path": "/playstation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo",
+      "real": "https://www.game.co.uk/nintendo",
+      "path": "/nintendo"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessories",
+      "real": "https://www.game.co.uk/accessories",
+      "path": "/accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Controllers",
+      "real": "https://www.game.co.uk/accessories/controllers",
+      "path": "/accessories/controllers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fight Sticks",
+      "real": "https://www.game.co.uk/accessories/fight-sticks",
+      "path": "/accessories/fight-sticks"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Chairs",
+      "real": "https://www.game.co.uk/accessories/gaming-chairs",
+      "path": "/accessories/gaming-chairs"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Desks",
+      "real": "https://www.game.co.uk/accessories/gaming-desks",
+      "path": "/accessories/gaming-desks"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Headsets",
+      "real": "https://www.game.co.uk/accessories/headsets",
+      "path": "/accessories/headsets"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Black Friday",
+      "real": "https://www.game.co.uk/black-friday/deals",
+      "path": "/black-friday/deals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Christmas",
+      "real": "https://www.game.co.uk/christmas",
+      "path": "/christmas"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Coming Soon",
+      "real": "https://www.game.co.uk/coming-soon",
+      "path": "/coming-soon"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PC Coming Soon",
+      "real": "https://www.game.co.uk/coming-soon/pc",
+      "path": "/coming-soon/pc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys Coming Soon",
+      "real": "https://www.game.co.uk/coming-soon/toys",
+      "path": "/coming-soon/toys"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trading Cards Coming Soon",
+      "real": "https://www.game.co.uk/coming-soon/trading-cards",
+      "path": "/coming-soon/trading-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Deals",
+      "real": "https://www.game.co.uk/deals",
+      "path": "/deals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "2 for £20",
+      "real": "https://www.game.co.uk/deals/2-for-20",
+      "path": "/deals/2-for-20"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessory Deals",
+      "real": "https://www.game.co.uk/deals/accessories",
+      "path": "/deals/accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clearance",
+      "real": "https://www.game.co.uk/deals/clearance",
+      "path": "/deals/clearance"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Games under £15",
+      "real": "https://www.game.co.uk/deals/video-games-under-15",
+      "path": "/deals/video-games-under-15"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo Deals",
+      "real": "https://www.game.co.uk/deals/nintendo",
+      "path": "/deals/nintendo"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PC Gaming Deals",
+      "real": "https://www.game.co.uk/deals/pc",
+      "path": "/deals/pc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation Deals",
+      "real": "https://www.game.co.uk/deals/playstation",
+      "path": "/deals/playstation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tech Deals",
+      "real": "https://www.game.co.uk/deals/tech",
+      "path": "/deals/tech"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toy Deals",
+      "real": "https://www.game.co.uk/deals/toys",
+      "path": "/deals/toys"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trading Card Deals",
+      "real": "https://www.game.co.uk/deals/tcg",
+      "path": "/deals/tcg"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Deals",
+      "real": "https://www.game.co.uk/deals/xbox",
+      "path": "/deals/xbox"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Warehouse Clearance",
+      "real": "https://www.game.co.uk/deals/warehouse-clearance",
+      "path": "/deals/warehouse-clearance"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital",
+      "real": "https://www.game.co.uk/digital",
+      "path": "/digital"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital Add Ons",
+      "real": "https://www.game.co.uk/digital/add-ons",
+      "path": "/digital/add-ons"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital Credit",
+      "real": "https://www.game.co.uk/digital/credit",
+      "path": "/digital/credit"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital Games",
+      "real": "https://www.game.co.uk/digital/games",
+      "path": "/digital/games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital Subscriptions",
+      "real": "https://www.game.co.uk/digital/subscriptions",
+      "path": "/digital/subscriptions"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.game.co.uk/digital/gift-cards",
+      "path": "/digital/gift-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Events",
+      "real": "https://www.game.co.uk/events",
+      "path": "/events"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Frasers Plus Exclusive Prices",
+      "real": "https://www.game.co.uk/frasers-plus-exclusive-prices",
+      "path": "/frasers-plus-exclusive-prices"
+    },
+    {
+      "kind": "sitemap",
+      "label": "GAME Exclusives",
+      "real": "https://www.game.co.uk/game-exclusives",
+      "path": "/game-exclusives"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Games",
+      "real": "https://www.game.co.uk/games",
+      "path": "/games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Action Adventure Games",
+      "real": "https://www.game.co.uk/games/action-adventure",
+      "path": "/games/action-adventure"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Family Games",
+      "real": "https://www.game.co.uk/games/family-casual",
+      "path": "/games/family-casual"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fighting Games",
+      "real": "https://www.game.co.uk/games/fighting",
+      "path": "/games/fighting"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Football Games",
+      "real": "https://www.game.co.uk/games/football",
+      "path": "/games/football"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Horror Games",
+      "real": "https://www.game.co.uk/games/horror",
+      "path": "/games/horror"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Racing Games",
+      "real": "https://www.game.co.uk/games/racing",
+      "path": "/games/racing"
+    },
+    {
+      "kind": "sitemap",
+      "label": "RPG Games",
+      "real": "https://www.game.co.uk/games/rpg",
+      "path": "/games/rpg"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shooter Games",
+      "real": "https://www.game.co.uk/games/shooter",
+      "path": "/games/shooter"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Simulation Games",
+      "real": "https://www.game.co.uk/games/simulation",
+      "path": "/games/simulation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sports Games",
+      "real": "https://www.game.co.uk/games/sports",
+      "path": "/games/sports"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Strategy Games",
+      "real": "https://www.game.co.uk/games/strategy",
+      "path": "/games/strategy"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Homeware",
+      "real": "https://www.game.co.uk/gaming-homeware",
+      "path": "/gaming-homeware"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming, TV & Movie Merchandise",
+      "real": "https://www.game.co.uk/merchandise",
+      "path": "/merchandise"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Display Collectables",
+      "real": "https://www.game.co.uk/merchandise/display-collectables",
+      "path": "/merchandise/display-collectables"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Clothing",
+      "real": "https://www.game.co.uk/merchandise/clothing",
+      "path": "/merchandise/clothing"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Homeware",
+      "real": "https://www.game.co.uk/merchandise/homeware",
+      "path": "/merchandise/homeware"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Retro",
+      "real": "https://www.game.co.uk/merchandise/retro",
+      "path": "/merchandise/retro"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gifts",
+      "real": "https://www.game.co.uk/gifts",
+      "path": "/gifts"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Character Gifts",
+      "real": "https://www.game.co.uk/gifts/character-gifts",
+      "path": "/gifts/character-gifts"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gifts for Gamers",
+      "real": "https://www.game.co.uk/gifts/gifts-for-gamers",
+      "path": "/gifts/gifts-for-gamers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toy Gifts",
+      "real": "https://www.game.co.uk/gifts/toy-gifts",
+      "path": "/gifts/toy-gifts"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trading Card Gifts",
+      "real": "https://www.game.co.uk/gifts/trading-card-gifts",
+      "path": "/gifts/trading-card-gifts"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Just Landed",
+      "real": "https://www.game.co.uk/just-landed-up-next",
+      "path": "/just-landed-up-next"
+    },
+    {
+      "kind": "sitemap",
+      "label": "SALE",
+      "real": "https://www.game.co.uk/sale",
+      "path": "/sale"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Games & Consoles on SALE",
+      "real": "https://www.game.co.uk/sale/gaming",
+      "path": "/sale/gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo SALE",
+      "real": "https://www.game.co.uk/sale/nintendo",
+      "path": "/sale/nintendo"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation SALE",
+      "real": "https://www.game.co.uk/sale/playstation",
+      "path": "/sale/playstation"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tech on SALE",
+      "real": "https://www.game.co.uk/sale/tech",
+      "path": "/sale/tech"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys on SALE",
+      "real": "https://www.game.co.uk/sale/toys",
+      "path": "/sale/toys"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox SALE",
+      "real": "https://www.game.co.uk/sale/xbox",
+      "path": "/sale/xbox"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Gaming",
+      "real": "https://www.game.co.uk/xbox/all-xbox",
+      "path": "/xbox/all-xbox"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Accessories",
+      "real": "https://www.game.co.uk/xbox/accessories",
+      "path": "/xbox/accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Consoles",
+      "real": "https://www.game.co.uk/xbox/consoles",
+      "path": "/xbox/consoles"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Digital Downloads",
+      "real": "https://www.game.co.uk/xbox/digital-downloads",
+      "path": "/xbox/digital-downloads"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Games",
+      "real": "https://www.game.co.uk/xbox/games",
+      "path": "/xbox/games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Series X",
+      "real": "https://www.game.co.uk/xbox/series-x",
+      "path": "/xbox/series-x"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Series S",
+      "real": "https://www.game.co.uk/xbox/series-s",
+      "path": "/xbox/series-s"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store Finder",
+      "real": "https://www.game.co.uk/stores",
+      "path": "/stores"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Help Home",
+      "real": "https://www.game.co.uk/help",
+      "path": "/help"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Contact Us",
+      "real": "https://www.game.co.uk/contact",
+      "path": "/contact"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Track order",
+      "real": "https://www.game.co.uk/accountinformation/orderhistorysummary",
+      "path": "/accountinformation/orderhistorysummary"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Frasers Plus",
+      "real": "https://www.game.co.uk/frasersplus",
+      "path": "/frasersplus"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Game Blog",
+      "real": "https://www.game.co.uk/blog",
+      "path": "/blog"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Affiliates",
+      "real": "https://www.game.co.uk/affiliates",
+      "path": "/affiliates"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Promotional terms",
+      "real": "https://www.game.co.uk/terms-and-conditions",
+      "path": "/terms-and-conditions"
+    }
+  ]
+}

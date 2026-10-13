@@ -1,0 +1,1192 @@
+{
+  "store": "amazon",
+  "real_home": "https://www.amazon.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.amazon.com/ (WebFetch: partial, homepage card headings only)",
+    "https://www.amazon.com/gp/site-directory (refused: robots.txt)",
+    "https://www.amazon.com/gp/help/customer/display.html, /gift-cards/b?node=2238192011, /gp/goldbox (refused: robots.txt)",
+    "https://web.archive.org/web/2026/https://www.amazon.com/ and /gp/site-directory (blocked)",
+    "research/amazon.md (live browser capture 2026-09-29)",
+    "research/amazon.json"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/gp/site-directory",
+  "notes": "WebFetch of amazon.com returned only homepage card headings (\"The latest listens\", \"Homeroom to homework\", \"Explore more\", \"Everyday essentials you might like\", \"Customers also bought\"); the site directory, help, gift card and deals pages were refused by robots.txt, web.archive.org is blocked and WebSearch returned nothing usable. Header, footer and page structure therefore come from research/amazon.md (live browser capture 2026-09-29: dark belt, ~30-link second row, four footer columns + legal bar) and long-standing amazon.com URL patterns (/gp/goldbox, /gp/site-directory, /<dept>/b?node=<id>, /gp/help/customer/display.html?nodeId=<id>). The department tree follows the public site directory; some subcategory node ids are approximate. Homepage gateway cards other than the five fetched headings are typical signed-out amazon.com cards and vary by session and season. Off-site destinations (amazon.jobs, aboutamazon.com, sell.amazon.com, partner programs) are local summary pages.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Amazon home",
+      "real": "https://www.amazon.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Update location",
+      "real": "https://www.amazon.com/",
+      "path": "/gp/delivery-location?ret=%2F"
+    },
+    {
+      "kind": "header",
+      "label": "Account & Lists",
+      "real": "https://www.amazon.com/ap/signin",
+      "path": "/ap/signin?openid.return_to=%2F&openid.assoc_handle=usflex"
+    },
+    {
+      "kind": "header",
+      "label": "Returns & Orders",
+      "real": "https://www.amazon.com/gp/css/order-history",
+      "path": "/gp/css/order-history"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.amazon.com/gp/cart/view.html?ref_=nav_cart",
+      "path": "/gp/cart/view.html?ref_=nav_cart"
+    },
+    {
+      "kind": "header",
+      "label": "Today's Deals",
+      "real": "https://www.amazon.com/gp/goldbox",
+      "path": "/gp/goldbox"
+    },
+    {
+      "kind": "header",
+      "label": "Prime Video",
+      "real": "https://www.amazon.com/gp/video/storefront",
+      "path": "/gp/video/storefront"
+    },
+    {
+      "kind": "header",
+      "label": "Registry",
+      "real": "https://www.amazon.com/registries",
+      "path": "/registries"
+    },
+    {
+      "kind": "header",
+      "label": "Customer Service",
+      "real": "https://www.amazon.com/gp/help/customer/display.html",
+      "path": "/gp/help/customer/display.html"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Cards",
+      "real": "https://www.amazon.com/gift-cards/b?node=2238192011",
+      "path": "/gift-cards/b?node=2238192011"
+    },
+    {
+      "kind": "header",
+      "label": "Sell",
+      "real": "https://sell.amazon.com/",
+      "path": "/b?node=12766669011"
+    },
+    {
+      "kind": "header",
+      "label": "Best Sellers",
+      "real": "https://www.amazon.com/gp/bestsellers",
+      "path": "/gp/bestsellers"
+    },
+    {
+      "kind": "header",
+      "label": "New Releases",
+      "real": "https://www.amazon.com/gp/new-releases",
+      "path": "/gp/new-releases"
+    },
+    {
+      "kind": "header",
+      "label": "Amazon Basics",
+      "real": "https://www.amazon.com/amazonbasics",
+      "path": "/amazonbasics"
+    },
+    {
+      "kind": "header",
+      "label": "Prime",
+      "real": "https://www.amazon.com/amazonprime",
+      "path": "/amazonprime"
+    },
+    {
+      "kind": "header",
+      "label": "Music",
+      "real": "https://music.amazon.com/",
+      "path": "/music/player"
+    },
+    {
+      "kind": "header",
+      "label": "Books",
+      "real": "https://www.amazon.com/books-used-books-textbooks/b?node=283155",
+      "path": "/books-used-books-textbooks/b?node=283155"
+    },
+    {
+      "kind": "header",
+      "label": "Amazon Home",
+      "real": "https://www.amazon.com/home-garden-kitchen-furniture-bedding/b?node=1055398",
+      "path": "/home-garden-kitchen-furniture-bedding/b?node=1055398"
+    },
+    {
+      "kind": "header",
+      "label": "Groceries",
+      "real": "https://www.amazon.com/alm/storefront?almBrandId=QW1hem9uIEZyZXNo",
+      "path": "/fresh"
+    },
+    {
+      "kind": "header",
+      "label": "Pharmacy",
+      "real": "https://pharmacy.amazon.com/",
+      "path": "/pharmacy"
+    },
+    {
+      "kind": "header",
+      "label": "Fashion",
+      "real": "https://www.amazon.com/amazon-fashion/b?node=7141123011",
+      "path": "/amazon-fashion/b?node=7141123011"
+    },
+    {
+      "kind": "header",
+      "label": "Toys & Games",
+      "real": "https://www.amazon.com/toys/b?node=165793011",
+      "path": "/toys/b?node=165793011"
+    },
+    {
+      "kind": "header",
+      "label": "Electronics",
+      "real": "https://www.amazon.com/electronics/b?node=172282",
+      "path": "/electronics/b?node=172282"
+    },
+    {
+      "kind": "header",
+      "label": "Computers",
+      "real": "https://www.amazon.com/computers-and-accessories/b?node=541966",
+      "path": "/computers-and-accessories/b?node=541966"
+    },
+    {
+      "kind": "header",
+      "label": "Beauty & Personal Care",
+      "real": "https://www.amazon.com/beauty/b?node=3760911",
+      "path": "/beauty/b?node=3760911"
+    },
+    {
+      "kind": "header",
+      "label": "Home Improvement",
+      "real": "https://www.amazon.com/Tools-and-Home-Improvement/b?node=228013",
+      "path": "/Tools-and-Home-Improvement/b?node=228013"
+    },
+    {
+      "kind": "header",
+      "label": "Smart Home",
+      "real": "https://www.amazon.com/smart-home/b?node=6563140011",
+      "path": "/smart-home/b?node=6563140011"
+    },
+    {
+      "kind": "header",
+      "label": "Video Games",
+      "real": "https://www.amazon.com/computer-video-games-hardware-accessories/b?node=468642",
+      "path": "/computer-video-games-hardware-accessories/b?node=468642"
+    },
+    {
+      "kind": "header",
+      "label": "Automotive",
+      "real": "https://www.amazon.com/automotive/b?node=15684181",
+      "path": "/automotive/b?node=15684181"
+    },
+    {
+      "kind": "header",
+      "label": "Kindle Books",
+      "real": "https://www.amazon.com/Kindle-eBooks/b?node=154606011",
+      "path": "/Kindle-eBooks/b?node=154606011"
+    },
+    {
+      "kind": "header",
+      "label": "Pet Supplies",
+      "real": "https://www.amazon.com/pet-supplies/b?node=2619533011",
+      "path": "/pet-supplies/b?node=2619533011"
+    },
+    {
+      "kind": "header",
+      "label": "Health & Household",
+      "real": "https://www.amazon.com/health-household/b?node=3760901",
+      "path": "/health-household/b?node=3760901"
+    },
+    {
+      "kind": "header",
+      "label": "Sports & Outdoors",
+      "real": "https://www.amazon.com/sports-outdoors/b?node=3375251",
+      "path": "/sports-outdoors/b?node=3375251"
+    },
+    {
+      "kind": "header",
+      "label": "Handmade",
+      "real": "https://www.amazon.com/handmade/b?node=11260432011",
+      "path": "/handmade/b?node=11260432011"
+    },
+    {
+      "kind": "header",
+      "label": "Coupons",
+      "real": "https://www.amazon.com/coupons",
+      "path": "/coupons"
+    },
+    {
+      "kind": "header",
+      "label": "Same-Day Delivery",
+      "real": "https://www.amazon.com/same-day-delivery",
+      "path": "/same-day-delivery"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://www.amazon.jobs/",
+      "path": "/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Newsletter",
+      "real": "https://www.aboutamazon.com/newsletter",
+      "path": "/newsletter"
+    },
+    {
+      "kind": "footer",
+      "label": "About Amazon",
+      "real": "https://www.aboutamazon.com/",
+      "path": "/about"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.aboutamazon.com/accessibility",
+      "path": "/accessibility"
+    },
+    {
+      "kind": "footer",
+      "label": "Sustainability",
+      "real": "https://sustainability.aboutamazon.com/",
+      "path": "/sustainability"
+    },
+    {
+      "kind": "footer",
+      "label": "Press Center",
+      "real": "https://press.aboutamazon.com/",
+      "path": "/pr"
+    },
+    {
+      "kind": "footer",
+      "label": "Investor Relations",
+      "real": "https://ir.aboutamazon.com/",
+      "path": "/ir"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Devices",
+      "real": "https://www.amazon.com/amazon-devices/b?node=2102313011",
+      "path": "/amazon-devices/b?node=2102313011"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Science",
+      "real": "https://www.amazon.science/",
+      "path": "/science"
+    },
+    {
+      "kind": "footer",
+      "label": "Sell on Amazon",
+      "real": "https://sell.amazon.com/",
+      "path": "/b?node=12766669011"
+    },
+    {
+      "kind": "footer",
+      "label": "Sell apps on Amazon",
+      "real": "https://developer.amazon.com/apps-and-games",
+      "path": "/sell-apps"
+    },
+    {
+      "kind": "footer",
+      "label": "Supply to Amazon",
+      "real": "https://supply.amazon.com/",
+      "path": "/supply"
+    },
+    {
+      "kind": "footer",
+      "label": "Protect & Build Your Brand",
+      "real": "https://brandservices.amazon.com/",
+      "path": "/brand-registry"
+    },
+    {
+      "kind": "footer",
+      "label": "Become an Affiliate",
+      "real": "https://affiliate-program.amazon.com/",
+      "path": "/associates"
+    },
+    {
+      "kind": "footer",
+      "label": "Become a Delivery Driver",
+      "real": "https://flex.amazon.com/",
+      "path": "/delivery-driver"
+    },
+    {
+      "kind": "footer",
+      "label": "Start a Package Delivery Business",
+      "real": "https://logistics.amazon.com/",
+      "path": "/dsp"
+    },
+    {
+      "kind": "footer",
+      "label": "Advertise Your Products",
+      "real": "https://advertising.amazon.com/",
+      "path": "/advertising"
+    },
+    {
+      "kind": "footer",
+      "label": "Self-Publish with Us",
+      "real": "https://kdp.amazon.com/",
+      "path": "/kdp"
+    },
+    {
+      "kind": "footer",
+      "label": "Become an Amazon Hub Partner",
+      "real": "https://hub.amazon.com/",
+      "path": "/hub"
+    },
+    {
+      "kind": "footer",
+      "label": "See More Ways to Make Money",
+      "real": "https://www.amazon.com/b/?node=18190131011",
+      "path": "/make-money"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Visa",
+      "real": "https://www.amazon.com/amazon-visa",
+      "path": "/amazon-visa"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Store Card",
+      "real": "https://www.amazon.com/amazon-store-card",
+      "path": "/amazon-store-card"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Secured Card",
+      "real": "https://www.amazon.com/amazon-secured-card",
+      "path": "/amazon-secured-card"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Business Card",
+      "real": "https://www.amazon.com/amazon-business-card",
+      "path": "/amazon-business-card"
+    },
+    {
+      "kind": "footer",
+      "label": "Shop with Points",
+      "real": "https://www.amazon.com/shop-with-points",
+      "path": "/shop-with-points"
+    },
+    {
+      "kind": "footer",
+      "label": "Credit Card Marketplace",
+      "real": "https://www.amazon.com/credit-card-marketplace",
+      "path": "/credit-card-marketplace"
+    },
+    {
+      "kind": "footer",
+      "label": "Reload Your Balance",
+      "real": "https://www.amazon.com/reload-your-balance",
+      "path": "/reload-your-balance"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Cards",
+      "real": "https://www.amazon.com/gift-cards/b?node=2238192011",
+      "path": "/gift-cards/b?node=2238192011"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Currency Converter",
+      "real": "https://www.amazon.com/currency-converter",
+      "path": "/currency-converter"
+    },
+    {
+      "kind": "footer",
+      "label": "Your Account",
+      "real": "https://www.amazon.com/gp/css/homepage.html",
+      "path": "/gp/css/homepage.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Your Orders",
+      "real": "https://www.amazon.com/gp/css/order-history",
+      "path": "/gp/css/order-history"
+    },
+    {
+      "kind": "footer",
+      "label": "Shipping Rates & Policies",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=468520",
+      "path": "/gp/help/customer/display.html?nodeId=468520"
+    },
+    {
+      "kind": "footer",
+      "label": "Amazon Prime",
+      "real": "https://www.amazon.com/amazonprime",
+      "path": "/amazonprime"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns & Replacements",
+      "real": "https://www.amazon.com/gp/css/returns/homepage.html",
+      "path": "/gp/css/returns/homepage.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Manage Your Content and Devices",
+      "real": "https://www.amazon.com/hz/mycd/myx",
+      "path": "/hz/mycd/myx"
+    },
+    {
+      "kind": "footer",
+      "label": "Recalls and Product Safety Alerts",
+      "real": "https://www.amazon.com/your-product-safety-alerts",
+      "path": "/your-product-safety-alerts"
+    },
+    {
+      "kind": "footer",
+      "label": "Registry & Gift List",
+      "real": "https://www.amazon.com/registries",
+      "path": "/registries"
+    },
+    {
+      "kind": "footer",
+      "label": "Help",
+      "real": "https://www.amazon.com/gp/help/customer/display.html",
+      "path": "/gp/help/customer/display.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Conditions of Use",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=508088",
+      "path": "/gp/help/customer/display.html?nodeId=508088"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Notice",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=468496",
+      "path": "/gp/help/customer/display.html?nodeId=468496"
+    },
+    {
+      "kind": "footer",
+      "label": "Consumer Health Data Privacy Disclosure",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=TnACMrGftqtXpwyOQ0",
+      "path": "/gp/help/customer/display.html?nodeId=TnACMrGftqtXpwyOQ0"
+    },
+    {
+      "kind": "footer",
+      "label": "Your Ads Privacy Choices",
+      "real": "https://www.amazon.com/adprefs",
+      "path": "/adprefs"
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.amazon.com/s?k=grand+theft+auto+vi",
+      "path": "/s?k=grand+theft+auto+vi",
+      "expect": [
+        "for \"grand theft auto vi\"",
+        "Sort by",
+        "Check each product page for other buying options."
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Video Games",
+      "real": "https://www.amazon.com/computer-video-games-hardware-accessories/b?node=468642",
+      "path": "/computer-video-games-hardware-accessories/b?node=468642",
+      "expect": [
+        "Video Games",
+        "PlayStation 5",
+        "Xbox Series X & S",
+        "Nintendo Switch"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department: Electronics",
+      "real": "https://www.amazon.com/electronics/b?node=172282",
+      "path": "/electronics/b?node=172282",
+      "expect": [
+        "Electronics",
+        "Shop by category",
+        "Headphones",
+        "Department"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Subcategory: Laptops",
+      "real": "https://www.amazon.com/b?node=565108",
+      "path": "/b?node=565108",
+      "expect": [
+        "Laptops",
+        "Computers",
+        "Customer Reviews",
+        "Price"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.amazon.com/dp/B0H6K928WL",
+      "path": "/dp/B0H6K928WL",
+      "expect": [
+        "About this item",
+        "Product information",
+        "Pre-order now",
+        "Customer reviews"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://www.amazon.com/gp/cart/view.html",
+      "path": "/gp/cart/view.html",
+      "expect": [
+        "Your Amazon Cart is empty",
+        "Shop today's deals",
+        "Sign in to your account",
+        "Sign up now"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.amazon.com/ap/signin",
+      "path": "/ap/signin",
+      "expect": [
+        "Sign in or create account",
+        "Enter mobile number or email",
+        "Continue",
+        "Buying for work?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Create account",
+      "real": "https://www.amazon.com/ap/register",
+      "path": "/ap/register",
+      "expect": [
+        "Sign in or create account",
+        "Enter mobile number or email"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Your Account",
+      "real": "https://www.amazon.com/gp/css/homepage.html",
+      "path": "/gp/css/homepage.html",
+      "expect": [
+        "Your Account",
+        "Your Orders",
+        "Login & security",
+        "Your Addresses",
+        "Gift cards",
+        "Your Payments"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Your Orders (guest is sent to sign-in)",
+      "real": "https://www.amazon.com/gp/css/order-history",
+      "path": "/gp/css/order-history",
+      "expect": [
+        "Sign in or create account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Customer Service",
+      "real": "https://www.amazon.com/gp/help/customer/display.html",
+      "path": "/gp/help/customer/display.html",
+      "expect": [
+        "Welcome to Amazon Customer Service",
+        "What would you like help with today?",
+        "Search our help library",
+        "Browse help topics"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pickup locations (store finder)",
+      "real": "https://www.amazon.com/ulp/view",
+      "path": "/ulp/view",
+      "expect": [
+        "Amazon Pickup Locations",
+        "Amazon Hub Locker",
+        "Amazon Hub Counter"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.amazon.com/gift-cards/b?node=2238192011",
+      "path": "/gift-cards/b?node=2238192011",
+      "expect": [
+        "Gift Cards",
+        "eGift Cards",
+        "Print at Home",
+        "Gift Cards by Mail",
+        "Reload Your Balance"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Today's Deals",
+      "real": "https://www.amazon.com/gp/goldbox",
+      "path": "/gp/goldbox",
+      "expect": [
+        "Today's Deals",
+        "All Deals",
+        "Department"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Best Sellers",
+      "real": "https://www.amazon.com/gp/bestsellers",
+      "path": "/gp/bestsellers",
+      "expect": [
+        "Amazon Best Sellers",
+        "Our most popular products based on sales. Updated frequently."
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "New Releases",
+      "real": "https://www.amazon.com/gp/new-releases",
+      "path": "/gp/new-releases",
+      "expect": [
+        "Amazon Hot New Releases",
+        "Our best-selling new and future releases. Updated frequently."
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns Center (guest is sent to sign-in)",
+      "real": "https://www.amazon.com/gp/css/returns/homepage.html",
+      "path": "/gp/css/returns/homepage.html",
+      "expect": [
+        "Sign in or create account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns policy",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=GKM69DUUYKQWKWX7",
+      "path": "/gp/help/customer/display.html?nodeId=GKM69DUUYKQWKWX7",
+      "expect": [
+        "Amazon.com Returns Policy",
+        "Return window",
+        "Refunds"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping rates & policies",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=468520",
+      "path": "/gp/help/customer/display.html?nodeId=468520",
+      "expect": [
+        "Shipping Rates and Delivery Estimates",
+        "Prime shipping benefits",
+        "Release-Date Delivery"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pre-order Price Guarantee",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=G4BRP7LCB9DSDNCR",
+      "path": "/gp/help/customer/display.html?nodeId=G4BRP7LCB9DSDNCR",
+      "expect": [
+        "About the Pre-Order Price Guarantee"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Conditions of Use",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=508088",
+      "path": "/gp/help/customer/display.html?nodeId=508088",
+      "expect": [
+        "Conditions of Use"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Privacy Notice",
+      "real": "https://www.amazon.com/gp/help/customer/display.html?nodeId=468496",
+      "path": "/gp/help/customer/display.html?nodeId=468496",
+      "expect": [
+        "Amazon.com Privacy Notice"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Amazon Prime",
+      "real": "https://www.amazon.com/amazonprime",
+      "path": "/amazonprime",
+      "expect": [
+        "Amazon Prime",
+        "Delivery",
+        "Streaming",
+        "Shopping"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Registry",
+      "real": "https://www.amazon.com/registries",
+      "path": "/registries",
+      "expect": [
+        "Registry & Gifting",
+        "Find a registry or gift list",
+        "Wedding Registry",
+        "Baby Registry"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site directory",
+      "real": "https://www.amazon.com/gp/site-directory",
+      "path": "/gp/site-directory",
+      "expect": [
+        "Shop by Department",
+        "Programs & Features"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sell on Amazon",
+      "real": "https://sell.amazon.com/",
+      "path": "/b?node=12766669011",
+      "expect": [
+        "Sell on Amazon"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Hero carousel",
+      "expect": [
+        "Pre-order Grand Theft Auto VI"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Sign-in card",
+      "expect": [
+        "Sign in for the best experience",
+        "Sign in securely"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Get your game on card/row",
+      "expect": [
+        "Get your game on"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Shop for your home essentials card/row",
+      "expect": [
+        "Shop for your home essentials"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Gaming accessories card/row",
+      "expect": [
+        "Gaming accessories"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Shop deals in Fashion card/row",
+      "expect": [
+        "Shop deals in Fashion"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Refresh your space card/row",
+      "expect": [
+        "Refresh your space"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "New home arrivals under $50 card/row",
+      "expect": [
+        "New home arrivals under $50"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Top categories in Kitchen appliances card/row",
+      "expect": [
+        "Top categories in Kitchen appliances"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Homeroom to homework card/row",
+      "expect": [
+        "Homeroom to homework"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "The latest listens card/row",
+      "expect": [
+        "The latest listens"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Wireless Tech card/row",
+      "expect": [
+        "Wireless Tech"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Fashion trends you like card/row",
+      "expect": [
+        "Fashion trends you like"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Everyday essentials you might like card/row",
+      "expect": [
+        "Everyday essentials you might like"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Customers also bought card/row",
+      "expect": [
+        "Customers also bought"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Explore more card/row",
+      "expect": [
+        "Explore more"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Personalized recommendations sign-in",
+      "expect": [
+        "See personalized recommendations",
+        "New customer? Start here."
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Back to top bar",
+      "expect": [
+        "Back to top"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Amazon Devices",
+      "real": "https://www.amazon.com/amazon-devices/b?node=2102313011",
+      "path": "/amazon-devices/b?node=2102313011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electronics",
+      "real": "https://www.amazon.com/electronics/b?node=172282",
+      "path": "/electronics/b?node=172282"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computers",
+      "real": "https://www.amazon.com/computers-and-accessories/b?node=541966",
+      "path": "/computers-and-accessories/b?node=541966"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Home",
+      "real": "https://www.amazon.com/smart-home/b?node=6563140011",
+      "path": "/smart-home/b?node=6563140011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Arts & Crafts",
+      "real": "https://www.amazon.com/arts-crafts-sewing/b?node=2617941011",
+      "path": "/arts-crafts-sewing/b?node=2617941011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Automotive",
+      "real": "https://www.amazon.com/automotive/b?node=15684181",
+      "path": "/automotive/b?node=15684181"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby",
+      "real": "https://www.amazon.com/baby/b?node=165796011",
+      "path": "/baby/b?node=165796011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beauty & Personal Care",
+      "real": "https://www.amazon.com/beauty/b?node=3760911",
+      "path": "/beauty/b?node=3760911"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Women's Fashion",
+      "real": "https://www.amazon.com/womens-fashion/b?node=7147440011",
+      "path": "/womens-fashion/b?node=7147440011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Men's Fashion",
+      "real": "https://www.amazon.com/mens-fashion/b?node=7147441011",
+      "path": "/mens-fashion/b?node=7147441011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Girls' Fashion",
+      "real": "https://www.amazon.com/girls-fashion/b?node=7147442011",
+      "path": "/girls-fashion/b?node=7147442011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Boys' Fashion",
+      "real": "https://www.amazon.com/boys-fashion/b?node=7147443011",
+      "path": "/boys-fashion/b?node=7147443011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Health & Household",
+      "real": "https://www.amazon.com/health-household/b?node=3760901",
+      "path": "/health-household/b?node=3760901"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home & Kitchen",
+      "real": "https://www.amazon.com/home-garden-kitchen-furniture-bedding/b?node=1055398",
+      "path": "/home-garden-kitchen-furniture-bedding/b?node=1055398"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Industrial & Scientific",
+      "real": "https://www.amazon.com/industrial-scientific/b?node=16310091",
+      "path": "/industrial-scientific/b?node=16310091"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Luggage",
+      "real": "https://www.amazon.com/luggage-travel-gear/b?node=9479199011",
+      "path": "/luggage-travel-gear/b?node=9479199011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Movies & Television",
+      "real": "https://www.amazon.com/movies-tv/b?node=2625373011",
+      "path": "/movies-tv/b?node=2625373011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pet Supplies",
+      "real": "https://www.amazon.com/pet-supplies/b?node=2619533011",
+      "path": "/pet-supplies/b?node=2619533011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Software",
+      "real": "https://www.amazon.com/software/b?node=229534",
+      "path": "/software/b?node=229534"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sports & Outdoors",
+      "real": "https://www.amazon.com/sports-outdoors/b?node=3375251",
+      "path": "/sports-outdoors/b?node=3375251"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tools & Home Improvement",
+      "real": "https://www.amazon.com/Tools-and-Home-Improvement/b?node=228013",
+      "path": "/Tools-and-Home-Improvement/b?node=228013"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys & Games",
+      "real": "https://www.amazon.com/toys/b?node=165793011",
+      "path": "/toys/b?node=165793011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Games",
+      "real": "https://www.amazon.com/computer-video-games-hardware-accessories/b?node=468642",
+      "path": "/computer-video-games-hardware-accessories/b?node=468642"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Books",
+      "real": "https://www.amazon.com/books-used-books-textbooks/b?node=283155",
+      "path": "/books-used-books-textbooks/b?node=283155"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kindle Books",
+      "real": "https://www.amazon.com/Kindle-eBooks/b?node=154606011",
+      "path": "/Kindle-eBooks/b?node=154606011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "CDs & Vinyl",
+      "real": "https://www.amazon.com/music-rock-classical-pop-jazz/b?node=5174",
+      "path": "/music-rock-classical-pop-jazz/b?node=5174"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Grocery & Gourmet Food",
+      "real": "https://www.amazon.com/grocery/b?node=16310101",
+      "path": "/grocery/b?node=16310101"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Handmade",
+      "real": "https://www.amazon.com/handmade/b?node=11260432011",
+      "path": "/handmade/b?node=11260432011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Musical Instruments",
+      "real": "https://www.amazon.com/musical-instruments/b?node=11091801",
+      "path": "/musical-instruments/b?node=11091801"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Office Products",
+      "real": "https://www.amazon.com/office-products/b?node=1064954",
+      "path": "/office-products/b?node=1064954"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Patio, Lawn & Garden",
+      "real": "https://www.amazon.com/lawn-garden/b?node=2972638011",
+      "path": "/lawn-garden/b?node=2972638011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Today's Deals",
+      "real": "https://www.amazon.com/gp/goldbox",
+      "path": "/gp/goldbox"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Sellers",
+      "real": "https://www.amazon.com/gp/bestsellers",
+      "path": "/gp/bestsellers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Releases",
+      "real": "https://www.amazon.com/gp/new-releases",
+      "path": "/gp/new-releases"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Movers & Shakers",
+      "real": "https://www.amazon.com/gp/movers-and-shakers",
+      "path": "/gp/movers-and-shakers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.amazon.com/gift-cards/b?node=2238192011",
+      "path": "/gift-cards/b?node=2238192011"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Registry & Gift List",
+      "real": "https://www.amazon.com/registries",
+      "path": "/registries"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Amazon Prime",
+      "real": "https://www.amazon.com/amazonprime",
+      "path": "/amazonprime"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Prime Video",
+      "real": "https://www.amazon.com/gp/video/storefront",
+      "path": "/gp/video/storefront"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Amazon Music",
+      "real": "https://music.amazon.com/",
+      "path": "/music/player"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Amazon Fresh",
+      "real": "https://www.amazon.com/alm/storefront?almBrandId=QW1hem9uIEZyZXNo",
+      "path": "/fresh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Amazon Pharmacy",
+      "real": "https://pharmacy.amazon.com/",
+      "path": "/pharmacy"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Amazon Basics",
+      "real": "https://www.amazon.com/amazonbasics",
+      "path": "/amazonbasics"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Coupons",
+      "real": "https://www.amazon.com/coupons",
+      "path": "/coupons"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Same-Day Delivery",
+      "real": "https://www.amazon.com/same-day-delivery",
+      "path": "/same-day-delivery"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Amazon Pickup Locations",
+      "real": "https://www.amazon.com/ulp/view",
+      "path": "/ulp/view"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Customer Service",
+      "real": "https://www.amazon.com/gp/help/customer/display.html",
+      "path": "/gp/help/customer/display.html"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Your Account",
+      "real": "https://www.amazon.com/gp/css/homepage.html",
+      "path": "/gp/css/homepage.html"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Your Orders",
+      "real": "https://www.amazon.com/gp/css/order-history",
+      "path": "/gp/css/order-history"
+    }
+  ]
+}

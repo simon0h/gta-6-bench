@@ -1,0 +1,1074 @@
+{
+  "store": "xbox-store",
+  "real_home": "https://www.xbox.com/en-US/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.xbox.com/en-US/",
+    "https://www.xbox.com/en-US/games",
+    "https://www.xbox.com/en-US/games/all-games/console",
+    "https://www.xbox.com/en-US/search/results?q=halo",
+    "https://www.xbox.com/en-US/xbox-game-pass",
+    "https://www.xbox.com/en-US/xbox-game-pass/games",
+    "https://www.xbox.com/en-US/promotions/sales/sales-and-specials",
+    "https://www.xbox.com/en-US/consoles",
+    "https://www.xbox.com/en-US/consoles/xbox-series-x",
+    "https://www.xbox.com/en-US/consoles/xbox-series-s",
+    "https://www.xbox.com/en-US/consoles/compare",
+    "https://www.xbox.com/en-US/accessories",
+    "https://www.xbox.com/en-US/redeem",
+    "https://www.xbox.com/en-US/cloud-gaming",
+    "https://www.xbox.com/en-US/community",
+    "https://www.xbox.com/en-US/rewards",
+    "https://www.xbox.com/en-US/where-to-buy",
+    "https://www.xbox.com/en-US/devices",
+    "https://www.xbox.com/en-US/games/xbox-play-anywhere",
+    "https://www.xbox.com/en-US/games/free-to-play",
+    "https://www.xbox.com/en-US/games/backward-compatibility",
+    "https://www.xbox.com/en-US/games/optimized",
+    "https://www.xbox.com/en-US/family-hub",
+    "https://www.xbox.com/en-US/xbox-on-pc",
+    "https://www.xbox.com/en-US/legal/community-standards",
+    "https://www.xbox.com/en-US/legal/legal-notices",
+    "https://www.microsoft.com/en-us/store/b/order-tracking",
+    "https://www.microsoft.com/en-us/store/locations/find-a-store",
+    "https://www.microsoft.com/en-us/store/b/gift-cards",
+    "https://support.microsoft.com/en-us/contactus",
+    "https://support.microsoft.com/en-US/account-billing/returning-items-you-bought-from-microsoft-store-for-exchange-or-refund-81629012-aa4f-f48b-2394-8596f415072b",
+    "https://support.microsoft.com/en-US/accounts-billing/shipping-options-costs-and-delivery-times",
+    "research/xbox-store.md (product page, cart, sign-in observed in a browser 2026-09-29)"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/en-US/sitemap",
+  "notes": "Captured 2026-10-13 with WebFetch. The xbox.com homepage body is client-rendered: WebFetch saw a hero carousel whose slide copy is image-only (alt \"Lilith from Diablo IV rises behind an XBOX Series X console.\"), the \"Shop for more xbox products or sign in to your xbox account\" strip (items unpopulated in the capture) and \"Follow XBOX\"; the clone hero slide copy (GTA VI pre-order) is the clone's choice, not copied. /en-US/games/all-games/console and /en-US/search/results rendered no body (JS app); their expect strings come from research/xbox-store.md (search observed in a browser 2026-09-29). support.xbox.com is a JS shell with no content, so support topic pages summarise the known Xbox Support categories. account.microsoft.com redirects to sign-in. web.archive.org is blocked for WebFetch. microsoft.com/en-us/store/b/shipping failed; the support.microsoft.com shipping article was used instead. Off-site header/footer destinations (news.xbox.com, support.xbox.com, microsoft.com, developer.microsoft.com, gear.xbox.com, Xbox Design Lab, aka.ms feedback, the All Microsoft flyout) are local summary pages. Social icons are skipped; the locale switcher points to a local language page; \"Manage cookies\" is a JS dialog (#) and is not listed. The site map page stands in for microsoft.com/en-us/sitemap1.aspx and is scoped to Xbox sections.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Xbox home",
+      "real": "https://www.xbox.com/en-US",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "All Microsoft",
+      "real": "https://www.microsoft.com (All Microsoft flyout)",
+      "path": "/en-US/all-microsoft"
+    },
+    {
+      "kind": "header",
+      "label": "Join Game Pass",
+      "real": "https://www.xbox.com/en-us/xbox-game-pass",
+      "path": "/en-US/xbox-game-pass"
+    },
+    {
+      "kind": "header",
+      "label": "Browse Games",
+      "real": "https://www.xbox.com/en-us/xbox-game-pass/games",
+      "path": "/en-US/xbox-game-pass/games"
+    },
+    {
+      "kind": "header",
+      "label": "Deals with Game Pass",
+      "real": "https://www.xbox.com/en-us/xbox-game-pass/deals",
+      "path": "/en-US/xbox-game-pass/deals"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX Cloud Gaming",
+      "real": "https://www.xbox.com/en-us/cloud-gaming",
+      "path": "/en-US/cloud-gaming"
+    },
+    {
+      "kind": "header",
+      "label": "Games home",
+      "real": "https://www.xbox.com/en-us/games",
+      "path": "/en-US/games"
+    },
+    {
+      "kind": "header",
+      "label": "Shop all console games",
+      "real": "https://www.xbox.com/en-us/games/all-games/console",
+      "path": "/en-US/games/all-games/console"
+    },
+    {
+      "kind": "header",
+      "label": "Shop all PC games",
+      "real": "https://www.xbox.com/en-us/games/all-games/pc",
+      "path": "/en-US/games/all-games/pc"
+    },
+    {
+      "kind": "header",
+      "label": "Cloud games",
+      "real": "https://www.xbox.com/en-us/play",
+      "path": "/en-US/play"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX Play Anywhere",
+      "real": "https://www.xbox.com/en-us/games/xbox-play-anywhere",
+      "path": "/en-US/games/xbox-play-anywhere"
+    },
+    {
+      "kind": "header",
+      "label": "Free-to-Play games",
+      "real": "https://www.xbox.com/en-us/games/free-to-play",
+      "path": "/en-US/games/free-to-play"
+    },
+    {
+      "kind": "header",
+      "label": "Optimized for XBOX Series X|S",
+      "real": "https://www.xbox.com/en-us/games/optimized",
+      "path": "/en-US/games/optimized"
+    },
+    {
+      "kind": "header",
+      "label": "Optimized for handhelds",
+      "real": "https://www.xbox.com/en-us/handhelds/handheld-compatibility",
+      "path": "/en-US/handhelds/handheld-compatibility"
+    },
+    {
+      "kind": "header",
+      "label": "Backward compatible games",
+      "real": "https://www.xbox.com/en-us/games/backward-compatibility",
+      "path": "/en-US/games/backward-compatibility"
+    },
+    {
+      "kind": "header",
+      "label": "Sales & Specials",
+      "real": "https://www.xbox.com/en-us/promotions/sales/sales-and-specials",
+      "path": "/en-US/promotions/sales/sales-and-specials"
+    },
+    {
+      "kind": "header",
+      "label": "Redeem Code",
+      "real": "https://www.xbox.com/en-us/redeem",
+      "path": "/en-US/redeem"
+    },
+    {
+      "kind": "header",
+      "label": "Explore all devices",
+      "real": "https://www.xbox.com/en-us/devices",
+      "path": "/en-US/devices"
+    },
+    {
+      "kind": "header",
+      "label": "Meet XBOX Series X|S",
+      "real": "https://www.xbox.com/en-us/consoles",
+      "path": "/en-US/consoles"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX Series X",
+      "real": "https://www.xbox.com/en-us/consoles/xbox-series-x",
+      "path": "/en-US/consoles/xbox-series-x"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX Series S",
+      "real": "https://www.xbox.com/en-us/consoles/xbox-series-s",
+      "path": "/en-US/consoles/xbox-series-s"
+    },
+    {
+      "kind": "header",
+      "label": "Shop all consoles",
+      "real": "https://www.xbox.com/en-us/consoles/all-consoles",
+      "path": "/en-US/consoles/all-consoles"
+    },
+    {
+      "kind": "header",
+      "label": "Compare consoles",
+      "real": "https://www.xbox.com/en-us/consoles/compare",
+      "path": "/en-US/consoles/compare"
+    },
+    {
+      "kind": "header",
+      "label": "Help me choose a console",
+      "real": "https://www.xbox.com/en-us/consoles/help-me-choose",
+      "path": "/en-US/consoles/help-me-choose"
+    },
+    {
+      "kind": "header",
+      "label": "Where to buy",
+      "real": "https://www.xbox.com/en-us/where-to-buy",
+      "path": "/en-US/where-to-buy"
+    },
+    {
+      "kind": "header",
+      "label": "Shop all accessories",
+      "real": "https://www.xbox.com/en-us/accessories",
+      "path": "/en-US/accessories"
+    },
+    {
+      "kind": "header",
+      "label": "Controllers",
+      "real": "https://www.xbox.com/en-us/accessories#controllers",
+      "path": "/en-US/accessories#controllers"
+    },
+    {
+      "kind": "header",
+      "label": "Design your controller",
+      "real": "https://xboxdesignlab.xbox.com/",
+      "path": "/en-US/xbox-design-lab"
+    },
+    {
+      "kind": "header",
+      "label": "Headsets",
+      "real": "https://www.xbox.com/en-us/accessories#headsets",
+      "path": "/en-US/accessories#headsets"
+    },
+    {
+      "kind": "header",
+      "label": "Hard drives & storage",
+      "real": "https://www.xbox.com/en-us/accessories#storage",
+      "path": "/en-US/accessories#storage"
+    },
+    {
+      "kind": "header",
+      "label": "Mobile gaming accessories",
+      "real": "https://www.xbox.com/en-us/accessories#mobile",
+      "path": "/en-US/accessories#mobile"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX on PC",
+      "real": "https://www.xbox.com/en-us/xbox-on-pc",
+      "path": "/en-US/xbox-on-pc"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX on handhelds",
+      "real": "https://www.xbox.com/en-us/xbox-on-handhelds",
+      "path": "/en-US/xbox-on-handhelds"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX on mobile",
+      "real": "https://www.xbox.com/en-us/xbox-on-mobile",
+      "path": "/en-US/xbox-on-mobile"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX on TVs",
+      "real": "https://www.xbox.com/en-us/xbox-on-tvs",
+      "path": "/en-US/xbox-on-tvs"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX on VR headsets",
+      "real": "https://www.xbox.com/en-us/xbox-on-vr-headsets",
+      "path": "/en-US/xbox-on-vr-headsets"
+    },
+    {
+      "kind": "header",
+      "label": "Play",
+      "real": "https://www.xbox.com/en-us/play",
+      "path": "/en-US/play"
+    },
+    {
+      "kind": "header",
+      "label": "Shop Games",
+      "real": "https://www.xbox.com/en-us/games",
+      "path": "/en-US/games"
+    },
+    {
+      "kind": "header",
+      "label": "Shop Game Pass",
+      "real": "https://www.xbox.com/en-us/xbox-game-pass",
+      "path": "/en-US/xbox-game-pass"
+    },
+    {
+      "kind": "header",
+      "label": "Shop Consoles",
+      "real": "https://www.xbox.com/en-us/consoles/all-consoles",
+      "path": "/en-US/consoles/all-consoles"
+    },
+    {
+      "kind": "header",
+      "label": "Shop Accessories",
+      "real": "https://www.xbox.com/en-us/accessories",
+      "path": "/en-US/accessories"
+    },
+    {
+      "kind": "header",
+      "label": "Shop Deals",
+      "real": "https://www.xbox.com/en-us/promotions/sales/sales-and-specials",
+      "path": "/en-US/promotions/sales/sales-and-specials"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX community",
+      "real": "https://www.xbox.com/en-us/community",
+      "path": "/en-US/community"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX 25th Anniversary",
+      "real": "https://www.xbox.com/en-us/xbox-25th-anniversary",
+      "path": "/en-US/xbox-25th-anniversary"
+    },
+    {
+      "kind": "header",
+      "label": "FanFest",
+      "real": "https://www.xbox.com/en-us/community/fanfest",
+      "path": "/en-US/community/fanfest"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX News",
+      "real": "https://news.xbox.com/en-us/",
+      "path": "/en-US/news"
+    },
+    {
+      "kind": "header",
+      "label": "Sustainability",
+      "real": "https://www.xbox.com/en-us/community/sustainability",
+      "path": "/en-US/community/sustainability"
+    },
+    {
+      "kind": "header",
+      "label": "Our philosophy",
+      "real": "https://www.xbox.com/en-us/community/for-everyone",
+      "path": "/en-US/community/for-everyone"
+    },
+    {
+      "kind": "header",
+      "label": "Family hub",
+      "real": "https://www.xbox.com/en-us/family-hub",
+      "path": "/en-US/family-hub"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX Family Settings app",
+      "real": "https://www.xbox.com/en-us/apps/family-settings-app",
+      "path": "/en-US/apps/family-settings-app"
+    },
+    {
+      "kind": "header",
+      "label": "Accessible gaming",
+      "real": "https://www.xbox.com/en-us/community/for-everyone/accessibility",
+      "path": "/en-US/community/for-everyone/accessibility"
+    },
+    {
+      "kind": "header",
+      "label": "Community standards",
+      "real": "https://www.xbox.com/en-us/legal/community-standards",
+      "path": "/en-US/legal/community-standards"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX Gear",
+      "real": "https://gear.xbox.com",
+      "path": "/en-US/gear"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX Game Studios",
+      "real": "https://shop.xboxgamestudios.com",
+      "path": "/en-US/xbox-game-studios"
+    },
+    {
+      "kind": "header",
+      "label": "Support home",
+      "real": "https://support.xbox.com/en-US/",
+      "path": "/en-US/support"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX status",
+      "real": "https://support.xbox.com/en-US/xbox-live-status",
+      "path": "/en-US/support/xbox-live-status"
+    },
+    {
+      "kind": "header",
+      "label": "Account & profile",
+      "real": "https://support.xbox.com/en-US/help/account-profile/browse",
+      "path": "/en-US/support/help/account-profile/browse"
+    },
+    {
+      "kind": "header",
+      "label": "Subscriptions & billing",
+      "real": "https://support.xbox.com/en-US/help/subscriptions-billing/browse",
+      "path": "/en-US/support/help/subscriptions-billing/browse"
+    },
+    {
+      "kind": "header",
+      "label": "Hardware & networking",
+      "real": "https://support.xbox.com/en-US/help/hardware-network/browse",
+      "path": "/en-US/support/help/hardware-network/browse"
+    },
+    {
+      "kind": "header",
+      "label": "Family & online safety",
+      "real": "https://support.xbox.com/en-US/help/family-online-safety/browse",
+      "path": "/en-US/support/help/family-online-safety/browse"
+    },
+    {
+      "kind": "header",
+      "label": "Games & apps",
+      "real": "https://support.xbox.com/en-US/help/games-apps/browse",
+      "path": "/en-US/support/help/games-apps/browse"
+    },
+    {
+      "kind": "header",
+      "label": "Friends & social activity",
+      "real": "https://support.xbox.com/en-US/help/friends-social-activity/browse",
+      "path": "/en-US/support/help/friends-social-activity/browse"
+    },
+    {
+      "kind": "header",
+      "label": "Accessible gaming",
+      "real": "https://support.xbox.com/en-US/help/accessible-gaming",
+      "path": "/en-US/support/help/accessible-gaming"
+    },
+    {
+      "kind": "header",
+      "label": "XBOX system updates",
+      "real": "https://support.xbox.com/en-US/help/hardware-network/settings-updates/whats-new-xbox-one-system-updates",
+      "path": "/en-US/support/help/hardware-network/settings-updates/whats-new-xbox-one-system-updates"
+    },
+    {
+      "kind": "header",
+      "label": "Profile",
+      "real": "https://www.xbox.com/en-us/play/user",
+      "path": "/en-US/play/user"
+    },
+    {
+      "kind": "header",
+      "label": "Rewards",
+      "real": "https://www.xbox.com/en-us/rewards",
+      "path": "/en-US/rewards"
+    },
+    {
+      "kind": "header",
+      "label": "Wish list",
+      "real": "https://www.xbox.com/en-us/wishlist",
+      "path": "/en-US/wishlist"
+    },
+    {
+      "kind": "header",
+      "label": "Games",
+      "real": "https://developer.microsoft.com/en-us/games",
+      "path": "/en-US/developers/games"
+    },
+    {
+      "kind": "header",
+      "label": "Designed for XBOX",
+      "real": "https://www.xbox.com/en-us/designed-for-xbox",
+      "path": "/en-US/designed-for-xbox"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.xbox.com/en-US/cart",
+      "path": "/en-US/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Sign in",
+      "real": "https://login.live.com/oauth20_authorize.srf",
+      "path": "/login.live.com/oauth20_authorize.srf?prompt=select_account"
+    },
+    {
+      "kind": "footer",
+      "label": "XBOX consoles",
+      "real": "https://www.xbox.com/en-us/consoles",
+      "path": "/en-US/consoles"
+    },
+    {
+      "kind": "footer",
+      "label": "XBOX games",
+      "real": "https://www.xbox.com/en-us/games",
+      "path": "/en-US/games"
+    },
+    {
+      "kind": "footer",
+      "label": "XBOX Game Pass",
+      "real": "https://www.xbox.com/en-us/xbox-game-pass",
+      "path": "/en-US/xbox-game-pass"
+    },
+    {
+      "kind": "footer",
+      "label": "XBOX accessories",
+      "real": "https://www.xbox.com/en-us/accessories",
+      "path": "/en-US/accessories"
+    },
+    {
+      "kind": "footer",
+      "label": "XBOX News",
+      "real": "https://news.xbox.com",
+      "path": "/en-US/news"
+    },
+    {
+      "kind": "footer",
+      "label": "XBOX Support",
+      "real": "https://support.xbox.com",
+      "path": "/en-US/support"
+    },
+    {
+      "kind": "footer",
+      "label": "Feedback",
+      "real": "https://aka.ms/xboxideas",
+      "path": "/en-US/feedback"
+    },
+    {
+      "kind": "footer",
+      "label": "Community Standards",
+      "real": "https://www.xbox.com/en-us/legal/community-standards",
+      "path": "/en-US/legal/community-standards"
+    },
+    {
+      "kind": "footer",
+      "label": "Photosensitive Seizure Warning",
+      "real": "https://support.xbox.com/help/family-online-safety/online-safety/photosensitive-seizure-warning",
+      "path": "/en-US/support/help/family-online-safety/online-safety/photosensitive-seizure-warning"
+    },
+    {
+      "kind": "footer",
+      "label": "User Research at XBOX",
+      "real": "https://www.xbox.com/en-us/community/research",
+      "path": "/en-US/community/research"
+    },
+    {
+      "kind": "footer",
+      "label": "Microsoft account",
+      "real": "https://account.microsoft.com",
+      "path": "/account"
+    },
+    {
+      "kind": "footer",
+      "label": "Microsoft Store Support",
+      "real": "https://support.microsoft.com/en-us/account-billing/payment-billing-and-the-microsoft-store-app-help-bdf79f17-1b6c-449c-a7fb-9ba16c7e6db2",
+      "path": "/en-US/support/microsoft-store"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns",
+      "real": "https://support.microsoft.com/en-US/account-billing/returning-items-you-bought-from-microsoft-store-for-exchange-or-refund-81629012-aa4f-f48b-2394-8596f415072b",
+      "path": "/en-US/returns"
+    },
+    {
+      "kind": "footer",
+      "label": "Orders tracking",
+      "real": "https://www.microsoft.com/en-us/store/b/order-tracking",
+      "path": "/en-US/store/b/order-tracking"
+    },
+    {
+      "kind": "footer",
+      "label": "Store locations",
+      "real": "https://www.microsoft.com/en-us/store/locations/find-a-store",
+      "path": "/en-US/store/locations/find-a-store"
+    },
+    {
+      "kind": "footer",
+      "label": "Rewards",
+      "real": "https://www.xbox.com/en-us/rewards",
+      "path": "/en-US/rewards"
+    },
+    {
+      "kind": "footer",
+      "label": "Games",
+      "real": "https://developer.microsoft.com/en-us/games/publish",
+      "path": "/en-US/developers/games"
+    },
+    {
+      "kind": "footer",
+      "label": "Designed for XBOX",
+      "real": "https://www.xbox.com/en-us/designed-for-xbox",
+      "path": "/en-US/designed-for-xbox"
+    },
+    {
+      "kind": "footer",
+      "label": "Your Privacy Choices",
+      "real": "https://aka.ms/yourcaliforniaprivacychoices",
+      "path": "/en-US/privacy-choices"
+    },
+    {
+      "kind": "footer",
+      "label": "Consumer Health Privacy",
+      "real": "https://go.microsoft.com/fwlink/?linkid=2259814",
+      "path": "/en-US/legal/consumer-health-privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "Sitemap",
+      "real": "https://www.microsoft.com/en-us/sitemap1.aspx",
+      "path": "/en-US/sitemap"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact Microsoft",
+      "real": "https://support.microsoft.com/en-us/contactus",
+      "path": "/en-US/contactus"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy & Cookies",
+      "real": "https://go.microsoft.com/fwlink/?LinkId=521839",
+      "path": "/en-US/privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms of use",
+      "real": "https://go.microsoft.com/fwlink/?LinkID=206977",
+      "path": "/en-US/terms"
+    },
+    {
+      "kind": "footer",
+      "label": "Trademarks",
+      "real": "https://www.microsoft.com/trademarks",
+      "path": "/en-US/trademarks"
+    },
+    {
+      "kind": "footer",
+      "label": "Third Party Notices",
+      "real": "https://www.xbox.com/en-us/legal/legal-notices",
+      "path": "/en-US/legal/legal-notices"
+    },
+    {
+      "kind": "footer",
+      "label": "Safety & eco",
+      "real": "https://www.microsoft.com/en-us/legal/compliance/devices-safety-and-eco",
+      "path": "/en-US/legal/devices-safety-and-eco"
+    },
+    {
+      "kind": "footer",
+      "label": "About our ads",
+      "real": "https://choice.microsoft.com",
+      "path": "/en-US/about-our-ads"
+    },
+    {
+      "kind": "footer",
+      "label": "English (United States)",
+      "real": "https://www.xbox.com/Shell/ChangeLocale",
+      "path": "/en-US/locale"
+    },
+    {
+      "kind": "page",
+      "label": "Department: Games home",
+      "real": "https://www.xbox.com/en-US/games",
+      "path": "/en-US/games",
+      "expect": [
+        "New releases",
+        "Best sellers",
+        "Browse by genre",
+        "Enjoy more ways to play with XBOX"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Category: Shop all console games",
+      "real": "https://www.xbox.com/en-US/games/all-games/console",
+      "path": "/en-US/games/all-games/console",
+      "expect": [
+        "Sort by",
+        "Filters"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.xbox.com/en-US/search/results?q=grand%20theft%20auto%20vi",
+      "path": "/en-US/search/results?q=grand%20theft%20auto%20vi",
+      "expect": [
+        "Search results for: grand theft auto vi",
+        "Games (",
+        "Add-Ons ("
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.xbox.com/en-US/games/store/grand-theft-auto-vi/9p3h4968grsm",
+      "path": "/en-US/games/store/grand-theft-auto-vi/9p3h4968grsm",
+      "expect": [
+        "Grand Theft Auto VI",
+        "CHOOSE EDITION",
+        "Compare editions",
+        "In this bundle"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://www.xbox.com/en-US/cart",
+      "path": "/en-US/cart",
+      "expect": [
+        "Cart",
+        "Keep shopping",
+        "Need help?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign-in (Microsoft account)",
+      "real": "https://login.live.com/oauth20_authorize.srf",
+      "path": "/login.live.com/oauth20_authorize.srf?prompt=select_account",
+      "expect": [
+        "Sign in",
+        "Email or phone number",
+        "Create an account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order tracking",
+      "real": "https://www.microsoft.com/en-us/store/b/order-tracking",
+      "path": "/en-US/store/b/order-tracking",
+      "expect": [
+        "Order Tracking",
+        "Manage your orders",
+        "Manage Microsoft account order",
+        "Manage guest order",
+        "Frequently Asked Questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help: Contact Microsoft",
+      "real": "https://support.microsoft.com/en-us/contactus",
+      "path": "/en-US/contactus",
+      "expect": [
+        "Contact us",
+        "Select the product you need help with",
+        "More support options"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store locator",
+      "real": "https://www.microsoft.com/en-us/store/locations/find-a-store",
+      "path": "/en-US/store/locations/find-a-store",
+      "expect": [
+        "Microsoft Experience Centers",
+        "Microsoft Experience Center - Fifth Avenue",
+        "677 Fifth Avenue, New York, NY 10022-4210",
+        "Frequently asked questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.microsoft.com/en-us/store/b/gift-cards",
+      "path": "/en-US/store/b/gift-cards",
+      "expect": [
+        "Microsoft and XBOX Gift Cards",
+        "The perfect gift for gamers",
+        "Redeem a gift card",
+        "Gift Card FAQ"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals: Sales & Specials",
+      "real": "https://www.xbox.com/en-US/promotions/sales/sales-and-specials",
+      "path": "/en-US/promotions/sales/sales-and-specials",
+      "expect": [
+        "XBOX Sales & Specials",
+        "This week’s digital game deals",
+        "Controllers & accessories on sale",
+        "Deals with Game Pass"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns / refunds policy",
+      "real": "https://support.microsoft.com/en-US/account-billing/returning-items-you-bought-from-microsoft-store-for-exchange-or-refund-81629012-aa4f-f48b-2394-8596f415072b",
+      "path": "/en-US/returns",
+      "expect": [
+        "Get a refund for apps and games purchased from Microsoft Store",
+        "How to request a refund for Microsoft Store apps on a Windows PC"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping policy",
+      "real": "https://support.microsoft.com/en-US/accounts-billing/shipping-options-costs-and-delivery-times",
+      "path": "/en-US/shipping",
+      "expect": [
+        "Shipping options, costs, and delivery times",
+        "Where we ship",
+        "USA & Puerto Rico"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Redeem a code",
+      "real": "https://www.xbox.com/en-US/redeem",
+      "path": "/en-US/redeem",
+      "expect": [
+        "Redeem your XBOX digital code or gift card",
+        "What do I do after I redeem my code?",
+        "Frequently asked questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Game Pass",
+      "real": "https://www.xbox.com/en-US/xbox-game-pass",
+      "path": "/en-US/xbox-game-pass",
+      "expect": [
+        "Choose the plan that’s right for you",
+        "Essential",
+        "Premium",
+        "Ultimate",
+        "Frequently asked questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Consoles",
+      "real": "https://www.xbox.com/en-US/consoles",
+      "path": "/en-US/consoles",
+      "expect": [
+        "XBOX CONSOLES",
+        "XBOX SERIES X",
+        "XBOX SERIES S",
+        "Which console is right for you?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Accessories",
+      "real": "https://www.xbox.com/en-US/accessories",
+      "path": "/en-US/accessories",
+      "expect": [
+        "Accessories",
+        "Controllers",
+        "Headsets & communication",
+        "Storage"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cloud gaming",
+      "real": "https://www.xbox.com/en-US/cloud-gaming",
+      "path": "/en-US/cloud-gaming",
+      "expect": [
+        "XBOX CLOUD GAMING",
+        "Stream XBOX games on your favorite devices",
+        "Get started"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Rewards",
+      "real": "https://www.xbox.com/en-US/rewards",
+      "path": "/en-US/rewards",
+      "expect": [
+        "Play. Earn. Redeem. Repeat.",
+        "HOW TO EARN POINTS",
+        "HOW TO REDEEM POINTS"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Where to buy",
+      "real": "https://www.xbox.com/en-US/where-to-buy",
+      "path": "/en-US/where-to-buy",
+      "expect": [
+        "FIND AVAILABLE XBOX RETAILERS",
+        "Buy direct from Microsoft"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account (signed out shows the sign-in wall)",
+      "real": "https://account.microsoft.com",
+      "path": "/account",
+      "expect": [
+        "Sign in",
+        "Email or phone number"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.microsoft.com/en-us/sitemap1.aspx",
+      "path": "/en-US/sitemap",
+      "expect": [
+        "Sitemap"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Hero carousel (GTA VI pre-order slide)",
+      "expect": [
+        "Grand Theft Auto VI",
+        "PRE-ORDER"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Shop for more / sign in strip",
+      "expect": [
+        "Shop for more xbox products or sign in to your xbox account"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Follow XBOX",
+      "expect": [
+        "Follow XBOX"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Join Game Pass",
+      "path": "/en-US/xbox-game-pass"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Browse Games",
+      "path": "/en-US/xbox-game-pass/games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX Cloud Gaming",
+      "path": "/en-US/cloud-gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Games home",
+      "path": "/en-US/games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all console games",
+      "path": "/en-US/games/all-games/console"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all PC games",
+      "path": "/en-US/games/all-games/pc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX Play Anywhere",
+      "path": "/en-US/games/xbox-play-anywhere"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Free-to-Play games",
+      "path": "/en-US/games/free-to-play"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Optimized for XBOX Series X|S",
+      "path": "/en-US/games/optimized"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Backward compatible games",
+      "path": "/en-US/games/backward-compatibility"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sales & Specials",
+      "path": "/en-US/promotions/sales/sales-and-specials"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Explore all devices",
+      "path": "/en-US/devices"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Meet XBOX Series X|S",
+      "path": "/en-US/consoles"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX Series X",
+      "path": "/en-US/consoles/xbox-series-x"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX Series S",
+      "path": "/en-US/consoles/xbox-series-s"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all consoles",
+      "path": "/en-US/consoles/all-consoles"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Compare consoles",
+      "path": "/en-US/consoles/compare"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop all accessories",
+      "path": "/en-US/accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX on PC",
+      "path": "/en-US/xbox-on-pc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX on mobile",
+      "path": "/en-US/xbox-on-mobile"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Play",
+      "path": "/en-US/play"
+    },
+    {
+      "kind": "sitemap",
+      "label": "XBOX community",
+      "path": "/en-US/community"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Family hub",
+      "path": "/en-US/family-hub"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Support home",
+      "path": "/en-US/support"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rewards",
+      "path": "/en-US/rewards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cart",
+      "path": "/en-US/cart"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Redeem Code",
+      "path": "/en-US/redeem"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Orders tracking",
+      "path": "/en-US/store/b/order-tracking"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store locations",
+      "path": "/en-US/store/locations/find-a-store"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift cards",
+      "path": "/en-US/store/b/gift-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Returns",
+      "path": "/en-US/returns"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shipping",
+      "path": "/en-US/shipping"
+    }
+  ]
+}

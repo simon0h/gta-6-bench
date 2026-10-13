@@ -7,6 +7,8 @@ import { validateCard } from '../../lib/payment.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
 import { PRODUCTS, byId, search, refine, totals, SHIPPING_METHODS, STATES, selectedProduct, cartError, shippingEta, parseFilters, collection, DEPARTMENTS, HUBS, productPath } from './data.js'
 import * as P from './pages.js'
+import { LANDINGS, FACETS, EXTRA_COLLECTIONS, GIFT_BRANDS, INFO, landingHeader, subLanding, preownedLanding, infoPage, sitemapPage, sitemapXml } from './site.js'
+import { proPage, tradePage, creditPage, gradingPage, digitalPage } from './marketing.js'
 import { capturedRecommendations } from './recommendation-reference.js'
 import { contactPage } from './checkout-reference.js'
 import { registerJourneys, selectedStoreName, rememberSelection, productSaveActions, savedCartItem, savedCartSection, resumeSignIn, privateOrder, addressValues, addressPicker } from './journeys.js'
@@ -39,7 +41,7 @@ router.use((req,res,next)=>{
 registerJourneys(router, { render, invalidateReview })
 
 // ---- browse ----
-router.get('/', (req, res) => render(req, res, 'Power to the Players', P.homePage({ base: res.locals.base, products: PRODUCTS })))
+router.get('/', (req, res) => render(req, res, 'Power to the Players', P.homePage({ base: res.locals.base, products: PRODUCTS, user: req.store.user })))
 
 function browse(req,res,hub=null) {
   const q = String(req.query.q ?? '')
@@ -47,14 +49,45 @@ function browse(req,res,hub=null) {
   const source = hub ? hub.products.filter(p=>!q || search(q).some(x=>x.id===p.id)) : search(q)
   render(req,res,hub?.name || `${q} | Search Results`,P.searchPage({base:res.locals.base,q,filters,source,products:refine(source,filters),hub,path:res.locals.base+req.path,page:req.query.page}))
 }
+// Department and collection landings: real page structure around catalog rows only.
+function withLanding(base,hub,path,extra={}) {
+  const landing={...(LANDINGS[path]||{}),...extra}
+  if(!landing.top && !landing.crumbs && !extra.name) return hub
+  const name=landing.name||hub.name
+  return {...hub,name,facets:FACETS[landing.facets]||FACETS.default,landingHtml:landingHeader(base,{name,crumbs:landing.crumbs||[],top:landing.top})}
+}
+function landingBrowse(req,res,{name,crumbs=[],top,filter,facets}) {
+  browse(req,res,{name,description:'',products:PRODUCTS.filter(filter),facets:FACETS[facets]||FACETS.default,landingHtml:landingHeader(res.locals.base,{name,crumbs,top})})
+}
 router.get('/search',(req,res)=>browse(req,res))
-for (const slug of [...DEPARTMENTS.map(d=>d.id),...Object.keys(HUBS),'gaming-accessories/controllers']) router.get('/'+slug,(req,res)=>browse(req,res,collection(slug)))
+for (const slug of [...DEPARTMENTS.map(d=>d.id),...Object.keys(HUBS),'gaming-accessories/controllers']) router.get('/'+slug,(req,res)=>browse(req,res,withLanding(res.locals.base,collection(slug),'/'+slug,slug==='gaming-accessories/controllers'?{crumbs:[['Gaming Accessories','/gaming-accessories']]}:{})))
+router.get('/pre-order-online-pick-up-in-store',(req,res)=>browse(req,res,withLanding(res.locals.base,collection('pre-order'),'/pre-order-online-pick-up-in-store')))
+router.get('/preowned',(req,res)=>browse(req,res,withLanding(res.locals.base,collection('pre-owned'),'/preowned')))
+router.get('/preowned/:sub',(req,res,next)=>{const l=preownedLanding(req.params.sub);if(!l)return next();landingBrowse(req,res,l)})
+router.get('/gift-cards',(req,res)=>landingBrowse(req,res,{...LANDINGS['/gift-cards'],filter:()=>false}))
+router.get('/gift-cards/:brand',(req,res,next)=>{const b=GIFT_BRANDS[req.params.brand];if(!b)return next();landingBrowse(req,res,{name:`${b} Gift Cards`,crumbs:[['Gift Cards','/gift-cards']],filter:()=>false,top:()=>`<p class="gs-landing-note">${P.escapeText(b)} gift cards and digital codes are delivered by email on GameStop.com. Gift-card purchase and redemption are not offered in this local catalog.</p>`})})
+for (const [path,c] of Object.entries(EXTRA_COLLECTIONS)) router.get(path,(req,res)=>landingBrowse(req,res,c))
+const SLUG=/^[a-z0-9|-]{2,60}$/
+for (const dept of ['video-games','consoles-hardware','gaming-accessories','collectibles','toys-games','toys-games/trading-cards','deals']) {
+  router.get(`/${dept}/:sub`,(req,res,next)=>{if(!SLUG.test(req.params.sub))return next();landingBrowse(req,res,subLanding(dept,req.params.sub))})
+}
+router.get('/consoles-hardware/:sub/:sub2',(req,res,next)=>{if(!SLUG.test(req.params.sub)||!SLUG.test(req.params.sub2))return next();landingBrowse(req,res,subLanding('consoles-hardware',req.params.sub,req.params.sub2))})
+router.get('/digital-store/:sub',(req,res,next)=>{if(!SLUG.test(req.params.sub))return next();const l=subLanding('digital-store',req.params.sub);landingBrowse(req,res,{...l,crumbs:[['Digital Store','/digital-store']],filter:()=>false,top:()=>`<p class="gs-landing-note">Digital codes are emailed and redeemed on the platform's store. Downloadable games and currency are not offered online in this local catalog.</p>`})})
+for (const path of Object.keys(INFO)) router.get(path,(req,res)=>render(req,res,INFO[path].title,infoPage(res.locals.base,path)))
+router.get('/sitemap',(req,res)=>render(req,res,'Site Map',sitemapPage(res.locals.base)))
+router.get('/sitemap.xml',(req,res)=>res.type('application/xml').send(sitemapXml(res.locals.base)))
+router.get('/credit',(req,res)=>render(req,res,'GameStop Pro Credit Card',creditPage(res.locals.base)))
+router.post('/newsletter',(req,res)=>{
+  const email=typeof req.body.email==='string'?req.body.email.trim():''
+  const ok=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
+  render(req,res,'Sign Up',P.simplePage({title:ok?"You're on the list!":'Sign Up',html:ok?`<p>Thanks for signing up. This local storefront does not send email; your address was not stored.</p><a class="gs-btn" href="${res.locals.base}/">Continue Shopping</a>`:`<p class="gs-error" role="alert">Enter a valid email address.</p><form method="post" action="${res.locals.base}/newsletter" class="gs-inline-form"><label for="gs-signup-retry">Email address</label><input id="gs-signup-retry" name="email" type="email" autocomplete="email" value="${P.escapeText(email)}" required><button class="gs-btn">Join</button></form>`}),ok?200:400)
+})
 router.get('/brands/:brand',(req,res)=>{
   const products=PRODUCTS.filter(p=>p.brand.toLowerCase()===req.params.brand.toLowerCase())
   if(!products.length) return render(req,res,'Brand not found',P.simplePage({title:'Brand not found',html:`<a href="${res.locals.base}/search">Browse all products</a>`}),404)
   browse(req,res,{name:products[0].brand,description:'Browse games, gear and collectibles from this brand.',products})
 })
-router.get('/digital-store',(req,res)=>render(req,res,'Digital Store',P.simplePage({title:'Digital Store',html:`<p>Download entitlements and gift-card delivery are not offered online in this local catalog. Upcoming code-in-box releases are physical products shipped to your address.</p><h2>Explore code-in-box releases</h2><p><a class="gs-btn" href="${res.locals.base}/video-games?format=code-in-box">Shop code-in-box releases</a></p>`})))
+router.get('/digital-store',(req,res)=>render(req,res,'Digital Store',digitalPage(res.locals.base,LANDINGS['/digital-store'].top(res.locals.base))))
 function productHandler(req,res) {
   const p=selectedProduct(byId(req.params.id),req.query.variant)
   if (!p) {
@@ -69,7 +102,7 @@ function productHandler(req,res) {
 router.get('/video-games/:category/products/:name/:id.html',productHandler)
 router.get('/products/:id',productHandler)
 
-router.get('/trade-in', (req, res) => render(req, res, 'Trade-In', P.simplePage({ title: 'Trade-In', html: `<p>Prepare your games, consoles and accessories for an in-store inspection. Condition, original accessories and eligibility affect the offer.</p><p>Trade valuations, store credit and cash payouts are unavailable online in this catalog.</p><a class="gs-btn" href="${res.locals.base}/stores">Find a store</a><p><a href="${res.locals.base}/help/articles/trades">Trade-in preparation</a></p>` })))
+router.get('/trade-in', (req, res) => render(req, res, 'Trade-In', tradePage(res.locals.base)))
 
 // ---- cart ----
 function invalidateReview(req) { delete req.store.checkout.review }
@@ -306,7 +339,7 @@ router.get('/order/confirmation', (req, res) => {
   render(req, res, 'Order Confirmation', P.confirmationPage({ base: res.locals.base, order }))
 })
 
-router.get('/pro', (req, res) => render(req, res, 'GameStop Pro', P.simplePage({ title: 'GameStop Pro Benefits', html: `<div class="gs-pro-upsell"><h2>Level up to Pro</h2><p>Learn about member rewards, trade credit and eligible merchandise discounts. Actual membership benefits have product and shipping exclusions.</p><p>Paid enrollment, renewal, rewards and member pricing are unavailable in this local catalog.</p><a class="gs-btn" href="${res.locals.base}/help/articles/pro">Read Pro information</a></div><p><a href="${res.locals.base}/search/?q=pre-owned">Shop Pre-Owned</a> · <a href="${res.locals.base}/help/">Read shopping help</a></p>` })))
+router.get('/pro', (req, res) => render(req, res, 'GameStop Pro', proPage(res.locals.base)))
 
 export default {
   slug: 'gamestop',

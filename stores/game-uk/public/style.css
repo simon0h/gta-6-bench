@@ -162,3 +162,42 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 
 /* Keep the 42-page catalog navigation within narrow viewports. */
 .gu-pagination{flex-wrap:wrap}
+/* ---- parity pass (2026-10-13): game.co.uk homepage, landing pages, footer, info pages ---- */
+.gu-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.gu-circle svg{width:38px;height:38px;color:#111}.gu-circle-0{background:#fff}
+.gu-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:24px;margin:0 -36px 28px;min-height:360px;padding:40px 56px;color:#fff;background:linear-gradient(90deg,rgba(10,6,24,.94) 30%,rgba(10,6,24,.35)),url('/static/art/depth/digital-games-campaign.png') center/cover #120a26;overflow:hidden}
+.gu-hero-kicker{display:inline-block;background:#000;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;padding:5px 8px;margin:0 0 14px}
+.gu-hero h1{font-size:44px;line-height:1.05;margin:0 0 12px}.gu-hero p{font-size:15px;max-width:420px;margin:0 0 22px;line-height:1.5}
+.gu-hero .gu-btn-black{background:#000;border:1px solid #fff;color:#fff;min-width:150px}
+.gu-hero-covers{display:flex;justify-content:center;gap:22px}.gu-hero-covers img{width:170px;height:auto;filter:drop-shadow(0 14px 16px #000a);transform:rotate(-5deg)}.gu-hero-covers img+img{transform:rotate(5deg)}
+.gu-gifts-panel{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin:0 -36px 28px;padding:30px 56px;background:linear-gradient(100deg,#f7e8f1,#fff 70%);border-top:1px solid #f0d6e5;border-bottom:1px solid #f0d6e5}
+.gu-gifts-panel h2{font-size:28px;margin:0 0 6px}.gu-gifts-panel p{margin:0;font-size:14px}.gu-gifts-panel .gu-btn{min-width:110px}
+.gu-cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.gu-cat-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:130px;padding:16px 10px;text-align:center;text-decoration:none;font-weight:700;font-size:13px;border:1px solid #e5e5e5;background:#fafafa;transition:box-shadow .15s}
+.gu-cat-tile:hover{box-shadow:0 0 0 2px var(--gu-magenta)}.gu-cat-tile small{font-weight:400;font-size:11px;color:#636363}
+.gu-cat-mark{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;background:#111}
+.gu-tone-0 .gu-cat-mark,.gu-blog-art.gu-tone-0{background:#cc3083}.gu-tone-1 .gu-cat-mark,.gu-blog-art.gu-tone-1{background:#111}.gu-tone-2 .gu-cat-mark,.gu-blog-art.gu-tone-2{background:#2b1a5c}.gu-tone-3 .gu-cat-mark,.gu-blog-art.gu-tone-3{background:#0b6e4f}.gu-tone-4 .gu-cat-mark,.gu-blog-art.gu-tone-4{background:#1f4fa3}.gu-tone-5 .gu-cat-mark,.gu-blog-art.gu-tone-5{background:#c4401f}
+.gu-gift-shop{margin:40px 0}.gu-cat-tiles{margin:8px 0 30px}.gu-cat-tiles h2{font-size:18px;margin:0 0 14px}
+.gu-landing-h2{font-size:17px;margin:-4px 0 10px;font-weight:600}
+.gu-crumbs span{color:#636363}
+.gu-in-section{display:flex;flex-direction:column;padding:0 0 14px;margin-bottom:6px;border-bottom:1px solid #e5e5e5}.gu-in-section h3,.gu-filter-by{font-size:14px;margin:0 0 10px;text-transform:none}.gu-in-section a{font-size:12px;padding:5px 0;text-decoration:none}.gu-in-section a:hover{text-decoration:underline}
+.gu-filter-by{margin-top:14px}
+.gu-available{font-size:14px;margin:0 0 14px;font-weight:600}
+.gu-editorial{margin:40px 0 10px;padding-top:24px;border-top:1px solid #e5e5e5;max-width:1000px}.gu-editorial h2{font-size:16px}.gu-editorial p{font-size:13px;line-height:1.6;color:#333}
+.gu-account-menu{position:relative;display:flex;align-items:flex-start}.gu-account-menu>a{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;font-size:10px;font-weight:600}
+.gu-account-drop>summary{list-style:none;cursor:pointer;font-size:12px;padding:0 0 0 2px}.gu-account-drop>summary::-webkit-details-marker{display:none}
+.gu-account-pop{position:absolute;right:-20px;top:calc(100% + 10px);z-index:40;background:#fff;border:1px solid #ddd;box-shadow:0 6px 18px #0002;min-width:220px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}.gu-account-pop a{font-size:13px;padding:7px 0;text-decoration:none;color:#111}.gu-account-pop a:hover{text-decoration:underline}.gu-account-pop .gu-btn{color:#fff;text-align:center;margin-bottom:6px}
+.gu-footer-cols a{display:block}.gu-news-form{display:flex;gap:6px}.gu-news-form input{padding:9px 12px;border:1px solid #999;min-width:260px}
+.gu-store-badge{display:inline-flex!important;flex-direction:column;background:#000;color:#fff!important;border-radius:6px;padding:5px 12px;margin:0 0 8px;font-weight:700;font-size:13px;text-decoration:none;width:max-content;min-width:130px}.gu-store-badge small{font-weight:400;font-size:9px}
+.gu-follow{font-size:12px;font-weight:700;margin:8px 0 4px}.gu-social{display:flex;gap:10px;flex-wrap:wrap}
+.gu-info{max-width:1120px;margin:0 auto 40px;line-height:1.6}.gu-info>h1{font-size:26px;margin:18px 0 14px}.gu-info h2{font-size:18px;margin:28px 0 10px}
+.gu-blog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.gu-blog-card h3{font-size:16px;margin:6px 0}.gu-blog-card p{font-size:13px;margin:0}.gu-blog-art{display:flex;align-items:flex-end;aspect-ratio:16/9;padding:14px;color:#fff;font-weight:800;font-size:20px;text-decoration:none;margin-bottom:10px}
+.gu-sitemap{display:grid;grid-template-columns:1fr 2fr 1fr;gap:32px}.gu-sitemap h2{margin-top:0}.gu-sitemap-list{list-style:none;padding:0;margin:0 0 20px}.gu-sitemap-list li{padding:3px 0;font-size:13px}.gu-sitemap-list .gu-sitemap-list{padding-left:16px;margin:2px 0 6px;border-left:1px solid #e5e5e5}.gu-sitemap-cats>.gu-sitemap-list{columns:2;column-gap:28px}.gu-sitemap-cats>.gu-sitemap-list>li{break-inside:avoid;padding-bottom:8px}.gu-depth-0>li>a{font-weight:700}
+.gu-acc{border-bottom:1px solid #e5e5e5;padding:12px 0}.gu-acc summary{font-weight:700;cursor:pointer}.gu-acc p{font-size:13px}
+.gu-help-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin:10px 0 30px}.gu-help-cats a{display:block;border:1px solid #ddd;padding:22px 18px;text-decoration:none;font-weight:700;font-size:15px}.gu-help-cats a:hover{border-color:var(--gu-magenta)}.gu-help-cats small{display:block;font-weight:400;font-size:12px;color:#636363;margin-top:6px}
+.gu-help-more{background:#f5f5f5;padding:22px;margin:30px 0;text-align:center}.gu-help-more h2{margin:0 0 6px}.gu-help-more p{margin:0 0 14px}
+.gu-delivery-table{width:100%;border-collapse:collapse;font-size:13px}.gu-delivery-table th,.gu-delivery-table td{border:1px solid #ddd;padding:9px 10px;text-align:left}.gu-delivery-table th{background:#f5f5f5}
+.gu-fplus-hero{background:linear-gradient(115deg,#12082d,#281558);color:#fff;padding:36px 32px;margin:0 0 28px}.gu-fplus-hero h2{font-size:26px;margin:0 0 8px}.gu-fplus-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.gu-fplus-grid>div{border:1px solid #ddd;padding:18px}
+@media(max-width:900px){.gu-hero{grid-template-columns:1fr;padding:30px 28px;margin:0 -16px 24px}.gu-hero-covers img{width:120px}.gu-gifts-panel{margin:0 -16px 24px;padding:24px 20px}.gu-sitemap{grid-template-columns:1fr}.gu-blog-grid,.gu-fplus-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.gu-hero h1{font-size:32px}.gu-hero-covers{display:none}.gu-hero{min-height:0}.gu-cat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gu-cat-tile{min-height:110px}.gu-sitemap-cats>.gu-sitemap-list{columns:1}.gu-blog-grid,.gu-fplus-grid{grid-template-columns:1fr}.gu-news-form{flex-wrap:wrap}.gu-news-form input{min-width:0;flex:1}.gu-account-drop{display:none}.gu-delivery-table{font-size:11px}}
+@media(max-width:700px){.gu-facets>.gu-in-section,.gu-facets>.gu-filter-by,.gu-facets>.gu-fine{grid-column:1/-1}.gu-in-section{padding-top:10px}}

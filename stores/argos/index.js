@@ -9,6 +9,7 @@ import { esc } from '../../lib/html.js'
 import { PRODUCTS, BRANDS, CAMPAIGNS, bySku, departmentById, slug, search, totals, selectedProduct, lineKey, validateCart, hasPreorder, orderEta, fulfilmentText, COLLECTION_POINTS, POSTCODE_RE, EMAIL_RE } from './data.js'
 import * as P from './pages.js'
 import * as J from './journeys.js'
+import * as S from './site.js'
 import { retailState, rememberProduct } from '../../lib/retail-state.js'
 
 const router = Router()
@@ -55,6 +56,7 @@ router.use((req, res, next) => {
   next()
 })
 
+S.mountSite(router, { render, notFound })
 J.mountJourneys(router, { render, notFound, invalidateCheckout })
 
 function browse(req,res,scope={}) {
@@ -67,7 +69,8 @@ function browse(req,res,scope={}) {
   const q=filters.q||''
   render(req,res,scope.title||'Search results',P.listings(res.locals.base,search(q,filters),q,filters))
 }
-router.get('/', (req,res)=>render(req,res,'Shop technology, home, toys and more',P.home(res.locals.base)))
+router.get('/', (req,res)=>{ const s=S.homeSections(res.locals.base); render(req,res,'Order online today for fast home delivery',`${s.pre}${P.home(res.locals.base)}${s.post}`) })
+router.get('/search/:term',(req,res)=>browse(req,res,{q:String(req.params.term).replace(/[-+]+/g,' ').trim(),route:`${res.locals.base}/search`}))
 router.get('/search',(req,res)=>browse(req,res))
 router.get('/browse/:department',(req,res)=>{
   const d=departmentById(req.params.department)
@@ -152,6 +155,7 @@ router.get('/account', (req, res) => {
   if (req.store.user) return render(req, res, 'Your account', J.dashboard(res.locals.base,req))
   render(req, res, 'Sign in or continue as a guest', P.account(res.locals.base))
 })
+router.get('/account/login', (req, res) => req.store.user ? res.redirect(`${res.locals.base}/account`) : render(req, res, 'Login', P.account(res.locals.base)))
 router.post('/account', (req, res) => {
   const base = res.locals.base
   const email = str(req.body.email).toLowerCase()

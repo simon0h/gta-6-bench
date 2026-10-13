@@ -1,6 +1,7 @@
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { productImage, productGallery } from '../../lib/product-assets.js'
 import * as D from './depth-pages.js'
+import { NAV, FOOTER, referenceHome, digitalHref } from './parity-pages.js'
 import { orderStatus } from '../../lib/retail-state.js'
 import { itemDelivery } from './journeys.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
@@ -8,15 +9,7 @@ import { GAME, PLATFORM_OPTIONS, listing, SHIPPING_METHODS, COUNTRIES, MAX_QTY, 
 
 const NAME = 'Rockstar Store'
 
-// Header menubar from the research: GAMES / GAME ADD-ONS / GTA+ / MERCHANDISE / FEATURED with dropdown groups.
-const NAV = [
-  { label: 'Games', href: '/view-all-games', items: [['View All Games', '/view-all-games'], ['Grand Theft Auto VI', '/game/buy-gta-vi'], ['Grand Theft Auto V', '/game/buy-gta-v'], ['Red Dead Redemption 2', '/game/buy-red-dead-redemption-2'], ['Red Dead Redemption', '/game/buy-red-dead-redemption'], ['Bully: Scholarship Edition', '/game/buy-bully-scholarship-edition']] },
-  { label: 'Game Add-Ons', href: '/game-add-ons', items: [['Grand Theft Auto Online: Shark Cash Cards', '/game/shark-cash-cards'], ['Red Dead Online: Gold Bars', '/game/gold-bars']] },
-  { label: 'GTA+', href: '/game/gta-plus' },
-  { label: 'Merchandise', href: '/merchandise', items: [['View All Merchandise', '/merchandise'], ['Apparel', '/search?category=apparel'], ['Accessories', '/search?category=accessories'], ['Collectibles', '/search?category=collectibles']] },
-  { label: 'Featured', href: '/search?collection=new-arrivals', items: [['New Arrivals', '/search?collection=new-arrivals'], ['Shop by Grand Theft Auto', '/grand-theft-auto-collection'], ['Shop by Red Dead Redemption', '/red-dead-redemption-collection'], ['Shop by Rockstar Games', '/rockstar-games-collection']] },
-]
-
+// Header menubar and footer links from the real store (research/parity/rockstar-store.json).
 const ICON = {
   search: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
   user: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
@@ -54,14 +47,14 @@ export function layout({ base, title, body, cartCount = 0, user = null, cookieBa
 </header>
 <main class="rs-main" id="top">${body}</main>
 <footer class="rs-footer">
-  <div class="rs-footer-logo" aria-label="Rockstar Games"><span>R<b>*</b></span></div>
-  <ul class="rs-footer-links"><li><a href="${base}/support">Rockstar Support</a></li><li><a href="${base}/library">PC Library</a></li><li><a href="${base}/account">Your Account</a></li><li><a href="${base}/recently-viewed">Recently viewed</a></li><li><a href="${base}/support?topic=Privacy">Privacy Policy</a></li><li><a href="${base}/support?topic=Cookies">Cookie Policy</a></li><li><a href="${base}/support?topic=Terms">Terms of Service</a></li><li><a href="${base}/support?topic=Privacy">Do Not Sell or Share My Personal Information</a></li><li><a href="${base}/support?topic=Refunds">Refunds</a></li><li><a href="${base}/cookie-settings">Cookie Settings</a></li></ul>
+  <a class="rs-footer-logo" href="${base}/rockstar-games" aria-label="Rockstar Games"><span>R<b>*</b></span></a>
+  <ul class="rs-footer-links">${FOOTER.map(([l,h])=>`<li><a href="${base}${h}">${esc(l)}</a></li>`).join('')}</ul>
   <p class="rs-legal">Rockstar Games, Inc. &copy; 2026. All other marks and trademarks are properties of their respective owners.</p>
   <div class="rs-footer-tools"><details class="rs-language"><summary>English ▾</summary><p>Region: United States<br>Currency: USD</p></details><a href="#top" class="rs-backtop">Back to top</a></div>
   ${disclaimer(NAME)}
 </footer>
 ${cookieBanner ? `<div class="rs-cookie" role="dialog" aria-label="Cookie preferences">
-  <p>We use cookies to improve your experience. See our <a href="${base}/support?topic=Cookies">Cookie Policy</a>.</p>
+  <p>We use cookies to improve your experience. See our <a href="${base}/cookie-policy">Cookie Policy</a>.</p>
   <form method="post" action="${base}/cookies"><input type="hidden" name="return" value="${esc(returnTo)}">
     <button type="submit" name="choice" value="accept">ACCEPT ALL COOKIES</button>
     <button type="submit" name="choice" value="reject">REJECT ALL</button>
@@ -79,7 +72,7 @@ const carousel = (base, heading, products) => D.shelf(base,heading,products,`/se
 
 // ---------- home ----------
 export function homePage({ base, products }) {
-  if (!fixtureCatalog) return `<section class="rs-hero rs-hero-gtavi"><div class="rs-hero-media">${productImage('rockstar-store',GAME)}</div><div class="rs-hero-text"><h1>Grand Theft Auto VI</h1><a class="rs-btn rs-btn-pill" href="${base}${GAME.path}">Pre-Order Now</a></div></section>`
+  if (!fixtureCatalog) return referenceHome(base)
   const by = (c) => {
     const selected=products.filter(p=>p.collections?.includes(c))
     if(c==='new-arrivals')return [...selected].sort((a,b)=>Boolean(b.photo)-Boolean(a.photo)).slice(0,10)
@@ -182,14 +175,15 @@ const screenshotFiles = [['01_-_Vice_City_01.jpg','Vice City sign with plane fly
 export function gtaviPage({ base, platform = null, error = null, modal = '' }) {
   const opt = PLATFORM_OPTIONS.find(o => o.id === platform) ?? null
   const cib = platform ? listing(platform, 'standard', 'code-in-box') : null
-  const linkOut = (edition) => platform ? listing(platform, edition, 'digital').linkOut : '#select-platform'
-  const upgradeLink = platform === 'ps5' ? '/playstation-store/en-us/product/EP1004-PPSA01547_00-ULTEDTIONUPGRADE' : platform === 'xbox' ? '/xbox-store/en-US/games/store/grand-theft-auto-vi-ultimate-edition-upgrade/9pn4llbr8rch' : '#select-platform'
+  const linkOut = (edition) => platform ? digitalHref(base, platform, edition) : '#select-platform'
+  const newTab = fixtureCatalog ? 'target="_blank" rel="noopener"' : ''
+  const upgradeLink = platform ? digitalHref(base, platform, 'upgrade') : '#select-platform'
   const selfHref = `${base}${GAME.path}${platform ? `?platform=${platform}` : ''}`
   const card = (edition, name) => `<article class="rs-edition">
     <img class="rs-edition-reference" src="${referenceRoot}${edition === 'ultimate' ? 'UltimateEdition_07_en_us_R04_Deliv.jpg' : 'GTAVI_PreOrderWebstore_CompareEditionsThumbnail_Standard_1280x720_R01.jpg'}" alt="Grand Theft Auto VI ${name}" loading="lazy"><p class="rs-kicker">Grand Theft Auto VI</p><h3>${name}</h3>
     <ul class="rs-edition-list">${EDITION_CONTENT.map(i => `<li class="${edition === 'ultimate' || STANDARD_INCLUDES.has(i) ? 'is-in' : 'is-out'}">${esc(i)}</li>`).join('')}</ul>
     <p class="rs-preload">${ICON.clock} Pre-load begins November 12, 2026</p>
-    <a class="rs-btn rs-btn-pill rs-btn-block" href="${esc(linkOut(edition))}" ${platform ? 'target="_blank" rel="noopener"' : 'title="Select a platform first"'}>${platformGlyph(platform)}Pre-Order Now</a>
+    <a class="rs-btn rs-btn-pill rs-btn-block" href="${esc(linkOut(edition))}" ${platform ? newTab : 'title="Select a platform first"'}>${platformGlyph(platform)}Pre-Order Now</a>
   </article>`
   return `${modal}
 <section class="rs-game-hero rs-reference-hero ${opt ? `is-${opt.id}` : ''}">
@@ -231,7 +225,7 @@ export function gtaviPage({ base, platform = null, error = null, modal = '' }) {
     <p class="rs-fine">Taxes and shipping will be calculated in the checkout window.</p>
   </div>
 </section>
-<section class="rs-section rs-upgrade"><div><h2>Upgrade to the Ultimate Edition</h2><p>Purchased the game? Upgrade to the Ultimate Edition on ${esc(opt ? opt.storeName : 'PlayStation Store')} at any time.</p></div><a class="rs-btn rs-btn-pill" href="${esc(upgradeLink)}" ${platform ? 'target="_blank" rel="noopener"' : ''}>Upgrade Now ${ICON.ext}</a></section>
+<section class="rs-section rs-upgrade"><div><h2>Upgrade to the Ultimate Edition</h2><p>Purchased the game? Upgrade to the Ultimate Edition on ${esc(opt ? opt.storeName : 'PlayStation Store')} at any time.</p></div><a class="rs-btn rs-btn-pill" href="${esc(upgradeLink)}" ${platform ? newTab : ''}>Upgrade Now ${ICON.ext}</a></section>
 <section id="faq" class="rs-section"><h2>FAQ</h2>${FAQ.map(([q, a]) => `<details class="rs-faq"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</section>
 <section class="rs-section"><h2>Supported Languages</h2><p class="rs-fine">English, French, Italian, German, Russian, Japanese, Polish, Korean, Simplified Chinese, Traditional Chinese, Spanish (Mexico), Spanish (Spain), Portuguese (Brazil)</p></section>
 <section class="rs-section"><h2>Trademarks and Copyrights</h2><p class="rs-fine">Rockstar Games, Inc. &copy; 2026. Grand Theft Auto is a trademark of Take-Two Interactive Software, Inc. "PlayStation" and "PS5" are registered trademarks of Sony Interactive Entertainment Inc. Xbox is a trademark of the Microsoft group of companies.</p></section>

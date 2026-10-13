@@ -10,6 +10,7 @@ import { authenticate, publicAccount } from '../../lib/accounts.js'
 import { validateCard } from '../../lib/payment.js'
 import { recordOrder } from '../../lib/orders.js'
 import { retailState, rememberProduct, defaultAddress } from '../../lib/retail-state.js'
+import { installSite, homePage, landingExtras, giftFinderIntro } from './site.js'
 import { installJourneys, productJourney, privateOrder } from './journeys.js'
 
 import { browseProducts, departments, departmentPaths, slug, browseTiles, browseProduct, catalogListing, departmentHub, homeContent, resolveProduct, optionInput, quantityLimit, artwork } from './browse.js'
@@ -90,13 +91,22 @@ function cards(res, list = products) {
 }
 function product(req, res, p, values = {}, errors = [], status = 200) {
   rememberProduct(req,p.sku)
-  if (!fixtureCatalog) return render(req,res,p.title,`<div class="columns">${productGallery('smyths-toys',p)}<section><h1>${esc(p.title)}</h1><p>Ref: ${p.sku}</p>${p.unit_price == null ? '' : `<p class="price">${cash(p.unit_price)}</p>`}<p>Standard edition · Download code in a box</p><p>Availability not verified.</p><button disabled>Check availability</button></section></div>`,errors,status)
-  render(req, res, p.title, `<p><a href="${url(res, '/search?text=gta+6')}">Gaming &amp; Tech › Pre-Order Games</a></p><div class="columns">${productGallery('smyths-toys',p)}<section><h1>${esc(p.title)}</h1><p>Ref: ${p.sku} · PEGI 18</p><p class="price">${p.unit_price == null ? 'Price not verified' : cash(p.unit_price)}</p><p>Standard edition · Download code in a box</p><form action="${url(res, '/cart/add')}" method="post"><input name="sku" type="hidden" value="${p.sku}">${field('qty', 'Quantity', { qty: values.qty ?? '1' }, { type: 'number' })}<button>Pre-order</button></form>${productJourney(req,url(res),p,values)}<p>Home Delivery — FREE</p><p>Click &amp; Collect — FREE</p><p><strong>This product only contains a download code inside the box. A disc will not be included.</strong></p><p>Pre-load, collection and delivery available from 12 November 2026. Playable from 19 November 2026.</p>${p.platform === 'ps5' ? '<p>Requires a PlayStation account registered to the United Kingdom.</p>' : ''}</section></div><section class="panel"><h2>Key features</h2><p>Pre-order to receive the Vintage Vice City Pack. Follow Jason and Lucia in Vice City and across Leonida.</p><p>Pre-order Price Promise: a lower Smyths price on dispatch or collection is honoured automatically. This cannot be combined with a money-off voucher.</p><p>No payment upfront for card pre-orders. Cards are pre-authorised 2–7 days before availability and charged on dispatch or collection. PayPal orders are paid in full upfront.</p></section>`, errors, status)
+  const base = url(res), ps5 = p.platform === 'ps5', sub = ps5 ? ['PlayStation 5 Pre-Order Games', '/gaming-and-tech/pre-order-games/playstation-5-pre-order-games/c/SM06040301'] : ['Xbox Series X Pre-Order Games', '/gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games/c/SM06040302']
+  const crumbs = `<nav class="st-crumbs" aria-label="Breadcrumb"><ol><li><a href="${base}">Home</a></li><li><a href="${base}/gaming-and-tech/c/SM0604">Gaming &amp; Tech</a></li><li><a href="${base}/gaming-and-tech/pre-order-games/c/SM060403">Pre-Order Games</a></li><li><a href="${base}${sub[1]}">${sub[0]}</a></li></ol></nav>`
+  const buy = fixtureCatalog
+    ? `<p class="price">${p.unit_price == null ? 'Price not verified' : cash(p.unit_price)}</p><p>Standard edition · Download code in a box</p><form action="${url(res, '/cart/add')}" method="post"><input name="sku" type="hidden" value="${p.sku}">${field('qty', 'Quantity', { qty: values.qty ?? '1' }, { type: 'number' })}<button>Pre-order</button></form>${productJourney(req,base,p,values)}<div class="st-fulfil"><p><strong>Home Delivery</strong> — FREE</p><p><strong>Click &amp; Collect</strong> — FREE</p></div>`
+    : `${p.unit_price == null ? '' : `<p class="price">${cash(p.unit_price)}</p>`}<p>Standard edition · Download code in a box</p><p class="notice">Availability not verified.</p><button disabled>Check availability</button><div class="st-fulfil"><p><strong>Home Delivery</strong><br>Availability not verified</p><p><strong>Click &amp; Collect</strong><br>Availability not verified</p></div>`
+  const body = `${crumbs}<div class="columns st-pdp">${productGallery('smyths-toys',p)}<section class="st-buybox"><p class="st-brand">Rockstar Games</p><h1>${esc(p.title)}</h1><p class="st-ref">Ref: ${p.sku} · <span class="st-pegi">PEGI 18</span></p>${buy}<p><strong>This product only contains a download code inside the box. A disc will not be included.</strong></p><p>Pre-load, collection and delivery available from 12 November 2026. Playable from 19 November 2026.</p>${ps5 ? '<p>Requires a PlayStation account registered to the United Kingdom.</p>' : ''}</section></div>
+<div class="st-pdp-tabs"><section class="panel"><h2>Key features</h2><ul><li>Pre-order to receive the Vintage Vice City Pack.</li><li>Pre-load starting on November 12th. Pre-orders collection and delivery available on November 12th. Playable from November 19th.</li><li>This product will only contain a download code inside the box to support pre-load. A disc will not be included.</li><li>Grand Theft Auto VI is a single-player experience.</li>${ps5 ? '<li>The PlayStation 5 version can only be used by users holding an account for PlayStation registered to the United Kingdom.</li>' : ''}</ul><p>Pre-order Price Promise: a lower Smyths price on dispatch or collection is honoured automatically. This cannot be combined with a money-off voucher.</p><p>No payment upfront for card pre-orders. Cards are pre-authorised 2–7 days before availability and charged on dispatch or collection. PayPal orders are paid in full upfront.</p></section>
+<section class="panel"><h2>Product details</h2><p>Grand Theft Auto VI heads to the state of Leonida, home to the neon-soaked streets of Vice City and beyond. Jason and Lucia are caught up in a criminal conspiracy that stretches across the state.</p><dl><dt>Ref</dt><dd>${p.sku}</dd><dt>Platform</dt><dd>${ps5 ? 'PlayStation 5' : 'Xbox Series X'}</dd><dt>Edition</dt><dd>Standard</dd><dt>Format</dt><dd>Download code in a box</dd><dt>Age rating</dt><dd>PEGI 18</dd><dt>Release date</dt><dd>19 November 2026</dd></dl></section>
+<section class="panel"><h2>Safety &amp; manufacturer information</h2><p>Publisher: Rockstar Games. Age rating PEGI 18 – not suitable for persons under 18 years of age. Manufacturer contact and full safety information are shown on the real product page and were not captured here.</p></section></div>`
+  render(req, res, p.title, body, errors, status)
 }
 
+installSite(router,{ROOT,url,render,field,catalog})
 installJourneys(router,{ROOT,url,render,field,catalog,catalogProduct,branches,cash,trustedLine,lineKey,cartErrors})
 
-router.get(['/', ROOT, `${ROOT}/`], (req, res) => render(req, res, 'Toys, Baby, Outdoor, Gaming & Tech', homeContent(url(res))))
+router.get(['/', ROOT, `${ROOT}/`], (req, res) => render(req, res, 'Toys, Baby, Outdoor, Gaming & Tech', homePage(url(res), catalog)))
 router.get([`${ROOT}/search`, '/search'], (req, res) => {
  const q=string(req.query.text||req.query.q)
  if(q) req.store.smythsSearches=[q,...(req.store.smythsSearches||[]).filter(x=>x!==q)].slice(0,5)
@@ -104,7 +114,7 @@ router.get([`${ROOT}/search`, '/search'], (req, res) => {
  render(req,res,'Search results',catalogListing(url(res),catalog,req.query,q?`Search results for “${q}”`:'Shop all toys and games')+recent)
 })
 router.post(`${ROOT}/search/clear`,(req,res)=>{req.store.smythsSearches=[];res.redirect(url(res,'/search'))})
-for(const department of departments) router.get(`${ROOT}${departmentPaths[department]}`,(req,res)=>render(req,res,department,departmentHub(url(res),department)))
+for(const department of departments) router.get(`${ROOT}${departmentPaths[department]}`,(req,res)=>render(req,res,department,departmentHub(url(res),department)+landingExtras(url(res),department)))
 router.get(`${ROOT}/category/:slug`,(req,res)=>{
  const p=catalog.find(p=>p.family===req.params.slug)
  if(!p)return render(req,res,'Category not found','<h1>Category not found</h1>',[],404)
@@ -122,7 +132,7 @@ router.get([`${ROOT}/campaigns/:slug`,`${ROOT}/gaming-and-tech/pre-order-games`]
  else return render(req,res,'Campaign not found','<h1>Campaign not found</h1>',[],404)
  render(req,res,campaign==='pocket-money'?'Pocket money picks':'Gaming pre-orders',catalogListing(url(res),catalog,selected,campaign==='pocket-money'?'Pocket money picks — £15 and under':'Gaming pre-orders'))
 })
-router.get(`${ROOT}/gift-finder-hub`,(req,res)=>render(req,res,'Gift Finder',`<section class="department-banner"><h1>Find their next favourite gift</h1><p>Choose an age, interest and budget to discover something they will love.</p></section>${catalogListing(url(res),catalog,req.query,'Gift Finder','/gift-finder-hub')}`))
+router.get(`${ROOT}/gift-finder-hub`,(req,res)=>render(req,res,'Gift Finder',giftFinderIntro(url(res),req.query)+'<div class="st-gf-results">'+catalogListing(url(res),catalog,req.query,'Gift Finder','/gift-finder-hub')+'</div>'))
 function ordinaryProduct(req,res,p,values=req.query,errors=[],status=200){rememberProduct(req,p.sku);render(req,res,p.title,browseProduct(url(res),p,values,[],productJourney(req,url(res),p,values)),errors,status)}
 router.get(`${ROOT}/catalog/:sku`, (req,res) => {
  const p=browseProducts.find(p=>p.sku===req.params.sku)

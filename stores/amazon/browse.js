@@ -3,6 +3,7 @@ import { CATALOG_PLATFORMS, pageWindow } from './assortment500.js'
 import { productArt } from './art.js'
 import { esc, money } from '../../lib/html.js'
 import { PRODUCTS, productPath, search, SORTS, DEPARTMENTS } from './data.js'
+import { shopByCategory } from './parity.js'
 import { NODES, nodeById, nodePath, ancestorNodes, FILTER_KEYS, values, queryString } from './catalog.js'
 
 export function productRow(base,title,products,href='',label='See more') {
@@ -35,7 +36,7 @@ export function categoryIntro({base,node}) {
  const children=NODES.filter(n=>n.parent===node.id)
  const peers=children.length?children:NODES.filter(n=>n.parent===node.parent&&n.id!==node.id)
  const campaign={home:'home',electronics:'electronics',videogames:'gaming','toys-and-games':'toys'}[ancestorNodes(node.id)[0]?.id]
- return `<div class="az-department"><nav class="az-crumbs" aria-label="Breadcrumb"><a href="${base}/">Amazon home</a> &rsaquo; ${ancestorNodes(node.id).map(n=>`<a href="${nodePath(base,n.id)}">${esc(n.title)}</a>`).join(' &rsaquo; ')}</nav><header class="az-department-hero${campaign?' az-department-campaign':''}">${campaign?`<img class="az-department-campaign-img" src="${node.id === 'kitchen' ? '/static/art/retail/williams-sonoma.png' : `/static/art/depth/${campaign}-campaign.png`}" alt="${esc(node.title)} collection">`:''}<div><p>SHOP THE DEPARTMENT</p><h1>${esc(node.title)}</h1><p>${esc(node.description)}</p></div>${campaign?'':productArt(featured)}</header><div class="az-category-links">${peers.map(n=>categoryTile(base,n.id)).join('')}</div><nav class="az-curated-nav"><a href="${base}/gp/bestsellers/${node.id}">Best Sellers in ${esc(node.title)}</a><a href="${base}/gp/new-releases/${node.id}">New Arrivals</a>${inNode(node.id).some(p=>p.deal)?`<a href="${base}/gp/goldbox?node=${node.id}">Deals</a>`:''}${inNode(node.id).some(p=>p.price<25)?`<a href="${base}/s?node=${node.id}&amp;price=under25">Under $25</a>`:''}</nav></div>`
+ return `<div class="az-department"><nav class="az-crumbs" aria-label="Breadcrumb"><a href="${base}/">Amazon home</a> &rsaquo; ${ancestorNodes(node.id).map(n=>`<a href="${nodePath(base,n.id)}">${esc(n.title)}</a>`).join(' &rsaquo; ')}</nav><header class="az-department-hero${campaign?' az-department-campaign':''}">${campaign?`<img class="az-department-campaign-img" src="${node.id === 'kitchen' ? '/static/art/retail/williams-sonoma.png' : `/static/art/depth/${campaign}-campaign.png`}" alt="${esc(node.title)} collection">`:''}<div><p>SHOP THE DEPARTMENT</p><h1>${esc(node.title)}</h1><p>${esc(node.description)}</p></div>${campaign?'':productArt(featured)}</header>${shopByCategory(base,node.id)}<div class="az-category-links">${peers.map(n=>categoryTile(base,n.id)).join('')}</div><nav class="az-curated-nav"><a href="${base}/gp/bestsellers/${node.id}">Best Sellers in ${esc(node.title)}</a><a href="${base}/gp/new-releases/${node.id}">New Arrivals</a>${inNode(node.id).some(p=>p.deal)?`<a href="${base}/gp/goldbox?node=${node.id}">Deals</a>`:''}${inNode(node.id).some(p=>p.price<25)?`<a href="${base}/s?node=${node.id}&amp;price=under25">Under $25</a>`:''}</nav></div>`
 }
 export function browseResults({base,q='',dept='',sort='',filters={},results,inCart={},page=1,node='',endpoint='/s',heading='',tile,gameTile}) {
  const state={k:q,i:dept,node,s:sort,...filters}

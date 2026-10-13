@@ -6,6 +6,7 @@ import { documentLayout } from './chrome.js'
 import { randomInt } from 'node:crypto'
 import { products as PRODUCTS, tiles, home, searchPage, categoryPage, categoryById, campaignPage, campaigns, brandsPage, bySku } from './catalog.js'
 import { productBody } from './product-detail.js'
+import { installSite } from './site.js'
 import { installJourneys, needsMember, customerOrder, rememberViewed, productJourneyControls, productQuestions, checkoutAddressValues, checkoutAddressLinks } from './journeys.js'
 import { retailState } from '../../lib/retail-state.js'
 import { canonicalLine, invalidateCheckout, purchaseLines, checkoutToken, amountFor, deliveryGroups, deliveryEta, deliverySummary, purchaseSummary, cartBody, installCartControls } from './commerce.js'
@@ -43,6 +44,7 @@ function render(req, res, title, body, status = 200) {
 }
 
 installJourneys(router, { render, productPage })
+installSite(router, { render, knownCategory: id => Boolean(categoryById(id)), knownCampaign: id => campaigns.some(c => c.id === id) })
 
 router.get('/', (req, res) => render(req, res, '쿠팡', home(res.locals.base, req.query)))
 router.get(['/np/search', '/search'], (req, res) => render(req, res, '검색 결과', searchPage(res.locals.base, req.query)))

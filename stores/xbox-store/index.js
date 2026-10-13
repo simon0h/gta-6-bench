@@ -7,11 +7,14 @@ import { enterScenarioCart, scenarioAvailability, scenarioPayment, scenarioActiv
 import { authenticate, createAccount, findAccount, publicAccount } from '../../lib/accounts.js'
 import { filterProducts, PRODUCTS, byId, editions, search, totals, priceTotals, productPath, STATES, RELEASE, isBuyable, familyEditions, COLLECTIONS, queryOptions, FACETS, facetValues } from './data.js'
 import * as P from './pages.js'
+import { installSite } from './site.js'
 import { installJourneys, resumeAccount } from './journeys.js'
 import { owns, lifecycle, token as serviceToken } from './journey-state.js'
 import { directFingerprint, cartValid, cartFingerprint, review, matchesReview, safeValues, toOrderItem, entitlements } from './purchase.js'
 
 const NAME = 'Xbox Store'
+// Platforms and genres xbox.com lists stay browsable (with an empty state) even when the catalog has no title for them.
+const KNOWN_VALUES = { platform: ['Xbox Series X|S', 'Xbox One', 'PC', 'Cloud', 'Handheld'], genre: ['Action & adventure', 'Platformer', 'Family & kids', 'Racing & flying', 'Role playing', 'Shooter', 'Sports', 'Strategy', 'Fighting'] }
 const router = Router()
 registerScenarioAdapter('xbox-store', { lines: store => [...store.cart, ...(store.checkout.scenarioItems || [])] })
 router.use((req,res,next)=>{
@@ -108,7 +111,7 @@ function saveCard(req, payment, billing) {
 }
 
 // ---- browse ----
-router.get('/', (req, res) => render(req, res, 'Xbox Official Site: Consoles, Games, and Community', P.homePage({ base: res.locals.base, products: PRODUCTS })))
+router.get('/', (req, res) => render(req, res, 'Xbox Official Site: Consoles, Games, and Community', P.homePage({ base: res.locals.base, products: PRODUCTS, user: req.store.user })))
 
 function browse(req,res,{title,scope=PRODUCTS,route}={}) {
   const options=queryOptions(req.query), q=(options.q||'').trim(), type=['add-ons','hardware','all'].includes(options.type)?options.type:'games'
@@ -124,6 +127,7 @@ router.get('/en-US/search/results',(req,res)=>{
   browse(req,res)
 })
 router.get(['/en-US/games/all-games/console','/en-US/games/browse'],(req,res)=>browse(req,res,{route:req.baseUrl+req.path}))
+router.get('/en-US/games/all-games/pc',(req,res)=>browse(req,res,{title:'Browse all PC games',scope:PRODUCTS.filter(p=>p.platforms.includes('PC')),route:req.baseUrl+req.path}))
 router.get('/en-US/games/collection/:collection',(req,res)=>{
   const c=COLLECTIONS.find(c=>c.id===req.params.collection)
   if(!c)return notFound(req,res)
@@ -133,14 +137,13 @@ router.get(['/en-US/games/genres','/en-US/games/platforms'],(req,res)=>render(re
 router.get('/en-US/games/:dimension/:value',(req,res,next)=>{
   if(!['genre','platform'].includes(req.params.dimension))return next()
   const f=FACETS.find(f=>f.key===req.params.dimension),value=req.params.value
-  if(!facetValues(f).some(([v])=>v===value))return notFound(req,res)
+  if(!facetValues(f).some(([v])=>v===value)&&!(KNOWN_VALUES[f.key]||[]).includes(value))return notFound(req,res)
   browse(req,res,{title:`${value} games`,scope:PRODUCTS.filter(p=>p[f.field].includes(value)),route:req.baseUrl+req.path})
 })
 router.get('/en-US/xbox-game-pass',(req,res)=>render(req,res,'Xbox Game Pass',P.gamePassPage({base:res.locals.base})))
-router.get('/en-US/consoles',(req,res)=>res.redirect(`${res.locals.base}/en-US/games/browse?type=hardware`))
-router.get('/en-US/play',(req,res)=>res.redirect(`${res.locals.base}/en-US/games/platform/Cloud`))
 router.get('/en-US/more',(req,res)=>render(req,res,'Explore Xbox',P.hubPage({base:res.locals.base,kind:'genres'})))
 
+installSite(router, { render, tile: P.tile })
 installJourneys(router, {render,signinWall,notFound})
 
 router.get('/art/:file', (req, res) => {

@@ -4,11 +4,9 @@ import { GAME } from '../../lib/catalog.js'
 import { productPath, games, STATES, STORE_NAME, SHIP_ZIP, RELEASE, FULFILLMENT, DEPARTMENTS, stockFor, etaFor, pickupAvailabilityKnown } from './data.js'
 import { orderStatus } from '../../lib/retail-state.js'
 import { art, optionText, gallery } from './browse-pages.js'
+import { MENUS, HEADER_LINKS, FOOTER, LEGAL, SUPPORT_PANEL } from './site-tree.js'
 
 const NAME = 'Best Buy'
-const NAV_MENUS = ['Shop', 'Deals', 'Support & Services', 'Discover']
-const NAV_LINKS = [['Top Deals','/top-deals'],['Deal of the Day','/deal-of-the-day'],['Gift Ideas','/gift-ideas'],['Outlet','/outlet']]
-const MENU_LINKS = {Shop:DEPARTMENTS.map(d=>[d.name,`/departments/${d.id}`]),Deals:[['Top Deals','/top-deals'],['Deal of the Day','/deal-of-the-day'],['Best Buy Outlet','/outlet']], 'Support & Services':[['Shopping help','/help'],['Services','/services'],['Your account','/account']], Discover:[['Shop by Brand','/brands'],['Gift Ideas','/gift-ideas'],['Grand Theft Auto VI','/site/video-game-franchises/grand-theft-auto/pcmcat301800050002.c']]}
 const HUB_PATH = '/site/video-game-franchises/grand-theft-auto/pcmcat301800050002.c'
 
 const ICON_CART = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>'
@@ -19,47 +17,56 @@ const ICON_PIN = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" st
 const logo = (base) => `<a class="bb-logo" href="${base}/" aria-label="best buy home"><span class="bb-tag">BEST<br>BUY</span></a>`
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`
 
-export function layout({ base, title, body, cartCount = 0, user = null, chrome = 'full', back = null, q = '', storeName = STORE_NAME }) {
-  const header = chrome === 'full' ? `<header class="bb-header">
-  <div class="bb-header-top">
+const ICON_MENU = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>'
+function siteHeader({ base, cartCount, user, q, storeName }) {
+  const col = (title, links) => `<section><h2>${esc(title)}</h2><ul>${links.map(([l, u]) => `<li><a href="${base}${u}">${esc(l)}</a></li>`).join('')}</ul></section>`
+  return `<header class="bbx-header">
+  <div class="bbx-top">
     ${logo(base)}
-    <form class="bb-search" action="${base}/site/searchpage.jsp" method="get" role="search">
-      <input type="search" name="st" value="${esc(q)}" placeholder="Search Best Buy" aria-label="What can we help you find? Suggestions appear below" autocomplete="off" list="bb-search-suggestions"><datalist id="bb-search-suggestions"><option value="laptop"><option value="headphones"><option value="monitor"><option value="coffee"><option value="gta 6"></datalist>
+    <details class="bbx-menu"><summary class="bbx-menu-btn" aria-label="Menu">${ICON_MENU}<span>Menu</span></summary><div class="bbx-drawer" role="navigation" aria-label="Main menu">
+      <section class="bbx-drawer-shop"><h2>Shop by Department</h2><ul>${MENUS.Shop.map(([l, u]) => `<li><a href="${base}${u}">${esc(l)}<span aria-hidden="true">›</span></a></li>`).join('')}</ul></section>
+      <div class="bbx-drawer-more">${col('Deals', MENUS.Deals)}${col('Support & Services', MENUS['Support & Services'])}${col('Discover', MENUS.Discover)}<p><a href="${base}/sitemap">Site Map</a></p></div>
+    </div></details>
+    <form class="bb-search bbx-search" action="${base}/site/searchpage.jsp" method="get" role="search">
+      <input type="search" name="st" value="${esc(q)}" placeholder="What can we help you find today?" aria-label="What can we help you find? Suggestions appear below" autocomplete="off" list="bb-search-suggestions"><datalist id="bb-search-suggestions"><option value="laptop"><option value="headphones"><option value="monitor"><option value="coffee"><option value="gta 6"></datalist>
       <button type="submit" aria-label="Submit search">${ICON_SEARCH}</button>
     </form>
-    <a href="${base}/site/store-locator" class="bb-store-pick" aria-label="Your Store: ${esc(storeName)}">${ICON_PIN} <span>Your Store: <b>${storeName}</b></span></a>
-    <details class="bb-native-menu bb-account-menu"><summary class="bb-account" aria-label="${user?`Account: ${esc(user.first_name||'shopper')}`:'Account'}">${ICON_USER} <span>${user?`Hi, ${esc(user.first_name||'there')}`:'Account'}</span></summary><div><b>${user?'Your account':'Welcome to Best Buy'}</b><p>Manage purchases, saved products and your preferences.</p><a class="bb-btn bb-btn-blue" href="${base}/${user?'account':'identity/global/signin'}">${user?'Account overview':'Sign in'}</a>${user?'':`<a href="${base}/identity/newAccount">Create an account</a>`}<a href="${base}/account/orders">Purchases</a><a href="${base}/account/saved">Saved products</a><a href="${base}/recent">Recently viewed</a><a href="${base}/support">Support center</a>${user?`<a href="${base}/logout">Sign out</a>`:''}</div></details>
-    <a class="bb-cart-link" href="${base}/cart" aria-label="cart, ${plural(cartCount, 'item')}">${ICON_CART}${cartCount ? `<span class="bb-cart-count">${cartCount}</span>` : ''}</a>
+    <a href="${base}/site/store-locator" class="bbx-store" aria-label="Your Store: ${esc(storeName)}">${ICON_PIN} <span>Your Store: <b>${esc(storeName)}</b></span></a>
+    <details class="bbx-account"><summary aria-label="${user ? `Account: ${esc(user.first_name || 'shopper')}` : 'Account'}">${ICON_USER} <span>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Account'}</span></summary><div class="bbx-account-panel"><b>${user ? 'Your account' : 'Welcome to Best Buy'}</b>${user ? `<a class="bbx-btn bbx-btn-blue" href="${base}/account">Account Home</a>` : `<a class="bbx-btn bbx-btn-blue" href="${base}/identity/global/signin">Sign In</a><a class="bbx-btn bbx-btn-outline" href="${base}/identity/newAccount">Create Account</a>`}<a href="${base}/account/orders">Orders &amp; Purchases</a><a href="${base}/profile/ss/orderlookup">Order Status</a><a href="${base}/account/saved">Saved Items</a><a href="${base}/recent">Recently Viewed</a><a href="${base}/site/electronics/best-buy-membership/pcmcat1679668833285.c">My Best Buy Memberships</a><a href="${base}/support">Support Center</a>${user ? `<a href="${base}/logout">Sign Out</a>` : ''}</div></details>
+    <a class="bbx-cart bb-cart-link" href="${base}/cart" aria-label="cart, ${plural(cartCount, 'item')}">${ICON_CART}<span class="bbx-cart-label">Cart</span>${cartCount ? `<span class="bb-cart-count">${cartCount}</span>` : ''}</a>
   </div>
-  <nav class="bb-nav" aria-label="Site">
-    ${NAV_MENUS.map(n => `<details class="bb-native-menu"><summary class="bb-menu-btn">${esc(n)} &#9662;</summary><div>${MENU_LINKS[n].map(([l,u]) => `<a href="${base}${u}">${esc(l)}</a>`).join('')}</div></details>`).join('')}
-    ${NAV_LINKS.map(([n,u]) => `<a href="${base}${u}">${esc(n)}</a>`).join('')}
-    <details class="bb-native-menu"><summary class="bb-menu-btn">More ▾</summary><div>${[['Membership','/membership'],['Financing & Rewards','/financing'],['Gift Cards','/gift-cards'],['Trade-In','/trade-in'],['Best Buy Business','/business'],['Saved products','/account/saved'],['Recently viewed','/recent'],['Your purchases','/account/orders'],['Contact us','/contact-us']].map(([n,u])=>`<a href="${base}${u}">${n}</a>`).join('')}</div></details>
-  </nav>
-  <div class="bb-band">Ready for your next upgrade? <a href="${base}/top-deals">Explore Top Deals</a> · Free shipping on catalog items.</div>
-</header>` : `<header class="bb-header bb-header-slim">
+  <nav class="bbx-links" aria-label="Featured">${HEADER_LINKS.map(([l, u]) => `<a href="${base}${u}">${esc(l)}</a>`).join('')}</nav>
+</header>`
+}
+function siteFooter({ base }) {
+  return `<footer class="bbx-footer">
+  <div class="bbx-foot-top">
+    <section class="bbx-support-panel"><h2><a href="${base}/support">Visit our Support Center</a></h2><ul>${SUPPORT_PANEL.map(([l, u]) => `<li><a href="${base}${u}">${esc(l)}</a></li>`).join('')}</ul></section>
+    <section class="bbx-news"><h2>Get the latest deals and more.</h2><form method="post" action="${base}/newsletter"><label for="footer-deals-email">Email Address</label><div><input id="footer-deals-email" type="email" name="deals_email" autocomplete="email"><button class="bbx-btn bbx-btn-blue" type="submit">Sign Up</button></div></form></section>
+    <section class="bbx-app"><h2>Best Buy app</h2><p>Shop deals, track orders and check out in store with the app.</p><a href="${base}/site/misc/mobile-app/pcmcat208500050016.c">Learn more ›</a></section>
+  </div>
+  <div class="bbx-foot-cols">${FOOTER.map(([h, links]) => `<section><h3>${esc(h)}</h3><ul>${links.map(([l, u]) => `<li><a href="${base}${u}">${esc(l)}</a></li>`).join('')}</ul></section>`).join('')}</div>
+  <div class="bbx-legal"><nav aria-label="Legal &amp; Privacy">${LEGAL.map(([l, u]) => `<a href="${base}${esc(u)}">${esc(l)}</a>`).join('')}<a href="${base}/sitemap">Site Map</a></nav>
+  <p>&copy; 2026 Best Buy. All rights reserved. BEST BUY, the BEST BUY logo, the tag design, and MY BEST BUY are trademarks of Best Buy and its affiliated companies. Prices and offers are subject to change.</p>
+  ${disclaimer(NAME)}</div>
+</footer>`
+}
+
+export function layout({ base, title, body, cartCount = 0, user = null, chrome = 'full', back = null, q = '', storeName = STORE_NAME }) {
+  const header = chrome === 'full' ? siteHeader({ base, cartCount, user, q, storeName }) : `<header class="bb-header bb-header-slim">
   <div class="bb-header-top">
     ${logo(base)}
     ${back ? `<a class="bb-back" href="${esc(back.href)}">${esc(back.label)}${back.count ? ` <span class="bb-cart-count">${back.count}</span>` : ''}</a>` : ''}
   </div>
 </header>`
-  const footer = chrome === 'full' ? `<footer class="bb-footer">
-  <div class="bb-footer-cols">
-    <div><h4>Order &amp; Purchases</h4><a href="${base}/account">Check Order Status</a><a href="${base}/help">Shipping, Delivery &amp; Store Pickup</a><a href="${base}/help">Returns &amp; Exchanges</a><a href="${base}/contact-us">Get help with an order</a></div>
-    <div><h4>Payment Options</h4><span class="bb-static">My Best Buy&reg; Credit Card</span><span class="bb-static">Pay Your Bill at Citibank</span><span class="bb-static">Lease to Own</span><a href="${base}/gift-cards">Gift Cards</a></div>
-    <div><h4>Support &amp; Services</h4><a href="${base}/help">Visit our Support Center</a><span class="bb-static">Shop with an Expert</span><span class="bb-static">Schedule a Service</span><span class="bb-static">Manage an Appointment</span></div>
-    <div><h4>Rewards &amp; Membership</h4><a href="${base}/membership">My Best Buy Memberships&trade;</a><span class="bb-static">View Points &amp; Certificates</span><span class="bb-static">Member Offers</span></div>
-  </div>
-  <p class="bb-copy">Returns &amp; Exchanges &middot; Get Support &middot; Give Feedback &middot; Terms &amp; Conditions &middot; Privacy &middot; Interest-Based Ads<br>Prices and offers are subject to change. &copy; 2026 Best Buy. All rights reserved. BEST BUY, the BEST BUY logo, the tag design, and MY BEST BUY are trademarks of Best Buy and its affiliated companies.</p>
-  ${disclaimer(NAME)}
-</footer>` : `<footer class="bb-footer bb-footer-slim">
+  const footer = chrome === 'full' ? siteFooter({ base }) : `<footer class="bb-footer bb-footer-slim">
   <p class="bb-copy">Returns &amp; Exchanges &middot; Get Support &middot; Give Feedback &middot; Terms &amp; Conditions &middot; Privacy &middot; Interest-Based Ads<br>Prices and offers are subject to change. &copy; 2026 Best Buy. All rights reserved.</p>
   ${disclaimer(NAME)}
 </footer>`
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
-<link rel="stylesheet" href="${base}/static/style.css"></head>
+<link rel="stylesheet" href="${base}/static/style.css"><link rel="stylesheet" href="${base}/static/site.css"></head>
 <body>
 <a class="bb-skip" href="#main-content">Skip to content</a>
 ${header}

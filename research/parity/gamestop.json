@@ -1,0 +1,1139 @@
+{
+  "store": "gamestop",
+  "real_home": "https://www.gamestop.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.gamestop.com/",
+    "https://www.gamestop.com/video-games",
+    "https://www.gamestop.com/consoles-hardware",
+    "https://www.gamestop.com/gaming-accessories",
+    "https://www.gamestop.com/collectibles",
+    "https://www.gamestop.com/toys-games",
+    "https://www.gamestop.com/digital-store",
+    "https://www.gamestop.com/gift-cards",
+    "https://www.gamestop.com/pre-order-online-pick-up-in-store",
+    "https://www.gamestop.com/help",
+    "https://www.gamestop.com/stores/",
+    "https://www.gamestop.com/fullreturnpolicy",
+    "https://www.gamestop.com/pro/",
+    "https://www.gamestop.com/trade/",
+    "https://www.gamestop.com/credit",
+    "https://www.gamestop.com/card-grading-service",
+    "https://www.gamestop.com/PrivacyPolicy.html",
+    "https://www.gamestop.com/disclaimer.html",
+    "https://www.gamestop.com/TermsConditions.html",
+    "https://www.gamestop.com/accessibility.html",
+    "https://www.gamestop.com/recallnotice.html",
+    "https://www.gamestop.com/affiliate.html",
+    "https://www.gamestop.com/catransparencyact.html",
+    "https://www.gamestop.com/californiaprivacy",
+    "https://www.gamestop.com/promotions-and-exclusions",
+    "research/gamestop.md"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "notes": "Fetched with WebFetch on 2026-10-13. Blocked (robots.txt or fetch error): /search, /login, /order/search, /cart, /deals, product pages and /sitemap.xml; web.archive.org was also blocked for WebFetch. Search, product, cart and sign-in expectations come from the 2026-09-29 browser capture in research/gamestop.md. GameStop has no public HTML site map, so the sitemap list mirrors the header department menu and the main service pages. The real site percent-encodes \"|\" in Xbox Series X|S paths (xbox-series-x%7Cs); the clone uses xbox-series-x-s. Off-site footer links (Narvar returns, MarketForce store feedback, news.gamestop.com investors, careers, app stores) became local summary pages. The real Trade-In link is /trade/; the clone keeps its existing /trade-in route (/trade redirects there). Gift-card menu entries point at filtered listing URLs on the real site and use local /gift-cards/<brand> pages here; Out-Of-Print Cards is a price/franchise-filtered URL on the real site and a local landing page here. The home page Halloween and NY Convention rows are seasonal and were skipped.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "GameStop Home",
+      "real": "https://www.gamestop.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Trade-In",
+      "real": "https://www.gamestop.com/trade/",
+      "path": "/trade-in"
+    },
+    {
+      "kind": "header",
+      "label": "GameStop Pro",
+      "real": "https://www.gamestop.com/pro/",
+      "path": "/pro"
+    },
+    {
+      "kind": "header",
+      "label": "Find a Store",
+      "real": "https://www.gamestop.com/stores/",
+      "path": "/stores"
+    },
+    {
+      "kind": "header",
+      "label": "Sign In",
+      "real": "https://www.gamestop.com/login/",
+      "path": "/login"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.gamestop.com/cart/",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Trading Cards",
+      "real": "https://www.gamestop.com/toys-games/trading-cards",
+      "path": "/toys-games/trading-cards"
+    },
+    {
+      "kind": "header",
+      "label": "Graded Cards",
+      "real": "https://www.gamestop.com/graded-trading-cards",
+      "path": "/graded-trading-cards"
+    },
+    {
+      "kind": "header",
+      "label": "PSA Card Grading",
+      "real": "https://www.gamestop.com/card-grading-service",
+      "path": "/card-grading-service"
+    },
+    {
+      "kind": "header",
+      "label": "Sports Trading Cards",
+      "real": "https://www.gamestop.com/toys-games/trading-cards/sports-trading-cards",
+      "path": "/toys-games/trading-cards/sports-trading-cards"
+    },
+    {
+      "kind": "header",
+      "label": "Pokémon Trading Cards",
+      "real": "https://www.gamestop.com/toys-games/trading-cards/trading-card-games",
+      "path": "/toys-games/trading-cards/trading-card-games"
+    },
+    {
+      "kind": "header",
+      "label": "Out-Of-Print Cards",
+      "real": "https://www.gamestop.com/toys-games/trading-cards?pmin=175.00",
+      "path": "/toys-games/trading-cards/out-of-print"
+    },
+    {
+      "kind": "header",
+      "label": "Deals",
+      "real": "https://www.gamestop.com/deals",
+      "path": "/deals"
+    },
+    {
+      "kind": "header",
+      "label": "Shop My Store",
+      "real": "https://www.gamestop.com/shopmystore/",
+      "path": "/shopmystore"
+    },
+    {
+      "kind": "header",
+      "label": "Pre-Order",
+      "real": "https://www.gamestop.com/pre-order-online-pick-up-in-store",
+      "path": "/pre-order-online-pick-up-in-store"
+    },
+    {
+      "kind": "header",
+      "label": "Board Games",
+      "real": "https://www.gamestop.com/toys-games/board-games",
+      "path": "/toys-games/board-games"
+    },
+    {
+      "kind": "header",
+      "label": "Clothing",
+      "real": "https://www.gamestop.com/clothing",
+      "path": "/clothing"
+    },
+    {
+      "kind": "header",
+      "label": "Homewares",
+      "real": "https://www.gamestop.com/home",
+      "path": "/home"
+    },
+    {
+      "kind": "header",
+      "label": "Stuffed Animals & Plush",
+      "real": "https://www.gamestop.com/toys-games/stuffed-animals-plush",
+      "path": "/toys-games/stuffed-animals-plush"
+    },
+    {
+      "kind": "header",
+      "label": "Funko",
+      "real": "https://www.gamestop.com/collectibles/funko",
+      "path": "/collectibles/funko"
+    },
+    {
+      "kind": "header",
+      "label": "LEGO",
+      "real": "https://www.gamestop.com/lego",
+      "path": "/lego"
+    },
+    {
+      "kind": "header",
+      "label": "Figures",
+      "real": "https://www.gamestop.com/collectibles/figures",
+      "path": "/collectibles/figures"
+    },
+    {
+      "kind": "header",
+      "label": "Statues",
+      "real": "https://www.gamestop.com/collectibles/statues",
+      "path": "/collectibles/statues"
+    },
+    {
+      "kind": "header",
+      "label": "Replicas",
+      "real": "https://www.gamestop.com/collectibles/replicas",
+      "path": "/collectibles/replicas"
+    },
+    {
+      "kind": "header",
+      "label": "Collector's Boxes",
+      "real": "https://www.gamestop.com/collectibles/collectors-boxes",
+      "path": "/collectibles/collectors-boxes"
+    },
+    {
+      "kind": "header",
+      "label": "All Collectibles",
+      "real": "https://www.gamestop.com/collectibles",
+      "path": "/collectibles"
+    },
+    {
+      "kind": "header",
+      "label": "PS5 Consoles",
+      "real": "https://www.gamestop.com/consoles-hardware/playstation-5",
+      "path": "/consoles-hardware/playstation-5"
+    },
+    {
+      "kind": "header",
+      "label": "PS5 Games",
+      "real": "https://www.gamestop.com/video-games/playstation-5",
+      "path": "/video-games/playstation-5"
+    },
+    {
+      "kind": "header",
+      "label": "PS5 Accessories",
+      "real": "https://www.gamestop.com/gaming-accessories/playstation-5-accessories",
+      "path": "/gaming-accessories/playstation-5-accessories"
+    },
+    {
+      "kind": "header",
+      "label": "PS4 Consoles",
+      "real": "https://www.gamestop.com/consoles-hardware/playstation-4",
+      "path": "/consoles-hardware/playstation-4"
+    },
+    {
+      "kind": "header",
+      "label": "PS4 Games",
+      "real": "https://www.gamestop.com/video-games/playstation-4",
+      "path": "/video-games/playstation-4"
+    },
+    {
+      "kind": "header",
+      "label": "PS4 Accessories",
+      "real": "https://www.gamestop.com/gaming-accessories/playstation-4-accessories",
+      "path": "/gaming-accessories/playstation-4-accessories"
+    },
+    {
+      "kind": "header",
+      "label": "PlayStation Gift Cards",
+      "real": "https://www.gamestop.com/digital-store/digital-store-virtual-currency/digital?prefn1=brand&prefv1=Sony",
+      "path": "/gift-cards/playstation"
+    },
+    {
+      "kind": "header",
+      "label": "All PlayStation 5",
+      "real": "https://www.gamestop.com/popular-consoles/playstation",
+      "path": "/popular-consoles/playstation"
+    },
+    {
+      "kind": "header",
+      "label": "Switch 2 Consoles",
+      "real": "https://www.gamestop.com/consoles-hardware/nintendo-switch-2",
+      "path": "/consoles-hardware/nintendo-switch-2"
+    },
+    {
+      "kind": "header",
+      "label": "Switch 2 Games",
+      "real": "https://www.gamestop.com/video-games/nintendo-switch-2",
+      "path": "/video-games/nintendo-switch-2"
+    },
+    {
+      "kind": "header",
+      "label": "Switch 2 Accessories",
+      "real": "https://www.gamestop.com/gaming-accessories/switch-2-accessories",
+      "path": "/gaming-accessories/switch-2-accessories"
+    },
+    {
+      "kind": "header",
+      "label": "Switch 2 Digital Store",
+      "real": "https://www.gamestop.com/digital-store/switch-2-digital",
+      "path": "/digital-store/switch-2-digital"
+    },
+    {
+      "kind": "header",
+      "label": "Switch Consoles",
+      "real": "https://www.gamestop.com/consoles-hardware/nintendo-switch",
+      "path": "/consoles-hardware/nintendo-switch"
+    },
+    {
+      "kind": "header",
+      "label": "Switch Games",
+      "real": "https://www.gamestop.com/video-games/nintendo-switch",
+      "path": "/video-games/nintendo-switch"
+    },
+    {
+      "kind": "header",
+      "label": "Switch Accessories",
+      "real": "https://www.gamestop.com/gaming-accessories/nintendo-switch-accessories",
+      "path": "/gaming-accessories/nintendo-switch-accessories"
+    },
+    {
+      "kind": "header",
+      "label": "Nintendo eShop Gift Cards",
+      "real": "https://www.gamestop.com/gift-cards?prefn1=platform&prefv1=Nintendo%20Switch",
+      "path": "/gift-cards/nintendo"
+    },
+    {
+      "kind": "header",
+      "label": "Nintendo amiibo",
+      "real": "https://www.gamestop.com/consoles-hardware/nintendo-switch/nintendo-switch-amiibo",
+      "path": "/consoles-hardware/nintendo-switch/nintendo-switch-amiibo"
+    },
+    {
+      "kind": "header",
+      "label": "All Nintendo Switch",
+      "real": "https://www.gamestop.com/popular-consoles/nintendo-switch",
+      "path": "/popular-consoles/nintendo-switch"
+    },
+    {
+      "kind": "header",
+      "label": "Series X|S Consoles",
+      "real": "https://www.gamestop.com/consoles-hardware/xbox-series-x%7Cs",
+      "path": "/consoles-hardware/xbox-series-x-s"
+    },
+    {
+      "kind": "header",
+      "label": "Series X|S Games",
+      "real": "https://www.gamestop.com/video-games/xbox-series-x%7Cs",
+      "path": "/video-games/xbox-series-x-s"
+    },
+    {
+      "kind": "header",
+      "label": "Series X|S Accessories",
+      "real": "https://www.gamestop.com/gaming-accessories/xbox-series-x%7Cs-accessories",
+      "path": "/gaming-accessories/xbox-series-x-s-accessories"
+    },
+    {
+      "kind": "header",
+      "label": "Xbox One Consoles",
+      "real": "https://www.gamestop.com/consoles-hardware/xbox-one",
+      "path": "/consoles-hardware/xbox-one"
+    },
+    {
+      "kind": "header",
+      "label": "Xbox One Games",
+      "real": "https://www.gamestop.com/video-games/xbox-one",
+      "path": "/video-games/xbox-one"
+    },
+    {
+      "kind": "header",
+      "label": "Xbox Gift Cards",
+      "real": "https://www.gamestop.com/gift-cards?prefn1=platform&prefv1=Xbox",
+      "path": "/gift-cards/xbox"
+    },
+    {
+      "kind": "header",
+      "label": "Xbox Digital Store",
+      "real": "https://www.gamestop.com/digital-store/xbox-digital",
+      "path": "/digital-store/xbox-digital"
+    },
+    {
+      "kind": "header",
+      "label": "All Xbox Series X|S",
+      "real": "https://www.gamestop.com/popular-consoles/xbox",
+      "path": "/popular-consoles/xbox"
+    },
+    {
+      "kind": "header",
+      "label": "Pre-Owned Electronics",
+      "real": "https://www.gamestop.com/preowned/pre-owned-tech",
+      "path": "/preowned/pre-owned-tech"
+    },
+    {
+      "kind": "header",
+      "label": "Exclusive Design Controllers",
+      "real": "https://www.gamestop.com/links/gamestop-exclusive-design-refurbished-controllers",
+      "path": "/links/gamestop-exclusive-design-refurbished-controllers"
+    },
+    {
+      "kind": "header",
+      "label": "All Pre-Owned",
+      "real": "https://www.gamestop.com/preowned",
+      "path": "/preowned"
+    },
+    {
+      "kind": "header",
+      "label": "New & Upcoming",
+      "real": "https://www.gamestop.com/new-and-upcoming",
+      "path": "/new-and-upcoming"
+    },
+    {
+      "kind": "header",
+      "label": "Only At GameStop",
+      "real": "https://www.gamestop.com/only-at-gamestop",
+      "path": "/only-at-gamestop"
+    },
+    {
+      "kind": "header",
+      "label": "Digital Store",
+      "real": "https://www.gamestop.com/digital-store",
+      "path": "/digital-store"
+    },
+    {
+      "kind": "header",
+      "label": "Retro Gaming",
+      "real": "https://www.gamestop.com/retro",
+      "path": "/retro"
+    },
+    {
+      "kind": "header",
+      "label": "GS Pro Credit Card",
+      "real": "https://www.gamestop.com/credit",
+      "path": "/credit"
+    },
+    {
+      "kind": "footer",
+      "label": "Help Center",
+      "real": "https://www.gamestop.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "footer",
+      "label": "Order Status",
+      "real": "https://www.gamestop.com/order/search/",
+      "path": "/order/search"
+    },
+    {
+      "kind": "footer",
+      "label": "GameStop Pro Credit Card",
+      "real": "https://www.gamestop.com/credit",
+      "path": "/credit"
+    },
+    {
+      "kind": "footer",
+      "label": "Recall Notices",
+      "real": "https://www.gamestop.com/recallnotice.html",
+      "path": "/recallnotice.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Make a Return",
+      "real": "https://returns.narvar.com/gamestop/returns",
+      "path": "/returns"
+    },
+    {
+      "kind": "footer",
+      "label": "Store Feedback",
+      "real": "https://gamestop.survey.marketforce.com/",
+      "path": "/store-feedback"
+    },
+    {
+      "kind": "footer",
+      "label": "CA Privacy Rights",
+      "real": "https://www.gamestop.com/californiaprivacy",
+      "path": "/californiaprivacy"
+    },
+    {
+      "kind": "footer",
+      "label": "CA Transparency Act",
+      "real": "https://www.gamestop.com/catransparencyact.html",
+      "path": "/catransparencyact.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Conditions of Use",
+      "real": "https://www.gamestop.com/disclaimer.html",
+      "path": "/disclaimer.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns Policy",
+      "real": "https://www.gamestop.com/fullreturnpolicy",
+      "path": "/fullreturnpolicy"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Policy",
+      "real": "https://www.gamestop.com/PrivacyPolicy.html",
+      "path": "/PrivacyPolicy.html"
+    },
+    {
+      "kind": "footer",
+      "label": "GameStop Pro Terms & Conditions",
+      "real": "https://www.gamestop.com/TermsConditions.html",
+      "path": "/TermsConditions.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Card Grading Service Terms & Conditions",
+      "real": "https://www.gamestop.com/CardGradingTermsConditions.html",
+      "path": "/CardGradingTermsConditions.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.gamestop.com/accessibility.html",
+      "path": "/accessibility.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Affiliates",
+      "real": "https://www.gamestop.com/affiliate.html",
+      "path": "/affiliate.html"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://www.gamestop.com/careers",
+      "path": "/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Find a Store",
+      "real": "https://www.gamestop.com/stores",
+      "path": "/stores"
+    },
+    {
+      "kind": "footer",
+      "label": "Investors",
+      "real": "http://news.gamestop.com/",
+      "path": "/investors"
+    },
+    {
+      "kind": "footer",
+      "label": "Promotions & Exclusions",
+      "real": "https://www.gamestop.com/promotions-and-exclusions",
+      "path": "/promotions-and-exclusions"
+    },
+    {
+      "kind": "footer",
+      "label": "Download on the App Store",
+      "real": "https://itunes.apple.com/us/app/gamestop/id406033647",
+      "path": "/mobile-app"
+    },
+    {
+      "kind": "footer",
+      "label": "Get it on Google Play",
+      "real": "https://play.google.com/store/apps/details?id=com.gamestop.powerup.v2",
+      "path": "/mobile-app"
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.gamestop.com/search/?q=grand%20theft%20auto%20vi",
+      "path": "/search?q=grand+theft+auto+vi",
+      "expect": [
+        "Search Results for \"grand theft auto vi\"",
+        "Sort",
+        "Delivery Method",
+        "Platform"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page (GTA VI PS5)",
+      "real": "https://www.gamestop.com/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+      "path": "/video-games/playstation-5/products/grand-theft-auto-vi---playstation-5-code-in-box/448295.html",
+      "expect": [
+        "Grand Theft Auto VI - PlayStation 5 (Code in Box)",
+        "Pre-Order",
+        "Delivery:",
+        "Billing does not occur until order is processed"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://www.gamestop.com/cart/",
+      "path": "/cart",
+      "expect": [
+        "Your cart is empty"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.gamestop.com/login/",
+      "path": "/login",
+      "expect": [
+        "Sign In",
+        "Email",
+        "Password",
+        "Create Account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Create account",
+      "real": "https://www.gamestop.com/registration/",
+      "path": "/account/create",
+      "expect": [
+        "Create Account",
+        "First Name",
+        "Last Name"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status",
+      "real": "https://www.gamestop.com/order/search/",
+      "path": "/order/search",
+      "expect": [
+        "Order Status",
+        "Order Number",
+        "Email"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help center",
+      "real": "https://www.gamestop.com/help",
+      "path": "/help",
+      "expect": [
+        "How Can We Help?",
+        "Browse Help Topics",
+        "Frequently Asked Questions",
+        "Still need help?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store locator",
+      "real": "https://www.gamestop.com/stores/",
+      "path": "/stores",
+      "expect": [
+        "Find A Store"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.gamestop.com/gift-cards",
+      "path": "/gift-cards",
+      "expect": [
+        "Gift Cards",
+        "Shop Gift Cards For Top Brands",
+        "Virtual Currency",
+        "Digital Subscriptions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals",
+      "real": "https://www.gamestop.com/deals",
+      "path": "/deals",
+      "expect": [
+        "Deals",
+        "Best Matches"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns policy",
+      "real": "https://www.gamestop.com/fullreturnpolicy",
+      "path": "/fullreturnpolicy",
+      "expect": [
+        "Return Policy",
+        "Non-Returnable Items",
+        "Defective Product Exchanges"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping options",
+      "real": "https://www.gamestop.com/help",
+      "path": "/help/articles/shipping",
+      "expect": [
+        "Shipping Options at GameStop"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Video Games department",
+      "real": "https://www.gamestop.com/video-games",
+      "path": "/video-games",
+      "expect": [
+        "Video Games",
+        "Browse By Platform",
+        "Best Matches",
+        "Delivery Method"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Consoles & Hardware department",
+      "real": "https://www.gamestop.com/consoles-hardware",
+      "path": "/consoles-hardware",
+      "expect": [
+        "Consoles & Hardware",
+        "Browse By Category",
+        "Virtual Reality"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gaming Accessories department",
+      "real": "https://www.gamestop.com/gaming-accessories",
+      "path": "/gaming-accessories",
+      "expect": [
+        "Gaming Accessories",
+        "Browse By Platform",
+        "Racing Wheels",
+        "Chargers & Cables"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Collectibles department",
+      "real": "https://www.gamestop.com/collectibles",
+      "path": "/collectibles",
+      "expect": [
+        "Collectibles",
+        "Shop The Latest Pre-Orders In Collectibles!",
+        "Shop All Collectibles From These Top Fandoms"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Toys & Games department",
+      "real": "https://www.gamestop.com/toys-games",
+      "path": "/toys-games",
+      "expect": [
+        "Toys & Games",
+        "Shop All Toys!",
+        "Blind Bags",
+        "Puzzles"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Digital Store",
+      "real": "https://www.gamestop.com/digital-store",
+      "path": "/digital-store",
+      "expect": [
+        "Digital Store",
+        "GameStop's Guide To Digital Downloads",
+        "Top Virtual Currencies"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pre-Order landing",
+      "real": "https://www.gamestop.com/pre-order-online-pick-up-in-store",
+      "path": "/pre-order-online-pick-up-in-store",
+      "expect": [
+        "Pre-Order Online, Pick Up In-Store"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "GameStop Pro",
+      "real": "https://www.gamestop.com/pro/",
+      "path": "/pro",
+      "expect": [
+        "Get $60 in value just for signing up!",
+        "GameStop Pro Benefits",
+        "Why It Pays To Be A Pro",
+        "Details & Exclusions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Trade-In",
+      "real": "https://www.gamestop.com/trade/",
+      "path": "/trade-in",
+      "expect": [
+        "Trade-in Your Stuff For Cash or Credit.",
+        "This Week's Top Trade Deals.",
+        "Find A Store Near You"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pro Credit Card",
+      "real": "https://www.gamestop.com/credit",
+      "path": "/credit",
+      "expect": [
+        "Get 2% Back in Rewards* With the GameStop Pro Credit Card!",
+        "Points Never Expire* & No Annual Fee*",
+        "FAQs"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "PSA Card Grading",
+      "real": "https://www.gamestop.com/card-grading-service",
+      "path": "/card-grading-service",
+      "expect": [
+        "Get Your Cards Graded With PSA",
+        "How It Works",
+        "Drop Off Your Cards",
+        "PSA Grading Submissions FAQ"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Privacy Policy",
+      "real": "https://www.gamestop.com/PrivacyPolicy.html",
+      "path": "/PrivacyPolicy.html",
+      "expect": [
+        "Privacy Policy",
+        "Personal Information We Collect",
+        "Children's Privacy"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Conditions of Use",
+      "real": "https://www.gamestop.com/disclaimer.html",
+      "path": "/disclaimer.html",
+      "expect": [
+        "Conditions of Use",
+        "Applicable Law",
+        "Prohibited Uses"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pro Terms & Conditions",
+      "real": "https://www.gamestop.com/TermsConditions.html",
+      "path": "/TermsConditions.html",
+      "expect": [
+        "Membership Eligibility",
+        "Auto-renew"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Accessibility",
+      "real": "https://www.gamestop.com/accessibility.html",
+      "path": "/accessibility.html",
+      "expect": [
+        "Accessibility Statement",
+        "Our Commitment to Accessibility",
+        "Web Accessibility Guidelines"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Promotions & Exclusions",
+      "real": "https://www.gamestop.com/promotions-and-exclusions",
+      "path": "/promotions-and-exclusions",
+      "expect": [
+        "Promotions & Exclusions",
+        "Ask our Customer Service Team!"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Recall Notices",
+      "real": "https://www.gamestop.com/recallnotice.html",
+      "path": "/recallnotice.html",
+      "expect": [
+        "Recall Notice",
+        "Recall Summary"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Affiliates",
+      "real": "https://www.gamestop.com/affiliate.html",
+      "path": "/affiliate.html",
+      "expect": [
+        "Affiliate Application",
+        "Build a Better Site",
+        "It's Easy and Free"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Sign-in prompt",
+      "expect": [
+        "Sign in for the best experience"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Promo bar",
+      "expect": [
+        "Pre-Order The Newest Trading Cards Before They Sell Out."
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Featured Products",
+      "expect": [
+        "Featured Products"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Pokémon TCG sets",
+      "expect": [
+        "Shop Pokémon TCG By Set"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Top Deals",
+      "expect": [
+        "Top Deals"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Collectors hero",
+      "expect": [
+        "Power to the Collectors"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Trading card pulls",
+      "expect": [
+        "Chasing Hits, One Pull at a Time"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Sports cards",
+      "expect": [
+        "Score A Touchdown, Basket, or Homerun!"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "What Everyone's Playing",
+      "expect": [
+        "What Everyone's Playing"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Gear replacement",
+      "expect": [
+        "When Gear Fails, Get Back in the Game"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Film collectibles",
+      "expect": [
+        "Collect Your Favorite Films!"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "New toys",
+      "expect": [
+        "New Toys & Collectibles Have Arrived!"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Top brands",
+      "expect": [
+        "Top Brands For Every Fan"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Browse By Category",
+      "expect": [
+        "Browse By Category"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Newsletter sign-up",
+      "expect": [
+        "Sign Up",
+        "Get Exclusive Promotions, Coupons, and the Latest Events"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Get the app",
+      "expect": [
+        "Get the App"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Games",
+      "real": "https://www.gamestop.com/video-games",
+      "path": "/video-games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation 5 Games",
+      "real": "https://www.gamestop.com/video-games/playstation-5",
+      "path": "/video-games/playstation-5"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox Series X|S Games",
+      "real": "https://www.gamestop.com/video-games/xbox-series-x%7Cs",
+      "path": "/video-games/xbox-series-x-s"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo Switch 2 Games",
+      "real": "https://www.gamestop.com/video-games/nintendo-switch-2",
+      "path": "/video-games/nintendo-switch-2"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PC Gaming",
+      "real": "https://www.gamestop.com/pc-gaming",
+      "path": "/pc-gaming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Consoles & Hardware",
+      "real": "https://www.gamestop.com/consoles-hardware",
+      "path": "/consoles-hardware"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Virtual Reality",
+      "real": "https://www.gamestop.com/consoles-hardware/virtual-reality",
+      "path": "/consoles-hardware/virtual-reality"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Accessories",
+      "real": "https://www.gamestop.com/gaming-accessories",
+      "path": "/gaming-accessories"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Controllers",
+      "real": "https://www.gamestop.com/gaming-accessories/controllers",
+      "path": "/gaming-accessories/controllers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Headsets",
+      "real": "https://www.gamestop.com/gaming-accessories/gaming-headsets",
+      "path": "/gaming-accessories/gaming-headsets"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trading Cards",
+      "real": "https://www.gamestop.com/toys-games/trading-cards",
+      "path": "/toys-games/trading-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Graded Trading Cards",
+      "real": "https://www.gamestop.com/graded-trading-cards",
+      "path": "/graded-trading-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Collectibles",
+      "real": "https://www.gamestop.com/collectibles",
+      "path": "/collectibles"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys & Games",
+      "real": "https://www.gamestop.com/toys-games",
+      "path": "/toys-games"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing",
+      "real": "https://www.gamestop.com/clothing",
+      "path": "/clothing"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home & Lifestyle",
+      "real": "https://www.gamestop.com/home",
+      "path": "/home"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electronics",
+      "real": "https://www.gamestop.com/electronics",
+      "path": "/electronics"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Digital Store",
+      "real": "https://www.gamestop.com/digital-store",
+      "path": "/digital-store"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.gamestop.com/gift-cards",
+      "path": "/gift-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Deals",
+      "real": "https://www.gamestop.com/deals",
+      "path": "/deals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pre-Owned",
+      "real": "https://www.gamestop.com/preowned",
+      "path": "/preowned"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Retro Gaming",
+      "real": "https://www.gamestop.com/retro",
+      "path": "/retro"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New & Upcoming",
+      "real": "https://www.gamestop.com/new-and-upcoming",
+      "path": "/new-and-upcoming"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Only At GameStop",
+      "real": "https://www.gamestop.com/only-at-gamestop",
+      "path": "/only-at-gamestop"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trade-In",
+      "real": "https://www.gamestop.com/trade/",
+      "path": "/trade-in"
+    },
+    {
+      "kind": "sitemap",
+      "label": "GameStop Pro",
+      "real": "https://www.gamestop.com/pro/",
+      "path": "/pro"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store Locator",
+      "real": "https://www.gamestop.com/stores/",
+      "path": "/stores"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Help Center",
+      "real": "https://www.gamestop.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Order Status",
+      "real": "https://www.gamestop.com/order/search/",
+      "path": "/order/search"
+    }
+  ]
+}

@@ -1,0 +1,1974 @@
+{
+  "store": "walmart",
+  "real_home": "https://www.walmart.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.walmart.com/",
+    "https://www.walmart.com/all-departments",
+    "https://www.walmart.com/help",
+    "https://www.walmart.com/store/directory",
+    "https://www.walmart.com/cp/gift-cards/96894",
+    "https://www.walmart.com/shop/deals",
+    "https://www.walmart.com/cart",
+    "https://www.walmart.com/plus",
+    "https://www.walmart.com/registry",
+    "https://www.walmart.com/cp/electronics/3944",
+    "https://www.walmart.com/help/article/walmart-standard-return-policy/adc0dfb692954e67a4de206fb8d9e03a",
+    "https://www.walmart.com/help/article/pickup-and-delivery/d0d02a5f54e54592930f110aaf6a2f50",
+    "https://www.walmart.com/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0",
+    "https://www.walmart.com/store-finder",
+    "research/walmart.md"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "notes": "Fetched with WebFetch on 2026-10-13. Blocked: /search (robots disallowed) and /sitemap.xml (client error); search, product page, cart and identity-gate expectations come from research/walmart.md (2026-09-29 capture). The old shipping-policy article URL now shows \"This page no longer exists\", so the Pickup and Delivery help article stands in for the shipping policy. The real cart fetch returned homepage chrome only (cart is client-rendered). The Departments/Services drawer headings were read from the global menu on /store/directory; their real category ids were not all captured, so those paths are /cp/<slug>. Sitemap items are the /all-departments tree (first eight links per department; the off-site Kobo eBooks link is omitted) plus the main non-product sections. Walmart has no public HTML site map; /sitemap is a local page. Off-site footer links (corporate, careers, marketplace, Spark Driver, MSDS, privacy pages) are local info pages. Seasonal homepage promos (Halloween/fall) were live on the capture date and are included as home items.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Walmart Homepage",
+      "real": "https://www.walmart.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Departments",
+      "real": "https://www.walmart.com/all-departments",
+      "path": "/all-departments"
+    },
+    {
+      "kind": "header",
+      "label": "Services",
+      "real": "https://www.walmart.com/all-departments",
+      "path": "/services"
+    },
+    {
+      "kind": "header",
+      "label": "My Items",
+      "real": "https://www.walmart.com/my-items",
+      "path": "/my-items"
+    },
+    {
+      "kind": "header",
+      "label": "Lists",
+      "real": "https://www.walmart.com/lists",
+      "path": "/lists"
+    },
+    {
+      "kind": "header",
+      "label": "Registries",
+      "real": "https://www.walmart.com/my-registries",
+      "path": "/my-registries"
+    },
+    {
+      "kind": "header",
+      "label": "Sign in or create account",
+      "real": "https://identity.walmart.com/account/login",
+      "path": "/account/login"
+    },
+    {
+      "kind": "header",
+      "label": "Purchase History",
+      "real": "https://www.walmart.com/orders",
+      "path": "/orders"
+    },
+    {
+      "kind": "header",
+      "label": "Subscriptions",
+      "real": "https://www.walmart.com/cp/subscriptions/4191733",
+      "path": "/cp/subscriptions/4191733"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.walmart.com/cart",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Rollbacks & More",
+      "real": "https://www.walmart.com/shop/savings",
+      "path": "/shop/savings"
+    },
+    {
+      "kind": "header",
+      "label": "Restaurants",
+      "real": "https://www.walmart.com/cp/restaurants",
+      "path": "/cp/restaurants"
+    },
+    {
+      "kind": "header",
+      "label": "Get it Fast",
+      "real": "https://www.walmart.com/shop/get-it-fast",
+      "path": "/shop/get-it-fast"
+    },
+    {
+      "kind": "header",
+      "label": "Pharmacy",
+      "real": "https://www.walmart.com/cp/pharmacy/5431",
+      "path": "/cp/pharmacy/5431"
+    },
+    {
+      "kind": "header",
+      "label": "Walmart+",
+      "real": "https://www.walmart.com/plus",
+      "path": "/plus"
+    },
+    {
+      "kind": "header",
+      "label": "More",
+      "real": "https://www.walmart.com/all-departments",
+      "path": "/all-departments"
+    },
+    {
+      "kind": "header",
+      "label": "Grocery",
+      "real": "https://www.walmart.com/cp/food/976759",
+      "path": "/cp/food/976759"
+    },
+    {
+      "kind": "header",
+      "label": "Clothing, Shoes & Accessories",
+      "real": "https://www.walmart.com/cp/clothing/5438",
+      "path": "/cp/clothing/5438"
+    },
+    {
+      "kind": "header",
+      "label": "Baby",
+      "real": "https://www.walmart.com/cp/baby-products/5427",
+      "path": "/cp/baby-products/5427"
+    },
+    {
+      "kind": "header",
+      "label": "Pharmacy, Health & Wellness",
+      "real": "https://www.walmart.com/cp/health/976760",
+      "path": "/cp/health/976760"
+    },
+    {
+      "kind": "header",
+      "label": "Home, Garden & Tools",
+      "real": "https://www.walmart.com/cp/home/4044",
+      "path": "/cp/home/4044"
+    },
+    {
+      "kind": "header",
+      "label": "Electronics",
+      "real": "https://www.walmart.com/cp/electronics/3944",
+      "path": "/cp/electronics/3944"
+    },
+    {
+      "kind": "header",
+      "label": "Gaming & Movies",
+      "real": "https://www.walmart.com/cp/video-games/2636",
+      "path": "/cp/video-games/2636"
+    },
+    {
+      "kind": "header",
+      "label": "Auto & Tires",
+      "real": "https://www.walmart.com/cp/auto-tires/91083",
+      "path": "/cp/auto-tires/91083"
+    },
+    {
+      "kind": "header",
+      "label": "Personal Care",
+      "real": "https://www.walmart.com/cp/personal-care/1005862",
+      "path": "/cp/personal-care/1005862"
+    },
+    {
+      "kind": "header",
+      "label": "Beauty",
+      "real": "https://www.walmart.com/cp/beauty/1085666",
+      "path": "/cp/beauty/1085666"
+    },
+    {
+      "kind": "header",
+      "label": "Toys & Outdoor Play",
+      "real": "https://www.walmart.com/cp/toys/4171",
+      "path": "/cp/toys/4171"
+    },
+    {
+      "kind": "header",
+      "label": "Household Essentials",
+      "real": "https://www.walmart.com/cp/household-essentials/1115193",
+      "path": "/cp/household-essentials/1115193"
+    },
+    {
+      "kind": "header",
+      "label": "Pet Supplies",
+      "real": "https://www.walmart.com/cp/pet-supplies/5440",
+      "path": "/cp/pet-supplies/5440"
+    },
+    {
+      "kind": "header",
+      "label": "School, Office & Art Supplies",
+      "real": "https://www.walmart.com/cp/office-supplies/1229749",
+      "path": "/cp/office-supplies/1229749"
+    },
+    {
+      "kind": "header",
+      "label": "Sports & Outdoors",
+      "real": "https://www.walmart.com/cp/sports-and-outdoors/4125",
+      "path": "/cp/sports-and-outdoors/4125"
+    },
+    {
+      "kind": "header",
+      "label": "Collectibles",
+      "real": "https://www.walmart.com/cp/collectibles/5967908",
+      "path": "/cp/collectibles/5967908"
+    },
+    {
+      "kind": "header",
+      "label": "Books",
+      "real": "https://www.walmart.com/cp/books/3920",
+      "path": "/cp/books/3920"
+    },
+    {
+      "kind": "header",
+      "label": "Music",
+      "real": "https://www.walmart.com/cp/music/4104",
+      "path": "/cp/music/4104"
+    },
+    {
+      "kind": "header",
+      "label": "Party Supplies",
+      "real": "https://www.walmart.com/cp/party-occasions/2637",
+      "path": "/cp/party-occasions/2637"
+    },
+    {
+      "kind": "header",
+      "label": "Resold",
+      "real": "https://www.walmart.com/cp/resold",
+      "path": "/cp/resold"
+    },
+    {
+      "kind": "header",
+      "label": "Auto Care Services",
+      "real": "https://www.walmart.com/cp/auto-services/1087266",
+      "path": "/cp/auto-services/1087266"
+    },
+    {
+      "kind": "header",
+      "label": "Health Services",
+      "real": "https://www.walmart.com/cp/health-services",
+      "path": "/cp/health-services"
+    },
+    {
+      "kind": "header",
+      "label": "Vaccines",
+      "real": "https://www.walmart.com/cp/vaccines",
+      "path": "/cp/vaccines"
+    },
+    {
+      "kind": "header",
+      "label": "Vision Center",
+      "real": "https://www.walmart.com/cp/vision-center",
+      "path": "/cp/vision-center"
+    },
+    {
+      "kind": "header",
+      "label": "Benefit Programs",
+      "real": "https://www.walmart.com/cp/benefit-programs",
+      "path": "/cp/benefit-programs"
+    },
+    {
+      "kind": "header",
+      "label": "Insurance Services",
+      "real": "https://www.walmart.com/cp/insurance-services",
+      "path": "/cp/insurance-services"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Cards",
+      "real": "https://www.walmart.com/cp/gift-cards/96894",
+      "path": "/cp/gift-cards/96894"
+    },
+    {
+      "kind": "header",
+      "label": "Spark Good",
+      "real": "https://www.walmart.com/cp/spark-good",
+      "path": "/cp/spark-good"
+    },
+    {
+      "kind": "header",
+      "label": "Custom Cakes",
+      "real": "https://www.walmart.com/cp/custom-cakes",
+      "path": "/cp/custom-cakes"
+    },
+    {
+      "kind": "header",
+      "label": "Photo Services",
+      "real": "https://www.walmart.com/cp/photo-services",
+      "path": "/cp/photo-services"
+    },
+    {
+      "kind": "header",
+      "label": "Protection Services",
+      "real": "https://www.walmart.com/cp/protection-services",
+      "path": "/cp/protection-services"
+    },
+    {
+      "kind": "header",
+      "label": "Home & Tech Services",
+      "real": "https://www.walmart.com/cp/home-tech-services",
+      "path": "/cp/home-tech-services"
+    },
+    {
+      "kind": "header",
+      "label": "Walmart Business",
+      "real": "https://www.walmart.com/cp/about-walmart-business/6136230",
+      "path": "/cp/about-walmart-business/6136230"
+    },
+    {
+      "kind": "footer",
+      "label": "All Departments",
+      "real": "https://www.walmart.com/all-departments",
+      "path": "/all-departments"
+    },
+    {
+      "kind": "footer",
+      "label": "Store Directory",
+      "real": "https://www.walmart.com/store/directory",
+      "path": "/store/directory"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://careers.walmart.com/",
+      "path": "/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Our Company",
+      "real": "https://corporate.walmart.com/",
+      "path": "/our-company"
+    },
+    {
+      "kind": "footer",
+      "label": "Sell on Walmart.com",
+      "real": "https://marketplace.walmart.com/",
+      "path": "/sell-on-walmart"
+    },
+    {
+      "kind": "footer",
+      "label": "Help",
+      "real": "https://www.walmart.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "footer",
+      "label": "Product Recalls",
+      "real": "https://corporate.walmart.com/recalls",
+      "path": "/product-recalls"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.walmart.com/help/article/responsible-disclosure-and-accessibility-policies/0f173dab8bd942da84b1cd7ab5ffc3cb",
+      "path": "/help/article/responsible-disclosure-and-accessibility-policies/0f173dab8bd942da84b1cd7ab5ffc3cb"
+    },
+    {
+      "kind": "footer",
+      "label": "Tax Exempt Program",
+      "real": "https://www.walmart.com/cp/tax-exemption-program/8480422",
+      "path": "/cp/tax-exemption-program/8480422"
+    },
+    {
+      "kind": "footer",
+      "label": "Get the Walmart App",
+      "real": "https://www.walmart.com/cp/walmart-mobile-app/1087865",
+      "path": "/cp/walmart-mobile-app/1087865"
+    },
+    {
+      "kind": "footer",
+      "label": "Safety Data Sheet",
+      "real": "http://msds.walmartstores.com/",
+      "path": "/safety-data-sheet"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms of Use",
+      "real": "https://www.walmart.com/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0",
+      "path": "/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Notice",
+      "real": "https://corporate.walmart.com/privacy-security/walmart-privacy-notice",
+      "path": "/privacy-notice"
+    },
+    {
+      "kind": "footer",
+      "label": "California Supply Chain Act",
+      "real": "https://corporate.walmart.com/california-transparency",
+      "path": "/california-transparency"
+    },
+    {
+      "kind": "footer",
+      "label": "Your Privacy Choices",
+      "real": "https://www.walmart.com/privacyrequest",
+      "path": "/privacyrequest"
+    },
+    {
+      "kind": "footer",
+      "label": "Notice at Collection",
+      "real": "https://corporate.walmart.com/privacy-security/california-privacy-rights",
+      "path": "/notice-at-collection"
+    },
+    {
+      "kind": "footer",
+      "label": "AdChoices",
+      "real": "https://corporate.walmart.com/privacy-security/walmart-privacy-notice#interest-based-advertising",
+      "path": "/adchoices"
+    },
+    {
+      "kind": "footer",
+      "label": "Consumer Health Data Privacy Notices",
+      "real": "https://corporate.walmart.com/privacy-security/walmart-consumer-health-data-privacy-notices",
+      "path": "/consumer-health-data-privacy-notices"
+    },
+    {
+      "kind": "footer",
+      "label": "Learn about Spark Driver",
+      "real": "https://www.sparkdriverapp.com/",
+      "path": "/spark-driver"
+    },
+    {
+      "kind": "footer",
+      "label": "Brand Shop Directory",
+      "real": "https://www.walmart.com/brand/branddirectory",
+      "path": "/brand/branddirectory"
+    },
+    {
+      "kind": "footer",
+      "label": "Walmart Business",
+      "real": "https://business.walmart.com/cp/about-walmart-business/6136230",
+      "path": "/cp/about-walmart-business/6136230"
+    },
+    {
+      "kind": "footer",
+      "label": "#IYWYK",
+      "real": "https://www.walmart.com/cp/walmart-in-the-know/7781927",
+      "path": "/cp/walmart-in-the-know/7781927"
+    },
+    {
+      "kind": "footer",
+      "label": "Delete Account",
+      "real": "https://www.walmart.com/account/login?returnUrl=%2Faccount%2Fdelete-account",
+      "path": "/account/delete-account"
+    },
+    {
+      "kind": "footer",
+      "label": "Give feedback",
+      "real": "https://www.walmart.com/",
+      "path": "/help/contact"
+    },
+    {
+      "kind": "page",
+      "label": "All Departments",
+      "real": "https://www.walmart.com/all-departments",
+      "path": "/all-departments",
+      "expect": [
+        "All Departments",
+        "Savings & Featured Shops",
+        "Home, Furniture & Appliances",
+        "Arts, Crafts, Sewing & Party Supplies"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department page (Electronics)",
+      "real": "https://www.walmart.com/cp/electronics/3944",
+      "path": "/cp/electronics/3944",
+      "expect": [
+        "Electronics",
+        "Shop by category",
+        "TVs & home theater",
+        "Headphones"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Department page (Video Games)",
+      "real": "https://www.walmart.com/cp/video-games/2636",
+      "path": "/cp/video-games/2636",
+      "expect": [
+        "Video Games",
+        "Shop by category"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.walmart.com/search?q=grand+theft+auto+vi",
+      "path": "/search?q=grand+theft+auto+vi",
+      "expect": [
+        "Results for \"grand theft auto vi\"",
+        "Uses item details. Price when purchased online",
+        "Sort by"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.walmart.com/ip/Grand-Theft-Auto-VI-PlayStation-5-Game/20482917228",
+      "path": "/ip/Grand-Theft-Auto-VI-PlayStation-5-Game/20482917228",
+      "expect": [
+        "Grand Theft Auto VI, PlayStation 5 Game",
+        "Preorder Price Guarantee",
+        "How do you want your item?",
+        "Sold and shipped by Walmart.com"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://www.walmart.com/cart",
+      "path": "/cart",
+      "expect": [
+        "Cart"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://identity.walmart.com/account/login",
+      "path": "/account/login",
+      "expect": [
+        "Sign in or create your account",
+        "Phone number or email",
+        "Continue"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Create account",
+      "real": "https://identity.walmart.com/account/sign-up",
+      "path": "/account/sign-up",
+      "expect": [
+        "Create your Walmart account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status / Purchase history",
+      "real": "https://www.walmart.com/orders",
+      "path": "/orders",
+      "expect": [
+        "Sign in or create your account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help center",
+      "real": "https://www.walmart.com/help",
+      "path": "/help",
+      "expect": [
+        "Help & customer support",
+        "Choose a help topic or chat with us",
+        "Your Order",
+        "Returns & Refunds",
+        "Didn't find what you were looking for?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store directory",
+      "real": "https://www.walmart.com/store/directory",
+      "path": "/store/directory",
+      "expect": [
+        "Walmart Store Directory",
+        "Walmart Stores in U.S.",
+        "Nebraska"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store finder",
+      "real": "https://www.walmart.com/store-finder",
+      "path": "/store-finder",
+      "expect": [
+        "Walmart Stores Near Me"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.walmart.com/cp/gift-cards/96894",
+      "path": "/cp/gift-cards/96894",
+      "expect": [
+        "Shop Walmart Gift Cards",
+        "Shop by category",
+        "Check your gift card balance",
+        "Using Walmart gift cards",
+        "Gift card help & info"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift card balance",
+      "real": "https://www.walmart.com/account/giftcards/balance",
+      "path": "/account/giftcards/balance",
+      "expect": [
+        "Check your gift card balance",
+        "Gift card number"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Deals",
+      "real": "https://www.walmart.com/shop/deals",
+      "path": "/shop/deals",
+      "expect": [
+        "Deals",
+        "Must-haves for less",
+        "Shopping, simplified",
+        "Flash Deals",
+        "Clearance"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Flash Deals",
+      "real": "https://www.walmart.com/shop/deals/flash-deals",
+      "path": "/shop/deals/flash-deals",
+      "expect": [
+        "Flash Deals"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Walmart+",
+      "real": "https://www.walmart.com/plus",
+      "path": "/plus",
+      "expect": [
+        "Try 30 days of Walmart+ for just $1",
+        "Explore Walmart+ benefits",
+        "Free Delivery",
+        "Frequently Asked Questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift registry",
+      "real": "https://www.walmart.com/registry",
+      "path": "/registry",
+      "expect": [
+        "Gifts for life",
+        "Create your registry",
+        "Find a registry",
+        "Registry FAQs"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Return policy",
+      "real": "https://www.walmart.com/help/article/walmart-standard-return-policy/adc0dfb692954e67a4de206fb8d9e03a",
+      "path": "/help/article/walmart-standard-return-policy/adc0dfb692954e67a4de206fb8d9e03a",
+      "expect": [
+        "Walmart Standard Return Policy",
+        "Returning items purchased on Walmart.com",
+        "In store purchases",
+        "Extended holiday returns",
+        "Damaged or defective items"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping / pickup & delivery policy",
+      "real": "https://www.walmart.com/help/article/pickup-and-delivery/d0d02a5f54e54592930f110aaf6a2f50",
+      "path": "/help/article/pickup-and-delivery/d0d02a5f54e54592930f110aaf6a2f50",
+      "expect": [
+        "Pickup and Delivery",
+        "Pickup Orders",
+        "Delivery Orders",
+        "Delayed or Canceled Delivery Orders"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Terms of Use",
+      "real": "https://www.walmart.com/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0",
+      "path": "/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0",
+      "expect": [
+        "Walmart.com Terms of Use",
+        "Introduction",
+        "Your Use of the Walmart Sites",
+        "Placing an Order"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.walmart.com/all-departments",
+      "path": "/sitemap",
+      "expect": [
+        "Site Map",
+        "Departments"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Page H1",
+      "expect": [
+        "Walmart | Save Money. Live better."
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Pickup or delivery? location pill",
+      "expect": [
+        "Pickup or delivery?"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Walmart+ hero",
+      "expect": [
+        "Save more. A lot more.",
+        "Try Walmart+ for $1"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Fashion, home & more promo",
+      "expect": [
+        "Fashion, home & more"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "From classics to top trends promo",
+      "expect": [
+        "From classics to top trends"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Flash Deals row",
+      "expect": [
+        "Flash Deals",
+        "Up to 65% off"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Seasonal promo grid",
+      "expect": [
+        "Premium autumn prep",
+        "Stylish kitchen upgrades",
+        "Decor, food & more"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Fall promo tiles",
+      "expect": [
+        "Fall coffee, syrups & more",
+        "Seasonal hosting essentials",
+        "Halloween candy under $5"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Free delivery promo",
+      "expect": [
+        "Get Free Delivery & returns without leaving home"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Feedback prompt",
+      "expect": [
+        "We'd love to hear what you think!",
+        "Give feedback"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Savings & Featured Shops",
+      "real": "https://www.walmart.com/shop/savings",
+      "path": "/shop/savings"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clearance",
+      "real": "https://www.walmart.com/shop/deals/clearance",
+      "path": "/shop/deals/clearance"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Flash Deals",
+      "real": "https://www.walmart.com/shop/deals/flash-deals",
+      "path": "/shop/deals/flash-deals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Sellers",
+      "real": "https://www.walmart.com/shop/best-sellers",
+      "path": "/shop/best-sellers"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New & Trending",
+      "real": "https://www.walmart.com/cp/new-trending/7689165",
+      "path": "/cp/new-trending/7689165"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tailgating",
+      "real": "https://www.walmart.com/cp/tailgating/6338015",
+      "path": "/cp/tailgating/6338015"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Brand Shop Directory",
+      "real": "https://www.walmart.com/brand/branddirectory",
+      "path": "/brand/branddirectory"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pride Always",
+      "real": "https://www.walmart.com/cp/pride/9552002",
+      "path": "/cp/pride/9552002"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Grocery",
+      "real": "https://www.walmart.com/cp/food/976759",
+      "path": "/cp/food/976759"
+    },
+    {
+      "kind": "sitemap",
+      "label": "EBT/SNAP eligible food",
+      "real": "https://www.walmart.com/cp/snap-online/1465096",
+      "path": "/cp/snap-online/1465096"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Exclusively online",
+      "real": "https://www.walmart.com/cp/shop-more-than-your-store/7485418",
+      "path": "/cp/shop-more-than-your-store/7485418"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Everyday meals",
+      "real": "https://www.walmart.com/cp/dinner-tonight/5681029",
+      "path": "/cp/dinner-tonight/5681029"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Recipes",
+      "real": "https://www.walmart.com/i/recipe-library",
+      "path": "/i/recipe-library"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fresh Produce",
+      "real": "https://www.walmart.com/cp/fresh-produce/976793",
+      "path": "/cp/fresh-produce/976793"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Meat & Seafood",
+      "real": "https://www.walmart.com/cp/meat-seafood/9569500",
+      "path": "/cp/meat-seafood/9569500"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Deli",
+      "real": "https://www.walmart.com/cp/deli/976789",
+      "path": "/cp/deli/976789"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home, Furniture & Appliances",
+      "real": "https://www.walmart.com/cp/home/4044",
+      "path": "/cp/home/4044"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Furniture",
+      "real": "https://www.walmart.com/cp/furniture/103150",
+      "path": "/cp/furniture/103150"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Mattresses & Accessories",
+      "real": "https://www.walmart.com/cp/mattresses-accessories/539386",
+      "path": "/cp/mattresses-accessories/539386"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen & Dining",
+      "real": "https://www.walmart.com/cp/kitchen-dining/623679",
+      "path": "/cp/kitchen-dining/623679"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Storage & Organization",
+      "real": "https://www.walmart.com/cp/storage-organization/90828",
+      "path": "/cp/storage-organization/90828"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Luggage & Travel",
+      "real": "https://www.walmart.com/cp/luggage/7333633",
+      "path": "/cp/luggage/7333633"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Appliances",
+      "real": "https://www.walmart.com/cp/appliances/90548",
+      "path": "/cp/appliances/90548"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vacuums, Steamers & Floorcare",
+      "real": "https://www.walmart.com/cp/vacuums-steamers-floor-care/4047",
+      "path": "/cp/vacuums-steamers-floor-care/4047"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Patio & Garden",
+      "real": "https://www.walmart.com/cp/patio-garden/5428",
+      "path": "/cp/patio-garden/5428"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Patio Furniture",
+      "real": "https://www.walmart.com/cp/patio-furniture/91416",
+      "path": "/cp/patio-furniture/91416"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Patio Sets",
+      "real": "https://www.walmart.com/browse/patio-furniture/patio-sets/5428_91416_3013177",
+      "path": "/browse/patio-furniture/patio-sets/5428_91416_3013177"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Conversation Sets",
+      "real": "https://www.walmart.com/browse/patio-garden/patio-conversation-sets/5428_91416_3013177_1225084",
+      "path": "/browse/patio-garden/patio-conversation-sets/5428_91416_3013177_1225084"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Cooking",
+      "real": "https://www.walmart.com/cp/grills-outdoor-cooking/4089",
+      "path": "/cp/grills-outdoor-cooking/4089"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gas Grills",
+      "real": "https://www.walmart.com/browse/patio-garden/gas-grills/5428_4089_7375787_7991811",
+      "path": "/browse/patio-garden/gas-grills/5428_4089_7375787_7991811"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Charcoal",
+      "real": "https://www.walmart.com/browse/patio-garden/lump-charcoal-briquettes/5428_4089_9732116_5377022",
+      "path": "/browse/patio-garden/lump-charcoal-briquettes/5428_4089_9732116_5377022"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Outdoor Decor",
+      "real": "https://www.walmart.com/cp/patio-outdoor-decor/1102183",
+      "path": "/cp/patio-outdoor-decor/1102183"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home Improvement",
+      "real": "https://www.walmart.com/cp/home-improvement/1072864",
+      "path": "/cp/home-improvement/1072864"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Heaters",
+      "real": "https://www.walmart.com/browse/home-improvement/space-heaters/1072864_133032_1161932_1085403",
+      "path": "/browse/home-improvement/space-heaters/1072864_133032_1161932_1085403"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Humidifiers",
+      "real": "https://www.walmart.com/browse/home-improvement/humidifiers/1072864_133032_1231459_133042",
+      "path": "/browse/home-improvement/humidifiers/1072864_133032_1231459_133042"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Air Quality",
+      "real": "https://www.walmart.com/browse/home-improvement/air-quality/1072864_133032_1231459",
+      "path": "/browse/home-improvement/air-quality/1072864_133032_1231459"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Water Purification",
+      "real": "https://www.walmart.com/browse/home-improvement/water-filters/1072864_6610571_1231153",
+      "path": "/browse/home-improvement/water-filters/1072864_6610571_1231153"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tools",
+      "real": "https://www.walmart.com/cp/tools/1031899",
+      "path": "/cp/tools/1031899"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fasteners",
+      "real": "https://www.walmart.com/browse/home-improvement/fasteners/1072864_1067612_1067614",
+      "path": "/browse/home-improvement/fasteners/1072864_1067612_1067614"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Building Materials",
+      "real": "https://www.walmart.com/browse/home-improvement/building-materials/1072864_1172176",
+      "path": "/browse/home-improvement/building-materials/1072864_1172176"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing, Shoes & Accessories",
+      "real": "https://www.walmart.com/cp/clothing/5438",
+      "path": "/cp/clothing/5438"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Premium Fashion",
+      "real": "https://www.walmart.com/cp/premium-fashion/7056862",
+      "path": "/cp/premium-fashion/7056862"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Arrivals",
+      "real": "https://www.walmart.com/shop/clothing-and-accessories/new-arrivals",
+      "path": "/shop/clothing-and-accessories/new-arrivals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Editors' Picks",
+      "real": "https://www.walmart.com/shop/clothing-and-accessories/editors-picks",
+      "path": "/shop/clothing-and-accessories/editors-picks"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Now Trending",
+      "real": "https://www.walmart.com/cp/trending/5289731",
+      "path": "/cp/trending/5289731"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Women",
+      "real": "https://www.walmart.com/cp/womens-clothing/133162",
+      "path": "/cp/womens-clothing/133162"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Women's Plus",
+      "real": "https://www.walmart.com/cp/womens-plus/133195",
+      "path": "/cp/womens-plus/133195"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Men",
+      "real": "https://www.walmart.com/cp/mens-clothing/133197",
+      "path": "/cp/mens-clothing/133197"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toys",
+      "real": "https://www.walmart.com/cp/toys/4171",
+      "path": "/cp/toys/4171"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Action Figures",
+      "real": "https://www.walmart.com/cp/action-figures/4172",
+      "path": "/cp/action-figures/4172"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dolls & Dollhouses",
+      "real": "https://www.walmart.com/cp/dolls-dollhouses/4187",
+      "path": "/cp/dolls-dollhouses/4187"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Learning Toys",
+      "real": "https://www.walmart.com/cp/learning-toys/56125",
+      "path": "/cp/learning-toys/56125"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dart Blasters",
+      "real": "https://www.walmart.com/browse/toys/nerf-blaster-toys/4171_14521_936979",
+      "path": "/browse/toys/nerf-blaster-toys/4171_14521_936979"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Games & Puzzles",
+      "real": "https://www.walmart.com/cp/games-puzzles/4191",
+      "path": "/cp/games-puzzles/4191"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Collectibles",
+      "real": "https://www.walmart.com/cp/collectibles/5967908",
+      "path": "/cp/collectibles/5967908"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cars, Drones & RC",
+      "real": "https://www.walmart.com/browse/remote-control-play-vehicles/4171_1111647",
+      "path": "/browse/remote-control-play-vehicles/4171_1111647"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby & Kids",
+      "real": "https://www.walmart.com/cp/baby-products/5427",
+      "path": "/cp/baby-products/5427"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Days",
+      "real": "https://www.walmart.com/shop/deals/baby",
+      "path": "/shop/deals/baby"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Diapers & Wipes",
+      "real": "https://www.walmart.com/cp/diapering/486190",
+      "path": "/cp/diapering/486190"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Registry",
+      "real": "https://www.walmart.com/cp/baby-registry/1229485",
+      "path": "/cp/baby-registry/1229485"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Clothing",
+      "real": "https://www.walmart.com/browse/5438_7712430_8775031_4648145",
+      "path": "/browse/5438_7712430_8775031_4648145"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Toddler Clothing",
+      "real": "https://www.walmart.com/browse/5438_7712430_2700757_2676407",
+      "path": "/browse/5438_7712430_2700757_2676407"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids Clothing",
+      "real": "https://www.walmart.com/cp/kids-clothing/7712430",
+      "path": "/cp/kids-clothing/7712430"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Games",
+      "real": "https://www.walmart.com/cp/video-games/2636",
+      "path": "/cp/video-games/2636"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Xbox",
+      "real": "https://www.walmart.com/cp/xbox-series-x/9206773",
+      "path": "/cp/xbox-series-x/9206773"
+    },
+    {
+      "kind": "sitemap",
+      "label": "PlayStation",
+      "real": "https://www.walmart.com/cp/playstation-5/3475115",
+      "path": "/cp/playstation-5/3475115"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nintendo",
+      "real": "https://www.walmart.com/cp/nintendo-switch/4646529",
+      "path": "/cp/nintendo-switch/4646529"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Game Accessories",
+      "real": "https://www.walmart.com/browse/video-games/video-game-accessories/2636_1229019",
+      "path": "/browse/video-games/video-game-accessories/2636_1229019"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Virtual Reality",
+      "real": "https://www.walmart.com/browse/video-games/virtual-reality/2636_5454301",
+      "path": "/browse/video-games/virtual-reality/2636_5454301"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Video Game Savings",
+      "real": "https://www.walmart.com/shop/deals/video-games-and-media",
+      "path": "/shop/deals/video-games-and-media"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Electronics",
+      "real": "https://www.walmart.com/cp/electronics/3944",
+      "path": "/cp/electronics/3944"
+    },
+    {
+      "kind": "sitemap",
+      "label": "TV & Video",
+      "real": "https://www.walmart.com/cp/tv-video/1060825",
+      "path": "/cp/tv-video/1060825"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Home Audio & Theater",
+      "real": "https://www.walmart.com/browse/home-audio-theater/3944_77622",
+      "path": "/browse/home-audio-theater/3944_77622"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Smart Home",
+      "real": "https://www.walmart.com/cp/smart-home/1229875",
+      "path": "/cp/smart-home/1229875"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tablets & Accessories",
+      "real": "https://www.walmart.com/cp/ipad-tablets/1078524",
+      "path": "/cp/ipad-tablets/1078524"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Computers",
+      "real": "https://www.walmart.com/cp/computers/3951",
+      "path": "/cp/computers/3951"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cell Phones",
+      "real": "https://www.walmart.com/cp/cell-phones/1105910",
+      "path": "/cp/cell-phones/1105910"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wearable Tech",
+      "real": "https://www.walmart.com/cp/wearable-technology/1229723",
+      "path": "/cp/wearable-technology/1229723"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pharmacy, Health & Wellness",
+      "real": "https://www.walmart.com/cp/health/976760",
+      "path": "/cp/health/976760"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Health & Wellness",
+      "real": "https://www.walmart.com/cp/the-wellness-hub/5523094",
+      "path": "/cp/the-wellness-hub/5523094"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pharmacy",
+      "real": "https://www.walmart.com/cp/pharmacy/5431",
+      "path": "/cp/pharmacy/5431"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Allergy & Sinus",
+      "real": "https://www.walmart.com/cp/allergy-sinus/3771182",
+      "path": "/cp/allergy-sinus/3771182"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Vitamins & Supplements",
+      "real": "https://www.walmart.com/cp/vitamins-supplements/1005863",
+      "path": "/cp/vitamins-supplements/1005863"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Caregiver Hub",
+      "real": "https://www.walmart.com/cp/caregiver/2915579",
+      "path": "/cp/caregiver/2915579"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Protein, Fitness, & Weight Management",
+      "real": "https://www.walmart.com/cp/protein-fitness/1166769",
+      "path": "/cp/protein-fitness/1166769"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Women's Wellness",
+      "real": "https://www.walmart.com/cp/1767021",
+      "path": "/cp/1767021"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pain Management",
+      "real": "https://www.walmart.com/cp/pain-management/6972993",
+      "path": "/cp/pain-management/6972993"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Personal Care",
+      "real": "https://www.walmart.com/cp/personal-care/1005862",
+      "path": "/cp/personal-care/1005862"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Multipacks",
+      "real": "https://www.walmart.com/browse/seasonal/personal-care-stock-up/1085632_9267270_7332448",
+      "path": "/browse/seasonal/personal-care-stock-up/1085632_9267270_7332448"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bath & Body",
+      "real": "https://www.walmart.com/cp/bath-body/1071969",
+      "path": "/cp/bath-body/1071969"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Oral Care",
+      "real": "https://www.walmart.com/cp/oral-care/1007221",
+      "path": "/cp/oral-care/1007221"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Feminine Care",
+      "real": "https://www.walmart.com/browse/personal-care/feminine-care/1005862_1091866",
+      "path": "/browse/personal-care/feminine-care/1005862_1091866"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Incontinence",
+      "real": "https://www.walmart.com/browse/personal-care/incontinence/1005862_1225655",
+      "path": "/browse/personal-care/incontinence/1005862_1225655"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sexual Wellness",
+      "real": "https://www.walmart.com/cp/sexual-wellness/1414629",
+      "path": "/cp/sexual-wellness/1414629"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shaving",
+      "real": "https://www.walmart.com/cp/shaving/1007220",
+      "path": "/cp/shaving/1007220"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Beauty",
+      "real": "https://www.walmart.com/cp/beauty/1085666",
+      "path": "/cp/beauty/1085666"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Premium Beauty",
+      "real": "https://www.walmart.com/cp/premium-beauty/7924299",
+      "path": "/cp/premium-beauty/7924299"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Makeup",
+      "real": "https://www.walmart.com/cp/makeup/1007040",
+      "path": "/cp/makeup/1007040"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Haircare",
+      "real": "https://www.walmart.com/cp/hair-care/1007219",
+      "path": "/cp/hair-care/1007219"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Skincare",
+      "real": "https://www.walmart.com/cp/skin-care/1007039",
+      "path": "/cp/skin-care/1007039"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fragrance",
+      "real": "https://www.walmart.com/cp/fragrances/133225",
+      "path": "/cp/fragrances/133225"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nail Care",
+      "real": "https://www.walmart.com/cp/nailcare/3592123",
+      "path": "/cp/nailcare/3592123"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Suncare & Tanning",
+      "real": "https://www.walmart.com/browse/beauty/facial-sunscreen/1085666_1007039_4046177",
+      "path": "/browse/beauty/facial-sunscreen/1085666_1007039_4046177"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Auto & Tires",
+      "real": "https://www.walmart.com/cp/auto-tires/91083",
+      "path": "/cp/auto-tires/91083"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tires",
+      "real": "https://www.walmart.com/cp/tires-accessories/1077064",
+      "path": "/cp/tires-accessories/1077064"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Batteries & Accessories",
+      "real": "https://www.walmart.com/cp/batteries-accessories/1104292",
+      "path": "/cp/batteries-accessories/1104292"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Auto Care Center",
+      "real": "https://www.walmart.com/cp/auto-services/1087266",
+      "path": "/cp/auto-services/1087266"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Oils and Fluids",
+      "real": "https://www.walmart.com/cp/oils-fluids/1104294",
+      "path": "/cp/oils-fluids/1104294"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Replacement Auto Parts",
+      "real": "https://www.walmart.com/cp/automotive-replacement-parts/1074765",
+      "path": "/cp/automotive-replacement-parts/1074765"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Auto Electronics",
+      "real": "https://www.walmart.com/cp/auto-electronics/3947",
+      "path": "/cp/auto-electronics/3947"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Exterior Car Parts & Accessories",
+      "real": "https://www.walmart.com/cp/exterior-car-parts-accessories/1074784",
+      "path": "/cp/exterior-car-parts-accessories/1074784"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Household Essentials",
+      "real": "https://www.walmart.com/cp/household-essentials/1115193",
+      "path": "/cp/household-essentials/1115193"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Delivery Subscriptions",
+      "real": "https://www.walmart.com/browse/household-essentials/household-essentials-subscription/1115193_7023530",
+      "path": "/browse/household-essentials/household-essentials-subscription/1115193_7023530"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cleaning Supplies",
+      "real": "https://www.walmart.com/browse/household-essentials/cleaning-supplies/1115193_1071966",
+      "path": "/browse/household-essentials/cleaning-supplies/1115193_1071966"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Laundry",
+      "real": "https://www.walmart.com/browse/household-essentials/laundry/1115193_1071967",
+      "path": "/browse/household-essentials/laundry/1115193_1071967"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bathroom",
+      "real": "https://www.walmart.com/browse/household-essentials/bathroom/1115193_1071965",
+      "path": "/browse/household-essentials/bathroom/1115193_1071965"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kitchen",
+      "real": "https://www.walmart.com/browse/household-essentials/kitchen/1115193_1071968",
+      "path": "/browse/household-essentials/kitchen/1115193_1071968"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Paper & Plastic",
+      "real": "https://www.walmart.com/browse/household-essentials/paper-plastic/1115193_1073264",
+      "path": "/browse/household-essentials/paper-plastic/1115193_1073264"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Air Fresheners",
+      "real": "https://www.walmart.com/browse/household-essentials/air-fresheners/1115193_1025739",
+      "path": "/browse/household-essentials/air-fresheners/1115193_1025739"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sports & Outdoors",
+      "real": "https://www.walmart.com/cp/sports-and-outdoors/4125",
+      "path": "/cp/sports-and-outdoors/4125"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sports",
+      "real": "https://www.walmart.com/cp/sports/4161",
+      "path": "/cp/sports/4161"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Basketball",
+      "real": "https://www.walmart.com/browse/sports-outdoors/basketball/4125_4161_4165",
+      "path": "/browse/sports-outdoors/basketball/4125_4161_4165"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Football",
+      "real": "https://www.walmart.com/browse/sports-outdoors/football-gear-equipment/4125_4161_434036",
+      "path": "/browse/sports-outdoors/football-gear-equipment/4125_4161_434036"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Golf",
+      "real": "https://www.walmart.com/browse/sports-outdoors/golf-equipment/4125_4161_4152",
+      "path": "/browse/sports-outdoors/golf-equipment/4125_4161_4152"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pickleball",
+      "real": "https://www.walmart.com/browse/sports-outdoors/pickleball/4125_4161_6675878",
+      "path": "/browse/sports-outdoors/pickleball/4125_4161_6675878"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Soccer",
+      "real": "https://www.walmart.com/browse/sports-outdoors/soccer/4125_4161_432196",
+      "path": "/browse/sports-outdoors/soccer/4125_4161_432196"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fitness",
+      "real": "https://www.walmart.com/cp/exercise-fitness/4134",
+      "path": "/cp/exercise-fitness/4134"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pets",
+      "real": "https://www.walmart.com/cp/pet-supplies/5440",
+      "path": "/cp/pet-supplies/5440"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pet Profiles",
+      "real": "https://www.walmart.com/account/pet-hub",
+      "path": "/account/pet-hub"
+    },
+    {
+      "kind": "sitemap",
+      "label": "The Pet Event",
+      "real": "https://www.walmart.com/cp/the-pet-event/6286537",
+      "path": "/cp/the-pet-event/6286537"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pet Prescriptions",
+      "real": "https://www.walmart.com/cp/8328098",
+      "path": "/cp/8328098"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Supplies",
+      "real": "https://www.walmart.com/cp/dogs/202072",
+      "path": "/cp/dogs/202072"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Food",
+      "real": "https://www.walmart.com/browse/pets/dog-food-and-treats/5440_202072_6432755",
+      "path": "/browse/pets/dog-food-and-treats/5440_202072_6432755"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Toys",
+      "real": "https://www.walmart.com/browse/pets/all-dog-toys/5440_202072_2243339_202086",
+      "path": "/browse/pets/all-dog-toys/5440_202072_2243339_202086"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Supplies",
+      "real": "https://www.walmart.com/cp/cats/202073",
+      "path": "/cp/cats/202073"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Food",
+      "real": "https://www.walmart.com/browse/pets/cat-food/5440_202073_1749780",
+      "path": "/browse/pets/cat-food/5440_202073_1749780"
+    },
+    {
+      "kind": "sitemap",
+      "label": "School & Office Supplies",
+      "real": "https://www.walmart.com/cp/office-supplies/1229749",
+      "path": "/cp/office-supplies/1229749"
+    },
+    {
+      "kind": "sitemap",
+      "label": "School Supplies",
+      "real": "https://www.walmart.com/cp/school-supplies/1086045",
+      "path": "/cp/school-supplies/1086045"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Teacher's Classroom Shop",
+      "real": "https://www.walmart.com/cp/teaching-classroom-supplies/3462603",
+      "path": "/cp/teaching-classroom-supplies/3462603"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bulk Teaching Supplies",
+      "real": "https://www.walmart.com/browse/teaching-and-classroom-supplies/teachers-supplies-in-bulk/1229749_1086045_3462603_1889202",
+      "path": "/browse/teaching-and-classroom-supplies/teachers-supplies-in-bulk/1229749_1086045_3462603_1889202"
+    },
+    {
+      "kind": "sitemap",
+      "label": "School Arts and Crafts",
+      "real": "https://www.walmart.com/browse/office-supplies/school-arts-crafts/1229749_1086045_1718345",
+      "path": "/browse/office-supplies/school-arts-crafts/1229749_1086045_1718345"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shipping & Moving",
+      "real": "https://www.walmart.com/cp/shipping-moving/2696828",
+      "path": "/cp/shipping-moving/2696828"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Safes & Lockboxes",
+      "real": "https://www.walmart.com/browse/home-safety/safes-lockboxes/1072864_1068865_1231016",
+      "path": "/browse/home-safety/safes-lockboxes/1072864_1068865_1231016"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Walmart for Business",
+      "real": "https://www.walmart.com/cp/about-walmart-business/6136230",
+      "path": "/cp/about-walmart-business/6136230"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Arts, Crafts, Sewing & Party Supplies",
+      "real": "https://www.walmart.com/cp/arts-crafts-sewing/1334134",
+      "path": "/cp/arts-crafts-sewing/1334134"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sewing Machines & Accessories",
+      "real": "https://www.walmart.com/cp/sewing/1094704",
+      "path": "/cp/sewing/1094704"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Die Cutting",
+      "real": "https://www.walmart.com/browse/arts-crafts-sewing/die-cutting/1334134_3123463",
+      "path": "/browse/arts-crafts-sewing/die-cutting/1334134_3123463"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fabric",
+      "real": "https://www.walmart.com/cp/fabric/4232946",
+      "path": "/cp/fabric/4232946"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Arts & Crafts Furniture and Storage",
+      "real": "https://www.walmart.com/browse/arts-crafts-sewing/arts-crafts-furniture-and-storage/1334134_6355365",
+      "path": "/browse/arts-crafts-sewing/arts-crafts-furniture-and-storage/1334134_6355365"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Craft Supplies",
+      "real": "https://www.walmart.com/cp/crafting/6172404",
+      "path": "/cp/crafting/6172404"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Art Supplies",
+      "real": "https://www.walmart.com/cp/art-supplies/5899871",
+      "path": "/cp/art-supplies/5899871"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Knitting & Crochet",
+      "real": "https://www.walmart.com/browse/arts-crafts-sewing/knitting-crochet/1334134_4880989",
+      "path": "/browse/arts-crafts-sewing/knitting-crochet/1334134_4880989"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Movies & TV",
+      "real": "https://www.walmart.com/cp/movies-tv/4096",
+      "path": "/cp/movies-tv/4096"
+    },
+    {
+      "kind": "sitemap",
+      "label": "4K Ultra HD Movies",
+      "real": "https://www.walmart.com/browse/4k-ultra-hd-movies/4096_3315790",
+      "path": "/browse/4k-ultra-hd-movies/4096_3315790"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Blu-ray Movies",
+      "real": "https://www.walmart.com/browse/movies-tv-shows/blu-ray-movies/4096_616859",
+      "path": "/browse/movies-tv-shows/blu-ray-movies/4096_616859"
+    },
+    {
+      "kind": "sitemap",
+      "label": "DVD Movies",
+      "real": "https://www.walmart.com/browse/movies-tv-shows/dvd-movies/4096_8073310_7001804",
+      "path": "/browse/movies-tv-shows/dvd-movies/4096_8073310_7001804"
+    },
+    {
+      "kind": "sitemap",
+      "label": "4K Ultra HD TV Shows",
+      "real": "https://www.walmart.com/browse/movies-tv-shows/tv-shows-4k-ultra-hd/4096_6003122_2378322",
+      "path": "/browse/movies-tv-shows/tv-shows-4k-ultra-hd/4096_6003122_2378322"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Blu-ray TV Shows",
+      "real": "https://www.walmart.com/browse/movies-tv-shows/tv-shows-blu-ray/4096_6003122_8068379",
+      "path": "/browse/movies-tv-shows/tv-shows-blu-ray/4096_6003122_8068379"
+    },
+    {
+      "kind": "sitemap",
+      "label": "DVD TV Shows",
+      "real": "https://www.walmart.com/browse/movies-tv-shows/tv-shows-dvd/4096_6003122_3476135",
+      "path": "/browse/movies-tv-shows/tv-shows-dvd/4096_6003122_3476135"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Music & Vinyl",
+      "real": "https://www.walmart.com/cp/music/4104",
+      "path": "/cp/music/4104"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Turntables",
+      "real": "https://www.walmart.com/browse/musical-instruments/turntables-record-players/7796869_1097690_6268144_2152355_49600",
+      "path": "/browse/musical-instruments/turntables-record-players/7796869_1097690_6268144_2152355_49600"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Musical instruments",
+      "real": "https://www.walmart.com/browse/musical-instruments/7796869",
+      "path": "/browse/musical-instruments/7796869"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rap & hip-hop",
+      "real": "https://www.walmart.com/browse/music/rap-hip-hop-on-cds-vinyl/4104_4117",
+      "path": "/browse/music/rap-hip-hop-on-cds-vinyl/4104_4117"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Rock",
+      "real": "https://www.walmart.com/browse/music/rock-music/4104_4118",
+      "path": "/browse/music/rock-music/4104_4118"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pop",
+      "real": "https://www.walmart.com/browse/music/pop-music/4104_4115",
+      "path": "/browse/music/pop-music/4104_4115"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Country",
+      "real": "https://www.walmart.com/browse/music/country-music/4104_4109",
+      "path": "/browse/music/country-music/4104_4109"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Classical",
+      "real": "https://www.walmart.com/browse/music/classical-music-on-cd-or-vinyl/4104_4108",
+      "path": "/browse/music/classical-music-on-cd-or-vinyl/4104_4108"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Books",
+      "real": "https://www.walmart.com/cp/books/3920",
+      "path": "/cp/books/3920"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kobo eReaders",
+      "real": "https://www.walmart.com/browse/books/kobo-ereader-devices-accessories/3920_3252253",
+      "path": "/browse/books/kobo-ereader-devices-accessories/3920_3252253"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Children's books",
+      "real": "https://www.walmart.com/browse/childrens-kids-books/3920_582053",
+      "path": "/browse/childrens-kids-books/3920_582053"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Textbooks",
+      "real": "https://www.walmart.com/browse/textbooks/3920_582377",
+      "path": "/browse/textbooks/3920_582377"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Teen & Young Adult books",
+      "real": "https://www.walmart.com/browse/books/teen-young-adult-books/3920_1068785",
+      "path": "/browse/books/teen-young-adult-books/3920_1068785"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Magazines",
+      "real": "https://www.walmart.com/browse/books/magazines/3920_3298715",
+      "path": "/browse/books/magazines/3920_3298715"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Biographies & Memoirs",
+      "real": "https://www.walmart.com/browse/books/biographies-memoirs/3920_5196470",
+      "path": "/browse/books/biographies-memoirs/3920_5196470"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Seasonal & Celebrations",
+      "real": "https://www.walmart.com/cp/party-occasions/2637",
+      "path": "/cp/party-occasions/2637"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby Shower",
+      "real": "https://www.walmart.com/browse/party-occasions/baby-shower-party-supplies/2637_1042319_4687421",
+      "path": "/browse/party-occasions/baby-shower-party-supplies/2637_1042319_4687421"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Balloons",
+      "real": "https://www.walmart.com/browse/party-occasions/balloons/2637_1042319_1212898_3956207",
+      "path": "/browse/party-occasions/balloons/2637_1042319_1212898_3956207"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Balloon Arches",
+      "real": "https://www.walmart.com/browse/party-occasions/balloon-arch/2637_1042319_1212898_3956207_2139180_4860386",
+      "path": "/browse/party-occasions/balloon-arch/2637_1042319_1212898_3956207_2139180_4860386"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Balloons by Color",
+      "real": "https://www.walmart.com/browse/party-occasions/balloons-by-color/2637_1042319_1212898_3956207_6986611",
+      "path": "/browse/party-occasions/balloons-by-color/2637_1042319_1212898_3956207_6986611"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Birthday Party Supplies",
+      "real": "https://www.walmart.com/browse/party-occasions/birthday-party-supplies/2637_8972913_8516046",
+      "path": "/browse/party-occasions/birthday-party-supplies/2637_8972913_8516046"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gender Reveal",
+      "real": "https://www.walmart.com/browse/party-occasions/gender-reveal-party-supplies/2637_9103747",
+      "path": "/browse/party-occasions/gender-reveal-party-supplies/2637_9103747"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Helium Tanks",
+      "real": "https://www.walmart.com/browse/party-occasions/helium-tanks/2637_1042319_1212898_4114382",
+      "path": "/browse/party-occasions/helium-tanks/2637_1042319_1212898_4114382"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.walmart.com/cp/gift-cards/96894",
+      "path": "/cp/gift-cards/96894"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gaming Gift Cards",
+      "real": "https://www.walmart.com/browse/gifts-registry/gaming-gift-cards/1094765_96894_8922996_9379468",
+      "path": "/browse/gifts-registry/gaming-gift-cards/1094765_96894_8922996_9379468"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Restaurant Gift Cards",
+      "real": "https://www.walmart.com/browse/gifts-registry/restaurant-gift-cards/1094765_96894_8922996_8305131",
+      "path": "/browse/gifts-registry/restaurant-gift-cards/1094765_96894_8922996_8305131"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Retail Gift Cards",
+      "real": "https://www.walmart.com/browse/gifts-registry/retail-gift-cards/1094765_96894_8922996_3374424",
+      "path": "/browse/gifts-registry/retail-gift-cards/1094765_96894_8922996_3374424"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Prepaid Gift Cards",
+      "real": "https://www.walmart.com/browse/cell-phones/phone-data-plans/1105910_4960552",
+      "path": "/browse/cell-phones/phone-data-plans/1105910_4960552"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Entertainment Gift Cards",
+      "real": "https://www.walmart.com/browse/gifts-registry/entertainment-gift-cards/1094765_96894_8922996_2765943",
+      "path": "/browse/gifts-registry/entertainment-gift-cards/1094765_96894_8922996_2765943"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Travel Gift Cards",
+      "real": "https://www.walmart.com/browse/gifts-registry/travel-gift-cards/1094765_96894_8922996_9617007",
+      "path": "/browse/gifts-registry/travel-gift-cards/1094765_96894_8922996_9617007"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Lifestyle Gift Cards",
+      "real": "https://www.walmart.com/browse/gifts-registry/lifestyle-gift-cards/1094765_96894_8922996_7573523",
+      "path": "/browse/gifts-registry/lifestyle-gift-cards/1094765_96894_8922996_7573523"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Help",
+      "real": "https://www.walmart.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Store Directory",
+      "real": "https://www.walmart.com/store/directory",
+      "path": "/store/directory"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Walmart+",
+      "real": "https://www.walmart.com/plus",
+      "path": "/plus"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Registry",
+      "real": "https://www.walmart.com/registry",
+      "path": "/registry"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Deals",
+      "real": "https://www.walmart.com/shop/deals",
+      "path": "/shop/deals"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Purchase History",
+      "real": "https://www.walmart.com/orders",
+      "path": "/orders"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Lists",
+      "real": "https://www.walmart.com/lists",
+      "path": "/lists"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Services",
+      "real": "https://www.walmart.com/services",
+      "path": "/services"
+    }
+  ]
+}

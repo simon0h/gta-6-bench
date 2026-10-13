@@ -1,0 +1,143 @@
+// Help, policy and information copy summarised from nike.com (en-US) pages
+// fetched 2026-10-13. Articles that were not fetched are short summaries of
+// Nike's long-standing public policies and are marked `summary: true`.
+
+export const HELP_TOPICS = [
+  { id: 'returns-info-all', heading: 'Returns & Exchanges', articles: ['returns-policy', 'how-to-return', 'refund-info'] },
+  { id: 'shipping-delivery-info-all', heading: 'Shipping & Delivery', articles: ['shipping-delivery', 'store-pickup', 'free-shipping'] },
+  { id: 'orders-payment-info-all', heading: 'Orders & Payment', articles: ['order-tracking', 'change-cancel-order', 'payment-options'] },
+  { id: 'shopping-info-all', heading: 'Shopping', articles: ['size-charts', 'product-discount', 'product-advice'] },
+  { id: 'membership-apps-info-all', heading: 'Nike Membership & Apps', articles: ['member-benefits', 'nike-snkrs-pass', 'nike-snkrs-draw'] },
+  { id: 'company-info-all', heading: 'Company Info', articles: ['shoe-warranty', 'recycle-shoes', 'nikeinc-donation'] },
+]
+
+const contact = 'Contact Nike by chat (Products & Orders, 4 am - 11 pm PT, 7 days a week) or call 1-800-806-6453 (4 am - 11 pm PT, 7 days a week).'
+
+export const HELP_ARTICLES = {
+  'returns-policy': { q: "What Is Nike's Return Policy?", sections: [
+    [null, ['You have 60 days to return or exchange an online order (from the date it was delivered) or a Nike store purchase. Some exceptions apply. Proof of purchase is required for all returns.',
+      'Returns are free for Nike Members, and Members may also be eligible for price adjustments on eligible items.',
+      'Custom Jersey By You soccer jerseys cannot be returned. Nike x LEGO® brick sets must be sealed and unopened. Purchases from Nike Clearance stores cannot be returned or exchanged, and items bought at other Nike stores or online cannot be returned to Nike Clearance stores.']],
+    ['How to Return', ['Online orders can be returned at most Nike stores (except Nike Clearance stores) or shipped back to Nike. Store purchases can be returned to any Nike store except Clearance stores with the items and proof of purchase.',
+      'If an item is defective or flawed, return it within 60 days. After 60 days, see Nike\'s warranty information. Purchases made at another retailer must be returned to that retailer.']],
+    ['Other Terms', ['Nike may require and electronically capture information from a valid government ID for returns and exchanges, and may limit returns made without a receipt.']],
+  ] },
+  'how-to-return': { q: 'How Do I Return or Exchange My Nike Order?', summary: true, sections: [[null, ['Members can start a return from the Orders section of their profile; guests can start one with their order number and email. Choose to drop your return at a Nike store (except Nike Clearance stores) or ship it back using the prepaid label.', 'Exchanges for a different size or color can be made at a Nike store, or by returning the item and placing a new order online.']]] },
+  'refund-info': { q: 'Where Is My Refund?', summary: true, sections: [[null, ['Refunds are issued to the original payment method once the return is received and processed. Shipped returns can take up to two weeks to arrive and be processed; your bank may take a few additional days to post the credit.']]] },
+  'shipping-delivery': { q: "What Are Nike's Shipping Options?", table: true, sections: [
+    [null, ['Standard, Faster and Fastest shipping are available at checkout. Each item in your bag shows an estimated delivery date based on your selection, your address and where the item ships from.']],
+    ['Ship It Free', ['Nike Members get free standard shipping on orders of $50 or more ($5 under $50). Guests get free standard shipping on orders of $75 or more ($8 under $75). Members need to sign in at checkout to get member shipping.']],
+    ['Get It Fast', ['Faster shipping costs $15 for Members and $20 for guests. Fastest shipping costs $25 for Members and $30 for guests. Expedited options may not be available for every order.']],
+    ['Pick It Up', ['Nike Store Pickup is free at participating stores for eligible orders, and orders are usually ready within two hours. Ship to a Pickup Location sends your order by standard shipping to a nearby pickup point; standard shipping fees apply.']],
+    ['Additional Information', ['Multiple items may arrive in separate shipments. Orders to APO and FPO addresses ship free via USPS Military Mail and arrive in 30–45 days. Standard and expedited times do not apply to Nike By You and Converse Custom orders.', 'Shipping fees are calculated after discounts and promotions, before taxes, and are non-refundable unless you receive an incorrect item. Nike does not ship internationally, to U.S. territories, re-shippers, freight forwarders or PO boxes.']],
+  ] },
+  'store-pickup': { q: 'Can I Buy Online and Pick Up at a Nike Store?', summary: true, sections: [[null, ['Yes. Choose Pick Up at checkout and select a participating Nike store. Pickup is free, and eligible orders are usually ready within two hours. Bring your order confirmation and a photo ID.']]] },
+  'free-shipping': { q: 'How Do I Get Free Shipping on Nike Orders?', summary: true, sections: [[null, ['Nike Members get free standard shipping on orders of $50 or more; guests get free standard shipping on orders of $75 or more. Membership is free — sign in at checkout to apply member shipping.']]] },
+  'order-tracking': { q: 'Where Is My Nike Order?', summary: true, sections: [[null, ['Members can track orders in the Orders section of their profile. Guests can look up an order with the order number and email address used at checkout. Tracking details appear once the order ships.']]] },
+  'change-cancel-order': { q: 'Can I Cancel or Change My Nike Order?', sections: [
+    [null, ['Nike can\'t change an order once it\'s placed, including the size, color, quantity, shipping method or delivery address.', 'Most orders can be canceled within 30 minutes of placing them. Members can sign in, open their orders and use the cancel option there; guests can find their order with the order number and email address.',
+      'If the cancel option is missing, the order has already entered processing and can\'t be canceled, even by Nike. You can return or exchange the items after delivery.']],
+    ['Payment and Address Changes', ['You aren\'t charged until your order ships, so canceled orders aren\'t refunded; a temporary authorization hold may appear and should clear within a few days. Delivery addresses can\'t be changed, though some carriers may redirect packages, possibly for a fee. Nike By You orders may allow address changes depending on their status.']],
+  ] },
+  'payment-options': { q: "What Are Nike's Payment Options?", sections: [
+    [null, ['Nike accepts major credit and debit cards from Visa, Mastercard, American Express and Discover; Apple Pay and Google Pay; PayPal; Klarna; and Nike and Converse gift cards.',
+      'Nike Members can save multiple cards or gift cards to their profile for faster checkout. Each order can use only one credit or debit card, but a Nike gift card can be combined with a card, and up to 10 Nike gift cards can be used on one order. Existing product vouchers work on Nike.com orders only.']],
+  ] },
+  'size-charts': { q: 'How Do I Find the Right Size and Fit?', summary: true, sections: [[null, ['Each product page links to a Size Guide with measurements for that product. Nike size charts cover men\'s, women\'s and kids\' shoes and clothing, along with fit guidance such as true to size or runs small.']]] },
+  'product-discount': { q: "How Can I Get Nike's Best Deals?", summary: true, sections: [[null, ['Shop the Sale section, become a Nike Member for member-only offers, and check eligibility for student, military, teacher and first responder discounts.']]] },
+  'product-advice': { q: 'Does Nike Offer Product Advice?', summary: true, sections: [[null, ['Yes. Nike Experts can help you find products by chat, by phone and in Nike stores, and product pages include fit and feature details.']]] },
+  'member-benefits': { q: 'What Is Nike Membership?', summary: true, sections: [[null, ['Nike Membership is free. Members get free shipping on orders of $50+, a 60-day Wear Test, receipt-free returns, member-only products and events, and access to Nike apps.']]] },
+  'nike-snkrs-pass': { q: 'What Is Nike SNKRS Pass?', summary: true, sections: [[null, ['SNKRS Pass is a SNKRS app feature that lets Members reserve select sneakers for pickup at a participating Nike store.']]] },
+  'nike-snkrs-draw': { q: 'How Can I Join a SNKRS Draw?', summary: true, sections: [[null, ['Enter a draw on the product\'s launch page in the SNKRS app or on Nike.com/launch while the draw is open. Winners are selected at random and charged only if selected.']]] },
+  'shoe-warranty': { q: 'Do Nike Shoes Have a Warranty?', summary: true, sections: [[null, ['Nike footwear is warrantied for two years from the date of manufacture against defects in materials and workmanship. Normal wear and tear and misuse are not covered.']]] },
+  'recycle-shoes': { q: 'Can I Recycle My Nike Shoes?', summary: true, sections: [[null, ['Participating Nike stores accept worn athletic shoes of any brand for recycling or donation through Nike\'s take-back program.']]] },
+  'nikeinc-donation': { q: 'Does Nike Offer Grants or Donations?', summary: true, sections: [[null, ['Nike invests in community programs that get kids moving through partners selected by Nike, Inc. Unsolicited product donation requests generally can\'t be fulfilled.']]] },
+  'student-discount': { q: 'Does Nike Offer a Student Discount?', sections: [[null, ['Yes. Eligible high school, college and university students in the US get 10% off most items on Nike.com and in the Nike App. Verify your student status (handled by SheerID) to receive a single-use promo code, then apply it at checkout while signed in to your Nike Member profile. You must be 16 or older.',
+    'Each code works once and expires two weeks after it is issued; you can request a new code every seven days. The discount can\'t be used in Nike stores, excludes Nike By You, gift cards, select Launch and SNKRS products and Apple products, applies to the first $500 of a qualifying purchase, and can only be combined with free-shipping codes.']]] },
+  'military-discount': { q: 'Does Nike Offer a Military Discount?', summary: true, sections: [[null, ['Eligible active-duty military, veterans and their families can verify their status to receive a 10% off promo code for Nike.com and the Nike App, plus a discount in Nike stores with valid ID.']]] },
+  'teacher-discount': { q: 'Does Nike Offer a Teacher Discount?', summary: true, sections: [[null, ['Eligible US teachers can verify their status to receive a 10% off single-use promo code for Nike.com and the Nike App.']]] },
+  'first-responder-discount': { q: 'Does Nike Offer a First Responder and Medical Professional Discount?', summary: true, sections: [[null, ['Eligible first responders and medical professionals can verify their status to receive a 10% off single-use promo code for Nike.com and the Nike App.']]] },
+  'birthday-terms-promo': { q: 'What Is the Nike Birthday Promo?', summary: true, sections: [[null, ['Nike Members may receive a birthday promo code during their birthday month. Terms, exclusions and expiration dates are listed with the offer.']]] },
+}
+
+// Off-site and editorial destinations rendered as local pages.
+export const INFO_PAGES = {
+  '/promo-code': { title: 'Promotions & Discounts', h1: 'Nike Promo Codes', paragraphs: ['Find current Nike promo codes and offers, and see how to apply a promo code in your bag or at checkout. One promo code can be used per order.'], links: [['Student', '/help/a/student-discount'], ['Military', '/help/a/military-discount'], ['Teacher', '/help/a/teacher-discount'], ['First Responders & Medical Professionals', '/help/a/first-responder-discount'], ['Birthday', '/help/a/birthday-terms-promo']] },
+  '/product-advice': { title: 'Product Advice', h1: 'Product Advice', paragraphs: ['Get expert help choosing shoes, clothing and gear. Chat with a Nike Expert, call 1-800-806-6453, or visit a Nike store for a fitting.'], links: [['Size Charts', '/help/a/size-charts'], ['Running Shoe Finder', '/running-shoe-finder'], ['Find a Store', '/retail']] },
+  '/corporate-sales': { title: 'Corporate Sales', h1: 'CORPORATE SALES', faq: [
+    ['How Do I Place a Bulk or Corporate Sales Nike Order?', 'Eligible businesses and groups can get help ordering in bulk, such as custom sneakers, team apparel or gift cards. Orders include free standard shipping and may qualify for a discount.'],
+    ['Is there a minimum order size?', 'Corporate sales orders must total at least $2,500 and ship to one address. Custom Nike By You shoes require at least 20 identical pairs of one style.'],
+    ['Do you offer customization?', 'Nike By You can create custom sneakers in available colors for eligible shoes. Personalized apparel is not currently offered.'],
+    ['How do I buy Nike gift cards in bulk?', 'Bulk orders of digital or physical gift cards are placed by email. Physical cards come in a miniature Nike shoebox.'],
+    ['How does shipping work?', 'Corporate sales orders ship free by standard shipping within the US only, not to US territories or international addresses.'],
+    ['Is there a discount for bulk or corporate sales orders?', 'Qualified orders may receive a discount; details are available by email.'],
+    ['How do I place a Nike order for sports team uniforms?', 'Team uniform orders are handled through Nike Team Sports.']] },
+  '/product-news': { title: 'Product News', h1: 'Product News', paragraphs: ['The latest Nike product stories: new releases, innovations and the athletes who test them.'], links: [['New Arrivals', '/w/new-mens-3n82yznik1'], ['SNKRS Launch Calendar', '/launch'], ['Nike Air', '/air']] },
+  '/magazine': { title: 'Nike Magazine', h1: 'Nike Magazine', paragraphs: ['Nike Magazine (about.nike.com/en/magazine) publishes stories about athletes, design, sport and the people behind Nike. In this simulation it is a local summary page.'] },
+  '/about-nike': { title: 'About Nike', h1: 'About Nike', paragraphs: ['NIKE, Inc. is headquartered near Beaverton, Oregon. Its mission is to bring inspiration and innovation to every athlete* in the world (*if you have a body, you are an athlete). The NIKE, Inc. portfolio includes Nike, Jordan and Converse.', 'The real site for this content is about.nike.com; this is a local summary page.'] },
+  '/news': { title: 'News', h1: 'Nike News', paragraphs: ['Nike News (news.nike.com) is the company\'s newsroom for product announcements, athlete stories and company news. This is a local summary page.'] },
+  '/careers': { title: 'Careers', h1: 'Careers at Nike', paragraphs: ['Nike hires across corporate, retail, distribution and technology roles. Openings are listed on jobs.nike.com; this is a local summary page.'] },
+  '/investors': { title: 'Investors', h1: 'NIKE, Inc. Investor Relations', paragraphs: ['NIKE, Inc. (NYSE: NKE) publishes earnings releases, SEC filings, annual reports and shareholder information at investors.nike.com. This is a local summary page.'] },
+  '/purpose': { title: 'Purpose', h1: 'Purpose', paragraphs: ['Nike\'s Purpose work covers people, planet and play: community investment, inclusion and its environmental targets. The full reports are published at purpose.nike.com; this is a local summary page.'] },
+  '/sustainability': { title: 'Sustainability', h1: 'Move to Zero', paragraphs: ['Move to Zero is Nike\'s journey toward zero carbon and zero waste, including products made with recycled materials and shoe take-back and recycling programs.'], links: [['Can I recycle my Nike shoes?', '/help/a/recycle-shoes'], ['Space Hippie', '/space-hippie']] },
+  '/accessibility': { title: 'Accessibility', h1: 'Accessibility at Nike', paragraphs: ['Nike is committed to making Nike.com and the Nike apps accessible to everyone, following the Web Content Accessibility Guidelines. If you have trouble using any part of the site, contact Nike by chat or call 1-800-806-6453.'] },
+  '/terms-of-sale': { title: 'Terms of Sale', h1: 'Terms of Sale', paragraphs: ['The Terms of Sale govern purchases on Nike.com: order acceptance, pricing and availability, payment, shipping, returns and dispute resolution. In this simulation no real orders are placed.'] },
+  '/terms-of-use': { title: 'Terms of Use', h1: 'Terms of Use', paragraphs: ['The Terms of Use govern use of Nike websites and apps, including account rules, user content, intellectual property and dispute resolution.'] },
+  '/privacy-policy': { title: 'Nike Privacy Policy', h1: 'Nike Privacy Policy', paragraphs: ['The Nike Privacy Policy explains what personal data Nike collects, how it is used and shared, and the choices and rights you have, including access, deletion and opting out of targeted advertising.'] },
+  '/guest/settings/do-not-share-my-data': { title: 'Your Privacy Choices', h1: 'Your Privacy Choices', paragraphs: ['Opt out of the sale or sharing of your personal data and targeted advertising. Members can manage these settings in their profile; guests can set them for this browser.'], form: true },
+  '/ca-supply-chains-act': { title: 'CA Supply Chains Act', h1: 'Statement on Forced Labor, Human Trafficking and Modern Slavery', paragraphs: ['Nike\'s statement under the California Transparency in Supply Chains Act describes its supplier Code of Conduct, audits, certification and training to address forced labor and human trafficking. The original is published on about.nike.com.'] },
+  '/site-feedback': { title: 'Site Feedback', h1: 'Send Us Feedback', paragraphs: ['Tell Nike what you think about the website. For order questions, use Get Help instead.'], feedback: true },
+  '/air': { title: 'Nike Air', h1: 'Nike Air', paragraphs: ['Pressurized air inside a flexible membrane: Nike Air cushioning has been part of Nike footwear since 1978 and lives in the Air Max, Air Force 1 and Air Jordan lines.'], links: [['Nike Air Max', '/air-max'], ['Nike Air Force 1', '/air-force-1']] },
+  '/air-force-1': { title: 'Nike Air Force 1', h1: 'Nike Air Force 1', paragraphs: ['Introduced in 1982 as the first basketball shoe with Nike Air, the Air Force 1 is now an everyday icon in low, mid and high versions.'], links: [["Men's Shoes", '/w/mens-shoes-nik1zy7ok'], ["Women's Shoes", '/w/womens-shoes-5e1x6zy7ok']] },
+  '/air-max': { title: 'Nike Air Max', h1: 'Nike Air Max', paragraphs: ['Visible Air: since the Air Max 1 in 1987, Air Max has put the cushioning on display, from the Air Max 90 and 95 to the Air Max Plus and DN.'] },
+  '/flyease': { title: 'Nike FlyEase', h1: 'Nike FlyEase', paragraphs: ['FlyEase designs make shoes easier to get on and off, with features such as wrap-around zippers and hinged, hands-free entry.'] },
+  '/flyknit': { title: 'Nike Flyknit', h1: 'Nike Flyknit', paragraphs: ['Flyknit uppers are engineered yarns knit into a lightweight, form-fitting, nearly seamless upper.'] },
+  '/free': { title: 'Nike Free', h1: 'Nike Free', paragraphs: ['Nike Free shoes use a flexible, segmented sole for a natural, barefoot-like ride.'] },
+  '/react': { title: 'Nike React', h1: 'Nike React', paragraphs: ['Nike React foam is soft, springy, lightweight and durable cushioning used across running and lifestyle shoes.'] },
+  '/running/vaporfly': { title: 'Nike Vaporfly', h1: 'Nike Vaporfly', paragraphs: ['The Vaporfly pairs ZoomX foam with a full-length carbon-fiber plate for road racing.'], links: [['Running', '/running'], ['Race', '/w/road-racing-shoes-9gdhkzy7ok']] },
+  '/zoomx': { title: 'Nike ZoomX', h1: 'Nike ZoomX', paragraphs: ['ZoomX is Nike\'s lightest and most responsive foam, used in racing and high-cushion running shoes.'] },
+  '/space-hippie': { title: 'Space Hippie', h1: 'Space Hippie', paragraphs: ['Space Hippie shoes were built from manufacturing scraps and recycled materials as part of Nike\'s Move to Zero.'] },
+  '/training/hybrid': { title: 'Hybrid RN', h1: 'Train Everything', paragraphs: ['Nike Hybrid RN is built for hybrid training: running, lifting and conditioning in one session.'], links: [['Hybrid', '/w/hybrid-training-8wvhh'], ['Training', '/training']] },
+  '/teens': { title: 'Teens Collection', h1: 'Teens Collection', paragraphs: ['Shoes and clothing picked for teens, from everyday sportswear to team sports.'], links: [['Big Kids Shoes', '/w/big-kids-shoes-agibjzv4dhzy7ok'], ['Big Kids Clothing', '/w/big-kids-clothing-6ymx6zagibjzv4dh']] },
+  '/kobe': { title: 'Kobe', h1: 'Kobe', paragraphs: ['Kobe Bryant\'s signature basketball line, including Protro re-releases.'], links: [['Basketball Shoes', '/w/basketball-shoes-3glsmzy7ok']] },
+  '/running-shoe-finder': { title: 'Running Shoe Finder', h1: 'Running Shoe Finder', paragraphs: ['Answer a few questions about where and how you run to narrow down Nike running shoes by cushioning, support and terrain.'], links: [['Road', '/w/road-running-shoes-37v7jz8kwewzy7ok'], ['Trail', '/w/acg-running-37v7jz93bsd'], ['Race', '/w/road-racing-shoes-9gdhkzy7ok']] },
+  '/nikeskims-lookbook': { title: 'NikeSKIMS Lookbook', h1: 'NikeSKIMS Lookbook', paragraphs: ['Looks from the NikeSKIMS collection of training and lifestyle pieces.'], links: [['All Clothing', '/w/nikeskims-b2asd']] },
+  '/nikeskims-bra-guide': { title: 'NikeSKIMS Bra Guide', h1: 'NikeSKIMS Bra Guide', paragraphs: ['Find the NikeSKIMS bra by support level and fabric.'], links: [['Bras', '/w/nikeskims-sports-bras-40qgmzb2asd']] },
+  '/nikeskims-collection-guide': { title: 'NikeSKIMS Fabric Guide', h1: 'NikeSKIMS Fabric Guide', paragraphs: ['NikeSKIMS fabrics range from Airy and Weightless to Matte, Satin Shine, Seamless, Stretch Knit 2.0, Stretch Nylon and Studio Stretch.'], links: [['All Clothing', '/w/nikeskims-b2asd']] },
+}
+
+// Department and sport landing pages that are not /w/ listings.
+export const HUB_COPY = {
+  '/jordan': 'Jordan Brand shoes, clothing and gear for men, women and kids.',
+  '/nikeskims': 'NikeSKIMS: training and lifestyle pieces in sculpting fabrics.',
+  '/gear-up': 'Gear up for every sport.',
+  '/sportswear': 'Nike Sportswear: everyday shoes and clothing with sport heritage.',
+  '/basketball': 'Basketball shoes, apparel and equipment.',
+  '/court': 'Tennis and pickleball shoes and apparel.',
+  '/soccer': 'Soccer cleats, indoor footwear, apparel and equipment.',
+  '/training': 'Training shoes and apparel for the gym, studio and recovery.',
+  '/running': 'Running shoes and apparel for road, race and trail.',
+  '/golf': 'Golf shoes, apparel and equipment.',
+  '/baseball': 'Baseball cleats, gloves and apparel.',
+  '/us-football': 'Football cleats, gloves and apparel.',
+  '/LockerRoom': 'Team and league gear from the NBA, NFL, MLB, WNBA, NCAA, NWSL and soccer clubs.',
+  '/acg': 'All Conditions Gear for trail running, hiking and exploring.',
+}
+
+export const STORES = [
+  ['FAIRVIEW MALL', '1800 Sheppard Ave. E, Unit 2096A', 'Toronto, Ontario, M2J 5A7, CA'],
+  ['Nike Yorkdale Shopping Centre', '3401 Dufferin St, Unit 244', 'Toronto, Ontario, M6A 2T9, CA'],
+  ['Nike Bloor', '1 Bloor St E', 'Toronto, Ontario, M4W 0A8, CA'],
+  ['Nike TEC 3.0', '220 Yonge St, Unit 300, Eaton Center Mall', 'Toronto, Ontario, M5B 2H1, CA'],
+  ['Scarborough Town Centre', '300 Borough Dr, Unit 19A', 'Scarborough, Ontario, M1P 4P5, CA'],
+  ['Markville Shopping Centre', '5000 Hwy 7 East, Unit 1175', 'Markham, Ontario, L3R 4M9, CA'],
+  ['Nike Factory Store - Vaughan Mills', '1 Bass Pro Mills Dr., Unit E3', 'Concord, Ontario, L4K 5W4, CA'],
+  ['Sherway Gardens', '25 The West Mall, Unit 1160', 'Etobicoke, Ontario, M9C 1B8, CA'],
+  ['Nike Clearance Store - Mississauga', '1250 South Service Rd.', 'Mississauga, Ontario, L5E 1V4, CA'],
+  ['Nike Square One 2.0', '100 City Centre Dr', 'Mississauga, Ontario, L5B 2C9, CA'],
+  ['Nike Factory Store - Halton Hills', '13850 Steeles Ave. W, Suite 200', 'Halton Hills, Ontario, L7G 0J1, CA'],
+  ['Nike Maple View', '900 Maple Ave', 'Burlington, Ontario, L7S 2J8, CA'],
+  ['Nike Factory Store - Niagara on the Lake', '300 Taylor Rd.', 'Niagara on the Lake, Ontario, L0S 1J0, CA'],
+  ['Nike Clearance Store - Niagara Falls', 'Fashion Outlets of Niagara Falls, 1886 Military Rd., Space 91-A', 'Niagara Falls, NY, 14304-1772, US'],
+  ['Nike Factory Store - Kitchener', '4326 King St. E', 'Kitchener, Ontario, N2P 2G5, CA'],
+]

@@ -34,7 +34,10 @@ test('amazon catalog: seven populated departments, distinct purchasable products
      assert.ok(asinList(page.text).length>0,n.id)
    }
    const home=await c.get('/amazon/')
-   for(const href of new Set([...home.text.matchAll(/href="([^"]+)"/g)].map(m=>decode(m[1])).filter(h=>/^\/amazon\/(b\?|s\?|gp\/goldbox|gp\/bestsellers|gp\/new-releases)/.test(h)))) {
+   // Merchandising links in the homepage body; header/footer chrome now mirrors amazon.com's full
+   // department tree, whose structure-only landings list no fixture products.
+   const body=home.text.slice(home.text.indexOf('<main'),home.text.indexOf('</main>'))
+   for(const href of new Set([...body.matchAll(/href="([^"]+)"/g)].map(m=>decode(m[1])).filter(h=>/^\/amazon\/(b\?|s\?|gp\/goldbox|gp\/bestsellers|gp\/new-releases)/.test(h)))) {
      const r=await c.get(href)
      assert.equal(r.status,200,href)
      assert.ok(asinList(r.text).length>0,href)

@@ -7,6 +7,8 @@ import { validateCard } from '../../lib/payment.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
 import { PRODUCTS, GAME, LISTINGS, byPath, byId, bySku, search, SORTS, sortProducts, lines, totals, SHIPPING_METHODS, BENCHMARK_PICKUP_STORES, COUNTRIES, MAX_QTY, XSOLLA_PROJECT, validItems, deliveryEta } from './data.js'
 import * as P from './pages.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
+import { installParity, referenceRoute, titlePage, TITLES, gtaPlusPage, allGamesPage, addOnsPage } from './parity-pages.js'
 import { retailState, defaultAddress } from '../../lib/retail-state.js'
 import { installJourneys, rememberProduct, authReturn, resumeWishlist, savedAddressValues, privateOrder } from './journeys.js'
 import { enterScenarioCart, scenarioPayment, scenarioAvailability, scenarioPickupEnabled } from '../../lib/benchmark-scenarios.js'
@@ -96,6 +98,7 @@ function renderSource(req, res, modal, status = 200) {
 }
 
 installJourneys(router,{render,notFound})
+installParity(router,{render,notFound})
 router.use(['/signin','/signup'],(req,res,next)=>authReturn(req.query.return,res.locals.base)===null?render(req,res,'Invalid return destination',P.simplePage({title:'Invalid return destination',html:'<p>Use a store account or checkout link to sign in.</p>'}),400):next())
 
 // ---- browse ----
@@ -118,10 +121,10 @@ router.get('/art/:id.svg', (req, res) => {
   res.type('image/svg+xml').send(P.coverSvg(p))
 })
 router.get('/cookie-settings',(req,res)=>render(req,res,'Cookie Settings',P.simplePage({title:'Cookie Settings',html:`<p>Choose your preference for this session.</p><form method="post" action="${res.locals.base}/cookies"><input type="hidden" name="return" value="${res.locals.base}/"><button class="rs-btn rs-btn-primary" name="choice" value="accept">Accept all</button><button class="rs-btn rs-btn-outline" name="choice" value="reject">Reject optional cookies</button></form>`})))
-router.get('/view-all-games',(req,res)=>render(req,res,'Games',P.hubPage({base:res.locals.base,title:'Games',description:'Explore worlds, stories and classics. Shop PC games for the Rockstar Games Launcher or discover console editions.',products:PRODUCTS})))
-router.get('/merchandise',(req,res)=>render(req,res,'Merchandise',P.hubPage({base:res.locals.base,title:'Merchandise',description:'Wear your favorite worlds. Explore apparel, accessories and collectibles.',products:PRODUCTS.filter(p=>p.section==='Gear'),merch:true})))
-for(const [route,collection,title] of [['grand-theft-auto-collection','gta','Grand Theft Auto'],['red-dead-redemption-collection','rdr','Red Dead Redemption'],['rockstar-games-collection','rockstar','Rockstar Games']]) router.get(`/${route}`,(req,res)=>render(req,res,title,P.hubPage({base:res.locals.base,title,description:'Discover the collection: games, apparel and essentials.',collection,products:PRODUCTS.filter(p=>p.collections?.includes(collection))})))
-router.get('/game-add-ons',(req,res)=>render(req,res,'Game Add-Ons',P.gridPage({base:res.locals.base,title:'Game Add-Ons for PC',products:PRODUCTS.filter(p=>p.section==='Add-Ons')})))
+router.get('/view-all-games',(req,res)=>!fixtureCatalog?render(req,res,'All Games',allGamesPage(res.locals.base)):render(req,res,'Games',P.hubPage({base:res.locals.base,title:'Games',description:'Explore worlds, stories and classics. Shop PC games for the Rockstar Games Launcher or discover console editions.',products:PRODUCTS})))
+router.get('/merchandise',(req,res)=>!fixtureCatalog?render(req,res,'Merchandise',P.searchPage({base:res.locals.base,q:'',sort:'relevance',products:PRODUCTS.filter(p=>p.section==='Gear'),options:{}})):render(req,res,'Merchandise',P.hubPage({base:res.locals.base,title:'Merchandise',description:'Wear your favorite worlds. Explore apparel, accessories and collectibles.',products:PRODUCTS.filter(p=>p.section==='Gear'),merch:true})))
+for(const [route,collection,title,real] of [['grand-theft-auto-collection','gta','Grand Theft Auto','/grand-theft-auto-collection'],['red-dead-redemption-collection','rdr','Red Dead Redemption','/red-dead-redemption-collection'],['rockstar-games-collection','rockstar','Rockstar Games','/rockstar-collection'],['rockstar-collection','rockstar','Rockstar Games','/rockstar-collection']]) router.get(`/${route}`,(req,res)=>{const ref=!fixtureCatalog&&referenceRoute(res.locals.base,real);return ref?render(req,res,ref[0],ref[1]):render(req,res,title,P.hubPage({base:res.locals.base,title,description:'Discover the collection: games, apparel and essentials.',collection,products:PRODUCTS.filter(p=>p.collections?.includes(collection))}))})
+router.get('/game-add-ons',(req,res)=>!fixtureCatalog?render(req,res,'Game Add-Ons',addOnsPage(res.locals.base)):render(req,res,'Game Add-Ons',P.gridPage({base:res.locals.base,title:'Game Add-Ons for PC',products:PRODUCTS.filter(p=>p.section==='Add-Ons')})))
 
 router.post('/cookies', (req, res) => {
   req.store.cookies = ['accept', 'reject', 'settings', 'close'].includes(req.body.choice) ? req.body.choice : 'close'
@@ -179,7 +182,14 @@ function otherProduct(req, res, p) {
   const popover = req.query.added && p.sale === 'direct' ? P.addedPopover({ base: res.locals.base, item: bySku(p.variants?.some(v=>v.id===req.query.variant)?`${p.sku}:${req.query.variant}`:p.sku), closeHref: `${res.locals.base}${p.path}` }) : ''
   render(req, res, p.title, P.otherProductPage({ base: res.locals.base, p, popover, modal: m.html, variantId:typeof req.query.variant==='string'?req.query.variant:'' }))
 }
-router.get('/game/:slug', (req, res) => { const p = byPath(`/game/${req.params.slug}`); return p ? otherProduct(req, res, p) : notFound(req, res) })
+router.get('/game/:slug', (req, res) => {
+  const p = byPath(`/game/${req.params.slug}`)
+  if (p) return otherProduct(req, res, p)
+  // Titles outside the active catalog keep the real page structure, read-only.
+  if (req.params.slug === 'gta-plus') return render(req, res, 'GTA+', gtaPlusPage(res.locals.base))
+  if (Object.hasOwn(TITLES, req.params.slug)) return render(req, res, TITLES[req.params.slug].title, titlePage(res.locals.base, req.params.slug))
+  notFound(req, res)
+})
 router.get('/merchandise/:slug', (req, res) => { const p = byPath(`/merchandise/${req.params.slug}`); return p ? otherProduct(req, res, p) : notFound(req, res) })
 
 // ---- merchandise cart (Buy Now / Add to Cart / Go To Cart / PROCEED TO CHECKOUT) ----

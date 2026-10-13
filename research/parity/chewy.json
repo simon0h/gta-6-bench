@@ -1,0 +1,1014 @@
+{
+  "store": "chewy",
+  "real_home": "https://www.chewy.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.chewy.com/",
+    "https://www.chewy.com/b/dog-288",
+    "https://www.chewy.com/b/cat-325",
+    "https://www.chewy.com/b/pharmacy-2515",
+    "https://www.chewy.com/b/new-arrivals-14264",
+    "https://www.chewy.com/b/connect-vet-16616",
+    "https://www.chewy.com/deals/todays-deals-2723",
+    "https://www.chewy.com/app/cart",
+    "https://www.chewy.com/app/content/return-policy",
+    "https://www.chewy.com/app/content/autoship",
+    "https://www.chewy.com/chewy-egift-card/dp/226306",
+    "https://www.chewy.com/customer-care",
+    "https://www.chewy.com/app/content/faq",
+    "https://www.chewy.com/vet-care",
+    "https://www.chewy.com/g/give-back",
+    "https://www.chewy.com/education",
+    "https://www.chewy.com/purina-pro-plan-adult-sensitive-skin/dp/52404"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/app/site-map",
+  "notes": "Captured with WebFetch on 2026-10-13. Header mega menu (Dog, Cat, Other Animals, Pharmacy, Expert Health Tips, Services, Education, Chewy Picks, Give Back, Popular Brands, New Arrivals, Deals) and homepage sections came from the homepage and /app/cart. The homepage/help footer is rendered client-side and was not returned; footer labels come from the www.chewy.com/vet-care footer (About, Investor Relations, Affiliates, Jobs, FAQs, Learn, Give Back, Gift Cards, Sell on Chewy, Terms of Use, Privacy Policy, Interest-Based Ads, Accessibility, California Supply Chains Act, Vendor Compliance) without hrefs, so local paths are chosen under /app/content/. Not fetchable: /s search and /app/login (robots disallowed), /app/content/shipping-info, /app/site-map and /sitemap.xml (fetch errors), web.archive.org (blocked); account and order history need sign-in, so their expectations are generic. Chewy has no retail stores; the Chewy Vet Care clinic finder stands in for a store locator. Real product pages exist (e.g. /dp/52404: At a Glance, Autoship, Buy once, About This Item, Questions & Answers, Reviews) but the clone has no captured inventory, so the eGift card page is the product-page example and it has no purchase controls. Search stays an explicit uncaptured-coverage state per the reference catalog rules, so the search item is expected to fail. The Canada site switcher and social links are skipped.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Chewy home",
+      "real": "https://www.chewy.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Use App",
+      "real": "https://www.chewy.love/pT5U?pid=chewy_website&c=Use_App_Header",
+      "path": "/mobile-app"
+    },
+    {
+      "kind": "header",
+      "label": "24/7 Help",
+      "real": "tel:+18006724399",
+      "path": "/customer-care"
+    },
+    {
+      "kind": "header",
+      "label": "Sign In",
+      "real": "https://www.chewy.com/app/login",
+      "path": "/app/login"
+    },
+    {
+      "kind": "header",
+      "label": "Cart",
+      "real": "https://www.chewy.com/app/cart",
+      "path": "/app/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Free $25 eGift card",
+      "real": "https://www.chewy.com/deals/todays-deals-2723",
+      "path": "/deals/todays-deals-2723"
+    },
+    {
+      "kind": "header",
+      "label": "Dog",
+      "real": "https://www.chewy.com/b/dog-288",
+      "path": "/b/dog-288"
+    },
+    {
+      "kind": "header",
+      "label": "Cat",
+      "real": "https://www.chewy.com/b/cat-325",
+      "path": "/b/cat-325"
+    },
+    {
+      "kind": "header",
+      "label": "Other Animals",
+      "real": "https://www.chewy.com/other-animals",
+      "path": "/other-animals"
+    },
+    {
+      "kind": "header",
+      "label": "Pharmacy",
+      "real": "https://www.chewy.com/b/pharmacy-2515",
+      "path": "/b/pharmacy-2515"
+    },
+    {
+      "kind": "header",
+      "label": "Expert Health Tips",
+      "real": "https://www.petmd.com/",
+      "path": "/expert-health-tips"
+    },
+    {
+      "kind": "header",
+      "label": "Services",
+      "real": "https://www.chewy.com/services",
+      "path": "/services"
+    },
+    {
+      "kind": "header",
+      "label": "Education",
+      "real": "https://www.chewy.com/education",
+      "path": "/education"
+    },
+    {
+      "kind": "header",
+      "label": "Chewy Picks",
+      "real": "https://www.chewy.com/best",
+      "path": "/best"
+    },
+    {
+      "kind": "header",
+      "label": "Give Back",
+      "real": "https://www.chewy.com/g/give-back",
+      "path": "/g/give-back"
+    },
+    {
+      "kind": "header",
+      "label": "Popular Brands",
+      "real": "https://www.chewy.com/brands",
+      "path": "/brands"
+    },
+    {
+      "kind": "header",
+      "label": "New Arrivals",
+      "real": "https://www.chewy.com/b/new-arrivals-14264",
+      "path": "/b/new-arrivals-14264"
+    },
+    {
+      "kind": "header",
+      "label": "Deals",
+      "real": "https://www.chewy.com/deals/todays-deals-2723",
+      "path": "/deals/todays-deals-2723"
+    },
+    {
+      "kind": "header",
+      "label": "Food",
+      "real": "https://www.chewy.com/b/food-332",
+      "path": "/b/food-332"
+    },
+    {
+      "kind": "header",
+      "label": "Treats",
+      "real": "https://www.chewy.com/b/treats-335",
+      "path": "/b/treats-335"
+    },
+    {
+      "kind": "header",
+      "label": "Health & Pharmacy",
+      "real": "https://www.chewy.com/b/health-pharmacy-372",
+      "path": "/b/health-pharmacy-372"
+    },
+    {
+      "kind": "header",
+      "label": "Supplies",
+      "real": "https://www.chewy.com/b/dog-288",
+      "path": "/b/dog-288"
+    },
+    {
+      "kind": "header",
+      "label": "Toys",
+      "real": "https://www.chewy.com/b/toys-315",
+      "path": "/b/toys-315"
+    },
+    {
+      "kind": "header",
+      "label": "Cleaning & Potty",
+      "real": "https://www.chewy.com/b/dog-potty-cleaning-and-training-supplies-351",
+      "path": "/b/dog-potty-cleaning-and-training-supplies-351"
+    },
+    {
+      "kind": "header",
+      "label": "Grooming",
+      "real": "https://www.chewy.com/b/dog-grooming-supplies-and-tools-355",
+      "path": "/b/dog-grooming-supplies-and-tools-355"
+    },
+    {
+      "kind": "header",
+      "label": "Litter",
+      "real": "https://www.chewy.com/b/litter-411",
+      "path": "/b/litter-411"
+    },
+    {
+      "kind": "header",
+      "label": "Trees & Scratchers",
+      "real": "https://www.chewy.com/b/cat-furniture-456",
+      "path": "/b/cat-furniture-456"
+    },
+    {
+      "kind": "header",
+      "label": "Chicken",
+      "real": "https://www.chewy.com/b/chicken-supplies-and-accessories-12992",
+      "path": "/b/chicken-supplies-and-accessories-12992"
+    },
+    {
+      "kind": "header",
+      "label": "Livestock",
+      "real": "https://www.chewy.com/b/farm-and-livestock-supplies-8403",
+      "path": "/b/farm-and-livestock-supplies-8403"
+    },
+    {
+      "kind": "header",
+      "label": "Wild Bird & Wildlife",
+      "real": "https://www.chewy.com/b/wildlife-supplies-139606",
+      "path": "/b/wildlife-supplies-139606"
+    },
+    {
+      "kind": "header",
+      "label": "Small Animal",
+      "real": "https://www.chewy.com/b/small-animal-supplies-and-accessories-977",
+      "path": "/b/small-animal-supplies-and-accessories-977"
+    },
+    {
+      "kind": "header",
+      "label": "Pet Bird",
+      "real": "https://www.chewy.com/b/bird-supplies-and-accessories-941",
+      "path": "/b/bird-supplies-and-accessories-941"
+    },
+    {
+      "kind": "header",
+      "label": "Fish",
+      "real": "https://www.chewy.com/b/fish-and-aquarium-supplies-885",
+      "path": "/b/fish-and-aquarium-supplies-885"
+    },
+    {
+      "kind": "header",
+      "label": "Reptile & Amphibian",
+      "real": "https://www.chewy.com/b/reptile-supplies-and-accessories-1025",
+      "path": "/b/reptile-supplies-and-accessories-1025"
+    },
+    {
+      "kind": "header",
+      "label": "Shop all Dog",
+      "real": "https://www.chewy.com/b/dog-288",
+      "path": "/b/dog-288"
+    },
+    {
+      "kind": "header",
+      "label": "Shop all Cat",
+      "real": "https://www.chewy.com/b/cat-325",
+      "path": "/b/cat-325"
+    },
+    {
+      "kind": "header",
+      "label": "Gift Cards",
+      "real": "https://www.chewy.com/chewy-egift-card/dp/226306",
+      "path": "/chewy-egift-card/dp/226306"
+    },
+    {
+      "kind": "header",
+      "label": "CarePlus Pet Insurance & Wellness Plans",
+      "real": "https://www.chewy.com/pet-insurance/",
+      "path": "/pet-insurance"
+    },
+    {
+      "kind": "header",
+      "label": "Chewy Vet Care",
+      "real": "https://www.chewy.com/vet-care",
+      "path": "/vet-care"
+    },
+    {
+      "kind": "header",
+      "label": "Connect with a Vet",
+      "real": "https://www.chewy.com/b/connect-vet-16616",
+      "path": "/b/connect-vet-16616"
+    },
+    {
+      "kind": "header",
+      "label": "Best Dog Supplies",
+      "real": "https://www.chewy.com/best/dog-supplies_s100968",
+      "path": "/best/dog-supplies_s100968"
+    },
+    {
+      "kind": "header",
+      "label": "Best Cat Supplies",
+      "real": "https://www.chewy.com/best/cat-supplies_s112080",
+      "path": "/best/cat-supplies_s112080"
+    },
+    {
+      "kind": "header",
+      "label": "Best Horse Supplies",
+      "real": "https://www.chewy.com/best/horse-supplies_s123854",
+      "path": "/best/horse-supplies_s123854"
+    },
+    {
+      "kind": "header",
+      "label": "Best Fish Supplies",
+      "real": "https://www.chewy.com/best/fish-aquarium-supplies_s121446",
+      "path": "/best/fish-aquarium-supplies_s121446"
+    },
+    {
+      "kind": "header",
+      "label": "Best Reptile Supplies",
+      "real": "https://www.chewy.com/best/reptile-supplies_s122326",
+      "path": "/best/reptile-supplies_s122326"
+    },
+    {
+      "kind": "header",
+      "label": "Best Bird Supplies",
+      "real": "https://www.chewy.com/best/bird-supplies_s122318",
+      "path": "/best/bird-supplies_s122318"
+    },
+    {
+      "kind": "header",
+      "label": "Best Small Animal Supplies",
+      "real": "https://www.chewy.com/best/small-animal-supplies_s121454",
+      "path": "/best/small-animal-supplies_s121454"
+    },
+    {
+      "kind": "header",
+      "label": "How We Give Back",
+      "real": "https://www.chewy.com/g/give-back",
+      "path": "/g/give-back"
+    },
+    {
+      "kind": "header",
+      "label": "Donate to a Rescue",
+      "real": "https://www.chewy.com/g/animal-shelters-and-rescues",
+      "path": "/g/animal-shelters-and-rescues"
+    },
+    {
+      "kind": "header",
+      "label": "Find Pets to Adopt",
+      "real": "https://www.chewy.com/g/search-adoptable-pets",
+      "path": "/g/search-adoptable-pets"
+    },
+    {
+      "kind": "header",
+      "label": "Join Our Network",
+      "real": "https://www.chewy.com/g/shelter-partners",
+      "path": "/g/shelter-partners"
+    },
+    {
+      "kind": "footer",
+      "label": "About",
+      "real": "https://www.chewy.com/app/content/about-us",
+      "path": "/app/content/about-us"
+    },
+    {
+      "kind": "footer",
+      "label": "Investor Relations",
+      "real": "https://investor.chewy.com/",
+      "path": "/app/content/investor-relations"
+    },
+    {
+      "kind": "footer",
+      "label": "Affiliates",
+      "real": "https://www.chewy.com/app/content/affiliate",
+      "path": "/app/content/affiliate"
+    },
+    {
+      "kind": "footer",
+      "label": "Jobs",
+      "real": "https://careers.chewy.com/",
+      "path": "/app/content/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Sell on Chewy",
+      "real": "https://www.chewy.com/app/content/sell-on-chewy",
+      "path": "/app/content/sell-on-chewy"
+    },
+    {
+      "kind": "footer",
+      "label": "FAQs",
+      "real": "https://www.chewy.com/app/content/faq",
+      "path": "/app/content/faq"
+    },
+    {
+      "kind": "footer",
+      "label": "Learn",
+      "real": "https://www.chewy.com/education",
+      "path": "/education"
+    },
+    {
+      "kind": "footer",
+      "label": "Give Back",
+      "real": "https://www.chewy.com/g/give-back",
+      "path": "/g/give-back"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Cards",
+      "real": "https://www.chewy.com/chewy-egift-card/dp/226306",
+      "path": "/chewy-egift-card/dp/226306"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms of Use",
+      "real": "https://www.chewy.com/app/content/terms-of-use",
+      "path": "/app/content/terms-of-use"
+    },
+    {
+      "kind": "footer",
+      "label": "Privacy Policy",
+      "real": "https://www.chewy.com/app/content/privacy",
+      "path": "/app/content/privacy"
+    },
+    {
+      "kind": "footer",
+      "label": "Interest-Based Ads",
+      "real": "https://www.chewy.com/app/content/interest-based-ads",
+      "path": "/app/content/interest-based-ads"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.chewy.com/app/content/accessibility",
+      "path": "/app/content/accessibility"
+    },
+    {
+      "kind": "footer",
+      "label": "California Supply Chains Act",
+      "real": "https://www.chewy.com/app/content/california-supply-chains-act",
+      "path": "/app/content/california-supply-chains-act"
+    },
+    {
+      "kind": "footer",
+      "label": "Vendor Compliance",
+      "real": "https://www.chewy.com/app/content/vendor-compliance",
+      "path": "/app/content/vendor-compliance"
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.chewy.com/s?query=dog+food",
+      "path": "/s?query=dog+food",
+      "expect": [
+        "dog food",
+        "Sort By"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Dog department",
+      "real": "https://www.chewy.com/b/dog-288",
+      "path": "/b/dog-288",
+      "expect": [
+        "Dog Supplies",
+        "Get your dog all set for fall",
+        "Frequently Asked Questions about Dog Supplies",
+        "Breed Size",
+        "Customer Rating"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cat department",
+      "real": "https://www.chewy.com/b/cat-325",
+      "path": "/b/cat-325",
+      "expect": [
+        "Cat Supplies",
+        "Trees, Condos & Scratchers",
+        "Frequently Asked Questions about Cat Supplies"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Category page",
+      "real": "https://www.chewy.com/b/dry-food-294",
+      "path": "/b/dry-food-294",
+      "expect": [
+        "Dry Dog Food",
+        "Sort By",
+        "Price: Low to High"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page (eGift card)",
+      "real": "https://www.chewy.com/chewy-egift-card/dp/226306",
+      "path": "/chewy-egift-card/dp/226306",
+      "expect": [
+        "Chewy eGift Card",
+        "Select Design",
+        "Select Amount",
+        "Email Delivery Details",
+        "About This Item"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Cart",
+      "real": "https://www.chewy.com/app/cart",
+      "path": "/app/cart",
+      "expect": [
+        "Your cart is empty.",
+        "Sign in to see items you may have added from another computer or device",
+        "Shop Today's Deals"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in",
+      "real": "https://www.chewy.com/app/login",
+      "path": "/app/login",
+      "expect": [
+        "Sign In",
+        "Email Address",
+        "Password",
+        "Create an Account"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account",
+      "real": "https://www.chewy.com/app/account",
+      "path": "/app/account",
+      "expect": [
+        "Account",
+        "Orders",
+        "Autoship"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status / track order",
+      "real": "https://www.chewy.com/app/account/orderhistory",
+      "path": "/app/account/orderhistory",
+      "expect": [
+        "Your Orders",
+        "Track"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help / customer care",
+      "real": "https://www.chewy.com/customer-care",
+      "path": "/customer-care",
+      "expect": [
+        "Chewy Help",
+        "Get help from our experts 24/7",
+        "1-800-672-4399"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Clinic locator (Chewy Vet Care)",
+      "real": "https://www.chewy.com/vet-care",
+      "path": "/vet-care/locations",
+      "expect": [
+        "Chewy Vet Care",
+        "Find a clinic"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Chewy Vet Care",
+      "real": "https://www.chewy.com/vet-care",
+      "path": "/vet-care",
+      "expect": [
+        "Chewy Vet Care",
+        "Connect with a Vet"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Today's Deals",
+      "real": "https://www.chewy.com/deals/todays-deals-2723",
+      "path": "/deals/todays-deals-2723",
+      "expect": [
+        "Today's Deals",
+        "Buy 3, get the 4th free top-rated toys",
+        "Dog deals",
+        "Livestock deals"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns",
+      "real": "https://www.chewy.com/app/content/return-policy",
+      "path": "/app/content/return-policy",
+      "expect": [
+        "How to Start a Return",
+        "Return shipping is free"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping info",
+      "real": "https://www.chewy.com/app/content/shipping-info",
+      "path": "/app/content/shipping-info",
+      "expect": [
+        "Shipping",
+        "$49"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Autoship",
+      "real": "https://www.chewy.com/app/content/autoship",
+      "path": "/app/content/autoship",
+      "expect": [
+        "Autoship & Save",
+        "Why You'll Love Autoship",
+        "Frequently Asked Questions",
+        "Autoship Terms"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pharmacy",
+      "real": "https://www.chewy.com/b/pharmacy-2515",
+      "path": "/b/pharmacy-2515",
+      "expect": [
+        "Pet Pharmacy",
+        "Filling their prescription is simple",
+        "Check their meds",
+        "Any questions?",
+        "Frequently Asked Questions about Pet Pharmacy"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Connect with a Vet",
+      "real": "https://www.chewy.com/b/connect-vet-16616",
+      "path": "/b/connect-vet-16616",
+      "expect": [
+        "Connect with a Vet",
+        "Peace of mind from home",
+        "Chat with a licensed veterinary technician",
+        "Frequently asked questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Give back",
+      "real": "https://www.chewy.com/g/give-back",
+      "path": "/g/give-back",
+      "expect": [
+        "Helping More People Bring Love Home",
+        "It's Never Been Easier To Give Back",
+        "Are You Part of a Shelter or Rescue?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Education hub",
+      "real": "https://www.chewy.com/education",
+      "path": "/education",
+      "expect": [
+        "All About Pets",
+        "Reptile and Amphibian",
+        "About Chewy Education"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "New arrivals",
+      "real": "https://www.chewy.com/b/new-arrivals-14264",
+      "path": "/b/new-arrivals-14264",
+      "expect": [
+        "New Arrivals",
+        "Explore the latest drops"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Pet insurance",
+      "real": "https://www.chewy.com/pet-insurance/",
+      "path": "/pet-insurance",
+      "expect": [
+        "CarePlus",
+        "Pet Insurance",
+        "Wellness"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Site map",
+      "real": "https://www.chewy.com/sitemap.xml",
+      "path": "/app/site-map",
+      "expect": [
+        "Site Map",
+        "Dog",
+        "Cat"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Hero carousel",
+      "expect": [
+        "Free $25 eGift card",
+        "New customers only. Exclusions apply."
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Welcome module",
+      "expect": [
+        "Welcome to Chewy",
+        "Hey, friend!",
+        "Set up a prescription Autoship",
+        "Set up an Autoship"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Shop all pets",
+      "expect": [
+        "Shop all pets, friends & more",
+        "Pet Parent",
+        "Livestock"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Popular categories",
+      "expect": [
+        "Explore popular categories",
+        "Dog Flea & Tick",
+        "Cat Litter"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Pharmacy promo",
+      "expect": [
+        "50% off your first Autoship order of prescription medication",
+        "Chewy Pharmacy has the pet meds you trust at low prices every day."
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Pet parenting made easy",
+      "expect": [
+        "Pet parenting made easy",
+        "Award-winning 24/7 customer care",
+        "Chat free with our licensed vet team",
+        "Prescription meds, delivered fast",
+        "Discover pet insurance"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Seasonal row",
+      "expect": [
+        "Get your pet all set for fall"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "App promo",
+      "expect": [
+        "Get the Chewy app"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog",
+      "real": "https://www.chewy.com/b/dog-288",
+      "path": "/b/dog-288"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat",
+      "real": "https://www.chewy.com/b/cat-325",
+      "path": "/b/cat-325"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Horse",
+      "real": "https://www.chewy.com/b/horse-1663",
+      "path": "/b/horse-1663"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pet Parent",
+      "real": "https://www.chewy.com/b/pet-parents-15439",
+      "path": "/b/pet-parents-15439"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wild Bird",
+      "real": "https://www.chewy.com/b/wild-bird-12931",
+      "path": "/b/wild-bird-12931"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Small Pet",
+      "real": "https://www.chewy.com/b/small-pet-977",
+      "path": "/b/small-pet-977"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pet Bird",
+      "real": "https://www.chewy.com/b/bird-941",
+      "path": "/b/bird-941"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fish",
+      "real": "https://www.chewy.com/b/fish-885",
+      "path": "/b/fish-885"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Reptile",
+      "real": "https://www.chewy.com/b/reptile-1025",
+      "path": "/b/reptile-1025"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chicken",
+      "real": "https://www.chewy.com/b/chicken-12992",
+      "path": "/b/chicken-12992"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Livestock",
+      "real": "https://www.chewy.com/b/farm-animal-8403",
+      "path": "/b/farm-animal-8403"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Food",
+      "real": "https://www.chewy.com/b/food-332",
+      "path": "/b/food-332"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Treats",
+      "real": "https://www.chewy.com/b/treats-335",
+      "path": "/b/treats-335"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Health & Pharmacy",
+      "real": "https://www.chewy.com/b/health-pharmacy-372",
+      "path": "/b/health-pharmacy-372"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Toys",
+      "real": "https://www.chewy.com/b/toys-315",
+      "path": "/b/toys-315"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Cleaning & Potty",
+      "real": "https://www.chewy.com/b/dog-potty-cleaning-and-training-supplies-351",
+      "path": "/b/dog-potty-cleaning-and-training-supplies-351"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dog Grooming",
+      "real": "https://www.chewy.com/b/dog-grooming-supplies-and-tools-355",
+      "path": "/b/dog-grooming-supplies-and-tools-355"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Food",
+      "real": "https://www.chewy.com/b/food-387",
+      "path": "/b/food-387"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Litter",
+      "real": "https://www.chewy.com/b/litter-411",
+      "path": "/b/litter-411"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Treats",
+      "real": "https://www.chewy.com/b/treats-391",
+      "path": "/b/treats-391"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Health & Pharmacy",
+      "real": "https://www.chewy.com/b/health-pharmacy-415",
+      "path": "/b/health-pharmacy-415"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Trees & Scratchers",
+      "real": "https://www.chewy.com/b/cat-furniture-456",
+      "path": "/b/cat-furniture-456"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cat Toys",
+      "real": "https://www.chewy.com/b/toys-326",
+      "path": "/b/toys-326"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Horse Supplies",
+      "real": "https://www.chewy.com/b/horse-supplies-and-accessories-1663",
+      "path": "/b/horse-supplies-and-accessories-1663"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chicken Supplies",
+      "real": "https://www.chewy.com/b/chicken-supplies-and-accessories-12992",
+      "path": "/b/chicken-supplies-and-accessories-12992"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Livestock Supplies",
+      "real": "https://www.chewy.com/b/farm-and-livestock-supplies-8403",
+      "path": "/b/farm-and-livestock-supplies-8403"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wild Bird & Wildlife Supplies",
+      "real": "https://www.chewy.com/b/wildlife-supplies-139606",
+      "path": "/b/wildlife-supplies-139606"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Small Animal Supplies",
+      "real": "https://www.chewy.com/b/small-animal-supplies-and-accessories-977",
+      "path": "/b/small-animal-supplies-and-accessories-977"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bird Supplies",
+      "real": "https://www.chewy.com/b/bird-supplies-and-accessories-941",
+      "path": "/b/bird-supplies-and-accessories-941"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fish & Aquarium Supplies",
+      "real": "https://www.chewy.com/b/fish-and-aquarium-supplies-885",
+      "path": "/b/fish-and-aquarium-supplies-885"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Reptile Supplies",
+      "real": "https://www.chewy.com/b/reptile-supplies-and-accessories-1025",
+      "path": "/b/reptile-supplies-and-accessories-1025"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pet Pharmacy",
+      "real": "https://www.chewy.com/b/pharmacy-2515",
+      "path": "/b/pharmacy-2515"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Today's Deals",
+      "real": "https://www.chewy.com/deals/todays-deals-2723",
+      "path": "/deals/todays-deals-2723"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Arrivals",
+      "real": "https://www.chewy.com/b/new-arrivals-14264",
+      "path": "/b/new-arrivals-14264"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Education",
+      "real": "https://www.chewy.com/education",
+      "path": "/education"
+    },
+    {
+      "kind": "sitemap",
+      "label": "How We Give Back",
+      "real": "https://www.chewy.com/g/give-back",
+      "path": "/g/give-back"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chewy Vet Care",
+      "real": "https://www.chewy.com/vet-care",
+      "path": "/vet-care"
+    },
+    {
+      "kind": "sitemap",
+      "label": "CarePlus",
+      "real": "https://www.chewy.com/pet-insurance",
+      "path": "/pet-insurance"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Connect with a Vet",
+      "real": "https://www.chewy.com/b/connect-vet-16616",
+      "path": "/b/connect-vet-16616"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.chewy.com/chewy-egift-card/dp/226306",
+      "path": "/chewy-egift-card/dp/226306"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Customer Care",
+      "real": "https://www.chewy.com/customer-care",
+      "path": "/customer-care"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Autoship",
+      "real": "https://www.chewy.com/app/content/autoship",
+      "path": "/app/content/autoship"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Popular Brands",
+      "real": "https://www.chewy.com/brands",
+      "path": "/brands"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Chewy Picks",
+      "real": "https://www.chewy.com/best",
+      "path": "/best"
+    }
+  ]
+}

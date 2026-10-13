@@ -6,9 +6,13 @@ import { productPath, STATES, LOCATION, arrivalFor, arrivalSummary, arrivalPhras
 
 import { DEPARTMENTS, SELLERS, departmentPath, categorySlug } from './catalog.js'
 import * as Browse from './browse.js'
+import { ALL_DEPARTMENTS, DEPARTMENT_MENU, SERVICE_MENU, NAV_BAR, FOOTER_LINKS } from './sitetree.js'
 
 const NAME = 'Walmart'
-const NAV = [['Rollbacks & More','/shop/savings'],['Fall favorites','/shop/fall-home'],['Get it Fast','/shop/get-it-fast'],['Pharmacy','/cp/pharmacy/5431'],['Walmart+','/plus'],['More','/departments']]
+const NAV = NAV_BAR
+// Subcategory links for a Departments-drawer heading, from the /all-departments tree.
+const MENU_TREE = { 'Rollbacks & More': 'Savings & Featured Shops', 'Home, Garden & Tools': 'Home, Furniture & Appliances', 'Gaming & Movies': 'Video Games', 'Toys & Outdoor Play': 'Toys', 'Baby': 'Baby & Kids', 'Pet Supplies': 'Pets', 'School, Office & Art Supplies': 'School & Office Supplies', 'Party Supplies': 'Seasonal & Celebrations', 'Music': 'Music & Vinyl' }
+const menuSubs = name => (ALL_DEPARTMENTS.find(d => d[0] === (MENU_TREE[name] ?? name))?.[2] ?? []).slice(0, 6)
 
 // Inline icons only (no external assets). The spark is six rounded yellow spokes, not Walmart's logo file.
 const ICON = {
@@ -29,7 +33,7 @@ const SHOW_HIDE_JS = `<script>document.querySelectorAll('[data-toggle]').forEach
 // ---- layout ----
 export function layout({ base, title, body, t, user = null, variant = 'store', q = '', location = LOCATION }) {
   const header = variant === 'store' ? storeHeader({ base, t, user, q, location }) : variant === 'checkout' ? checkoutHeader({ base }) : identityHeader({ base })
-  const footer = variant === 'identity' ? identityFooter() : storeFooter(base)
+  const footer = variant === 'identity' ? identityFooter(base) : storeFooter(base)
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
@@ -48,18 +52,18 @@ function storeHeader({ base, t, user, q, location }) {
   return `<header class="wm-header">
   <div class="wm-header-top">
     <a class="wm-logo" href="${base}/" aria-label="Walmart Homepage">${ICON.spark}</a>
-    <details class="wm-header-menu wm-location-menu"><summary class="wm-loc" aria-label="Shipping location: ${esc(location.city)}, ${esc(location.zip)}">${ICON.pin}<span><b>How do you want your items?</b><small>${esc(location.city)}, ${esc(location.zip)} &bull; ${esc(location.store)}</small></span><span aria-hidden="true">⌄</span></summary><div class="wm-header-panel"><h2>Choose how you shop</h2><div class="wm-location-methods"><span>${ICON.truck}<b>Shipping</b><small>Available</small></span><span><b>Pickup</b><small>Unavailable</small></span><span><b>Delivery</b><small>Unavailable</small></span></div><p>Browse shipping options for your ZIP code. Review your full address at checkout.</p><form action="${base}/location" method="post"><label for="header-zip">ZIP code</label><input id="header-zip" name="zip" value="${esc(location.zip)}" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required><input type="hidden" name="method" value="shipping"><button class="wm-pill wm-pill-block">Save ZIP code</button></form><a href="${base}/store-finder">Choose a preferred sample store</a></div></details>
+    <details class="wm-header-menu wm-location-menu"><summary class="wm-loc" aria-label="Shipping location: ${esc(location.city)}, ${esc(location.zip)}">${ICON.pin}<span><b>Pickup or delivery?</b><small>${esc(location.city)}, ${esc(location.zip)} &bull; ${esc(location.store)}</small></span><span aria-hidden="true">⌄</span></summary><div class="wm-header-panel"><h2>Choose how you shop</h2><div class="wm-location-methods"><span>${ICON.truck}<b>Shipping</b><small>Available</small></span><span><b>Pickup</b><small>Unavailable</small></span><span><b>Delivery</b><small>Unavailable</small></span></div><p>Browse shipping options for your ZIP code. Review your full address at checkout.</p><form action="${base}/location" method="post"><label for="header-zip">ZIP code</label><input id="header-zip" name="zip" value="${esc(location.zip)}" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required><input type="hidden" name="method" value="shipping"><button class="wm-pill wm-pill-block">Save ZIP code</button></form><a href="${base}/store-finder">Choose a preferred sample store</a></div></details>
     <form class="wm-search" action="${base}/search" method="get" role="search">
       <input type="search" name="q" placeholder="Search Walmart" aria-label="Search Walmart" value="${esc(q)}" list="wm-search-suggestions"><datalist id="wm-search-suggestions">${["milk","coffee","headphones","storage","pet food","gta 6"].map(v=>`<option value="${v}">`).join('')}</datalist>
       <button type="submit" aria-label="Search icon">${ICON.search}</button>
     </form>
-    <details class="wm-header-menu wm-my-items-menu"><summary class="wm-util" aria-label="Reorder My Items">${ICON.heart}<span><small>Reorder</small><b>My Items</b></span></summary><div class="wm-header-panel"><h2>Your everyday favorites</h2><a href="${base}/my-items">Reorder</a><a href="${base}/lists">Lists</a><a href="${base}/my-items/recent">Recently viewed</a><a href="${base}/registries">Registries</a></div></details>
-    <details class="wm-header-menu wm-account-menu"><summary class="wm-util" aria-label="${user ? `Hi, ${esc(user.first_name || 'there')} Account` : 'Sign In Account'}">${ICON.user}<span><small>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Sign In'}</small><b>Account</b></span></summary><div class="wm-header-panel"><h2>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Welcome to Walmart'}</h2><a class="wm-pill wm-pill-block" href="${user ? `${base}/account` : `${base}/account/login`}">${user?'Your account':'Sign in or create account'}</a><a href="${base}/orders">Purchase history</a><a href="${base}/account/addresses">Address book</a><a href="${base}/account/plus">Walmart+ membership</a><a href="${base}/help">Help center</a>${user?`<a href="${base}/account/logout">Sign out</a>`:''}</div></details>
+    <details class="wm-header-menu wm-my-items-menu"><summary class="wm-util" aria-label="Reorder My Items">${ICON.heart}<span><small>Reorder</small><b>My Items</b></span></summary><div class="wm-header-panel"><h2>Your everyday favorites</h2><a href="${base}/my-items">My Items</a><a href="${base}/my-items">Reorder</a><a href="${base}/lists">Lists</a><a href="${base}/my-items/recent">Recently viewed</a><a href="${base}/my-registries">Registries</a></div></details>
+    <details class="wm-header-menu wm-account-menu"><summary class="wm-util" aria-label="${user ? `Hi, ${esc(user.first_name || 'there')} Account` : 'Sign In Account'}">${ICON.user}<span><small>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Sign In'}</small><b>Account</b></span></summary><div class="wm-header-panel"><h2>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Welcome to Walmart'}</h2><a class="wm-pill wm-pill-block" href="${user ? `${base}/account` : `${base}/account/login`}">${user?'Your account':'Sign in or create account'}</a><a href="${base}/orders">Purchase History</a><a href="${base}/plus">Walmart+</a><a href="${base}/cp/subscriptions/4191733">Subscriptions</a><a href="${base}/account/addresses">Address book</a><a href="${base}/account/plus">Manage Walmart+ membership</a><a href="${base}/help">Help</a><span class="wm-static">Language | English</span>${user?`<a href="${base}/account/logout">Sign out</a>`:''}</div></details>
     <a class="wm-cart-link" href="${base}/cart" aria-label="Cart contains ${t.count} item${t.count === 1 ? '' : 's'}, total ${money(t.subtotal)}">${ICON.cart}<span class="wm-cart-count">${t.count}</span><small>${money(t.subtotal)}</small></a>
   </div>
   <nav class="wm-header-nav" aria-label="Departments and services">
-    <details class="wm-native-menu wm-header-menu wm-departments-menu"><summary class="wm-nav-dd">&#9776; Departments &#9662;</summary><div class="wm-header-panel wm-mega-panel"><div class="wm-menu-heading"><h2>Shop by department</h2><a href="${base}/departments">All departments</a></div><div class="wm-mega-grid">${DEPARTMENTS.map(d=>`<section><a class="wm-menu-dept" href="${departmentPath(base,d)}">${esc(d.name)}</a>${d.categories.map(c=>`<a href="${base}/browse/${categorySlug(c)}?department=${d.key}">${esc(c)}</a>`).join('')}</section>`).join('')}</div></div></details>
-    <details class="wm-native-menu wm-header-menu wm-services-menu"><summary class="wm-nav-dd">&#9881; Services &#9662;</summary><div class="wm-header-panel wm-service-menu-panel"><h2>Services for your everyday</h2><a href="${base}/services">All services</a><a href="${base}/cp/pharmacy/5431">Pharmacy</a><a href="${base}/services/auto-care">Auto Care Center</a><a href="${base}/services/photo">Photo Center</a><a href="${base}/services/financial">Financial services</a><a href="${base}/store-finder">Store finder</a><a href="${base}/help">Help center</a></div></details>
+    <details class="wm-native-menu wm-header-menu wm-departments-menu"><summary class="wm-nav-dd">&#9776; Departments &#9662;</summary><div class="wm-header-panel wm-mega-panel"><div class="wm-menu-heading"><h2>Departments</h2><a href="${base}/all-departments">All Departments</a></div><div class="wm-mega-grid">${DEPARTMENT_MENU.map(([n,p])=>`<section><a class="wm-menu-dept" href="${base}${p}">${esc(n)}</a>${menuSubs(n).filter(([,sp])=>sp!==p).map(([sn,sp])=>`<a href="${base}${sp}">${esc(sn)}</a>`).join('')}</section>`).join('')}</div></div></details>
+    <details class="wm-native-menu wm-header-menu wm-services-menu"><summary class="wm-nav-dd">&#9881; Services &#9662;</summary><div class="wm-header-panel wm-service-menu-panel"><div class="wm-menu-heading"><h2>Services</h2><a href="${base}/services">All Services</a></div><div class="wm-service-menu-grid">${SERVICE_MENU.map(([n,p])=>`<a href="${base}${p}">${esc(n)}</a>`).join('')}<a href="${base}/store-finder">Store finder</a><a href="${base}/services/financial">Financial services</a></div></div></details>
     ${NAV.map(([n,path]) => `<a href="${base}${path}">${esc(n)}</a>`).join('')}
   </nav>
 </header>`
@@ -74,18 +78,20 @@ function identityHeader({ base }) {
 }
 
 function storeFooter(base) {
-  const links = [['All Departments','/departments'],['Store Directory','/store-directory'],['Services','/services'],['Help','/help'],['Account','/account'],['My Items','/my-items'],['Lists','/lists'],['Purchase history','/orders'],['Pharmacy','/cp/pharmacy/5431'],['Walmart+','/plus']]
   return `<footer class="wm-footer">
-  <div class="wm-feedback">We&rsquo;d love to hear what you think! <a href="${base}/help/contact">Give feedback</a></div>
-  <nav class="wm-footer-links" aria-label="Footer">${links.map(([l,path]) => `<a href="${base}${path}">${esc(l)}</a>`).join('')}</nav>
+  <div class="wm-feedback"><p>We&#39;d love to hear what you think!</p><a class="wm-pill wm-pill-white" href="${base}/help/contact">Give feedback</a></div>
+  <div class="wm-footer-main">
+  <nav class="wm-footer-links" aria-label="Footer">${FOOTER_LINKS.map(([l,path]) => `<a href="${base}${path}">${esc(l)}</a>`).join('')}</nav>
+  <nav class="wm-footer-links wm-footer-sub" aria-label="More">${[['Site Map','/sitemap'],['Store finder','/store-finder'],['Gift Cards','/cp/gift-cards/96894'],['Deals','/shop/deals'],['Registry','/registry'],['Purchase History','/orders']].map(([l,path]) => `<a href="${base}${path}">${esc(l)}</a>`).join('')}</nav>
   <p class="wm-copy">&copy; 2026 Walmart. All Rights Reserved.</p>
   ${disclaimer(NAME)}
+  </div>
 </footer>`
 }
 
-function identityFooter() {
-  const links = ['Give feedback', 'Terms of Use', 'Privacy Notice', 'California Supply Chain Act', 'Your Privacy Choices', 'Customer Privacy Center', 'Notice at Collection']
-  return `<footer class="wm-id-footer"><p>&copy; 2026 Walmart. All Rights Reserved.</p><nav aria-label="Legal">${links.map(l => `<span class="wm-static">${esc(l)}</span>`).join('')}</nav>${disclaimer(NAME)}</footer>`
+function identityFooter(base) {
+  const links = [['Give feedback', '/help/contact'], ['Terms of Use', '/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0'], ['Privacy Notice', '/privacy-notice'], ['California Supply Chain Act', '/california-transparency'], ['Your Privacy Choices', '/privacyrequest'], ['Customer Privacy Center', '/privacy-notice'], ['Notice at Collection', '/notice-at-collection']]
+  return `<footer class="wm-id-footer"><p>&copy; 2026 Walmart. All Rights Reserved.</p><nav aria-label="Legal">${links.map(([l, path]) => `<a href="${base}${path}">${esc(l)}</a>`).join('')}</nav>${disclaimer(NAME)}</footer>`
 }
 
 // ---- shared pieces ----

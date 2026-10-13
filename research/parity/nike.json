@@ -1,0 +1,2336 @@
+{
+  "store": "nike",
+  "real_home": "https://www.nike.com/",
+  "captured_at": "2026-10-13",
+  "sources": [
+    "https://www.nike.com/",
+    "https://www.nike.com/men",
+    "https://www.nike.com/w/mens-shoes-nik1zy7ok",
+    "https://www.nike.com/w/sale-3yaep",
+    "https://www.nike.com/w?q=running",
+    "https://www.nike.com/t/air-force-1-07-mens-shoes-jBrhbr/CW2288-111",
+    "https://www.nike.com/cart",
+    "https://www.nike.com/register",
+    "https://www.nike.com/orders/details/",
+    "https://www.nike.com/orders/gift-card-lookup",
+    "https://www.nike.com/help",
+    "https://www.nike.com/help/a/returns-policy",
+    "https://www.nike.com/help/a/shipping-delivery",
+    "https://www.nike.com/help/a/change-cancel-order",
+    "https://www.nike.com/help/a/payment-options",
+    "https://www.nike.com/help/a/student-discount",
+    "https://www.nike.com/retail",
+    "https://www.nike.com/membership",
+    "https://www.nike.com/gift-cards",
+    "https://www.nike.com/corporate-sales"
+  ],
+  "home_path": "/",
+  "sitemap_path": "/sitemap",
+  "notes": "Captured with WebFetch on 2026-10-13. Client-rendered pages returned no form content: /register (only 'You need to enable JavaScript'), /orders/details and /orders/gift-card-lookup (title 'Member Orders' only), and the member profile was not reachable signed-out, so those expect strings use Nike's long-standing sign-in, account and lookup labels rather than a fresh capture. sitemap.xml could not be fetched (direct fetch errored, web.archive.org blocked); Nike has no HTML site map, so the sitemap items are the real mega-menu department tree plus main service sections. /retail geolocated the fetch to Toronto, so its store list is the Toronto/Niagara list. Search expectations come from the real 'running' search but are checked on the clone's captured 'gta 6' search, because uncaptured queries must stay marked uncaptured. The product check uses a captured observation path (purchase stays unverified, no Add to Bag). Off-site corporate links (about.nike.com, news, jobs, investors, purpose, agreementservice legal documents) are local summary pages.",
+  "items": [
+    {
+      "kind": "header",
+      "label": "Nike home",
+      "real": "https://www.nike.com/",
+      "path": "/"
+    },
+    {
+      "kind": "header",
+      "label": "Jordan",
+      "real": "https://www.nike.com/jordan",
+      "path": "/jordan"
+    },
+    {
+      "kind": "header",
+      "label": "Converse",
+      "real": "https://www.nike.com/w/converse-akmjx",
+      "path": "/w/converse-akmjx"
+    },
+    {
+      "kind": "header",
+      "label": "Accessibility at Nike",
+      "real": "https://www.nike.com/accessibility",
+      "path": "/accessibility"
+    },
+    {
+      "kind": "header",
+      "label": "Find a Store",
+      "real": "https://www.nike.com/retail",
+      "path": "/retail"
+    },
+    {
+      "kind": "header",
+      "label": "Help",
+      "real": "https://www.nike.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "header",
+      "label": "Order Status",
+      "real": "https://www.nike.com/orders/details/",
+      "path": "/orders/details"
+    },
+    {
+      "kind": "header",
+      "label": "Shipping & Delivery",
+      "real": "https://www.nike.com/help/a/shipping-delivery",
+      "path": "/help/a/shipping-delivery"
+    },
+    {
+      "kind": "header",
+      "label": "Returns",
+      "real": "https://www.nike.com/help/a/returns-policy",
+      "path": "/help/a/returns-policy"
+    },
+    {
+      "kind": "header",
+      "label": "Order Cancellation",
+      "real": "https://www.nike.com/help/a/change-cancel-order",
+      "path": "/help/a/change-cancel-order"
+    },
+    {
+      "kind": "header",
+      "label": "Size Charts",
+      "real": "https://www.nike.com/help/a/size-charts",
+      "path": "/help/a/size-charts"
+    },
+    {
+      "kind": "header",
+      "label": "Contact Us",
+      "real": "https://www.nike.com/help/#contact",
+      "path": "/help#contact"
+    },
+    {
+      "kind": "header",
+      "label": "Membership",
+      "real": "https://www.nike.com/membership",
+      "path": "/membership"
+    },
+    {
+      "kind": "header",
+      "label": "Promotions & Discounts",
+      "real": "https://www.nike.com/promo-code",
+      "path": "/promo-code"
+    },
+    {
+      "kind": "header",
+      "label": "Product Advice",
+      "real": "https://www.nike.com/product-advice",
+      "path": "/product-advice"
+    },
+    {
+      "kind": "header",
+      "label": "Join Us",
+      "real": "https://www.nike.com/membership",
+      "path": "/membership"
+    },
+    {
+      "kind": "header",
+      "label": "Sign In",
+      "real": "https://www.nike.com/register",
+      "path": "/register"
+    },
+    {
+      "kind": "header",
+      "label": "Favorites",
+      "real": "https://www.nike.com/favorites",
+      "path": "/favorites"
+    },
+    {
+      "kind": "header",
+      "label": "Bag",
+      "real": "https://www.nike.com/cart",
+      "path": "/cart"
+    },
+    {
+      "kind": "header",
+      "label": "Men",
+      "real": "https://www.nike.com/men",
+      "path": "/men"
+    },
+    {
+      "kind": "header",
+      "label": "New & Featured",
+      "real": "https://www.nike.com/w/new-mens-3n82yznik1",
+      "path": "/w/new-mens-3n82yznik1"
+    },
+    {
+      "kind": "header",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/mens-shoes-nik1zy7ok",
+      "path": "/w/mens-shoes-nik1zy7ok"
+    },
+    {
+      "kind": "header",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/mens-clothing-6ymx6znik1",
+      "path": "/w/mens-clothing-6ymx6znik1"
+    },
+    {
+      "kind": "header",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/mens-accessories-equipment-awwpwznik1",
+      "path": "/w/mens-accessories-equipment-awwpwznik1"
+    },
+    {
+      "kind": "header",
+      "label": "Women",
+      "real": "https://www.nike.com/women",
+      "path": "/women"
+    },
+    {
+      "kind": "header",
+      "label": "New & Featured",
+      "real": "https://www.nike.com/w/new-womens-3n82yz5e1x6",
+      "path": "/w/new-womens-3n82yz5e1x6"
+    },
+    {
+      "kind": "header",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/womens-shoes-5e1x6zy7ok",
+      "path": "/w/womens-shoes-5e1x6zy7ok"
+    },
+    {
+      "kind": "header",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/womens-clothing-5e1x6z6ymx6",
+      "path": "/w/womens-clothing-5e1x6z6ymx6"
+    },
+    {
+      "kind": "header",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/womens-accessories-equipment-5e1x6zawwpw",
+      "path": "/w/womens-accessories-equipment-5e1x6zawwpw"
+    },
+    {
+      "kind": "header",
+      "label": "Shop by Color",
+      "real": "https://www.nike.com/w/womens-matching-sets-clothing-2lukpz5e1x6z6ymx6",
+      "path": "/w/womens-matching-sets-clothing-2lukpz5e1x6z6ymx6"
+    },
+    {
+      "kind": "header",
+      "label": "Kids",
+      "real": "https://www.nike.com/kids",
+      "path": "/kids"
+    },
+    {
+      "kind": "header",
+      "label": "New & Featured",
+      "real": "https://www.nike.com/w/new-kids-3n82yzv4dh",
+      "path": "/w/new-kids-3n82yzv4dh"
+    },
+    {
+      "kind": "header",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/kids-shoes-v4dhzy7ok",
+      "path": "/w/kids-shoes-v4dhzy7ok"
+    },
+    {
+      "kind": "header",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/kids-clothing-6ymx6zv4dh",
+      "path": "/w/kids-clothing-6ymx6zv4dh"
+    },
+    {
+      "kind": "header",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/kids-accessories-equipment-awwpwzv4dh",
+      "path": "/w/kids-accessories-equipment-awwpwzv4dh"
+    },
+    {
+      "kind": "header",
+      "label": "Shop By Sport",
+      "real": "https://www.nike.com/w/kids-basketball-3glsmzv4dh",
+      "path": "/w/kids-basketball-3glsmzv4dh"
+    },
+    {
+      "kind": "header",
+      "label": "Jordan",
+      "real": "https://www.nike.com/jordan",
+      "path": "/jordan"
+    },
+    {
+      "kind": "header",
+      "label": "New & Featured",
+      "real": "https://www.nike.com/w/new-jordan-37eefz3n82y",
+      "path": "/w/new-jordan-37eefz3n82y"
+    },
+    {
+      "kind": "header",
+      "label": "Men",
+      "real": "https://www.nike.com/w/mens-jordan-37eefznik1",
+      "path": "/w/mens-jordan-37eefznik1"
+    },
+    {
+      "kind": "header",
+      "label": "Women",
+      "real": "https://www.nike.com/w/womens-jordan-37eefz5e1x6",
+      "path": "/w/womens-jordan-37eefz5e1x6"
+    },
+    {
+      "kind": "header",
+      "label": "Kids",
+      "real": "https://www.nike.com/w/kids-jordan-37eefzv4dh",
+      "path": "/w/kids-jordan-37eefzv4dh"
+    },
+    {
+      "kind": "header",
+      "label": "Sport",
+      "real": "https://www.nike.com/w/jordan-basketball-37eefz3glsm",
+      "path": "/w/jordan-basketball-37eefz3glsm"
+    },
+    {
+      "kind": "header",
+      "label": "NikeSKIMS",
+      "real": "https://www.nike.com/nikeskims",
+      "path": "/nikeskims"
+    },
+    {
+      "kind": "header",
+      "label": "All Shoes",
+      "real": "https://www.nike.com/w/nikeskims-shoes-b2asdzy7ok",
+      "path": "/w/nikeskims-shoes-b2asdzy7ok"
+    },
+    {
+      "kind": "header",
+      "label": "All Clothing",
+      "real": "https://www.nike.com/w/nikeskims-b2asd",
+      "path": "/w/nikeskims-b2asd"
+    },
+    {
+      "kind": "header",
+      "label": "Shop by Color",
+      "real": "https://www.nike.com/w/nikeskims-b2asd",
+      "path": "/w/nikeskims-b2asd"
+    },
+    {
+      "kind": "header",
+      "label": "Shop by Material",
+      "real": "https://www.nike.com/w/nikeskims-b2asd",
+      "path": "/w/nikeskims-b2asd"
+    },
+    {
+      "kind": "header",
+      "label": "NikeSKIMS Guides",
+      "real": "https://www.nike.com/w/nikeskims-b2asd",
+      "path": "/w/nikeskims-b2asd"
+    },
+    {
+      "kind": "header",
+      "label": "Sport",
+      "real": "https://www.nike.com/gear-up",
+      "path": "/gear-up"
+    },
+    {
+      "kind": "header",
+      "label": "Basketball",
+      "real": "https://www.nike.com/basketball",
+      "path": "/basketball"
+    },
+    {
+      "kind": "header",
+      "label": "Court",
+      "real": "https://www.nike.com/court",
+      "path": "/court"
+    },
+    {
+      "kind": "header",
+      "label": "Soccer",
+      "real": "https://www.nike.com/soccer",
+      "path": "/soccer"
+    },
+    {
+      "kind": "header",
+      "label": "Training",
+      "real": "https://www.nike.com/training",
+      "path": "/training"
+    },
+    {
+      "kind": "header",
+      "label": "Running",
+      "real": "https://www.nike.com/running",
+      "path": "/running"
+    },
+    {
+      "kind": "header",
+      "label": "Golf",
+      "real": "https://www.nike.com/golf",
+      "path": "/golf"
+    },
+    {
+      "kind": "header",
+      "label": "More Sports",
+      "real": "https://www.nike.com/gear-up",
+      "path": "/gear-up"
+    },
+    {
+      "kind": "header",
+      "label": "Team and League Gear",
+      "real": "https://www.nike.com/LockerRoom",
+      "path": "/LockerRoom"
+    },
+    {
+      "kind": "header",
+      "label": "All Conditions Gear",
+      "real": "https://www.nike.com/acg",
+      "path": "/acg"
+    },
+    {
+      "kind": "header",
+      "label": "Sportswear",
+      "real": "https://www.nike.com/sportswear",
+      "path": "/sportswear"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Cards",
+      "real": "https://www.nike.com/gift-cards",
+      "path": "/gift-cards"
+    },
+    {
+      "kind": "footer",
+      "label": "Corporate Sales",
+      "real": "https://www.nike.com/corporate-sales",
+      "path": "/corporate-sales"
+    },
+    {
+      "kind": "footer",
+      "label": "Find a Store",
+      "real": "https://www.nike.com/retail",
+      "path": "/retail"
+    },
+    {
+      "kind": "footer",
+      "label": "Membership",
+      "real": "https://www.nike.com/membership",
+      "path": "/membership"
+    },
+    {
+      "kind": "footer",
+      "label": "Product News",
+      "real": "https://www.nike.com/product-news",
+      "path": "/product-news"
+    },
+    {
+      "kind": "footer",
+      "label": "Magazine",
+      "real": "https://about.nike.com/en/magazine",
+      "path": "/magazine"
+    },
+    {
+      "kind": "footer",
+      "label": "Site Feedback",
+      "real": "https://www.nike.com/#site-feedback",
+      "path": "/site-feedback"
+    },
+    {
+      "kind": "footer",
+      "label": "Get Help",
+      "real": "https://www.nike.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "footer",
+      "label": "Order Status",
+      "real": "https://www.nike.com/orders/details/",
+      "path": "/orders/details"
+    },
+    {
+      "kind": "footer",
+      "label": "Shipping and Delivery",
+      "real": "https://www.nike.com/help/a/shipping-delivery",
+      "path": "/help/a/shipping-delivery"
+    },
+    {
+      "kind": "footer",
+      "label": "Returns",
+      "real": "https://www.nike.com/help/a/returns-policy",
+      "path": "/help/a/returns-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Order Cancellation",
+      "real": "https://www.nike.com/help/a/change-cancel-order",
+      "path": "/help/a/change-cancel-order"
+    },
+    {
+      "kind": "footer",
+      "label": "Payment Options",
+      "real": "https://www.nike.com/help/a/payment-options",
+      "path": "/help/a/payment-options"
+    },
+    {
+      "kind": "footer",
+      "label": "Gift Card Balance",
+      "real": "https://www.nike.com/orders/gift-card-lookup",
+      "path": "/orders/gift-card-lookup"
+    },
+    {
+      "kind": "footer",
+      "label": "Contact Us",
+      "real": "https://www.nike.com/help/#contact",
+      "path": "/help#contact"
+    },
+    {
+      "kind": "footer",
+      "label": "About Nike",
+      "real": "https://about.nike.com/en",
+      "path": "/about-nike"
+    },
+    {
+      "kind": "footer",
+      "label": "News",
+      "real": "http://news.nike.com/",
+      "path": "/news"
+    },
+    {
+      "kind": "footer",
+      "label": "Careers",
+      "real": "https://jobs.nike.com/",
+      "path": "/careers"
+    },
+    {
+      "kind": "footer",
+      "label": "Investors",
+      "real": "http://investors.nike.com/",
+      "path": "/investors"
+    },
+    {
+      "kind": "footer",
+      "label": "Purpose",
+      "real": "https://purpose.nike.com/",
+      "path": "/purpose"
+    },
+    {
+      "kind": "footer",
+      "label": "Sustainability",
+      "real": "https://www.nike.com/sustainability",
+      "path": "/sustainability"
+    },
+    {
+      "kind": "footer",
+      "label": "Accessibility",
+      "real": "https://www.nike.com/accessibility",
+      "path": "/accessibility"
+    },
+    {
+      "kind": "footer",
+      "label": "Student",
+      "real": "https://www.nike.com/help/a/student-discount",
+      "path": "/help/a/student-discount"
+    },
+    {
+      "kind": "footer",
+      "label": "Military",
+      "real": "https://www.nike.com/help/a/military-discount",
+      "path": "/help/a/military-discount"
+    },
+    {
+      "kind": "footer",
+      "label": "Teacher",
+      "real": "https://www.nike.com/help/a/teacher-discount",
+      "path": "/help/a/teacher-discount"
+    },
+    {
+      "kind": "footer",
+      "label": "First Responders & Medical Professionals",
+      "real": "https://www.nike.com/help/a/first-responder-discount",
+      "path": "/help/a/first-responder-discount"
+    },
+    {
+      "kind": "footer",
+      "label": "Birthday",
+      "real": "https://www.nike.com/help/a/birthday-terms-promo",
+      "path": "/help/a/birthday-terms-promo"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike Air",
+      "real": "https://www.nike.com/air",
+      "path": "/air"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike Air Force 1",
+      "real": "https://www.nike.com/air-force-1",
+      "path": "/air-force-1"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike Air Max",
+      "real": "https://www.nike.com/air-max",
+      "path": "/air-max"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike FlyEase",
+      "real": "https://www.nike.com/flyease",
+      "path": "/flyease"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike Flyknit",
+      "real": "https://www.nike.com/flyknit",
+      "path": "/flyknit"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike Free",
+      "real": "https://www.nike.com/free",
+      "path": "/free"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike React",
+      "real": "https://www.nike.com/react",
+      "path": "/react"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike Vaporfly",
+      "real": "https://www.nike.com/running/vaporfly",
+      "path": "/running/vaporfly"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike ZoomX",
+      "real": "https://www.nike.com/zoomx",
+      "path": "/zoomx"
+    },
+    {
+      "kind": "footer",
+      "label": "Space Hippie",
+      "real": "https://www.nike.com/space-hippie",
+      "path": "/space-hippie"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms of Sale",
+      "real": "https://agreementservice.svs.nike.com/us/en_us/rest/agreement?agreementType=termsOfSale",
+      "path": "/terms-of-sale"
+    },
+    {
+      "kind": "footer",
+      "label": "Terms of Use",
+      "real": "https://agreementservice.svs.nike.com/us/en_us/rest/agreement?agreementType=termsOfUse",
+      "path": "/terms-of-use"
+    },
+    {
+      "kind": "footer",
+      "label": "Nike Privacy Policy",
+      "real": "https://agreementservice.svs.nike.com/rest/agreement?agreementType=privacyPolicy",
+      "path": "/privacy-policy"
+    },
+    {
+      "kind": "footer",
+      "label": "Your Privacy Choices",
+      "real": "https://www.nike.com/guest/settings/do-not-share-my-data",
+      "path": "/guest/settings/do-not-share-my-data"
+    },
+    {
+      "kind": "footer",
+      "label": "CA Supply Chains Act",
+      "real": "https://about.nike.com/en/impact-resources/statement-on-forced-labor",
+      "path": "/ca-supply-chains-act"
+    },
+    {
+      "kind": "page",
+      "label": "Department landing (Men)",
+      "real": "https://www.nike.com/men",
+      "path": "/men",
+      "expect": [
+        "Men",
+        "Shop by Sport",
+        "Shop By Category",
+        "Featured Footwear",
+        "Latest in Clothing"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Category listing (Men's Shoes)",
+      "real": "https://www.nike.com/w/mens-shoes-nik1zy7ok",
+      "path": "/w/mens-shoes-nik1zy7ok",
+      "expect": [
+        "Men's Shoes & Sneakers",
+        "Gender",
+        "Shop by Price",
+        "Sort By"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sale / deals",
+      "real": "https://www.nike.com/w/sale-3yaep",
+      "path": "/w/sale-3yaep",
+      "expect": [
+        "Shop All Sale",
+        "Hoodies and Pullovers",
+        "Sports Bras",
+        "Gender"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Search results",
+      "real": "https://www.nike.com/w?q=running",
+      "path": "/w?q=gta%206",
+      "expect": [
+        "Search results for",
+        "Sports",
+        "Gender",
+        "Sort By"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Product page",
+      "real": "https://www.nike.com/t/air-force-1-07-mens-shoes-jBrhbr/CW2288-111",
+      "path": "/t/air-force-1-gore-tex-vibram-mens-shoes-ASaVZlAr/HV5953-002",
+      "expect": [
+        "Product Details",
+        "Shipping & Returns",
+        "Reviews",
+        "Favorite"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Bag (cart)",
+      "real": "https://www.nike.com/cart",
+      "path": "/cart",
+      "expect": [
+        "Bag",
+        "Summary",
+        "There are no items in your bag.",
+        "Subtotal",
+        "Estimated Shipping & Handling",
+        "Estimated Tax"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Sign in / join",
+      "real": "https://www.nike.com/register",
+      "path": "/register",
+      "expect": [
+        "Enter your email to join us or sign in.",
+        "Email",
+        "Continue"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Account profile",
+      "real": "https://www.nike.com/member/profile",
+      "path": "/member/profile",
+      "expect": [
+        "Profile",
+        "Orders",
+        "Favorites",
+        "Settings"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Favorites",
+      "real": "https://www.nike.com/favorites",
+      "path": "/favorites",
+      "expect": [
+        "Favorites"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order status lookup",
+      "real": "https://www.nike.com/orders/details/",
+      "path": "/orders/details",
+      "expect": [
+        "Order Status",
+        "Order Number",
+        "Email"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Help / customer service",
+      "real": "https://www.nike.com/help",
+      "path": "/help",
+      "expect": [
+        "GET HELP",
+        "Quick Assists",
+        "Returns & Exchanges",
+        "Orders & Payment",
+        "Nike Membership & Apps",
+        "1-800-806-6453"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Store locator",
+      "real": "https://www.nike.com/retail",
+      "path": "/retail",
+      "expect": [
+        "Find a Nike Store",
+        "Search Location",
+        "Stores Near You"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift cards",
+      "real": "https://www.nike.com/gift-cards",
+      "path": "/gift-cards",
+      "expect": [
+        "Nike Gift Cards",
+        "Email a Gift Card",
+        "Mail a Gift Card",
+        "Check Your Balance",
+        "LOOKING FOR A CORPORATE GIFT CARD OPTION?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Gift card balance",
+      "real": "https://www.nike.com/orders/gift-card-lookup",
+      "path": "/orders/gift-card-lookup",
+      "expect": [
+        "Gift Card Balance",
+        "Card Number",
+        "PIN"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Returns policy",
+      "real": "https://www.nike.com/help/a/returns-policy",
+      "path": "/help/a/returns-policy",
+      "expect": [
+        "What Is Nike's Return Policy?",
+        "FAQs",
+        "Other Terms"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Shipping policy",
+      "real": "https://www.nike.com/help/a/shipping-delivery",
+      "path": "/help/a/shipping-delivery",
+      "expect": [
+        "What Are Nike's Shipping Options?",
+        "Ship It Free",
+        "Get It Fast",
+        "Pick It Up"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Order cancellation",
+      "real": "https://www.nike.com/help/a/change-cancel-order",
+      "path": "/help/a/change-cancel-order",
+      "expect": [
+        "Can I Cancel or Change My Nike Order?",
+        "FAQs"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Payment options",
+      "real": "https://www.nike.com/help/a/payment-options",
+      "path": "/help/a/payment-options",
+      "expect": [
+        "What Are Nike's Payment Options?",
+        "FAQs"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Membership",
+      "real": "https://www.nike.com/membership",
+      "path": "/membership",
+      "expect": [
+        "Nike Membership",
+        "IT'S BETTER AS A MEMBER",
+        "Members Also Get",
+        "Connect Through Membership",
+        "Frequently Asked Questions"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Corporate sales",
+      "real": "https://www.nike.com/corporate-sales",
+      "path": "/corporate-sales",
+      "expect": [
+        "CORPORATE SALES",
+        "Is there a minimum order size?"
+      ]
+    },
+    {
+      "kind": "page",
+      "label": "Student discount",
+      "real": "https://www.nike.com/help/a/student-discount",
+      "path": "/help/a/student-discount",
+      "expect": [
+        "Does Nike Offer a Student Discount?"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Promo bar",
+      "expect": [
+        "Members: Free Shipping on Orders $50+"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Hero: Fully Invested",
+      "expect": [
+        "FULLY INVESTED"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Air Jordan 1 High OG Royal",
+      "expect": [
+        "AIR JORDAN 1 HIGH OG \"ROYAL\""
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Train Everything (Hybrid RN)",
+      "expect": [
+        "Train Everything"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Crown the Season",
+      "expect": [
+        "CROWN THE SEASON"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Last Word",
+      "expect": [
+        "Last Word"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Body Obsessed",
+      "expect": [
+        "BODY OBSESSED"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Every. Day. Speed.",
+      "expect": [
+        "EVERY. DAY. SPEED."
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Bright Lights Pack",
+      "expect": [
+        "BRIGHT LIGHTS PACK"
+      ]
+    },
+    {
+      "kind": "home",
+      "label": "Trending",
+      "expect": [
+        "TRENDING"
+      ]
+    },
+    {
+      "kind": "sitemap",
+      "label": "Men",
+      "real": "https://www.nike.com/men",
+      "path": "/men"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New & Featured",
+      "real": "https://www.nike.com/w/new-mens-3n82yznik1",
+      "path": "/w/new-mens-3n82yznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Arrivals",
+      "real": "https://www.nike.com/w/new-mens-3n82yznik1",
+      "path": "/w/new-mens-3n82yznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Sellers",
+      "real": "https://www.nike.com/w/mens-best-76m50znik1",
+      "path": "/w/mens-best-76m50znik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Latest Drops",
+      "real": "https://www.nike.com/w/new-upcoming-drops-k0gk",
+      "path": "/w/new-upcoming-drops-k0gk"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hybrid RN",
+      "real": "https://www.nike.com/training/hybrid",
+      "path": "/training/hybrid"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nike Sportswear",
+      "real": "https://www.nike.com/w/mens-lifestyle-13jrmznik1",
+      "path": "/w/mens-lifestyle-13jrmznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "SNKRS Launch Calendar",
+      "real": "https://www.nike.com/launch",
+      "path": "/launch"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Sale",
+      "real": "https://www.nike.com/w/mens-sale-3yaepznik1",
+      "path": "/w/mens-sale-3yaepznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/mens-shoes-nik1zy7ok",
+      "path": "/w/mens-shoes-nik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Shoes",
+      "real": "https://www.nike.com/w/mens-shoes-nik1zy7ok",
+      "path": "/w/mens-shoes-nik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Basketball",
+      "real": "https://www.nike.com/w/mens-basketball-shoes-3glsmznik1zy7ok",
+      "path": "/w/mens-basketball-shoes-3glsmznik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jordan",
+      "real": "https://www.nike.com/w/mens-jordan-shoes-37eefznik1zy7ok",
+      "path": "/w/mens-jordan-shoes-37eefznik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Running",
+      "real": "https://www.nike.com/w/mens-running-shoes-37v7jznik1zy7ok",
+      "path": "/w/mens-running-shoes-37v7jznik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sportswear",
+      "real": "https://www.nike.com/w/mens-lifestyle-shoes-13jrmznik1zy7ok",
+      "path": "/w/mens-lifestyle-shoes-13jrmznik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Training & Gym",
+      "real": "https://www.nike.com/w/mens-training-gym-shoes-58jtoznik1zy7ok",
+      "path": "/w/mens-training-gym-shoes-58jtoznik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Custom Shoes",
+      "real": "https://www.nike.com/w/mens-nike-by-you-shoes-6ealhznik1zy7ok",
+      "path": "/w/mens-nike-by-you-shoes-6ealhznik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/mens-clothing-6ymx6znik1",
+      "path": "/w/mens-clothing-6ymx6znik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Clothing",
+      "real": "https://www.nike.com/w/mens-clothing-6ymx6znik1",
+      "path": "/w/mens-clothing-6ymx6znik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fleece",
+      "real": "https://www.nike.com/w/mens-fleece-4xh6qznik1",
+      "path": "/w/mens-fleece-4xh6qznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hoodies & Sweatshirts",
+      "real": "https://www.nike.com/w/mens-hoodies-and-pullovers-6riveznik1",
+      "path": "/w/mens-hoodies-and-pullovers-6riveznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jackets & Vests",
+      "real": "https://www.nike.com/w/mens-jackets-vests-50r7yznik1",
+      "path": "/w/mens-jackets-vests-50r7yznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pants",
+      "real": "https://www.nike.com/w/mens-pants-and-tights-2kq19znik1",
+      "path": "/w/mens-pants-and-tights-2kq19znik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shorts",
+      "real": "https://www.nike.com/w/mens-shorts-38fphznik1",
+      "path": "/w/mens-shorts-38fphznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tops & Graphic Tees",
+      "real": "https://www.nike.com/w/mens-tops-t-shirts-9om13znik1",
+      "path": "/w/mens-tops-t-shirts-9om13znik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/mens-accessories-equipment-awwpwznik1",
+      "path": "/w/mens-accessories-equipment-awwpwznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Accessories",
+      "real": "https://www.nike.com/w/mens-accessories-equipment-awwpwznik1",
+      "path": "/w/mens-accessories-equipment-awwpwznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bags & Backpacks",
+      "real": "https://www.nike.com/w/mens-bags-and-backpacks-9xy71znik1",
+      "path": "/w/mens-bags-and-backpacks-9xy71znik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hats & Headwear",
+      "real": "https://www.nike.com/w/mens-hats-visors-and-headbands-52r49znik1",
+      "path": "/w/mens-hats-visors-and-headbands-52r49znik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Socks",
+      "real": "https://www.nike.com/w/mens-socks-7ny3qznik1",
+      "path": "/w/mens-socks-7ny3qznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sunglasses",
+      "real": "https://www.nike.com/w/sunglasses-arlyp",
+      "path": "/w/sunglasses-arlyp"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Women",
+      "real": "https://www.nike.com/women",
+      "path": "/women"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New & Featured",
+      "real": "https://www.nike.com/w/new-womens-3n82yz5e1x6",
+      "path": "/w/new-womens-3n82yz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Arrivals",
+      "real": "https://www.nike.com/w/new-womens-3n82yz5e1x6",
+      "path": "/w/new-womens-3n82yz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Sellers",
+      "real": "https://www.nike.com/w/womens-best-5e1x6z76m50",
+      "path": "/w/womens-best-5e1x6z76m50"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nike Sportswear",
+      "real": "https://www.nike.com/w/womens-lifestyle-13jrmz5e1x6",
+      "path": "/w/womens-lifestyle-13jrmz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Sale",
+      "real": "https://www.nike.com/w/womens-sale-3yaepz5e1x6",
+      "path": "/w/womens-sale-3yaepz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/womens-shoes-5e1x6zy7ok",
+      "path": "/w/womens-shoes-5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Shoes",
+      "real": "https://www.nike.com/w/womens-shoes-5e1x6zy7ok",
+      "path": "/w/womens-shoes-5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Basketball",
+      "real": "https://www.nike.com/w/womens-basketball-shoes-3glsmz5e1x6zy7ok",
+      "path": "/w/womens-basketball-shoes-3glsmz5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jordan",
+      "real": "https://www.nike.com/w/womens-jordan-shoes-37eefz5e1x6zy7ok",
+      "path": "/w/womens-jordan-shoes-37eefz5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Running",
+      "real": "https://www.nike.com/w/womens-running-shoes-37v7jz5e1x6zy7ok",
+      "path": "/w/womens-running-shoes-37v7jz5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sportswear",
+      "real": "https://www.nike.com/w/womens-lifestyle-shoes-13jrmz5e1x6zy7ok",
+      "path": "/w/womens-lifestyle-shoes-13jrmz5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Training & Gym",
+      "real": "https://www.nike.com/w/womens-training-gym-shoes-58jtoz5e1x6zy7ok",
+      "path": "/w/womens-training-gym-shoes-58jtoz5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Custom Shoes",
+      "real": "https://www.nike.com/w/womens-nike-by-you-shoes-5e1x6z6ealhzy7ok",
+      "path": "/w/womens-nike-by-you-shoes-5e1x6z6ealhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/womens-clothing-5e1x6z6ymx6",
+      "path": "/w/womens-clothing-5e1x6z6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Clothing",
+      "real": "https://www.nike.com/w/womens-clothing-5e1x6z6ymx6",
+      "path": "/w/womens-clothing-5e1x6z6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bras",
+      "real": "https://www.nike.com/w/womens-sports-bras-40qgmz5e1x6",
+      "path": "/w/womens-sports-bras-40qgmz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fleece",
+      "real": "https://www.nike.com/w/womens-fleece-4xh6qz5e1x6",
+      "path": "/w/womens-fleece-4xh6qz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hoodies & Sweatshirts",
+      "real": "https://www.nike.com/w/womens-hoodies-and-pullovers-5e1x6z6rive",
+      "path": "/w/womens-hoodies-and-pullovers-5e1x6z6rive"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jackets & Vests",
+      "real": "https://www.nike.com/w/womens-jackets-vests-50r7yz5e1x6",
+      "path": "/w/womens-jackets-vests-50r7yz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Leggings",
+      "real": "https://www.nike.com/w/womens-tights-leggings-29sh2z5e1x6",
+      "path": "/w/womens-tights-leggings-29sh2z5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Matching Sets",
+      "real": "https://www.nike.com/w/womens-matching-sets-clothing-2lukpz5e1x6z6ymx6",
+      "path": "/w/womens-matching-sets-clothing-2lukpz5e1x6z6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pants",
+      "real": "https://www.nike.com/w/womens-pants-and-tights-2kq19z5e1x6",
+      "path": "/w/womens-pants-and-tights-2kq19z5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shorts",
+      "real": "https://www.nike.com/w/womens-shorts-38fphz5e1x6",
+      "path": "/w/womens-shorts-38fphz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tops & Graphics Tees",
+      "real": "https://www.nike.com/w/womens-tops-t-shirts-5e1x6z9om13",
+      "path": "/w/womens-tops-t-shirts-5e1x6z9om13"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/womens-accessories-equipment-5e1x6zawwpw",
+      "path": "/w/womens-accessories-equipment-5e1x6zawwpw"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Accessories",
+      "real": "https://www.nike.com/w/womens-accessories-equipment-5e1x6zawwpw",
+      "path": "/w/womens-accessories-equipment-5e1x6zawwpw"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bags & Backpacks",
+      "real": "https://www.nike.com/w/womens-bags-and-backpacks-5e1x6z9xy71",
+      "path": "/w/womens-bags-and-backpacks-5e1x6z9xy71"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hats & Headwear",
+      "real": "https://www.nike.com/w/womens-hats-visors-and-headbands-52r49z5e1x6",
+      "path": "/w/womens-hats-visors-and-headbands-52r49z5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Socks",
+      "real": "https://www.nike.com/w/womens-socks-5e1x6z7ny3q",
+      "path": "/w/womens-socks-5e1x6z7ny3q"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop by Color",
+      "real": "https://www.nike.com/w/womens-matching-sets-clothing-2lukpz5e1x6z6ymx6",
+      "path": "/w/womens-matching-sets-clothing-2lukpz5e1x6z6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Dark Neutrals",
+      "real": "https://www.nike.com/w/womens-color-shop-brown-4elb3z5e1x6",
+      "path": "/w/womens-color-shop-brown-4elb3z5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Purple Pulse",
+      "real": "https://www.nike.com/w/womens-color-shop-purple-5e1x6z9g6re",
+      "path": "/w/womens-color-shop-purple-5e1x6z9g6re"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Spruce Greens",
+      "real": "https://www.nike.com/w/womens-color-shop-green-5e1x6z9cm3q",
+      "path": "/w/womens-color-shop-green-5e1x6z9cm3q"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Very Berry",
+      "real": "https://www.nike.com/w/womens-color-shop-navy-5e1x6z9cd0e",
+      "path": "/w/womens-color-shop-navy-5e1x6z9cd0e"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Warm Neutrals",
+      "real": "https://www.nike.com/w/womens-color-shop-new-neutrals-5e1x6z98ed2",
+      "path": "/w/womens-color-shop-new-neutrals-5e1x6z98ed2"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids",
+      "real": "https://www.nike.com/kids",
+      "path": "/kids"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New & Featured",
+      "real": "https://www.nike.com/w/new-kids-3n82yzv4dh",
+      "path": "/w/new-kids-3n82yzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Arrivals",
+      "real": "https://www.nike.com/w/new-kids-3n82yzv4dh",
+      "path": "/w/new-kids-3n82yzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Sellers",
+      "real": "https://www.nike.com/w/kids-best-76m50zv4dh",
+      "path": "/w/kids-best-76m50zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nike Sportswear",
+      "real": "https://www.nike.com/w/kids-lifestyle-13jrmzv4dh",
+      "path": "/w/kids-lifestyle-13jrmzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Nike x LEGO®",
+      "real": "https://www.nike.com/w/nike-lego-collection-58jr",
+      "path": "/w/nike-lego-collection-58jr"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Teens Collection",
+      "real": "https://www.nike.com/teens",
+      "path": "/teens"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Sale",
+      "real": "https://www.nike.com/w/kids-sale-3yaepzv4dh",
+      "path": "/w/kids-sale-3yaepzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/kids-shoes-v4dhzy7ok",
+      "path": "/w/kids-shoes-v4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Shoes",
+      "real": "https://www.nike.com/w/kids-shoes-v4dhzy7ok",
+      "path": "/w/kids-shoes-v4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Big Kids (7-12 yrs)",
+      "real": "https://www.nike.com/w/big-kids-shoes-agibjzv4dhzy7ok",
+      "path": "/w/big-kids-shoes-agibjzv4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Little Kids (3-7 yrs)",
+      "real": "https://www.nike.com/w/little-kids-shoes-6dacezv4dhzy7ok",
+      "path": "/w/little-kids-shoes-6dacezv4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby & Toddler (0-3 yrs)",
+      "real": "https://www.nike.com/w/baby-toddler-kids-shoes-2j488zv4dhzy7ok",
+      "path": "/w/baby-toddler-kids-shoes-2j488zv4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Basketball",
+      "real": "https://www.nike.com/w/kids-basketball-shoes-3glsmzv4dhzy7ok",
+      "path": "/w/kids-basketball-shoes-3glsmzv4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jordan",
+      "real": "https://www.nike.com/w/kids-jordan-shoes-37eefzv4dhzy7ok",
+      "path": "/w/kids-jordan-shoes-37eefzv4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Running",
+      "real": "https://www.nike.com/w/kids-running-shoes-37v7jzv4dhzy7ok",
+      "path": "/w/kids-running-shoes-37v7jzv4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sportswear",
+      "real": "https://www.nike.com/w/kids-lifestyle-shoes-13jrmzv4dhzy7ok",
+      "path": "/w/kids-lifestyle-shoes-13jrmzv4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/kids-clothing-6ymx6zv4dh",
+      "path": "/w/kids-clothing-6ymx6zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Clothing",
+      "real": "https://www.nike.com/w/kids-clothing-6ymx6zv4dh",
+      "path": "/w/kids-clothing-6ymx6zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Big Kids (7-12 yrs)",
+      "real": "https://www.nike.com/w/big-kids-clothing-6ymx6zagibjzv4dh",
+      "path": "/w/big-kids-clothing-6ymx6zagibjzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Little Kids (3-7 yrs)",
+      "real": "https://www.nike.com/w/little-kids-clothing-6dacez6ymx6zv4dh",
+      "path": "/w/little-kids-clothing-6dacez6ymx6zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baby & Toddler (0-3 yrs)",
+      "real": "https://www.nike.com/w/baby-toddler-kids-clothing-2j488z6ymx6zv4dh",
+      "path": "/w/baby-toddler-kids-clothing-2j488z6ymx6zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bras & Tights",
+      "real": "https://www.nike.com/w/kids-bras-tights-88mejzv4dh",
+      "path": "/w/kids-bras-tights-88mejzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fleece",
+      "real": "https://www.nike.com/w/kids-fleece-4xh6qzv4dh",
+      "path": "/w/kids-fleece-4xh6qzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hoodies & Sweatshirts",
+      "real": "https://www.nike.com/w/kids-hoodies-and-pullovers-6rivezv4dh",
+      "path": "/w/kids-hoodies-and-pullovers-6rivezv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jackets & Vests",
+      "real": "https://www.nike.com/w/kids-jackets-vests-50r7yzv4dh",
+      "path": "/w/kids-jackets-vests-50r7yzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pants",
+      "real": "https://www.nike.com/w/kids-pants-and-tights-2kq19zv4dh",
+      "path": "/w/kids-pants-and-tights-2kq19zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shorts",
+      "real": "https://www.nike.com/w/kids-shorts-38fphzv4dh",
+      "path": "/w/kids-shorts-38fphzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tops & Graphics Tees",
+      "real": "https://www.nike.com/w/kids-tops-t-shirts-9om13zv4dh",
+      "path": "/w/kids-tops-t-shirts-9om13zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/kids-accessories-equipment-awwpwzv4dh",
+      "path": "/w/kids-accessories-equipment-awwpwzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Accessories",
+      "real": "https://www.nike.com/w/kids-accessories-equipment-awwpwzv4dh",
+      "path": "/w/kids-accessories-equipment-awwpwzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bags & Backpacks",
+      "real": "https://www.nike.com/w/kids-bags-and-backpacks-9xy71zv4dh",
+      "path": "/w/kids-bags-and-backpacks-9xy71zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hats & Headwear",
+      "real": "https://www.nike.com/w/kids-hats-visors-and-headbands-52r49zv4dh",
+      "path": "/w/kids-hats-visors-and-headbands-52r49zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Socks",
+      "real": "https://www.nike.com/w/kids-socks-7ny3qzv4dh",
+      "path": "/w/kids-socks-7ny3qzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop By Sport",
+      "real": "https://www.nike.com/w/kids-basketball-3glsmzv4dh",
+      "path": "/w/kids-basketball-3glsmzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Basketball",
+      "real": "https://www.nike.com/w/kids-basketball-3glsmzv4dh",
+      "path": "/w/kids-basketball-3glsmzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gymnastics",
+      "real": "https://www.nike.com/w/gymnastics-dance-inspired-2obuy",
+      "path": "/w/gymnastics-dance-inspired-2obuy"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Fan Gear",
+      "real": "https://www.nike.com/w/kids-fan-gear-b170ozv4dh",
+      "path": "/w/kids-fan-gear-b170ozv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Football",
+      "real": "https://www.nike.com/w/kids-football-3hj8mzv4dh",
+      "path": "/w/kids-football-3hj8mzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Running",
+      "real": "https://www.nike.com/w/kids-running-37v7jzv4dh",
+      "path": "/w/kids-running-37v7jzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Soccer",
+      "real": "https://www.nike.com/w/kids-soccer-1gdj0zv4dh",
+      "path": "/w/kids-soccer-1gdj0zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jordan",
+      "real": "https://www.nike.com/jordan",
+      "path": "/jordan"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New & Featured",
+      "real": "https://www.nike.com/w/new-jordan-37eefz3n82y",
+      "path": "/w/new-jordan-37eefz3n82y"
+    },
+    {
+      "kind": "sitemap",
+      "label": "New Arrivals",
+      "real": "https://www.nike.com/w/new-jordan-37eefz3n82y",
+      "path": "/w/new-jordan-37eefz3n82y"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Best Sellers",
+      "real": "https://www.nike.com/w/best-jordan-37eefz76m50",
+      "path": "/w/best-jordan-37eefz76m50"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Heat Check",
+      "real": "https://www.nike.com/w/jordan-heat-check-1n7xt",
+      "path": "/w/jordan-heat-check-1n7xt"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jordan Brand x Space Jam Collection",
+      "real": "https://www.nike.com/w/jordan-brand-x-space-jam-collection-9b8qk",
+      "path": "/w/jordan-brand-x-space-jam-collection-9b8qk"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Sale",
+      "real": "https://www.nike.com/w/sale-jordan-37eefz3yaep",
+      "path": "/w/sale-jordan-37eefz3yaep"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Men",
+      "real": "https://www.nike.com/w/mens-jordan-37eefznik1",
+      "path": "/w/mens-jordan-37eefznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All",
+      "real": "https://www.nike.com/w/mens-jordan-37eefznik1",
+      "path": "/w/mens-jordan-37eefznik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/mens-jordan-shoes-37eefznik1zy7ok",
+      "path": "/w/mens-jordan-shoes-37eefznik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "AJ1",
+      "real": "https://www.nike.com/w/mens-jordan-1-shoes-4fokyznik1zy7ok",
+      "path": "/w/mens-jordan-1-shoes-4fokyznik1zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/mens-jordan-clothing-37eefz6ymx6znik1",
+      "path": "/w/mens-jordan-clothing-37eefz6ymx6znik1"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/jordan-accessories-equipment-37eefzawwpw",
+      "path": "/w/jordan-accessories-equipment-37eefzawwpw"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Women",
+      "real": "https://www.nike.com/w/womens-jordan-37eefz5e1x6",
+      "path": "/w/womens-jordan-37eefz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All",
+      "real": "https://www.nike.com/w/womens-jordan-37eefz5e1x6",
+      "path": "/w/womens-jordan-37eefz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/womens-jordan-shoes-37eefz5e1x6zy7ok",
+      "path": "/w/womens-jordan-shoes-37eefz5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "AJ1",
+      "real": "https://www.nike.com/w/womens-jordan-1-shoes-4fokyz5e1x6zy7ok",
+      "path": "/w/womens-jordan-1-shoes-4fokyz5e1x6zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/womens-jordan-clothing-37eefz5e1x6z6ymx6",
+      "path": "/w/womens-jordan-clothing-37eefz5e1x6z6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kids",
+      "real": "https://www.nike.com/w/kids-jordan-37eefzv4dh",
+      "path": "/w/kids-jordan-37eefzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All",
+      "real": "https://www.nike.com/w/kids-jordan-37eefzv4dh",
+      "path": "/w/kids-jordan-37eefzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/kids-jordan-shoes-37eefzv4dhzy7ok",
+      "path": "/w/kids-jordan-shoes-37eefzv4dhzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "AJ1",
+      "real": "https://www.nike.com/w/jordan-1-shoes-1onraz3aqegz4fokyzy7ok",
+      "path": "/w/jordan-1-shoes-1onraz3aqegz4fokyzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Clothing",
+      "real": "https://www.nike.com/w/kids-jordan-clothing-37eefz6ymx6zv4dh",
+      "path": "/w/kids-jordan-clothing-37eefz6ymx6zv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/kids-jordan-accessories-equipment-37eefzawwpwzv4dh",
+      "path": "/w/kids-jordan-accessories-equipment-37eefzawwpwzv4dh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sport",
+      "real": "https://www.nike.com/w/jordan-basketball-37eefz3glsm",
+      "path": "/w/jordan-basketball-37eefz3glsm"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Basketball",
+      "real": "https://www.nike.com/w/jordan-basketball-37eefz3glsm",
+      "path": "/w/jordan-basketball-37eefz3glsm"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Golf",
+      "real": "https://www.nike.com/w/jordan-golf-23q9wz37eef",
+      "path": "/w/jordan-golf-23q9wz37eef"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cleats",
+      "real": "https://www.nike.com/w/jordan-cleats-spikes-37eefz5ufbh",
+      "path": "/w/jordan-cleats-spikes-37eefz5ufbh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NikeSKIMS",
+      "real": "https://www.nike.com/nikeskims",
+      "path": "/nikeskims"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Shoes",
+      "real": "https://www.nike.com/w/nikeskims-shoes-b2asdzy7ok",
+      "path": "/w/nikeskims-shoes-b2asdzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NikeSKIMS Rift",
+      "real": "https://www.nike.com/w/nikeskims-shoes-b2asdzy7ok",
+      "path": "/w/nikeskims-shoes-b2asdzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Clothing",
+      "real": "https://www.nike.com/w/nikeskims-b2asd",
+      "path": "/w/nikeskims-b2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Bras",
+      "real": "https://www.nike.com/w/nikeskims-sports-bras-40qgmzb2asd",
+      "path": "/w/nikeskims-sports-bras-40qgmzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jackets",
+      "real": "https://www.nike.com/w/nikeskims-jackets-vests-50r7yzb2asd",
+      "path": "/w/nikeskims-jackets-vests-50r7yzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Leggings",
+      "real": "https://www.nike.com/w/nikeskims-tights-leggings-29sh2zb2asd",
+      "path": "/w/nikeskims-tights-leggings-29sh2zb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shorts",
+      "real": "https://www.nike.com/w/nikeskims-shorts-38fphzb2asd",
+      "path": "/w/nikeskims-shorts-38fphzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tops and Tanks",
+      "real": "https://www.nike.com/w/nikeskims-tops-t-shirts-9om13zb2asd",
+      "path": "/w/nikeskims-tops-t-shirts-9om13zb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Accessories",
+      "real": "https://www.nike.com/w/nikeskims-accessories-equipment-awwpwzb2asd",
+      "path": "/w/nikeskims-accessories-equipment-awwpwzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop by Color",
+      "real": "https://www.nike.com/w/nikeskims-b2asd",
+      "path": "/w/nikeskims-b2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Carob Brown",
+      "real": "https://www.nike.com/w/nikeskims-brown-557pqzb2asd",
+      "path": "/w/nikeskims-brown-557pqzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Citrine",
+      "real": "https://www.nike.com/w/nikeskims-yellow-ayp69zb2asd",
+      "path": "/w/nikeskims-yellow-ayp69zb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Ivory",
+      "real": "https://www.nike.com/w/nikeskims-white-4g797zb2asd",
+      "path": "/w/nikeskims-white-4g797zb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Obsidian",
+      "real": "https://www.nike.com/w/nikeskims-black-90poyzb2asd",
+      "path": "/w/nikeskims-black-90poyzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop by Material",
+      "real": "https://www.nike.com/w/nikeskims-b2asd",
+      "path": "/w/nikeskims-b2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Airy",
+      "real": "https://www.nike.com/w/nikeskims-nikeskims-airy-5c1qqzb2asd",
+      "path": "/w/nikeskims-nikeskims-airy-5c1qqzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Matte",
+      "real": "https://www.nike.com/w/nikeskims-nikeskims-matte-5s3enzb2asd",
+      "path": "/w/nikeskims-nikeskims-matte-5s3enzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Performance Cotton Blend",
+      "real": "https://www.nike.com/w/nikeskims-performance-cotton-blend-93ehs",
+      "path": "/w/nikeskims-performance-cotton-blend-93ehs"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Satin Shine",
+      "real": "https://www.nike.com/w/nikeskims-nikeskims-satin-shine-97fc5zb2asd",
+      "path": "/w/nikeskims-nikeskims-satin-shine-97fc5zb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Seamless",
+      "real": "https://www.nike.com/w/nikeskims-nikeskims-seamless-6lh4szb2asd",
+      "path": "/w/nikeskims-nikeskims-seamless-6lh4szb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Stretch Knit 2.0",
+      "real": "https://www.nike.com/w/nikeskims-nikeskims-stretch-knit-21jwlzb2asd",
+      "path": "/w/nikeskims-nikeskims-stretch-knit-21jwlzb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Stretch Nylon",
+      "real": "https://www.nike.com/w/nikeskims-stretch-nylon-7sut9",
+      "path": "/w/nikeskims-stretch-nylon-7sut9"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Studio Stretch",
+      "real": "https://www.nike.com/w/nikeskims-studio-stretch-admbq",
+      "path": "/w/nikeskims-studio-stretch-admbq"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Weightless",
+      "real": "https://www.nike.com/w/nikeskims-nikeskims-weightless-4csx8zb2asd",
+      "path": "/w/nikeskims-nikeskims-weightless-4csx8zb2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NikeSKIMS Guides",
+      "real": "https://www.nike.com/w/nikeskims-b2asd",
+      "path": "/w/nikeskims-b2asd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NikeSKIMS Lookbook",
+      "real": "https://www.nike.com/nikeskims-lookbook",
+      "path": "/nikeskims-lookbook"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NikeSKIMS Bra Guide",
+      "real": "https://www.nike.com/nikeskims-bra-guide",
+      "path": "/nikeskims-bra-guide"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NikeSKIMS Fabric Guide",
+      "real": "https://www.nike.com/nikeskims-collection-guide",
+      "path": "/nikeskims-collection-guide"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sport",
+      "real": "https://www.nike.com/gear-up",
+      "path": "/gear-up"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Basketball",
+      "real": "https://www.nike.com/basketball",
+      "path": "/basketball"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/basketball-shoes-3glsmzy7ok",
+      "path": "/w/basketball-shoes-3glsmzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Apparel",
+      "real": "https://www.nike.com/w/basketball-clothing-3glsmz6ymx6",
+      "path": "/w/basketball-clothing-3glsmz6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Equipment",
+      "real": "https://www.nike.com/w/basketball-accessories-equipment-3glsmzawwpw",
+      "path": "/w/basketball-accessories-equipment-3glsmzawwpw"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Kobe",
+      "real": "https://www.nike.com/kobe",
+      "path": "/kobe"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Jordan",
+      "real": "https://www.nike.com/w/jordan-basketball-37eefz3glsm",
+      "path": "/w/jordan-basketball-37eefz3glsm"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Court",
+      "real": "https://www.nike.com/court",
+      "path": "/court"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tennis",
+      "real": "https://www.nike.com/w/tennis-ed1q",
+      "path": "/w/tennis-ed1q"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Pickleball",
+      "real": "https://www.nike.com/w/pickleball-273vc",
+      "path": "/w/pickleball-273vc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tennis Shoes",
+      "real": "https://www.nike.com/w/tennis-shoes-ed1qzy7ok",
+      "path": "/w/tennis-shoes-ed1qzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Tennis Apparel",
+      "real": "https://www.nike.com/w/tennis-clothing-6ymx6zed1q",
+      "path": "/w/tennis-clothing-6ymx6zed1q"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Soccer",
+      "real": "https://www.nike.com/soccer",
+      "path": "/soccer"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cleats",
+      "real": "https://www.nike.com/w/soccer-shoes-1gdj0zy7ok",
+      "path": "/w/soccer-shoes-1gdj0zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Indoor Footwear",
+      "real": "https://www.nike.com/w/indoor-court-soccer-shoes-1gdj0z8yh10zy7ok",
+      "path": "/w/indoor-court-soccer-shoes-1gdj0z8yh10zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Apparel",
+      "real": "https://www.nike.com/w/soccer-clothing-1gdj0z6ymx6",
+      "path": "/w/soccer-clothing-1gdj0z6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Equipment",
+      "real": "https://www.nike.com/w/soccer-accessories-equipment-1gdj0zawwpw",
+      "path": "/w/soccer-accessories-equipment-1gdj0zawwpw"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Training",
+      "real": "https://www.nike.com/training",
+      "path": "/training"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Prime",
+      "real": "https://www.nike.com/w/prime-7frqv",
+      "path": "/w/prime-7frqv"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Train",
+      "real": "https://www.nike.com/w/training-gym-58jto",
+      "path": "/w/training-gym-58jto"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hybrid",
+      "real": "https://www.nike.com/w/hybrid-training-8wvhh",
+      "path": "/w/hybrid-training-8wvhh"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Strength",
+      "real": "https://www.nike.com/w/strength-training-45gbi",
+      "path": "/w/strength-training-45gbi"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Studio",
+      "real": "https://www.nike.com/w/yoga-pilates-59fco",
+      "path": "/w/yoga-pilates-59fco"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Recover",
+      "real": "https://www.nike.com/w/recover-5vfyy",
+      "path": "/w/recover-5vfyy"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Running",
+      "real": "https://www.nike.com/running",
+      "path": "/running"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Road",
+      "real": "https://www.nike.com/w/road-running-shoes-37v7jz8kwewzy7ok",
+      "path": "/w/road-running-shoes-37v7jz8kwewzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Race",
+      "real": "https://www.nike.com/w/road-racing-shoes-9gdhkzy7ok",
+      "path": "/w/road-racing-shoes-9gdhkzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trail",
+      "real": "https://www.nike.com/w/acg-running-37v7jz93bsd",
+      "path": "/w/acg-running-37v7jz93bsd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Track & Field",
+      "real": "https://www.nike.com/w/track-field-shoes-7nem3zy7ok",
+      "path": "/w/track-field-shoes-7nem3zy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Apparel",
+      "real": "https://www.nike.com/w/running-clothing-37v7jz6ymx6",
+      "path": "/w/running-clothing-37v7jz6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Running Shoe Finder",
+      "real": "https://www.nike.com/running-shoe-finder",
+      "path": "/running-shoe-finder"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Golf",
+      "real": "https://www.nike.com/golf",
+      "path": "/golf"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shoes",
+      "real": "https://www.nike.com/w/golf-shoes-23q9wzy7ok",
+      "path": "/w/golf-shoes-23q9wzy7ok"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Apparel",
+      "real": "https://www.nike.com/w/golf-clothing-23q9wz6ymx6",
+      "path": "/w/golf-clothing-23q9wz6ymx6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Equipment",
+      "real": "https://www.nike.com/w/golf-accessories-equipment-23q9wzawwpw",
+      "path": "/w/golf-accessories-equipment-23q9wzawwpw"
+    },
+    {
+      "kind": "sitemap",
+      "label": "More Sports",
+      "real": "https://www.nike.com/gear-up",
+      "path": "/gear-up"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Baseball",
+      "real": "https://www.nike.com/baseball",
+      "path": "/baseball"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Cheer",
+      "real": "https://www.nike.com/w/cheerleading-1cyjk",
+      "path": "/w/cheerleading-1cyjk"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Football",
+      "real": "https://www.nike.com/us-football",
+      "path": "/us-football"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Lacrosse",
+      "real": "https://www.nike.com/w/lacrosse-4nvmr",
+      "path": "/w/lacrosse-4nvmr"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Skateboarding",
+      "real": "https://www.nike.com/w/skateboarding-8mfrf",
+      "path": "/w/skateboarding-8mfrf"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Softball",
+      "real": "https://www.nike.com/w/womens-softball-2dlpvz5e1x6",
+      "path": "/w/womens-softball-2dlpvz5e1x6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Sportswear",
+      "real": "https://www.nike.com/sportswear",
+      "path": "/sportswear"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Swimming",
+      "real": "https://www.nike.com/w/surf-swimming-3c2dj",
+      "path": "/w/surf-swimming-3c2dj"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Volleyball",
+      "real": "https://www.nike.com/w/volleyball-tc2u",
+      "path": "/w/volleyball-tc2u"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Wrestling",
+      "real": "https://www.nike.com/w/wrestling-52dy6",
+      "path": "/w/wrestling-52dy6"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Team and League Gear",
+      "real": "https://www.nike.com/LockerRoom",
+      "path": "/LockerRoom"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Locker Room",
+      "real": "https://www.nike.com/LockerRoom",
+      "path": "/LockerRoom"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NBA Gear",
+      "real": "https://www.nike.com/w/nba-1vofi",
+      "path": "/w/nba-1vofi"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NFL Gear",
+      "real": "https://www.nike.com/w/nfl-9bklc",
+      "path": "/w/nfl-9bklc"
+    },
+    {
+      "kind": "sitemap",
+      "label": "MLB Gear",
+      "real": "https://www.nike.com/w/mlb-b0g9x",
+      "path": "/w/mlb-b0g9x"
+    },
+    {
+      "kind": "sitemap",
+      "label": "WNBA Gear",
+      "real": "https://www.nike.com/w/wnba-6ef6n",
+      "path": "/w/wnba-6ef6n"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NCAA Gear",
+      "real": "https://www.nike.com/w/basketball-college-teams-2wq2gz3glsm",
+      "path": "/w/basketball-college-teams-2wq2gz3glsm"
+    },
+    {
+      "kind": "sitemap",
+      "label": "NWSL Gear",
+      "real": "https://www.nike.com/w/national-womens-soccer-league-5yy3b",
+      "path": "/w/national-womens-soccer-league-5yy3b"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Soccer Club Gear",
+      "real": "https://www.nike.com/w/soccer-clubs-6fu9q",
+      "path": "/w/soccer-clubs-6fu9q"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Federations Gear",
+      "real": "https://www.nike.com/w/national-team-soccer-1gdj0zav9de",
+      "path": "/w/national-team-soccer-1gdj0zav9de"
+    },
+    {
+      "kind": "sitemap",
+      "label": "All Conditions Gear",
+      "real": "https://www.nike.com/acg",
+      "path": "/acg"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Trail Run",
+      "real": "https://www.nike.com/w/acg-trail-running-75jcnz93bsd",
+      "path": "/w/acg-trail-running-75jcnz93bsd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Hike",
+      "real": "https://www.nike.com/w/acg-hiking-90dwjz93bsd",
+      "path": "/w/acg-hiking-90dwjz93bsd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Explore",
+      "real": "https://www.nike.com/w/acg-explore-1v964z93bsd",
+      "path": "/w/acg-explore-1v964z93bsd"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Shop All Sale",
+      "real": "https://www.nike.com/w/sale-3yaep",
+      "path": "/w/sale-3yaep"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Get Help",
+      "real": "https://www.nike.com/help",
+      "path": "/help"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Membership",
+      "real": "https://www.nike.com/membership",
+      "path": "/membership"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Gift Cards",
+      "real": "https://www.nike.com/gift-cards",
+      "path": "/gift-cards"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Find a Store",
+      "real": "https://www.nike.com/retail",
+      "path": "/retail"
+    },
+    {
+      "kind": "sitemap",
+      "label": "Order Status",
+      "real": "https://www.nike.com/orders/details/",
+      "path": "/orders/details"
+    }
+  ]
+}

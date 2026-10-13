@@ -3,6 +3,7 @@ import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
 import { productImage, productGallery } from '../../lib/product-assets.js'
 import { productPhoto } from '../../lib/product-photos.js'
 import { DEPARTMENTS, CAMPAIGNS, categorySlug } from './catalog.js'
+import { FOOTER_COLUMNS, ACCOUNT_LINKS } from './site.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
 import {
   PRODUCTS, quantityLimit, byId, selectedProduct, eligibleMethods, productPath, productHref, facets, countdown, SORTS, DELIVERY_METHODS, INTERNATIONAL_DELIVERY, PDP_DELIVERY_ORDER, CHECKOUT_DELIVERY_ORDER,
@@ -13,7 +14,7 @@ const NAME = 'GAME'
 
 function informationHref(base, label) {
  const text = label.replaceAll('&amp;', '&')
- const routes = {"Track order":"/account/orders","Store Finder":"/stores","Help Home":"/help","Contact Us":"/contact","Delivery & Collection":"/help/categories/delivery","Returns & Cancellations":"/help/categories/returns","Frasers Plus":"/frasersplus"}
+ const routes = {"Track order":"/accountinformation/orderhistorysummary","Store Finder":"/stores","Help Home":"/help","Contact Us":"/contact","Delivery & Collection":"/help/categories/delivery","Returns & Cancellations":"/help/categories/returns","Frasers Plus":"/frasersplus","Cookie policy":"/cookie-preferences","Privacy":"/help/categories/legal","Privacy Policy":"/help/categories/legal","Terms":"/help/articles/offers-promotions-and-competitions","Terms & Conditions":"/help/articles/offers-promotions-and-competitions","Cookie Policy":"/cookie-preferences"}
  return base + (routes[text] || '/information?topic=' + encodeURIComponent(text))
 }
 export function supportInformationPage(base, topic = 'Shopping information') {
@@ -87,7 +88,7 @@ function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
     </form>
     <nav class="gu-icons" aria-label="Account and bag">
       <a href="${base}/stores">${ICON.pin}<span>Stores</span></a>
-      ${user ? `<a href="${base}/account">${ICON.user}<span>Hi, ${esc(user.first_name || 'there')}</span></a>` : `<a href="${base}/login">${ICON.user}<span>Sign In</span></a>`}
+      <div class="gu-account-menu">${user ? `<a href="${base}/account">${ICON.user}<span>Hi, ${esc(user.first_name || 'there')}</span></a>` : `<a href="${base}/login">${ICON.user}<span>Sign In</span></a>`}<details class="gu-account-drop"><summary aria-label="My account menu"><span aria-hidden="true">⌄</span></summary><div class="gu-account-pop">${user ? '' : `<a class="gu-btn gu-btn-block" href="${base}/login">Sign In</a>`}${ACCOUNT_LINKS.map(([l,u])=>`<a href="${base}${u}">${l}</a>`).join('')}${user ? `<a href="${base}/logout">Sign out</a>` : ''}</div></details></div>
       <a href="${base}/wishlist">${ICON.heart}<span>My Wish List</span></a>
       <div class="gu-bag${flyoutOpen ? ' is-open' : ''}">
         <a href="${base}/cart" class="gu-bag-link" aria-label="My Bag, ${t.count} item${t.count === 1 ? '' : 's'}">${ICON.bag}<span>My Bag</span><span class="gu-count">${t.count}</span></a>
@@ -96,7 +97,7 @@ function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
     </nav>
   </div>
   <details class="gu-navigation" open><summary>Shop departments <span aria-hidden="true">☰</span></summary><nav class="gu-nav" aria-label="Shop by category">${DEPARTMENTS.map(d=>`<div class="gu-mega-item"><a href="${base}/${d.id}">${esc(d.title)}</a><details class="gu-menu-disclosure"><summary aria-label="Explore ${esc(d.title)}"><span aria-hidden="true">⌄</span></summary><div class="gu-mega"><div><h4>${esc(d.title)}</h4><a class="gu-shop-all" href="${base}/${d.id}">Shop all ${esc(d.title)}</a>${d.categories.map(c=>`<a href="${base}/${d.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div><div><h4>Discover</h4>${d.id==='gaming'?`<a href="${searchHref(base,'grand theft auto vi')}">GTA VI Pre-Order</a>`:''}${CAMPAIGNS.map(c=>`<a href="${base}/campaign/${c.id}">${esc(c.title)}</a>`).join('')}</div><a class="gu-menu-photo" href="${base}/${d.id}">${productPhoto(d.photo,d.title)}<b>Explore ${esc(d.title)} →</b></a></div></details></div>`).join('')}</nav></details>
-  <div class="gu-promo" id="gu-promo"><a href="${searchHref(base,'FC27')}">${esc(PROMOS[0])}</a></div>
+  <div class="gu-promo" id="gu-promo"><a href="${base}/frasersplus">${esc(PROMOS[2])}</a></div>
 </header>`
 }
 
@@ -118,19 +119,17 @@ function footer(base, mode) {
   // ASSUMPTION: like the minimal auth.game.co.uk page, the sign-in and checkout steps carry
   // only a slim legal footer (no newsletter or link columns).
   if (mode !== 'full') return `<footer class="gu-footer gu-footer-slim"><p class="gu-copy">&copy; 2026 Frasers Group Trading Limited &middot; <a href="${informationHref(base, 'Terms &amp; Conditions')}">Terms &amp; Conditions</a> &middot; <a href="${informationHref(base, 'Privacy Policy')}">Privacy Policy</a> &middot; <a href="${informationHref(base, 'Cookie Policy')}">Cookie Policy</a></p>${disclaimer(NAME)}</footer>`
-  const col = (h, links) => `<div><h4>${h}</h4>${links.map(l => ['Careers','Affiliates','Corporate','Facebook','Instagram','X','YouTube','TikTok','Modern Slavery Statement'].includes(l) ? `<span class="gu-footer-unavailable">${l}</span>` : `<a href="${informationHref(base, l)}">${l}</a>`).join('')}</div>`
+  const col = (h, links) => `<div><h4>${h}</h4>${links.map(([l, u]) => `<a href="${base}${u}">${esc(l)}</a>`).join('')}</div>`
   return `<footer class="gu-footer">
-  <div class="gu-newsletter"><h4>Sign up to our newsletter</h4><p>Newsletter signup is unavailable in this shop.</p></div>
+  <div class="gu-newsletter"><h4>Sign up to our newsletter</h4><form class="gu-news-form" method="get" action="${base}/information"><input type="hidden" name="topic" value="Newsletter"><label class="gu-sr" for="gu-news-email">Email address</label><input id="gu-news-email" type="email" name="email" placeholder="Enter email address" autocomplete="email"><button class="gu-btn gu-btn-black" type="submit">Sign up</button></form></div>
   <div class="gu-footer-cols">
-    ${col('Customer services', ['Help Home', 'Contact Us', 'Delivery &amp; Collection', 'Returns &amp; Cancellations', 'Track order'])}
-    ${col('Information', ['Terms &amp; Conditions', 'Privacy Policy', 'Cookie Policy', 'Frasers Plus', 'Modern Slavery Statement'])}
-    ${col('About', ['About GAME', 'Careers', 'Store Finder', 'Affiliates', 'Corporate'])}
-    ${col('Stay connected', ['Facebook', 'Instagram', 'X', 'YouTube', 'TikTok'])}
+    ${FOOTER_COLUMNS.map(([h, links]) => col(h, links)).join('')}
+    <div><h4>Stay connected</h4><a class="gu-store-badge" href="${base}/mobile-app"><small>Download on the</small> App Store</a><a class="gu-store-badge" href="${base}/mobile-app"><small>Get it on</small> Google Play</a><p class="gu-follow">Follow Us</p><div class="gu-social">${['X', 'TikTok', 'Instagram', 'Facebook'].map(x => `<span class="gu-footer-unavailable" title="${x}">${x}</span>`).join('')}</div></div>
   </div>
   <div class="gu-ways"><span>Ways to pay</span>${['VISA', 'VISA Debit', 'Mastercard', 'Maestro', 'Apple Pay', 'PayPal', 'Gift Cards', 'Frasers+'].map(w => `<span class="gu-paylogo">${w}</span>`).join('')}</div>
-  <div class="gu-currency">&pound; GBP <a href="${informationHref(base, 'Edit')}">Edit</a></div>
-  <p class="gu-copy">&copy; 2026 Frasers Group Trading Limited</p>
-  <p class="gu-fca">*Frasers Plus is a credit product. Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable). Credit subject to status. Terms apply. 18+, UK residents only. Frasers Group Trading Limited acts as a credit broker and not a lender.</p>
+  <div class="gu-currency">Currency &pound; GBP <a href="${informationHref(base, 'Edit')}">Edit</a></div>
+  <p class="gu-copy">&copy; 2026 Frasers Group Trading Limited &middot; <a href="${base}/help/categories/legal">Privacy Policy</a> &middot; <a href="${base}/sitemap">Sitemap</a></p>
+  <p class="gu-fca">Frasers Group Trading Limited acts as a credit broker and is an appointed representative of a lender authorised and regulated by the Financial Conduct Authority. *Frasers Plus is a credit product. Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable). Credit subject to status. Terms apply. 18+, UK residents only. Missed payments may affect your credit score.</p>
   ${disclaimer(NAME)}
 </footer>`
 }
@@ -148,7 +147,7 @@ ${footer(base, mode)}
 ${cookieChoice ? '' : cookieBanner(base, back)}
 <script>
 (function(){
-  var promo=document.querySelector('#gu-promo a');if(promo){var msgs=${JSON.stringify(PROMOS)},i=0;setInterval(function(){i=(i+1)%msgs.length;promo.textContent=msgs[i];promo.href=[${JSON.stringify(searchHref(base,'FC27'))},${JSON.stringify(base+'/campaign/coming-soon')},${JSON.stringify(base+'/frasersplus')}][i]},4000)}
+  var promo=document.querySelector('#gu-promo a');if(promo){var msgs=${JSON.stringify(PROMOS)},i=2;setInterval(function(){i=(i+1)%msgs.length;promo.textContent=msgs[i];promo.href=[${JSON.stringify(searchHref(base,'FC27'))},${JSON.stringify(base+'/coming-soon')},${JSON.stringify(base+'/frasersplus')}][i]},4000)}
   var navigation=document.querySelector('.gu-navigation');if(matchMedia('(max-width:700px)').matches){if(navigation)navigation.open=false;document.querySelectorAll('.gu-facets details').forEach(function(facet){facet.open=!!facet.querySelector('.is-active')})}
   var menus=[...document.querySelectorAll('.gu-menu-disclosure')];menus.forEach(function(menu){menu.addEventListener('toggle',function(){if(menu.open)menus.forEach(function(other){if(other!==menu)other.open=false})})});
   document.addEventListener('click',function(e){if(!e.target.closest('.gu-nav'))menus.forEach(function(m){m.open=false})});
@@ -173,26 +172,40 @@ function tile(base, p, back) {
 </article>`
 }
 
+// Homepage sections in the order seen on www.game.co.uk (2026-09-29 / 2026-10-13): round
+// category shortcuts, Coming Soon hero, Gifts For Gamers, Frasers Plus band, Trending, Gift Shop.
+// Product tiles only ever show catalogue rows (reference mode: the two GTA VI listings).
+const SHORTCUTS = [['Coming Soon','/coming-soon'],['XBOX','/xbox/all-xbox'],['PlayStation','/playstation'],['Nintendo','/nintendo'],['Pokemon','/pokemon'],['LEGO','/lego'],['Toys','/toys'],['PC','/pc-gaming']]
+const SHORTCUT_ICON = {
+  XBOX: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><path d="M15 14c6 4 12 12 18 22M33 14c-6 4-12 12-18 22" stroke="currentColor" stroke-width="3" fill="none"/></svg>',
+  PlayStation: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M19 10v28l6 2V17c0-2 3-2 3 0v8c4 2 8 0 8-5 0-6-5-8-17-10z" fill="currentColor"/><path d="M8 33c0 3 6 4 11 2v-3c-4 1-7 1-7 0 0-1 3-2 7-3v-3c-6 1-11 4-11 7z" fill="currentColor"/></svg>',
+  Nintendo: '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="12" width="12" height="24" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><rect x="26" y="12" width="12" height="24" rx="6" fill="currentColor"/><circle cx="16" cy="19" r="2.5" fill="currentColor"/></svg>',
+  Pokemon: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><path d="M9 24h30" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="24" r="5" fill="#fff" stroke="currentColor" stroke-width="3"/></svg>',
+  LEGO: '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="20" width="30" height="16" rx="2" fill="currentColor"/><rect x="13" y="14" width="8" height="7" rx="2" fill="currentColor"/><rect x="27" y="14" width="8" height="7" rx="2" fill="currentColor"/></svg>',
+  Toys: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="26" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="15" cy="14" r="5" fill="currentColor"/><circle cx="33" cy="14" r="5" fill="currentColor"/><circle cx="20" cy="25" r="1.8" fill="currentColor"/><circle cx="28" cy="25" r="1.8" fill="currentColor"/></svg>',
+  PC: '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="32" height="21" rx="2" fill="none" stroke="currentColor" stroke-width="3"/><path d="M18 38h12M24 31v7" stroke="currentColor" stroke-width="3"/></svg>',
+}
+const GIFT_SHOP = [['Gifts For Gamers','/gifts/gifts-for-gamers','Headsets, controllers and gaming gear'],['Character Gifts','/gifts/character-gifts','Mario, Sonic, Pokémon and more'],['Toy Gifts','/gifts/toy-gifts','Plush, playsets and action figures'],['Trading Card Gifts','/gifts/trading-card-gifts','Booster packs, tins and binders'],['Football Gifts','/gifts/football-gifts','Football games and fan favourites'],['Digital Gift Cards and Currency','/gifts/digital-gift-cards-and-currency','Instant codes for every platform']]
+
 export function homePage({ base, products }) {
-  if (!fixtureCatalog) return `<h1>Coming Soon</h1><div class="gu-grid">${products.map(p=>tile(base,p)).join('')}</div>`
+  const gta = products.filter(p => p.kind === 'game' && p.preorder)
+  const trending = fixtureCatalog ? [...gta, ...products.filter(p=>['991202','992007','992001','991203'].includes(p.id))].slice(0,6) : gta
   const section = (title, list, href) => `<section class="gu-trending"><div class="gu-section-title"><h2>${esc(title)}</h2><a href="${href}">Shop all →</a></div><div class="gu-grid gu-shelf">${list.slice(0,4).map(p=>tile(base,p,base+'/')).join('')}</div></section>`
-  const circles = [
-    ['Coming Soon','/campaign/coming-soon',byId('756802')],['Xbox','/gaming?platform=Xbox',byId('992004')],
-    ['PlayStation','/gaming?platform=PS5',byId('992003')],['Nintendo','/gaming?platform=Nintendo',byId('991202')],
-    ['Trading Cards','/toys/trading-cards',byId('992023')],['LEGO','/lego',byId('992018')],['Toys','/toys',byId('991207')],['PC','/pc-gaming',byId('991205')],
-  ]
   const discoveries = [['Gaming PCs & Laptops','/pc-gaming/laptops','laptop'],['Plush & Soft Toys','/toys/soft-toys','plush-rabbit'],['Creative Building Sets','/lego/building-sets','brick-city-bus'],['Trading Card Storage','/toys/trading-cards/card-storage','card-binder-red']]
-  return `<section class="gu-circles" aria-label="Popular departments">${circles.map(([name,url,p])=>`<a href="${base}${url}"><span class="gu-circle">${artwork(p)}</span><span>${esc(name)}</span></a>`).join('')}</section>
-  <div class="gu-campaign-pair"><section class="gu-campaign gu-campaign-games"><div class="gu-campaign-covers" aria-hidden="true">${productImage('game-uk',byId('756802'))}${productImage('game-uk',byId('400064'))}</div><div class="gu-campaign-copy"><h1>Coming Soon</h1><p>Discover the next releases for PlayStation and Xbox.</p><a class="gu-btn" href="${base}/campaign/coming-soon">Shop upcoming releases</a></div></section><section class="gu-campaign gu-campaign-gifts"><div class="gu-campaign-copy"><h2>Gifts for Gamers</h2><p>Find their next game, console or favourite accessory.</p><div class="gu-campaign-links"><a class="gu-btn" href="${base}/campaign/gifts-for-gamers">Find a gift</a><a class="gu-btn" href="${base}/gaming?platform=PS5">PS5</a><a class="gu-btn" href="${base}/gaming?platform=Xbox">Xbox</a><a class="gu-btn" href="${base}/gaming?platform=Nintendo">Nintendo</a></div></div></section></div>
-  <section class="gu-fplus"><div><b>FRASERS<span>PLUS</span></b><h2>SPREAD THE COST OF GIFTING*</h2><p>Buy now. Pay in 3, interest free.</p><small>Representative APR 29.9% (variable). Credit subject to status. Terms apply.</small></div><a class="gu-btn gu-btn-light" href="${base}/frasersplus">About Frasers Plus</a></section>
-  ${section('Trending',products.filter(p=>['991202','992007','992001','991203'].includes(p.id)),base+'/gaming')}
-  <section class="gu-popular"><div class="gu-section-title"><h2>Popular Categories</h2><a href="${base}/searchresults">Shop all →</a></div><div class="gu-discoveries">${discoveries.map(([title,url,photo])=>`<a href="${base}${url}">${productPhoto(photo,title)}<h3>${title}</h3><span>Shop all →</span></a>`).join('')}</div></section>
+  const fixtureExtras = fixtureCatalog ? `<section class="gu-popular"><div class="gu-section-title"><h2>Popular Categories</h2><a href="${base}/searchresults">Shop all →</a></div><div class="gu-discoveries">${discoveries.map(([title,url,photo])=>`<a href="${base}${url}">${productPhoto(photo,title)}<h3>${title}</h3><span>Shop all →</span></a>`).join('')}</div></section>
   ${section('Level up your PC setup',products.filter(p=>p.departments.includes('pc-gaming')),base+'/pc-gaming')}
-  ${section('Great finds under £30',products.filter(p=>p.campaigns.includes('under-30')&&!p.keywords.includes('gta')),base+'/campaign/under-30')}
-  ${section('Coming Soon',products.filter(p=>p.preorder),base+'/campaign/coming-soon')}`
+  ${section('Great finds under £30',products.filter(p=>p.campaigns.includes('under-30')&&!p.keywords.includes('gta')),base+'/campaign/under-30')}` : ''
+  return `<section class="gu-circles" aria-label="Shop by category">${SHORTCUTS.map(([name,url],i)=>`<a href="${base}${url}"><span class="gu-circle gu-circle-${i}">${i===0&&gta[0]?artwork(gta[0]):SHORTCUT_ICON[name]}</span><span>${esc(name)}</span></a>`).join('')}</section>
+  <section class="gu-hero" aria-labelledby="gu-hero-title"><div class="gu-hero-copy"><p class="gu-hero-kicker">PRE-ORDER NOW</p><h1 id="gu-hero-title">Coming Soon</h1><p>Be first in line for the biggest upcoming releases on PlayStation and Xbox.</p><a class="gu-btn gu-btn-black" href="${base}/coming-soon">Shop Now</a></div><div class="gu-hero-covers" aria-hidden="true">${gta.slice(0,2).map(p=>productImage('game-uk',p)).join('')}</div></section>
+  <section class="gu-gifts-panel"><div><h2>Gifts For Gamers</h2><p>Find their next game, console or favourite accessory.</p></div><div class="gu-campaign-links"><a class="gu-btn" href="${base}/games">Games</a><a class="gu-btn" href="${base}/playstation">PS5</a><a class="gu-btn" href="${base}/xbox/all-xbox">XBOX</a><a class="gu-btn" href="${base}/nintendo">Switch</a></div></section>
+  <section class="gu-fplus"><div><b>FRASERS<span>PLUS</span></b><h2>SPREAD THE COST OF GIFTING*</h2><p>Buy now. Pay in 3, interest free.</p><small>Representative APR 29.9% (variable). Credit subject to status. Terms apply.</small></div><a class="gu-btn gu-btn-light" href="${base}/frasersplus">Find out more</a></section>
+  <section class="gu-trending"><div class="gu-section-title"><h2>Trending</h2><a href="${base}/coming-soon">Shop all →</a></div><div class="gu-grid gu-shelf">${trending.map(p=>tile(base,p,base+'/')).join('')}</div></section>
+  <section class="gu-gift-shop"><div class="gu-section-title"><h2>Gift Shop</h2><a href="${base}/gifts">Shop all gifts →</a></div><div class="gu-cat-grid">${GIFT_SHOP.map(([l,u,d],i)=>`<a class="gu-cat-tile gu-tone-${i%6}" href="${base}${u}"><span class="gu-cat-mark" aria-hidden="true">${esc(l.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase())}</span><span>${esc(l)}</span><small>${esc(d)}</small></a>`).join('')}</div></section>
+  ${fixtureExtras}`
 }
 
-export function searchPage({ base, q='', products, facetProducts=products, filters = {}, sort = 'popular', hideFilters = false, page=1, route='/searchresults', heading='Search Results', intro='', department=null }) {
+export function searchPage({ base, q='', products, facetProducts=products, filters = {}, sort = 'popular', hideFilters = false, page=1, route='/searchresults', heading='Search Results', intro='', department=null, landing=null }) {
+  if (landing) { heading = landing.h1 || heading; intro = landing.intro ?? intro }
   const f=facets(facetProducts), size=12, pages=Math.max(1,Math.ceil(products.length/size)), current=Math.min(Math.max(1,page),pages)
   const url=(over={})=>{const params={descriptionfilter:q,...filters,sort:sort==='popular'?null:sort,hidefilters:hideFilters?'1':null,...over};return `${base}${route}?${Object.entries(params).filter(([,v])=>v).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&')}`}
   const here=url({page:current}), keys=['platform','brand','age','category','style','price','availability']
@@ -200,13 +213,17 @@ export function searchPage({ base, q='', products, facetProducts=products, filte
   const active=Object.entries(filters).filter(([k,v])=>keys.includes(k)&&v)
   const reset=Object.fromEntries(keys.map(k=>[k,null]))
   const pageLinks=()=>`<nav class="gu-pagination" aria-label="Results pages">${Array.from({length:pages},(_,i)=>`<a href="${esc(url({page:i+1}))}" ${i+1===current?'aria-current="page"':''}>${i+1}</a>`).join('')}</nav>`
-  return `<div class="gu-search-page"><nav class="gu-crumbs"><a href="${base}/">Home</a> / ${esc(heading)}</nav><h1>${esc(heading)}</h1>${intro?`<p class="gu-intro">${esc(intro)}</p>`:''}
-  ${department?`<div class="gu-chips">${department.categories.map(c=>`<a href="${base}/${department.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div>`:''}
+  const crumbs=(landing?.crumbs||[]).map(([l,u])=>`<a href="${base}${u}">${esc(l)}</a> / `).join('')
+  const tiles=landing?.tiles?.length?`<section class="gu-cat-tiles" aria-label="${esc(landing.tilesHeading||'Shop by Category')}">${landing.tilesHeading?`<h2>${esc(landing.tilesHeading)}</h2>`:''}<div class="gu-cat-grid">${landing.tiles.map(([l,u],i)=>`<a class="gu-cat-tile gu-tone-${i%6}" href="${base}${u}"><span class="gu-cat-mark" aria-hidden="true">${esc(l.replace(/[^A-Za-z0-9]/g,'').slice(0,2).toUpperCase())}</span><span>${esc(l)}</span></a>`).join('')}</div></section>`:''
+  const section=landing?.section?.length?`<nav class="gu-in-section" aria-label="In This Section"><h3>In This Section</h3>${landing.section.map(([l,u])=>`<a href="${base}${u}">${esc(l)}</a>`).join('')}</nav>`:''
+  return `<div class="gu-search-page"><nav class="gu-crumbs" aria-label="Breadcrumb"><a href="${base}/">Home</a> / ${crumbs}<span>${esc(heading)}</span></nav><h1>${esc(heading)}</h1>${landing?.h2?`<h2 class="gu-landing-h2">${esc(landing.h2)}</h2>`:''}${intro?`<p class="gu-intro">${esc(intro)}</p>`:''}
+  ${tiles}
+  ${department&&!landing?.tiles?`<div class="gu-chips">${department.categories.map(c=>`<a href="${base}/${department.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div>`:''}
   <p class="gu-found">We found ${products.length} product${products.length===1?'':'s'}${route==='/searchresults'?` for ${esc(q)}`:''}</p>
   ${active.length?`<p class="gu-active-filters">Filtered by ${active.map(([k,v])=>`${esc(k)}: <b>${esc(v)}</b> <a aria-label="Remove ${esc(k)} filter" href="${esc(url({[k]:null}))}">×</a>`).join(', ')} · <a href="${esc(url(reset))}">Clear filters</a></p>`:''}
   <div class="gu-toolbar"><a class="gu-link-btn" href="${esc(url({hidefilters:hideFilters?null:'1',page:current}))}">${hideFilters?'Show Filters':'Hide Filters'}</a><span>${products.length} Products · Page ${current} of ${pages}</span><details class="gu-sort"><summary>Sort By</summary><ul>${SORTS.map(s=>`<li><a class="gu-sort-opt${s.key===sort?' is-active':''}" href="${esc(url({sort:s.key}))}"${s.key===sort?' aria-current="true"':''}>${esc(s.label)}</a></li>`).join('')}</ul></details></div>
-  <div class="gu-search-body${hideFilters?' gu-no-facets':''}"><aside class="gu-facets"${hideFilters?' hidden':''}>${keys.map(key=>`<details open><summary>${({age:'Age Rating',availability:'Availability'})[key]||key[0].toUpperCase()+key.slice(1)}</summary>${key==='price'?f.price.map(b=>facetLink(key,b.label,b.n)).join(''):Object.entries(f[key]).filter(([,n])=>n).map(([v,n])=>facetLink(key,v,n)).join('')||'<span class="gu-fine">None</span>'}</details>`).join('')}</aside>
-  <div>${products.length?`<div class="gu-grid">${products.slice((current-1)*size,current*size).map(p=>tile(base,p,here)).join('')}</div>${pageLinks()}`:`<div class="gu-empty"><h2>No matching products</h2><p>Try another search term or <a href="${esc(url(reset))}">clear your filters</a>.</p><p>Popular searches: ${['Nintendo','LEGO','headset','monitor'].map(x=>`<a href="${searchHref(base,x)}">${x}</a>`).join(' · ')}</p><a href="${base}/gaming">Browse gaming</a></div>`}</div></div></div>`
+  <div class="gu-search-body${hideFilters?' gu-no-facets':''}"><aside class="gu-facets"${hideFilters?' hidden':''}>${section}<h3 class="gu-filter-by">Filter By</h3>${!facetProducts.length&&landing?'<p class="gu-fine">No filters available</p>':keys.map(key=>`<details open><summary>${({age:'Age Rating',availability:'Availability'})[key]||key[0].toUpperCase()+key.slice(1)}</summary>${key==='price'?f.price.map(b=>facetLink(key,b.label,b.n)).join(''):Object.entries(f[key]).filter(([,n])=>n).map(([v,n])=>facetLink(key,v,n)).join('')||'<span class="gu-fine">None</span>'}</details>`).join('')}</aside>
+  <div><h2 class="gu-available">Available Products</h2>${products.length?`<div class="gu-grid">${products.slice((current-1)*size,current*size).map(p=>tile(base,p,here)).join('')}</div>${pageLinks()}`:`${landing&&!active.length?`<div class="gu-empty"><h2>0 Products</h2><p>There are currently no products available in ${esc(heading)}.</p><p>Browse <a href="${base}/coming-soon">Coming Soon</a> or <a href="${base}/gaming">Consoles &amp; Video Games</a>.</p></div>`:`<div class="gu-empty"><h2>No matching products</h2><p>Try another search term or <a href="${esc(url(reset))}">clear your filters</a>.</p><p>Popular searches: ${['Nintendo','LEGO','headset','monitor'].map(x=>`<a href="${searchHref(base,x)}">${x}</a>`).join(' · ')}</p><a href="${base}/gaming">Browse gaming</a></div>`}`}</div></div>${landing?.editorial?`<section class="gu-editorial"><h2>${esc(heading)}</h2><p>${esc(landing.editorial)}</p></section>`:''}${department&&landing?.tiles?`<div class="gu-chips" aria-label="More in ${esc(department.title)}">${department.categories.map(c=>`<a href="${base}/${department.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div>`:''}</div>`
 }
 
 export function productPage({ base, p, modal = null, qty = 1, wished = false, option = '', error = '' }) {
@@ -296,7 +313,7 @@ ${modal ? '' : `<div class="gu-sticky" hidden><div class="gu-sticky-inner"><span
 // ---- bag ----
 export function cartPage({ base, t, notice = null }) {
   if (!t.lines.length) {
-    return `<div class="gu-cart-empty">${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}<h1>Your Bag Is Empty</h1><div class="gu-empty-icon">${ICON.bag}</div><p>Your bag is kept in this browser session.</p><p><a href="${base}/wishlist">View saved items</a> · <a href="${base}/recently-viewed">Recently viewed</a></p><a class="gu-btn" href="${base}/login?returnurl=cart">Sign In</a></div>`
+    return `<div class="gu-cart-empty">${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}<h1>Your Bag Is Empty</h1><div class="gu-empty-icon">${ICON.bag}</div><p>We'll hold your bag for 30 days.</p><p>Sign in or register to sync your bag to any device.</p><p><a href="${base}/wishlist">View saved items</a> · <a href="${base}/recently-viewed">Recently viewed</a></p><a class="gu-btn" href="${base}/login?returnurl=cart">Sign In</a></div>`
   }
   const rows = t.lines.map(l => `<div class="gu-line">
   <a href="${productHref(base, l.product)}">${artwork(l.product)}</a>
