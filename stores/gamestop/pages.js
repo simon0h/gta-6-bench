@@ -4,6 +4,7 @@ import { productPath, STATES, SHIPPING_METHODS, shippingEta, DEPARTMENTS } from 
 import { artwork } from './catalog-pages.js'
 import { orderStatus } from '../../lib/retail-state.js'
 import { checkoutShell } from './checkout-reference.js'
+import { megaNav, drawerMenu, footerHtml } from './site.js'
 export { homePage, searchPage, productPage } from './catalog-pages.js'
 
 export const escapeText = esc
@@ -11,6 +12,7 @@ const NAME = 'GameStop'
 const capturedIcons = { pro: 'gamestop-pro.svg', search: 'material-search.svg', cart: 'material-shopping-cart.svg', trade: 'material-repeat.svg' }
 const icon = name => capturedIcons[name] ? `<img class="gs-icon" src="/static/reference/gamestop/${capturedIcons[name]}" alt="">` : `<svg class="gs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${{search:'<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>',user:'<circle cx="12" cy="7" r="4"/><path d="M4 22v-3c0-7 16-7 16 0v3z"/>',cart:'<path d="M2 3h3l3 12h11l3-9H6"/><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/>',trade:'<path d="M3 7h17l-4-4M21 17H4l4 4M3 7v5M21 17v-5"/>',pro:'<path d="m12 2 4 6 6 4-6 4-4 6-4-6-6-4 6-4z" fill="currentColor"/>',store:'<path d="M3 9h18l-2-6H5zM4 10v11h16V10M9 21v-7h6v7"/>'}[name]}</svg>`
 
+// NAV kept for reference: the live header now comes from site.js MENU.
 const NAV = [['Trading Cards','toys-games/trading-cards'],['Deals','deals'],['Pre-Order','pre-order'],['Collectibles','collectibles'],['PlayStation','playstation'],['Nintendo Switch','nintendo-switch'],['Xbox','xbox'],['Pre-Owned','pre-owned'],['New & Upcoming','new-and-upcoming'],['Only at GameStop','only-at-gamestop'],['Digital Store','digital-store'],['Retro Gaming','retro']]
 
 export function layout({ base, title, body, cartCount = 0, user = null, bodyClass = '', q = '', selectedStore = '' }) {
@@ -18,40 +20,31 @@ export function layout({ base, title, body, cartCount = 0, user = null, bodyClas
   const capturedProduct = body.includes('gs-game-pdp')
   const capturedCart = body.includes('gs-captured-cart-page')
   const capturedChrome = capturedProduct || capturedCart
-  const productNavigation = [['Trading Cards','toys-games/trading-cards'],['Deals','deals'],['Shop My Store','stores'],['Pre-Order','pre-order'],['Collectibles & More','collectibles'],['PlayStation','playstation'],['Nintendo Switch','nintendo-switch'],['Xbox','xbox'],['Pre-Owned','pre-owned'],['New & Upcoming','new-and-upcoming'],['Only At GameStop','only-at-gamestop'],['Digital Store','digital-store'],['Retro Gaming','retro'],['GS Pro Credit Card','pro']]
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)} | GameStop</title>
-<link rel="stylesheet" href="${base}/static/style.css"><script src="${base}/static/storefront.js" defer></script></head>
+<link rel="stylesheet" href="${base}/static/style.css"><link rel="stylesheet" href="${base}/static/site.css"><script src="${base}/static/storefront.js" defer></script></head>
 <body class="${esc(bodyClass)}${capturedChrome ? ' gs-captured-product' : ''}${capturedCart ? ' gs-captured-cart' : ''}">
+<a class="gs-skip" href="#main-content">Skip to main content</a>
 <header class="gs-header">
   <div class="gs-header-top">
-    <details class="gs-native-menu"><summary class="gs-menu" aria-label="Menu"><img class="gs-menu-bars" src="/static/reference/gamestop/material-menu.svg" alt=""><span>Menu</span></summary><div class="gs-menu-panel"><section><h3>Shop By Category</h3>${DEPARTMENTS.map(d => `<a href="${base}/${d.id}">${esc(d.name)} <span aria-hidden="true">›</span></a>`).join('')}</section><section><h3>Explore More</h3><a href="${base}/deals">Deals</a><a href="${base}/new-and-upcoming">New &amp; Upcoming</a><a href="${base}/pre-owned">Pre-Owned</a><a href="${base}/retro">Retro Gaming</a><a href="${base}/card-grading-service">Card Grading Service</a><a href="${base}/trade-in/">Trade-In</a><a href="${base}/pro/">GameStop Pro</a><h3>Your GameStop</h3><a href="${base}/account/saved">Saved &amp; recently viewed</a><a href="${base}/help/">Help Center</a></section></div></details>
+    <details class="gs-native-menu"><summary class="gs-menu" aria-label="Menu"><img class="gs-menu-bars" src="/static/reference/gamestop/material-menu.svg" alt=""><span>Menu</span></summary><div class="gs-menu-panel">${drawerMenu(base)}</div></details>
     <a class="gs-logo" href="${base}/" aria-label="GameStop home"><img src="/static/reference/gamestop/gamestop-logo.svg" alt="GameStop" width="160" height="38"></a>
     <form class="gs-search" action="${base}/search/" method="get" role="search">
       <button type="submit" aria-label="Search">${icon('search')}</button><input type="search" name="q" value="${esc(q)}" list="gs-search-suggestions" placeholder="Search games, consoles &amp; more" aria-label="Search games, consoles and more">
       <datalist id="gs-search-suggestions"><option value="controller"><option value="trading card"><option value="pre-owned"><option value="PC gaming"><option value="Grand Theft Auto VI"></datalist>
     </form>
     <nav class="gs-utils" aria-label="Account">
-      <a class="gs-desktop-action" href="${base}/trade-in">${icon('trade')}<span>Trade-In</span></a><a class="gs-desktop-action" href="${base}/pro/">${icon('pro')}<span>GameStop Pro</span></a>
-      <details class="gs-account-menu"><summary>${icon('user')}<span>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Sign In'}</span></summary><div><b>${user?'Your account':'Welcome to GameStop'}</b><a class="gs-btn gs-btn-block" href="${base}/${user?'account':'login'}/">${user?'My Account':'Sign In'}</a><a href="${base}/account/orders">Orders</a><a href="${base}/account/saved">Saved &amp; recently viewed</a><a href="${base}/account/addresses">Address book</a>${user?`<a href="${base}/logout">Sign Out</a>`:`<a href="${base}/account/create/">Create Account</a>`}</div></details>
-      <a href="${base}/cart/" class="gs-cart-link" aria-label="Cart, ${cartCount} items">${icon('cart')}<span>Cart${cartCount ? `<span class="gs-badge">${cartCount}</span>` : ''}</span></a>
+      <a class="gs-desktop-action" href="${base}/trade-in">${icon('trade')}<span>Trade-In</span></a><a class="gs-desktop-action" href="${base}/pro">${icon('pro')}<span>GameStop Pro</span></a>
+      <details class="gs-account-menu"><summary>${icon('user')}<span>${user ? `Hi, ${esc(user.first_name || 'there')}` : 'Sign In'}</span></summary><div><b>${user?'Your account':'Sign in for the best experience'}</b><a class="gs-btn gs-btn-block" href="${base}/${user?'account':'login'}">${user?'My Account':'Sign In'}</a><a href="${base}/account/orders">Orders</a><a href="${base}/account/saved">Saved &amp; recently viewed</a><a href="${base}/account/addresses">Address book</a>${user?`<a href="${base}/logout">Sign Out</a>`:`<a href="${base}/account/create">Create Account</a>`}</div></details>
+      <a href="${base}/cart" class="gs-cart-link" aria-label="Cart, ${cartCount} items">${icon('cart')}<span>Cart${cartCount ? `<span class="gs-badge">${cartCount}</span>` : ''}</span></a>
     </nav>
   </div>
-  <div class="gs-nav-row"><button class="gs-rail-arrow" data-nav-scroll="-1" aria-label="Previous categories" hidden>‹</button><nav class="gs-nav" id="gs-category-nav" aria-label="Shop by category">${(capturedProduct ? productNavigation : NAV).map(([n,path]) => `<a href="${base}/${path}">${esc(n)}${capturedProduct && ['Trading Cards','Collectibles & More','PlayStation','Nintendo Switch','Xbox','Pre-Owned'].includes(n) ? '<img class="gs-nav-chevron" src="/static/reference/gamestop/nav-chevron.svg" alt="">' : ''}</a>`).join('')}</nav><button class="gs-rail-arrow" data-nav-scroll="1" aria-label="More categories" hidden>›</button><nav class="gs-location-nav" aria-label="Shopping services"><a href="${base}/order/search">Track Order</a><a href="${base}/stores">${icon('store')}${esc(selectedStore || (capturedChrome ? 'Hillsdale' : 'Find a Store'))}</a></nav></div>
-  <div class="gs-promo"><a href="${base}/toys-games/trading-cards">${capturedChrome ? 'Pre-Order The Newest Trading Cards Before They Sell Out.' : 'Collect something great. Shop trading cards and supplies.'}</a></div>
+  <div class="gs-nav-row"><button class="gs-rail-arrow" data-nav-scroll="-1" aria-label="Previous categories" hidden>‹</button><nav class="gs-nav" id="gs-category-nav" aria-label="Shop by category">${megaNav(base)}</nav><button class="gs-rail-arrow" data-nav-scroll="1" aria-label="More categories" hidden>›</button><nav class="gs-location-nav" aria-label="Shopping services"><a href="${base}/order/search">Track Order</a><a href="${base}/stores">${icon('store')}${esc(selectedStore || 'Find a Store')}</a></nav></div>
+  <div class="gs-promo"><a href="${base}/toys-games/trading-cards">Pre-Order The Newest Trading Cards Before They Sell Out.</a></div>
 </header>
 <main class="gs-main" id="main-content">${body}</main>
-<footer class="gs-footer">
-  <div class="gs-footer-cols">
-    <div><h4>GET HELP</h4><a href="${base}/help">Help Center</a><a href="${base}/order/search">Order Status</a><a href="${base}/help/contact">Contact support</a><span class="gs-static">GameStop Pro Credit Card</span><a href="${base}/help/articles/returns">Make a Return</a></div>
-    <div><h4>LEGAL &amp; PRIVACY</h4><span class="gs-static">Conditions of Use</span><a href="${base}/help/articles/returns">Returns Policy</a><span class="gs-static">Privacy Policy</span><span class="gs-static">GameStop Pro Terms &amp; Conditions</span></div>
-    <div><h4>ABOUT US</h4><span class="gs-static">Accessibility</span><span class="gs-static">Careers</span><a href="${base}/stores">Find a Store</a><span class="gs-static">Investors</span></div>
-    <div><h4>YOUR GAMESTOP</h4><p>Keep your favorites, orders and shopping preferences in one place.</p><a href="${base}/account/saved">Saved &amp; recently viewed</a><a href="${base}/account/preferences">Manage preferences</a><a href="${base}/pro">Explore Pro benefits</a></div>
-  </div>
-  <p class="gs-copy">&copy; 1999-2026 GameStop &nbsp;·&nbsp; Australia &amp; New Zealand &nbsp;·&nbsp; France &nbsp;·&nbsp; Cookie Preferences</p>
-  ${disclaimer(NAME)}
-</footer>
+${footerHtml(base, disclaimer(NAME))}
 </body></html>`
 }
 
