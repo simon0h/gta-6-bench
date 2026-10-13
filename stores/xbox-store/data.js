@@ -1,8 +1,21 @@
 import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
 import { CATALOG_EVIDENCE } from './catalog-evidence.js'
 import { expandCatalog } from './expand500.js'
-import { ORDINARY_PRODUCTS, ORDINARY_EXTRAS, EXISTING_DETAILS, FACETS, SORTS, COLLECTIONS, PLAN_DATA } from './catalog.js'
-export { FACETS, SORTS, COLLECTIONS, PLAN_DATA }
+import { ORDINARY_PRODUCTS, ORDINARY_EXTRAS, EXISTING_DETAILS, FACETS as BASE_FACETS, SORTS as BASE_SORTS, COLLECTIONS as BASE_COLLECTIONS, PLAN_DATA } from './catalog.js'
+import { SHELF, REFERENCE_POPULARITY } from './shelf.js'
+export { PLAN_DATA }
+// Reference-mode collections cover the whole assortment (the fixture ones assume the fixture release calendar).
+const TODAY = new Date('2026-10-13')
+const released = p => new Date(p.release) <= TODAY
+export const COLLECTIONS = fixtureCatalog ? BASE_COLLECTIONS : [
+  {id:'new-releases',title:'New releases',intro:'Discover recent arrivals and new adventures.',test:p=>p.type==='game'&&p.purchasable&&p.productType!=='bundle'&&released(p)&&TODAY-new Date(p.release)<=400*86400000},
+  {id:'best-sellers',title:'Best selling games',intro:'The most popular games on Xbox right now, including pre-orders.',test:p=>p.type==='game'&&p.purchasable&&p.price>0&&(p.productType!=='bundle'||p.kind==='game')},
+  ...BASE_COLLECTIONS.filter(c=>c.id!=='new-releases'),
+  {id:'add-ons',title:'Add-ons and in-game currency',intro:'Expansions, season passes and in-game currency for the games you play.',type:'add-ons',test:p=>p.type==='add-on'&&p.purchasable},
+]
+// Reference mode adds the store-wide assortment (shelf.js), so browse pages also filter by brand, category and rating.
+export const FACETS = fixtureCatalog ? BASE_FACETS : [...BASE_FACETS, {key:'brand',label:'Brand',field:'brand'}, {key:'category',label:'Category',field:'category'}, {key:'rating',label:'Customer rating',values:[['4.5','4.5 stars & up'],['4','4 stars & up'],['3','3 stars & up']]}]
+export const SORTS = fixtureCatalog ? BASE_SORTS : [...BASE_SORTS.slice(0,3), ['rating','Highest rated'], ...BASE_SORTS.slice(3)]
 // Listings as they appear on xbox.com (research/xbox-store.md, 2026-09-29).
 // Canonical GTA VI editions remain Xbox Series X|S digital offers. Expanded physical
 // games and hardware ship separately and grant no native digital licenses.
@@ -180,16 +193,23 @@ if (!fixtureCatalog) for (const p of PRODUCTS) {
   if (p.catalogEvidence.purchase === 'unverified') { p.purchasable = false; p.available = false }
 }
 
+// Everything the storefront browses, searches and sells. PRODUCTS stays the evidence-backed GTA VI
+// allowlist (inventory reports, catalog policy); in reference mode the everyday assortment sits beside it.
+export const CATALOG = fixtureCatalog ? PRODUCTS : [...PRODUCTS, ...SHELF]
+const popularityOf = p => p.popularity ?? REFERENCE_POPULARITY[p.id] ?? 0
+
 export const isBuyable = p => Boolean(p && p.purchasable && p.available !== false && (!p.physical || p.stock > 0) && Number.isFinite(p.price) && p.price >= 0)
 export const familyEditions = p => p.family === 'gta-vi' ? editions() : (p.editions || []).map(byId).filter(isBuyable)
-export const facetValues = facet => facet.values || [...new Set(PRODUCTS.flatMap(p=>Array.isArray(p[facet.field]) ? p[facet.field] : [p[facet.field]]).filter(Boolean))].sort().map(v=>[v,v])
+export const facetValues = facet => facet.values || [...new Set(CATALOG.flatMap(p=>Array.isArray(p[facet.field]) ? p[facet.field] : [p[facet.field]]).filter(Boolean))].sort().map(v=>[v,v])
 export const queryOptions = query => Object.fromEntries(['q','type','sort','limit','page','availability',...FACETS.map(f=>f.key)].filter(k=>typeof query[k]==='string'&&query[k].length<=200).map(k=>[k,query[k]]))
-export const suggestions = q => PRODUCTS.filter(p=>p.type==='game'&&p.purchasable&&(!q||p.title.toLowerCase().includes(q.toLowerCase()))).slice(0,6)
+export const suggestions = q => CATALOG.filter(p=>p.type==='game'&&p.purchasable&&(!q||p.title.toLowerCase().includes(q.toLowerCase()))).slice(0,6)
 
-export const byId = (id) => (typeof id === 'string' ? PRODUCTS.find(p => p.id === id) : null) ?? null
+export const byId = (id) => (typeof id === 'string' ? CATALOG.find(p => p.id === id) : null) ?? null
 export const editions = () => PRODUCTS.filter(p => p.kind === 'game')
 
 export function productPath(base, p) {
+  // Consoles and accessories live on Microsoft Store product pages (microsoft.com/en-us/d/<slug>/<id>).
+  if (p.shelf && p.physical) return `${base}/en-US/d/${p.slug}/${p.id}`
   return `${base}/en-US/games/store/${p.slug}/${p.id}`
 }
 
@@ -199,16 +219,18 @@ export function search(q, type = 'games') {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9|]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
   if (!tokens.length) return []
-  const wanted = type === 'add-ons' ? 'add-on' : type === 'games' ? 'game' : type === 'hardware' ? 'hardware' : null
-  const scored = PRODUCTS
+  const wanted = type === 'add-ons' ? 'add-on' : type === 'games' ? 'game' : type === 'hardware' ? 'hardware' : type === 'gift-cards' ? 'gift-card' : null
+  const scored = CATALOG
     .filter(p => wanted === null ? type==='all' : p.type === wanted)
     .map(p => {
       const hay = norm(p.title + ' ' + p.keywords)
       const hits = tokens.filter(t => hay.includes(t))
-      return { p, full: hits.length === tokens.length, partial: hits.some(t => t.length >= 3) }
+      // Assortment items rank by how much of the query their title carries; the GTA VI rows keep catalogue order first.
+      const titleHits = p.shelf ? tokens.filter(t => norm(p.title).includes(t)).length : tokens.length + 1
+      return { p, full: hits.length === tokens.length, partial: hits.some(t => t.length >= 3), titleHits }
     })
     .filter(s => s.full || s.partial)
-    .sort((a, b) => (b.full - a.full) || (a.p.rank - b.p.rank))
+    .sort((a, b) => (b.full - a.full) || (b.titleHits - a.titleHits) || (a.p.rank - b.p.rank))
   return scored.map(s => s.p)
 }
 
@@ -239,6 +261,7 @@ export function filterProducts(items, options = {}) {
   let result=items.filter(p=>FACETS.every(f=>{
     const value=o[f.key]
     if(!value || value==='all') return true
+    if(f.key==='rating') return /^\d(\.\d)?$/.test(value) && Number(p.rating)>=Number(value)
     if(f.key==='price') {
       if(p.price===null) return false
       if(value==='sale') return p.listPrice>p.price
@@ -257,8 +280,9 @@ export function filterProducts(items, options = {}) {
     name:(a,b)=>a.title.localeCompare(b.title),
     'name-desc':(a,b)=>b.title.localeCompare(a.title),
     release:(a,b)=>new Date(b.release)-new Date(a.release),
-    popular:(a,b)=>b.popularity-a.popularity,
-    wishlisted:(a,b)=>b.wishlisted-a.wishlisted,
+    popular:(a,b)=>popularityOf(b)-popularityOf(a),
+    wishlisted:(a,b)=>(b.wishlisted??popularityOf(b))-(a.wishlisted??popularityOf(a)),
+    rating:(a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0),
     discount:(a,b)=>discount(b)-discount(a),
   }[o.sort]
   if(compare) result.sort((a,b)=>compare(a,b)||a.rank-b.rank)
