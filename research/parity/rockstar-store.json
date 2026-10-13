@@ -1,0 +1,708 @@
+{
+ "store": "rockstar-store",
+ "real_home": "https://store.rockstargames.com/",
+ "captured_at": "2026-10-13",
+ "sources": [
+  "https://store.rockstargames.com/",
+  "https://store.rockstargames.com/view-all-games",
+  "https://store.rockstargames.com/merchandise",
+  "https://store.rockstargames.com/search?q=gta",
+  "https://store.rockstargames.com/new-arrivals",
+  "https://store.rockstargames.com/grand-theft-auto-vi-collection",
+  "https://store.rockstargames.com/grand-theft-auto-collection",
+  "https://store.rockstargames.com/red-dead-redemption-collection",
+  "https://store.rockstargames.com/rockstar-collection",
+  "https://store.rockstargames.com/game/buy-gta-v",
+  "https://store.rockstargames.com/game/buy-red-dead-redemption-2",
+  "https://store.rockstargames.com/game/buy-la-noire",
+  "https://store.rockstargames.com/game/gta-plus",
+  "https://store.rockstargames.com/buy-gta-v-shark-cash-cards",
+  "https://store.rockstargames.com/buy-red-dead-online-gold-bars",
+  "https://store.rockstargames.com/refund-and-return-policy",
+  "https://store.rockstargames.com/sitemap.xml",
+  "https://support.rockstargames.com/",
+  "research/rockstar-store.md"
+ ],
+ "home_path": "/",
+ "sitemap_path": "/sitemap",
+ "notes": "Fetched with WebFetch on 2026-10-13. The real store has no HTML site map; its sitemap.xml lists only locale roots and /game/buy-* pages, so the sitemap section mirrors the header menu tree plus the /view-all-games titles. www.rockstargames.com/privacy, /legal and /cookies render client-side (WebFetch returned only metadata), so those pages only expect their titles; take2games.com/ccpa was not fetched. Sign-in is an off-site Rockstar Games Account OAuth popup (signin.rockstargames.com), cart/checkout come from research/rockstar-store.md (live walkthrough 2026-09-29/30). The real store has no order-lookup, store-locator, gift-card or deals pages: order receipts/status live in Rockstar Support and Xsolla emails, so those page kinds are represented by the support articles. Product prices on other games, cards, bars and merch were seen but are not part of the reference catalog; the clone shows those pages read-only without purchase controls.",
+ "items": [
+  {
+   "kind": "header",
+   "label": "Store",
+   "real": "https://store.rockstargames.com/",
+   "path": "/"
+  },
+  {
+   "kind": "header",
+   "label": "View All Games",
+   "real": "https://store.rockstargames.com/view-all-games",
+   "path": "/view-all-games"
+  },
+  {
+   "kind": "header",
+   "label": "Grand Theft Auto VI",
+   "real": "https://store.rockstargames.com/game/buy-gta-vi",
+   "path": "/game/buy-gta-vi"
+  },
+  {
+   "kind": "header",
+   "label": "Grand Theft Auto V",
+   "real": "https://store.rockstargames.com/game/buy-gta-v",
+   "path": "/game/buy-gta-v"
+  },
+  {
+   "kind": "header",
+   "label": "Red Dead Redemption 2",
+   "real": "https://store.rockstargames.com/game/buy-red-dead-redemption-2",
+   "path": "/game/buy-red-dead-redemption-2"
+  },
+  {
+   "kind": "header",
+   "label": "Red Dead Redemption",
+   "real": "https://store.rockstargames.com/game/buy-red-dead-redemption",
+   "path": "/game/buy-red-dead-redemption"
+  },
+  {
+   "kind": "header",
+   "label": "Bully: Scholarship Edition",
+   "real": "https://store.rockstargames.com/game/buy-bully-scholarship-edition",
+   "path": "/game/buy-bully-scholarship-edition"
+  },
+  {
+   "kind": "header",
+   "label": "Grand Theft Auto Online: Shark Cash Cards",
+   "real": "https://store.rockstargames.com/buy-gta-v-shark-cash-cards",
+   "path": "/buy-gta-v-shark-cash-cards"
+  },
+  {
+   "kind": "header",
+   "label": "Red Dead Online: Gold Bars",
+   "real": "https://store.rockstargames.com/buy-red-dead-online-gold-bars",
+   "path": "/buy-red-dead-online-gold-bars"
+  },
+  {
+   "kind": "header",
+   "label": "GTA+",
+   "real": "https://store.rockstargames.com/game/gta-plus",
+   "path": "/game/gta-plus"
+  },
+  {
+   "kind": "header",
+   "label": "View All Merchandise",
+   "real": "https://store.rockstargames.com/merchandise",
+   "path": "/merchandise"
+  },
+  {
+   "kind": "header",
+   "label": "Apparel",
+   "real": "https://store.rockstargames.com/search?sort=date.desc&subcategories%5Ball%5D=apparel",
+   "path": "/search?sort=date.desc&subcategories%5Ball%5D=apparel"
+  },
+  {
+   "kind": "header",
+   "label": "Accessories",
+   "real": "https://store.rockstargames.com/search?sort=date.desc&subcategories%5Ball%5D=accessories",
+   "path": "/search?sort=date.desc&subcategories%5Ball%5D=accessories"
+  },
+  {
+   "kind": "header",
+   "label": "Collectibles",
+   "real": "https://store.rockstargames.com/search?sort=date.desc&subcategories%5Ball%5D=collectible",
+   "path": "/search?sort=date.desc&subcategories%5Ball%5D=collectible"
+  },
+  {
+   "kind": "header",
+   "label": "New Arrivals",
+   "real": "https://store.rockstargames.com/new-arrivals",
+   "path": "/new-arrivals"
+  },
+  {
+   "kind": "header",
+   "label": "Shop Grand Theft Auto VI Collection",
+   "real": "https://store.rockstargames.com/grand-theft-auto-vi-collection",
+   "path": "/grand-theft-auto-vi-collection"
+  },
+  {
+   "kind": "header",
+   "label": "Shop Red Dead Redemption",
+   "real": "https://store.rockstargames.com/red-dead-redemption-collection",
+   "path": "/red-dead-redemption-collection"
+  },
+  {
+   "kind": "header",
+   "label": "Shop Grand Theft Auto",
+   "real": "https://store.rockstargames.com/grand-theft-auto-collection",
+   "path": "/grand-theft-auto-collection"
+  },
+  {
+   "kind": "header",
+   "label": "Shop Rockstar Games",
+   "real": "https://store.rockstargames.com/rockstar-collection",
+   "path": "/rockstar-collection"
+  },
+  {
+   "kind": "header",
+   "label": "Sign In",
+   "real": "https://signin.rockstargames.com/connect/authorize/t2gp-rs",
+   "path": "/signin"
+  },
+  {
+   "kind": "header",
+   "label": "Cart",
+   "real": "https://store.rockstargames.com/cart",
+   "path": "/cart"
+  },
+  {
+   "kind": "footer",
+   "label": "Rockstar Games",
+   "real": "https://www.rockstargames.com/",
+   "path": "/rockstar-games"
+  },
+  {
+   "kind": "footer",
+   "label": "Rockstar Support",
+   "real": "https://support.rockstargames.com/",
+   "path": "/support"
+  },
+  {
+   "kind": "footer",
+   "label": "Privacy Policy",
+   "real": "https://www.rockstargames.com/privacy/",
+   "path": "/privacy"
+  },
+  {
+   "kind": "footer",
+   "label": "Cookie Policy",
+   "real": "https://www.rockstargames.com/cookies",
+   "path": "/cookie-policy"
+  },
+  {
+   "kind": "footer",
+   "label": "Terms of Service",
+   "real": "https://www.rockstargames.com/legal/",
+   "path": "/legal"
+  },
+  {
+   "kind": "footer",
+   "label": "Do Not Sell or Share My Personal Information",
+   "real": "https://www.take2games.com/ccpa",
+   "path": "/ccpa"
+  },
+  {
+   "kind": "footer",
+   "label": "Refunds",
+   "real": "https://store.rockstargames.com/refund-and-return-policy",
+   "path": "/refund-and-return-policy"
+  },
+  {
+   "kind": "footer",
+   "label": "Cookie Settings",
+   "real": "https://store.rockstargames.com/",
+   "path": "/cookie-settings"
+  },
+  {
+   "kind": "page",
+   "label": "Product page: Grand Theft Auto VI",
+   "real": "https://store.rockstargames.com/game/buy-gta-vi",
+   "path": "/game/buy-gta-vi",
+   "expect": [
+    "Grand Theft Auto VI",
+    "Select Platform",
+    "Game Details",
+    "Compare Editions",
+    "Physical (Code-in-Box) Version Available"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Product page: Grand Theft Auto V",
+   "real": "https://store.rockstargames.com/game/buy-gta-v",
+   "path": "/game/buy-gta-v",
+   "expect": [
+    "Buy Grand Theft Auto V and Grand Theft Auto Online",
+    "Game Details",
+    "Key Features",
+    "GTAV Enhanced System Requirements",
+    "FAQ"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Product page: Red Dead Redemption 2",
+   "real": "https://store.rockstargames.com/game/buy-red-dead-redemption-2",
+   "path": "/game/buy-red-dead-redemption-2",
+   "expect": [
+    "Buy Red Dead Redemption 2",
+    "Game Details",
+    "Compare Editions",
+    "Key Features",
+    "System Requirements"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Product page: L.A. Noire",
+   "real": "https://store.rockstargames.com/game/buy-la-noire",
+   "path": "/game/buy-la-noire",
+   "expect": [
+    "Buy L.A. Noire",
+    "Game Details",
+    "Screenshots and Videos",
+    "Supported Languages",
+    "System Requirements"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "GTA+ membership",
+   "real": "https://store.rockstargames.com/game/gta-plus",
+   "path": "/game/gta-plus",
+   "expect": [
+    "Key Features",
+    "Cash Every Month",
+    "The Vinewood Club",
+    "GTA+ Games Library",
+    "Member-Only Shark Cards"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Shark Cash Cards",
+   "real": "https://store.rockstargames.com/buy-gta-v-shark-cash-cards",
+   "path": "/buy-gta-v-shark-cash-cards",
+   "expect": [
+    "Shark Cards",
+    "Buy Shark Cash Cards for PC"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Gold Bars",
+   "real": "https://store.rockstargames.com/buy-red-dead-online-gold-bars",
+   "path": "/buy-red-dead-online-gold-bars",
+   "expect": [
+    "Gold Bars",
+    "Buy Gold Bars for PC"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "All games",
+   "real": "https://store.rockstargames.com/view-all-games",
+   "path": "/view-all-games",
+   "expect": [
+    "All Games"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Merchandise (search listing)",
+   "real": "https://store.rockstargames.com/merchandise",
+   "path": "/merchandise",
+   "expect": [
+    "Search for:",
+    "results",
+    "Sort by..."
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Search results",
+   "real": "https://store.rockstargames.com/search?q=gta",
+   "path": "/search?q=gta",
+   "expect": [
+    "Search for:",
+    "results",
+    "Sort by...",
+    "Relevance"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "New Arrivals",
+   "real": "https://store.rockstargames.com/new-arrivals",
+   "path": "/new-arrivals",
+   "expect": [
+    "Collections",
+    "New Arrivals"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Grand Theft Auto VI Collection",
+   "real": "https://store.rockstargames.com/grand-theft-auto-vi-collection",
+   "path": "/grand-theft-auto-vi-collection",
+   "expect": [
+    "Featured",
+    "Grand Theft Auto VI Collection",
+    "Apparel",
+    "Accessories",
+    "Collectibles"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Grand Theft Auto collection",
+   "real": "https://store.rockstargames.com/grand-theft-auto-collection",
+   "path": "/grand-theft-auto-collection",
+   "expect": [
+    "Grand Theft Auto",
+    "Shop Grand Theft Auto VI",
+    "Shop Grand Theft Auto V",
+    "Buy Shark Cash Cards for PC"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Red Dead Redemption collection",
+   "real": "https://store.rockstargames.com/red-dead-redemption-collection",
+   "path": "/red-dead-redemption-collection",
+   "expect": [
+    "Red Dead Redemption",
+    "Games",
+    "Buy Gold Bars for PC",
+    "Apparel",
+    "Collectibles"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Rockstar collection",
+   "real": "https://store.rockstargames.com/rockstar-collection",
+   "path": "/rockstar-collection",
+   "expect": [
+    "Rockstar Games",
+    "Games",
+    "Apparel",
+    "Collectibles",
+    "Accessories"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Cart",
+   "real": "https://store.rockstargames.com/cart",
+   "path": "/cart",
+   "expect": [
+    "My Cart",
+    "Order Summary",
+    "Your cart is empty",
+    "Get FREE shipping with orders over $74.99"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Sign in",
+   "real": "https://signin.rockstargames.com/connect/authorize/t2gp-rs",
+   "path": "/signin",
+   "expect": [
+    "Sign In"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Refund and return policy",
+   "real": "https://store.rockstargames.com/refund-and-return-policy",
+   "path": "/refund-and-return-policy",
+   "expect": [
+    "Refunds and Returns FAQ",
+    "What are my refund rights for digital purchases?",
+    "What is the EEA / UK right of withdrawal?",
+    "Who is Xsolla and where can I find the full refund policy?"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Customer support",
+   "real": "https://support.rockstargames.com/",
+   "path": "/support",
+   "expect": [
+    "Find answers to questions about your games and account.",
+    "Common Solutions",
+    "Still need help?"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Order receipts / order status help",
+   "real": "https://support.rockstargames.com/articles/1v0gPkZJ8IiKarabrFPHZU/rockstar-store-order-receipts",
+   "path": "/support/articles/order-receipts",
+   "expect": [
+    "Rockstar Store Order Receipts"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Privacy policy",
+   "real": "https://www.rockstargames.com/privacy/",
+   "path": "/privacy",
+   "expect": [
+    "Privacy Policy"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Terms of service",
+   "real": "https://www.rockstargames.com/legal/",
+   "path": "/legal",
+   "expect": [
+    "Terms of Service"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Cookie policy",
+   "real": "https://www.rockstargames.com/cookies",
+   "path": "/cookie-policy",
+   "expect": [
+    "Cookie Policy"
+   ]
+  },
+  {
+   "kind": "page",
+   "label": "Do Not Sell or Share",
+   "real": "https://www.take2games.com/ccpa",
+   "path": "/ccpa",
+   "expect": [
+    "Do Not Sell or Share My Personal Information"
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Hero: Goodtime State collection",
+   "expect": [
+    "Grand Theft Auto VI: The Goodtime State – Vice City Collection",
+    "Pre-Order Now"
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Hero: Grand Theft Auto VI",
+   "expect": [
+    "Grand Theft Auto VI",
+    "Reserve today to unlock exclusive benefits and be ready to play at launch."
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Grand Theft Auto VI Collection block",
+   "expect": [
+    "Grand Theft Auto VI Collection"
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Popular Items shelf",
+   "expect": [
+    "Popular Items"
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Rockstar Games Collection block",
+   "expect": [
+    "Rockstar Games Collection"
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Grand Theft Auto VI: The Album promo",
+   "expect": [
+    "Grand Theft Auto VI: The Album"
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Shop Red Dead Redemption block",
+   "expect": [
+    "Shop Red Dead Redemption"
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Games and New Arrivals shelves",
+   "expect": [
+    "Games",
+    "New Arrivals"
+   ]
+  },
+  {
+   "kind": "home",
+   "label": "Cookie banner",
+   "expect": [
+    "ACCEPT ALL COOKIES",
+    "REJECT ALL",
+    "COOKIE SETTINGS"
+   ]
+  },
+  {
+   "kind": "sitemap",
+   "label": "Games",
+   "real": "https://store.rockstargames.com/view-all-games",
+   "path": "/view-all-games"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Grand Theft Auto VI",
+   "real": "https://store.rockstargames.com/game/buy-gta-vi",
+   "path": "/game/buy-gta-vi"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Grand Theft Auto V",
+   "real": "https://store.rockstargames.com/game/buy-gta-v",
+   "path": "/game/buy-gta-v"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Red Dead Redemption 2",
+   "real": "https://store.rockstargames.com/game/buy-red-dead-redemption-2",
+   "path": "/game/buy-red-dead-redemption-2"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Red Dead Redemption",
+   "real": "https://store.rockstargames.com/game/buy-red-dead-redemption",
+   "path": "/game/buy-red-dead-redemption"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Grand Theft Auto: The Trilogy – The Definitive Edition",
+   "real": "https://store.rockstargames.com/game/buy-grand-theft-auto-the-trilogy-the-definitive-edition",
+   "path": "/game/buy-grand-theft-auto-the-trilogy-the-definitive-edition"
+  },
+  {
+   "kind": "sitemap",
+   "label": "L.A. Noire",
+   "real": "https://store.rockstargames.com/game/buy-la-noire",
+   "path": "/game/buy-la-noire"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Bully: Scholarship Edition",
+   "real": "https://store.rockstargames.com/game/buy-bully-scholarship-edition",
+   "path": "/game/buy-bully-scholarship-edition"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Max Payne 3",
+   "real": "https://store.rockstargames.com/game/buy-max-payne-3",
+   "path": "/game/buy-max-payne-3"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Grand Theft Auto IV: Complete Edition",
+   "real": "https://store.rockstargames.com/game/buy-grand-theft-auto-iv",
+   "path": "/game/buy-grand-theft-auto-iv"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Grand Theft Auto: The Trilogy",
+   "real": "https://store.rockstargames.com/game/buy-grand-theft-auto-the-trilogy",
+   "path": "/game/buy-grand-theft-auto-the-trilogy"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Game Add-Ons",
+   "real": "https://store.rockstargames.com/game-add-ons",
+   "path": "/game-add-ons"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Grand Theft Auto Online: Shark Cash Cards",
+   "real": "https://store.rockstargames.com/buy-gta-v-shark-cash-cards",
+   "path": "/buy-gta-v-shark-cash-cards"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Red Dead Online: Gold Bars",
+   "real": "https://store.rockstargames.com/buy-red-dead-online-gold-bars",
+   "path": "/buy-red-dead-online-gold-bars"
+  },
+  {
+   "kind": "sitemap",
+   "label": "GTA+",
+   "real": "https://store.rockstargames.com/game/gta-plus",
+   "path": "/game/gta-plus"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Merchandise",
+   "real": "https://store.rockstargames.com/merchandise",
+   "path": "/merchandise"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Apparel",
+   "real": "https://store.rockstargames.com/search?sort=date.desc&subcategories%5Ball%5D=apparel",
+   "path": "/search?sort=date.desc&subcategories%5Ball%5D=apparel"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Accessories",
+   "real": "https://store.rockstargames.com/search?sort=date.desc&subcategories%5Ball%5D=accessories",
+   "path": "/search?sort=date.desc&subcategories%5Ball%5D=accessories"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Collectibles",
+   "real": "https://store.rockstargames.com/search?sort=date.desc&subcategories%5Ball%5D=collectible",
+   "path": "/search?sort=date.desc&subcategories%5Ball%5D=collectible"
+  },
+  {
+   "kind": "sitemap",
+   "label": "New Arrivals",
+   "real": "https://store.rockstargames.com/new-arrivals",
+   "path": "/new-arrivals"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Grand Theft Auto VI Collection",
+   "real": "https://store.rockstargames.com/grand-theft-auto-vi-collection",
+   "path": "/grand-theft-auto-vi-collection"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Grand Theft Auto Collection",
+   "real": "https://store.rockstargames.com/grand-theft-auto-collection",
+   "path": "/grand-theft-auto-collection"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Red Dead Redemption Collection",
+   "real": "https://store.rockstargames.com/red-dead-redemption-collection",
+   "path": "/red-dead-redemption-collection"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Rockstar Games Collection",
+   "real": "https://store.rockstargames.com/rockstar-collection",
+   "path": "/rockstar-collection"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Cart",
+   "real": "https://store.rockstargames.com/cart",
+   "path": "/cart"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Sign In",
+   "real": "https://signin.rockstargames.com/",
+   "path": "/signin"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Rockstar Support",
+   "real": "https://support.rockstargames.com/",
+   "path": "/support"
+  },
+  {
+   "kind": "sitemap",
+   "label": "Refunds",
+   "real": "https://store.rockstargames.com/refund-and-return-policy",
+   "path": "/refund-and-return-policy"
+  }
+ ]
+}
