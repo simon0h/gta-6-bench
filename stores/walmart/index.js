@@ -13,6 +13,7 @@ import * as P from './pages.js'
 import * as B from './browse.js'
 import { DEPARTMENTS, CAMPAIGNS, SELLERS, categorySlug } from './catalog.js'
 import { esc } from '../../lib/html.js'
+import { installParity } from './parity.js'
 
 const NAME = 'Walmart'
 const router = Router()
@@ -85,6 +86,9 @@ router.use((req,res,next)=>{
   next()
 })
 
+// walmart.com site chrome pages: all-departments, site map, department tree, policies, info pages.
+// Installed first so /store/directory is not taken by the sample-store route /store/:id.
+installParity(router, { render, tile: P.tile })
 registerJourneys(router, { render, notFound, gateUrl, addToCart })
 
 // ---- browse ----
@@ -102,7 +106,8 @@ router.get('/cp/:slug/:id',(req,res)=>{
  render(req,res,{title:`${d.name} - Walmart.com`,body:B.departmentPage({base:res.locals.base,department:d,filters:B.filtersFrom(req.query),page:req.query.page,tile:P.tile})})
 })
 router.get('/browse/:category',(req,res)=>{
- const category=PRODUCTS.find(p=>categorySlug(p.category)===req.params.category)?.category
+ // Menu categories from the fixture department list stay browsable even when the active catalog has none of them.
+ const category=PRODUCTS.find(p=>categorySlug(p.category)===req.params.category)?.category ?? DEPARTMENTS.flatMap(d=>d.categories).find(c=>categorySlug(c)===req.params.category)
  if(!category)return notFound(req,res)
  const source=PRODUCTS.filter(p=>p.category===category)
  render(req,res,{title:`${category} - Walmart.com`,body:B.listingPage({base:res.locals.base,route:`${res.locals.base}/browse/${req.params.category}`,title:category,source,filters:B.filtersFrom(req.query),page:req.query.page,tile:P.tile})})

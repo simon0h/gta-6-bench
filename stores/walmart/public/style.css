@@ -189,3 +189,86 @@ address{font-style:normal;line-height:1.5}
 .wm-pdp .wm-pdp-media{display:block;min-width:0}
 /* Item-specific pickup availability retains the shipping-only cart contract. */
 .wm-pickup-check{color:inherit;text-decoration:none;cursor:pointer}.wm-pickup-check:hover{border-color:#0071dc}.wm-pickup-check span{text-decoration:underline}.wm-pickup-availability{max-width:620px;margin:30px auto 70px;padding:26px;border:1px solid #d5d9dd;border-radius:10px}.wm-pickup-availability h1{font-size:26px}.wm-pickup-availability h2{font-size:17px;line-height:1.5}.wm-pickup-availability form{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:28px 0}.wm-pickup-availability input{border:1px solid #74767c;border-radius:5px;font:inherit;padding:12px;width:110px}
+/* ---- walmart.com parity pass (2026-10-13): homepage mosaic, flash deals, landing pages, info pages, footer ---- */
+body{font-family:"EverydaySans","Helvetica Neue",Helvetica,Arial,sans-serif}
+.wm-real-home{max-width:1500px;margin:0 auto}
+.wm-home-mosaic{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:16px;margin:8px 0 28px}
+.wm-mosaic-col{display:grid;grid-template-rows:1fr 1fr;gap:16px}
+.wm-promo{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;border-radius:12px;padding:20px;min-height:200px;overflow:hidden;text-decoration:none;color:#2e2f32}
+.wm-promo:hover{text-decoration:none}.wm-promo:hover h2{text-decoration:underline}
+.wm-promo>div{position:relative;z-index:1;max-width:58%}.wm-promo h2{font-size:22px;line-height:1.15;margin:0 0 6px}.wm-promo p{margin:0 0 12px;font-size:14px}
+.wm-promo .product-photo{position:absolute;right:12px;bottom:12px;width:44%;max-width:170px;border-radius:10px;mix-blend-mode:multiply}
+.wm-promo-peach{background:#fde8dc}.wm-promo-sky{background:#e6f1fc}.wm-promo-sand{background:#f5eedf}.wm-promo-mint{background:#e3f4ea}
+.wm-promo-blue{background:linear-gradient(135deg,#0053e2 0%,#003fae 100%);color:#fff;align-items:center;justify-content:center;text-align:center;min-height:416px}
+.wm-promo-big>div{max-width:80%}.wm-promo-big h2{font-size:44px;color:#fff;margin-bottom:12px}.wm-promo-big p{font-size:18px;color:#fff;margin-bottom:22px}
+.wm-promo-blue::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:#ffc220;opacity:.16;right:-140px;top:-160px}
+.wm-promo-blue .wm-pill-white{border-color:#fff;font-size:16px;padding:12px 26px}
+.wm-text-cta{text-decoration:underline;font-weight:400;font-size:14px}
+.wm-flash{background:#fff;border:1px solid #e3e4e5;border-radius:12px;padding:18px 20px;margin:0 0 28px}
+.wm-flash .wm-section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}.wm-flash h2{font-size:24px;margin:0}.wm-flash h3{font-size:14px;font-weight:400;color:#46474a;margin:2px 0 0}
+.wm-flash-cats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.wm-flash-cats a{position:relative;display:flex;flex-direction:column;gap:6px;text-decoration:none;font-size:14px}
+.wm-flash-cats .product-photo{width:100%;border-radius:8px;background-color:#f5f5f5!important;aspect-ratio:1!important}
+.wm-deal-flag{display:inline-block;align-self:flex-start;background:#ea1100;color:#fff;font-size:12px;font-weight:700;border-radius:4px;padding:1px 6px}
+.wm-flash-cats .wm-deal-flag{position:absolute;top:8px;left:8px}
+.wm-promo-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0 0 28px}.wm-promo-grid .wm-promo{min-height:240px}
+.wm-home-gta{margin-bottom:28px}
+.wm-crumbs{font-size:13px;color:#46474a;margin:4px 0 14px}.wm-crumbs a{color:#46474a}
+.wm-landing-hero{background:#f2f8fd;border-radius:12px;padding:24px 28px;display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:22px}
+.wm-landing-hero h1{font-size:32px;margin:0 0 6px}.wm-landing-hero p{margin:0;max-width:640px;color:#46474a}
+.wm-landing-hero .product-photo,.wm-landing-hero .wm-mono{width:120px;height:120px;border-radius:50%;flex:none}
+.wm-shop-by{margin:0 0 26px}.wm-shop-by h2{font-size:20px;margin:0 0 14px}
+.wm-cat-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:18px 14px}
+.wm-cat-tiles a{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;text-decoration:none;font-size:14px;line-height:1.3}
+.wm-cat-tiles a:hover span:last-child{text-decoration:underline}
+.wm-cat-tiles .product-photo,.wm-cat-tiles .wm-mono{width:100px;height:100px;border-radius:50%;background-color:#f2f8fd!important;aspect-ratio:1!important}
+.wm-mono{display:flex;align-items:center;justify-content:center;background:#e9f1fe;color:#0053e2;font-weight:700;font-size:28px;border-radius:50%}
+.wm-mono-gc{background:linear-gradient(135deg,#0053e2,#002e99)!important;color:#ffc220}
+.wm-empty-cat{text-align:center;padding:36px 20px;border:1px solid #e3e4e5;border-radius:12px}.wm-empty-cat h2{font-size:20px;margin:12px 0 8px}.wm-empty-cat p{max-width:560px;margin:0 auto 16px;color:#46474a}
+.wm-all-depts h1,.wm-sitemap h1{font-size:30px;margin:8px 0 20px}
+.wm-all-depts-grid{columns:4 240px;column-gap:28px}
+.wm-all-depts-grid>section{break-inside:avoid;margin:0 0 26px}
+.wm-all-depts-grid h2,.wm-all-depts-grid h3{font-size:16px;margin:0 0 8px}.wm-all-depts-grid h2 a,.wm-all-depts-grid h3 a{text-decoration:none}
+.wm-all-depts-grid ul,.wm-sitemap-cols ul{list-style:none;padding:0;margin:0}.wm-all-depts-grid li,.wm-sitemap-cols li{margin:0 0 7px;font-size:14px}
+.wm-all-depts-grid li a,.wm-sitemap-cols li a{color:#46474a;text-decoration:none}.wm-all-depts-grid li a:hover,.wm-sitemap-cols li a:hover{text-decoration:underline}
+.wm-sitemap>h2{font-size:22px;margin:10px 0 16px}.wm-sitemap-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;border-top:1px solid #e3e4e5;padding-top:22px}.wm-sitemap-cols h2{font-size:16px}
+.wm-info-page,.wm-help-article,.wm-store-dir,.wm-giftcards,.wm-deals,.wm-registry,.wm-all-depts,.wm-sitemap,.wm-landing{max-width:1400px;margin:0 auto}
+.wm-info-body{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:28px;margin-top:22px}.wm-info-body article p{font-size:16px;line-height:1.6;margin:0 0 14px}
+.wm-info-body aside{border:1px solid #e3e4e5;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;align-self:start}.wm-info-body aside h2{font-size:18px}
+.wm-help-kicker{color:#46474a;margin:6px 0 4px;font-size:16px}
+.wm-help-quick{background:#f2f8fd;border-radius:12px;padding:20px;margin:14px 0 24px}.wm-help-quick h2{font-size:18px}
+.wm-help-quick nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.wm-help-tile{background:#fff;border:1px solid #d6dbe2;border-radius:10px;padding:18px;font-weight:700;text-decoration:none;text-align:center}.wm-help-tile:hover{border-color:#0053e2}
+.wm-help-topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin:10px 0 24px}
+.wm-help-topics section{border:1px solid #e3e4e5;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}.wm-help-topics h2{font-size:17px}.wm-help-topics a{color:#46474a}
+.wm-help-article .wm-card{border:1px solid #e3e4e5;border-radius:12px;padding:24px;margin:12px 0}.wm-help-article h1{font-size:26px}.wm-help-article h2{font-size:18px;margin-top:18px}.wm-help-article p{line-height:1.6}
+.wm-help-related{display:flex;flex-wrap:wrap;gap:10px 22px;margin:8px 0 20px}
+.wm-store-dir h1{font-size:30px}.wm-state-list{list-style:none;padding:0;columns:4 180px;margin:14px 0 24px}.wm-state-list li{margin:0 0 9px}
+.wm-inline-form{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid #e3e4e5;border-radius:12px;padding:18px;margin:16px 0}.wm-inline-form input{padding:9px 12px;border:1px solid #777;border-radius:4px;font:inherit}
+.wm-gc-hero,.wm-reg-hero,.wm-deals-hero{background:linear-gradient(120deg,#0053e2,#002e99);color:#fff;border-radius:12px;padding:30px 34px;display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:24px}
+.wm-deals-hero{display:block}
+.wm-gc-hero h1,.wm-reg-hero h1,.wm-deals-hero h1{font-size:32px;color:#fff}.wm-gc-hero p,.wm-reg-hero p,.wm-deals-hero p,.wm-reg-hero h2{color:#fff}.wm-eyebrow{font-weight:700;opacity:.9;margin:0 0 6px}
+.wm-gc-card{width:230px;height:145px;border-radius:14px;background:#ffc220;box-shadow:0 8px 24px #0004;display:flex;align-items:flex-end;padding:16px;flex:none}.wm-gc-card b{font-size:22px;color:#0053e2}
+.wm-gc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:0 0 26px}.wm-gc-grid article{border:1px solid #e3e4e5;border-radius:12px;padding:20px}.wm-gc-grid h2{font-size:18px}.wm-gc-grid h3{font-size:14px;font-weight:400;color:#46474a}
+.wm-gc-grid form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.wm-gc-grid input{padding:8px;border:1px solid #777;border-radius:4px;font:inherit}
+.wm-gc-ways>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.wm-gc-ways article{background:#f2f8fd;border-radius:12px;padding:18px}
+.wm-giftcards>section,.wm-deals>section,.wm-registry>section{margin-bottom:26px}
+.wm-faq details{border-bottom:1px solid #e3e4e5;padding:12px 0}.wm-faq summary{cursor:pointer}.wm-faq summary h3{display:inline;font-size:16px}
+.wm-about{background:#f8f8f8;border-radius:12px;padding:20px}.wm-about h2{font-size:17px}
+.wm-deal-chips{margin:0 0 22px}
+.wm-deal-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.wm-deal-tiles a{border:1px solid #e3e4e5;border-radius:12px;padding:18px;text-decoration:none;display:flex;flex-direction:column;gap:6px}.wm-deal-tiles h3{font-size:18px;margin:4px 0 0}
+.wm-deals-split{display:grid;grid-template-columns:1fr 1fr;gap:16px}.wm-deals-split article{background:#f2f8fd;border-radius:12px;padding:20px}
+.wm-benefits{columns:2;padding-left:18px}.wm-benefits li{margin:0 0 6px}
+.wm-plus-half{background:#fff8e1;border-radius:12px;padding:18px 22px;margin:18px 0}
+.wm-balance{max-width:560px}.wm-balance .wm-card{border:1px solid #e3e4e5;border-radius:12px;padding:20px;margin:14px 0;display:block}
+.wm-service-menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}.wm-service-menu-panel{min-width:420px}
+.wm-mega-grid .wm-menu-dept{font-weight:700}
+.wm-footer{background:none;margin-top:48px;padding:0;font-size:13px}
+.wm-feedback{background:#e9f1fe;display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 16px;border:0}.wm-feedback p{margin:0;font-size:16px}
+.wm-footer-main{background:#002d58;color:#fff;padding:22px 24px 18px}
+.wm-footer-main .wm-footer-links{gap:10px 22px;max-width:1100px;margin:0 auto;padding:10px 0}.wm-footer-main a{color:#fff;font-size:13px}
+.wm-footer-sub{border-top:1px solid #ffffff2e}.wm-footer-main .wm-copy{color:#fff}.wm-footer-main p{color:#dfe7f3}
+.wm-id-footer nav a{margin:0 8px;color:#2e2f32;font-size:12px}
+@media(max-width:1100px){.wm-home-mosaic{grid-template-columns:1fr 1fr}.wm-home-mosaic>.wm-promo-big{grid-column:1/-1;grid-row:1;min-height:300px}.wm-flash-cats{grid-template-columns:repeat(3,minmax(0,1fr))}.wm-promo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wm-deal-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.wm-sitemap-cols{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.wm-home-mosaic{grid-template-columns:1fr}.wm-promo-big h2{font-size:32px}.wm-promo h2{font-size:19px}.wm-promo{min-height:170px}.wm-flash-cats{grid-template-columns:repeat(2,minmax(0,1fr))}.wm-promo-grid{grid-template-columns:1fr 1fr;gap:10px}.wm-promo-grid .wm-promo{min-height:210px;padding:14px}.wm-promo-grid .wm-promo>div{max-width:100%}.wm-promo-grid .product-photo{width:55%}.wm-info-body,.wm-deals-split,.wm-gc-ways>div{grid-template-columns:1fr}.wm-help-quick nav{grid-template-columns:1fr 1fr}.wm-gc-hero,.wm-reg-hero,.wm-landing-hero{flex-direction:column;align-items:flex-start;padding:20px}.wm-gc-card{width:180px;height:112px}.wm-landing-hero h1,.wm-gc-hero h1{font-size:24px}.wm-cat-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}.wm-cat-tiles .product-photo,.wm-cat-tiles .wm-mono{width:84px;height:84px}.wm-sitemap-cols{grid-template-columns:1fr}.wm-service-menu-panel{min-width:0}.wm-deal-tiles{grid-template-columns:1fr}}
+.wm-footer .wm-feedback{margin:0}
