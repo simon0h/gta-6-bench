@@ -1,12 +1,13 @@
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
-import { productImage, productGallery } from '../../lib/product-assets.js'
+import { productImage as assetImage, productGallery as assetGallery } from '../../lib/product-assets.js'
+import { shelfImage, shelfGallery } from './shelf.js'
 import { productPhoto } from '../../lib/product-photos.js'
 import { DEPARTMENTS, CAMPAIGNS, categorySlug } from './catalog.js'
 import { FOOTER_COLUMNS, ACCOUNT_LINKS } from './site.js'
 import { esc, money, disclaimer } from '../../lib/html.js'
 import {
-  PRODUCTS, quantityLimit, byId, selectedProduct, eligibleMethods, productPath, productHref, facets, countdown, SORTS, DELIVERY_METHODS, INTERNATIONAL_DELIVERY, PDP_DELIVERY_ORDER, CHECKOUT_DELIVERY_ORDER,
+  CATALOG, quantityLimit, byId, selectedProduct, eligibleMethods, productPath, productHref, facets, countdown, SORTS, DELIVERY_METHODS, INTERNATIONAL_DELIVERY, PDP_DELIVERY_ORDER, CHECKOUT_DELIVERY_ORDER,
   COLLECT_STORES, BENCHMARK_COLLECT_STORE, TITLES, MAX_QTY, RELEASE_TEXT, RELEASE_SHORT, DISPATCH_TEXT, PREORDER_NOTICE_1, PREORDER_NOTICE_2, LEGAL_TEXT,
 } from './data.js'
 
@@ -84,7 +85,7 @@ function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
     <form class="gu-search" action="${base}/searchresults" method="get" role="search">
       <input type="search" name="descriptionfilter" value="${esc(q)}" placeholder="Search product or brand" aria-label="Search product or brand" list="gu-suggestions">
       <button type="submit" aria-label="Search">${ICON.search}</button>
-      <datalist id="gu-suggestions">${[...new Set(PRODUCTS.map(p=>p.brand)), "Nintendo", "headset", "LEGO", "gta 6", "monitor"].map(x=>`<option value="${esc(x)}">`).join('')}</datalist>
+      <datalist id="gu-suggestions">${[...new Set(CATALOG.map(p=>p.brand)), "Nintendo", "headset", "LEGO", "gta 6", "monitor"].map(x=>`<option value="${esc(x)}">`).join('')}</datalist>
     </form>
     <nav class="gu-icons" aria-label="Account and bag">
       <a href="${base}/stores">${ICON.pin}<span>Stores</span></a>
@@ -159,6 +160,9 @@ ${cookieChoice ? '' : cookieBanner(base, back)}
 }
 
 // ---- browse ----
+// Assortment rows draw their pictures from the store's own /images/products/ route (shelf.js).
+const productImage = (store, p, opts) => p.shelf ? shelfImage('/'+store, p, opts) : assetImage(store, p, opts)
+const productGallery = (store, p) => p.shelf ? shelfGallery('/'+store, p) : assetGallery(store, p)
 export function artwork(p,className='') { return productImage('game-uk',{...p,variantId:p.option},{className}) }
 
 function tile(base, p, back) {
@@ -174,7 +178,8 @@ function tile(base, p, back) {
 
 // Homepage sections in the order seen on www.game.co.uk (2026-09-29 / 2026-10-13): round
 // category shortcuts, Coming Soon hero, Gifts For Gamers, Frasers Plus band, Trending, Gift Shop.
-// Product tiles only ever show catalogue rows (reference mode: the two GTA VI listings).
+// Reference mode adds the real homepage's Coming Soon carousel plus department rows from the
+// GAME assortment (shelf.js), so GTA VI is one product among many.
 const SHORTCUTS = [['Coming Soon','/coming-soon'],['XBOX','/xbox/all-xbox'],['PlayStation','/playstation'],['Nintendo','/nintendo'],['Pokemon','/pokemon'],['LEGO','/lego'],['Toys','/toys'],['PC','/pc-gaming']]
 const SHORTCUT_ICON = {
   XBOX: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><path d="M15 14c6 4 12 12 18 22M33 14c-6 4-12 12-18 22" stroke="currentColor" stroke-width="3" fill="none"/></svg>',
@@ -189,18 +194,35 @@ const GIFT_SHOP = [['Gifts For Gamers','/gifts/gifts-for-gamers','Headsets, cont
 
 export function homePage({ base, products }) {
   const gta = products.filter(p => p.kind === 'game' && p.preorder)
-  const trending = fixtureCatalog ? [...gta, ...products.filter(p=>['991202','992007','992001','991203'].includes(p.id))].slice(0,6) : gta
-  const section = (title, list, href) => `<section class="gu-trending"><div class="gu-section-title"><h2>${esc(title)}</h2><a href="${href}">Shop all →</a></div><div class="gu-grid gu-shelf">${list.slice(0,4).map(p=>tile(base,p,base+'/')).join('')}</div></section>`
+  const pick = ids => ids.map(id => products.find(p => p.id === id)).filter(Boolean)
+  // Trending as on www.game.co.uk (2026-10-13): GTA VI, FC27, Star Wars Galactic Racer, Yu-Gi-Oh! Beyond the Brave.
+  const trending = fixtureCatalog ? [...gta, ...products.filter(p=>['991202','992007','992001','991203'].includes(p.id))].slice(0,6) : pick(['756802','753767','754376','740026'])
+  const section = (title, list, href, row='') => `<section class="gu-trending"${row?` data-home-row="${row}"`:''}><div class="gu-section-title"><h2>${esc(title)}</h2><a href="${href}">Shop all →</a></div><div class="gu-grid gu-shelf">${list.slice(0,4).map(p=>tile(base,p,base+'/')).join('')}</div></section>`
+  const shelf = products.filter(p => p.shelf)
+  const dealPct = p => (p.ticketPrice - p.price) / p.ticketPrice
+  const comingSoon = fixtureCatalog ? '' : section('Coming Soon', pick(['756802','900043','757759','756389']), base+'/coming-soon', 'coming-soon')
+  const shelfRows = fixtureCatalog ? '' : [
+    section('Top Deals', [...shelf].filter(p => !p.preorder && p.ticketPrice > p.price).sort((a,b) => dealPct(b) - dealPct(a) || b.price - a.price).filter((p,i,a) => a.findIndex(x => x.category === p.category) === i), base+'/deals', 'deals'),
+    section('Nintendo Switch 2', pick(['719937','719950','753530','758743']), base+'/nintendo', 'nintendo'),
+    section('Controllers & Headsets', pick(['384553','371325','857967','712252']), base+'/accessories', 'accessories'),
+    section('Trading Cards', pick(['741118','740747','741022','741183']), base+'/toys/trading-cards', 'trading-cards'),
+    section('PC Gaming', pick(['735536','414107','394064','384680']), base+'/pc-gaming', 'pc-gaming'),
+    section('LEGO', pick(['921347','988225','702500','988246']), base+'/lego', 'lego'),
+    section('Tech', pick(['700010','389751','388435','807125']), base+'/tech', 'tech'),
+    section('Plush & Board Games', pick(['397092','418479','890547','725624']), base+'/toys', 'toys'),
+  ].join('')
   const discoveries = [['Gaming PCs & Laptops','/pc-gaming/laptops','laptop'],['Plush & Soft Toys','/toys/soft-toys','plush-rabbit'],['Creative Building Sets','/lego/building-sets','brick-city-bus'],['Trading Card Storage','/toys/trading-cards/card-storage','card-binder-red']]
   const fixtureExtras = fixtureCatalog ? `<section class="gu-popular"><div class="gu-section-title"><h2>Popular Categories</h2><a href="${base}/searchresults">Shop all →</a></div><div class="gu-discoveries">${discoveries.map(([title,url,photo])=>`<a href="${base}${url}">${productPhoto(photo,title)}<h3>${title}</h3><span>Shop all →</span></a>`).join('')}</div></section>
   ${section('Level up your PC setup',products.filter(p=>p.departments.includes('pc-gaming')),base+'/pc-gaming')}
   ${section('Great finds under £30',products.filter(p=>p.campaigns.includes('under-30')&&!p.keywords.includes('gta')),base+'/campaign/under-30')}` : ''
   return `<section class="gu-circles" aria-label="Shop by category">${SHORTCUTS.map(([name,url],i)=>`<a href="${base}${url}"><span class="gu-circle gu-circle-${i}">${i===0&&gta[0]?artwork(gta[0]):SHORTCUT_ICON[name]}</span><span>${esc(name)}</span></a>`).join('')}</section>
   <section class="gu-hero" aria-labelledby="gu-hero-title"><div class="gu-hero-copy"><p class="gu-hero-kicker">PRE-ORDER NOW</p><h1 id="gu-hero-title">Coming Soon</h1><p>Be first in line for the biggest upcoming releases on PlayStation and Xbox.</p><a class="gu-btn gu-btn-black" href="${base}/coming-soon">Shop Now</a></div><div class="gu-hero-covers" aria-hidden="true">${gta.slice(0,2).map(p=>productImage('game-uk',p)).join('')}</div></section>
+  ${comingSoon}
   <section class="gu-gifts-panel"><div><h2>Gifts For Gamers</h2><p>Find their next game, console or favourite accessory.</p></div><div class="gu-campaign-links"><a class="gu-btn" href="${base}/games">Games</a><a class="gu-btn" href="${base}/playstation">PS5</a><a class="gu-btn" href="${base}/xbox/all-xbox">XBOX</a><a class="gu-btn" href="${base}/nintendo">Switch</a></div></section>
   <section class="gu-fplus"><div><b>FRASERS<span>PLUS</span></b><h2>SPREAD THE COST OF GIFTING*</h2><p>Buy now. Pay in 3, interest free.</p><small>Representative APR 29.9% (variable). Credit subject to status. Terms apply.</small></div><a class="gu-btn gu-btn-light" href="${base}/frasersplus">Find out more</a></section>
-  <section class="gu-trending"><div class="gu-section-title"><h2>Trending</h2><a href="${base}/coming-soon">Shop all →</a></div><div class="gu-grid gu-shelf">${trending.map(p=>tile(base,p,base+'/')).join('')}</div></section>
+  <section class="gu-trending" data-home-row="trending"><div class="gu-section-title"><h2>Trending</h2><a href="${base}/coming-soon">Shop all →</a></div><div class="gu-grid gu-shelf">${trending.map(p=>tile(base,p,base+'/')).join('')}</div></section>
   <section class="gu-gift-shop"><div class="gu-section-title"><h2>Gift Shop</h2><a href="${base}/gifts">Shop all gifts →</a></div><div class="gu-cat-grid">${GIFT_SHOP.map(([l,u,d],i)=>`<a class="gu-cat-tile gu-tone-${i%6}" href="${base}${u}"><span class="gu-cat-mark" aria-hidden="true">${esc(l.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase())}</span><span>${esc(l)}</span><small>${esc(d)}</small></a>`).join('')}</div></section>
+  ${shelfRows}
   ${fixtureExtras}`
 }
 
@@ -229,7 +251,7 @@ export function searchPage({ base, q='', products, facetProducts=products, filte
 export function productPage({ base, p, modal = null, qty = 1, wished = false, option = '', error = '' }) {
   const original = p
   p = selectedProduct(p,option) || p
-  const related = PRODUCTS.filter(x=>x.id!==p.id && x.family!==p.family && x.departments.some(d=>p.departments.includes(d))).sort((a,b)=>Number(b.category===p.category)-Number(a.category===p.category)).slice(0,4)
+  const related = CATALOG.filter(x=>x.id!==p.id && x.family!==p.family && x.departments.some(d=>p.departments.includes(d))).sort((a,b)=>Number(b.category===p.category)-Number(a.category===p.category)).slice(0,4)
   const path = productPath(base, p)
   const isGame = p.kind === 'game'
   const hidden = (n, v) => `<input type="hidden" name="${n}" value="${esc(v)}">`
@@ -243,7 +265,7 @@ export function productPage({ base, p, modal = null, qty = 1, wished = false, op
   if (modal === 'preorder') {
     modalHtml = `<div class="gu-modal-backdrop"><div class="gu-modal" role="dialog" aria-labelledby="modal-title">
   <div class="gu-modal-head"><h2 id="modal-title">Pre-order</h2><a class="gu-modal-close" href="${path}" aria-label="Close">&times;</a></div>
-  <div class="gu-modal-body">${productImage('game-uk',p)}<div><p>${PREORDER_NOTICE_1}</p><p><b>${RELEASE_TEXT}</b></p><p>${PREORDER_NOTICE_2}</p></div></div>
+  <div class="gu-modal-body">${productImage('game-uk',p)}<div><p>${PREORDER_NOTICE_1}</p><p><b>${p.releaseText||RELEASE_TEXT}</b></p><p>${PREORDER_NOTICE_2}</p></div></div>
   <div class="gu-modal-foot"><a class="gu-btn gu-btn-black" href="${path}">Cancel</a>${addForm('Add to bag', 'gu-btn')}</div>
 </div></div>`
   } else if (modal === 'age') {
@@ -282,12 +304,12 @@ export function productPage({ base, p, modal = null, qty = 1, wished = false, op
       <button class="gu-btn gu-btn-block gu-cta" type="submit" ${modal||!quantityLimit(p) ? 'disabled' : ''}>${!quantityLimit(p)?'Out of stock':modal ? 'Adding...' : cta.label}</button>
     </form>
     <script>document.getElementById('gu-share').addEventListener('click',async function(){var result=document.getElementById('gu-share-result');try{await navigator.clipboard.writeText(location.origin+${JSON.stringify(path+(option?'?option='+encodeURIComponent(option):''))});result.textContent='Link copied'}catch(e){result.textContent='Copy this address: '+location.origin+${JSON.stringify(path+(option?'?option='+encodeURIComponent(option):''))}}});${original.options?`document.getElementById('option').addEventListener('change',function(){document.getElementById('gu-buy-form').requestSubmit(document.getElementById('gu-option-preview'))})`:''}</script>
-    ${p.preorder ? `<div class="gu-countdown"><b>Release Date: ${RELEASE_SHORT}</b><span>${countdown() ?? 'Out now'}</span></div>` : ''}
+    ${p.preorder ? `<div class="gu-countdown"><b>Release Date: ${p.releaseShort||RELEASE_SHORT}</b><span>${countdown(Date.now(), p.release||undefined) ?? 'Out now'}</span></div>` : ''}
     ${p.pegi ? `<p class="gu-pegi-line"><b>Pegi Rating:</b> Suitable for people aged ${p.pegi} and over. <a href="${informationHref(base, 'Read More...')}">Read More...</a></p>` : ''}
   </div>
   <div class="gu-pdp-info">
     <details class="gu-acc" open><summary>Description</summary><div class="gu-acc-body">
-      ${p.preorder ? `<p class="gu-preorder-info">${ICON.info}<span>${PREORDER_NOTICE_1} <b>${RELEASE_TEXT}</b>. ${PREORDER_NOTICE_2}</span></p>` : ''}
+      ${p.preorder ? `<p class="gu-preorder-info">${ICON.info}<span>${PREORDER_NOTICE_1} <b>${p.releaseText||RELEASE_TEXT}</b>. ${PREORDER_NOTICE_2}</span></p>` : ''}
       <p>Product code: ${esc(p.id)}</p>
       <p><b>${esc(p.title)}</b></p>
       ${p.description.map(d => `<p>${esc(d)}</p>`).join('')}
@@ -328,7 +350,7 @@ export function cartPage({ base, t, notice = null }) {
       <button type="submit" name="action" value="remove" class="gu-link-btn">Remove</button><button type="submit" name="action" value="wishlist" class="gu-link-btn">Move to wish list</button>
     </form>
     <p class="gu-fine">${l.product.digital ? 'This product is a digital code and will be delivered by email.' : `This product will be delivered by ${esc(l.product.carrier)}, and may arrive separately to other items in your basket.`}</p>
-    ${l.product.preorder ? `<p class="gu-fine gu-preorder-info">${ICON.info} Pre-order: available for delivery from ${RELEASE_TEXT}. Your entire order will be held until all items are available.</p>` : ''}
+    ${l.product.preorder ? `<p class="gu-fine gu-preorder-info">${ICON.info} Pre-order: available for delivery from ${l.product.releaseText||RELEASE_TEXT}. Your entire order will be held until all items are available.</p>` : ''}
   </div>
 </div>`).join('')
   return `<div class="gu-cart">

@@ -1,11 +1,11 @@
 // Site structure captured from www.game.co.uk on 2026-10-13 (homepage, department pages,
 // /sitemap Categories directory, /deals, /coming-soon). See research/parity/game-uk.json.
 // Landing pages reproduce the real page shape (breadcrumb, tiles, "In This Section",
-// filters, sort, editorial copy). Product grids only ever list rows from data.js PRODUCTS,
-// so in reference mode most categories show the empty "0 Products" state.
+// filters, sort, editorial copy). Product grids list rows from data.js CATALOG
+// (reference mode: the GTA VI listings plus the GAME assortment in shelf.js).
 
 const CAT = (...names) => p => names.includes(p.category) || names.includes(p.browseCategory)
-const PLATFORM = { ps: p => p.platformFacet === 'PS5', xbox: p => p.platformFacet === 'Xbox', nintendo: p => p.platformFacet === 'Nintendo' || p.brand === 'Nintendo', pc: p => p.platformFacet === 'PC' || (p.departments || []).includes('pc-gaming') }
+const PLATFORM = { ps: p => p.platformFacet === 'PS5', xbox: p => p.platformFacet === 'Xbox', nintendo: p => String(p.platformFacet || '').startsWith('Nintendo') || p.brand === 'Nintendo', pc: p => p.platformFacet === 'PC' || (p.departments || []).includes('pc-gaming') }
 const ACCESSORY = CAT('Controllers', 'Headsets', 'Racing Wheels', 'Charging Docks', 'Carry Cases')
 const DEAL = p => p.ticketPrice > p.price
 const and = (...fns) => p => fns.every(f => f(p))
@@ -37,7 +37,7 @@ export const CATEGORY_TREE = [
   ['Coming Soon', '/coming-soon', [
     ['PC Coming Soon', '/coming-soon/pc', [], { match: and(p => p.preorder, PLATFORM.pc) }],
     ['Toys Coming Soon', '/coming-soon/toys', [], { match: NONE }],
-    ['Trading Cards Coming Soon', '/coming-soon/trading-cards', [], { match: NONE }],
+    ['Trading Cards Coming Soon', '/coming-soon/trading-cards', [], { match: p => p.preorder && p.category === 'Trading Cards' }],
   ], { match: p => p.preorder, intro: "Keep an eye on what's coming next at GAME.", section: [['Trading Cards Coming Soon', '/coming-soon/trading-cards'], ['Toys Coming Soon', '/coming-soon/toys']] }],
   ['Deals', '/deals', [
     ['2 for £20', '/deals/2-for-20'], ['Accessory Deals', '/deals/accessories'], ['ASUS Peripherals', '/deals/asus-peripherals'], ['Board Games Deals', '/deals/board-games'],
@@ -124,7 +124,37 @@ export const LANDINGS = {
 
 // Infer a listing filter for pages only reached from tiles: platform from the path,
 // product kind from the last segment. Undetermined pages list nothing.
+const DEPT = (...ids) => p => (p.departments || []).some(d => ids.includes(d))
+const TITLE = re => p => re.test(p.title)
+const DIGITAL = DEPT('digital')
+// Merchandise landings that the generic rules below cannot place (most specific first).
+const SPECIFIC = [
+  [/black-friday|christmas|events|halloween|frasers-plus|game-exclusives|homeware|merchandise|clothing|retro|2-for-20|warehouse|asus-peripherals|days-of-play|just-landed/, () => NONE],
+  [/pokemon/, () => TITLE(/pok[eé]mon/i)],
+  [/lego/, () => p => p.brand === 'LEGO' || /\blego\b/i.test(p.title)],
+  [/trading-card|\/tcg|booster/, () => CAT('Trading Cards')],
+  [/board-games/, () => CAT('Board Games')],
+  [/plush|soft-toys/, () => CAT('Soft Toys')],
+  [/wooden/, () => CAT('Wooden Toys')],
+  [/game-pass|gamepass/, () => and(DIGITAL, TITLE(/game pass/i))],
+  [/nintendo-switch-online|eshop/, () => and(DIGITAL, p => p.brand === 'Nintendo')],
+  [/gift-card|e-vouchers|digital-gift/, () => CAT('Gift Cards')],
+  [/digital|credit|add-ons|subscriptions/, plat => plat ? and(DIGITAL, plat) : DIGITAL],
+  [/deals|sale|clearance|30-off|50-off|70-off|80-off|90-off|under-15/, plat => plat ? and(DEAL, plat) : DEAL],
+  [/monitor/, () => CAT('Monitors')], [/keyboard/, () => CAT('Keyboards')], [/mice|mouse/, () => CAT('Mice')],
+  [/chair/, () => CAT('Gaming Chairs')], [/headphones|earbuds/, () => CAT('Headphones')], [/speaker/, () => CAT('Speakers')],
+  [/lighting|lights/, () => CAT('Smart Lighting')], [/steering|wheel|racing-wheel/, () => CAT('Racing Wheels')],
+  [/charging|battery|docks?$/, plat => plat ? and(CAT('Charging Docks'), plat) : CAT('Charging Docks')],
+  [/\/toys/, () => DEPT('toys')], [/\/tech/, () => DEPT('tech')], [/pc-gaming/, () => DEPT('pc-gaming')],
+]
+
 export function inferMatch(path) {
+  const platform = /playstation|ps5/.test(path) ? PLATFORM.ps : /xbox/.test(path) ? PLATFORM.xbox : /nintendo/.test(path) ? PLATFORM.nintendo : null
+  if (/\/(?:games|consoles|controllers|headsets|accessories)$/.test(path) && !/digital|deal|sale|clearance|black-friday/.test(path)) return generic(path)
+  for (const [re, make] of SPECIFIC) if (re.test(path)) return make(platform)
+  return generic(path)
+}
+function generic(path) {
   const plat = /playstation|ps5/.test(path) ? PLATFORM.ps : /xbox/.test(path) ? PLATFORM.xbox : /nintendo/.test(path) ? PLATFORM.nintendo : null
   if (/digital|gift|eshop|game-pass|gamepass|credit|deal|sale|clearance|black-friday|bundles|disc-edition|digital-edition|lego|toys|cards/.test(path)) return NONE
   const kind = /\/games$/.test(path) ? CAT('Video Games') : /consoles/.test(path) ? CAT('Consoles') : /controllers/.test(path) ? CAT('Controllers') : /headsets/.test(path) ? CAT('Headsets') : /accessories$/.test(path) ? ACCESSORY : null

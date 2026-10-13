@@ -2,6 +2,7 @@ import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
 import { CATALOG_EVIDENCE } from './catalog-evidence.js'
 import { extendCatalog } from './catalog.js'
 import { scenarioProduct, scenarioStockFor } from '../../lib/benchmark-scenarios.js'
+import { SHELF } from './shelf.js'
 // Listings as they appear on game.co.uk (research/game-uk.md, 2026-09-29).
 // GAME runs on the shared Frasers Group platform: each platform is its own
 // 6-digit product code (plus an 8-digit "colcode" variant), the platform is
@@ -123,9 +124,16 @@ if (!fixtureCatalog) for (const p of PRODUCTS) {
   delete p.stock; p.purchaseLimit = 99; p.catalogType = 'game'; p.catalogPlatform = p.platform
   p.badges = p.badges.filter(b => b !== 'TRENDING')
 }
+// PRODUCTS stays the evidence-backed GTA VI listings only in reference mode (inventory.js,
+// applyCatalogPolicy reports). The browsable store also carries GAME's everyday assortment
+// (shelf.js); fixture mode keeps its own authored catalog unchanged.
+export const ASSORTMENT = fixtureCatalog ? [] : SHELF
+// Listing order is "Most Popular": the GTA VI listings sit among the best sellers, not on top.
+export const CATALOG = fixtureCatalog ? PRODUCTS : [...ASSORTMENT.slice(0, 5), ...PRODUCTS, ...ASSORTMENT.slice(5)]
 export const quantityLimit = p => p?.purchaseLimit ?? p?.stock ?? 0
 
-export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
+const BY_ID = new Map(CATALOG.map(p => [p.id, p]))
+export const byId = (id) => BY_ID.get(String(id)) ?? null
 
 // The real URL is /{brand}-{name}-{6-digit code}#colcode={8-digit variant}. Anything
 // ending in a known 6-digit code resolves (the site redirects to the canonical slug).
@@ -140,15 +148,23 @@ export const productHref = (base, p) => `${base}/${p.slug}${p.option?'?option='+
 // Top-level nav department for each breadcrumb root, so the header nav and breadcrumb
 // links (which run a search here) land on the products that live under them.
 // ASSUMPTION: GAME files Shark Cash Cards under "Digital Gift Cards" in the nav.
-const DEPT = { 'Video Games': 'Consoles & Video Games', Consoles: 'Consoles & Video Games', Accessories: 'Consoles & Video Games', Toys: 'Toys & Games', 'PlayStation Gaming': 'Consoles & Video Games', 'Xbox Gaming': 'Consoles & Video Games', 'Digital Downloads': 'Digital Gift Cards', Tech: 'Tech' }
+const DEPT = { 'Video Games': 'Consoles & Video Games', Consoles: 'Consoles & Video Games', Accessories: 'Consoles & Video Games', Toys: 'Toys & Games', 'PlayStation Gaming': 'Consoles & Video Games', 'Xbox Gaming': 'Consoles & Video Games', 'Digital Downloads': 'Digital Gift Cards', Tech: 'Tech', 'Nintendo Gaming': 'Consoles & Video Games nintendo switch', 'PC Gaming': 'PC Gaming pc' }
 
 export function search(q, { platform, category, price, style, brand, age, department, campaign, availability } = {}) {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  return PRODUCTS.filter(p => {
+  // Assortment rows match whole-word prefixes (singular or plural), so "6" or "tv" does not hit
+  // unrelated words; the GTA VI listings keep their original substring match.
+  const wordHit = (hay, t) => hay.includes(' ' + (t.length > 3 && t.endsWith('s') ? t.slice(0, -1) : t))
+  const found = CATALOG.filter(p => {
     const hay = norm(`${p.brand} ${p.title} ${p.keywords} ${p.crumbs.join(' ')} ${DEPT[p.crumbs[0]] ?? ''} ${p.category} ${p.style ?? ''}`)
-    return tokens.every(t => hay.includes(t)) && (!platform || p.platformFacet === platform) && (!category || p.category === category || p.browseCategory === category) && (!style || p.style === style) && (!brand || p.brand === brand) && (!age || p.age === age) && (!department || p.departments.includes(department)) && (!campaign || p.campaigns.includes(campaign)) && (!availability || (availability === 'In stock' ? p.stock > 0 : availability === 'Out of stock' && p.stock === 0)) && (!price || PRICE_BANDS.some(b => b.label === price && p.price >= b.min && p.price < b.max))
+    return tokens.every(t => p.shelf ? wordHit(' ' + hay, t) : hay.includes(t)) && (!platform || p.platformFacet === platform) && (!category || p.category === category || p.browseCategory === category) && (!style || p.style === style) && (!brand || p.brand === brand) && (!age || p.age === age) && (!department || p.departments.includes(department)) && (!campaign || p.campaigns.includes(campaign)) && (!availability || (availability === 'In stock' ? p.stock > 0 : availability === 'Out of stock' && p.stock === 0)) && (!price || PRICE_BANDS.some(b => b.label === price && p.price >= b.min && p.price < b.max))
   })
+  // Relevance: a GTA search lists the Grand Theft Auto VI listings first.
+  if (/\bgta\b|gta ?(?:6|vi)|grand theft/i.test(String(q ?? ''))) return [...found.filter(p => p.kind === 'game'), ...found.filter(p => p.kind !== 'game')]
+  // Otherwise rows whose title matches every term come before keyword-only matches.
+  if (tokens.length && !fixtureCatalog) { const inTitle = p => { const t = ' ' + norm(`${p.brand} ${p.title}`); return tokens.every(x => t.includes(' ' + x)) }; return [...found.filter(inTitle), ...found.filter(p => !inTitle(p))] }
+  return found
 }
 
 export function selectedProduct(p, option) {
@@ -266,8 +282,8 @@ export function totals(store, deliveryId = null) {
 }
 
 // "49 days 22 hours left to pre-order" (live countdown on the PDP).
-export function countdown(now = Date.now()) {
-  const ms = new Date(`${RELEASE_ISO}T00:00:00Z`).getTime() - now
+export function countdown(now = Date.now(), iso = RELEASE_ISO) {
+  const ms = new Date(`${iso}T00:00:00Z`).getTime() - now
   if (ms <= 0) return null
   const days = Math.floor(ms / 86400000)
   const hours = Math.floor((ms % 86400000) / 3600000)
