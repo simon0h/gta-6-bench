@@ -2,8 +2,8 @@ import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { CATALOG_PLATFORMS, pageWindow } from '../amazon/assortment500.js'
 import { esc, money } from '../../lib/html.js'
 import { productPhoto } from '../../lib/product-photos.js'
-import { PRODUCTS, productPath, stockLimit, selectedProduct, PREORDER_ARRIVAL } from './data.js'
-import { DEPARTMENTS, CAMPAIGNS } from './catalog.js'
+import { CATALOG as PRODUCTS, SHELF_ITEMS, ALL_DEPARTMENTS as DEPARTMENTS, departmentOf, productPath, stockLimit, selectedProduct, PREORDER_ARRIVAL } from './data.js'
+import { CAMPAIGNS } from './catalog.js'
 import { productImage, optionText, targetIcon, productGallery } from './media.js'
 export const brandSlug = name => name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'')
 const url = (path, changes={}) => {
@@ -29,7 +29,7 @@ const tiles=(base,products,path)=>`<div class="tg-grid">${products.map(p=>catalo
 const hero=(base,{title,tagline,description,image,href,cta='Shop now'})=>`<section class="tg-depth-hero" style="background-image:url('/static/art/depth/${image}.png')"><div><p class="tg-eyebrow">${esc(tagline)}</p><h1>${esc(title)}</h1><p>${esc(description)}</p>${href?`<a class="tg-btn" href="${base}${href}">${esc(cta)}</a>`:''}</div></section>`
 const departmentTiles=base=>`<nav class="tg-department-grid" aria-label="Departments">${DEPARTMENTS.map(d=>`<a href="${base}/c/${d.id}">${productPhoto(d.photo,d.name)}<b>${esc(d.name)}</b></a>`).join('')}</nav>`
 export function catalogHome({base}) {
-  if (!fixtureCatalog) return `<section class="tg-section tg-home-shelf"><div class="tg-section-head"><h2>Video Games</h2><a href="${base}/c/video-games/-/N-5xtg5">Shop all</a></div>${tiles(base,PRODUCTS,base+'/')}</section>`
+  if (!fixtureCatalog) return homeRows(base).more
   const shelf=(title,href,products)=>`<section class="tg-section tg-home-shelf"><div class="tg-section-head"><h2>${esc(title)}</h2><a href="${base}${href}">Shop all</a></div>${tiles(base,products.slice(0,6),base+'/')}</section>`
   return hero(base,{title:'Hello, cozy season.',tagline:'The Fall Home Edit',description:'Fresh textures, warm accents and everyday finds to make your space feel like you.',image:'target-fall-home-campaign',href:'/c/fall-home',cta:'Shop home & kitchen'})+
     `<section class="tg-section"><h2>Shop your favorite departments</h2>${departmentTiles(base)}</section>
@@ -44,6 +44,25 @@ export function catalogHome({base}) {
     shelf('Restock your everyday','/c/everyday-essentials',PRODUCTS.filter(p=>['grocery','household'].includes(p.department)))+
     `<section class="tg-brand-edit"><h2>Only-at-Target favorites</h2><p>Explore the brands that bring more to your everyday.</p><div class="tg-brand-links">${['Threshold','Good & Gather','Goodfellow & Co','up&up','Room Essentials','Boots & Barkley'].map(b=>`<a href="${base}/b/${brandSlug(b)}">${esc(b)}</a>`).join('')}</div></section>`+
     shelf('Next up in gaming','/c/video-games',PRODUCTS.filter(p=>p.kind==='game'))
+}
+// Reference-mode homepage product carousels. The Halloween and fall-newness rows list the products
+// target.com showed in those rows on 2026-10-13; the others mix deals and categories from shelf.js.
+const carousel=(base,products,label)=>`<div class="tg-carousel" role="region" tabindex="0" aria-label="${esc(label)}">${tiles(base,products,base+'/')}</div>`
+const titled=(re)=>SHELF_ITEMS.filter(p=>re.test(p.title))
+export function homeRows(base) {
+  const row=(title,href,products,link='Shop all')=>`<section class="tg-section tg-home-shelf tg-home-carousel"><div class="tg-section-head"><h2>${esc(title)}</h2><a href="${base}${href}">${esc(link)}</a></div>${carousel(base,products,title)}</section>`
+  const pick=(...lists)=>{const seen=new Set();return lists.flat().filter(p=>p&&!seen.has(p.tcin)&&seen.add(p.tcin))}
+  const halloween=[/Monopoly Harry Potter/,/Joyfy/,/Elsa Travel/,/17\.9" Ghost/,/JMM x Monsters/,/Anna Classic/,/Bluey/,/Chihuahua/,/Hocus Pocus/,/Ariel Dress/,/Spiderweb/,/Scoob/,/Light Pumpkin/,/Count Chocula/,/Spider Pumpkin/,/Candelabra/,/Belle Dress/,/Ghost Tombstone/,/Grim Reaper/].map(re=>SHELF_ITEMS.find(p=>re.test(p.title))).filter(Boolean)
+  const newness=SHELF_ITEMS.filter(p=>p.isNew&&!['video-games','halloween','entertainment'].includes(p.department)).sort((a,b)=>(a.department==='electronics')-(b.department==='electronics'))
+  const deals=pick(...['electronics','kitchen-dining','home-decor','household','beauty','toys','baby','grocery','sports-outdoors','patio-garden'].map(d=>SHELF_ITEMS.filter(p=>p.department===d&&p.deal).slice(0,2))).slice(0,16)
+  const essentials=SHELF_ITEMS.filter(p=>['grocery','household'].includes(p.department)&&p.rating.count>2000).slice(0,14)
+  const tech=titled(/AirPods Pro 3|Nintendo Switch 2 Console|PlayStation 5 Console \(Slim\)|Apple iPad 11|Beats Studio Pro|Mario Kart World -|Xbox Series X 1TB|Samsung 65|JBL Flip 7|Apple Watch Series 11|Meta Quest|Kindle Paperwhite/)
+  return {
+    halloween:carousel(base,halloween,'Save on Halloween must-haves'),
+    newness:carousel(base,newness,'Next-level fall newness'),
+    deals:row('Top deals','/c/top-deals/-/N-4xw74',deals,'Shop all deals'),
+    more:row('Trending in tech & gaming','/c/electronics/-/N-5xtg6',tech)+row('Restock your essentials','/c/household-essentials/-/N-5xsz1',essentials),
+  }
 }
 export function categoryIntro({base,department,campaign,weekly=false}) {
   if (weekly) return hero(base,{title:'Weekly Ad',tagline:'This week’s featured offers',description:'Shop this week’s featured deals. Displayed sale prices apply automatically; no coupon clipping needed.',image:'groceries-campaign'})
@@ -92,7 +111,7 @@ export function ordinaryProductPage({base,p,recs,user,drawer,listMsg,shipZip='95
   const back=url(path,{variant:p.variantId||'',returnTo:browseBack})
   const canBuy=available&&fulfillment==='shipping'
   const login=`${base}/login?redirect=${encodeURIComponent(back)}`
-  return `${drawer||''}${browseBack?`<p><a href="${esc(browseBack)}">← Back to results</a></p>`:''}<nav class="tg-crumbs"><a href="${base}/">Target</a> › <a href="${base}/c/${p.department}">${esc(DEPARTMENTS.find(d=>d.id===p.department).name)}</a> › <a href="${base}/c/${p.department}?type=${encodeURIComponent(p.type)}">${esc(p.type)}</a></nav>
+  return `${drawer||''}${browseBack?`<p><a href="${esc(browseBack)}">← Back to results</a></p>`:''}<nav class="tg-crumbs">${(()=>{const d=departmentOf(p.department),href=base+(d.path||'/c/'+p.department);return `<a href="${base}/">Target</a> › <a href="${href}">${esc(d.name)}</a> › <a href="${esc(href+'?type='+encodeURIComponent(p.type))}">${esc(p.type)}</a>`})()}</nav>
     ${listMsg?`<p class="tg-toast">${esc(listMsg)}</p>`:''}<div class="tg-pdp">${productGallery(p)}
     <div class="tg-buybox" id="info-and-fulfillment"><a href="${base}/b/${brandSlug(p.brand)}">Shop all ${esc(p.brand)}</a><h1>${esc(p.title)}</h1><a href="#reviews" class="tg-rating-row"><span class="tg-stars" aria-hidden="true">★★★★★</span> ${esc(p.rating.text)} (${p.rating.count})</a>
     <div class="tg-price-module"><b class="tg-price">${money(p.price)}</b>${p.regularPrice?` <span class="tg-deal-label">Sale</span> <del>${money(p.regularPrice)}</del>`:''}</div>${p.unitAmount?`<p class="tg-fine">${money(p.price/p.unitAmount)} / ${esc(p.unitLabel)}</p>`:""}<p class="tg-fine">Sold and shipped by ${esc(p.seller)}</p>

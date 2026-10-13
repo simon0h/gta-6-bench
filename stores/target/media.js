@@ -1,6 +1,9 @@
 import { productImage as assetImage, productGallery as assetGallery } from '../../lib/product-assets.js'
 import { esc } from '../../lib/html.js'
-export const productImage = (p,className='') => assetImage('target',p,{className})
+// Assortment items (shelf.js) are not in the evidenced inventory that /product-assets serves, so their
+// locally rendered illustrations come from this store's own /shelf-art route instead.
+const shelfArt = html => html.replace(/\/product-assets\/target\/(\d+)\/(\d+)\.svg/g, '/target/shelf-art/$1/$2.svg')
+export const productImage = (p,className='') => p.shelf ? shelfArt(assetImage('target',p,{className})) : assetImage('target',p,{className})
 export const optionText = p => Object.entries(p.selectedOptions || {}).map(([k,v])=>`${k}: ${v}`).join(' · ')
 
 // Small, consistent outline icons stay legible at header and fulfillment sizes.
@@ -9,5 +12,5 @@ export function targetIcon(name) {
   return `<svg class="tg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]||paths.shipping}</svg>`
 }
 export function productGallery(p) {
- return `<div class="tg-gallery"><a class="tg-skip" href="#info-and-fulfillment">Skip images</a>${assetGallery('target',p)}<a class="tg-heart" href="#save-to-list" aria-label="Save ${esc(p.title)} to your wish list">&#9825;</a></div>`
+ return `<div class="tg-gallery"><a class="tg-skip" href="#info-and-fulfillment">Skip images</a>${p.shelf?shelfArt(assetGallery('target',p)):assetGallery('target',p)}<a class="tg-heart" href="#save-to-list" aria-label="Save ${esc(p.title)} to your wish list">&#9825;</a></div>`
 }
