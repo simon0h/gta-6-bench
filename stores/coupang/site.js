@@ -4,7 +4,7 @@
 // In the default reference catalog the grids show the Coupang shelf (shelf.js), a
 // general-merchandise assortment kept separate from GTA 6 evidence. Pages that have
 // no shelf rows keep Coupang's empty-result layout.
-import { esc } from '../../lib/html.js'
+import { esc, publicNotice } from '../../lib/html.js'
 import { DEPARTMENTS, FRESH, deptById, GNB, PARTNER_MENU, HELP_MENU, MY_MENU, FOOTER_LINKS } from './site-data.js'
 import { shelf, inDept, searchShelf } from './shelf.js'
 import { grid, row } from './shelf-pages.js'
@@ -30,7 +30,7 @@ function listing(base, action, query, { heading, emptyTitle, emptyCopy, hidden =
 <fieldset><legend>상품평</legend>${RATING.map(([v, l]) => `<label><input type="radio" name="rating" value="${v}"${checked('rating', v)}> ${l}</label>`).join('')}</fieldset>
 <input type="hidden" name="sorter" value="${sort}"><button>필터 적용</button></form>
 <section class="cp-results">${heading || ''}<div class="cp-sortbar" role="navigation" aria-label="정렬">${SORTS.map(([v, l]) => `<a href="${sortLink(v)}"${v === sort ? ' aria-current="true"' : ''}>${l}</a>`).join('')}<span class="cp-view">60개씩 보기</span></div>
-<div class="cp-empty" data-catalog-state="no-listings"><div class="cp-empty-icon" aria-hidden="true">🔍</div><h2>${esc(emptyTitle || '이 목록에 표시할 상품이 없습니다.')}</h2><p>${esc(emptyCopy || '이 모의 환경은 이 페이지의 실제 상품 목록과 가격, 재고를 수집하지 않았습니다. 다른 카테고리를 둘러보거나 검색어를 바꿔 보세요.')}</p><a class="cp-btn-outline" href="${base}/np/categories">전체 카테고리 보기</a></div></section></div>`
+<div class="cp-empty" data-catalog-state="no-listings"><div class="cp-empty-icon" aria-hidden="true">🔍</div><h2>${esc(emptyTitle || '이 목록에 표시할 상품이 없습니다.')}</h2><p>${esc(emptyCopy || '선택하신 조건에 맞는 상품이 없습니다. 다른 카테고리를 둘러보거나 검색어를 바꿔 보세요.')}</p><a class="cp-btn-outline" href="${base}/np/categories">전체 카테고리 보기</a></div></section></div>`
 }
 
 const deptTile = (base, d) => `<a class="cp-dept-tile" href="${base}/np/categories/${d.id}"><span class="cp-dept-icon" aria-hidden="true">${esc(d.label.slice(0, 1))}</span><span>${esc(d.label)}</span></a>`
@@ -49,7 +49,7 @@ function categoryPage(base, dept, sub, query, reference = false) {
   const side = `<aside class="cp-cat-side"><h2><a href="${base}/np/categories/${dept.id}">${esc(dept.label)}</a></h2><ul>${dept.subs.map(s => `<li><a href="${base}/np/categories/${dept.id}/${s.slug}"${sub?.slug === s.slug ? ' aria-current="page"' : ''}>${esc(s.label)}</a></li>`).join('')}</ul></aside>`
   const hero = `<section class="cp-cat-hero${dept.id === FRESH.id ? ' cp-fresh' : ''}"><div><p>${sub ? esc(dept.label) : dept.id === FRESH.id ? '새벽배송 · 신선식품' : '카테고리'}</p><h1>${esc(title)}</h1><p>${dept.id === FRESH.id ? '로켓프레시 상품은 지역별 배송 가능 여부와 도착 시간을 주문 화면에서 확인할 수 있습니다.' : `${esc(dept.label)} 카테고리의 하위 분류와 필터, 정렬을 확인해 보세요.`}</p></div></section>`
   const tiles = sub ? '' : `<div class="cp-subtiles">${dept.subs.map(s => `<a href="${base}/np/categories/${dept.id}/${s.slug}"><span aria-hidden="true">${esc(s.label.slice(0, 2))}</span>${esc(s.label)}</a>`).join('')}</div>`
-  return `${crumb(base, sub ? [[dept.label, `/np/categories/${dept.id}`], [sub.label]] : [[dept.label]])}<div class="cp-cat-layout">${side}<div>${hero}${tiles}${listing(base, action, query, { heading: `<h2 class="cp-results-title">${esc(title)} 전체 상품</h2>`, emptyTitle: `${title} 상품 목록이 이 환경에 수집되지 않았습니다.`, items: reference ? inDept(dept.id, sub?.slug) : undefined })}</div></div>`
+  return `${crumb(base, sub ? [[dept.label, `/np/categories/${dept.id}`], [sub.label]] : [[dept.label]])}<div class="cp-cat-layout">${side}<div>${hero}${tiles}${listing(base, action, query, { heading: `<h2 class="cp-results-title">${esc(title)} 전체 상품</h2>`, emptyTitle: `현재 ${title} 카테고리에 표시할 상품이 없습니다.`, items: reference ? inDept(dept.id, sub?.slug) : undefined })}</div></div>`
 }
 
 // Quick-menu landings. Copy summarises what each real section is; product rows stay empty.
@@ -85,7 +85,7 @@ function landingPage(base, path, l, query, user, reference = false) {
   const all = reference && LANDING_ITEMS[path] ? LANDING_ITEMS[path]() : null
   const items = all && (query.category ? all.filter(p => p.dept === query.category) : all)
   const keepOrder = path === '/np/goldbox' || path === '/np/campaigns/83' || path === '/np/omp'
-  return `${crumb(base, [[l.title]])}${hero}${tabs}${listing(base, base + path, query, { emptyTitle: `${l.title} 상품 목록이 이 환경에 수집되지 않았습니다.`, emptyCopy: '실시간 특가와 상품 구성은 이 모의 환경에 수집되지 않았습니다. 카테고리를 선택해 둘러보세요.', hidden: query.category ? { category: query.category } : {}, items: items || undefined, keepOrder })}`
+  return `${crumb(base, [[l.title]])}${hero}${tabs}${listing(base, base + path, query, { emptyTitle: `${l.title} 상품을 준비 중입니다.`, emptyCopy: '특가와 상품 구성은 수시로 바뀝니다. 잠시 후 다시 확인하시거나 카테고리를 선택해 둘러보세요.', hidden: query.category ? { category: query.category } : {}, items: items || undefined, keepOrder })}`
 }
 
 // Customer service and company pages. Off-site links on coupang.com become these local pages.
@@ -100,8 +100,8 @@ export const INFO = {
   ], links: [['주문목록', '/ssr/desktop/order/list'], ['취소/반품 내역', '/ssr/desktop/cancel-return-exchange/list'], ['자주묻는 질문', '/ssr/desktop/contact/faq']] },
   '/ssr/desktop/contact/inquiry': { title: '1:1 채팅문의', group: '고객센터', sections: [
     S('문의하기 전에', '주문·배송·취소·반품에 관한 대부분의 질문은 자주묻는 질문에서 바로 확인할 수 있습니다.'),
-    S('1:1 문의 남기기', '로그인한 회원은 주문을 선택하고 문의 내용을 남길 수 있습니다. 이 모의 환경의 문의는 계정의 문의내역에만 저장되며 실시간 상담원 채팅은 연결되지 않습니다.'),
-    S('365 고객센터', '전화 1577-7011 (유료) · 연중무휴. 이 환경에서는 전화 상담이 연결되지 않습니다.'),
+    S('1:1 문의 남기기', '로그인한 회원은 주문을 선택하고 문의 내용을 남길 수 있습니다. 남기신 문의와 답변은 마이쿠팡 > 문의내역에서 확인할 수 있습니다.'),
+    S('365 고객센터', '전화 1577-7011 (유료) · 연중무휴. 상담 연결이 많은 시간에는 대기 시간이 길어질 수 있습니다.'),
   ], links: [['문의 남기기', '/help/inquiries/new'], ['문의내역', '/help/inquiries'], ['자주묻는 질문', '/ssr/desktop/contact/faq']] },
   '/ssr/desktop/contact/voc': { title: '고객의 소리', group: '고객센터', sections: [
     S('쿠팡에 의견을 들려주세요', '서비스 이용 중 불편했던 점이나 개선 제안, 칭찬하고 싶은 점을 남길 수 있는 창구입니다.'),
@@ -109,28 +109,27 @@ export const INFO = {
   ], links: [['의견 남기기', '/help/inquiries/new'], ['공지사항', '/np/notices']] },
   '/np/notices': { title: '공지사항', group: '고객센터', sections: [
     S('공지사항 안내', '쿠팡 서비스 변경, 약관 개정, 시스템 점검과 개인정보 처리방침 변경 등의 소식이 공지사항 게시판에 게시됩니다.'),
-    S('게시판 목록', '실제 공지 게시물은 이 모의 환경에 수집되지 않았습니다. 약관과 정책의 현재 요약은 아래 링크에서 확인할 수 있습니다.'),
+    S('게시판 목록', '현재 등록된 공지사항이 없습니다. 약관과 정책은 아래 링크에서 확인할 수 있습니다.'),
   ], links: [['이용약관', '/np/policies/terms'], ['개인정보 처리방침', '/np/policies/privacy'], ['고객센터', '/ssr/desktop/contact/faq']] },
   '/np/company': { title: '회사소개', group: '회사', sections: [
     S('커머스의 미래를 만들어 갑니다', '쿠팡은 2010년 설립되어 고객이 앱을 여는 순간부터 상품을 받는 순간까지 "와우"하는 경험을 만드는 것을 목표로 합니다. 빠른 배송, 폭넓은 상품 구색, 낮은 가격을 핵심 가치로 삼습니다.'),
     S('주요 서비스', '쿠팡은 쇼핑을 넘어 생활 전반의 서비스를 제공합니다.', '로켓배송 — 당일·새벽·익일 직접 배송', '로켓프레시 — 자정까지 주문하면 새벽 도착하는 신선식품', '로켓직구 — 해외 직구 무료배송', '쿠팡이츠 — 음식 배달', '쿠팡플레이 — 동영상 스트리밍', '쿠팡페이 — 간편결제', 'CPLB — 쿠팡 자체 브랜드'),
-    S('출처', '쿠팡 뉴스룸 회사소개(news.coupang.com/company) 요약. 외부 사이트로 연결하지 않습니다.'),
   ], links: [['Investor Relations', '/np/investor-relations'], ['인재채용', '/np/careers']] },
   '/np/investor-relations': { title: 'Investor Relations', group: '회사', sections: [
     S('Coupang, Inc. (NYSE: CPNG)', '쿠팡의 모회사 Coupang, Inc.는 뉴욕증권거래소에 CPNG 티커로 상장되어 있습니다. 리테일, 음식 배달(Eats), 동영상 스트리밍(Play), 핀테크 서비스를 제공하는 기술 기업으로 소개됩니다.'),
     S('IR 사이트 구성', 'Overview · Latest Quarter (실적 발표, 프레젠테이션, 웹캐스트) · News & Events · Stock Info · Financials (분기 실적, 연차보고서, SEC 공시) · Governance · Resources'),
-    S('출처', 'ir.aboutcoupang.com 요약 (2026-10-13). 주가 정보와 공시 원문은 이 환경에 포함되지 않습니다.'),
+    S('IR 문의', '주가 정보와 공시 원문은 Coupang, Inc. IR 사이트(ir.aboutcoupang.com)에서 확인할 수 있습니다.'),
   ], links: [['회사소개', '/np/company']] },
   '/np/careers': { title: '인재채용', group: '회사', sections: [
     S('쿠팡은 커머스의 미래를 만들어 가고 있습니다', '쿠팡 채용 사이트는 직무 검색, 팀 소개, 근무지, 채용 절차(How We Hire), 쿠팡에서의 생활을 소개합니다.'),
     S('주요 직군', '운영 · 고객서비스, 프로덕트 매니지먼트, 가격·판매자 운영, 기술 지원, 인사(HR), 엔지니어링, 물류(CLS)'),
     S('공정한 기회', '쿠팡은 모두에게 공평한 기회를 제공합니다.'),
-    S('출처', 'coupang.jobs 요약 (2026-10-13). 지원서 접수는 이 환경에서 제공하지 않습니다.'),
+    S('지원 방법', '채용 공고 확인과 지원서 접수는 쿠팡 채용 사이트(coupang.jobs)에서 할 수 있습니다.'),
   ], links: [['회사소개', '/np/company']] },
   '/np/partnership': { title: '입점 / 제휴문의', group: '회사', sections: [
     S('쿠팡과 함께하는 방법', '쿠팡은 판매 방식과 사업 형태에 따라 여러 입점·제휴 프로그램을 운영합니다. 아래에서 알맞은 프로그램을 선택하세요.'),
   ], links: PARTNER_MENU.concat([['판매자 가입', '/np/partners/vendor-signup']]) },
-  '/np/partners/vendor-signup': { title: '판매자 가입', group: '입점신청', sections: [S('쿠팡 Wing 판매자 가입', '오픈마켓 판매자는 쿠팡 Wing에서 사업자 정보를 등록하고 상품을 직접 판매할 수 있습니다. 가입 신청은 이 환경에서 처리되지 않습니다.')], links: PARTNER_MENU },
+  '/np/partners/vendor-signup': { title: '판매자 가입', group: '입점신청', sections: [S('쿠팡 Wing 판매자 가입', '오픈마켓 판매자는 쿠팡 Wing에서 사업자 정보를 등록하고 상품을 직접 판매할 수 있습니다. 가입 신청은 쿠팡 Wing(wing.coupang.com)에서 진행해 주세요.')], links: PARTNER_MENU },
   '/np/partners/marketplace': { title: '오픈마켓', group: '입점신청', sections: [S('마켓플레이스 판매', '판매자가 상품을 직접 등록하고 배송하는 방식입니다. 판매 수수료와 정산 주기는 카테고리에 따라 다릅니다.')], links: PARTNER_MENU },
   '/np/partners/travel': { title: '여행·티켓', group: '입점신청', sections: [S('여행·티켓 파트너', '숙박, 여행 상품, 공연·전시 티켓 판매사를 위한 입점 프로그램입니다.')], links: PARTNER_MENU },
   '/np/partners/rocket-supplier': { title: '로켓배송 공급사', group: '입점신청', sections: [S('로켓배송 입점', '공급사가 쿠팡에 상품을 납품하면 쿠팡이 직접 매입하여 로켓배송으로 판매하는 방식입니다.')], links: PARTNER_MENU },
@@ -140,28 +139,28 @@ export const INFO = {
     S('제1조 (목적)', '이 약관은 쿠팡 주식회사가 운영하는 사이버몰에서 제공하는 서비스를 이용함에 있어 회사와 회원의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.'),
     S('주요 내용', '회원가입과 탈퇴, 구매 신청과 계약 성립, 결제, 배송, 청약철회, 마켓플레이스(통신판매중개) 이용, 회원의 의무, 분쟁 해결'),
     S('통신판매중개', '마켓플레이스 상품은 개별 판매자가 판매하며, 쿠팡은 통신판매중개자로서 해당 거래의 당사자가 아닙니다.'),
-    S('안내', '전문은 쿠팡 이용약관 페이지에 게시됩니다. 이 페이지는 모의 환경을 위한 요약입니다.'),
+    S('안내', '위 내용은 이용약관의 주요 내용을 요약한 것입니다. 자세한 사항은 이용약관 전문을 확인해 주세요.'),
   ] },
   '/np/policies/privacy': { title: '개인정보 처리방침', group: '약관 및 정책', sections: [
     S('개인정보 처리방침 목차', '쿠팡 개인정보 처리방침은 다음 항목으로 구성됩니다.', '개인정보 수집 이용 보유 파기', '개인정보의 제3자 제공', '개인정보의 처리업무 위탁', '개인정보의 파기절차 및 방법', '이용자의 권리와 그 행사 방법', '이용자 맞춤형 광고 개인정보보호 원칙', '개인정보 자동 수집 설치/운영 및 거부에 관한 사항', '스마트폰 앱 관리', '개인정보 보호책임자 및 담당자의 연락처', '회사의 정보보호 노력', '고지의 의무'),
-    S('이 환경에서의 처리', '이 모의 환경에 입력한 계정과 배송지 정보는 서버 실행 동안만 보관됩니다. 실제 개인정보와 카드정보를 입력하지 마세요.'),
-    S('출처', 'privacy.coupang.com 쿠팡 개인정보 처리방침(Ver. 7.8) 목차 요약.'),
+    { ...S('이 사이트에서의 처리', '쿠팡(주)과 관련 없는 모의 쇼핑 사이트입니다. 입력한 계정과 배송지 정보는 서버 실행 동안만 보관됩니다. 실제 개인정보와 카드정보를 입력하지 마세요.'), publicOnly: true },
+    S('안내', '위 목차는 쿠팡 개인정보 처리방침(Ver. 7.8)의 구성입니다. 자세한 내용은 개인정보 처리방침 전문을 확인해 주세요.'),
   ] },
-  '/np/policies/coupay': { title: '쿠팡페이 이용약관', group: '약관 및 정책', sections: [S('전자금융거래 이용약관', '쿠페이 간편결제, 쿠팡캐시 등 쿠팡페이가 제공하는 전자금융거래 서비스의 이용 조건을 정합니다. 이 환경은 쿠페이 결제를 제공하지 않습니다.')] },
+  '/np/policies/coupay': { title: '쿠팡페이 이용약관', group: '약관 및 정책', sections: [S('전자금융거래 이용약관', '쿠페이 간편결제, 쿠팡캐시 등 쿠팡페이가 제공하는 전자금융거래 서비스의 이용 조건을 정합니다.')] },
   '/np/policies/location': { title: '위치기반서비스 이용약관', group: '약관 및 정책', sections: [S('위치정보 이용', '배송지 확인, 주변 매장 안내 등 위치기반서비스 제공을 위한 위치정보의 수집과 이용 조건을 정합니다.')] },
   '/np/policies/youth': { title: '청소년보호정책', group: '약관 및 정책', sections: [S('청소년 보호', '쿠팡은 청소년에게 유해한 정보와 상품으로부터 청소년을 보호하기 위해 청소년 유해 상품 판매 시 성인 인증을 요구하고 청소년보호책임자를 지정하고 있습니다.')] },
   '/np/policies/seller': { title: '판매자 이용약관', group: '약관 및 정책', sections: [S('마켓플레이스 판매자 약관', '쿠팡 마켓플레이스에 상품을 등록·판매하는 판매자와 쿠팡 사이의 권리와 의무, 수수료와 정산, 상품 등록 기준을 정합니다.')] },
   '/np/business-info': { title: '사업자정보 확인', group: '회사', sections: [S('사업자 정보', '전자상거래법에 따라 공개하는 사업자 정보입니다.', '상호명: 쿠팡(주)', '주소: 서울시 송파구 송파대로 570', '사업자등록번호: 120-88-00767', '통신판매업신고: 2017-서울송파-0680', '이메일: help@coupang.com')] },
-  '/np/coupangplay': { title: '쿠팡플레이', group: '쿠팡 서비스', sections: [S('쿠팡플레이', '쿠팡플레이는 영화, 드라마, 예능, 스포츠 중계를 제공하는 쿠팡의 동영상 스트리밍 서비스입니다. 와우회원은 추가 비용 없이 이용할 수 있습니다.'), S('안내', '이 환경에서는 쿠팡플레이로 연결되지 않습니다.')] },
-  '/np/coupangbiz': { title: '쿠팡비즈', group: '쿠팡 서비스', sections: [S('사업자 회원 전용 구매', '쿠팡비즈는 사업자 회원을 위한 구매 서비스로 사업자 전용가, 세금계산서 발행, 대량 구매를 지원합니다.'), S('가입', '사업자 회원 가입은 이 환경에서 제공하지 않습니다.')] },
-  '/np/travel': { title: '쿠팡트래블', group: '쿠팡 서비스', sections: [S('여행 · 티켓', '쿠팡트래블에서는 호텔·펜션 등 국내 숙소, 해외여행 상품, 항공권, 공연·전시 티켓을 예약할 수 있습니다.'), S('안내', '여행 상품 예약은 이 환경에서 제공하지 않습니다.')] },
+  '/np/coupangplay': { title: '쿠팡플레이', group: '쿠팡 서비스', sections: [S('쿠팡플레이', '쿠팡플레이는 영화, 드라마, 예능, 스포츠 중계를 제공하는 쿠팡의 동영상 스트리밍 서비스입니다. 와우회원은 추가 비용 없이 이용할 수 있습니다.'), S('이용 안내', '쿠팡플레이는 쿠팡플레이 앱 또는 웹사이트(coupangplay.com)에서 쿠팡 계정으로 로그인해 이용할 수 있습니다.')] },
+  '/np/coupangbiz': { title: '쿠팡비즈', group: '쿠팡 서비스', sections: [S('사업자 회원 전용 구매', '쿠팡비즈는 사업자 회원을 위한 구매 서비스로 사업자 전용가, 세금계산서 발행, 대량 구매를 지원합니다.'), S('가입', '사업자 회원 가입은 사업자등록번호 인증 후 이용할 수 있습니다.')] },
+  '/np/travel': { title: '쿠팡트래블', group: '쿠팡 서비스', sections: [S('여행 · 티켓', '쿠팡트래블에서는 호텔·펜션 등 국내 숙소, 해외여행 상품, 항공권, 공연·전시 티켓을 예약할 수 있습니다.'), S('안내', '현재 여행 상품 예약 서비스를 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.')] },
 }
 
 function infoPage(base, path, p) {
   const related = p.links ? `<aside class="cp-related"><h2>관련 메뉴</h2>${p.links.map(([l, h]) => `<a href="${base}${h}">${esc(l)}</a>`).join('')}</aside>` : ''
   const side = p.group === '고객센터' ? `<nav class="cp-info-nav" aria-label="고객센터 메뉴"><strong>고객센터</strong>${HELP_MENU.concat([['공지사항', '/np/notices']]).map(([l, h]) => `<a href="${base}${h}"${h === path ? ' aria-current="page"' : ''}>${esc(l)}</a>`).join('')}</nav>`
     : p.group === '약관 및 정책' ? `<nav class="cp-info-nav" aria-label="약관 및 정책"><strong>약관 및 정책</strong>${FOOTER_LINKS.filter(([, h]) => h.startsWith('/np/policies')).map(([l, h]) => `<a href="${base}${h}"${h === path ? ' aria-current="page"' : ''}>${esc(l)}</a>`).join('')}</nav>` : ''
-  return `${crumb(base, [[p.group], [p.title]])}<div class="cp-info${side ? ' cp-info-with-nav' : ''}">${side}<article><h1>${esc(p.title)}</h1>${p.sections.map(s => `<section><h2>${esc(s.h)}</h2>${s.ps.length > 2 ? `<p>${esc(s.ps[0])}</p><ul>${s.ps.slice(1).map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : s.ps.map(x => `<p>${esc(x)}</p>`).join('')}</section>`).join('')}${related}</article></div>`
+  return `${crumb(base, [[p.group], [p.title]])}<div class="cp-info${side ? ' cp-info-with-nav' : ''}">${side}<article><h1>${esc(p.title)}</h1>${p.sections.map(s => { const html = `<section><h2>${esc(s.h)}</h2>${s.ps.length > 2 ? `<p>${esc(s.ps[0])}</p><ul>${s.ps.slice(1).map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : s.ps.map(x => `<p>${esc(x)}</p>`).join('')}</section>`; return s.publicOnly ? publicNotice(html) : html }).join('')}${related}</article></div>`
 }
 
 export function sitemapPage(base) {
@@ -191,7 +190,7 @@ export function homePage(base) {
   const top = (id, n) => [...inDept(id)].sort((a, b) => b.sales * b.rating - a.sales * a.rating).slice(0, n)
   const rows = `<section class="cp-home-section"><div class="cp-section-head"><h2>카테고리별 추천상품</h2><a href="${base}/np/categories">전체 카테고리 ›</a></div><div class="cs-cat-blocks">${DEPARTMENTS.filter(d => inDept(d.id).length).map(d => `<article class="cs-cat-block"><header><h3><a href="${base}/np/categories/${d.id}">${esc(d.label)}</a></h3><p>${d.subs.slice(0, 5).map(s => `<a href="${base}/np/categories/${d.id}/${s.slug}">${esc(s.label)}</a>`).join('')}</p><a class="cs-more" href="${base}/np/categories/${d.id}">더보기 ›</a></header>${row(base, top(d.id, 6))}</article>`).join('')}</div></section>`
   const wow = `<section class="cp-wow"><div><p class="cp-kicker">로켓와우</p><h2>와우회원이라면 누리는 혜택</h2><ul><li>로켓배송 상품 무료배송</li><li>로켓배송 상품 30일 무료반품</li><li>쿠팡플레이 무료 시청</li><li>쿠팡이츠 무료배달</li></ul></div><a class="cp-btn" href="${base}/np/campaigns/83">와우회원할인 보기</a></section>`
-  const note = `<section class="cp-catalog-note" data-reference-state="catalog"><h2>상품 정보 안내</h2><p>표시된 상품의 가격, 할인율, 상품평 수와 도착 예정일은 모의 쇼핑 환경을 위한 예시입니다. 실제 쿠팡의 실시간 판매 정보와 다를 수 있습니다. Captured catalog · 0 GTA 6 product observations.</p></section>`
+  const note = `<section class="cp-catalog-note" data-reference-state="catalog"><h2>상품 정보 안내</h2><p>표시된 가격과 할인율, 도착 예정일은 주문 시점과 배송지에 따라 달라질 수 있습니다. 최종 결제 금액과 도착 예정일은 주문/결제 화면에서 확인해 주세요.</p>${publicNotice('<p>표시된 상품 정보는 모의 쇼핑 환경을 위한 예시이며, 실제 쿠팡의 판매 정보와 관련이 없습니다.</p>')}</section>`
   return `<h1 class="cp-sr">쿠팡</h1>${hero}${shortcuts}${discovery}${goldbox}${ranking}${fresh}${rows}${wow}${note}`
 }
 
@@ -204,16 +203,16 @@ export function searchBody(base, query) {
   const hidden = { q, ...(dept ? { category: query.category } : {}) }
   // GTA 6 has no captured Coupang listing: say so, then show what the shelf matches.
   if (/gta|grand\s*theft|그랜드\s*테프트|지티에이/i.test(q)) {
-    const notice = `<section class="reference-coverage cs-coverage" data-reference-state="uncaptured"><h2>‘${esc(q)}’ 예약판매 상품 정보가 수집되지 않았습니다.</h2><p>Search has not been captured for GTA 6 listings. This is not a zero-result or out-of-stock response from the retailer.</p><p>이 환경에는 쿠팡의 Grand Theft Auto VI 판매 정보가 없습니다. 아래는 검색어와 관련된 다른 상품입니다.</p></section>`
+    const notice = `<section class="reference-coverage cs-coverage" data-reference-state="uncaptured"><h2>‘${esc(q)}’ 예약판매 상품이 없습니다.</h2><p>현재 판매 중인 Grand Theft Auto VI 상품이 없습니다. 아래는 검색어와 관련된 다른 상품입니다.</p></section>`
     return `${head}${notice}${results.length ? listing(base, `${base}/np/search`, query, { hidden, items: results, keepOrder: true }) : ''}`
   }
   if (results.length) return `${head}${listing(base, `${base}/np/search`, query, { hidden, items: results, keepOrder: true })}`
   // Uncaptured query: identify missing coverage rather than fabricate an empty result set.
-  return `${head}<div class="cp-listing"><div class="cp-filters" aria-hidden="true"><h2>필터</h2><p>배송 · 가격 · 상품평</p></div><section class="cp-results"><div class="cp-sortbar">${SORTS.map(([, l], i) => `<span${i === 0 ? ' aria-current="true"' : ''}>${l}</span>`).join('')}</div><section class="empty reference-coverage cp-empty" data-reference-state="uncaptured"><h2>Search has not been captured</h2><p>Search: <strong>${esc(q)}</strong></p><p>The available source capture does not establish the products or purchase options for this page. This is not a zero-result or out-of-stock response from the retailer.</p><p>이 검색어의 실제 쿠팡 검색결과는 수집되지 않았습니다.</p><a href="${base}/np/categories">전체 카테고리 보기</a></section></section></div>`
+  return `${head}<div class="cp-listing"><div class="cp-filters" aria-hidden="true"><h2>필터</h2><p>배송 · 가격 · 상품평</p></div><section class="cp-results"><div class="cp-sortbar">${SORTS.map(([, l], i) => `<span${i === 0 ? ' aria-current="true"' : ''}>${l}</span>`).join('')}</div><section class="empty reference-coverage cp-empty" data-reference-state="uncaptured"><h2>‘<strong>${esc(q)}</strong>’에 대한 검색결과가 없습니다.</h2><ul><li>단어의 철자가 정확한지 확인해 보세요.</li><li>검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li><li>두 단어 이상의 검색어인 경우, 띄어쓰기를 확인해 보세요.</li></ul><a href="${base}/np/categories">전체 카테고리 보기</a></section></section></div>`
 }
 
 export function emptyCart(base) {
-  return `<h1>장바구니</h1><div class="cp-cart-tabs"><span aria-current="true">일반구매 (0)</span><span>정기배송 (0)</span></div><div class="cp-empty cp-cart-empty"><div class="cp-empty-icon" aria-hidden="true">🛒</div><h2>장바구니에 담은 상품이 없습니다.</h2><p>원하는 상품을 장바구니에 담아보세요!</p><a class="cp-btn" href="${base}">쇼핑 계속하기</a></div><p class="hint">이 모의 환경의 기본 카탈로그에는 구매가 확인된 상품이 없어 장바구니에 담을 수 없습니다.</p>`
+  return `<h1>장바구니</h1><div class="cp-cart-tabs"><span aria-current="true">일반구매 (0)</span><span>정기배송 (0)</span></div><div class="cp-empty cp-cart-empty"><div class="cp-empty-icon" aria-hidden="true">🛒</div><h2>장바구니에 담은 상품이 없습니다.</h2><p>원하는 상품을 장바구니에 담아보세요!</p><a class="cp-btn" href="${base}">쇼핑 계속하기</a></div>`
 }
 
 // Routes. In fixture mode the authored catalog keeps its own categories and campaigns.
