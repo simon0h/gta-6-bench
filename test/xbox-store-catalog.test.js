@@ -65,7 +65,7 @@ test('Xbox product types: ordinary metadata, edition links, base listing, DLC an
     const mc=await c.get(path('9mvxmvt8zkwc'))
     assert.match(mc.text,/Everyone 10\+/);assert.match(mc.text,/Online up to 8/);assert.match(mc.text,/Minecraft: Deluxe Collection/)
     assert.doesNotMatch(mc.text,/RATING PENDING|This content is locked/)
-    assert.match(mc.text,/Original illustrative cover/)
+    assert.match(mc.text,/Cover art\. This image is not a gameplay screenshot/);assert.doesNotMatch(mc.text,/Original illustrative cover/)
     const halo=await c.get(path('halo-infinite'))
     assert.match(halo.text,/Multiplayer|multiplayer/);assert.match(halo.text,/>GET<\/span>/)
     const base=await c.get(path('minecraft-base'))

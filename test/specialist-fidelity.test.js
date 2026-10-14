@@ -34,7 +34,7 @@ test('GTA VI platform product pages use observed cover and screenshot presentati
     assert.equal(xb.status, 200)
     assert.match(xb.text, /class="xb-cover" src="\/static\/reference\/xbox-store\/gta-vi-cover\.png"/)
     assert.match(xb.text, /ESRB Mature 17\+/)
-    assert.doesNotMatch(xb.text, /class="xb-gp-card"|Original illustrative cover/)
+    assert.doesNotMatch(xb.text, /class="xb-gp-card"|Cover art\. This image is not a gameplay screenshot|Original illustrative cover/)
     assert.match(xb.text, /<div class="xb-buybox" id="buybox">/)
   } finally { await srv.close() }
 })
