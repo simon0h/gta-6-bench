@@ -5,7 +5,7 @@ import { shelfImage, shelfGallery } from './shelf.js'
 import { productPhoto } from '../../lib/product-photos.js'
 import { DEPARTMENTS, CAMPAIGNS, categorySlug } from './catalog.js'
 import { FOOTER_COLUMNS, ACCOUNT_LINKS } from './site.js'
-import { esc, money, disclaimer } from '../../lib/html.js'
+import { esc, money, disclaimer, publicNotice } from '../../lib/html.js'
 import {
   CATALOG, quantityLimit, byId, selectedProduct, eligibleMethods, productPath, productHref, facets, countdown, SORTS, DELIVERY_METHODS, INTERNATIONAL_DELIVERY, PDP_DELIVERY_ORDER, CHECKOUT_DELIVERY_ORDER,
   COLLECT_STORES, BENCHMARK_COLLECT_STORE, TITLES, MAX_QTY, RELEASE_TEXT, RELEASE_SHORT, DISPATCH_TEXT, PREORDER_NOTICE_1, PREORDER_NOTICE_2, LEGAL_TEXT,
@@ -22,17 +22,17 @@ export function supportInformationPage(base, topic = 'Shopping information') {
  const title = String(topic).slice(0,100)
  const q = title.toLowerCase()
  let content
- if (/password|signing in/.test(q)) content = '<p>Password recovery is unavailable in this shop. Sign in using an existing account or continue shopping as a guest where offered.</p>'
- else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Financing applications and new gift-card purchases are unavailable in this shop.</p>'
- else if (/cookie|privacy/.test(q)) content = '<p>This synthetic shop uses a session cookie to keep your basket, account and checkout together. Orders are recorded for the benchmark. Real retailer advertising and tracking services are not connected.</p>'
+ if (/password|signing in/.test(q)) content = '<p>To reset your password, use the Forgotten password link on the sign in page. You can also check out as a guest where offered.</p>'
+ else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Gift cards and eVouchers can be redeemed at the payment step of checkout.</p>'
+ else if (/cookie|privacy/.test(q)) content = '<p>We use cookies to keep your basket, account and checkout together and to improve your shopping experience. You can change your choices at any time from Cookie preferences.</p>'
  else if (/return|refund|cancel/.test(q)) content = '<p>Review the item, format, delivery choice and total before placing your order. Digital redemption codes may have different return conditions from physical products. You can save a support enquiry from your order details. This does not approve a cancellation or refund.</p>'
  else if (/delivery|shipping|collection/.test(q)) content = '<p>Product pages show available fulfilment choices. Confirm your address or collection store at checkout to see the order-specific delivery estimate and charges. Pre-orders are fulfilled when available; wait for collection confirmation before visiting a store.</p>'
- else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming. This is a synthetic shopping environment: local orders record your selected items without charging a real payment method.</p>'
+ else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming.</p>' + publicNotice('<p>This is not the real GAME website: orders record your selected items without charging a real payment method.</p>')
  else if (/read more/.test(q)) content = '<p>PEGI 18 identifies games intended for adults. You must confirm you are 18 or over before adding this age-rated game to your bag.</p>'
- else if (/edit/.test(q)) content = '<p>Prices are displayed in pounds sterling and include VAT. Currency switching is unavailable in this UK shop.</p>'
- else if (/mobile phones/.test(q)) content = '<p>Mobile phones are not included in this shop’s current catalogue. Browse the available technology and gaming departments instead.</p>'
- else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat and telephone support are unavailable in this shop. Product availability and delivery options are shown on the product page and at checkout.</p>'
- else content = '<p>This service is unavailable in this shop. You can browse products, check availability and complete the supported shopping flows.</p>'
+ else if (/edit/.test(q)) content = '<p>Prices are displayed in pounds sterling and include VAT. Our UK website sells in pounds sterling only.</p>'
+ else if (/mobile phones/.test(q)) content = '<p>We don’t currently sell mobile phones online. Browse our technology and gaming departments instead.</p>'
+ else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat is currently unavailable; please try again later or send us a message from Contact Us. Product availability and delivery options are shown on the product page and at checkout.</p>'
+ else content = '<p>This service is currently unavailable. Please try again later.</p>'
  return `<section><h1>${esc(title)}</h1>${content}<p><a href="${base}/">Continue shopping</a> · <a href="${base}/account">Your account and orders</a></p></section>`
 }
 const gbp = (n) => money(n, 'GBP')
@@ -318,7 +318,7 @@ export function productPage({ base, p, modal = null, qty = 1, wished = false, op
     </div></details>
     <details class="gu-acc"><summary>Delivery &amp; Returns</summary><div class="gu-acc-body">
       <ul class="gu-delivery-list">${p.digital?`<li><b>Email delivery</b><span>UK redemption code. Check account region and compatibility before purchase.</span><b>Free</b></li>`:deliveryList}${collectLine}</ul>
-      ${p.benchmarkPickup ? '<p class="gu-fine">Benchmark scenario: Click &amp; Collect is an authored local simulation for this task. It is not a claim about live GAME pre-order collection availability.</p>' : p.preorder ? `<p class="gu-fine">Click &amp; Collect is not available for pre-order items. Pre-orders are dispatched via Express Delivery the day before the launch date.</p>` : ''}
+      ${p.benchmarkPickup ? '<p class="gu-fine">Click &amp; Collect for this pre-order is available at '+esc(BENCHMARK_COLLECT_STORE)+' only.</p>' : p.preorder ? `<p class="gu-fine">Click &amp; Collect is not available for pre-order items. Pre-orders are dispatched via Express Delivery the day before the launch date.</p>` : ''}
       <p class="gu-fine">Returns: unwanted items can be returned within 28 days of delivery. Sealed software and digital codes cannot be returned once opened or redeemed.</p>
     </div></details>
   </div>
@@ -457,7 +457,7 @@ export function deliveryPage({ base, t, email, guest, preorderInBag, values = {}
       <p class="gu-fine">We'll only use your mobile number for delivery updates.</p>
     </section>
     <section class="gu-co-section"><h2>Delivery method</h2>
-      ${benchmarkCollection ? '<p class="gu-notice">Benchmark scenario: collection for this pre-order is an authored local simulation. Collection stock is available only at GAME London - Sports Direct, Oxford Street.</p>' : preorderInBag ? `<p class="gu-preorder-info">${ICON.info} Your bag contains a pre-order item. Your whole order will be held and dispatched via Express Delivery the day before the launch date (${DISPATCH_TEXT}).</p>` : ''}
+      ${benchmarkCollection ? '<p class="gu-notice">Click &amp; Collect for this pre-order is available only at GAME London - Sports Direct, Oxford Street.</p>' : preorderInBag ? `<p class="gu-preorder-info">${ICON.info} Your bag contains a pre-order item. Your whole order will be held and dispatched via Express Delivery the day before the launch date (${DISPATCH_TEXT}).</p>` : ''}
       ${radios}
       <div class="gu-field gu-collect-store"><label for="collectStore">Collection store</label><select id="collectStore" name="collectStore" ${!canCollect ? 'disabled' : ''}><option value="">Select a store</option>${COLLECT_STORES.map(s => `<option value="${esc(s)}" ${values.collectStore === s ? 'selected' : ''} ${benchmarkCollection&&s!==BENCHMARK_COLLECT_STORE?'disabled':''}>${esc(s)}${benchmarkCollection&&s!==BENCHMARK_COLLECT_STORE?' — Unavailable':''}</option>`).join('')}</select>${errors.collectStore ? `<span class="gu-error">${esc(errors.collectStore)}</span>` : ''}
       ${benchmarkCollection?`<h3>Pickup person</h3><p class="gu-fine">Name the person authorized to collect this order.</p><div class="gu-2col">${input('pickupFirstName','Pickup first name',{required:true})}${input('pickupLastName','Pickup last name',{required:true})}</div>${input('pickupEmail','Pickup email',{type:'email',required:true})}${input('pickupPhone','Pickup phone',{type:'tel',required:true})}`:''}</div>
@@ -497,17 +497,17 @@ export function paymentPage({ base, t, delivery, preorderInBag, values = {}, err
     <section class="gu-co-section"><h2>How would you like to pay?</h2>
       <div class="gu-paytabs">
         <label class="gu-paytab"><input type="radio" name="paymentMethod" value="card" ${pm === 'card' ? 'checked' : ''}><span><b>Credit/Debit card</b><small>VISA, VISA Debit, Mastercard, Maestro</small></span></label>
-        <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="applepay" disabled><span><b>Apple Pay</b><small>Unavailable in this shop</small></span></label>
+        <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="applepay" disabled><span><b>Apple Pay</b><small>Currently unavailable</small></span></label>
         <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="frasersplus" disabled><span><b>Frasers Plus</b><small>Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable). Credit subject to status. Not available for this order.</small></span></label>
-        <label class="gu-paytab${preorderInBag ? ' is-disabled' : ''}"><input type="radio" name="paymentMethod" value="paypal" ${pm === 'paypal' ? 'checked' : ''} ${preorderInBag ? 'disabled' : ''}><span><b>PayPal</b><small>${preorderInBag ? 'PayPal is not available for pre-orders.' : 'Recorded locally; no PayPal account is connected.'}</small></span></label>
+        <label class="gu-paytab${preorderInBag ? ' is-disabled' : ''}"><input type="radio" name="paymentMethod" value="paypal" ${pm === 'paypal' ? 'checked' : ''} ${preorderInBag ? 'disabled' : ''}><span><b>PayPal</b><small>${preorderInBag ? 'PayPal is not available for pre-orders.' : 'Pay with your PayPal account.'}</small></span></label>
       </div>
       <div class="gu-paypanel" data-panel="card">
         ${input('cardNumber', 'Card number', { extra: 'autocomplete="cc-number" inputmode="numeric" placeholder="0000 0000 0000 0000"', required: true })}
         <div class="gu-2col">${input('expiry', 'Expiry date (MM/YY)', { extra: 'autocomplete="cc-exp" placeholder="MM/YY"', required: true })}${input('cvv', 'Security code (CVV)', { extra: 'autocomplete="cc-csc" inputmode="numeric" maxlength="4"', required: true })}</div>
         ${input('nameOnCard', 'Name on card', { extra: 'autocomplete="cc-name"', required: true })}
-        <p class="gu-fine">${ICON.lock} Use test card details only. No bank authorisation or 3D Secure authentication is performed.</p>
+        <p class="gu-fine">${ICON.lock} Your payment details are encrypted and sent securely.</p>${publicNotice('<p class="gu-fine">This is not the real GAME website. Use test card details only: no card is charged and no bank authorisation or 3D Secure authentication is performed.</p>')}
       </div>
-      <div class="gu-paypanel" data-panel="paypal"><p>This choice records a local PayPal payment selection. No PayPal sign-in, redirect or payment takes place.</p></div>
+      <div class="gu-paypanel" data-panel="paypal"><p>Pay with PayPal when you place your order.</p>${publicNotice('<p>This is not the real GAME website: no PayPal sign-in, redirect or payment takes place.</p>')}</div>
     </section>
     <section class="gu-co-section"><h2>Billing address</h2>
       <label class="gu-check"><input type="checkbox" id="billingSame" name="billingSame" value="1" ${values.billingSame === undefined || values.billingSame ? 'checked' : ''}> Billing address same as delivery address</label>
