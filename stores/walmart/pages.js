@@ -4,7 +4,7 @@ import { productImage, productGallery as assetGallery } from '../../lib/product-
 import { shelfImage, shelfGallery } from './shelf.js'
 // Assortment items (shelf.js) are not part of the evidence-backed image catalog; they use their own art.
 const productGallery = (store, p) => p.shelf ? shelfGallery(p) : assetGallery(store, p)
-import { esc, money, disclaimer } from '../../lib/html.js'
+import { esc, money, disclaimer, publicNotice } from '../../lib/html.js'
 import { productPath, STATES, LOCATION, arrivalFor, arrivalSummary, arrivalPhrase, optionText, lineKey, PREORDER_PRICE_GUARANTEE, WALMART_PLUS } from './data.js'
 
 import { DEPARTMENTS, SELLERS, departmentPath, categorySlug } from './catalog.js'
@@ -55,7 +55,7 @@ function storeHeader({ base, t, user, q, location }) {
   return `<header class="wm-header">
   <div class="wm-header-top">
     <a class="wm-logo" href="${base}/" aria-label="Walmart Homepage">${ICON.spark}</a>
-    <details class="wm-header-menu wm-location-menu"><summary class="wm-loc" aria-label="Shipping location: ${esc(location.city)}, ${esc(location.zip)}">${ICON.pin}<span><b>Pickup or delivery?</b><small>${esc(location.city)}, ${esc(location.zip)} &bull; ${esc(location.store)}</small></span><span aria-hidden="true">⌄</span></summary><div class="wm-header-panel"><h2>Choose how you shop</h2><div class="wm-location-methods"><span>${ICON.truck}<b>Shipping</b><small>Available</small></span><span><b>Pickup</b><small>Unavailable</small></span><span><b>Delivery</b><small>Unavailable</small></span></div><p>Browse shipping options for your ZIP code. Review your full address at checkout.</p><form action="${base}/location" method="post"><label for="header-zip">ZIP code</label><input id="header-zip" name="zip" value="${esc(location.zip)}" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required><input type="hidden" name="method" value="shipping"><button class="wm-pill wm-pill-block">Save ZIP code</button></form><a href="${base}/store-finder">Choose a preferred sample store</a></div></details>
+    <details class="wm-header-menu wm-location-menu"><summary class="wm-loc" aria-label="Shipping location: ${esc(location.city)}, ${esc(location.zip)}">${ICON.pin}<span><b>Pickup or delivery?</b><small>${esc(location.city)}, ${esc(location.zip)} &bull; ${esc(location.store)}</small></span><span aria-hidden="true">⌄</span></summary><div class="wm-header-panel"><h2>Choose how you shop</h2><div class="wm-location-methods"><span>${ICON.truck}<b>Shipping</b><small>Available</small></span><span><b>Pickup</b><small>Unavailable</small></span><span><b>Delivery</b><small>Unavailable</small></span></div><p>Browse shipping options for your ZIP code. Review your full address at checkout.</p><form action="${base}/location" method="post"><label for="header-zip">ZIP code</label><input id="header-zip" name="zip" value="${esc(location.zip)}" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required><input type="hidden" name="method" value="shipping"><button class="wm-pill wm-pill-block">Save ZIP code</button></form><a href="${base}/store-finder">Choose a preferred store</a></div></details>
     <form class="wm-search" action="${base}/search" method="get" role="search">
       <input type="search" name="q" placeholder="Search Walmart" aria-label="Search Walmart" value="${esc(q)}" list="wm-search-suggestions"><datalist id="wm-search-suggestions">${["milk","coffee","headphones","storage","pet food","gta 6"].map(v=>`<option value="${v}">`).join('')}</datalist>
       <button type="submit" aria-label="Search icon">${ICON.search}</button>
@@ -201,7 +201,7 @@ function buyBox({ base, p, sponsored, location }) {
     <div class="wm-ful-tiles">
       <label class="wm-ful-tile is-selected" for="fulfillment-shipping"><input type="radio" id="fulfillment-shipping" name="fulfillment" value="shipping" aria-label="Shipping, ${esc(arrivalPhrase(arrival.short))}, Free" checked>${ICON.truck}<b>Shipping</b><span>${p.stock===0?'No delivery estimate':esc(arrivalPhrase(arrival.short))}</span><span>Free</span></label>
       ${p.kind==='game'?`<a class="wm-ful-tile wm-pickup-check" href="${base}/ip/${p.id}/pickup?zip=${encodeURIComponent(location.zip)}"><b>Pickup</b><span>Check nearby</span></a>`:'<div class="wm-ful-tile is-disabled" aria-disabled="true"><b>Pickup</b><span>Not available</span></div>'}
-      <div class="wm-ful-tile is-disabled" aria-disabled="true"><b>Delivery</b><span>${fixtureCatalog || location.zip === LOCATION.zip ? 'Not available' : 'Availability unverified'}</span></div>
+      <div class="wm-ful-tile is-disabled" aria-disabled="true"><b>Delivery</b><span>${fixtureCatalog || location.zip === LOCATION.zip ? 'Not available' : 'Varies by location'}</span></div>
     </div>
   </form>
   <p class="wm-fine"><a href="${base}/store-finder">Check nearby stores &amp; change location</a></p>
@@ -262,7 +262,7 @@ export function addedPage({ base, p, qty, t, recommendations }) {
 
 export function cartPage({ base, t, saved, user, flags, location=LOCATION }) {
   const unavailable=t.lines.some(l=>scenarioStockFor(l.product,'shipping')===0)
-  const availabilityNotice=t.lines.some(l=>l.product.kind==='game') ? `<p class="benchmark-fulfillment" role="status">This local storefront supports shipping only; pickup checkout is unavailable.</p>${unavailable?'<p class="benchmark-availability" role="alert">Shipping unavailable. This item can no longer be purchased. No order has been placed.</p>':''}` : ''
+  const availabilityNotice=t.lines.some(l=>l.product.kind==='game') ? `<p class="benchmark-fulfillment" role="status">This item is available for shipping only; pickup checkout is unavailable.</p>${unavailable?'<p class="benchmark-availability" role="alert">Shipping unavailable. This item can no longer be purchased. No order has been placed.</p>':''}` : ''
   if (!t.lines.length) {
     // ASSUMPTION: empty-cart copy was not captured; Walmart's current wording is "Time to start shopping!".
     return `<div class="wm-cart-empty"><h1>Time to start shopping!</h1><p>Your cart is empty.</p><a class="wm-pill" href="${base}/">Shop now</a>${savedSection(base, saved)}</div>`
@@ -284,7 +284,7 @@ export function cartPage({ base, t, saved, user, flags, location=LOCATION }) {
   <div class="wm-cart-main">
     <h1>Cart <span class="wm-cart-n">(${t.count} item${t.count === 1 ? '' : 's'})</span></h1>
     ${availabilityNotice}<a class="sr-only" href="#checkout-section">Skip to Checkout Section</a>
-    <details class="wm-acc" id="pickup-delivery"><summary>Pickup and delivery options</summary><div class="wm-acc-body"><p>Shipping to ${esc(location.city)}, ${esc(location.zip)} is the available option for this assortment. Each item shows its delivery estimate. ${fixtureCatalog?'Pickup and same-day delivery: Not available.':'Pickup availability is unverified. Same-day delivery was unavailable in the captured Omaha 68116 session; other locations were not verified.'} <a href="${base}/store-finder">Change browsing location</a>. Confirm your full delivery address at checkout.</p></div></details>
+    <details class="wm-acc" id="pickup-delivery"><summary>Pickup and delivery options</summary><div class="wm-acc-body"><p>Shipping to ${esc(location.city)}, ${esc(location.zip)} is the available option for these items. Each item shows its delivery estimate. ${fixtureCatalog?'Pickup and same-day delivery: Not available.':'Pickup and same-day delivery availability varies by location.'} <a href="${base}/store-finder">Change location</a>. Confirm your full delivery address at checkout.</p></div></details>
     <div class="wm-group">
       <div class="wm-group-head"><b>Free shipping, ${esc(arrivalPhrase(arrivalSummary(t.lines)).replace(/^Arrives/,'arrives'))}</b><span class="wm-fine">${esc(location.zip)}</span></div>
       <div class="wm-fine">Shipping estimates and sellers appear with each item &nbsp;&middot;&nbsp; Free shipping</div>
@@ -338,7 +338,7 @@ export function passwordPage({ base, identifier, isEmail, error, state }) {
   <form method="post" action="${base}/account/signin/withpassword" novalidate>
     <p class="wm-h6">Enter your password</p>
     <div class="wm-field"><label for="password">Password</label><div class="wm-pw"><input id="password" name="password" type="password" autocomplete="current-password" required ${error ? 'aria-invalid="true" aria-describedby="password-error"' : ''}><button type="button" class="wm-show" data-toggle="password">Show</button></div>${error ? `<p class="wm-error" id="password-error" role="alert">${esc(error)}</p>` : ''}</div>
-    <details class="wm-acc"><summary>Forgot password</summary><p>Use the local test account password or create another local account. Password reset emails and text messages are not connected.</p><a href="${base}/help/article/create-or-edit-an-account">Account help</a></details>
+    <details class="wm-acc"><summary>Forgot password</summary><p>Online password reset is temporarily unavailable. Please try again later, or create a new account.</p><a href="${base}/help/article/create-or-edit-an-account">Account help</a></details>
     <label class="wm-check" for="keep"><input type="checkbox" id="keep" name="keep" value="1" aria-label="Keep me signed in" checked> <span>Keep me signed in<br><small>Uncheck if using a public device.</small></span></label>
     <p class="wm-fine">We&rsquo;ll keep you signed in on this device. You may be asked to enter your password when modifying sensitive account information.</p>
     <button type="submit" class="wm-pill wm-pill-block">Sign in</button>
@@ -438,6 +438,7 @@ function paymentForm({ base, values, errors, editing }) {
     <div class="wm-3col">${field({ name: 'billingCity', label: 'City*', values, errors, extra: 'autocomplete="billing address-level2"' })}${stateSelect({ name: 'billingState', label: 'State*', values, errors })}${field({ name: 'billingZip', label: 'Zip Code*', values, errors, extra: 'autocomplete="billing postal-code" inputmode="numeric"' })}</div>
   </div>
   <p class="wm-fine">This card is used for this checkout. Only its brand and last four digits are retained; a saved wallet is not available.</p>
+  ${publicNotice('<p class="wm-fine">This is not the real Walmart website: no card is charged and no PayPal payment takes place.</p>')}
   <p class="wm-fine">*Required fields</p>
   <div class="wm-form-actions"><a href="${base}/checkout/review-order" class="wm-link-btn">Cancel</a><button type="submit" class="wm-pill">Save</button></div>
 </form>
@@ -492,7 +493,7 @@ function plusCard({ base, c, open, values, errors }) {
     return `<section class="wm-card wm-plus-card" id="walmart-plus"><div class="wm-co-sub-head"><div><h2>${WPLUS}</h2><div>30-day trial &middot; ${esc(plan.name)} plan, then ${esc(plan.text)} plus applicable tax</div><div class="wm-fine">Savings/trial: ${money(WALMART_PLUS.trial)}</div></div><a href="${base}/checkout/review-order?edit=plus" class="wm-link">Change</a></div></section>`
   }
   if (pl.decided) return ''
-  return `<section class="wm-card wm-plus-card" id="walmart-plus"><h2>${WPLUS}</h2><p>Try 30 days for just $1! Choose a plan at checkout to record your local membership selection.</p><div class="wm-form-actions wm-left"><a class="wm-pill wm-pill-white" href="${base}/checkout/review-order?edit=plus">Pick a plan</a>${decline}</div></section>`
+  return `<section class="wm-card wm-plus-card" id="walmart-plus"><h2>${WPLUS}</h2><p>Try 30 days for just $1! Choose a plan at checkout to start your membership.</p><div class="wm-form-actions wm-left"><a class="wm-pill wm-pill-white" href="${base}/checkout/review-order?edit=plus">Pick a plan</a>${decline}</div></section>`
 }
 
 function summaryRail({ base, t, c, open, ctaLabel }) {
@@ -546,8 +547,8 @@ export function thankyouPage({ base, order, status = 'processing' }) {
       </section>
       <section class="wm-card"><h2>Payment method</h2><p>${pay.method === 'card' ? `${esc(pay.brand)} ending in ${esc(pay.last4)}` : 'PayPal'}</p></section>
       <section class="wm-card"><h2>Contact</h2><p>${esc(order.customer.email)}<br><span class="wm-fine">Phone number ending in ${esc(String(order.customer.phone ?? '').replace(/\D/g, '').slice(-4))}</span></p></section>
-      ${order.meta.walmart_plus ? `<section class="wm-card wm-plus-card"><h2>${WPLUS}</h2><p>Your W+ trial membership has been created in this local account. <a href="${base}/account/plus">Manage your selection</a> before the displayed trial end, ${esc(trialEnd)}. No real subscription or future charge is activated.</p></section>` : ''}
-      <section class="wm-card"><h2>Order updates</h2><p>Check <a href="${base}/orders/${order.id}/tracking">tracking</a> for the current local status. Text verification and outbound messages are not connected.</p></section>
+      ${order.meta.walmart_plus ? `<section class="wm-card wm-plus-card"><h2>${WPLUS}</h2><p>Your W+ trial membership has started. <a href="${base}/account/plus">Manage your membership</a> before your trial ends on ${esc(trialEnd)}.</p>${publicNotice('<p>This is not the real Walmart website: no real subscription or future charge is activated.</p>')}</section>` : ''}
+      <section class="wm-card"><h2>Order updates</h2><p>Check <a href="${base}/orders/${order.id}/tracking">tracking</a> for the current status.</p></section>
     </div>
     <aside class="wm-summary">
       <h2>Order summary</h2>
