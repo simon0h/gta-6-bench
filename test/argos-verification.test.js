@@ -54,6 +54,6 @@ test('argos verification: cancelled delivery and collection receipts show histor
     }
     const c=s.client(), sofa=main((await c.get('/argos/product/9901004')).text)
     assert.doesNotMatch(sofa,/slot arranged after order/)
-    assert.match(main((await c.get('/argos/help/delivery-collection')).text),/does not send collection codes or book real delivery slots/)
+    assert.match(main((await c.get('/argos/help/delivery-collection')).text),/no collection codes are sent and no real delivery slots are booked/)
   } finally {await s.close()}
 })

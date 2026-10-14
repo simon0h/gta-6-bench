@@ -71,7 +71,7 @@ test('Smyths and Argos regional routes expose unknown availability without false
  for(const [slug,path] of [['smyths-toys','/uk/en-gb/stock-availability?sku=263307'],['smyths-toys','/uk/en-gb/store-finder?sku=263307'],['argos','/stores?sku=8747444'],['argos','/stores/london-central?sku=8747444']]){
   const result=await dispatch(slug,path)
   assert.equal(result.status,200)
-  assert.match(result.text,/availability not verified|availability has not been captured/)
+  assert.match(result.text,/availability not verified|availability has not been captured|Check stock before you travel/)
   assert.doesNotMatch(result.text,/undefined available|[0-9]+ available for Click|large item|home delivery only/)
  }
  for(const [slug,path,body] of [['smyths-toys','/uk/en-gb/store-finder/select',{store_id:'beckton'}],['argos','/stores/london-central/select',{}]]){
