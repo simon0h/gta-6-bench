@@ -184,7 +184,7 @@ body.xb-light .xb-main:has(>.xb-collection-hero){padding:0 0 30px}.xb-collection
 /* Current GTA VI ESRB descriptors, beneath the classification. */
 .xb-rating-descriptors{flex-basis:100%;font-size:12px;line-height:1.4;color:#eee}.xb-rating-descriptors hr{border:0;border-top:1px solid #777;margin:8px 0}
 
-/* Official Xbox product capture, 2026-10-06 at 1265 × 712. */
+/* Product page layout, 1265 × 712. */
 @font-face{font-family:SegoeUIReference;src:url('/static/reference/xbox-store/segoe-ui.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
 @font-face{font-family:SegoeUIReference;src:url('/static/reference/xbox-store/segoe-ui-semibold.woff2') format('woff2');font-style:normal;font-weight:600 800;font-display:swap}
 body{font-family:SegoeUIReference,'Segoe UI',Arial,sans-serif}
@@ -198,7 +198,7 @@ body{font-family:SegoeUIReference,'Segoe UI',Arial,sans-serif}
 @media(max-width:900px){.xb-header-inner{height:auto;min-height:56px;margin:0;padding:8px 18px}.xb-gta-hero .xb-hero-inner{flex-direction:row}.xb-gta-hero{padding:32px 24px}.xb-gta-hero .xb-hero-info h1{font-size:32px}.xb-gta-hero .xb-meta{font-size:16px}.xb-esrb-strip:has(.xb-rating-image){padding:25px 24px}.xb-esrb-left:has(.xb-rating-image),.xb-esrb-strip:has(.xb-rating-image) .xb-esrb-right{width:100%}}
 @media(max-width:540px){.xb-gta-hero .xb-hero-inner{gap:16px;min-height:0}.xb-gta-hero .xb-cover{width:105px;height:158px}.xb-gta-hero .xb-hero-info h1{font-size:25px;line-height:1.1;margin:0 0 10px}.xb-gta-hero .xb-meta{font-size:14px}.xb-gta-hero .xb-badges{gap:8px;font-size:11px}.xb-gta-hero>.xb-buybox{gap:9px;margin-top:24px}.xb-gta-hero .xb-buybox .xb-btn-buy{width:115px}.xb-gta-hero .xb-edition>summary{width:195px}.xb-gta-hero .xb-wishlist,.xb-gta-hero .xb-overflow>summary{width:48px}.xb-gta-hero .xb-buybox .xb-btn{height:58px;padding:8px 12px}}
 
-/* Measured from the official rendered product, same viewport and Pacific locale. */
+/* Product page buy box. */
 @font-face{font-family:'Bahnschrift Light';src:url('/static/reference/xbox-store/bahnschrift.woff') format('woff');font-weight:300;font-style:normal;font-display:swap}
 .xb-gta-hero{padding:48px 48px 40px;min-height:448px}.xb-gta-hero .xb-hero-inner{gap:16px;min-height:264px}.xb-gta-hero .xb-cover{width:176px;height:264px;aspect-ratio:2/3}.xb-gta-hero .xb-hero-info h1{font-family:'Bahnschrift Light',SegoeUIReference,sans-serif;font-size:40px;line-height:40px;font-weight:300;margin:0 0 10px}.xb-gta-hero .xb-meta{margin:0 0 12px}.xb-gta-hero .xb-hero-backdrop>img{width:100%;height:auto;min-height:100%;filter:blur(16px);transform:none;object-fit:cover;object-position:center top}.xb-gta-hero:after{display:block;background:rgba(0,0,0,.64)}.xb-gta-hero .xb-buybox .xb-btn-buy{width:128px}.xb-gta-hero .xb-edition>summary{width:213.3125px}.xb-gta-hero .xb-badges li{display:flex;align-items:center;gap:7px;background:none;border:0;padding:0}.xb-badge-icon{width:20px;height:20px;object-fit:contain;filter:invert(1)}.xb-gta-hero .xb-badges li:first-child:before{content:'X|S';font-size:14px;font-weight:600;background:#408735;color:white;padding:0 2px}.xb-wishlist>img{width:20px;height:20px;filter:invert(1)}.xb-edition .xb-btn-sub{display:flex;gap:22px;align-items:center}.xb-chevron{width:17px;height:17px;filter:invert(1)}
 @media(max-width:900px){.xb-gta-hero{padding:32px 24px}.xb-gta-hero .xb-hero-info h1{font-size:32px;line-height:36px}}
