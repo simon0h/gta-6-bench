@@ -86,7 +86,7 @@ export const PAGES = {
       ['Home Delivery', p('If Home Delivery is shown as available on the product page, the item can be ordered for delivery.')],
       ['Click & Collect', p('Choose a store on the product page to see whether it can be collected. Use the <a href="{base}/storefinder">Store finder</a> to find your nearest store.')],
       ['Pre-Order', p('Items that are not yet released can be pre-ordered where the product page shows a Pre-order button.')],
-      ['Please note', p('Stock shown as available may occasionally be unavailable in store. In this demo store, live branch stock has not been captured and is never shown as verified.')],
+      ['Please note', p('Stock shown as available may occasionally be unavailable in store. Please check with your local store before you travel.')],
     ],
   },
   '/gift-card-info': {
@@ -179,7 +179,7 @@ export const PAGES = {
   },
   '/gender-pay-gap': {
     title: 'Gender Pay Gap', h1: 'Gender Pay Gap', help: true,
-    intro: p('Smyths Toys UK Ltd publishes its gender pay gap report each year as required by UK regulations. The full figures are published on the real site; this demo store does not reproduce them.'),
+    intro: p('Smyths Toys UK Ltd publishes its gender pay gap report each year as required by UK regulations. The latest report is available on request from our Customer Care team.'),
     sections: [],
   },
   '/about-us': {
@@ -193,7 +193,7 @@ export const PAGES = {
   },
   '/careers': {
     title: 'Careers', h1: 'Jobs and Careers at Smyths Toys Superstores', help: true,
-    intro: p('On the real site, careers live at careers.smythstoys.com. This page summarises it locally.'),
+    intro: p('Find out about working at Smyths Toys Superstores and view current vacancies at careers.smythstoys.com.'),
     sections: [
       ['Careers at Smyths Toys Superstores', p('For people who enjoy fast-moving work and want broad retail and business experience while taking charge of their own progress.')],
       ['Our Core Business Areas', ul('<strong>Retail</strong> – store-based roles', '<strong>Head Office</strong> – buying, finance, marketing, IT and HR', '<strong>Distribution Centres</strong> – including a graduate programme')],
@@ -219,7 +219,7 @@ export const PAGES = {
   },
   '/buying-guides': {
     title: 'Buying Guides', h1: 'Buying Guides',
-    intro: p('Expert advice to help you choose. The full guides are on the real site; topics are listed here with links to the matching departments.'),
+    intro: p('Expert advice to help you choose. Choose a topic below to shop the matching department.'),
     sections: [
       ['Baby', `<ul class="st-linklist">${[['Car Seat Guide', '/baby/car-seats-and-bases/c/SM060202'], ['Pushchair guide', '/baby/pushchairs-and-strollers/c/SM060205'], ['Baby monitor guide', '/baby/baby-monitors-and-safety/c/SM060208'], ['Newborn essentials', '/baby/baby-essentials/c/baby-essentials'], ['Travelling with baby', '/baby/c/SM0602'], ['Playtime & baby’s development guide', '/baby/baby-toys/c/SM060216']].map(([t, u]) => `<li><a href="{base}${u}">${t}</a></li>`).join('')}</ul>`],
       ['Outdoor', `<ul class="st-linklist"><li><a href="{base}/outdoor/bikes/c/SM060301">Bike Buying Guide</a></li></ul>`],
