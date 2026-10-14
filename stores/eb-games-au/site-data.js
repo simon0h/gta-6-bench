@@ -132,9 +132,9 @@ export const INFO_PAGES = [
  ['/reboot','Reboot Repairs','Fixed-price repairs for PlayStation, Nintendo and Xbox consoles and controllers, with a warranty on all repairs.',[
   ['Fixed Price Repairs',['Know the price up front. No Repair, No Fee Guarantee. Expert Technicians. Warranty on all Repairs.']],
   ['How Reboot Repairs Works',['Step 1. Tell Us What\'s Wrong. Step 2. Send Your Device. Step 3. We Fix It. Step 4. You Play It.']],
-  ['Repair Prices',['Fixed Price - No Surprises! Each supported console and controller has a listed fixed repair price on the live Reboot service.']],
+  ['Repair Prices',['Fixed Price - No Surprises! Each supported console and controller has a listed fixed repair price.']],
   ['Prefer to head in store?',['Drop your device off at your nearest EB Games store for assessment.']],
-  ['Need More Help?',['Visit Help & Support or contact customer service. Repair bookings, quotes and shipping labels are not available here.']]]],
+  ['Need More Help?',['Visit Help & Support or contact customer service. Online repair bookings are currently unavailable; please visit your nearest store.']]]],
  ['/eb-protect','EB Protect','Protecting your consoles, games and controllers from life\'s little mishaps.',[
   ['What does EB Protect cover?',['EB Protect will cover any faults, failures, or accidental damage to your console, games, or controllers within your cover period. Your cover is stored in your EB World account, so there are no receipts to keep.']],
   ['T&C\'s apply. See staff for details. Available instore only.',['EB Protect cannot be purchased online.']]]],
@@ -150,15 +150,15 @@ export const INFO_PAGES = [
   ['Shop a Huge Range of Refurbished iPhones!',['Refurbished phones from marketplace sellers.']],
   ['Create the ultimate battlestation with furniture designed for peak gaming performance.',['Gaming chairs and desks.']],
   ['Expand your collection with even more Board Games!',['Board games from marketplace sellers.']],
-  ['All of our trusted sellers',['Marketplace items are sold and shipped by their sellers. No marketplace listings are available in this store.']]]],
+  ['All of our trusted sellers',['Marketplace items are sold and shipped by their sellers. Marketplace listings are currently unavailable. Please check back soon.']]]],
  ['/sell-your-tcg-singles','Sell Your TCG Singles','Sell your Pokémon, One Piece and Magic: The Gathering singles and get a valuation at your nearest store.',[
   ['How it Works',['Bring your cards to a participating store. Our team will assess them and make you an offer.']],
   ['What We Buy',['Singles from recent sets of Pokémon, One Piece and Magic: The Gathering.']],
   ['Card Condition Guide',['Cards are valued on condition. Damaged, altered or counterfeit cards can\'t be bought.']],
   ['Get Your Cards Ready',['Sort your cards and keep them sleeved to protect their condition.']],
-  ['We are buying TCG in the following stores:',['Participating stores are listed by state on the live site. EB Games doesn\'t offer refunds or exchanges for change of mind on singles.']]]],
+  ['We are buying TCG in the following stores:',['Ask your local store whether it is participating. EB Games doesn\'t offer refunds or exchanges for change of mind on singles.']]]],
  ['/careers','Careers at EB Games','Join the team at Australia\'s leading specialty games retailer.',[
-  ['Working at EB Games',['EB Games and ZiNG employ team members in stores, distribution and the support office around Australia. Roles and applications are listed on the EB Games careers site, which is not part of this store.']],
+  ['Working at EB Games',['EB Games and ZiNG employ team members in stores, distribution and the support office around Australia. Roles and applications are listed on the EB Games careers site.']],
   ['Store roles',['Store team members help customers with games, trades, preorders and pop culture collectibles.']]]],
  ['/privacy','Privacy Policy','Electronics Boutique Australia Pty Ltd, trading as EB Games, explains what information it collects and how it is used.',[
   ['Kinds of Information Collected',['Contact, payment and browsing information collected from shoppers and website visitors.']],
@@ -182,11 +182,11 @@ export const INFO_PAGES = [
  ['/console-trade-deals','Console Trade Deals','Trade your old console and put the credit towards a new one.',[
   ['Choose your platform',['See the current Nintendo, PlayStation and Xbox trade deals. Trade values are confirmed in store.']]]],
  ['/switch-trade-deals','Nintendo Trade Deals','Trade your Nintendo Switch towards a Nintendo Switch 2.',[
-  ['How it works',['Bring your console, accessories and identification to a store for assessment. Trade values are confirmed in store; no trade value is issued here.']]]],
+  ['How it works',['Bring your console, accessories and identification to a store for assessment. Trade values are confirmed in store.']]]],
  ['/playstation-trade-deals','PlayStation Trade Deals','Trade your PlayStation console towards a new PlayStation 5.',[
-  ['How it works',['Bring your console, accessories and identification to a store for assessment. Trade values are confirmed in store; no trade value is issued here.']]]],
+  ['How it works',['Bring your console, accessories and identification to a store for assessment. Trade values are confirmed in store.']]]],
  ['/xbox-trade-deals','Xbox Trade Deals','Trade your Xbox console towards a new Xbox Series X|S.',[
-  ['How it works',['Bring your console, accessories and identification to a store for assessment. Trade values are confirmed in store; no trade value is issued here.']]]],
+  ['How it works',['Bring your console, accessories and identification to a store for assessment. Trade values are confirmed in store.']]]],
 ]
 
 export const PLUS_BENEFITS = ['Buy 10 Get 1 FREE Boosters','Buy 10 Get 1 FREE Pop! Vinyls','Buy 10 Get 1 FREE Socks','Buy 10 Get 1 $70 OFF Clothing Items under $70 are FREE!','5% off digital currencies and content','5% extra Trade Value Stacks with your EB World Trade Bonus.','Double Carrots on every purchase Stacks with all promotional bonuses.','PLUS FREE GIFT when you join!']
