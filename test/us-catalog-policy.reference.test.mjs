@@ -88,7 +88,7 @@ test('US default public pages reject fabricated product and cart identities',asy
     for (const zip of ['68116','10001']) {
       const nearby=await walmart.get('/walmart/ip/20482917228/pickup?zip='+zip)
       assert.equal(nearby.status,200)
-      assert.match(nearby.text,/Pickup availability unverified/)
+      assert.match(nearby.text,/Pickup availability varies by store/)
       assert.doesNotMatch(nearby.text,/<b>Pickup not available<\/b>/)
     }
     const bestbuy=server.client()

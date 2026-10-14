@@ -275,7 +275,7 @@ test('walmart: picking a Walmart+ plan at checkout adds the $1 trial to the orde
     assert.match(picked.text, /Walmart\+ 30-day trial<\/span><span>\$1\.00/)
     assert.match(picked.text, /Place order for \$86\.59/)
     const done = await c.post('/walmart/checkout/place-order', {})
-    assert.match(done.text, /Your W\+ trial membership has been created/)
+    assert.match(done.text, /Your W\+ trial membership has started/)
     const [o] = await c.json('/api/orders?store=walmart')
     assert.deepEqual(o.totals, { subtotal: 79.99, shipping: 0, tax: 5.6, walmart_plus: 1, total: 86.59 })
     assert.equal(o.meta.walmart_plus, 'annual')
