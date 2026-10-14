@@ -7,7 +7,7 @@ export const DEPARTMENT_DEFS = [
  ['computers-tablets','Computers & Tablets','Work, create and stay connected','laptop'],
  ['mobile-phones','Mobile Phones','Your everyday connection','smartphone'],
  ['wearables','Wearables','Keep moving, keep connected','smartwatch-black'],
- ['cameras','Cameras','Capture your next adventure','mirrorless-camera'],
+ ['cameras','Cameras','Shoot your next adventure','mirrorless-camera'],
  ['smart-home','Smart Home','A more connected home','security-camera-white'],
  ['home-appliances','Home Appliances','Little upgrades, big difference','espresso-machine'],
  ['gaming','Gaming','Consoles, games and accessories','handheld-console'],

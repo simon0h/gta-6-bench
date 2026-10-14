@@ -211,7 +211,7 @@ const needsInfo = (req, res, next) => {
   if (!fixtureCatalog && req.store.checkout.info?.method === 'pickup') {
     delete req.store.checkout.info
     delete req.store.checkout.review
-    return renderInformation(req,res,{delivery_method:'delivery'},{errors:{delivery_method:'Store pickup availability has not been verified. Choose Delivery or a captured collection point.'}})
+    return renderInformation(req,res,{delivery_method:'delivery'},{errors:{delivery_method:'Store pickup is currently unavailable for this order. Choose Delivery or an Australia Post collection point.'}})
   }
   return req.store.checkout.info ? next() : res.redirect(res.locals.urls.information)
 }
@@ -294,7 +294,7 @@ router.post(`${STEP}/information`, checkoutStep, (req, res) => {
   v.delivery_method = method
   if (b.apply_discount) return renderInformation(req, res, v, { discountError: DISCOUNT_ERROR })
   // "Use my location" / "Find stores" / "Search" only refresh the finder of the chosen delivery method.
-  if (method === 'pickup' && !fixtureCatalog) return renderInformation(req,res,v,{errors:{delivery_method:'Store pickup availability has not been verified. Choose Delivery or a captured collection point.'}})
+  if (method === 'pickup' && !fixtureCatalog) return renderInformation(req,res,v,{errors:{delivery_method:'Store pickup is currently unavailable for this order. Choose Delivery or an Australia Post collection point.'}})
   if (method === 'pickup' && (b.use_location || b.find_stores)) return renderInformation(req, res, v)
   // The captured Melbourne 3000 collection search refreshes without requiring customer details.
   if (method === 'collection_point' && (b.use_location_point || b.find_points)) return renderInformation(req, res, v, { pointSearched: true })
