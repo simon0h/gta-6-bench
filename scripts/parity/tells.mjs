@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Finds wording that tells a shopper (or an AI agent) the store is a test copy.
+// Finds wording that tells an AI agent in a benchmark trial that the store is a test copy.
 // Crawls a store's pages and served SVGs, and searches visible text plus alt/title/aria-label/
 // placeholder/meta text for giveaway phrases.
 //
@@ -43,7 +43,8 @@ export function findTells(text) {
 if (slug) {
   process.env.NODE_ENV ??= 'test'
   const { createApp } = await import(path.join(ROOT, 'app.js'))
-  const app = await createApp({ persist: false })
+  // Scan what an agent sees: a benchmark trial app, where public-only notices are hidden.
+  const app = await createApp({ persist: false, benchmark: { runId: 'wording-scan', stores: [slug] } })
   const server = await new Promise(resolve => { const s = app.listen(0, () => resolve(s)) })
   const base = `http://127.0.0.1:${server.address().port}`
   const prefix = `/${slug}`

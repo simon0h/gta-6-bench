@@ -20,7 +20,7 @@ test('server boots, index lists stores, API responds', async () => {
     for (const s of stores) {
       const r = await c.get(s.url)
       assert.equal(r.status, 200, `${s.slug} home should render`)
-      assert.doesNotMatch(r.text, /Synthetic benchmark environment/)
+      assert.match(r.text, /Synthetic benchmark environment/, `${s.slug} home must include the disclaimer footer`)
     }
     assert.deepEqual(await c.json('/api/orders'), [])
   } finally { await srv.close() }

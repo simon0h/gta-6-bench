@@ -38,7 +38,7 @@ for (const [slug, name, id, category] of stores) {
       const c = srv.client(), base = `/${slug}`
       const home = await c.get(`${base}?run=negative-${slug}`)
       assert.equal(home.status, 200)
-      assert.doesNotMatch(home.text, /Synthetic benchmark environment/)
+      assert.match(home.text, /Synthetic benchmark environment/)
       for (const q of ['gta 6', 'gta vi', 'grand theft auto', 'grand theft auto vi', 'GTA6', 'Grand Theft Auto 6']) {
         const search = await c.get(`${base}/search?q=${encodeURIComponent(q)}`)
         assert.equal(search.status, 200)

@@ -24,7 +24,7 @@ test('gmarket: Korean search and guest preorder records KRW, Korean address and 
     const page = await c.get('/gmarket/product/4796016651')
     assert.match(page.text, /<html lang="ko">/)
     assert.match(page.text, /name="viewport"/)
-    assert.doesNotMatch(page.text, /Synthetic benchmark environment/)
+    assert.match(page.text, /Synthetic benchmark environment/)
     assert.match(page.text, /89,800원/)
     assert.doesNotMatch(page.text, /89,800\.00/)
     assert.match(page.text, /코드 인 박스 \(디스크 미포함\)/)

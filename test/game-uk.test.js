@@ -69,7 +69,7 @@ test('game-uk: guest pre-orders the PS5 code-in-box copy end to end', async () =
     assert.match(gate.text, />Continue securely<\/button>/)
     assert.match(gate.text, /Personalised experience/)
     assert.doesNotMatch(gate.text, /Sign up to our newsletter|Search product or brand/, 'the sign-in page is minimal: wordmark, form, slim footer')
-    assert.doesNotMatch(gate.text, /Synthetic benchmark environment/)
+    assert.match(gate.text, /Synthetic benchmark environment/)
 
     const afterEmail = await c.post('/game-uk/account/login', { action: 'email', email: 'alex@example.com', returnUrl: '/checkout' })
     assert.match(afterEmail.url, /step=register/)
