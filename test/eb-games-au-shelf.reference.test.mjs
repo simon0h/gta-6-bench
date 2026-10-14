@@ -69,7 +69,7 @@ test('assortment items are bought in full as kind other; GTA VI purchase guards 
     assert.deepEqual(order.items, [{ kind: 'other', qty: 2, unit_price: 79, title: 'Pokemon - Charizard Super Sized 10" Pop! Vinyl Figure', sku: '343410' }])
     assert.equal(order.meta.deposit_paid, 0)
     assert.equal(order.meta.balance_due, 0)
-    // Store pickup for GTA VI stays unverified in reference mode.
+    // Store pickup for GTA VI stays unavailable in reference mode.
     const g = s.client()
     await g.post(`${B}/cart/add`, { sku: '330056', qty: '1' })
     await g.post(`${B}/checkout/guest`, { guest_email: 'gta@example.com' })

@@ -82,10 +82,10 @@ test('EB collection and ship-from-store cancellation restrictions, guest ownersh
  assert.equal((await s.client().get(`${B}/account/orders/${o.id}`)).status,404)
  const help=await c.get(`${B}/help?q=damaged`);assert.match(help.text,/Damaged or defective items/);assert.doesNotMatch(help.text,/>Plan a trade-in</)
  const bad=await c.post(`${B}/help/contact`,{category:'Returns & faults',email:'guest51@example.com',subject:'Damaged item',message:'short'});assert.equal(bad.status,400);assert.match(bad.text,/Damaged item/)
- const support=await c.post(`${B}/help/contact`,{category:'Returns & faults',email:'guest51@example.com',subject:'Collection question',message:'Can the store explain my collection options?',order_id:o.id});assert.match(support.text,/Support request saved/);const casePath=path(support);assert.equal((await s.client().get(casePath)).status,404)
+ const support=await c.post(`${B}/help/contact`,{category:'Returns & faults',email:'guest51@example.com',subject:'Collection question',message:'Can the store explain my collection options?',order_id:o.id});assert.match(support.text,/Support request received/);const casePath=path(support);assert.equal((await s.client().get(casePath)).status,404)
  await c.post(`${B}/account/login`,credentials);assert.equal((await c.get(casePath)).status,404);await c.post(`${B}/account/logout`,{});assert.equal((await c.get(casePath)).status,200)
  const delivery=await place(c,{member:false});getOrder(delivery.id).meta.ship_from_store=true;assert.equal((await c.post(`${B}/account/orders/${delivery.id}/cancel`,{reason:'change'})).status,400)
  for(const route of ['/trade-and-save','/reboot','/plus'])assert.equal((await c.get(B+route)).status,200)
- assert.match((await c.get(`${B}/reboot`)).text,/Repair bookings, quotes and shipping labels are not available/)
+ assert.match((await c.get(`${B}/reboot`)).text,/Online repair bookings are currently unavailable/)
  }finally{await s.close()}
 })
