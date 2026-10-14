@@ -150,7 +150,7 @@ test('IKEA profile, Family and address CRUD isolate accounts and prefill the can
     assert.match((await c.get('/ikea/account')).text, /Hej, Sam/)
     await c.post(`/ikea/account/addresses/${second}/delete`)
     assert.doesNotMatch((await c.get('/ikea/account/addresses')).text, /50 Work Road/)
-    assert.match((await c.post('/ikea/account/family', { action: 'leave' })).text, /Join your local/)
+    assert.match((await c.post('/ikea/account/family', { action: 'leave' })).text, /Join IKEA Family today/)
   } finally { await srv.close() }
 })
 
