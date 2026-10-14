@@ -63,7 +63,7 @@ function custom(kind, p, view) {
   const body = DRAW[kind].call(ctx, c, view, metal)
   const t = view === 1 ? 'translate(640,0) scale(-1,1)' : view === 2 ? 'translate(-96,-90) scale(1.3)' : view === 3 ? 'translate(80,60) scale(.75)' : ''
   const label = ['Product view', 'Reverse or interior view', 'Construction and material detail', 'Component and alternate views'][view]
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="600" viewBox="0 0 640 600" role="img" aria-label="${esc(p.title + ' — ' + label)}"><title>${esc(p.title + ' — ' + label)}</title><desc>Synthetic product illustration.</desc>${r(0, 0, 640, 600, '#f5f4f0')}<ellipse cx="320" cy="493" rx="214" ry="18" fill="#b9b7b0" opacity=".19"/><g transform="${t}">${body}</g><text x="320" y="572" font-size="15" fill="#677179" text-anchor="middle" font-family="sans-serif">${label}</text></svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="600" viewBox="0 0 640 600" role="img" aria-label="${esc(p.title + ' — ' + label)}"><title>${esc(p.title + ' — ' + label)}</title><desc>${esc(p.title)}</desc>${r(0, 0, 640, 600, '#f5f4f0')}<ellipse cx="320" cy="493" rx="214" ry="18" fill="#b9b7b0" opacity=".19"/><g transform="${t}">${body}</g><text x="320" y="572" font-size="15" fill="#677179" text-anchor="middle" font-family="sans-serif">${label}</text></svg>`
 }
 
 const cache = new Map()
