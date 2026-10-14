@@ -1,4 +1,4 @@
-/* Reference-mode Sephora chrome and content pages (sephora.com look, Oct 2026). */
+/* Sephora chrome and content pages. */
 .sx{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:#000;background:#fff;--sx-red:#cf112c;--sx-grey:#f6f6f8;--sx-line:#eeeeee;--sx-muted:#666}
 .sx *{box-sizing:border-box}
 .sx nav{background:none;color:inherit;border:0;padding:0;gap:0;justify-content:flex-start;font-weight:inherit;flex-wrap:wrap;position:static;font-size:inherit;overflow:visible;white-space:normal}
