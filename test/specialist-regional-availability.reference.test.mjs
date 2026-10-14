@@ -32,7 +32,7 @@ test('JB keeps captured Australia Post points without invented retail-store stoc
  assert.doesNotMatch(html,/melbourne-central|sydney-city|No stores available with your item/)
  const result=await dispatch('jb-hifi',jbInfo,{method:'POST',state:jbState(),body:{delivery_method:'pickup',store_id:'melbourne-central',email:'reference@example.test',pickup_first_name:'Test',pickup_last_name:'Buyer',pickup_phone:'0412345678'}})
  assert.equal(result.status,400)
- assert.match(result.text,/Store pickup availability has not been verified/)
+ assert.match(result.text,/Store pickup is currently unavailable/)
  assert.equal(result.req.store.checkout.info,undefined)
  const point=await dispatch('jb-hifi',jbInfo,{method:'POST',state:jbState(),body:{delivery_method:'collection_point',point_query:'Melbourne 3000',point_country:'AU',point_id:'qv-parcel-locker',email:'reference@example.test'}})
  assert.equal(point.status,302)
@@ -61,7 +61,7 @@ test('stale pickup checkout state cannot bypass EB or JB information validation'
  for(const [slug,path,state] of [['jb-hifi','/checkouts/cn/local-reference-token/en-us/payment',jb],['eb-games-au','/checkout/payment',eb]]){
   const result=await dispatch(slug,path,{method:'POST',state,body:{}})
   assert.equal(result.status,400)
-  assert.match(result.text,/pickup availability has not been verified/)
+  assert.match(result.text,slug==='jb-hifi'?/Store pickup is currently unavailable/:/pickup availability has not been verified/)
   assert.equal(result.req.store.checkout.info,undefined)
   assert.doesNotMatch(result.text,/Order number:|Thank you for your/)
  }
