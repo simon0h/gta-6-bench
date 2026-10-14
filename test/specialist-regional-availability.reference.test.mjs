@@ -47,7 +47,7 @@ test('EB rejects unobserved pickup while retaining delivery and deposit checkout
  assert.match(delivery.text,/Preorder deposit/)
  const pickup=await dispatch('eb-games-au','/checkout/delivery',{method:'POST',state:ebState(),body:{method:'pickup',store_id:'sydney',first_name:'Test',last_name:'Buyer',phone:'0412345678'}})
  assert.equal(pickup.status,400)
- assert.match(pickup.text,/Store pickup availability has not been verified/)
+ assert.match(pickup.text,/Click (&amp;|&) Collect is not available for this order/)
  assert.equal(pickup.req.store.checkout.info,undefined)
  const ship=await dispatch('eb-games-au','/checkout/delivery',{method:'POST',state:ebState(),body:{method:'ship',first_name:'Test',last_name:'Buyer',phone:'0412345678',address:'1 Test Street',suburb:'Sydney',state:'NSW',postcode:'2000',shipping_method:'standard'}})
  assert.equal(ship.status,302)
@@ -61,7 +61,7 @@ test('stale pickup checkout state cannot bypass EB or JB information validation'
  for(const [slug,path,state] of [['jb-hifi','/checkouts/cn/local-reference-token/en-us/payment',jb],['eb-games-au','/checkout/payment',eb]]){
   const result=await dispatch(slug,path,{method:'POST',state,body:{}})
   assert.equal(result.status,400)
-  assert.match(result.text,slug==='jb-hifi'?/Store pickup is currently unavailable/:/pickup availability has not been verified/)
+  assert.match(result.text,slug==='jb-hifi'?/Store pickup is currently unavailable/:/Click (&amp;|&) Collect is not available for this order/)
   assert.equal(result.req.store.checkout.info,undefined)
   assert.doesNotMatch(result.text,/Order number:|Thank you for your/)
  }
