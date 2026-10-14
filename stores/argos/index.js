@@ -23,7 +23,7 @@ router.use((req,res,next) => {
  const stockSku = req.path.match(/^\/product\/([^/]+)\/stock$/)?.[1]
  const shelfOnlyCart = req.store.cart.length > 0 && req.store.cart.every(line => isShelfSku(line.sku))
  if (!fixtureCatalog && (req.path.startsWith('/checkout') && !(shelfOnlyCart || req.method === 'GET' && /^\/checkout\/confirmation\//.test(req.path)) || req.method === 'POST' && (req.path === '/trolley/add' && !isShelfSku(req.body?.sku) || stockSku && !isShelfSku(stockSku)))) {
-  return render(req,res,'Availability not verified','<h1>Availability not verified</h1><p>This listing does not have verified delivery or collection availability.</p>',409)
+  return render(req,res,'Not available to buy online','<h1>Sorry, this item isn’t available to buy online right now</h1><p>Please check back later.</p>',409)
  }
  next()
 })
@@ -304,6 +304,6 @@ router.get('/checkout/confirmation/:number', (req, res) => {
 })
 router.use(notFound)
 
-export default { slug: 'argos', name: 'Argos', country: 'UK', currency: 'GBP', gta6_available: fixtureCatalog ? true : null, availability_status: fixtureCatalog ? 'available' : 'listing_only', description: fixtureCatalog ? 'UK code-in-box preorder fixture with postcode checkout.' : 'UK GTA VI listings; postcode availability unverified.', router }
+export default { slug: 'argos', name: 'Argos', country: 'UK', currency: 'GBP', gta6_available: fixtureCatalog ? true : null, availability_status: fixtureCatalog ? 'available' : 'listing_only', description: fixtureCatalog ? 'UK code-in-box pre-order with postcode checkout.' : 'UK GTA VI listings.', router }
 
 registerScenarioAdapter('argos', { seed(store, id, qty) { store.cart = [{ ...selectedProduct(bySku(id)), qty, age_confirmed: true }] } })

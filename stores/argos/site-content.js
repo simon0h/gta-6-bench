@@ -3,7 +3,8 @@
 // off-site links (Sainsbury's corporate site, careers, partner services) say where the real page lives.
 // Every service on these pages is described only: nothing here books, charges or links an account.
 
-const SHOP = 'This benchmark shop shows the page structure only; no application, booking, payment or account link is made here.'
+// Shown on the public site only (publicNotice): protects real visitors from thinking anything was applied for.
+const SHOP = 'This is not the real Argos website: no application, booking, payment or account link is made here.'
 
 export const INFO = {
   '/help/delivery-and-collection-guide': { title: 'Delivery & Collection Guide', crumb: 'Delivery and collection', sections: [
@@ -14,7 +15,7 @@ export const INFO = {
     { id: 'big-things', h2: 'Home delivery for big things', p: ['Large items such as sofas and beds are delivered by two people. Delivery slot prices are shown at checkout.'] },
     { h2: 'Home delivery for clothing', p: ['Next day delivery costs £3.95 for orders placed by 2pm Monday to Friday. Orders placed after 2pm Friday and before 2pm Sunday arrive or are ready on Monday. Bank holidays are excluded.'] },
     { h2: 'Installation and recycling', p: ['Available for dishwashers, washing machines, washer dryers and freestanding cookers. A recycling-only service starts at £14.99. Terms apply.'] },
-  ], links: [['Track your order', '/order/tracking'], ['Find a store', '/stores'], ['Delivery & collection in this shop', '/help/delivery-collection']] },
+  ], links: [['Track your order', '/order/tracking'], ['Find a store', '/stores'], ['Delivery & collection help', '/help/delivery-collection']] },
   '/help/returns-product-support-and-repairs': { title: 'Returns, product support and repairs', crumb: 'Aftersales and returns', sections: [
     { h2: 'Returns, refunds and exchanges', p: ['Start a return, get product support or check how long your refund will take.'], links: [['Start a return', '/order/tracking?type=returns'], ['Product support', '/help/product-support']] },
     { id: 'how-to-return', h2: 'How to return your item', p: ['How you return an item depends on whether you collected it or had it delivered. Items bought from a Trusted Seller cannot be returned to an Argos store: post them back or the seller arranges a collection. Trusted Seller returns are accepted within 30 days of delivery.'] },
@@ -22,20 +23,20 @@ export const INFO = {
     { h2: 'If your item is faulty or damaged', list: ['Within 30 days: faulty items are eligible for a refund. Some cosmetically damaged items may qualify for a partial refund.', '30 days to 12 months: a free repair or replacement. If that fails, or causes significant inconvenience, a refund is offered.', 'Spare parts are available from Argos Spares, and some manufacturer guarantees extend cover.'] },
     { h2: 'Extended Christmas returns', p: ['Items bought from 23 September 2026 to 25 December 2026 can be returned until 31 January 2027.'] },
     { h2: 'Your statutory rights to cancel', p: ['Online or phone orders can be cancelled within 14 calendar days of receipt without giving a reason. Returning the full order includes a refund of the standard delivery charge. Some products, such as sealed software, perishable goods and personalised items, are excluded.'] },
-  ], links: [['Returns & cancellations in this shop', '/help/returns-cancellations'], ['Your orders', '/orders']] },
+  ], links: [['Returns & cancellations help', '/help/returns-cancellations'], ['Your orders', '/orders']] },
   '/help/gift-cards': { title: 'Gift cards', h1: "Send an Argos, Habitat, Sainsbury's or a Multi-brand Gift Card", crumb: 'Ways to pay', sections: [
     { h2: 'Shop all gift cards', cards: [['By Email', 'Argos eGift Cards are delivered instantly by email.'], ['By Post', 'Argos Gift Cards sent by post, from £1.50 postage.']] },
     { h2: 'Our other brands', cards: [['Sainsbury’s eGift Card', 'Spend in Sainsbury’s stores and online.'], ['Sainsbury’s Gift Card', 'A physical card for Sainsbury’s.'], ['Habitat Gift Card', 'Spend at Habitat stores and online.'], ['Multi-brand eGift Card', 'One card to spend across a range of brands.']] },
     { h2: 'Already got an Argos Gift Card or eGift Card?', p: ['Check your balance online or at any Argos store till, and use your card online, in the app or in store.'] },
     { h2: 'Argos for Business Gift Cards', p: ['Reward staff and customers with Argos gift cards bought in bulk through Argos for Business.'], links: [['Find out more', '/argos-for-business']] },
     { h2: 'Need more info? Here are some quick links...', list: ['How many Gift Cards or eGift Cards can I use online?', 'How can I check the balance on my Argos Gift Card or eGift Card?', 'How to claim eGift card rewards', 'What’s the difference between an eGift Card and a Gift Card?', 'Can I use my Argos Gift Card or eGift Card for items that I want delivered?'], links: [['eGift Card Rewards', '/features/egift-card-rewards'], ['Terms & Conditions', '/help/terms-and-conditions']] },
-  ], note: 'Gift cards cannot be bought or redeemed in this benchmark shop.' },
+  ], publicNote: 'This is not the real Argos website: gift cards cannot be bought or redeemed here.' },
   '/help/payment-types': { title: 'Payment types', crumb: 'Ways to pay', sections: [
     { h2: 'Ways to pay online', list: ['Argos Pay', 'Visa, Mastercard and American Express credit and debit cards', 'PayPal and PayPal Pay in 3', 'Klarna', 'Argos Gift Cards and eGift Cards'] },
     { id: 'paypal', h2: 'What’s PayPal?', p: ['PayPal lets you pay using the details saved in your PayPal account without entering your card number on Argos.'] },
     { id: 'price-match', h2: 'Do we price match with other brands?', p: ['Argos does not price match with other retailers.'] },
     { h2: 'Ways to pay in store', p: ['Cards, contactless, Argos Gift Cards and Argos Pay are accepted at store tills.'] },
-  ], note: 'This shop accepts test card details only.' },
+  ], publicNote: 'This is not the real Argos website: use test card details only. No card is charged.' },
   '/help/argos-pay': { title: 'Argos Pay', h1: 'Buy what you love, pay at your pace.', crumb: 'Ways to pay', sections: [
     { h2: 'Say hello to flexible credit that suits you with Argos Pay', p: ['Apply once and use Argos Pay again at Argos or Habitat. You can check your eligibility without affecting your credit score.'] },
     { h2: 'Argos Card customer?', p: ['Argos Card accounts have moved to Argos Pay. Register before your first purchase.'] },
@@ -44,7 +45,7 @@ export const INFO = {
     { h2: 'How to apply for Argos Pay', p: ['Apply whilst you buy: choose Argos Pay at checkout, check eligibility, complete the application and pick a payment option. Or apply for future purchases before you shop.'] },
     { h2: 'Manage your account', p: ['Use the Argos Pay app or the Online Account Manager to check your balance, make payments and track spending.'] },
     { id: 'faq', h2: 'Frequently Asked Questions', list: ['How do I apply?', 'Will applying affect my credit score?', 'Where can I use Argos Pay?', 'How do I manage my account?', 'How do I make a payment?'] },
-  ], note: SHOP },
+  ], publicNote: SHOP },
   '/help/nectar': { title: 'Nectar at Argos', crumb: 'Ways to pay', sections: [
     { h2: 'How Nectar works at Argos', p: ['Collect Nectar points when you spend at Argos and link your Nectar card to your Argos account to collect online.'] },
     { h2: 'Before you get started, here’s how Nectar works at Argos...', p: ['Points are worth money off your shopping. Scan your card at the till in store.'] },
@@ -53,7 +54,7 @@ export const INFO = {
     { h2: 'Explore more', p: ['Find other places to collect and spend Nectar points, and how to join Nectar.'] },
     { h2: 'Frequently asked questions', list: ['How do I link my accounts?', 'Is there a limit on points?', 'How do I collect points?', 'How do I get a Nectar card?', 'How do I check my balance?'] },
     { h2: 'Terms and conditions', p: ['Nectar terms and privacy policy apply. Argos may change the conversion process at any time.'] },
-  ], note: SHOP, links: [['Nectar services in this shop', '/help/nectar-services']] },
+  ], publicNote: SHOP, links: [['Nectar and Argos services', '/help/nectar-services']] },
   '/help/argos-care': { title: 'Argos Care', crumb: 'Insurance and Argos Care', sections: [
     { h2: 'Why not get that extra bit of cover with Argos Care?', p: ['Argos Care adds accidental damage cover and protection beyond the manufacturer’s guarantee. Accidental damage cover starts from the moment you buy, and you can collect Nectar points on Argos Care.'] },
     { id: 'electrical', h2: 'Argos Electrical Product Care', p: ['Covers accidental damage, and faults or breakdowns after the manufacturer’s guarantee ends, for electrical goods — parts and labour included.'] },
@@ -62,7 +63,7 @@ export const INFO = {
     { h2: 'Argos Furniture Care', p: ['Covers Argos and Habitat furniture with technician repairs, stain-removal kits, or a replacement or vouchers.'] },
     { h2: 'Purchased jewellery or a watch?', p: ['Since February 2024 jewellery and watches are covered by Replacement Care.'] },
     { id: 'further-information', h2: 'Further Information', list: ['Buy as you shop: Argos Care options appear on the product page below the add to trolley button.', 'There’s still time to get protected: add Argos Care within 45 days of purchase in store with your receipt.', 'How to make a claim: the claim process depends on your policy.'] },
-  ], note: 'Argos Care is not sold in this benchmark shop.' },
+  ], publicNote: 'This is not the real Argos website: Argos Care cannot be bought here.' },
   '/help/terms-and-conditions': { title: 'Terms and Conditions', crumb: 'Terms and conditions', sections: [
     { h2: 'Terms and Conditions', p: ['Argos’s own terms for browsing the website and app and buying online or by Click & Collect.'], list: ['Who We Are and How to Contact Us', 'About These Terms (and How They May Change)', 'Using Our Website / App and Your Account', 'Ordering on Our Website / App', 'Title (Ownership) and Responsibility (Risk)', 'Prices, Payment and Pricing Errors', 'Delivery and Collection', 'Age-Restricted Products', 'Returns, Cancellations and Refunds', 'Product Information', 'Intellectual Property', 'External Links', 'Our Right to Suspend or Cancel Your Account', 'Our Responsibility to You', 'Complaints and Dispute Resolution', 'Other Important Terms'] },
     { h2: 'Schedules', list: ['Schedule 1 – Argos Care & Extended Warranties', 'Schedule 2 – Nectar Points (Argos)', 'Schedule 3 – Argos and Habitat Gift Cards / eGift Cards', 'Schedule 4 – Multi-Brand Gift Cards', 'Schedule 5 – Argos Plus (Delivery Pass)'] },
@@ -76,35 +77,34 @@ export const INFO = {
   ] },
   '/help/cookie-list': { title: 'List of cookies', crumb: 'Cookies', sections: [
     { h2: 'Cookies we use', list: ['Strictly necessary cookies — keep you signed in and remember your trolley.', 'Functional cookies — remember choices such as your postcode or store.', 'Performance cookies — help us understand how the site is used.', 'Marketing cookies — show relevant offers on other sites.'] },
-    { h2: 'Cookies in this shop', p: ['This benchmark shop sets one session cookie to keep your trolley and sign-in state. It sets no tracking or marketing cookies.'] },
-  ], links: [['Cookies policy', '/privacy-hub/cookie-policy']] },
+  ], publicNote: 'This is not the real Argos website: it sets one session cookie to keep your trolley and sign-in state, and no tracking or marketing cookies.', links: [['Cookies policy', '/privacy-hub/cookie-policy']] },
   '/help/argos-spares': { title: 'Argos Spares', crumb: 'Product care', sections: [
     { h2: 'Spare parts and accessories', p: ['Argos Spares (argosspares.co.uk) sells genuine spare parts and accessories for products bought at Argos, from vacuum filters to remote controls. Search by your product’s catalogue number.'] },
-  ], note: 'The real Argos Spares site is a separate website. Spares cannot be ordered in this benchmark shop.', links: [['Product support', '/help/product-support']] },
+  ], note: 'Argos Spares is a separate website. Spare parts are ordered there rather than on argos.co.uk.', links: [['Product support', '/help/product-support']] },
   '/help/furniture-recycling': { title: 'Furniture Recycling', crumb: 'Product care', sections: [
     { h2: 'Furniture recycling with Clearabee', p: ['Argos partners with Clearabee to collect and responsibly dispose of unwanted furniture when you buy a replacement. Bookings are made with Clearabee.'] },
-  ], note: SHOP },
+  ], publicNote: SHOP },
   '/events/safety-product-recalls': { title: 'Product recalls', h1: 'Product safety and recalls', crumb: 'Product care', sections: [
     { h2: 'Current product recalls', p: ['Argos lists products that have been recalled, with the catalogue numbers affected and what to do. Stop using an affected product and follow the instructions for a refund or repair.'] },
-    { h2: 'Recalls in this shop', p: ['There are no product recalls for items in this benchmark shop.'] },
+    { h2: 'Recalls for products on sale', p: ['There are currently no recalls for products on sale at Argos.'] },
   ] },
   '/features/egift-card-rewards': { title: 'eGift Card Rewards', crumb: 'Payment & services', sections: [
     { h2: 'Get rewarded with an eGift Card', p: ['On selected promotions you receive an Argos eGift Card after buying qualifying products. The eGift Card arrives by email and can be spent on a future order.'] },
     { h2: 'How to claim', list: ['Buy a qualifying product during the promotion.', 'Wait for your order to be delivered or collected.', 'Your eGift Card reward is emailed to you.'] },
-  ], note: 'There are no eGift Card reward promotions in this benchmark shop.' },
+  ], note: 'There are no eGift Card reward promotions running at the moment. Check back soon.' },
   '/pet-insurance': { title: 'Pet Insurance', h1: 'Argos Pet Insurance', crumb: 'Payment & services', sections: [
     { h2: 'About Argos Pet Insurance', p: ['Argos Pet Insurance (argospetinsurance.co.uk) offers cover for dogs and cats, including vet fees, with lifetime and time-limited policy options. Policies are arranged by a separate insurer.'] },
-  ], note: SHOP },
+  ], publicNote: SHOP },
   '/about-us': { title: 'About us', h1: 'About Argos', crumb: 'About Argos', sections: [
     { h2: 'Who we are', p: ['Argos is a UK general merchandise retailer, founded in 1973 and part of Sainsbury’s since 2016. Customers shop online, in the app, in Argos stores and at Argos stores and collection points inside Sainsbury’s supermarkets.'] },
     { id: 'brands', h2: 'Our brands', p: ['Argos sits alongside Sainsbury’s, Tu clothing, Habitat and Nectar in the Sainsbury’s group.'] },
-  ], note: 'The real “About us” page is on the Sainsbury’s corporate website (about.sainsburys.co.uk).' },
+  ], note: 'Find out more about us on the Sainsbury’s corporate website (about.sainsburys.co.uk).' },
   '/argos-for-business': { title: 'Argos for Business', crumb: 'About Argos', sections: [
     { h2: 'Gift cards and rewards for business', p: ['Argos for Business (argosforbusiness.co.uk) supplies Argos gift cards and eGift Cards in bulk for staff rewards, incentives and customer promotions.'] },
-  ], note: SHOP },
+  ], publicNote: SHOP },
   '/careers': { title: 'Careers', h1: 'Careers at Argos', crumb: 'About Argos', sections: [
     { h2: 'Work with us', p: ['Argos jobs — in stores, distribution, customer service and head office — are advertised on the Sainsbury’s group careers site (sainsburys.jobs).'] },
-  ], note: 'Applications cannot be made in this benchmark shop.' },
+  ], note: 'Search and apply for roles on sainsburys.jobs.' },
   '/press-enquiries': { title: 'Press enquiries', crumb: 'About Argos', sections: [
     { h2: 'Media enquiries', p: ['Journalists contact the Sainsbury’s group press office for Argos news, which is published on the Sainsbury’s corporate website.'] },
   ] },
@@ -116,8 +116,7 @@ export const INFO = {
   ] },
   '/privacy-hub/privacy-policy': { title: 'Privacy policy', crumb: 'Privacy', sections: [
     { h2: 'How we use your information', p: ['Argos uses your details to process orders, deliveries and returns, manage your account, prevent fraud and, with your permission, send marketing. You can ask to access, correct or delete your information.'] },
-    { h2: 'In this shop', p: ['This benchmark shop keeps your trolley, account and orders in a session on this server only.'] },
-  ] },
+  ], publicNote: 'This is not the real Argos website: your trolley, account and orders are kept in a session on this server only.' },
   '/privacy-hub/cookie-policy': { title: 'Cookies policy', crumb: 'Privacy', sections: [
     { h2: 'How we use cookies', p: ['Cookies help the website work, remember your choices and measure how it is used. You can change your cookie preferences at any time.'], links: [['List of cookies', '/help/cookie-list']] },
   ] },
@@ -129,7 +128,7 @@ export const LANDINGS = {
   '/events/christmas-gifts': { title: 'Christmas Gifts', intro: 'Find gifts for everyone on your list, from stocking fillers to the big present.', tiles: ['toys', 'technology', 'gaming', 'jewellery-and-watches', 'health-and-beauty', 'home-and-furniture'] },
   '/events/toys-offers': { title: 'Toy Offers', intro: 'Offers on toys, games and gifts for kids.', tiles: ['toys', 'baby-and-nursery'] },
   '/events/garden-diy-offers': { title: 'Garden & DIY Offers', intro: 'Offers across garden furniture, storage and outdoor cooking.', tiles: ['garden-and-diy'] },
-  '/events/voucher-discount-codes': { title: 'Voucher Codes and Offers', intro: 'Find our hottest codes now. Enter a valid promotional code at checkout to apply it to your order.', tiles: ['technology', 'toys', 'home-and-furniture', 'appliances'], empty: 'There are no voucher codes running in this benchmark shop.' },
+  '/events/voucher-discount-codes': { title: 'Voucher Codes and Offers', intro: 'Find our hottest codes now. Enter a valid promotional code at checkout to apply it to your order.', tiles: ['technology', 'toys', 'home-and-furniture', 'appliances'], empty: 'There are no voucher codes running at the moment. Check back soon for new offers.' },
   '/list/shop-top-100-deals': { title: 'Shop our top 100 deals', intro: 'Our top 100 deals, updated regularly.', tiles: ['technology', 'appliances', 'home-and-furniture', 'toys'] },
   '/amazing-deals': { title: 'A-mazing deals', intro: 'A-mazing deals across the store.', tiles: ['technology', 'home-and-furniture', 'toys'] },
   '/list/3-for-20-on-selected-toys': { title: 'Toys 3 for £20', intro: 'Mix and match selected toys.', tiles: ['toys'] },

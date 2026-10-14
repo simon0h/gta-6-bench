@@ -106,7 +106,7 @@ export const orderEta = (cart,method) => hasPreorder(cart) ? `Pre-orders from ${
 export function validateCart(cart,method) {
   const messages=[],aggregate=new Map(),variants=new Map(),trusted=[]
   // Reference mode: the evidenced GTA VI listings stay unverified for purchase. Only assortment lines can be ordered.
-  if (!fixtureCatalog && cart.some(line => !shelfBySku(line?.sku))) return { messages:['Ordering availability has not been verified for these listings.'], cart:[] }
+  if (!fixtureCatalog && cart.some(line => !shelfBySku(line?.sku))) return { messages:['Sorry, this item isn’t available to order right now.'], cart:[] }
   for (const line of cart) {
     const product=bySku(line.sku), p=selectedProduct(product,line.variant_id)
     if (!p || !Number.isInteger(line.qty) || line.qty < 1 || line.qty > 5) { messages.push('An item or option in your trolley is no longer valid.'); continue }
