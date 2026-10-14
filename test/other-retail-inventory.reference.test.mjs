@@ -100,7 +100,7 @@ test('source-only retail rejects legacy and captured purchase submissions withou
     for (const path of ['/cart/add', '/checkout', '/checkout/order', '/checkout/place', '/cart/update']) {
       const result = await dispatch(slug, path, { method: 'POST', body: { sku: 'CP-GTA6-PS5', pid: 'running-shoes', qty: '1' }, state: { cart } })
       assert.equal(result.status, 409, `${slug} ${path}`)
-      assert.match(result.text, /Purchase is not verified/)
+      assert.match(result.text, /isn(&#39;|')t available to buy online|구매할 수 없/)
       assert.deepEqual(result.req.store.cart, cart)
       assert.deepEqual(result.req.store.checkout, {})
     }

@@ -167,7 +167,7 @@ test('smyths-toys: every query alias finds both platforms and arbitrary queries 
       assert.ok(response.text.includes(`href="${XBOX}"`), query)
       assert.match(response.text, /<html lang="en">/)
       assert.match(response.text, /name="viewport"/)
-      assert.match(response.text, /Synthetic benchmark environment/)
+      assert.doesNotMatch(response.text, /Synthetic benchmark environment/)
     }
     assert.match((await c.get(`${BASE}/search?text=bananas`)).text, /No products found/)
   } finally { await srv.close() }

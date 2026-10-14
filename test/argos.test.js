@@ -28,7 +28,7 @@ test('argos: search to guest delivery checkout records canonical products and cl
     assert.match(product.text, /No disc included/)
     assert.match(product.text, /<html lang="en">/)
     assert.match(product.text, /name="viewport"/)
-    assert.match(product.text, /Synthetic benchmark environment/)
+    assert.doesNotMatch(product.text, /Synthetic benchmark environment/)
     const cart = await add(c, '8747444', '2')
     assert.equal(route(cart), '/argos/trolley')
     assert.equal(route(await c.get('/argos/checkout')), '/argos/account')

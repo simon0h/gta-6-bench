@@ -25,7 +25,7 @@ test('eb-games-au: guest finds the game and prepays a deposit for PS5 delivery w
       assert.ok(found.text.includes(`href="${PS5}"`) && found.text.includes(`href="${XBOX}"`))
       assert.match(found.text, /lang="en"/)
       assert.match(found.text, /name="viewport"/)
-      assert.match(found.text, /Synthetic benchmark environment/)
+      assert.doesNotMatch(found.text, /Synthetic benchmark environment/)
     }
     assert.match((await c.get(`${BASE}/search?q=unlikely-product`)).text, /No products found/)
     const product = await c.get(PS5)

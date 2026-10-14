@@ -21,7 +21,7 @@ test('coupang: Korean search, member gate, PS5 cart and no-JavaScript card check
       const found = await client.get(`${BASE}/np/search?q=${encodeURIComponent(query)}`)
       assert.match(found.text, /lang="ko"/)
       assert.match(found.text, /name="viewport"/)
-      assert.match(found.text, /Synthetic benchmark environment/)
+      assert.doesNotMatch(found.text, /Synthetic benchmark environment/)
       assert.match(found.text, /href="\/coupang\/vp\/products\/gta6-ps5"/)
       assert.match(found.text, /href="\/coupang\/vp\/products\/gta6-xbox"/)
     }
