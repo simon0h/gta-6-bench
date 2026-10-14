@@ -269,7 +269,7 @@ export function buildIkeaRanges(item) {
         return item(id, title, category, subcategory, Math.round(Number(basePrice) * factor * 100) / 100, null, material, [finish], { width, depth, height }, description, {
           rooms, art: silhouettes[shape], color, care, stock: 5 + index * 2,
           assembly: furnishing ? 'Assembly or mounting may be required. Follow the supplied booklet; use wall fixings suitable for your wall where indicated. Two adults recommended for large pieces.' : 'No structural assembly required. Read the included care and use information before first use.',
-          imageNote: 'Product-form illustration; materials, construction and inch measurements are specified in the description.',
+          imageNote: 'Materials, construction and inch measurements are specified in the description.',
           keywords: `${name} ${material} ${purpose}`, rating: Number((4.2 + index * 0.2).toFixed(1)), reviews: 18 + index * 17,
           badge: index === 0 ? 'New' : '', catalogRange: 'home-500',
         })
