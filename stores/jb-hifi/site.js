@@ -2,7 +2,7 @@
 // jbhifi.com.au: /collections/all, department + sub-category landings, /pages/* help, service
 // and policy pages, /blogs/*, the HTML site map and /sitemap.xml. Product grids only ever list
 // products from the store's own catalogue (data.js); nothing here adds inventory.
-import { esc } from '../../lib/html.js'
+import { esc, publicNotice } from '../../lib/html.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { productPhoto } from '../../lib/product-photos.js'
 import { PRODUCTS, LISTED, ASSORTMENT, productPath } from './data.js'
@@ -157,7 +157,7 @@ const page = (base, trail, title, lead, body) => `${crumbs(base, trail)}<div cla
 const linkList = (base, rows) => rows.length ? `<ul class="jb-link-cards">${rows.map(([l, h]) => `<li><a href="${base}${h}">${esc(l)} &rsaquo;</a></li>`).join('')}</ul>` : ''
 function infoPage(base, path) {
   const [title, lead, sections, related] = INFO_PAGES[path]
-  return page(base, [[title]], title, lead, `${sections.map(([h, html]) => `<section class="jb-info-section"><h2>${esc(h)}</h2>${html}</section>`).join('')}${related.length ? `<section class="jb-info-section"><h2>${path === '/pages/services' ? 'Our services' : 'Related'}</h2>${linkList(base, related)}</section>` : ''}`)
+  return page(base, [[title]], title, lead, `${sections.map(([h, html]) => `<section class="jb-info-section"><h2>${esc(h)}</h2>${html}</section>`).join('')}${path === '/pages/privacy-policy' ? publicNotice('<section class="jb-info-section"><h2>This website</h2><p>This is not the real JB Hi-Fi website. Information stays in your browser session and is not sent to JB Hi-Fi.</p></section>') : ''}${related.length ? `<section class="jb-info-section"><h2>${path === '/pages/services' ? 'Our services' : 'Related'}</h2>${linkList(base, related)}</section>` : ''}`)
 }
 function helpHub(base) {
   return page(base, [['Help & Support']], 'Help & Support', 'How can we help you today?', `<form class="jb-help-search" method="get" action="${base}/help"><label for="help-search">Search help articles</label><div><input id="help-search" name="q" type="search" placeholder="e.g. pre-orders, Click & Collect, returns"><button class="jb-btn jb-btn-black" type="submit">Search</button></div></form>
@@ -176,7 +176,7 @@ function helpArticle(base, id) {
 function blogPage(base, slug) {
   const [, title, blurb] = BLOGS.find(b => b[0] === slug)
   const trail = slug === 'news-and-reviews' ? [[title]] : [['News & Reviews', '/blogs/news-and-reviews'], [title]]
-  return page(base, trail, title, blurb, `<nav class="jb-subcat-tiles" aria-label="News & Reviews sections">${BLOGS.map(([s, t]) => `<a href="${base}/blogs/${s}" ${s === slug ? 'aria-current="page"' : ''}>${esc(t)}</a>`).join('')}</nav><div class="jb-news-grid">${BLOGS.filter(b => b[0] !== slug && b[0] !== 'news-and-reviews').map(([s, t, b]) => `<a href="${base}/blogs/${s}"><span class="jb-news-kicker">${esc(t)}</span><b>${esc(b)}</b><span>Explore &rsaquo;</span></a>`).join('')}</div><p class="jb-fine">Editorial articles from the JB Hi-Fi team are published on jbhifi.com.au; this clone mirrors the section structure only.</p>`)
+  return page(base, trail, title, blurb, `<nav class="jb-subcat-tiles" aria-label="News & Reviews sections">${BLOGS.map(([s, t]) => `<a href="${base}/blogs/${s}" ${s === slug ? 'aria-current="page"' : ''}>${esc(t)}</a>`).join('')}</nav><div class="jb-news-grid">${BLOGS.filter(b => b[0] !== slug && b[0] !== 'news-and-reviews').map(([s, t, b]) => `<a href="${base}/blogs/${s}"><span class="jb-news-kicker">${esc(t)}</span><b>${esc(b)}</b><span>Explore &rsaquo;</span></a>`).join('')}</div><p class="jb-fine">New articles from the JB Hi-Fi team are published every week.</p>`)
 }
 function brandsPage(base) {
   const own = [...new Set(LISTED.map(p => p.brand).filter(Boolean))].sort()
@@ -197,12 +197,12 @@ function storeFinderPage(base, query, stores) {
   const q = String(query || '').toLowerCase()
   const groups = STORE_DIRECTORY.map(([st, names]) => [st, names.filter(n => !q || n.toLowerCase().includes(q) || st.toLowerCase() === q)]).filter(([, n]) => n.length)
   const pickup = stores.length ? `<section class="jb-info-section"><h2>Click &amp; Collect stores</h2><ul class="jb-store-list">${stores.map(s => `<li><a href="${base}/stores/${s.id}"><b>${esc(s.name)}</b></a><br><span class="jb-fine">${esc(s.address)}</span></li>`).join('')}</ul></section>` : `<p class="jb-notice">Store pickup availability for online orders is confirmed at checkout.</p>`
-  return page(base, [['Store Finder']], 'Store Finder', 'Find your nearest JB Hi-Fi store.', `<form class="jb-help-search" method="get" action="${base}/pages/store-finder"><label for="store-search">Enter postcode, suburb or state</label><div><input id="store-search" name="q" type="search" value="${esc(query || '')}" placeholder="e.g. Melbourne or VIC"><button class="jb-btn jb-btn-black" type="submit">Find stores</button></div></form>${pickup}<section class="jb-info-section"><h2>All stores${q ? ` matching “${esc(query)}”` : ''}</h2>${groups.length ? `<div class="jb-store-dir">${groups.map(([st, names]) => `<section><h3>${st}</h3><ul>${names.map(n => `<li>JB Hi-Fi ${esc(n)}</li>`).join('')}</ul></section>`).join('')}</div>` : '<p>No stores match your search. Try a suburb or state such as NSW.</p>'}<p class="jb-fine">Opening hours and live stock are not available in this clone.</p></section>`)
+  return page(base, [['Store Finder']], 'Store Finder', 'Find your nearest JB Hi-Fi store.', `<form class="jb-help-search" method="get" action="${base}/pages/store-finder"><label for="store-search">Enter postcode, suburb or state</label><div><input id="store-search" name="q" type="search" value="${esc(query || '')}" placeholder="e.g. Melbourne or VIC"><button class="jb-btn jb-btn-black" type="submit">Find stores</button></div></form>${pickup}<section class="jb-info-section"><h2>All stores${q ? ` matching “${esc(query)}”` : ''}</h2>${groups.length ? `<div class="jb-store-dir">${groups.map(([st, names]) => `<section><h3>${st}</h3><ul>${names.map(n => `<li>JB Hi-Fi ${esc(n)}</li>`).join('')}</ul></section>`).join('')}</div>` : '<p>No stores match your search. Try a suburb or state such as NSW.</p>'}<p class="jb-fine">Opening hours vary by store and on public holidays. Contact your local store for today's hours.</p></section>`)
 }
 function perksPage(base, user) {
   return page(base, [['JB Perks']], 'JB Perks', 'Join JB Perks for FREE member benefits.', `<section class="jb-perks-band"><div class="jb-perks-badge" aria-hidden="true">JB<br>PERKS</div><div><h2>Want a $10 welcome coupon*?</h2><p>Become a member today and enjoy a welcome coupon, member discounts and early sales notifications.</p><p class="jb-fine">*Valid for 28 days from issue. T&amp;Cs apply.</p></div><a class="jb-btn" href="${base}${user ? '/account/profile' : '/account/register'}">${user ? 'Manage my preferences' : 'Join &amp; get my $10'}</a></section>
 <section class="jb-info-section"><h2>Member benefits</h2><ul class="jb-benefits">${['$10 welcome coupon', 'Member-only offers and discounts', 'Early access to sales', 'Birthday Perk', 'Digital receipts — no paper needed'].map(b => `<li>${b}</li>`).join('')}</ul></section>
-<section class="jb-info-section"><h2>How to join</h2><p>Create a JB Hi-Fi account and add your Australian mobile number. Membership is free and not required to shop.</p>${linkList(base, [['Create account', '/account/register'], ['Log in', '/account/login'], ['JB Perks help', '/pages/help-and-support/jb-perks']])}<p class="jb-fine">Coupons are not issued in this clone.</p></section>`)
+<section class="jb-info-section"><h2>How to join</h2><p>Create a JB Hi-Fi account and add your Australian mobile number. Membership is free and not required to shop.</p>${linkList(base, [['Create account', '/account/register'], ['Log in', '/account/login'], ['JB Perks help', '/pages/help-and-support/jb-perks']])}${publicNotice('<p class="jb-fine">This is not the real JB Hi-Fi website. Coupons are not issued.</p>')}</section>`)
 }
 
 // ---------- site map ----------
@@ -268,6 +268,6 @@ export function installSite(router, { render, notFound, tile, trackOrderPage, fi
   router.post('/newsletter', (req, res) => {
     const email = typeof req.body?.email === 'string' ? req.body.email.trim() : ''
     const ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-    show(req, res, ok ? 'Thanks for signing up' : 'Sign up to our newsletter', page(base(res), [['Newsletter']], ok ? 'Thanks for signing up' : 'Sign up to our newsletter', '', ok ? `<p role="status">You're on the list, ${esc(email)}. (No email is sent from this clone.)</p><p><a class="jb-btn" href="${base(res)}/">Continue shopping</a></p>` : `<p class="jb-error" role="alert">Enter a valid email address.</p><form method="post" action="${base(res)}/newsletter" class="jb-help-search"><label for="nl-email">Email address</label><div><input id="nl-email" name="email" type="email" autocomplete="email" value="${esc(email)}"><button class="jb-btn jb-btn-black" type="submit">Sign up</button></div></form>`), ok ? 200 : 400)
+    show(req, res, ok ? 'Thanks for signing up' : 'Sign up to our newsletter', page(base(res), [['Newsletter']], ok ? 'Thanks for signing up' : 'Sign up to our newsletter', '', ok ? `<p role="status">You're on the list, ${esc(email)}.</p><p><a class="jb-btn" href="${base(res)}/">Continue shopping</a></p>` : `<p class="jb-error" role="alert">Enter a valid email address.</p><form method="post" action="${base(res)}/newsletter" class="jb-help-search"><label for="nl-email">Email address</label><div><input id="nl-email" name="email" type="email" autocomplete="email" value="${esc(email)}"><button class="jb-btn jb-btn-black" type="submit">Sign up</button></div></form>`), ok ? 200 : 400)
   })
 }
