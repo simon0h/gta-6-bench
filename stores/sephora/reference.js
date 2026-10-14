@@ -26,7 +26,7 @@ const store = referenceRetailStore({ slug: 'sephora', name: 'Sephora', availabil
         }
       }
       // An unobserved SKU parameter is not evidence of the captured variant.
-      if (!p || (req.query.skuId !== undefined && req.query.skuId !== p.sku)) return coverage(req, res, 'Product variant has not been captured', 404)
+      if (!p || (req.query.skuId !== undefined && req.query.skuId !== p.sku)) return coverage(req, res, "Sorry, we couldn't find that page", 404)
       render(req, res, p.title, capturedSephoraProduct(baseOf(res), p) + productExtras(baseOf(res), p))
     })
     installShelf(router, context)

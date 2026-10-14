@@ -173,7 +173,7 @@ test('Sephora sample-store choice and service drafts are validated, owner-scoped
   try {
     const client = server.client(); await login(client)
     assert.equal((await client.post('/sephora/stores/preferred', { store: 'real-store' })).status, 400)
-    assert.match((await client.post('/sephora/stores/preferred', { store: 'garden-walk' })).text, /Your preferred sample store/)
+    assert.match((await client.post('/sephora/stores/preferred', { store: 'garden-walk' })).text, /Your preferred store/)
     assert.match((await client.get('/sephora/services')).text, /value="garden-walk" selected/)
     const draft = await client.post('/sephora/services/interests', { service: 'beauty-lesson', store: 'garden-walk', notes: 'Soft eye makeup ideas' }), id = capture(draft.text, 'interest')
     assert.ok(id); assert.match(draft.text, /No real appointment/)

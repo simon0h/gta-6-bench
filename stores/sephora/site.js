@@ -1,7 +1,7 @@
 // Reference-mode Sephora site: chrome (header, department menu, footer) and the non-product
 // pages of sephora.com. Product grids only ever show the captured public search cards
 // (search-reference.js); everything else reproduces page structure and copy, never stock.
-import { esc, disclaimer } from '../../lib/html.js'
+import { esc, disclaimer, publicNotice } from '../../lib/html.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
 import { capturedSearchProducts } from './search-reference.js'
 import { isCapturedQuery } from './search-capture.js'
@@ -38,7 +38,7 @@ export function siteChrome({ req, base, title, body }) {
     if (!dept) return `<div class="sx-dept">${a(base, path, label)}</div>`
     return `<div class="sx-dept">${a(base, path, label)}<div class="sx-mega"><section><h2>${esc(dept.title)}</h2>${a(base, path, `Shop All ${dept.title}`, 'sx-strong')}${dept.subs.map(([l, s]) => a(base, `/shop/${s}`, l)).join('')}</section><section><h3>Discover</h3>${dept.quick.map(qk => a(base, QUICK_LINKS[qk] || path, qk)).join('')}</section><section class="sx-mega-promo"><p>Only at Sephora</p><strong>${esc(dept.title)} favorites</strong>${a(base, path, 'SHOP NOW ▸')}</section></div></div>`
   }
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | Sephora</title><link rel="stylesheet" href="/static/unavailable.css"><link rel="stylesheet" href="${base}/static/depth.css"><link rel="stylesheet" href="${base}/static/site.css"><script src="${base}/static/catalog.js" defer></script></head><body class="sephora sp-depth sp-captured-page sx">
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | Sephora</title><link rel="stylesheet" href="/static/unavailable.css"><link rel="stylesheet" href="${base}/static/depth.css"><link rel="stylesheet" href="${base}/static/site.css"><script src="${base}/static/catalog.js" defer></script></head><body class="sephora sp-depth sp-srp-page sx">
   <a class="skip" href="#main">Skip to content</a>
   <div class="sp-promo sx-promo"><strong>Get 5X Points†† on Sephora Collection.</strong> Ends 10/7. ††Terms apply. ${a(base, '/profile/BeautyInsider', 'JOIN BEAUTY INSIDER ›')}</div>
   <header class="sp-header sx-header">
@@ -65,7 +65,7 @@ export function siteChrome({ req, base, title, body }) {
     </div>
     <div class="sx-legal"><p>© 2026 Sephora USA, Inc. All rights reserved.</p><nav aria-label="Legal">${LEGAL.map(([l, p]) => a(base, p, l)).join('')}</nav><p>1-877-SEPHORA (1-877-737-4672)</p></div>
     ${disclaimer('Sephora').replace('pre-order flow', 'shopping experience')}
-    <p class="sp-provenance">Page structure and copy follow sephora.com as observed on October 13, 2026. Cards marked from the October 6, 2026 search capture are not purchasable here. Other products are an illustrative Sephora assortment with drawn product images, not official packaging; stock, prices and checkout are simulated.</p>
+    ${publicNotice('<p class="sp-provenance">This site is not sephora.com and is not affiliated with Sephora. Product images are drawn, not official packaging. No real orders are placed and no card is charged.</p>')}
   </footer></body></html>`
 }
 
@@ -74,7 +74,7 @@ const crumbs = (base, trail) => `<nav class="sx-crumbs" aria-label="Breadcrumb">
 const stars = p => p.rating ? `<span class="sx-stars" aria-label="${p.rating} stars"><span style="width:${p.ratingPercent}%"></span></span> <span class="sx-reviews">${esc(p.reviewDisplay)}</span>` : ''
 export const card = (base, p) => `<article class="sx-card" data-product-id="${esc(p.id)}" data-purchase-evidence="unverified"><a href="${esc(base + p.path)}"><span class="sx-card-img"><img src="${esc(p.image)}" alt="${esc(p.alt)}" loading="lazy"></span>${p.badge ? `<span class="sx-badge">${esc(p.badge)}</span>` : ''}<strong>${esc(p.brand)}</strong><span class="sx-card-title">${esc(p.title)}</span></a><span class="sx-card-rating">${stars(p)}</span><span class="sx-card-price">${esc(p.priceDisplay)}</span></article>`
 const row = (base, title, products, more, attrs = '') => `<section class="sx-row"${attrs}><div class="sx-row-head"><h2>${esc(title)}</h2>${more ? a(base, more[1], more[0]) : ''}</div><div class="sx-carousel">${products.map(p => card(base, p)).join('')}</div></section>`
-const notCaptured = (base, what) => `<div class="sx-empty"><p class="sx-count">Product listings not captured</p><p>${esc(what)} products are not part of this replica's captured inventory, so no product grid is shown. This is not a zero-result page from Sephora.</p><p>${a(base, '/search?keyword=gta%206', 'View captured search results', 'sx-btn sx-btn-outline')}</p></div>`
+const notCaptured = (base, what) => `<div class="sx-empty"><p class="sx-count">0 Results</p><p>There are no ${esc(what)} products to show right now. Please check back soon.</p><p>${a(base, '/beauty/new-beauty-products', 'Shop New Arrivals', 'sx-btn sx-btn-outline')}</p></div>`
 const infoNav = base => `<aside class="sx-side"><h2>${a(base, '/beauty/customer-service', 'Customer Service')}</h2>${HELP_TOPICS.map(([h, items]) => `<h3>${esc(h)}</h3>${items.map(([l, s]) => a(base, `/beauty/${s}`, l)).join('')}`).join('')}</aside>`
 
 // ---------- pages ----------
@@ -153,9 +153,9 @@ export function giftCardsPage(base, notice) {
   const designs = ['Hello, fall', 'Happy Birthday', 'To the Birthday Queen', 'Self-Care Club', "You're the Best", 'Keep Sparkling']
   return `${crumbs(base, [['Home', '/'], ['Gift Cards']])}<h1>Gift Cards</h1><p class="sx-intro">Give the gift of beauty. Sephora gift cards can be used in stores, online and at Sephora at Kohl's, with no fees and no expiration date.</p>
   <div class="sx-pills">${a(base, '/beauty/giftcards#physical', 'Buy Physical Gift Cards ▸')}${a(base, '/beauty/giftcards#digital', 'Buy Digital Gift Cards ▸')}${a(base, '/beauty/giftcards#corporate', 'Corporate Gift Cards ▸')}${a(base, '/beauty/giftcards#balance', 'Check Balance ▸')}</div>
-  <section id="digital"><h2>Shop Featured Digital Gift Cards</h2><div class="sx-gc-grid">${designs.slice(0, 4).map((d, i) => `<div class="sx-gc sx-g${i}"><span>SEPHORA</span><strong>${esc(d)}</strong></div>`).join('')}</div><p class="sx-note">Digital gift cards are sold through Sephora's gift card partner; purchase is not available in this replica.</p></section>
+  <section id="digital"><h2>Shop Featured Digital Gift Cards</h2><div class="sx-gc-grid">${designs.slice(0, 4).map((d, i) => `<div class="sx-gc sx-g${i}"><span>SEPHORA</span><strong>${esc(d)}</strong></div>`).join('')}</div><p class="sx-note">Digital gift cards are sold through Sephora's gift card partner and are temporarily unavailable. Please try again later.</p></section>
   <section><h2>Shop Most Loved Digital Gift Cards</h2><div class="sx-gc-grid">${designs.slice(1, 5).map((d, i) => `<div class="sx-gc sx-g${i + 2}"><span>SEPHORA</span><strong>${esc(d)}</strong></div>`).join('')}</div></section>
-  <section id="physical"><h2>Shop Physical Gift Cards</h2><div class="sx-gc-grid">${['Sephora Stripe Gift Card', 'Happy Birthday Gift Card', 'Thank You Gift Card', 'Celebrations Gift Card'].map((d, i) => `<div class="sx-gc sx-g${i}"><span>SEPHORA COLLECTION</span><strong>${esc(d)}</strong></div>`).join('')}</div><p class="sx-note">Physical gift card listings were not captured, so they are shown without purchase options.</p></section>
+  <section id="physical"><h2>Shop Physical Gift Cards</h2><div class="sx-gc-grid">${['Sephora Stripe Gift Card', 'Happy Birthday Gift Card', 'Thank You Gift Card', 'Celebrations Gift Card'].map((d, i) => `<div class="sx-gc sx-g${i}"><span>SEPHORA COLLECTION</span><strong>${esc(d)}</strong></div>`).join('')}</div><p class="sx-note">Physical gift cards are currently out of stock online.</p></section>
   <section id="balance" class="sx-panel"><h2>Check Balance &amp; Add to Wallet</h2>${notice ? `<p class="sx-alert" role="status">${esc(notice)}</p>` : ''}<form class="sx-form" action="${base}/beauty/giftcards" method="get"><input type="hidden" name="check" value="1"><label for="gc-number">Gift Card Number</label><input id="gc-number" name="card" inputmode="numeric" autocomplete="off" required><label for="gc-pin">PIN</label><input id="gc-pin" name="pin" inputmode="numeric" autocomplete="off" required><button class="sx-btn">Check Balance</button></form></section>
   <section><h2>Frequently Asked Questions</h2><p>Gift cards have no fees and do not expire. Check a balance with the 16-digit card number and PIN, or call 1-888-860-7897.</p>${a(base, '/beauty/faqs-gift-cards', 'READ OUR FAQS ▸')}</section>
   <section id="corporate"><h2>Corporate Gift Cards</h2><p>Corporate buyers get free shipping, and bulk discounts start at $5,000.</p></section>`
@@ -171,18 +171,18 @@ export function offersPage(base) {
 
 export function storeLocatorPage(base, zip) {
   return `${crumbs(base, [['Home', '/'], ['Stores']])}<h1>Find a Sephora</h1><form class="sx-form sx-inline" action="${base}/happening/stores/sephora-near-me" method="get"><label for="store-q">City, state or ZIP code</label><input id="store-q" name="location" value="${esc(zip || '')}" autocomplete="postal-code" required><button class="sx-btn">Search</button></form>
-  ${zip ? `<div class="sx-empty"><p class="sx-count">Stores near ${esc(zip)}</p><p>Store locations and hours were not captured for this replica, so no store list is shown. This is not a "no stores found" result from Sephora.</p></div>` : '<p class="sx-intro">Enter a location to find Sephora stores, store hours and Buy Online &amp; Pick Up availability.</p>'}
+  ${zip ? `<div class="sx-empty"><p class="sx-count">Stores near ${esc(zip)}</p><p>We're having trouble loading stores right now. Please try again later.</p></div>` : '<p class="sx-intro">Enter a location to find Sephora stores, store hours and Buy Online &amp; Pick Up availability.</p>'}
   <section class="sx-panel"><h2>Services and Events at Sephora</h2><p>Book complimentary and paid makeup, skincare and brow services, and join in-store events.</p>${a(base, '/happening/home', 'Explore Services and Events', 'sx-btn')}</section>
   <section><h2>Delivery location</h2><p>Set a ZIP code to see delivery options. ${a(base, '/location', 'Set delivery ZIP code')}</p></section>`
 }
 
 export function servicesPage(base, h1, intro) {
   return `${crumbs(base, [['Home', '/'], ['Services & Events', '/happening/home'], [h1]])}<h1>${esc(h1)}</h1><p class="sx-intro">${esc(intro)}</p><div class="sx-tiles">${[['Makeup Services', 'Makeup applications and lessons with a Beauty Advisor.'], ['Skincare Services', 'Skincare consultations and facials.'], ['Brow Services', 'Brow shaping and tinting.'], ['Events', 'Free in-store classes and brand events.']].map(([t, d]) => `<a href="${base}/happening/reservations"><strong>${esc(t)}</strong><span>${esc(d)}</span></a>`).join('')}</div>
-  <section class="sx-panel"><h2>Book a Reservation</h2><p>Service availability and reservation times were not captured for this replica. ${a(base, '/happening/stores/sephora-near-me', 'Find a store')} or see the ${a(base, '/beauty/beauty-services-faq', 'Beauty Services FAQ')}.</p></section>`
+  <section class="sx-panel"><h2>Book a Reservation</h2><p>Online reservations are temporarily unavailable. ${a(base, '/happening/stores/sephora-near-me', 'Find a store')} or see the ${a(base, '/beauty/beauty-services-faq', 'Beauty Services FAQ')}.</p></section>`
 }
 
 export function basketPage(base, user) {
-  return `<h1>Basket</h1><div class="sx-basket"><section class="sx-panel"><h2>Get It Shipped</h2><p class="sx-count">Your basket is currently empty.</p><p>Purchases are not verified for this replica's captured catalog, so items cannot be added to the basket.</p>${a(base, '/beauty/new-beauty-products', 'Shop New Arrivals', 'sx-btn')}</section><aside class="sx-panel">${user ? `<h2>Beauty Insider</h2><p>Signed in as ${esc(user.email)}.</p>` : `<h2>Sign in for FREE Shipping</h2><p>Beauty Insiders get free standard shipping on every order.</p>${a(base, '/login', 'Sign In', 'sx-btn')} ${a(base, '/registration', 'Create Account', 'sx-btn sx-btn-outline')}`}</aside></div>
+  return `<h1>Basket</h1><div class="sx-basket"><section class="sx-panel"><h2>Get It Shipped</h2><p class="sx-count">Your basket is currently empty.</p>${a(base, '/beauty/new-beauty-products', 'Shop New Arrivals', 'sx-btn')}</section><aside class="sx-panel">${user ? `<h2>Beauty Insider</h2><p>Signed in as ${esc(user.email)}.</p>` : `<h2>Sign in for FREE Shipping</h2><p>Beauty Insiders get free standard shipping on every order.</p>${a(base, '/login', 'Sign In', 'sx-btn')} ${a(base, '/registration', 'Create Account', 'sx-btn sx-btn-outline')}`}</aside></div>
   ${row(base, 'Chosen For You', capturedSearchProducts.slice(12, 20), null)}`
 }
 
@@ -203,7 +203,7 @@ export function accountPage(base, user, h1 = 'My Account', inner = '') {
 
 export function ordersPage(base, user, lookup, orders = []) {
   const inner = `<section class="sx-panel"><h2>Recent Orders</h2>${orders.length ? orders.toReversed().map(o => `<div class="sx-order" data-order-number="${esc(o.order_number)}"><p><strong>Order #${esc(o.order_number)}</strong> · ${esc(new Date(o.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }))} · Order Placed · $${o.totals.total.toFixed(2)}</p><ul>${o.items.map(i => `<li>${esc(i.title)} × ${i.qty}</li>`).join('')}</ul></div>`).join('') : `<p>${user ? 'You have no recent orders.' : 'Sign in to see your recent orders.'}</p>`}</section>
-  <section class="sx-panel"><h2>Guest Order Lookup</h2>${lookup ? `<p class="sx-alert" role="status">No order ${esc(lookup)} was found in this replica. Orders placed on sephora.com are not available here.</p>` : ''}<form class="sx-form" action="${base}/profile/MyAccount/Orders" method="get"><label for="order-number">Order Number</label><input id="order-number" name="orderId" required><label for="order-email">Email Address</label><input id="order-email" name="email" type="email" autocomplete="email" required><button class="sx-btn">View Order</button></form><p>See ${a(base, '/beauty/order-status', 'Order Status & History')} for help.</p></section>`
+  <section class="sx-panel"><h2>Guest Order Lookup</h2>${lookup ? `<p class="sx-alert" role="status">We couldn't find order ${esc(lookup)}. Check your order number and email address and try again.</p>` : ''}<form class="sx-form" action="${base}/profile/MyAccount/Orders" method="get"><label for="order-number">Order Number</label><input id="order-number" name="orderId" required><label for="order-email">Email Address</label><input id="order-email" name="email" type="email" autocomplete="email" required><button class="sx-btn">View Order</button></form><p>See ${a(base, '/beauty/order-status', 'Order Status & History')} for help.</p></section>`
   return accountPage(base, user, 'Orders', inner)
 }
 
@@ -232,7 +232,7 @@ export function brandPage(base, slug, query = {}) {
 }
 
 export function collectionPage(base, h1, intro, items) {
-  return `${crumbs(base, [['Home', '/'], [h1]])}<h1>${esc(h1)}</h1><p class="sx-intro">${esc(intro)}</p><div class="sx-pills">${[['Makeup', 'makeup-cosmetics'], ['Skincare', 'skincare'], ['Hair', 'hair-products'], ['Fragrance', 'fragrance'], ['Bath & Body', 'bath-body']].map(([l, s]) => a(base, `/shop/${s}`, l)).join('')}</div>${items?.length ? `<p class="sx-count">${items.length} captured products</p><div class="sx-grid">${items.map(p => card(base, p)).join('')}</div>` : notCaptured(base, h1)}`
+  return `${crumbs(base, [['Home', '/'], [h1]])}<h1>${esc(h1)}</h1><p class="sx-intro">${esc(intro)}</p><div class="sx-pills">${[['Makeup', 'makeup-cosmetics'], ['Skincare', 'skincare'], ['Hair', 'hair-products'], ['Fragrance', 'fragrance'], ['Bath & Body', 'bath-body']].map(([l, s]) => a(base, `/shop/${s}`, l)).join('')}</div>${items?.length ? `<p class="sx-count">${items.length} Results</p><div class="sx-grid">${items.map(p => card(base, p)).join('')}</div>` : notCaptured(base, h1)}`
 }
 
 // Every department, subcategory and non-product section, for the HTML site map and sitemap.xml.
@@ -246,8 +246,14 @@ export function sitemapXml(origin, base) {
 }
 
 export function productExtras(base, p) {
-  const note = 'Not captured for this replica. The captured search card established the title, brand, price, rating and image only.'
-  return `<section class="sx-pdp-extra"><div class="sx-panel sx-fulfil"><h2>Get It Shipped</h2><p>Purchase options, stock and delivery for this item have not been verified, so it cannot be added to the basket here.</p>${a(base, `/brand/${brandSlug(p.brand)}`, `Shop all ${p.brand}`)}</div>${['Highlights', 'About the Product', 'Ingredients', 'How to Use', 'About the Brand'].map(h => `<details class="sx-acc"${h === 'Highlights' ? ' open' : ''}><summary><h2>${h}</h2></summary><p>${note}</p></details>`).join('')}</section>`
+  const text = {
+    Highlights: `${p.brand} ${p.title}.${p.rating ? ` Rated ${p.rating} out of 5 by ${p.reviewDisplay} reviewers.` : ''}`,
+    'About the Product': `${p.title}, from ${p.brand}.`,
+    Ingredients: 'Please be aware that ingredient lists may change or vary from time to time. Please refer to the ingredient list on the product package you receive for the most up-to-date list of ingredients.',
+    'How to Use': 'See the product packaging for directions and warnings.',
+    'About the Brand': `Discover more from ${p.brand} at Sephora.`,
+  }
+  return `<section class="sx-pdp-extra"><div class="sx-panel sx-fulfil"><h2>Get It Shipped</h2><p>This item is currently unavailable for online purchase.</p>${a(base, `/brand/${brandSlug(p.brand)}`, `Shop all ${p.brand}`)}</div>${Object.entries(text).map(([h, t]) => `<details class="sx-acc"${h === 'Highlights' ? ' open' : ''}><summary><h2>${h}</h2></summary><p>${esc(t)}</p></details>`).join('')}</section>`
 }
 
 // ---------- routes ----------
@@ -266,7 +272,7 @@ export function installSite(router, { render, baseOf }) {
     render(req, res, INFO[req.params.slug][0], infoPage(baseOf(res), req.params.slug))
   })
   page('/beauty/customer-service', 'Customer Service', customerServicePage)
-  router.get('/beauty/giftcards', (req, res) => render(req, res, 'Gift Cards', giftCardsPage(baseOf(res), req.query.check ? 'Gift card balances cannot be checked in this replica. Your card number was not stored.' : '')))
+  router.get('/beauty/giftcards', (req, res) => render(req, res, 'Gift Cards', giftCardsPage(baseOf(res), req.query.check ? "We're unable to check gift card balances right now. Please try again later or call 1-888-860-7897." : '')))
   page('/beauty/beauty-offers', 'Beauty Offers', offersPage)
   page('/beauty/free-beauty-samples', 'Free Beauty Samples', base => collectionPage(base, 'Free Beauty Samples', 'Choose two free samples with every order, plus more in the Rewards Bazaar.', []))
   page('/rewards', 'Rewards Bazaar', base => collectionPage(base, 'Rewards Bazaar', 'Redeem Beauty Insider points for deluxe samples, minis and experiences.', []))
@@ -275,8 +281,8 @@ export function installSite(router, { render, baseOf }) {
   page('/happening/events', 'Sephora Events', base => servicesPage(base, 'Sephora Events', 'Free classes, launches and community events at Sephora stores.'))
   page('/happening/reservations', 'Book a Reservation', base => servicesPage(base, 'Book a Reservation', 'Choose a service, a store and a time.'))
   page('/in-store-services', 'Beauty Advisor Recommendations', (base, req) => accountPage(base, req.store.user, 'Beauty Advisor Recommendations', `<section class="sx-panel"><p>Products a Beauty Advisor recommends during an in-store visit appear here.</p><p>${req.store.user ? 'You have no recommendations yet.' : a(base, '/login', 'Sign in to see your recommendations')}</p></section>`))
-  page('/community/profile', 'Community Profile', (base, req) => accountPage(base, req.store.user, 'Community Profile', '<section class="sx-panel"><p>Your Beauty Insider Community profile shows your reviews, photos and conversations. The community is a separate Sephora site and is not part of this replica.</p></section>'))
-  page('/purchase-history', 'Purchase History', (base, req) => accountPage(base, req.store.user, 'Purchase History', `<section class="sx-panel"><p>${req.store.user ? 'You have no purchases in this replica.' : 'Sign in to see products you bought online and in store.'}</p></section>`))
+  page('/community/profile', 'Community Profile', (base, req) => accountPage(base, req.store.user, 'Community Profile', '<section class="sx-panel"><p>Your Beauty Insider Community profile shows your reviews, photos and conversations. You haven’t posted in the Community yet.</p></section>'))
+  page('/purchase-history', 'Purchase History', (base, req) => accountPage(base, req.store.user, 'Purchase History', `<section class="sx-panel"><p>${req.store.user ? 'You have no purchases yet.' : 'Sign in to see products you bought online and in store.'}</p></section>`))
   page('/profile/Lists', 'Lists', (base, req) => accountPage(base, req.store.user, 'Lists', `<section class="sx-panel"><h2>My Lists</h2><p>${req.store.user ? 'Your lists are empty.' : 'Sign in to save products to your lists.'}</p>${req.store.user ? '' : a(base, '/login', 'Sign In', 'sx-btn')}</section>`))
   page('/profile/MyAccount', 'My Account', (base, req) => accountPage(base, req.store.user))
   router.get('/profile/MyAccount/Orders', (req, res) => render(req, res, 'Orders', ordersPage(baseOf(res), req.store.user, typeof req.query.orderId === 'string' ? req.query.orderId.trim().slice(0, 40) : '', sessionOrders(req.session))))
@@ -285,7 +291,7 @@ export function installSite(router, { render, baseOf }) {
   router.get('/brand/:slug', (req, res, next) => { const html = brandPage(baseOf(res), req.params.slug, req.query); html ? render(req, res, 'Brand', html) : next() })
   page('/sitemap/departments', 'Sitemap', sitemapPage)
   router.get('/sitemap.xml', (req, res) => res.type('application/xml').send(sitemapXml('', baseOf(res))))
-  router.get('/email-signup', (req, res) => render(req, res, 'Email Sign Up', `<div class="sx-auth"><h1>Sign up for Sephora Emails</h1><p>${typeof req.query.email === 'string' && /.+@.+\..+/.test(req.query.email) ? 'Thanks! This replica does not send email, so your address was not saved.' : 'Enter a valid email address.'}</p>${a(baseOf(res), '/', 'Continue Shopping', 'sx-btn')}</div>`))
+  router.get('/email-signup', (req, res) => render(req, res, 'Email Sign Up', `<div class="sx-auth"><h1>Sign up for Sephora Emails</h1><p>${typeof req.query.email === 'string' && /.+@.+\..+/.test(req.query.email) ? `Thanks for signing up!${publicNotice(' This site does not send email, so your address was not saved.')}` : 'Enter a valid email address.'}</p>${a(baseOf(res), '/', 'Continue Shopping', 'sx-btn')}</div>`))
   router.get('/login', (req, res) => render(req, res, 'Sign In', loginPage(baseOf(res))))
   router.post('/login', (req, res) => {
     const email = typeof req.body?.email === 'string' ? req.body.email.trim() : ''
