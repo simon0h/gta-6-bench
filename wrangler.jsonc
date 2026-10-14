@@ -13,5 +13,10 @@
     "images": { "app": { "dockerfile": "./Dockerfile", "build_context": "." } }
   }],
   "durable_objects": { "bindings": [{ "name": "STOREFRONT", "class_name": "Storefront" }] },
-  "exports": { "Storefront": { "type": "durable-object", "storage": "sqlite" } }
+  "exports": { "Storefront": { "type": "durable-object", "storage": "sqlite" } },
+  // Pull request builds run `wrangler preview`. Bindings are not inherited, so
+  // each Preview declares its own (isolated) Storefront namespace.
+  "previews": {
+    "durable_objects": { "bindings": [{ "name": "STOREFRONT", "class_name": "Storefront" }] }
+  }
 }
