@@ -93,6 +93,7 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
     if (!run) return res.status(404).json({ error: 'Run not found' })
     res.json({ run: runWithUrls(run, req) })
   }))
+  router.get('/dashboard/api/runs/:id/live', action(async (req, res) => res.json(await manager.getLive(req.params.id))))
   router.post('/dashboard/api/runs/:id/attempts', action(async (req, res) => res.status(201).json({ attempt: attemptWithUrl(await manager.addAttempt(req.params.id, req.body || {}), req) })))
   router.patch('/dashboard/api/runs/:id/attempts/:attempt', action(async (req, res) => res.json({ attempt: attemptWithUrl(await manager.updateAttempt(req.params.id, req.params.attempt, req.body || {}), req) })))
   router.get('/dashboard/api/runs/:id/attempts/:attempt/traversal', action(async (req, res) => {
@@ -109,6 +110,7 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
   }))
   router.use('/dashboard/api', (req, res) => res.status(404).json({ error: 'Endpoint not found' }))
   router.use('/dashboard/assets', express.static(`${publicDirectory}/assets`, { fallthrough: false }))
+  router.get('/dashboard/live.js', (req, res) => res.sendFile(`${publicDirectory}/live.js`))
   router.get('/dashboard', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
   router.get('/dashboard/', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
   for (const file of ['app.js', 'style.css', 'portal.js', 'portal.css', 'capture.js', 'traversal.js']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))

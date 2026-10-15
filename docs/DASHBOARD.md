@@ -63,6 +63,21 @@ SQLite before releasing dynamic responses. A resumed task retains its original
 deadline and state. Traversal events are appended to a separate SQLite archive,
 with paginated operator reads, so historical traces do not grow the active checkpoint.
 
+## Live tracker
+
+The top of a run page shows where each agent is right now: its current task and
+store, the time left, the page it is on (home, search results, product, cart,
+checkout, order placed, sign-in or other browsing), which of those steps it has
+reached, its last click or form action, and its most recent pages. It refreshes
+every three seconds while an agent is shopping, every fifteen seconds otherwise,
+and pauses while the browser tab is hidden. **View traversal** opens the full path.
+
+The tracker is built from the traversal events below, so it adds nothing to the
+store pages. Each running task keeps a small summary of its position in the
+checkpoint, which is dropped when the task is submitted or times out. Page types
+are a best guess from the page address. Tasks started before the tracker existed
+show no position.
+
 ## Traversal recording
 
 New tasks record dynamic storefront requests and HTTP outcomes. A small script
