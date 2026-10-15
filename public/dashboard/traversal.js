@@ -2,6 +2,13 @@
   'use strict'
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const label = value => String(value || '').replace(/_/g, ' ')
+  const bullets = lines => Array.isArray(lines) && lines.length ? `<ul>${lines.map(line => `<li>${escape(line)}</li>`).join('')}</ul>` : '<p>—</p>'
+  // Expected output, actual output and failure reasons for a finished task.
+  function resultSummary(task, open) {
+    if (!Array.isArray(task?.expected_output) || !task.grade) return ''
+    const failed = task.grade.status !== 'passed'
+    return `<details class="traversal-result"${open ? ' open' : ''}><summary>Expected vs actual output · ${escape(label(task.grade.status))}</summary><div class="result-compare"><section><h4>Expected output</h4>${bullets(task.expected_output)}</section><section><h4>Actual output</h4>${bullets(task.actual_output)}</section></div>${failed ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(task.failure_reasons)}</section>` : ''}</details>`
+  }
   const active = task => !task?.completed_at && !['completed', 'complete', 'finished', 'failed', 'cancelled'].includes(task?.status)
   const navigation = { navigate: 'Navigate', reload: 'Reload', back_forward: 'Back / forward', push: 'History push', replace: 'History replace', hash: 'Fragment navigation' }
 
@@ -229,7 +236,7 @@
       const replayButton = find('[data-traversal-action="replay"]')
       if (replayButton) replayButton.disabled = !replay || !(Number(task?.replay_chunks) > 0)
       if (!task) { container.innerHTML = '<p class="traversal-empty">Start a task to record its traversal.</p>'; return }
-      if (task.recorded === false) { container.innerHTML = '<p class="traversal-empty">Traversal unavailable. This task started before recording was enabled.</p>'; return }
+      if (task.recorded === false) { container.innerHTML = `${resultSummary(task, state.resultOpen)}<p class="traversal-empty">Traversal unavailable. This task started before recording was enabled.</p>`; return }
       if (!cache?.loaded) { container.innerHTML = '<p class="traversal-empty" role="status">Loading traversal…</p>'; return }
       const allEvents = events(cache), view = currentView(), graph = graphFor(allEvents, cache.mode)
       cache.graph = graph
@@ -240,7 +247,7 @@
         const first = node.request || node.events[0] || {}
         return `<button type="button" class="traversal-graph-node ${node.kind}" data-node-id="${escape(node.id)}" aria-pressed="${node.id === view.selected}" aria-label="${escape(node.title)}, ${node.events.length} event${node.events.length === 1 ? '' : 's'}" aria-controls="traversal-inspector" style="left:${node.x}px;top:${node.y}px;width:${node.width}px;height:${node.height}px"><span class="traversal-node-kind">${node.kind === 'page' ? 'Page' : node.kind === 'unlinked' ? 'Unlinked' : escape(eventKind(first))}<span>${node.kind === 'event' ? `#${escape(first.id)}` : `${node.events.length} events`}</span></span><span class="traversal-node-title" title="${escape(node.title)}">${escape(node.title)}</span><span class="traversal-node-meta">${first.method ? `<span>${escape(first.method)}</span>` : ''}${Number.isFinite(first.status) ? `<span>${escape(first.status)}</span>` : ''}${timestamp(first)}</span><span class="traversal-node-detail" title="${escape(node.detail || (node.missingParents?.length ? 'Parent not recorded' : ''))}">${escape(node.detail || (node.missingParents?.length ? 'Parent not recorded' : ''))}</span></button>`
       }).join('')
-      container.innerHTML = `<div class="traversal-task-heading"><h3>${escape(task.task_id || 'Task')}</h3><span>${allEvents.length} / ${Number(cache.total ?? task.event_count) || allEvents.length} events</span></div>${!allEvents.length ? '<p class="traversal-empty">No events recorded yet.</p>' : `<div class="traversal-graph-workspace"><div class="traversal-graph-area"><div class="traversal-graph-viewport" tabindex="0" role="region" aria-label="Traversal graph. Drag to pan. Arrow keys pan; plus and minus zoom; zero fits the graph."><div class="traversal-graph-scene" style="width:${graph.width}px;height:${graph.height}px"><svg class="traversal-graph-edges" width="${graph.width}" height="${graph.height}" aria-hidden="true"><defs><marker id="traversal-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 8 4 0 8z"/></marker></defs>${graph.edges.map((edge, index) => edgeMarkup(edge, graph, index)).join('')}</svg>${nodes}</div></div><div class="traversal-graph-legend"><span class="${cache.mode === 'events' ? 'sequence' : 'parent'}">${cache.mode === 'events' ? 'Recorded order · dashed arrows, not causality' : 'Arrows: recorded parent → page'}</span><span>${graph.nodes.length} nodes · Drag to pan</span></div></div><section id="traversal-inspector" class="traversal-inspector" aria-label="Node details" tabindex="0"></section></div>`}`
+      container.innerHTML = `<div class="traversal-task-heading"><h3>${escape(task.task_id || 'Task')}</h3><span>${allEvents.length} / ${Number(cache.total ?? task.event_count) || allEvents.length} events</span></div>${resultSummary(task, state.resultOpen)}${!allEvents.length ? '<p class="traversal-empty">No events recorded yet.</p>' : `<div class="traversal-graph-workspace"><div class="traversal-graph-area"><div class="traversal-graph-viewport" tabindex="0" role="region" aria-label="Traversal graph. Drag to pan. Arrow keys pan; plus and minus zoom; zero fits the graph."><div class="traversal-graph-scene" style="width:${graph.width}px;height:${graph.height}px"><svg class="traversal-graph-edges" width="${graph.width}" height="${graph.height}" aria-hidden="true"><defs><marker id="traversal-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 8 4 0 8z"/></marker></defs>${graph.edges.map((edge, index) => edgeMarkup(edge, graph, index)).join('')}</svg>${nodes}</div></div><div class="traversal-graph-legend"><span class="${cache.mode === 'events' ? 'sequence' : 'parent'}">${cache.mode === 'events' ? 'Recorded order · dashed arrows, not causality' : 'Arrows: recorded parent → page'}</span><span>${graph.nodes.length} nodes · Drag to pan</span></div></div><section id="traversal-inspector" class="traversal-inspector" aria-label="Node details" tabindex="0"></section></div>`}`
       applyView(); renderInspector()
       if (find('.traversal-inspector')) find('.traversal-inspector').scrollTop = inspectorScroll
       // Refresh never changes the user's framing. Keyboard navigation reveals offscreen nodes.
@@ -304,12 +311,16 @@
     }
     function open({ runId, attemptId, label: agentLabel }) {
       close()
-      state = { runId, attemptId, selected: null, tasks: [], cache: new Map() }
+      state = { runId, attemptId, selected: null, tasks: [], cache: new Map(), resultOpen: true }
       dialog.innerHTML = `<div class="traversal-header"><div><h2 id="traversal-title">Traversal <span>${escape(agentLabel)}</span></h2><p class="traversal-status" role="status">Loading…</p></div><button class="icon-button" type="button" data-traversal-action="close" aria-label="Close traversal" autofocus>×</button></div><div class="traversal-toolbar"><div class="traversal-modes" role="group" aria-label="Graph view"><button class="button quiet small" type="button" data-traversal-mode="pages" aria-pressed="true" disabled>Pages</button><button class="button quiet small" type="button" data-traversal-mode="events" aria-pressed="false" disabled>All events</button></div><div class="traversal-graph-controls"><button class="button secondary small" type="button" data-traversal-action="replay" title="Play back the page as the agent saw it" disabled>Watch replay</button><button class="button secondary small" type="button" data-traversal-action="refresh">Refresh</button><button class="button quiet small" type="button" data-traversal-action="zoom-out" aria-label="Zoom out" title="Zoom out" disabled>−</button><output class="traversal-zoom-value" aria-label="Zoom level">100%</output><button class="button quiet small" type="button" data-traversal-action="zoom-in" aria-label="Zoom in" title="Zoom in" disabled>+</button><button class="button quiet small" type="button" data-traversal-action="fit" disabled>Fit view</button><button class="button quiet small" type="button" data-traversal-action="download" disabled>JSON</button></div></div><p class="traversal-error" role="alert" hidden></p><div class="traversal-layout"><aside class="traversal-task-panel"><h3>Tasks <span id="traversal-task-count">0</span></h3><nav class="traversal-tasks" aria-label="Started tasks"></nav></aside><section class="traversal-trace" aria-label="Task traversal"><p class="traversal-empty">Loading traversal…</p></section></div>`
       dialog.showModal()
       refresh()
     }
 
+    // Remember whether the output summary is open across refreshes and tasks.
+    dialog.addEventListener('toggle', event => {
+      if (state && event.target.matches?.('.traversal-result')) state.resultOpen = event.target.open
+    }, true)
     dialog.addEventListener('click', event => {
       const taskButton = event.target.closest('[data-traversal-task]')
       if (taskButton && state) {

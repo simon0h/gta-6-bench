@@ -140,7 +140,19 @@
     // Tasks have no time limit; each result records how long the agent took.
     const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite)
     const total = timed.length ? ` · ${duration(timed.reduce((sum, ms) => sum + ms, 0))} total` : ''
-    return `<details class="result-details"><summary>View ${results.length} task result${results.length === 1 ? '' : 's'}${Number.isFinite(attempt.summary?.passed) ? ` · ${attempt.summary.passed} passed` : ''}${total}</summary><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Time taken</th><th scope="col">Notes</th></tr></thead><tbody>${results.map((result, index) => `<tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(duration(result.elapsed_ms))}</td><td>${escape(result.grade?.reasons?.map(reason => reason.message).filter(Boolean).join('; ') || result.final_response?.message || result.reason || result.message || result.notes || '—')}</td></tr>`).join('')}</tbody></table></details>`
+    return `<details class="result-details"><summary>View ${results.length} task result${results.length === 1 ? '' : 's'}${Number.isFinite(attempt.summary?.passed) ? ` · ${attempt.summary.passed} passed` : ''}${total}</summary><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Time taken</th></tr></thead>${results.map((result, index) => `<tbody class="result-group"><tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(duration(result.elapsed_ms))}</td></tr><tr class="result-outputs"><td colspan="3">${resultOutputs(result)}</td></tr></tbody>`).join('')}</table></details>`
+  }
+
+  // Expected output, actual output and (for tasks that did not pass) one
+  // bullet per failure reason. The server works these out from the task.
+  function bullets(lines) {
+    return Array.isArray(lines) && lines.length ? `<ul>${lines.map(line => `<li>${escape(line)}</li>`).join('')}</ul>` : '<p>—</p>'
+  }
+  function resultOutputs(result) {
+    const status = result.grade?.status
+    const reasons = Array.isArray(result.failure_reasons) && result.failure_reasons.length ? result.failure_reasons : (result.grade?.reasons || []).map(reason => reason.message).filter(Boolean)
+    const actual = Array.isArray(result.actual_output) ? result.actual_output : result.final_response?.message ? [`Agent’s message: “${result.final_response.message}”`] : []
+    return `<div class="result-compare"><section><h4>Expected output</h4>${bullets(result.expected_output)}</section><section><h4>Actual output</h4>${bullets(actual)}</section></div>${status && status !== 'passed' ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(reasons)}</section>` : ''}`
   }
 
   function renderAttempt(attempt, index, run) {

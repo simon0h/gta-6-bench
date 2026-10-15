@@ -4,6 +4,7 @@ import path from 'node:path'
 import { randomUUID, createHash } from 'node:crypto'
 import { publicTask, SUITE_VERSION } from './tasks.js'
 import { gradeTask } from './grader.js'
+import { describeResult } from './outcome.js'
 import { startEnvironment, BENCHMARK_DATE } from './environment.js'
 import { runBaseline, BASELINES } from './baselines.js'
 import { environmentFingerprint, writeJson, summarize, renderReport } from './report.js'
@@ -121,6 +122,7 @@ export async function runSuite({ tasks, outputDirectory, baseline = 'reference',
           environment_error: environmentError ?? null, agent_error: agentError ?? null,
           artifact_directory: relative, artifacts,
         }
+        Object.assign(result, describeResult(task, result, orders))
         await writeJson(path.join(runDirectory, 'task.json'), task)
         await writeJson(path.join(runDirectory, 'actions.json'), { actions, console_errors: consoleErrors, blocked_requests: blockedRequests })
         await writeJson(path.join(runDirectory, 'scenario-events.json'), scenarioEvents)
