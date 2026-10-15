@@ -21,7 +21,7 @@
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const $ = selector => document.querySelector(selector)
-  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0 }
+  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, resultTabs: new Map(), resultsOpen: new Set() }
   let toastTimer
   const live = window.DashboardLive.create({ api, agents })
 
@@ -128,10 +128,34 @@
     renderSidebar()
   }
 
+  // Passed results are green, failed red, environment errors amber.
+  function resultTone(result) {
+    const status = result.grade?.status
+    return status === 'passed' ? 'passed' : status === 'failed' ? 'failed' : status === 'environment_error' ? 'error' : 'pending'
+  }
   function resultBadge(result) {
     const status = result.grade?.status || result.outcome || result.status || 'Submitted'
-    const tone = status === 'passed' ? 'green' : status === 'failed' ? 'red' : status === 'environment_error' ? 'orange' : 'gray'
-    return `<span class="badge ${tone}"><span class="status-dot"></span>${escape(status.replace(/_/g, ' '))}</span>`
+    return `<span class="badge result-badge ${resultTone(result)}"><span class="status-dot"></span>${escape(status.replace(/_/g, ' '))}</span>`
+  }
+  // The All / Failed / Passed tabs. "Failed" holds every graded task that did not pass.
+  const resultFilters = [['all', 'All'], ['failed', 'Failed'], ['passed', 'Passed']]
+  function matchesFilter(result, filter) {
+    const tone = resultTone(result)
+    return filter === 'all' || (filter === 'passed' ? tone === 'passed' : tone === 'failed' || tone === 'error')
+  }
+  function applyResultFilter(details, filter) {
+    let shown = 0
+    for (const tab of details.querySelectorAll('[data-filter]')) tab.setAttribute('aria-selected', String(tab.dataset.filter === filter))
+    for (const group of details.querySelectorAll('.result-group')) {
+      const match = filter === 'all' || group.dataset.tone === filter || (filter === 'failed' && group.dataset.tone === 'error')
+      group.hidden = !match
+      if (match) shown++
+    }
+    const empty = details.querySelector('.result-empty')
+    if (empty) {
+      empty.hidden = shown > 0
+      empty.textContent = filter === 'passed' ? 'No passed tasks yet.' : 'No failed tasks.'
+    }
   }
 
   function renderResults(attempt) {
@@ -140,7 +164,17 @@
     // Tasks have no time limit; each result records how long the agent took.
     const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite)
     const total = timed.length ? ` · ${duration(timed.reduce((sum, ms) => sum + ms, 0))} total` : ''
-    return `<details class="result-details"><summary>View ${results.length} task result${results.length === 1 ? '' : 's'}${Number.isFinite(attempt.summary?.passed) ? ` · ${attempt.summary.passed} passed` : ''}${total}</summary><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Time taken</th></tr></thead>${results.map((result, index) => `<tbody class="result-group"><tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(duration(result.elapsed_ms))}</td></tr><tr class="result-outputs"><td colspan="3">${resultOutputs(result)}</td></tr></tbody>`).join('')}</table></details>`
+    const count = filter => results.filter(result => matchesFilter(result, filter)).length
+    const passed = count('passed'), failed = count('failed')
+    const filter = state.resultTabs.get(attempt.id) || 'all'
+    const id = escape(attempt.id)
+    const tabs = `<div class="result-tabs" role="tablist" aria-label="Filter task results">${resultFilters.map(([key, name]) => `<button class="result-tab ${key}" type="button" role="tab" data-action="result-tab" data-attempt="${id}" data-filter="${key}" aria-selected="${key === filter}">${name}<span>${key === 'all' ? results.length : count(key)}</span></button>`).join('')}</div>`
+    const rows = results.map((result, index) => {
+      const tone = resultTone(result)
+      return `<tbody class="result-group ${tone}" data-tone="${tone}"${matchesFilter(result, filter) ? '' : ' hidden'}><tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(duration(result.elapsed_ms))}</td></tr><tr class="result-outputs"><td colspan="3">${resultOutputs(result)}</td></tr></tbody>`
+    }).join('')
+    const empty = results.some(result => matchesFilter(result, filter))
+    return `<details class="result-details" data-attempt="${id}"${state.resultsOpen.has(attempt.id) ? ' open' : ''}><summary>View ${results.length} task result${results.length === 1 ? '' : 's'} · <span class="result-count passed">${passed} passed</span> · <span class="result-count failed">${failed} failed</span>${total}</summary>${tabs}<table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Time taken</th></tr></thead>${rows}</table><p class="result-empty"${empty ? ' hidden' : ''}>${filter === 'passed' ? 'No passed tasks yet.' : 'No failed tasks.'}</p></details>`
   }
 
   // Expected output, actual output and (for tasks that did not pass) one
@@ -271,6 +305,10 @@
     if (action === 'close-dialog') $('#create-dialog').close()
     if (action === 'refresh') { control.disabled = true; await load(); if (control.isConnected) control.disabled = false }
     if (action === 'retry-session') { control.disabled = true; await initialize() }
+    if (action === 'result-tab') {
+      state.resultTabs.set(control.dataset.attempt, control.dataset.filter)
+      applyResultFilter(control.closest('.result-details'), control.dataset.filter)
+    }
     if (action === 'view-traversal') {
       const attempt = attempts(state.selected).find(item => item.id === control.dataset.attempt)
       if (attempt) traversal.open({ runId: state.selected.id, attemptId: attempt.id, label: agentData(attempt.agent).name })
@@ -379,6 +417,12 @@
       }
     }
   })
+  // Keep each agent's results open (and on the same tab) when the page refreshes.
+  document.addEventListener('toggle', event => {
+    const details = event.target
+    if (!details.matches?.('.result-details')) return
+    if (details.open) state.resultsOpen.add(details.dataset.attempt); else state.resultsOpen.delete(details.dataset.attempt)
+  }, true)
   window.addEventListener('hashchange', () => { traversal.close(); if (state.authenticated) load({ initial: true }) })
   window.addEventListener('beforeunload', event => { if ([...state.drafts.values()].some(draft => draft.dirty)) { event.preventDefault(); event.returnValue = '' } })
   initialize()

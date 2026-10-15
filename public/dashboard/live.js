@@ -60,7 +60,7 @@
       } else {
         const last = entry.last
         const took = Number.isFinite(last?.elapsed_ms) ? ` · took ${escape(duration(last.elapsed_ms))}` : ''
-        const lastText = last ? `Last task: ${escape(last.index)} · ${escape(storeName(last.store))} · ${escape(last.timed_out ? 'timed out' : String(last.grade || 'submitted').replace(/_/g, ' '))}${took}` : ''
+        const lastText = last ? `Last task: ${escape(last.index)} · ${escape(storeName(last.store))} · <span class="result-status ${last.grade === 'passed' ? 'passed' : last.grade === 'failed' ? 'failed' : last.grade === 'environment_error' ? 'error' : ''}">${escape(last.timed_out ? 'timed out' : String(last.grade || 'submitted').replace(/_/g, ' '))}</span>${took}` : ''
         body = `<p class="live-quiet">${entry.status === 'complete' ? `All ${escape(entry.total)} tasks submitted.` : entry.completed ? `On the task page. ${escape(entry.completed)} of ${escape(entry.total)} tasks submitted.` : 'Has not started a task yet.'}</p>${lastText ? `<p class="live-quiet">${lastText}</p>` : ''}`
       }
       const icon = agentIcon(entry.agent)

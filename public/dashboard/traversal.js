@@ -2,12 +2,14 @@
   'use strict'
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const label = value => String(value || '').replace(/_/g, ' ')
+  // Passed results are green, failed red, environment errors amber.
+  const tone = status => status === 'passed' ? 'passed' : status === 'failed' ? 'failed' : status === 'environment_error' ? 'error' : ''
   const bullets = lines => Array.isArray(lines) && lines.length ? `<ul>${lines.map(line => `<li>${escape(line)}</li>`).join('')}</ul>` : '<p>—</p>'
   // Expected output, actual output and failure reasons for a finished task.
   function resultSummary(task, open) {
     if (!Array.isArray(task?.expected_output) || !task.grade) return ''
     const failed = task.grade.status !== 'passed'
-    return `<details class="traversal-result"${open ? ' open' : ''}><summary>Expected vs actual output · ${escape(label(task.grade.status))}</summary><div class="result-compare"><section><h4>Expected output</h4>${bullets(task.expected_output)}</section><section><h4>Actual output</h4>${bullets(task.actual_output)}</section></div>${failed ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(task.failure_reasons)}</section>` : ''}</details>`
+    return `<details class="traversal-result"${open ? ' open' : ''}><summary>Expected vs actual output · <span class="result-status ${tone(task.grade.status)}">${escape(label(task.grade.status))}</span></summary><div class="result-compare"><section><h4>Expected output</h4>${bullets(task.expected_output)}</section><section><h4>Actual output</h4>${bullets(task.actual_output)}</section></div>${failed ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(task.failure_reasons)}</section>` : ''}</details>`
   }
   const active = task => !task?.completed_at && !['completed', 'complete', 'finished', 'failed', 'cancelled'].includes(task?.status)
   const navigation = { navigate: 'Navigate', reload: 'Reload', back_forward: 'Back / forward', push: 'History push', replace: 'History replace', hash: 'Fragment navigation' }
@@ -167,7 +169,7 @@
       return seconds < 60 ? `${seconds}s` : minutes < 60 ? `${minutes}m ${seconds % 60}s` : `${Math.floor(minutes / 60)}h ${minutes % 60}m`
     }
     function renderTasks() {
-      const markup = state.tasks.length ? state.tasks.map((task, index) => `<button class="traversal-task${String(task.trial_id) === state.selected ? ' selected' : ''}" type="button" data-traversal-task="${escape(task.trial_id)}"${String(task.trial_id) === state.selected ? ' aria-current="true"' : ''}><span class="traversal-task-name">${escape(task.task_id || `Task ${index + 1}`)}</span><span class="traversal-task-meta"><span>${escape(label(task.grade?.status || task.status || 'In progress'))}${Number.isFinite(task.elapsed_ms) ? ` · ${escape(took(task.elapsed_ms))}` : ''}</span><span>${task.recorded === false ? 'Unavailable' : `${Number(task.event_count) || 0} events`}</span></span></button>`).join('') : '<p class="traversal-empty">No tasks started yet.</p>'
+      const markup = state.tasks.length ? state.tasks.map((task, index) => `<button class="traversal-task${String(task.trial_id) === state.selected ? ' selected' : ''} ${tone(task.grade?.status)}" type="button" data-traversal-task="${escape(task.trial_id)}"${String(task.trial_id) === state.selected ? ' aria-current="true"' : ''}><span class="traversal-task-name">${escape(task.task_id || `Task ${index + 1}`)}</span><span class="traversal-task-meta"><span><span class="result-status ${tone(task.grade?.status)}">${escape(label(task.grade?.status || task.status || 'In progress'))}</span>${Number.isFinite(task.elapsed_ms) ? ` · ${escape(took(task.elapsed_ms))}` : ''}</span><span>${task.recorded === false ? 'Unavailable' : `${Number(task.event_count) || 0} events`}</span></span></button>`).join('') : '<p class="traversal-empty">No tasks started yet.</p>'
       const container = find('.traversal-tasks')
       if (container.innerHTML !== markup) {
         const focused = document.activeElement?.dataset.traversalTask
