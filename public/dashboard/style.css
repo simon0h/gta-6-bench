@@ -306,6 +306,13 @@ dialog::backdrop { background: #00000099; }
 .traversal-task-meta { display: flex; justify-content: space-between; gap: 7px; margin-top: 5px; color: var(--muted); font-size: 10px; }
 .traversal-trace { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
 .traversal-empty { padding: 20px 10px; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.replay-actions { display: flex; align-items: center; gap: 6px; }
+.replay-actions .icon-button { margin: -4px -5px 0 2px; }
+.replay-stage { flex: 1; min-height: 0; display: flex; justify-content: center; align-items: flex-start; padding: 12px; overflow: auto; background: var(--bg); }
+.replay-stage .rr-player { background: var(--paper); box-shadow: none; border: 1px solid var(--line); }
+/* The player's own controls are light; keep their text dark. */
+.replay-stage .rr-player { color: #111111; }
+.replay-note { flex: none; padding: 8px 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
 .traversal-task-heading { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 7px; flex: none; padding: 12px 14px; border-bottom: 1px solid var(--line); }
 .traversal-task-heading h3 { min-width: 0; font-size: 13px; font-weight: 500; overflow-wrap: anywhere; }
 .traversal-task-heading > span { color: var(--muted); font: 10px/1.5 var(--mono); white-space: nowrap; }

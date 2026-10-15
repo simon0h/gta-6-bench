@@ -79,9 +79,11 @@ persists across deployments; it is not a build environment variable.
 
 Pushes to `main` trigger deployment.
 A pull request is not a production deployment until its changes reach that branch.
-Preview builds are currently disabled.
-Use a separate staging Worker and Durable Object namespace for previews so test
-builds cannot alter production state. A new Cloudflare account or Worker needs its
+Other branches run the preview command, `npx wrangler preview`. It needs the
+`previews` block in `wrangler.jsonc`, which gives each Preview its own Storefront
+Durable Object namespace, so test builds cannot alter production state. A Preview
+has no operator secret unless one is added with `wrangler preview secret`, so it
+answers "Hosting is not configured" until then. A new Cloudflare account or Worker needs its
 own repository connection and runtime secret; these files alone do not create them.
 
 ## State and restart behavior

@@ -38,7 +38,7 @@
     }
     return body
   }
-  const traversal = window.DashboardTraversal.create({ api })
+  const traversal = window.DashboardTraversal.create({ api, replay: window.DashboardReplay?.create({ api }) })
 
   function toast(message, error = false) {
     clearTimeout(toastTimer)

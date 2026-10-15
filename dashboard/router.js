@@ -1,10 +1,19 @@
 import express from 'express'
 import { createHmac, timingSafeEqual, randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
+import { createRequire } from 'node:module'
+import path from 'node:path'
 import { readBounded, RESPONSE_LIMIT } from '../deploy/coordinator.js'
 import { dynamicTraversalRequest } from '../benchmark/traversal.js'
 
 const publicDirectory = fileURLToPath(new URL('../public/dashboard/', import.meta.url))
+const require = createRequire(import.meta.url)
+// Recorder and player bundles come straight from their pinned npm packages.
+const vendor = {
+  'rrweb-record.js': path.join(path.dirname(require.resolve('@rrweb/record')), 'record.umd.min.cjs'),
+  'rrweb-player.js': path.join(path.dirname(require.resolve('rrweb-player')), 'rrweb-player.umd.min.cjs'),
+  'rrweb-player.css': path.join(path.dirname(require.resolve('rrweb-player')), 'style.min.css'),
+}
 const ADMIN_COOKIE = 'bench_operator'
 const AGENT_COOKIE = 'bench_attempt'
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character])
@@ -107,16 +116,35 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
     if (manager.traceArchive) res.set('x-benchmark-trace-trial', result.trial_id)
     res.json(result)
   }))
+  router.get('/dashboard/api/runs/:id/attempts/:attempt/replay/:trial', action(async (req, res) => {
+    const cursor = req.query.after ?? '0'
+    if (typeof cursor !== 'string' || !/^\d+$/.test(cursor) || !Number.isSafeInteger(Number(cursor))) return res.status(400).json({ error: 'Invalid replay cursor' })
+    const result = await manager.getReplay(req.params.id, req.params.attempt, req.params.trial, { after: Number(cursor) })
+    // As with traversal, the host fills archived chunks only after these checks.
+    if (manager.traceArchive) res.set('x-benchmark-replay-trial', result.trial_id)
+    res.json(result)
+  }))
   router.use('/dashboard/api', (req, res) => res.status(404).json({ error: 'Endpoint not found' }))
   router.use('/dashboard/assets', express.static(`${publicDirectory}/assets`, { fallthrough: false }))
   router.get('/dashboard', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
   router.get('/dashboard/', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
-  for (const file of ['app.js', 'style.css', 'portal.js', 'portal.css', 'capture.js', 'traversal.js']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))
+  for (const file of ['app.js', 'style.css', 'portal.js', 'portal.css', 'capture.js', 'traversal.js', 'recorder.js', 'replay.js']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))
+  for (const [file, source] of Object.entries(vendor)) {
+    router.get(`/dashboard/vendor/${file}`, (req, res) => res.set('Cache-Control', 'private, max-age=86400').type(file.endsWith('.css') ? 'css' : 'text/javascript').sendFile(source))
+  }
 
   router.post('/agent/events', sameOrigin, express.json({ limit: '32kb' }), action(async (req, res) => {
     const token = cookie(req, AGENT_COOKIE)
     if (!token) return res.status(401).json({ error: 'Open your agent URL before recording browser events.' })
     await manager.recordBrowserEvents(token, req.body)
+    res.sendStatus(204)
+  }))
+  router.post('/agent/replay', sameOrigin, express.raw({ type: () => true, limit: '1mb' }), action(async (req, res) => {
+    const token = cookie(req, AGENT_COOKIE)
+    if (!token) return res.status(401).json({ error: 'Open your agent URL before recording.' })
+    const { trial, page, seq } = req.query
+    if (![trial, page, seq].every(value => typeof value === 'string') || !/^\d{1,6}$/.test(seq)) return res.status(400).json({ error: 'Invalid replay chunk' })
+    await manager.recordReplay(token, { trial_id: trial, page_id: page, seq: Number(seq) }, Buffer.isBuffer(req.body) ? req.body : Buffer.alloc(0))
     res.sendStatus(204)
   }))
 
@@ -201,7 +229,8 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
       if (html) {
         const back = `<a href="/agent/${esc(token)}" aria-label="Return to benchmark task and submit result" style="position:fixed;z-index:2147483647;bottom:16px;right:16px;padding:11px 15px;background:#181c19;color:#fff;border:1px solid #59605b;border-radius:999px;font:600 12px system-ui;text-decoration:none;box-shadow:0 4px 16px #0002">Task &amp; submit result ↗</a>`
         const capture = traversal?.page_id ? `<script src="/dashboard/capture.js" data-trial="${esc(target.trialId)}" data-page="${esc(traversal.page_id)}" defer></script>` : ''
-        const document = Buffer.from(body).toString('utf8'), addition = `${back}${capture}`
+        const recorder = traversal?.page_id && target.replay ? `<script src="/dashboard/vendor/rrweb-record.js" defer></script><script src="/dashboard/recorder.js" data-trial="${esc(target.trialId)}" data-page="${esc(traversal.page_id)}" defer></script>` : ''
+        const document = Buffer.from(body).toString('utf8'), addition = `${back}${capture}${recorder}`
         return res.send(/<\/body>/i.test(document) ? document.replace(/<\/body>/i, `${addition}</body>`) : document + addition)
       }
       res.end(Buffer.from(body))

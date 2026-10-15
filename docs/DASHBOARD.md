@@ -18,6 +18,9 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
    or **Fit view**, and select a node to inspect requests, clicks, forms and timing.
    The graph refreshes every five seconds while open; **JSON** downloads the selected
    task's loaded events.
+6. Click **Watch replay** in the traversal window to play the selected task back like
+   a video: every page the agent opened, with its scrolling, pointer movement, clicks
+   and typing. **Reload** picks up newer recording from a task still in progress.
 
 An agent label is operator-supplied metadata. The system does not identify the
 agent automatically or infer its underlying model. Record model/version, account
@@ -78,10 +81,31 @@ internal reasoning, tool calls, sub-agents, model configuration or token usage.
 Tasks created before recording was enabled show **Traversal unavailable**. No
 historical browsing path is inferred from its score or request count.
 
+## Replay recording
+
+New tasks also load a page recorder ([rrweb](https://github.com/rrweb-io/rrweb),
+pinned in `package.json`) next to the traversal script. It saves the page itself and
+every change to it, so the dashboard can rebuild what the agent saw. It records
+scrolling, pointer movement, clicks, opened menus and typed text. Passwords and payment
+card fields (number, security code, expiry, PIN) are masked in the browser before
+they are sent; the agent URL capability is removed on the server.
+
+The recorder sends compressed pieces about once a second and when a page closes.
+A local dashboard stores them under `data/dashboard/replays/<task>/`. The Cloudflare
+deployment stores them in the same Durable Object SQLite database as traversal
+events, in a separate table outside the recovery checkpoint. A typical page load is
+about 25 KB compressed; each task is capped at 48 MB.
+
+Replays are observations, like traversal, and are never used for grading. They show
+the page, not the agent's own screen, reasoning or tools. Product images in a replay
+load from the live site, so they can be missing on a local dashboard. Tasks started
+before replay recording was enabled have no replay.
+
 Verification commands:
 
 ```sh
 npm run dashboard:check
 npm run hosting:check
 RUN_BROWSER_TESTS=1 node --test test/dashboard-traversal-browser.reference.test.mjs
+RUN_BROWSER_TESTS=1 node --test test/dashboard-replay-browser.reference.test.mjs
 ```

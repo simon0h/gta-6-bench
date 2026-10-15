@@ -124,7 +124,7 @@
     return `<path class="traversal-graph-edge ${edge.relation}" data-from="${escape(edge.from)}" data-to="${escape(edge.to)}" data-relation="${edge.relation}" d="${path}" marker-end="url(#traversal-arrow)"><title>${escape(edge.relation === 'parent' ? 'Recorded parent' : 'Recorded order')}${edge.label ? ` · ${escape(edge.label)}` : ''}</title></path>${edge.label ? `<text class="traversal-edge-label" x="${labelX}" y="${labelY}" text-anchor="middle">${escape(edge.label)}</text>` : ''}`
   }
 
-  function create({ api }) {
+  function create({ api, replay }) {
     const dialog = document.querySelector('#traversal-dialog')
     let state = null, timer, sequence = 0, controller, drag = null, restoringFocus = false
     const find = selector => dialog.querySelector(selector)
@@ -222,6 +222,8 @@
       const available = !!(task && task.recorded !== false && cache?.loaded && cache.events.size)
       for (const control of dialog.querySelectorAll('[data-traversal-mode], [data-traversal-action="download"], [data-traversal-action="fit"], [data-traversal-action="zoom-in"], [data-traversal-action="zoom-out"]')) control.disabled = !available
       for (const control of dialog.querySelectorAll('[data-traversal-mode]')) control.setAttribute('aria-pressed', String(control.dataset.traversalMode === (cache?.mode || 'pages')))
+      const replayButton = find('[data-traversal-action="replay"]')
+      if (replayButton) replayButton.disabled = !replay || !(Number(task?.replay_chunks) > 0)
       if (!task) { container.innerHTML = '<p class="traversal-empty">Start a task to record its traversal.</p>'; return }
       if (task.recorded === false) { container.innerHTML = '<p class="traversal-empty">Traversal unavailable. This task started before recording was enabled.</p>'; return }
       if (!cache?.loaded) { container.innerHTML = '<p class="traversal-empty" role="status">Loading traversal…</p>'; return }
@@ -299,7 +301,7 @@
     function open({ runId, attemptId, label: agentLabel }) {
       close()
       state = { runId, attemptId, selected: null, tasks: [], cache: new Map() }
-      dialog.innerHTML = `<div class="traversal-header"><div><h2 id="traversal-title">Traversal <span>${escape(agentLabel)}</span></h2><p class="traversal-status" role="status">Loading…</p></div><button class="icon-button" type="button" data-traversal-action="close" aria-label="Close traversal" autofocus>×</button></div><div class="traversal-toolbar"><div class="traversal-modes" role="group" aria-label="Graph view"><button class="button quiet small" type="button" data-traversal-mode="pages" aria-pressed="true" disabled>Pages</button><button class="button quiet small" type="button" data-traversal-mode="events" aria-pressed="false" disabled>All events</button></div><div class="traversal-graph-controls"><button class="button secondary small" type="button" data-traversal-action="refresh">Refresh</button><button class="button quiet small" type="button" data-traversal-action="zoom-out" aria-label="Zoom out" title="Zoom out" disabled>−</button><output class="traversal-zoom-value" aria-label="Zoom level">100%</output><button class="button quiet small" type="button" data-traversal-action="zoom-in" aria-label="Zoom in" title="Zoom in" disabled>+</button><button class="button quiet small" type="button" data-traversal-action="fit" disabled>Fit view</button><button class="button quiet small" type="button" data-traversal-action="download" disabled>JSON</button></div></div><p class="traversal-error" role="alert" hidden></p><div class="traversal-layout"><aside class="traversal-task-panel"><h3>Tasks <span id="traversal-task-count">0</span></h3><nav class="traversal-tasks" aria-label="Started tasks"></nav></aside><section class="traversal-trace" aria-label="Task traversal"><p class="traversal-empty">Loading traversal…</p></section></div>`
+      dialog.innerHTML = `<div class="traversal-header"><div><h2 id="traversal-title">Traversal <span>${escape(agentLabel)}</span></h2><p class="traversal-status" role="status">Loading…</p></div><button class="icon-button" type="button" data-traversal-action="close" aria-label="Close traversal" autofocus>×</button></div><div class="traversal-toolbar"><div class="traversal-modes" role="group" aria-label="Graph view"><button class="button quiet small" type="button" data-traversal-mode="pages" aria-pressed="true" disabled>Pages</button><button class="button quiet small" type="button" data-traversal-mode="events" aria-pressed="false" disabled>All events</button></div><div class="traversal-graph-controls"><button class="button secondary small" type="button" data-traversal-action="replay" title="Play back the page as the agent saw it" disabled>Watch replay</button><button class="button secondary small" type="button" data-traversal-action="refresh">Refresh</button><button class="button quiet small" type="button" data-traversal-action="zoom-out" aria-label="Zoom out" title="Zoom out" disabled>−</button><output class="traversal-zoom-value" aria-label="Zoom level">100%</output><button class="button quiet small" type="button" data-traversal-action="zoom-in" aria-label="Zoom in" title="Zoom in" disabled>+</button><button class="button quiet small" type="button" data-traversal-action="fit" disabled>Fit view</button><button class="button quiet small" type="button" data-traversal-action="download" disabled>JSON</button></div></div><p class="traversal-error" role="alert" hidden></p><div class="traversal-layout"><aside class="traversal-task-panel"><h3>Tasks <span id="traversal-task-count">0</span></h3><nav class="traversal-tasks" aria-label="Started tasks"></nav></aside><section class="traversal-trace" aria-label="Task traversal"><p class="traversal-empty">Loading traversal…</p></section></div>`
       dialog.showModal()
       refresh()
     }
@@ -327,6 +329,7 @@
       const action = button.dataset.traversalAction
       if (action === 'close') close()
       if (action === 'refresh') refresh()
+      if (action === 'replay' && replay && selectedTask()) replay.open({ runId: state.runId, attemptId: state.attemptId, trialId: state.selected, taskId: selectedTask().task_id, label: find('#traversal-title span')?.textContent || '' })
       const cache = selectedCache()
       if (!cache) return
       if (action === 'zoom-in') zoom(1.25)
