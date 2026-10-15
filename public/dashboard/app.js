@@ -135,7 +135,7 @@
   }
   function resultBadge(result) {
     const status = result.grade?.status || result.outcome || result.status || 'Submitted'
-    return `<span class="badge result-badge ${resultTone(result)}"><span class="status-dot"></span>${escape(status.replace(/_/g, ' '))}</span>`
+    return `<span class="badge result-badge ${resultTone(result)}"><span class="status-dot"></span>${escape(status.replace(/_/g, ' ').replace(/^./, char => char.toUpperCase()))}</span>`
   }
   // The All / Failed / Passed tabs. "Failed" holds every graded task that did not pass.
   const resultFilters = [['all', 'All'], ['failed', 'Failed'], ['passed', 'Passed']]
@@ -206,10 +206,10 @@
     const counts = { completed: entries.reduce((sum, entry) => sum + progress(entry, run).completed, 0), passed: 0, failed: 0, environment_error: 0 }
     for (const result of results) if (['passed', 'failed', 'environment_error'].includes(result.grade?.status)) counts[result.grade.status]++
     document.title = `${runName(run)} · GTA 6 Bench`
-    $('#main').innerHTML = `<div class="page-heading run-detail-heading"><div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div>
+    $('#main').innerHTML = `<div class="page-heading run-detail-heading"><div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><button class="button secondary" data-action="new-run">${icon('plus')}New run</button></div>
       <div class="stats-grid run-summary" role="group" aria-label="Run results"><div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${counts.completed}</div></div><div class="stat"><div class="stat-label">Passed</div><div class="stat-value positive">${counts.passed}</div></div><div class="stat"><div class="stat-label">Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div></div><div class="stat"><div class="stat-label">Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div></div></div>
       <section class="live-panel" id="live-panel" aria-label="Live tracker"></section>
-      <div class="section-heading"><div><h2>Agent URLs<span class="section-count">${entries.length} / 5</span></h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button secondary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five agent URLs"' : ''}>${icon('plus')}Add agent URL</button></div></div>
+      <div class="section-heading"><div><h2>Agent URLs<span class="section-count">${entries.length} / 5</span></h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five agent URLs"' : ''}>${icon('plus')}Add agent URL</button></div></div>
       ${entries.length ? `<div class="agent-grid">${entries.map((attempt, index) => renderAttempt(attempt, index, run)).join('')}</div>${entries.length >= 5 ? '<p class="capacity-note">Five-URL limit reached.</p>' : ''}` : `<section class="empty-state"><h2>No agent URLs yet</h2><button class="button primary" data-action="new-attempt">${icon('plus')}Add agent URL</button></section>`}`
     live.mount($('#live-panel'), run.id)
     renderSidebar()
@@ -248,7 +248,7 @@
     traversal.close()
     live.stop()
     $('#auth').hidden = false
-    $('#auth').innerHTML = `<form class="auth-card" id="login-form"><span class="brand-mark" aria-hidden="true">VI</span><div class="eyebrow">GTA 6 BENCH</div><h1>Sign in</h1><label for="workspace-token">Operator token</label><input id="workspace-token" name="token" type="password" required autocomplete="current-password"><p class="form-error" role="alert">${escape(error)}</p><button class="button primary" type="submit">Sign in</button></form>`
+    $('#auth').innerHTML = `<form class="auth-card" id="login-form"><span class="brand-mark" aria-hidden="true">VI</span><div class="eyebrow">GTA 6 Bench</div><h1>Sign in</h1><label for="workspace-token">Operator token</label><input id="workspace-token" name="token" type="password" required autocomplete="current-password"><p class="form-error" role="alert">${escape(error)}</p><button class="button primary" type="submit">Sign in</button></form>`
     $('#workspace-token').focus()
   }
 
