@@ -67,6 +67,12 @@ shows three things side by side:
 These are worked out from the task when the page loads (`benchmark/outcome.js`),
 so results saved earlier show them too. They are never shown to the agent.
 
+Passed results are marked green, failed results red and environment errors
+amber, on the run page, in the live tracker and in **View traversal**. When you
+open an agent's **View N task results**, three tabs filter the list: **All**,
+**Failed** (failed tasks and environment errors) and **Passed**. Each tab shows
+its count, and the open list and chosen tab stay put when the page refreshes.
+
 ## Comparability and persistence
 
 A run fixes the suite version, selected task definitions and environment hash.
