@@ -4,6 +4,7 @@ import { readFile, mkdir, writeFile, rename, unlink } from 'node:fs/promises'
 import path from 'node:path'
 import { tasks, publicTask, SUITE_VERSION } from './tasks.js'
 import { gradeTask } from './grader.js'
+import { publicLivePosition, updateLivePosition, validLivePosition } from './live.js'
 import { environmentFingerprint, summarize } from './report.js'
 import { BENCHMARK_DATE } from './environment.js'
 import { browserEvent, requestEvent, validPageId, validateTraversalEvent } from './traversal.js'
@@ -116,7 +117,7 @@ export async function createRunManager({
     const results = completed.map(trial => trial.result)
     return { ...clone(attempt), status: completed.length === run.task_ids.length ? 'complete' : records.some(trial => trial.status === 'running') ? 'running' : 'ready',
       completed: completed.length, total: run.task_ids.length, summary: summarize(results),
-      trials: records.map(({ snapshot, traversal_secret, ...trial }) => clone(trial)) }
+      trials: records.map(({ snapshot, traversal_secret, live, ...trial }) => clone(trial)) }
   }
   function runDetail(run) {
     return { ...clone(run), attempts: run.attempts.map(attempt => attemptDetail(run, attempt)) }
@@ -172,6 +173,9 @@ export async function createRunManager({
     const event = { id: ++trial.traversal.event_count, at: iso(timestamp), elapsed_ms: Math.max(0, Math.round(timestamp - Date.parse(trial.started_at))), ...fields }
     if (!traceEvents.has(trial.id)) traceEvents.set(trial.id, [])
     traceEvents.get(trial.id).push(event)
+    // The live position only describes a running task; late beacons do not revive it.
+    if (trial.status === 'running') trial.live = updateLivePosition(trial.live, event)
+    else delete trial.live
     return clone(event)
   }
   function ownedAttempt(runId, attemptId) {
@@ -306,6 +310,8 @@ export async function createRunManager({
     const trialIds = new Set(), positions = new Set(), trialMap = new Map()
     for (const trial of next.dashboard_trials) {
       if (!isObject(trial)) throw fail('Invalid dashboard trial checkpoint')
+      // The live position is a display summary; a damaged one is dropped, not fatal.
+      if (trial.live !== undefined && (trial.status !== 'running' || !validLivePosition(trial.live))) delete trial.live
       const run = attempts.get(trial.attempt_id), position = `${trial.attempt_id}:${trial.index}`
       if (!isObject(trial) || typeof trial.id !== 'string' || trialIds.has(trial.id) || !run || run.id !== trial.run_id
         || !Number.isInteger(trial.index) || trial.index < 0 || trial.index >= run.task_ids.length
@@ -395,6 +401,23 @@ export async function createRunManager({
       const run = runById(id)
       if (!run) throw fail('Run not found', 404)
       return runDetail(run)
+    }),
+    getLive: runId => serialized(async () => {
+      await expireAll()
+      const run = runById(runId)
+      if (!run) throw fail('Run not found', 404)
+      const storeOf = taskId => catalogs[run.suite].find(task => task.id === taskId)?.store ?? null
+      return { run_id: run.id, server_time: iso(now()), agents: run.attempts.map(attempt => {
+        const records = attemptTrials(attempt), current = activeTrial(attempt)
+        const completed = records.filter(trial => trial.status === 'completed'), last = completed.at(-1)
+        return { attempt_id: attempt.id, agent: attempt.agent, tags: clone(attempt.tags),
+          status: completed.length === run.task_ids.length ? 'complete' : current ? 'running' : 'ready',
+          completed: completed.length, total: run.task_ids.length,
+          current: current ? { trial_id: current.id, index: current.index + 1, task_id: current.task_id, store: storeOf(current.task_id),
+            started_at: current.started_at, deadline_at: current.deadline_at, recorded: Boolean(current.traversal), position: publicLivePosition(current.live) } : null,
+          last: last ? { index: last.index + 1, task_id: last.task_id, store: storeOf(last.task_id), completed_at: last.completed_at,
+            grade: last.result?.grade?.status ?? null, timed_out: Boolean(last.result?.timed_out) } : null }
+      }) }
     }),
     createRun: (input = {}) => serialized(async () => {
       const suite = input.suite ?? 'original30'
