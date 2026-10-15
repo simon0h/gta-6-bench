@@ -4,6 +4,7 @@ import { readFile, mkdir, writeFile, rename, unlink } from 'node:fs/promises'
 import path from 'node:path'
 import { tasks, publicTask, SUITE_VERSION } from './tasks.js'
 import { gradeTask } from './grader.js'
+import { describeResult } from './outcome.js'
 import { publicLivePosition, updateLivePosition, validLivePosition } from './live.js'
 import { environmentFingerprint, summarize } from './report.js'
 import { BENCHMARK_DATE } from './environment.js'
@@ -117,7 +118,18 @@ export async function createRunManager({
     const results = completed.map(trial => trial.result)
     return { ...clone(attempt), status: completed.length === run.task_ids.length ? 'complete' : records.some(trial => trial.status === 'running') ? 'running' : 'ready',
       completed: completed.length, total: run.task_ids.length, summary: summarize(results),
-      trials: records.map(({ snapshot, traversal_secret, live, ...trial }) => clone(trial)) }
+      trials: records.map(({ snapshot, traversal_secret, live, ...trial }) => {
+        const copy = clone(trial)
+        if (copy.result) Object.assign(copy.result, outcomeOf(run, trial))
+        return copy
+      }) }
+  }
+  // Expected output, actual output and failure reasons are worked out when
+  // read, so results saved before this summary existed show them too.
+  function outcomeOf(run, trial) {
+    const task = selectedTasks(run)?.[trial.index]
+    if (!trial.result || !task || task.id !== trial.task_id) return {}
+    return describeResult(task, trial.result)
   }
   function runDetail(run) {
     return { ...clone(run), attempts: run.attempts.map(attempt => attemptDetail(run, attempt)) }
@@ -414,12 +426,13 @@ export async function createRunManager({
       return attemptDetail(run, attempt)
     }),
     getTraversal: (runId, attemptId) => serialized(async () => {
-      const { attempt } = ownedAttempt(runId, attemptId)
+      const { run, attempt } = ownedAttempt(runId, attemptId)
       return { attempt_id: attempt.id, agent: attempt.agent, tasks: attemptTrials(attempt).map(trial => ({
         trial_id: trial.id, task_id: trial.task_id, index: trial.index + 1, status: trial.status,
         started_at: trial.started_at, completed_at: trial.completed_at ?? null, elapsed_ms: trial.result?.elapsed_ms ?? null, grade: clone(trial.result?.grade ?? null),
         recorded: Boolean(trial.traversal), event_count: trial.traversal?.event_count ?? 0,
         replay_recorded: Boolean(trial.replay), replay_chunks: trial.replay?.chunk_count ?? 0,
+        ...outcomeOf(run, trial),
       })) }
     }),
     getTraversalEvents: (runId, attemptId, trialId, { after = 0, limit = 500 } = {}) => serialized(async () => {

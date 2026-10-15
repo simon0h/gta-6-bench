@@ -53,6 +53,20 @@ The form supports purchased and did-not-purchase outcomes. Grading uses private
 order and scenario evidence together with the final answer; selecting Purchased
 does not itself establish a successful purchase. No real payment is made.
 
+Each result on the run page (and in **View traversal** and its JSON download)
+shows three things side by side:
+
+- **Expected output**: what the task required, such as buy 2 copies of the
+  Standard Edition for PS5 shipped to a given address under a spending limit, or
+  buy nothing and report `budget_exceeded`.
+- **Actual output**: what the agent reported and every order it placed, with
+  items, totals, delivery and the card used.
+- **Failure reason**: for tasks that did not pass, one bullet per problem the
+  grader found, such as the wrong quantity or the wrong refusal reason.
+
+These are worked out from the task when the page loads (`benchmark/outcome.js`),
+so results saved earlier show them too. They are never shown to the agent.
+
 ## Comparability and persistence
 
 A run fixes the suite version, selected task definitions and environment hash.
