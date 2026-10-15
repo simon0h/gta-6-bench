@@ -17,22 +17,26 @@ const menus = [...document.querySelectorAll('.gs-native-menu, .gs-account-menu')
 menus.forEach(menu => menu.addEventListener('toggle', () => { if(menu.open) menus.filter(other => other !== menu).forEach(other => {other.open = false}) }))
 document.addEventListener('click', event => menus.forEach(menu => { if(!menu.contains(event.target)) menu.open = false }))
 document.addEventListener('keydown', event => { if(event.key === 'Escape') menus.forEach(menu => {if(menu.open){menu.open = false;menu.querySelector('summary').focus()}}) })
-const featuredTabs = [...document.querySelectorAll('[data-featured-tab]')]
-const panels = [...document.querySelectorAll('.gs-featured [role="tabpanel"]')]
-function chooseFeatured(index, focus = false) {
-  featuredTabs.forEach((tab,i) => {tab.setAttribute('aria-selected', String(i===index));tab.tabIndex = i===index ? 0 : -1})
-  panels.forEach((panel,i) => {panel.hidden = i !== index})
-  if(focus) featuredTabs[index].focus()
-}
-featuredTabs.forEach((tab,i) => {
-  tab.addEventListener('click', () => chooseFeatured(i))
-  tab.addEventListener('keydown', event => {
-    if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return
-    event.preventDefault()
-    chooseFeatured(event.key==='Home'?0:event.key==='End'?featuredTabs.length-1:(i+(event.key==='ArrowRight'?1:-1)+featuredTabs.length)%featuredTabs.length,true)
+// Each tabbed product row (Featured Products, Top Deals, ...) switches on its own.
+for (const section of document.querySelectorAll('.gs-featured')) {
+  const featuredTabs = [...section.querySelectorAll('[data-featured-tab]')]
+  const panels = [...section.querySelectorAll('[role="tabpanel"]')]
+  if (!featuredTabs.length) continue
+  const chooseFeatured = (index, focus = false) => {
+    featuredTabs.forEach((tab,i) => {tab.setAttribute('aria-selected', String(i===index));tab.tabIndex = i===index ? 0 : -1})
+    panels.forEach((panel,i) => {panel.hidden = i !== index})
+    if(focus) featuredTabs[index].focus()
+  }
+  featuredTabs.forEach((tab,i) => {
+    tab.addEventListener('click', () => chooseFeatured(i))
+    tab.addEventListener('keydown', event => {
+      if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return
+      event.preventDefault()
+      chooseFeatured(event.key==='Home'?0:event.key==='End'?featuredTabs.length-1:(i+(event.key==='ArrowRight'?1:-1)+featuredTabs.length)%featuredTabs.length,true)
+    })
   })
-})
-if(featuredTabs.length){document.querySelector('.gs-featured').classList.add('is-enhanced');chooseFeatured(0)}
+  section.classList.add('is-enhanced');chooseFeatured(0)
+}
 const filterToggle=document.querySelector('.gs-filter-toggle'), filterForm=document.querySelector('#gs-filter-form')
 if(filterToggle){filterToggle.hidden=false;filterToggle.closest('aside').classList.add('is-enhanced');filterToggle.addEventListener('click',()=>{const expanded=filterToggle.getAttribute('aria-expanded')!=='true';filterToggle.setAttribute('aria-expanded',String(expanded));filterForm.classList.toggle('is-open',expanded)})}
 const imageDialog = document.querySelector('.gs-gallery-dialog')

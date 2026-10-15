@@ -7,6 +7,8 @@
 // their structure with an empty state.
 import { esc } from '../../lib/html.js'
 import { CONCEPT_ID } from './data.js'
+import { directListing } from './shelf-pages.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
 
 const GTA = `/en-us/concept/${CONCEPT_ID}/`
 const STORE = '/en-us/pages/latest'
@@ -253,7 +255,14 @@ function pdcBody(base, [path, eyebrow, h1, intro, sections, opts = {}]) {
 }
 
 // PlayStation Direct: hardware and merchandise are sold there, not on PlayStation Store.
-// No direct.playstation.com inventory was captured, so each category shows an empty state.
+// In reference mode the console and accessory pages list the hardware assortment (shelf.js);
+// games & merchandise (and fixture mode) keep the empty state.
+const DIRECT_SCOPE = {
+  '/direct.playstation.com/en-us': () => true,
+  '/direct.playstation.com/en-us/hardware/ps5': p => p.directDepartment === 'consoles',
+  '/direct.playstation.com/en-us/ps5': p => p.directDepartment === 'consoles',
+  '/direct.playstation.com/en-us/accessories/ps5': p => p.directDepartment !== 'consoles',
+}
 const DIRECT = [
   ['/direct.playstation.com/en-us', 'PlayStation Direct', 'Official consoles, accessories, games and merchandise sold by Sony Interactive Entertainment.'],
   ['/direct.playstation.com/en-us/hardware/ps5', 'PS5 consoles', 'PS5 Pro, PS5 and PS5 Digital Edition consoles and bundles.'],
@@ -261,12 +270,12 @@ const DIRECT = [
   ['/direct.playstation.com/en-us/games/catalog', 'Games & merchandise', 'Physical games, collector’s editions and official PlayStation merchandise.'],
   ['/direct.playstation.com/en-us/ps5', 'Buy a PS5', 'Choose a PS5 console model and bundle.'],
 ]
-function directBody(base, [path, h1, intro]) {
+function directBody(base, [path, h1, intro], query = {}) {
   const nav = DIRECT.slice(1, 4).map(([p, l]) => `<a href="${base}${p}"${p === path ? ' aria-current="page"' : ''}>${esc(l)}</a>`).join('')
   return `<div class="ps-direct-bar"><b>PlayStation Direct</b><nav aria-label="PlayStation Direct">${nav}</nav></div>
 <section class="ps-pdc-hero ps-direct-hero"><div><p class="ps-pdc-eyebrow">PlayStation Direct</p><h1>${esc(h1)}</h1><p>${esc(intro)}</p></div></section>
-<div class="ps-pdc-body ps-direct-layout"><aside class="ps-direct-filters" aria-label="Filters"><h2>Filter</h2><p><b>Category</b><br>Consoles · Controllers · Audio · Games</p><p><b>Availability</b><br>In stock · Coming soon</p><p><b>Sort by</b><br>Featured</p></aside>
-<section class="ps-direct-results"><p class="ps-direct-count">0 results</p><div class="ps-empty-state"><h2>No products to show</h2><p>PlayStation Direct items are not available in this store. PlayStation Store sells digital games, add-ons and subscriptions only.</p>${linkRow(base, [['Shop digital games on PlayStation Store', STORE], ['Grand Theft Auto VI pre-order', GTA]])}</div></section></div>`
+${(DIRECT_SCOPE[path] && directListing(base, path, query, DIRECT_SCOPE[path])) || `<div class="ps-pdc-body ps-direct-layout"><aside class="ps-direct-filters" aria-label="Filters"><h2>Filter</h2><p><b>Category</b><br>Consoles · Controllers · Audio · Games</p><p><b>Availability</b><br>In stock · Coming soon</p><p><b>Sort by</b><br>Featured</p></aside>
+<section class="ps-direct-results"><p class="ps-direct-count">0 results</p><div class="ps-empty-state"><h2>No products to show</h2><p>${fixtureCatalog ? 'PlayStation Direct items are not available in this store. PlayStation Store sells digital games, add-ons and subscriptions only.' : 'Physical games and merchandise are not stocked right now. Shop consoles and accessories, or buy digital games on PlayStation Store.'}</p>${linkRow(base, [...(fixtureCatalog ? [] : [['Buy consoles', '/direct.playstation.com/en-us/hardware/ps5'], ['Buy accessories', '/direct.playstation.com/en-us/accessories/ps5']]), ['Shop digital games on PlayStation Store', STORE], ['Grand Theft Auto VI pre-order', GTA]])}</div></section></div>`}`
 }
 
 function statusBody(base) {
@@ -305,7 +314,7 @@ const pathVariants = (p) => [p, `${p}/`]
 
 export function installPdc(router, { render }) {
   for (const page of PAGES) router.get(pathVariants(page[0]), (req, res) => render(req, res, { title: `${page[2].replace(/[®™]/g, '')} | PlayStation`, body: pdcBody(res.locals.base, page), chrome: 'pdc' }))
-  for (const d of DIRECT) router.get(pathVariants(d[0]), (req, res) => render(req, res, { title: `${d[1]} | PlayStation Direct`, body: directBody(res.locals.base, d), chrome: 'pdc' }))
+  for (const d of DIRECT) router.get(pathVariants(d[0]), (req, res) => render(req, res, { title: `${d[1]} | PlayStation Direct`, body: directBody(res.locals.base, d, req.query), chrome: 'pdc' }))
   router.get(pathVariants('/status.playstation.com'), (req, res) => render(req, res, { title: 'PSN Service Status', body: statusBody(res.locals.base), chrome: 'pdc' }))
   router.get(pathVariants('/en-us/site-map'), (req, res) => render(req, res, { title: 'Site map | PlayStation', body: siteMapBody(res.locals.base), chrome: 'pdc' }))
   router.get('/sitemap.xml', (req, res) => {

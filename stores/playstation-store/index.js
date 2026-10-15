@@ -7,6 +7,8 @@ import { recordOrder, getOrder, listOrders } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { enterScenarioCart, scenarioAvailability, scenarioPayment, scenarioKeepCartOnSignIn, scenarioActive, registerScenarioAdapter } from '../../lib/benchmark-scenarios.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
+import { ASSORTMENT, CATALOG } from './data.js'
+import { shelfArtSvg } from './shelf-art.js'
 import { PRODUCTS, filterProducts, CONCEPT_ID, STATES, byId, featured, search, cartLines, totals, productPath, conceptPath } from './data.js'
 import * as P from './pages.js'
 import { installPdc, INFORMATION_REDIRECTS } from './pdc.js'
@@ -40,9 +42,13 @@ function returnPath(res, value) {
 }
 
 // ---- page views (also used to draw the page underneath the drawer) ----
+// Browsable digital listings: the evidence-backed GTA VI rows plus, in reference mode, the
+// PlayStation Store assortment (hardware is listed on the PlayStation Direct pages instead).
+const LISTED = CATALOG.filter(p => p.department !== 'hardware')
+const directItem = (path) => ASSORTMENT.find(p => p.directPath && (path === p.directPath || path === `${p.directPath}/`)) ?? null
 const homeView = (res) => ({ title: HOME_TITLE, body: P.homePage({ base: res.locals.base, products: PRODUCTS }) })
 const searchView = (res, q, options = {}) => ({ title: `PlayStation Store | Search | ${q}`, body: P.searchPage({ base: res.locals.base, q, products: filterProducts(search(q), options), options }) })
-const browseView = (res, options = {}) => ({ title: 'PlayStation Store | Browse', body: P.searchPage({ base: res.locals.base, q: '', products: filterProducts(PRODUCTS, options), heading: 'Browse', options }) })
+const browseView = (res, options = {}) => ({ title: 'PlayStation Store | Browse', body: P.searchPage({ base: res.locals.base, q: '', products: filterProducts(LISTED, options), heading: 'Browse', options }) })
 // The signed-in shopper's orders, from this visitor's session only: one benchmark run must never see
 // another run's pre-orders for the shared test account.
 const myOrders = (req) => req.store.user ? listOrders({ store: req.storeSlug }).filter(o => o.session_id === req.session.id && o.customer.email === req.store.user.email && o.customer.account_id === req.store.user.id && o.meta.account_id === req.store.user.id) : []
@@ -59,6 +65,7 @@ function underlay(req, res) {
   const path = closeHref(req, res).split('?')[0].slice(base.length)
   const product = /^\/en-us\/product\/([^/]+)\/?$/.exec(path)
   const query = /^\/en-us\/search\/([^/]+)\/?$/.exec(path)
+  if (directItem(path)) return productView(req, res, directItem(path), productPath(base, directItem(path)))
   if (product && byId(product[1])) return productView(req, res, byId(product[1]), productPath(base, byId(product[1])))
   if (path.startsWith(`/en-us/concept/${CONCEPT_ID}`)) return productView(req, res, featured(), conceptPath(base))
   if (query) return searchView(res, decode(query[1]))
@@ -77,6 +84,18 @@ function wallet(req) {
   return (all[req.store.user.id] ??= { instruments: [], selected: null })
 }
 
+// Assortment artwork (drawn locally, see shelf-art.js) and PlayStation Direct product pages.
+router.get('/shelf-art/:id/:view.svg', (req, res) => {
+  const p = ASSORTMENT.find(item => item.id === req.params.id)
+  if (!p || !/^[0-3]$/.test(req.params.view)) return res.status(404).type('text').send('Not found')
+  res.set('Cache-Control', 'public, max-age=3600').type('image/svg+xml').send(shelfArtSvg(p, Number(req.params.view)))
+})
+router.get(['/direct.playstation.com/en-us/buy-consoles/:slug', '/direct.playstation.com/en-us/buy-accessories/:slug', '/direct.playstation.com/en-us/buy-consoles/:slug/', '/direct.playstation.com/en-us/buy-accessories/:slug/'], (req, res, next) => {
+  const p = directItem(req.path)
+  if (!p) return next()
+  const view = productView(req, res, p, productPath(res.locals.base, p), takeFlash(req))
+  render(req, res, { title: `${p.title} | PlayStation Direct`, body: view.body, chrome: 'pdc' })
+})
 installPdc(router, { render })
 installJourneys(router, { render, myOrders, wallet, returnPath })
 
@@ -91,9 +110,9 @@ router.get('/en-us/collection/:id',(req,res)=>{
  const collection=COLLECTIONS.find(([id])=>id===req.params.id)
  if(!collection)return notFound(req,res)
  const [id,title,intro,predicate]=collection
- render(req,res,{title,body:P.searchPage({base:res.locals.base,heading:title,intro,products:filterProducts(PRODUCTS.filter(predicate),req.query),options:req.query,action:`${res.locals.base}/en-us/collection/${id}`})})
+ render(req,res,{title,body:P.searchPage({base:res.locals.base,heading:title,intro,products:filterProducts(LISTED.filter(predicate),req.query),options:req.query,action:`${res.locals.base}/en-us/collection/${id}`})})
 })
-router.get('/en-us/pages/deals',(req,res)=>render(req,res,{title:'Deals',body:P.searchPage({base:res.locals.base,heading:'Deals',intro:'Explore Autumn offers on full games and editions. Offers end October 15, 2026.',products:filterProducts(PRODUCTS.filter(p=>p.price!==null&&p.originalPrice>p.price),req.query),options:req.query,action:`${res.locals.base}/en-us/pages/deals`})}))
+router.get('/en-us/pages/deals',(req,res)=>render(req,res,{title:'Deals',body:P.searchPage({base:res.locals.base,heading:'Deals',intro:ASSORTMENT.length?'Autumn Sale: save up to 85% on games, editions and add-ons. Offers end 10/22/2026 11:59 PM PT.':'Explore Autumn offers on full games and editions. Offers end October 15, 2026.',products:filterProducts(LISTED.filter(p=>p.price!==null&&p.originalPrice>p.price),req.query),options:req.query,action:`${res.locals.base}/en-us/pages/deals`})}))
 router.get('/en-us/pages/subscriptions',(req,res)=>render(req,res,{title:'PlayStation Plus',body:P.subscriptionsPage({base:res.locals.base})}))
 // The header search field submits ?q=; the store's own search URL is a path: /en-us/search/{q}.
 router.get('/en-us/search', (req, res) => {

@@ -1,6 +1,6 @@
 import { esc, money } from '../../lib/html.js'
 import { retailState, rememberProduct, toggleFavorite, saveAddress, deleteAddress, ownedOrders, ownedOrder, orderStatus, requestOrderAction, createSupportCase } from '../../lib/retail-state.js'
-import { PRODUCTS, byId, bySku } from './data.js'
+import { CATALOG, byId, bySku } from './data.js'
 import { art } from './depth-pages.js'
 
 export { rememberProduct }
@@ -86,7 +86,7 @@ export function installJourneys(router,{render,notFound}) {
  router.post('/account/addresses/:id/default',(req,res)=>{const s=retailState(req),a=s.addresses.find(a=>a.id===req.params.id);if(!a)return notFound(req,res);s.addresses.forEach(v=>v.is_default=v===a);res.redirect(`${res.locals.base}/account/addresses`)})
  router.post('/account/addresses/:id/delete',(req,res)=>{if(!deleteAddress(req,req.params.id))return notFound(req,res);res.redirect(`${res.locals.base}/account/addresses`)})
  router.post('/wishlist',(req,res)=>{
-  const p=PRODUCTS.find(p=>p.sku===req.body.sku)
+  const p=CATALOG.find(p=>p.sku===req.body.sku)
   if(!p)return notFound(req,res)
   if(!req.store.user){req.store.wishlistIntent=p.id;return res.redirect(`${res.locals.base}/signin?return=${encodeURIComponent(res.locals.base+'/wishlist')}`)}
   toggleFavorite(req,p.id);res.redirect(`${res.locals.base}/wishlist`)

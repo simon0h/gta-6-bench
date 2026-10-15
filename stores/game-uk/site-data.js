@@ -1,11 +1,11 @@
 // Site structure captured from www.game.co.uk on 2026-10-13 (homepage, department pages,
 // /sitemap Categories directory, /deals, /coming-soon). See research/parity/game-uk.json.
 // Landing pages reproduce the real page shape (breadcrumb, tiles, "In This Section",
-// filters, sort, editorial copy). Product grids only ever list rows from data.js PRODUCTS,
-// so in reference mode most categories show the empty "0 Products" state.
+// filters, sort, editorial copy). Product grids list rows from data.js CATALOG
+// (reference mode: the GTA VI listings plus the GAME assortment in shelf.js).
 
 const CAT = (...names) => p => names.includes(p.category) || names.includes(p.browseCategory)
-const PLATFORM = { ps: p => p.platformFacet === 'PS5', xbox: p => p.platformFacet === 'Xbox', nintendo: p => p.platformFacet === 'Nintendo' || p.brand === 'Nintendo', pc: p => p.platformFacet === 'PC' || (p.departments || []).includes('pc-gaming') }
+const PLATFORM = { ps: p => p.platformFacet === 'PS5', xbox: p => p.platformFacet === 'Xbox', nintendo: p => String(p.platformFacet || '').startsWith('Nintendo') || p.brand === 'Nintendo', pc: p => p.platformFacet === 'PC' || (p.departments || []).includes('pc-gaming') }
 const ACCESSORY = CAT('Controllers', 'Headsets', 'Racing Wheels', 'Charging Docks', 'Carry Cases')
 const DEAL = p => p.ticketPrice > p.price
 const and = (...fns) => p => fns.every(f => f(p))
@@ -37,7 +37,7 @@ export const CATEGORY_TREE = [
   ['Coming Soon', '/coming-soon', [
     ['PC Coming Soon', '/coming-soon/pc', [], { match: and(p => p.preorder, PLATFORM.pc) }],
     ['Toys Coming Soon', '/coming-soon/toys', [], { match: NONE }],
-    ['Trading Cards Coming Soon', '/coming-soon/trading-cards', [], { match: NONE }],
+    ['Trading Cards Coming Soon', '/coming-soon/trading-cards', [], { match: p => p.preorder && p.category === 'Trading Cards' }],
   ], { match: p => p.preorder, intro: "Keep an eye on what's coming next at GAME.", section: [['Trading Cards Coming Soon', '/coming-soon/trading-cards'], ['Toys Coming Soon', '/coming-soon/toys']] }],
   ['Deals', '/deals', [
     ['2 for £20', '/deals/2-for-20'], ['Accessory Deals', '/deals/accessories'], ['ASUS Peripherals', '/deals/asus-peripherals'], ['Board Games Deals', '/deals/board-games'],
@@ -111,7 +111,7 @@ export const LANDINGS = {
   '/gaming': { h1: 'Gaming', title: 'Consoles & Video Games | GAME', tiles: [['Game Consoles', '/gaming/consoles'], ['Video Games', '/gaming/video-games'], ['Gaming Accessories', '/gaming/accessories'], ['Gift Cards', '/digital']], section: [['Accessories', '/gaming/accessories']], intro: 'Shop consoles, video games and accessories for PlayStation, Xbox, Nintendo and PC.', editorial: 'From the latest consoles and new releases to controllers, headsets and gaming chairs, GAME has everything you need to level up your setup. Pick up bundles and deals across PlayStation, Xbox, Nintendo Switch and PC.' },
   '/gaming/accessories': { h1: 'Gaming Accessories', match: ACCESSORY, parent: '/gaming' },
   '/digital': { h1: 'Digital', title: 'Digital Gift Cards | GAME', tiles: [['GAME e-Vouchers', '/digital/gift-cards'], ['PlayStation Gift Cards', '/playstation/digital-gaming'], ['Xbox Gift Cards', '/xbox/digital-downloads'], ['Xbox Game Pass', '/xbox/digital-downloads/xbox-game-pass'], ['Nintendo Switch Online', '/nintendo/eshop/nintendo-switch-online'], ['Nintendo Gift Cards', '/nintendo/eshop']], section: [['Digital Add Ons', '/digital/add-ons'], ['Digital Credit', '/digital/credit'], ['Digital Games', '/digital/games'], ['Digital Subscriptions', '/digital/subscriptions'], ['Gift Cards', '/digital/gift-cards']], intro: "Desperate to get a new game or in-game content? It's time to go digital with GAME.", editorial: 'Digital codes are delivered by email. Check the platform and UK region before buying: codes are intended for accounts registered in the United Kingdom.' },
-  '/digital/gift-cards': { h1: 'Gift Cards', parent: '/digital', intro: 'Give the gift of choice with a Frasers Group Multi-Store Gift Card, the perfect present for any occasion.', editorial: 'Gift cards and eVouchers can be used at the payment step of checkout. Balance checks and new gift-card purchases are not available in this shop.' },
+  '/digital/gift-cards': { h1: 'Gift Cards', parent: '/digital', intro: 'Give the gift of choice with a Frasers Group Multi-Store Gift Card, the perfect present for any occasion.', editorial: 'Gift cards and eVouchers can be used at the payment step of checkout. Choose a gift card below to send to a friend or treat yourself.' },
   '/pc-gaming': { h1: 'PC Gaming', title: 'PC Gaming - Desktops, Accessories, Desks and Deals | GAME', tilesHeading: 'Shop by Category', tiles: [['Headsets', '/pc-gaming/accessories/headsets'], ['Keyboards', '/pc-gaming/accessories/keyboards'], ['Mice', '/pc-gaming/accessories/mice'], ['Mouse Mats / Surfaces', '/pc-gaming/accessories/mouse-pads'], ['Microphones', '/pc-gaming/accessories/microphones'], ['Streaming', '/pc-gaming/accessories/streaming-equipment'], ['Monitors', '/pc-gaming/accessories/gaming-monitors'], ['Handheld Consoles', '/tech/handheld-consoles'], ['Gaming Chairs', '/accessories/gaming-chairs'], ['Networking', '/pc-gaming/accessories/gaming-routers'], ['Controllers', '/pc-gaming/accessories/controllers'], ['Speakers', '/tech/speakers']], intro: 'From the most recent single-player game to popular eSports titles and the classics that will never get old, we have a PC game for you.', editorial: 'Upgrade your PC setup with gaming keyboards, mice, headsets, monitors and streaming gear, plus chairs and desks built for long sessions.' },
   '/tech': { h1: 'Tech', title: 'Tech and Home Entertainment | GAME', tilesHeading: 'Shop by Category', tiles: [['Mobile Phones', '/tech/mobile-phones'], ['Mobile Accessories', '/tech/mobile-phones/mobile-accessories'], ['Smart Watches', '/tech/smart-tech/smart-watches'], ['Headphones', '/tech/headphones-and-earbuds'], ['Tablets', '/tech/tablets'], ['Speakers', '/tech/speakers'], ['Smart Lighting', '/tech/smart-tech/smart-lighting'], ['Novelty Lighting', '/merchandise/homeware/lights'], ['Virtual Reality', '/tech/vr'], ['Arcade Machines', '/merchandise/retro/arcade-machines'], ['Retro', '/merchandise/retro'], ['Cameras', '/tech/cameras'], ['TV & Monitors', '/pc-gaming/accessories/gaming-monitors'], ['Robots', '/robosen'], ['Drones', '/tech/drones'], ['Kids Tech', '/tech/kids-tech']], intro: 'Phones, headphones, smart tech, VR and home entertainment.', editorial: 'Unreal experiences at an unreal price. Explore virtual reality, smart home tech, speakers, tablets and retro gaming from GAME.' },
   '/lego': { h1: 'LEGO', h2: 'Welcome to the GAME LEGO Store', section: [['Shop all LEGO', '/lego/all-lego'], ['NEW LEGO Sets', '/lego/new-lego'], ['Lego Coming Soon', '/lego/coming-soon'], ['Pokemon LEGO', '/lego/pokemon']], intro: 'Create endless games, learn new skills and enjoy building your own toys with our LEGO store.', editorial: 'From LEGO video games to creative building sets, find a build for every age and interest.' },
@@ -124,7 +124,37 @@ export const LANDINGS = {
 
 // Infer a listing filter for pages only reached from tiles: platform from the path,
 // product kind from the last segment. Undetermined pages list nothing.
+const DEPT = (...ids) => p => (p.departments || []).some(d => ids.includes(d))
+const TITLE = re => p => re.test(p.title)
+const DIGITAL = DEPT('digital')
+// Merchandise landings that the generic rules below cannot place (most specific first).
+const SPECIFIC = [
+  [/black-friday|christmas|events|halloween|frasers-plus|game-exclusives|homeware|merchandise|clothing|retro|2-for-20|warehouse|asus-peripherals|days-of-play|just-landed/, () => NONE],
+  [/pokemon/, () => TITLE(/pok[eé]mon/i)],
+  [/lego/, () => p => p.brand === 'LEGO' || /\blego\b/i.test(p.title)],
+  [/trading-card|\/tcg|booster/, () => CAT('Trading Cards')],
+  [/board-games/, () => CAT('Board Games')],
+  [/plush|soft-toys/, () => CAT('Soft Toys')],
+  [/wooden/, () => CAT('Wooden Toys')],
+  [/game-pass|gamepass/, () => and(DIGITAL, TITLE(/game pass/i))],
+  [/nintendo-switch-online|eshop/, () => and(DIGITAL, p => p.brand === 'Nintendo')],
+  [/gift-card|e-vouchers|digital-gift/, () => CAT('Gift Cards')],
+  [/digital|credit|add-ons|subscriptions/, plat => plat ? and(DIGITAL, plat) : DIGITAL],
+  [/deals|sale|clearance|30-off|50-off|70-off|80-off|90-off|under-15/, plat => plat ? and(DEAL, plat) : DEAL],
+  [/monitor/, () => CAT('Monitors')], [/keyboard/, () => CAT('Keyboards')], [/mice|mouse/, () => CAT('Mice')],
+  [/chair/, () => CAT('Gaming Chairs')], [/headphones|earbuds/, () => CAT('Headphones')], [/speaker/, () => CAT('Speakers')],
+  [/lighting|lights/, () => CAT('Smart Lighting')], [/steering|wheel|racing-wheel/, () => CAT('Racing Wheels')],
+  [/charging|battery|docks?$/, plat => plat ? and(CAT('Charging Docks'), plat) : CAT('Charging Docks')],
+  [/\/toys/, () => DEPT('toys')], [/\/tech/, () => DEPT('tech')], [/pc-gaming/, () => DEPT('pc-gaming')],
+]
+
 export function inferMatch(path) {
+  const platform = /playstation|ps5/.test(path) ? PLATFORM.ps : /xbox/.test(path) ? PLATFORM.xbox : /nintendo/.test(path) ? PLATFORM.nintendo : null
+  if (/\/(?:games|consoles|controllers|headsets|accessories)$/.test(path) && !/digital|deal|sale|clearance|black-friday/.test(path)) return generic(path)
+  for (const [re, make] of SPECIFIC) if (re.test(path)) return make(platform)
+  return generic(path)
+}
+function generic(path) {
   const plat = /playstation|ps5/.test(path) ? PLATFORM.ps : /xbox/.test(path) ? PLATFORM.xbox : /nintendo/.test(path) ? PLATFORM.nintendo : null
   if (/digital|gift|eshop|game-pass|gamepass|credit|deal|sale|clearance|black-friday|bundles|disc-edition|digital-edition|lego|toys|cards/.test(path)) return NONE
   const kind = /\/games$/.test(path) ? CAT('Video Games') : /consoles/.test(path) ? CAT('Consoles') : /controllers/.test(path) ? CAT('Controllers') : /headsets/.test(path) ? CAT('Headsets') : /accessories$/.test(path) ? ACCESSORY : null

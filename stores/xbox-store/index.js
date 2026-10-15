@@ -5,9 +5,10 @@ import { recordOrder, getOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { enterScenarioCart, scenarioAvailability, scenarioPayment, scenarioActive, registerScenarioAdapter } from '../../lib/benchmark-scenarios.js'
 import { authenticate, createAccount, findAccount, publicAccount } from '../../lib/accounts.js'
-import { filterProducts, PRODUCTS, byId, editions, search, totals, priceTotals, productPath, STATES, RELEASE, isBuyable, familyEditions, COLLECTIONS, queryOptions, FACETS, facetValues } from './data.js'
+import { filterProducts, PRODUCTS, CATALOG, byId, editions, search, totals, priceTotals, productPath, STATES, RELEASE, isBuyable, familyEditions, COLLECTIONS, queryOptions, FACETS, facetValues } from './data.js'
 import * as P from './pages.js'
 import { installSite } from './site.js'
+import { shelfArt } from './shelf-art.js'
 import { installJourneys, resumeAccount } from './journeys.js'
 import { owns, lifecycle, token as serviceToken } from './journey-state.js'
 import { directFingerprint, cartValid, cartFingerprint, review, matchesReview, safeValues, toOrderItem, entitlements } from './purchase.js'
@@ -113,13 +114,19 @@ function saveCard(req, payment, billing) {
 // ---- browse ----
 router.get('/', (req, res) => render(req, res, 'Xbox Official Site: Consoles, Games, and Community', P.homePage({ base: res.locals.base, products: PRODUCTS, user: req.store.user })))
 
-function browse(req,res,{title,scope=PRODUCTS,route}={}) {
-  const options=queryOptions(req.query), q=(options.q||'').trim(), type=['add-ons','hardware','all'].includes(options.type)?options.type:'games'
+// Result tabs: query type -> product type.
+const TYPE_OF={games:'game','add-ons':'add-on',hardware:'hardware','gift-cards':'gift-card'}
+const TAB_OF=Object.fromEntries(Object.entries(TYPE_OF).map(([tab,type])=>[type,tab]))
+function browse(req,res,{title,scope=CATALOG,route,defaultType='games',defaultSort}={}) {
+  const options=queryOptions(req.query)
+  // Reference mode lists unsearched pages by popularity (or the collection's own order), like xbox.com's default sort.
+  if(!fixtureCatalog&&!options.sort&&!(options.q||'').trim())options.sort=defaultSort||'popular'
+  const q=(options.q||'').trim(), type=[...Object.keys(TYPE_OF),'all'].includes(options.type)?options.type:defaultType
   const matches=q?search(q,type):null
-  const count=t=>scope.filter(p=>(t==='all'||p.type===t)&&(!q||search(q,t==='all'?'all':t==='game'?'games':t==='hardware'?'hardware':'add-ons').some(x=>x.id===p.id))).length
+  const count=t=>scope.filter(p=>(t==='all'||p.type===t)&&(!q||search(q,t==='all'?'all':TAB_OF[t]).some(x=>x.id===p.id))).length
   const scopeIds=new Set(scope.map(p=>p.id))
-  const items=(matches||scope).filter(p=>scopeIds.has(p.id)&&(type==='all'||p.type===(type==='add-ons'?'add-on':type==='hardware'?'hardware':'game')))
-  render(req,res,title||'Browse games',P.searchPage({base:res.locals.base,q,type,title,route,results:filterProducts(items,options),counts:{games:count('game'),addons:count('add-on'),hardware:count('hardware'),all:count('all')},options}))
+  const items=(matches||scope).filter(p=>scopeIds.has(p.id)&&(type==='all'||p.type===TYPE_OF[type]))
+  render(req,res,title||'Browse games',P.searchPage({base:res.locals.base,q,type,title,route,results:filterProducts(items,options),counts:{games:count('game'),addons:count('add-on'),hardware:count('hardware'),giftcards:count('gift-card'),all:count('all')},options}))
 }
 router.get('/en-US/search/results',(req,res)=>{
   if(req.query.type==='subscriptions')return res.redirect(`${res.locals.base}/en-US/xbox-game-pass`)
@@ -127,24 +134,38 @@ router.get('/en-US/search/results',(req,res)=>{
   browse(req,res)
 })
 router.get(['/en-US/games/all-games/console','/en-US/games/browse'],(req,res)=>browse(req,res,{route:req.baseUrl+req.path}))
-router.get('/en-US/games/all-games/pc',(req,res)=>browse(req,res,{title:'Browse all PC games',scope:PRODUCTS.filter(p=>p.platforms.includes('PC')),route:req.baseUrl+req.path}))
+router.get('/en-US/games/all-games/pc',(req,res)=>browse(req,res,{title:'Browse all PC games',scope:CATALOG.filter(p=>p.platforms.includes('PC')),route:req.baseUrl+req.path}))
 router.get('/en-US/games/collection/:collection',(req,res)=>{
   const c=COLLECTIONS.find(c=>c.id===req.params.collection)
   if(!c)return notFound(req,res)
-  browse(req,res,{title:c.title,scope:PRODUCTS.filter(c.test),route:req.baseUrl+req.path})
+  browse(req,res,{title:c.title,scope:CATALOG.filter(c.test),route:req.baseUrl+req.path,defaultType:c.type||'games',defaultSort:{'new-releases':'release',deals:'discount','coming-soon':'release'}[c.id]})
 })
 router.get(['/en-US/games/genres','/en-US/games/platforms'],(req,res)=>render(req,res,'Explore Xbox games',P.hubPage({base:res.locals.base,kind:req.path.endsWith('genres')?'genres':'platforms'})))
 router.get('/en-US/games/:dimension/:value',(req,res,next)=>{
   if(!['genre','platform'].includes(req.params.dimension))return next()
   const f=FACETS.find(f=>f.key===req.params.dimension),value=req.params.value
   if(!facetValues(f).some(([v])=>v===value)&&!(KNOWN_VALUES[f.key]||[]).includes(value))return notFound(req,res)
-  browse(req,res,{title:`${value} games`,scope:PRODUCTS.filter(p=>p[f.field].includes(value)),route:req.baseUrl+req.path})
+  browse(req,res,{title:`${value} games`,scope:CATALOG.filter(p=>p[f.field].includes(value)),route:req.baseUrl+req.path})
 })
 router.get('/en-US/xbox-game-pass',(req,res)=>render(req,res,'Xbox Game Pass',P.gamePassPage({base:res.locals.base})))
 router.get('/en-US/more',(req,res)=>render(req,res,'Explore Xbox',P.hubPage({base:res.locals.base,kind:'genres'})))
 
 installSite(router, { render, tile: P.tile })
 installJourneys(router, {render,signinWall,notFound})
+
+// Consoles and accessories: Microsoft Store browse and product pages.
+router.get('/en-US/store/b/xbox-accessories',(req,res)=>browse(req,res,{title:'Shop Xbox consoles & accessories',scope:CATALOG.filter(p=>p.type==='hardware'),route:req.baseUrl+req.path,defaultType:'hardware'}))
+router.get('/en-US/d/:slug/:id',(req,res)=>{
+  const p=byId(req.params.id)
+  if(!p||!p.physical||!p.shelf)return notFound(req,res)
+  if(req.params.slug!==p.slug)return res.redirect(productPath(res.locals.base,p))
+  render(req,res,`${p.title} | Microsoft Store`,P.hardwarePage({base:res.locals.base,p,inCart:req.store.cart.some(l=>l.pid===p.id),added:req.query.added==='1'}))
+})
+router.get('/shelf-art/:id/:view.svg',(req,res)=>{
+  const svg=shelfArt(byId(req.params.id),req.params.view)
+  if(!svg)return res.status(404).type('text').send('Image not found')
+  res.set('Cache-Control','public, max-age=3600').type('image/svg+xml').send(svg)
+})
 
 router.get('/art/:file', (req, res) => {
   const p = byId(String(req.params.file).replace(/\.svg$/, ''))
@@ -154,7 +175,7 @@ router.get('/art/:file', (req, res) => {
 
 function related(p) {
   const list = ids => (ids ?? []).map(byId).filter(Boolean)
-  return { bundle: list(p.bundle), includedIn: list(p.includedIn), addons: list(p.addons), recommendations:PRODUCTS.filter(x=>x.family!==p.family&&x.type==='game'&&isBuyable(x)&&x.genres.some(g=>p.genres.includes(g))).slice(0,4) }
+  return { bundle: list(p.bundle), includedIn: list(p.includedIn), addons: list(p.addons), recommendations:CATALOG.filter(x=>x.family!==p.family&&x.type==='game'&&!(p.editions||[]).includes(x.id)&&isBuyable(x)&&x.genres.some(g=>p.genres.includes(g))).slice(0,p.shelf?8:4) }
 }
 function ownedResponse(req,res,p) {
   return render(req,res,'You own this item',P.simplePage({title:'You already own this item',html:`<p>This digital license is in your account library.</p><a class="xb-btn xb-btn-buy" href="${res.locals.base}/account/library">View my library</a>`}),{status:409})
@@ -169,7 +190,7 @@ function productHtml(req, res, p) {
 router.get('/en-US/games/store/:slug/:id', (req, res) => {
   const p = byId(req.params.id)
   if (!p) return notFound(req, res)
-  if (req.params.slug !== p.slug) return res.redirect(productPath(res.locals.base, p))
+  if (req.params.slug !== p.slug || (p.shelf && p.physical)) return res.redirect(productPath(res.locals.base, p))
   render(req, res, `${p.purchasable ? 'Buy ' : ''}${p.title}`, productHtml(req, res, p), { theme: 'dark' })
 })
 
@@ -284,6 +305,7 @@ router.post('/en-US/cart/add', (req, res) => {
   // A digital licence is one per account: re-adding does not create a second line.
   if (!req.store.cart.some(l => l.pid === p.id)) req.store.cart.push({ pid: p.id })
   req.store.saved = (req.store.saved ?? []).filter(id => id !== p.id)
+  if (p.shelf && p.physical) return res.redirect(`${productPath(res.locals.base, p)}?added=1`)
   req.store.menuOpen = p.id
   res.redirect(productPath(res.locals.base, p)) // silent add: no modal or toast, the open menu's entry becomes "Open cart"
 })

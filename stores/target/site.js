@@ -1,6 +1,6 @@
 // Target.com site chrome, department landing pages, help/policy/information pages, site map.
 // Structure and headings follow target.com as captured on 2026-10-13 (see
-// research/parity/target.json). Product grids only ever show the store's own catalog;
+// research/parity/target.json). Product grids show the store's own catalog (the GTA VI rows plus shelf.js);
 // everything else here is navigation, editorial copy and information pages.
 import { esc } from '../../lib/html.js'
 import { productPhoto } from '../../lib/product-photos.js'
@@ -101,15 +101,16 @@ export function footerColumns(base) {
 // ---------- homepage ----------
 const offer = (base, path, big, small, note = '') => `<a class="tg-offer" href="${base}${path}"><span class="tg-offer-big">${big}</span><span class="tg-offer-small">${esc(small)}</span>${note ? `<span class="tg-fine">${esc(note)}</span>` : ''}</a>`
 const H = p => byLabel(p)
-export function homePage({ base, catalog }) {
+export function homePage({ base, catalog, rows = {} }) {
   const halloween = D.node('halloween', 'N-5xt2o')
   return `<h1 class="visually-hidden">Homepage</h1>
   <section class="tg-home-hero" style="background-image:url('/static/art/depth/target-fall-home-campaign.png')"><div><p class="tg-eyebrow">New arrivals</p><h2>What's in for fall</h2><p>Cozy layers, warm accents and new-season finds, all in one place.</p><a class="tg-btn" href="${base}${H('Target New Arrivals')}">Shop new arrivals</a></div></section>
-  ${section('Save on Halloween must-haves', `<div class="tg-offers">${offer(base, halloween, 'Up to 50% off', 'Halloween costumes, decorations & more*', 'Online only.')}${offer(base, halloween, 'BOGO 25% off', 'trick-or-treat candy*')}${offer(base, halloween, '30% off', 'select Halloween outdoor decor*')}${offer(base, D.DEALS_PATH, 'Shop all', 'Halloween Deals')}</div><p class="tg-fine">*Offers summarised from target.com; this local store does not apply them.</p>`, 'tg-band-orange')}
+  ${section('Save on Halloween must-haves', `<div class="tg-offers">${offer(base, halloween, 'Up to 50% off', 'Halloween costumes, decorations & more*', 'Online only.')}${offer(base, halloween, 'BOGO 25% off', 'trick-or-treat candy*')}${offer(base, halloween, '30% off', 'select Halloween outdoor decor*')}${offer(base, D.DEALS_PATH, 'Shop all', 'Halloween Deals')}</div><p class="tg-fine">*Offers summarised from target.com; this local store does not apply them.</p>${rows.halloween || ''}`, 'tg-band-orange')}
   ${section('Deals for your fall routine', `<div class="tg-offers">${offer(base, H('Home'), 'Up to 50% off', 'rugs*', 'Online only.')}${offer(base, H('Kitchen & Dining'), 'Up to 30% off', 'kitchen items*')}${offer(base, H('Household Essentials'), 'Up to 35% off', 'floor care items*')}${offer(base, H('Toys & Games'), 'Buy 2, get 1 Free', 'games & puzzles*')}${offer(base, H('Toys'), 'Up to 40% off', 'dolls, puppets & figures*', 'Online only.')}</div>`)}
   ${catalog}
   ${section('Now trending in deals', circles(base, [['Grocery Deals', H('Grocery')], ['Home Deals', H('Home')], ['Beauty & Personal Care Deals', H('Beauty')], ['Household Essentials Deals', H('Household Essentials')], ['Toy Deals', H('Toys')], ['Electronics Deals', H('Electronics')], ['Video Games Deals', D.VIDEO_GAMES_PATH], ['Clearance', H('Clearance')]], 'Trending deals'))}
-  ${section('Next-level fall newness', circles(base, [['Women’s', H('Women’s')], ['Men’s', H('Men’s')], ['Kids’', H('Kids’')], ['Home', H('Home')], ['Beauty', H('Beauty')], ['Target New Arrivals', H('Target New Arrivals')]], 'Fall newness'))}
+  ${rows.deals || ''}
+  ${section('Next-level fall newness', (rows.newness || '') + circles(base, [['Women’s', H('Women’s')], ['Men’s', H('Men’s')], ['Kids’', H('Kids’')], ['Home', H('Home')], ['Beauty', H('Beauty')], ['Target New Arrivals', H('Target New Arrivals')]], 'Fall newness'))}
   ${section('Ready for every celebration', circles(base, [['Gift Ideas', H('Gift Ideas')], ['Party Supplies', H('Party Supplies')], ['Halloween', halloween], ['Christmas', H('Christmas')], ['Gift Cards', D.GIFT_CARDS_PATH]], 'Celebrations'))}
   <section class="tg-home-promo" style="background-image:url('/static/art/depth/toys-campaign.png')"><div><h2>Discover the joy of the holiday kids' catalog</h2><p>Toys, games and gifts to spark big imaginations.</p><a class="tg-btn" href="${base}${H('Toys')}">Explore toys</a></div></section>
   <section class="tg-circle-promos" aria-label="Target Circle">${[['Target Circle™', 'Join free to save even more', 'Deals, a birthday gift and more with free membership.', D.CIRCLE_PATH], ['Target Circle™ Card', 'Save 5% every day', 'Instant extra 5% off at checkout with any Target Circle card.', '/circlecard'], ['Target Circle 360™', 'Free, fast shipping & same-day delivery', 'Annual membership $99 a year or $10.99 a month.', D.CIRCLE_360_PATH]].map(([t, h, p, href]) => `<a href="${base}${href}" class="tg-circle-card"><span class="tg-bullseye tg-bullseye-sm" aria-hidden="true"></span><b>${esc(t)}</b><h3>${esc(h)}</h3><p>${esc(p)}</p></a>`).join('')}</section>
@@ -146,7 +147,9 @@ export function categoryView(base, path) {
   const isHead = group && !NO_HEAD.includes(group[0]) && nodeId(group[1][0][1]) === id
   const menuGroup = !group && D.SHOP_ALL.find(([g]) => g === MENU_SUBS[entry.label])
   const map = { 'N-hz89j': 'kitchen-dining', 'N-5xtvd': 'home-decor', 'N-rdihz': 'clothing', 'N-55r1x': 'beauty', 'N-5xtzq': 'beauty', 'N-5xt44': 'pets', 'N-5xtb0': 'toys', 'N-5xt1a': 'grocery', 'N-5xsz1': 'household', 'N-5xteg': 'electronics' }
-  const scope = special?.scope || (map[id] ? p => p.department === map[id] && (id !== 'N-5xteg' || p.type === 'Headphones') : () => false)
+  const fixtureScope = special?.scope || (map[id] ? p => p.department === map[id] && (id !== 'N-5xteg' || p.type === 'Headphones') : () => false)
+  // Everyday assortment items (shelf.js) list the Target category nodes they belong to.
+  const scope = p => p.shelf ? p.nodes.includes(id) : fixtureScope(p)
   const hero = special?.hero
   const intro = `<nav class="tg-crumbs" aria-label="Breadcrumb"><a href="${base}/">Target</a>${group && !isHead ? ` › <a href="${base}${group[1][0][1]}">${esc(group[1][0][0])}</a>` : ''} › <span aria-current="page">${esc(title)}</span></nav>
   <div class="tg-cat-head"><h1>${esc(title)}</h1>${special?.subtitle ? `<p class="tg-fine">${esc(special.subtitle)}</p>` : ''}</div>

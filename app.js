@@ -4,7 +4,7 @@ import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { sessionMiddleware, createSessionMiddleware, storeState } from './lib/session.js'
 import { configureOrders, listOrders, getOrder, clearOrders } from './lib/orders.js'
-import { esc } from './lib/html.js'
+import { esc, setAgentView } from './lib/html.js'
 import { createCaptcha } from './lib/captcha.js'
 import { productAssetPageMiddleware } from './lib/product-assets.js'
 import { mountProductAssetRoutes } from './lib/product-asset-routes.js'
@@ -21,6 +21,7 @@ export const ROOT = path.dirname(fileURLToPath(import.meta.url))
  */
 export async function createApp(opts = {}) {
   const benchmark = opts.benchmark
+  setAgentView(Boolean(benchmark))
   if (benchmark && (!benchmark.runId || !Array.isArray(benchmark.stores) || !benchmark.stores.length)) {
     throw new Error('Benchmark mode requires a runId and an explicit store list')
   }

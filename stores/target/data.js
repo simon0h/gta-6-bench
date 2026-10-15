@@ -5,6 +5,7 @@ import { expandCatalog } from './expand500.js'
 // Listings as they appear on target.com (research/target.md and target.json, 2026-09-29/30).
 import { GAME } from '../../lib/catalog.js'
 import { ORDINARY_PRODUCTS, DEPARTMENTS } from './catalog.js'
+import { SHELF, SHELF_DEPARTMENTS, shelfByTcin } from './shelf.js'
 
 // Header context that drives the Pickup / Delivery / Shipping tabs on the real site.
 export const SHIP_ZIP = '95065'
@@ -165,7 +166,16 @@ export function cartIssues(store) {
   })
 }
 
-export const byTcin = (tcin) => PRODUCTS.find(p => p.tcin === String(tcin)) ?? null
+// Reference mode: the evidenced GTA VI rows stay alone in PRODUCTS (inventory, evidence, grading);
+// the everyday Target assortment in shelf.js sits beside them for browsing, search and kind:'other' orders.
+export const SHELF_ITEMS = fixtureCatalog ? [] : SHELF
+// Browse order: the evidenced GTA VI rows sit in the Video Games run right after the consoles,
+// like any other new release, instead of leading every department and search page.
+const gtaAt = SHELF_ITEMS.findIndex(p => p.type === 'Video Games')
+export const CATALOG = fixtureCatalog ? [...PRODUCTS] : [...SHELF_ITEMS.slice(0, gtaAt), ...PRODUCTS, ...SHELF_ITEMS.slice(gtaAt)]
+export const ALL_DEPARTMENTS = fixtureCatalog ? DEPARTMENTS : [...SHELF_DEPARTMENTS, ...DEPARTMENTS.filter(d => !SHELF_DEPARTMENTS.some(s => s.id === d.id))]
+export const departmentOf = id => ALL_DEPARTMENTS.find(d => d.id === id) ?? null
+export const byTcin = (tcin) => PRODUCTS.find(p => p.tcin === String(tcin)) ?? (fixtureCatalog ? null : shelfByTcin.get(String(tcin))) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 export const sponsored = () => PRODUCTS.find(p => p.sponsored)
 export const protectionPlan = () => fixtureCatalog ? PRODUCTS.find(p => p.addon) : { title: '2 Year Video Games Protection Plan ($75-$99.99) - Allstate', price: 13, readOnly: true }
@@ -175,12 +185,27 @@ export function productPath(base, p) {
 }
 
 export function search(q) {
-  const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+  const norm = s => (fixtureCatalog ? String(s ?? '') : String(s ?? '').normalize('NFD')).replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  const pool = PRODUCTS.filter(p => !p.addon)
+  const pool = CATALOG.filter(p => !p.addon)
   if (!tokens.length) return pool
-  const hits = p => { const hay = norm(p.title + ' ' + p.keywords); return tokens.filter(t => hay.includes(t)).length }
+  // Evidenced rows keep their original substring matching; assortment rows match whole words or
+  // word prefixes so "tv" or "6" do not pull in unrelated items.
+  const matches = (p, t) => {
+    const hay = norm(p.title + ' ' + p.keywords)
+    if (!p.shelf) return hay.includes(t)
+    const words = hay.split(' '), stem = t.length > 3 && t.endsWith('s') ? t.slice(0, -1) : t
+    return words.some(w => w.startsWith(t) || w === stem) || (t.length >= 5 && hay.includes(t))
+  }
+  const hits = p => tokens.filter(t => matches(p, t)).length
   const all = pool.filter(p => hits(p) === tokens.length)
+  if (all.length && !fixtureCatalog) {
+    // Relevance: more query words in the title first; ties keep catalog order.
+    const alias = s => s.replace(/playstation 5/g, 'playstation 5 ps5').replace(/xbox series x/g, 'xbox series x xsx')
+    const titleHits = p => { const words = alias(norm(p.title)).split(' '); return tokens.filter(t => words.some(w => w.startsWith(t))).length }
+    const rank = p => p.catalogType === 'console' ? 0 : 1
+    return all.map((p, i) => [p, titleHits(p), i]).sort((a, b) => b[1] - a[1] || rank(a[0]) - rank(b[0]) || a[2] - b[2]).map(([p]) => p)
+  }
   if (all.length) return all
   // Retain benchmark GTA alias behavior without turning unrelated empty queries into filler.
   return /gta|grand theft auto/.test(norm(q)) ? pool.filter(p => !p.family && hits(p) * 2 >= tokens.length) : []

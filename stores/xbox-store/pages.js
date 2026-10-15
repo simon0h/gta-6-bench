@@ -2,14 +2,16 @@ import { productImage, productGallery } from '../../lib/product-assets.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { benchmarkDate } from '../../lib/payment.js'
 import { physicalPage, shippingFields, shippingReceipt } from '../playstation-store/physical.js'
-import { esc, money, disclaimer } from '../../lib/html.js'
-import { productPath, byId, STATES, ESRB, RELEASE, isBuyable, PRODUCTS } from './data.js'
+import { esc, money, disclaimer, publicNotice } from '../../lib/html.js'
+import { productPath, byId, STATES, ESRB, RELEASE, isBuyable, CATALOG as PRODUCTS } from './data.js'
+import { shelfImage, shelfGallery } from './shelf-art.js'
+export { hardwarePage } from './shelf-pages.js'
 import * as discovery from './discovery.js'
 import { megaNav, footerCols, homeHero, shopStrip, followXbox } from './site.js'
 
 const NAME = 'Xbox Store'
 const referenceCover = p => p.id === '9nnzsnhlr63l' ? 'gta-vi-ultimate-cover.jpg' : ['9p3h4968grsm','9nl3wwnzlzzn'].includes(p.id) ? 'gta-vi-cover.png' : null
-export const artwork = (p,cls='') => referenceCover(p) ? `<img class="${esc(cls)}" src="/static/reference/xbox-store/${referenceCover(p)}" alt="${esc(p.title)}">` : productImage('xbox-store',p,{className:cls})
+export const artwork = (p,cls='') => p.shelf ? shelfImage(p,{className:cls}) : referenceCover(p) ? `<img class="${esc(cls)}" src="/static/reference/xbox-store/${referenceCover(p)}" alt="${esc(p.title)}">` : productImage('xbox-store',p,{className:cls})
 const utilityIcon = name => name === 'search' ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h3l2 12h12l3-9H6"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>'
 const xboxMark = '<svg class="xb-mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="currentColor"/><path d="M5 7q5-3 11 3q6-6 11-3q-5 1-8 6q7 8 8 13q-6-6-11-10q-6 4-11 10q1-6 8-13Q10 8 5 7" fill="white"/></svg>'
 
@@ -112,7 +114,7 @@ export function coverArt(p) {
     else lines.push(w)
   }
   const y0 = 200 - (lines.length - 1) * 19
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="380" viewBox="0 0 300 380" role="img" aria-label="${esc(p.title)} placeholder art">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="380" viewBox="0 0 300 380" role="img" aria-label="${esc(p.title)} cover art">
 <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a2a5c"/><stop offset="1" stop-color="#101114"/></linearGradient></defs>
 <rect width="300" height="380" fill="url(#g)"/><rect width="300" height="34" fill="#107c10"/>
 <text x="150" y="23" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">${p.type === 'add-on' ? 'ADD-ON' : 'DIGITAL GAME'}</text>
@@ -156,7 +158,7 @@ export function paymentFields({ values = {}, errors = {}, saved = [] }) {
   </fieldset>` : '<input type="hidden" name="pi" value="new">'}
   <fieldset class="xb-newpay"><legend>Add a new payment method</legend>
     <div class="xb-paytypes">${radio('payType', 'card', 'Credit or debit card', payType)}${radio('payType', 'paypal', 'PayPal', payType)}${radio('payType', 'venmo', 'Venmo', payType)}</div>
-    <p class="xb-fine">Visa, Mastercard, American Express and Discover are accepted, including prepaid cards. PayPal and Venmo are recorded locally; no provider sign-in or authorization occurs here.</p>
+    <p class="xb-fine">Visa, Mastercard, American Express and Discover are accepted, including prepaid cards. PayPal and Venmo are also accepted.</p>${publicNotice('<p class="xb-fine">This is not the real Microsoft Store: no PayPal or Venmo sign-in or authorization occurs and no payment is taken.</p>')}
     <div class="xb-cardfields">
     ${input('cardNumber', 'Card number', 'autocomplete="cc-number" inputmode="numeric"')}
     <div class="xb-3col">
@@ -231,12 +233,12 @@ export function productPage({ base, p, editions, related, inCart, owned = false,
   const actions = `<div class="xb-buybox" id="buybox">${!owned&&p.type==='game'&&p.subscriptions.length?`<a class="xb-btn xb-btn-buy xb-btn-two" href="${base}/en-US/xbox-game-pass"><span>GET GAME PASS</span><span class="xb-btn-sub">Included in ${esc(p.subscriptions.includes('Premium')?'Premium':p.subscriptions[0])}</span></a><span class="xb-buy-or">OR</span>`:''}${buy}${editionPicker}${authentic ? wishlist : ''}${overflow}</div>`
   return `<div class="xb-hero${authentic ? ' xb-gta-hero' : ''}" id="top"><div class="xb-hero-backdrop" aria-hidden="true">${authentic ? '<img src="/static/reference/xbox-store/gta-vi-background.jpg" alt="">' : artwork(p)}</div>
   <div class="xb-hero-inner">
-    ${referenceCover(p) ? artwork(p,'xb-cover') : productGallery('xbox-store',p,{className:'xb-cover'})}
+    ${referenceCover(p) ? artwork(p,'xb-cover') : p.shelf ? shelfGallery(p,{className:'xb-cover'}) : productGallery('xbox-store',p,{className:'xb-cover'})}
     <div class="xb-hero-info">
       ${p.subscriptions.length ? '<p class="xb-pdp-pass">XBOX GAME PASS</p>' : ''}<h1>${esc(p.title)}</h1>
-      <p class="xb-fine">Digital license · Delivered to your Xbox account library</p>
+      <p class="xb-fine">${p.type==='gift-card'?'Digital code · Delivered by email and to your order history':'Digital license · Delivered to your Xbox account library'}</p>
       <p class="xb-meta">${esc(p.publisher)} &bull; ${esc(p.genre)}${p.rating ? ` &bull; <span class="xb-stars" role="img" aria-label="Rating of ${esc(p.rating)} stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> ${esc(p.ratingCount)}` : ''}</p>
-      <ul class="xb-badges">${p.capabilities.map(c=>`<li>${esc(c)}</li>`).join('')}${p.ribbon ? '<li><img class="xb-badge-icon" src="/static/reference/xbox-store/preorder-icon.svg" alt="">Pre-order</li>' : ''}<li><img class="xb-badge-icon" src="/static/reference/xbox-store/languages-icon.svg" alt="">${p.languages} Supported languages</li></ul>${authentic ? '' : `<p class="xb-entitlement">${esc(p.productType==='currency'?'Consumable currency':p.productType==='dlc'?'Game add-on':p.productType==='bundle'?'Game bundle':p.productType==='base-listing'?'Base game listing':'Digital game')}</p>`}
+      <ul class="xb-badges">${p.capabilities.map(c=>`<li>${esc(c)}</li>`).join('')}${p.ribbon ? '<li><img class="xb-badge-icon" src="/static/reference/xbox-store/preorder-icon.svg" alt="">Pre-order</li>' : ''}<li><img class="xb-badge-icon" src="/static/reference/xbox-store/languages-icon.svg" alt="">${p.languages} Supported languages</li></ul>${authentic ? '' : `<p class="xb-entitlement">${esc(p.productType==='currency'?'Consumable currency':p.productType==='dlc'?'Game add-on':p.productType==='bundle'?'Game bundle':p.productType==='base-listing'?'Base game listing':p.productType==='gift-card'?'Digital gift card':p.productType==='membership-code'?'Game Pass membership code':'Digital game')}</p>`}
       ${authentic ? '' : actions}
     </div>
   </div>
@@ -245,7 +247,7 @@ export function productPage({ base, p, editions, related, inCart, owned = false,
 <div class="xb-esrb-strip"><div class="xb-esrb-left">${esrbMini(base,p)}</div>
   <div class="xb-esrb-right"><p>Publishers of games you launch receive access to your XBOX profile information and associated data while you play. <a href="${base}/en-US/support">Learn more</a></p>${p.iap ? '<p>+Offers in-app purchases.</p>' : ''}<p>Parental control information. <a href="${base}/en-US/support">Learn more</a></p></div></div>
 <nav class="xb-pdp-tabs" aria-label="Product sections"><a href="${path}#details" class="is-active" aria-current="page">DETAILS</a><a href="${path}#reviews">REVIEWS</a><a href="${path}#more">MORE</a></nav>
-${p.family === 'gta-vi' ? '<div id="details"></div>' : `<section class="xb-section" id="details"><h2>Game artwork</h2><details class="xb-art-viewer"><summary role="button" aria-expanded="false" aria-label="View cover art"><span class="xb-art-thumbnail">${artwork(p)}<span>Expand cover art ↗</span></span></summary><div class="xb-art-expanded">${artwork(p)}<p>${esc(p.title)}</p></div></details><p class="xb-fine">Original illustrative cover. This image is not a gameplay screenshot.</p></section>`}
+${p.family === 'gta-vi' ? '<div id="details"></div>' : `<section class="xb-section" id="details"><h2>Game artwork</h2><details class="xb-art-viewer"><summary role="button" aria-expanded="false" aria-label="View cover art"><span class="xb-art-thumbnail">${artwork(p)}<span>Expand cover art ↗</span></span></summary><div class="xb-art-expanded">${artwork(p)}<p>${esc(p.title)}</p></div></details><p class="xb-fine">Cover art. This image is not a gameplay screenshot.</p></section>`}
 ${p.requires ? `<section class="xb-section xb-required"><h2>Requires a game</h2><p>This ${p.productType==='currency'?'currency pack':'add-on'} requires <a href="${productPath(base,byId(p.requires))}">${esc(byId(p.requires).title)}</a>. The base game is sold separately. You may purchase this item before acquiring the base game.</p>${p.repeatable?'<p>Consumable content may be purchased again; it is not a standalone playable game.</p>':''}</section>` : ''}
 ${rail('In this bundle', related.bundle)}
 ${rail('Included in', related.includedIn)}
@@ -256,7 +258,7 @@ ${rail('Included in', related.includedIn)}
 ${p.family === 'gta-vi' ? '<div id="more"></div>' : ''}${compare}
 ${rail('Add-ons for this game', related.addons)}
 ${rail('You may also like', related.recommendations || [])}
-<section class="xb-section" id="reviews"><h2>Reviews</h2><p class="xb-fine">${p.rating?`Community rating: ${esc(p.rating)} out of 5 from ${esc(p.ratingCount)} ratings.`:'No community ratings yet.'} Written reviews are not available in this store.</p></section>
+<section class="xb-section" id="reviews"><h2>Reviews</h2><p class="xb-fine">${p.rating?`Community rating: ${esc(p.rating)} out of 5 from ${esc(p.ratingCount)} ratings.`:'No community ratings yet.'} Written reviews are not available for this title.</p></section>
 ${p.family === 'gta-vi' ? '' : gamePassPromo(base)}
 ${chatBubble(base)}`
 }
@@ -313,13 +315,13 @@ export function thanksCard({ base, order, p }) {
   const descriptions=order.meta.entitlements||[]
   const content=order.items.map(i=>{
     const product=byId(i.sku), entitlement=descriptions.find(e=>e.sku===i.sku), type=entitlement?.type||product?.entitlement
-    const detail=product?.physical?'Physical item. Standard shipping in 3–5 business days. No digital license is granted.':entitlement?.preorder ? `Pre-order license. Unlocks on ${entitlement.release}.` : type==='consumable' ? `${entitlement?.quantity||product?.quantity} currency units added to your local entitlement record. Requires ${byId(entitlement?.requires||product?.requires)?.title||'the base game'}.` : type==='dlc' ? `Add-on license acquired. Requires ${byId(entitlement?.requires||product?.requires)?.title||'the base game'}, sold separately.` : type==='bundle' ? 'Game bundle license acquired. Included games and add-ons are listed on the product page.' : 'Game license acquired. Manage installation from My games & apps on a supported device.'
+    const detail=product?.physical?'Physical item. Standard shipping in 3–5 business days. No digital license is granted.':entitlement?.preorder ? `Pre-order license. Unlocks on ${entitlement.release}.` : type==='consumable' ? `${entitlement?.quantity||product?.quantity} currency units added to your Microsoft account. Requires ${byId(entitlement?.requires||product?.requires)?.title||'the base game'}.` : type==='dlc' ? `Add-on license acquired. Requires ${byId(entitlement?.requires||product?.requires)?.title||'the base game'}, sold separately.` : type==='bundle' ? 'Game bundle license acquired. Included games and add-ons are listed on the product page.' : 'Game license acquired. Manage installation from My games & apps on a supported device.'
     return `<div class="xb-dialog-item">${product?artwork(product):''}<div><b>${esc(i.title)}</b><span>${product?.physical?'Physical':'Digital'} &nbsp;·&nbsp; Quantity: ${i.qty}</span><span class="xb-dialog-price">${money(i.unit_price)}</span><span>${esc(detail)}</span></div></div>`
   }).join('')
   return `<div class="xb-dialog-head"><span class="xb-ms-mini">Microsoft Store</span>${p ? `<a class="xb-dialog-close" href="${productPath(base,p)}" aria-label="Close">&times;</a>` : ''}</div>
   <h2 id="dlg-title" class="xb-thanks-title">&#10004; Thanks for your purchase</h2><p class="xb-order-number">Order #<span data-order-number>${esc(order.order_number)}</span></p>${content}${shippingReceipt(order)}
   <dl class="xb-pay-summary"><dt>Payment method</dt><dd>${paymentLine(order.payment)}</dd><dt>Total</dt><dd>${money(order.totals.total)} (includes ${money(order.totals.tax)} tax)</dd><dt>Email</dt><dd>${esc(order.customer.email)}</dd></dl>
-  <p class="xb-fine">Confirmation: Microsoft Store - Order Confirmation (Order #${esc(order.order_number)}). This receipt is available in your local order history.</p>
+  <p class="xb-fine">Confirmation: Microsoft Store - Order Confirmation (Order #${esc(order.order_number)}). This receipt is available in your order history.</p>
   ${order.meta.preorder?`<p class="xb-fine">Pre-orders unlock on the release date listed above. ${order.payment.method==='free'?'No charge is due.':order.shipping_address?'Physical items are charged immediately. Digital pre-orders are charged about 10 days before their release date.':'Your payment method will be charged about 10 days before the release date.'} Manage your pre-order from Payment &amp; billing &gt; Order history.</p>`:''}
   <div class="xb-dialog-actions">${order.meta.entitlements?.length?`<a class="xb-btn xb-btn-buy" href="${base}/account/library">My library</a>`:''}<a class="xb-btn xb-btn-grey" href="${base}/account/billing/orders">Order history</a><a class="xb-btn xb-btn-grey" href="${p?productPath(base,p):`${base}/`}">Close</a></div>`
 }

@@ -3,12 +3,15 @@ import { referenceRetailStore, observedProduct, capturedPhrase } from '../refere
 import { capturedWilliamsSearch, capturedWilliamsProduct, capturedSearchProducts } from './search-capture.js'
 import { siteChrome } from './site-chrome.js'
 import { installSite, homepage } from './site-routes.js'
+import { installShelf, cartCount } from './shelf-routes.js'
 
 const unique = [...new Map(capturedSearchProducts.map(p => [p.path, p])).values()]
 export const catalogObservations = unique.map(p => observedProduct(p, { source: p.source_url,
   evidence: 'research/fidelity-2026-10-06/other-retail.md#williams-sonoma', facts: ['title', 'native_path', 'displayed_price', 'sale_label', 'image'] }))
 let site
-const store = referenceRetailStore({ slug: 'williams-sonoma', name: 'Williams Sonoma', availability: 'unavailable', chrome: siteChrome,
+const store = referenceRetailStore({ slug: 'williams-sonoma', name: 'Williams Sonoma', availability: 'unavailable',
+  // The shared reference renderer always passes a zero count; the shelf cart lives in req.store.wsCart.
+  chrome: args => siteChrome({ ...args, count: cartCount(args.req.store) }),
   observations: catalogObservations, prepare(req) { req.williamsCapturedSearch = true },
   queryKeys: ['words', 'q'], searchRoutes: ['/search/results.html', '/search'], matches: capturedPhrase, capturedSearch: '/search/results.html?words=gta%206',
   search(req, res, { render, base, query }) { render(req, res, `Search results for ${query}`, capturedWilliamsSearch(base, { ...req.query, words: query })) },
@@ -29,6 +32,7 @@ router.get('/', (req, res, next) => {
   if (Object.values(req.query).some(value => typeof value !== 'string')) return next()
   site.render(req, res, 'Cookware, Cooking Utensils, Kitchen Decor & Gourmet Foods', homepage(site.baseOf(res)))
 })
+router.use(installShelf(site))
 router.use(store.router)
 
 export default { ...store, router }

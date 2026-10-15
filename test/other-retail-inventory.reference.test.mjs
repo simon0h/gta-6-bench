@@ -72,9 +72,14 @@ test('reference retail routes keep captured search and detail states, not artifi
       assert.doesNotMatch(detail.text, /action="[^\"]*\/(?:cart|checkout)/)
     }
   }
+  // Williams Sonoma searches its kitchen assortment (shelf.js) for terms other than the captured "gta 6".
+  const wsCoffee = await dispatch('williams-sonoma', '/search/results.html?words=coffee')
+  assert.equal(wsCoffee.status, 200)
+  assert.match(wsCoffee.text, /data-product-kind="other"/)
+  assert.doesNotMatch(wsCoffee.text, /data-reference-state="uncaptured"/)
   const ikea = await dispatch('ikea', '/us/en/search/?q=gta%206')
   assert.match(ikea.text, /We found 0 products and 0 content results/)
-  for (const [slug, path] of [['nike', '/w?q=GTA6'], ['ikea', '/us/en/search/?q=desk'], ['chewy', '/s?query=gta%206'], ['coupang', '/np/search?q=gta%206'], ['sephora', '/search?keyword=Grand+Theft+Auto+VI'], ['williams-sonoma', '/search/results.html?words=coffee']]) {
+  for (const [slug, path] of [['nike', '/w?q=GTA6'], ['ikea', '/us/en/search/?q=grand%20theft%20auto'], ['chewy', '/s?query=gta%206'], ['coupang', '/np/search?q=gta%206'], ['sephora', '/search?keyword=Grand+Theft+Auto+VI']]) {
     const result = await dispatch(slug, path)
     assert.equal(result.status, 200)
     assert.match(result.text, /data-reference-state="uncaptured"/)
@@ -95,7 +100,7 @@ test('source-only retail rejects legacy and captured purchase submissions withou
     for (const path of ['/cart/add', '/checkout', '/checkout/order', '/checkout/place', '/cart/update']) {
       const result = await dispatch(slug, path, { method: 'POST', body: { sku: 'CP-GTA6-PS5', pid: 'running-shoes', qty: '1' }, state: { cart } })
       assert.equal(result.status, 409, `${slug} ${path}`)
-      assert.match(result.text, /Purchase is not verified/)
+      assert.match(result.text, /isn(&#39;|')t available to buy online|구매할 수 없/)
       assert.deepEqual(result.req.store.cart, cart)
       assert.deepEqual(result.req.store.checkout, {})
     }

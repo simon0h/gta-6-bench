@@ -2,6 +2,7 @@ import { fixtureCatalog, applyCatalogPolicy } from '../../lib/catalog-policy.js'
 import { CATALOG_EVIDENCE } from './catalog-evidence.js'
 import { expandJB } from './expansion.js'
 import { enrichProducts, filterCatalog, selectedProduct } from './catalog.js'
+import { SHELF } from './shelf.js'
 // Listings as they appear on jbhifi.com.au (research/jb-hifi.md, 2026-09-29).
 // JB sells both GTA VI listings as "Code in Box" at A$129 (below the A$129.95 RRP); prices include GST.
 
@@ -148,15 +149,43 @@ enrichProducts(PRODUCTS)
 if (fixtureCatalog) PRODUCTS.push(...expandJB(PRODUCTS))
 applyCatalogPolicy('jb-hifi', PRODUCTS, CATALOG_EVIDENCE)
 if (!fixtureCatalog) for (const p of PRODUCTS) { delete p.stock; delete p.stars; delete p.reviews; p.purchaseLimit = 5 }
-export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
-export const bySlug = (slug) => PRODUCTS.find(p => p.slug === String(slug)) ?? null
+// Everyday assortment around the evidenced GTA VI rows (reference mode only; see shelf.js). It is kept
+// out of PRODUCTS so the catalog policy, inventory.js and /api/catalog `inventory` stay evidence-only.
+// Fixture mode keeps its own authored 500-row catalogue untouched.
+export const ASSORTMENT = fixtureCatalog ? [] : SHELF
+// Everything a shopper can browse, search and open: the evidenced rows first, then the assortment.
+export const LISTED = fixtureCatalog ? PRODUCTS : [...PRODUCTS, ...ASSORTMENT]
+export const byId = (id) => LISTED.find(p => p.id === String(id)) ?? null
+export const bySlug = (slug) => LISTED.find(p => p.slug === String(slug)) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 export const upsells = () => PRODUCTS.filter(p => p.upsell)
 
 export function productPath(base, p) { return `${base}/products/${p.slug}` }
 
-export function search(q, filters = {}) { return filterCatalog(PRODUCTS, q, filters) }
-export const DEPARTMENTS = [...new Set(PRODUCTS.map(p=>p.crumbs[0]))]
+// "Best Match": rows whose title contains the query words rank above rows that only match on
+// brand, category or keywords. Ties keep catalogue order, so the GTA VI listings stay first for
+// "gta 6" / "grand theft auto". Explicit sorts (price, title, rating…) are applied by filterCatalog.
+const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+function relevance(p, terms) {
+  const title = ` ${norm(p.title)} `
+  return terms.reduce((n, t) => n + (title.includes(` ${t} `) ? 3 : title.includes(t) ? 2 : 0), 0) + (terms.every(t => title.includes(t)) ? 2 : 0)
+}
+export function search(q, filters = {}) {
+  const found = filterCatalog(LISTED, q, filters)
+  const terms = norm(q).split(' ').filter(Boolean)
+  if (fixtureCatalog || (filters.sort && filters.sort !== 'best')) return found
+  if (!terms.length) {
+    // Browsing without a query: bestsellers first (featured, then most reviewed), with the GTA VI
+    // pre-orders placed among them rather than pinned to the top of every department.
+    const evidenced = found.filter(p => !p.shelf), shelf = found.filter(p => p.shelf)
+      .map((p, i) => [p, i]).sort(([a, i], [b, j]) => (b.top - a.top) || (b.reviews - a.reviews) || i - j).map(([p]) => p)
+    shelf.splice(Math.min(3, shelf.length), 0, ...evidenced)
+    return shelf
+  }
+  const score = new Map(found.map((p, i) => [p, [relevance(p, terms), i]]))
+  return found.sort((a, b) => score.get(b)[0] - score.get(a)[0] || score.get(a)[1] - score.get(b)[1])
+}
+export const DEPARTMENTS = [...new Set(LISTED.map(p=>p.crumbs[0]))]
 
 // State/territory select, in the order the checkout lists them.
 export const STATES = [

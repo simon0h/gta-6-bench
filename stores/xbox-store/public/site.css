@@ -152,3 +152,34 @@ body.xb-light .xb-main:has(>.xs-carousel)>.xb-light-section{max-width:1320px;mar
 @media(max-width:900px){.xs-slide-gta{background:linear-gradient(#0b0c0ed9,#0b0c0ed9),url('/static/reference/xbox-store/gta-vi-background.jpg') center/cover no-repeat,#2a1630}.xs-band{padding-left:16px;padding-right:16px}}
 @media(max-width:650px){.xb-nav{grid-template-columns:repeat(5,auto)!important;justify-content:space-between}}
 @media(max-width:480px){.xs-cards,.xs-cards-2{grid-template-columns:1fr}.xs-shop-strip a{width:84px}.xs-list{columns:1}}
+
+/* Microsoft Store device pages for consoles and accessories (shelf-pages.js) */
+.xh-page{max-width:1320px;margin:0 auto;padding:0 5% 48px;box-sizing:border-box;color:#1b1b1b}
+.xh-crumbs{padding:18px 0 0}
+.xh-added{background:#dff6dd;border:1px solid #107c10;padding:10px 14px;border-radius:4px;margin:16px 0 0}
+.xh-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;margin-top:20px;align-items:start}
+.xh-gallery .pa-gallery{margin:0}
+.xh-brand{margin:0;color:#505050;font-size:14px;font-weight:600}
+.xh-buy h1{font-size:30px;line-height:1.2;margin:6px 0 10px;font-weight:600}
+.xh-rating a{color:inherit;text-decoration:none}.xh-rating a:hover span{text-decoration:underline}
+.xh-stars{color:#107c10;letter-spacing:1px;margin-right:4px}
+.xh-muted{color:#616161;font-size:13px}
+.xh-price{font-size:26px;margin:14px 0}.xh-price s{color:#616161;font-size:18px}.xh-save{display:inline-block;font-size:13px;background:#107c10;color:#fff;padding:3px 8px;border-radius:3px;vertical-align:middle}
+.xh-options{border:0;padding:0;margin:0 0 18px}.xh-options legend{font-weight:600;margin-bottom:8px}
+.xh-options div{display:flex;flex-wrap:wrap;gap:8px}
+.xh-option{display:flex;flex-direction:column;border:1px solid #c8c8c8;border-radius:4px;padding:8px 12px;color:#1b1b1b;text-decoration:none;font-size:14px;min-width:120px}
+.xh-option small{color:#616161}.xh-option.is-selected{border:2px solid #107c10;padding:7px 11px}
+.xh-cta{min-width:240px;font-size:16px;padding:12px 24px}
+.xh-oos{font-weight:600;color:#a4262c}
+.xh-delivery{list-style:none;padding:0;margin:20px 0;border-top:1px solid #e1e1e1}
+.xh-delivery li{display:flex;flex-direction:column;padding:10px 0;border-bottom:1px solid #e1e1e1;font-size:14px}.xh-delivery b{margin-bottom:2px}
+.xh-section{margin-top:40px}.xh-section h2{font-size:24px;margin:0 0 14px}
+.xh-specs{display:grid;grid-template-columns:minmax(120px,240px) 1fr;margin:0;border-top:1px solid #e1e1e1}
+.xh-specs dt,.xh-specs dd{margin:0;padding:10px 0;border-bottom:1px solid #e1e1e1}.xh-specs dt{font-weight:600;padding-right:16px}
+.xh-reviews{display:flex;gap:40px;align-items:center;flex-wrap:wrap}
+.xh-score{display:flex;flex-direction:column;gap:4px}.xh-score b{font-size:48px;font-weight:600;line-height:1}
+.xh-bars{flex:1;min-width:240px;max-width:520px}
+.xh-bar{display:grid;grid-template-columns:40px 1fr 70px;gap:10px;align-items:center;font-size:13px;margin:4px 0}
+.xh-track{height:8px;background:#e6e6e6;border-radius:4px;overflow:hidden}.xh-track span{display:block;height:100%;background:#107c10}
+.xh-more-links{margin-top:32px}
+@media(max-width:900px){.xh-page{padding:0 16px 40px}.xh-grid{grid-template-columns:1fr;gap:20px}.xh-buy h1{font-size:24px}.xh-cta{width:100%}.xh-specs{grid-template-columns:1fr 1.4fr}}

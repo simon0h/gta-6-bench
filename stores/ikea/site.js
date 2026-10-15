@@ -1,13 +1,17 @@
 import { Router } from 'express'
-import { esc } from '../../lib/html.js'
+import { esc, publicNotice } from '../../lib/html.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
+import { listOrders } from '../../lib/orders.js'
 import { departments, categoryIndex, menuDepartments, rooms, roomCategories, footerColumns, legalBar, P } from './site-data.js'
 import { infoPages } from './site-pages.js'
 import { searchImages } from './search-reference.js'
+import { shelf, inCategory, deals, newArrivals } from './shelf.js'
+import { listing, carousel } from './shelf-pages.js'
 
 // Real-site pages for the IKEA US clone (paths mirror https://www.ikea.com/us/en/...).
-// Structure, navigation and editorial copy only: product grids show the captured
-// catalog, which has no purchasable IKEA products, so listings render an empty state.
+// In the default reference catalog, product grids and carousels show the IKEA shelf
+// (shelf.js), an everyday assortment kept separate from the GTA 6 evidence (IKEA has
+// no GTA 6 listing). Categories with no shelf rows keep the empty-listing state.
 
 const imageByTitle = Object.fromEntries(searchImages.slice(12).map(i => [i.title, i.src]))
 const inspiration = searchImages.slice(0, 12)
@@ -20,7 +24,7 @@ const tile = (base, cat, extra = '') => {
   return `<a class="ik-tile${img ? '' : ' no-img'}" href="${base}${P}/cat/${cat.slug}/"${extra}>${img ? `<img src="${img}" alt="" loading="lazy">` : `<span class="ik-tile-ph" aria-hidden="true">${esc(cat.title.slice(0, 1))}</span>`}<span>${esc(cat.title)}</span></a>`
 }
 const serviceBlocks = base => `<section class="ik-service-blocks" aria-label="Services"><a href="${base}${P}/customer-service/services/product-reservation/"><strong>Click and collect</strong><span>Order online and pick up at your local store.</span></a><a href="${base}${P}/customer-service/services/planning-consultation/"><strong>Planning and consultation</strong><span>Get help planning your space.</span></a><a href="${base}${P}/customer-service/services/delivery/"><strong>Delivery</strong><span>Get your purchases delivered to your door.</span></a><a href="${base}${P}/customer-service/services/assembly/"><strong>Taskrabbit Assembly</strong><span>Book a Tasker to assemble your furniture.</span></a><a href="${base}${P}/customer-service/services/finance-options/"><strong>Financing options</strong><span>Pay over time with IKEA financing.</span></a><a href="${base}${P}/planners/"><strong>Planning tools</strong><span>Design your space in 3D.</span></a></section>`
-const emptyResults = (base, what) => `<div class="ik-results-empty" data-reference-state="empty-listing"><h3>No products to show</h3><p>Product listings for ${esc(what)} have not been captured in this replica, so no items are shown. This is not the retailer’s inventory.</p><a class="ik-btn ik-btn-secondary" href="${base}${P}/cat/products-products/">Explore all products</a></div>`
+const emptyResults = (base, what) => `<div class="ik-results-empty" data-reference-state="empty-listing"><h3>No products to show</h3><p>There are currently no products available in ${esc(what)}. Please check back soon or explore our other products.</p><a class="ik-btn ik-btn-secondary" href="${base}${P}/cat/products-products/">Explore all products</a></div>`
 const filterBar = (base, action, count = 0) => {
   const pill = (label, name, values) => `<details class="ik-pill"><summary>${label}</summary><div>${values.map(v => `<label><input type="radio" name="${name}" value="${esc(v)}"> ${esc(v)}</label>`).join('')}<button class="ik-btn">Apply</button></div></details>`
   return `<section class="ik-sortfilter" aria-label="Sort and Filter"><h2 class="sr-only">Sort and Filter</h2><form action="${action}" method="get">${pill('Sort', 'sort', ['Best match', 'Price: low to high', 'Price: high to low', 'Newest', 'Customer rating', 'Name'])}${pill('Price', 'price', ['$0 - 49', '$50 - 99', '$100 - 199', '$200+'])}${pill('Color', 'color', ['White', 'Black', 'Gray', 'Beige', 'Brown', 'Green', 'Blue'])}${pill('Material', 'material', ['Wood', 'Metal', 'Fabric', 'Glass', 'Plastic'])}${pill('Category', 'category', ['All'])}<a class="ik-pill-link" href="${action}">All filters</a></form><p class="ik-count"><strong>${count} items</strong></p></section><h2 class="sr-only">Results list</h2>`
@@ -30,16 +34,31 @@ const helpBox = base => `<section class="ik-help-box"><h2>How can we help you?</
 
 const featuredDepts = ['storage-organization-st001', 'sofas-armchairs-700640', 'beds-mattresses-bm001', 'kitchen-appliances-ka001', 'tables-chairs-fu002', 'home-textiles-tl001', 'home-decor-de001', 'baby-kids-bc001', 'ikea-food-restaurant-fb001', 'home-electronics-he001', 'smart-home-hs001', 'pet-accessories-pt001'].map(s => categoryIndex.get(s))
 
+const byPopularity = items => [...items].sort((a, b) => b.popularity - a.popularity)
+const topIn = (cats, n) => byPopularity(shelf.filter(p => cats.includes(p.cat))).slice(0, n)
+// One best seller per department first, so the row spans the store.
+function topSellers() {
+  const out = [], seen = new Set()
+  for (const p of byPopularity(shelf)) if (!seen.has(p.dept) && out.length < 12) { seen.add(p.dept); out.push(p) }
+  return out
+}
+const topDeals = () => byPopularity(deals()).slice(0, 12)
+
 export function homePage(base) {
   const promo = (cls, img, eyebrow, title, text, href, cta) => `<a class="ik-promo ${cls}" href="${base}${href}">${img ? `<img src="${img}" alt="" loading="lazy">` : ''}<div><p class="ik-eyebrow">${eyebrow}</p><h2>${title}</h2><p>${text}</p><span class="ik-btn ik-btn-small">${cta}</span></div></a>`
   return `<div class="ik-home" data-reference-state="catalog">
   <h1 class="sr-only">Welcome to IKEA USA</h1>
   <section class="ik-catnav" aria-label="Product categories"><a class="sr-only" href="#ik-home-hero">Skip product categories list</a><div class="ik-catrail">${featuredDepts.map(d => tile(base, d)).join('')}<a class="ik-tile no-img" href="${base}${P}/cat/products-products/"><span class="ik-tile-ph" aria-hidden="true">→</span><span>All products</span></a></div></section>
+  ${carousel(base, 'New lower price', topDeals(), `${base}${P}/offers/`)}
   <section id="ik-home-hero" class="ik-hero"><img src="${RI}/kitchen-planning.jpg" alt="A light kitchen with wood fronts, open shelves and a dining table"><div class="ik-hero-card ik-family-yellow"><p class="ik-eyebrow">IKEA Family price</p><h2>IKEA Family price</h2><p>Members save 10% on SEKTION kitchens. Join IKEA Family for free and get member prices on selected products.</p><a class="ik-btn" href="${base}${P}/ikea-family/">Join or log in</a> <a class="ik-btn ik-btn-secondary" href="${base}${P}/offers/">See all offers</a></div></section>
   <section class="ik-sec"><h2>Holiday hosting?</h2><div class="ik-promos">${promo('wide', `${RI}/kitchen-accessories.jpg`, 'Kitchen &amp; tableware', 'Thanksgiving prep starts now', 'Serveware, cookware and table linens for every gathering.', `${P}/cat/cookware-tableware-kt001/`, 'Shop kitchenware')}${promo('', inspiration[8].src, 'New', 'Fall in love with our newest designs', 'Warm colors and soft textures for the new season.', `${P}/new/new-products/`, 'Shop new arrivals')}</div></section>
+  ${carousel(base, 'Top sellers', topSellers(), `${base}${P}/cat/products-products/`)}
   <section class="ik-sec ik-food"><div><p class="ik-eyebrow">IKEA Food</p><h2>Delicious deals on your favorite foods</h2><p>Stock up at the Swedish Food Market and enjoy restaurant offers for IKEA Family members.</p><a class="ik-btn ik-btn-secondary" href="${base}${P}/cat/ikea-food-restaurant-fb001/">Shop Swedish food</a></div><img src="${imageByTitle['IKEA Food & Swedish restaurant']}" alt="" loading="lazy"></section>
   <section class="ik-sec"><h2>IKEA Family offers</h2><p>Members save more every day, every visit. Enjoy member-only offers, 90-day price protection, free coffee and tea and more.</p><div class="ik-chips"><a href="${base}${P}/ikea-family/">IKEA Family benefits</a><a href="${base}${P}/offers/">All offers</a><a href="${base}${P}/profile/login/">Join or log in</a></div></section>
   <section class="ik-sec"><h2>Right now at IKEA</h2><div class="ik-grid4">${[['Deals', `${P}/offers/`, 'Save online and in-store.'], ['Shop new arrivals', `${P}/new/new-products/`, 'See what’s new this season.'], ['Winter holiday shop', `${P}/cat/winter-holidays-wt001/`, 'Holiday decor, lights and treats.'], ['IKEA Live shopping', `${P}/ideas/`, 'Get inspired by our experts.']].map(([t, h, d]) => `<a class="ik-card" href="${base}${h}"><h3>${t}</h3><p>${d}</p></a>`).join('')}</div></section>
+  ${carousel(base, 'New arrivals', newArrivals().sort((a, b) => b.popularity - a.popularity).slice(0, 12), `${base}${P}/new/new-products/`)}
+  ${carousel(base, 'Bestsellers for the bedroom', topIn(['beds-bm003', 'mattresses-bm002', 'bedding-tl004', 'nightstands-20656', 'dressers-storage-drawers-st004'], 10), `${base}${P}/cat/beds-mattresses-bm001/`)}
+  ${carousel(base, 'Organize your home office', topIn(['desks-computer-desks-20649', 'desk-chairs-20652', 'desk-accessories-10573', 'gaming-furniture-55002', 'lamps-light-fixtures-li002'], 10), `${base}${P}/cat/workspace-desks-chairs-fu004/`)}
   <section class="ik-sec"><h2>Shop accessories for every room</h2><p>Small changes with big impact: textiles, lighting, plants and decor to refresh any space.</p><h3>Inspiration for every room</h3><div class="ik-rooms">${rooms.slice(0, 8).map((r, i) => `<a href="${base}${P}/rooms/${r.slug}/"><img src="${inspiration[i].src}" alt=""><span>${esc(r.title)}</span></a>`).join('')}</div></section>
   <section class="ik-sec"><h2>As seen on Instagram</h2><p>Real homes, real ideas. Share yours with #IKEAUSA.</p><div class="ik-insta">${inspiration.slice(4, 10).map(i => `<a href="${base}${P}/ideas/"><img src="${i.src}" alt="${esc(i.alt)}"></a>`).join('')}</div></section>
   <section class="ik-sec"><h2>Discover how convenient shopping at IKEA can be!</h2><div class="ik-grid4"><a class="ik-card" href="${base}${P}/customer-service/services/product-reservation/"><h3>Need it fast? Try Click &amp; collect!</h3><p>Order online and pick up at your local IKEA store.</p></a><a class="ik-card" href="${base}${P}/customer-service/services/delivery/"><h3>Delivery</h3><p>Small order shipping and large item delivery options.</p></a><a class="ik-card" href="${base}${P}/customer-service/services/assembly/"><h3>Assembly by Taskrabbit</h3><p>Let a Tasker put it together.</p></a><a class="ik-card" href="${base}${P}/customer-service/mobile-apps/"><h3>The IKEA app</h3><p>Shop, scan and save on the go.</p></a></div></section>
@@ -52,10 +71,10 @@ export function homePage(base) {
 }
 
 function productsPage(base) {
-  return `${head(base, [], 'Products')}<div class="ik-alldepts">${menuDepartments.map(slug => categoryIndex.get(slug)).map(d => `<section><h2><a href="${base}${P}/cat/${d.slug}/">${esc(d.title)}</a></h2><div class="ik-subrail">${tile(base, { ...d, title: 'Shop all', image: d.title })}${d.subs.map(s => tile(base, { ...s, parent: d })).join('')}</div></section>`).join('')}</div>`
+  return `${head(base, [], 'Products')}${carousel(base, 'Top sellers', topSellers())}<div class="ik-alldepts">${menuDepartments.map(slug => categoryIndex.get(slug)).map(d => `<section><h2><a href="${base}${P}/cat/${d.slug}/">${esc(d.title)}</a></h2><div class="ik-subrail">${tile(base, { ...d, title: 'Shop all', image: d.title })}${d.subs.map(s => tile(base, { ...s, parent: d })).join('')}</div></section>`).join('')}</div>`
 }
 
-function categoryPage(base, cat) {
+function categoryPage(base, cat, query = {}) {
   const trail = [['Products', '/cat/products-products/']]
   if (cat.parent) trail.push([cat.parent.title, `/cat/${cat.parent.slug}/`])
   trail.push([cat.title])
@@ -63,8 +82,7 @@ function categoryPage(base, cat) {
   const anchor = /storage|shelv|dresser|wardrobe|cabinet|kids/i.test(cat.slug)
   return `${head(base, trail, cat.title, `Discover ${esc(cat.title.toLowerCase())} at IKEA — well-designed, functional and affordable, with options for every style and space.`)}
   ${cat.subs.length ? `<section class="ik-subrail" aria-label="Categories">${cat.subs.map(s => tile(base, { ...s, parent: cat })).join('')}</section>` : ''}
-  ${filterBar(base, `${base}${P}/cat/${cat.slug}/`)}
-  ${emptyResults(base, cat.title)}
+  ${inCategory(cat.slug).length ? listing(base, `${base}${P}/cat/${cat.slug}/`, query, inCategory(cat.slug)) : `${filterBar(base, `${base}${P}/cat/${cat.slug}/`)}${emptyResults(base, cat.title)}`}
   ${anchor ? `<section class="ik-sec ik-band"><div><h2>Remember to anchor furniture to the wall</h2><p>Tip-over accidents can be prevented. Secure chests, dressers and bookcases to the wall with the included restraint.</p><a class="ik-link" href="${base}${P}/safety-at-home/">Safety at Home</a></div></section>` : ''}
   <section class="ik-sec"><h2>Business owner? Join IKEA Business Network today</h2><p>Get member offers and planning help for your business.</p><a class="ik-link" href="${base}${P}/ikea-business/network/">See more</a></section>
   ${siblings.length ? `<section class="ik-sec"><h2>Related categories</h2><div class="ik-chips">${siblings.map(s => `<a href="${base}${P}/cat/${s.slug}/">${esc(s.title)}</a>`).join('')}</div></section>` : ''}
@@ -76,17 +94,18 @@ function roomsPage(base) {
 }
 function roomPage(base, room, i) {
   const cats = (roomCategories[room.slug] || []).map(s => categoryIndex.get(s)).filter(Boolean)
-  return `${head(base, [['Rooms', '/rooms/'], [room.title]], room.title, `Ideas, inspiration and furniture for your ${esc(room.title.toLowerCase())}.`)}<section class="ik-hero small"><img src="${inspiration[i % 12].src}" alt="" ><div class="ik-hero-card"><h2>${esc(room.title)} inspiration</h2><p>Make the most of your space with smart solutions and everyday comfort.</p><a class="ik-btn" href="${base}${P}/ideas/">Get inspired</a></div></section><section class="ik-sec"><h2>Shop by category</h2><div class="ik-subrail">${cats.map(c => tile(base, c)).join('')}</div></section><section class="ik-sec"><h2>Plan your ${esc(room.title.toLowerCase())}</h2><p>Use our planning tools or book a planning appointment with an IKEA expert.</p><a class="ik-link" href="${base}${P}/customer-service/services/planning-consultation/">Planning services</a></section>`
+  return `${head(base, [['Rooms', '/rooms/'], [room.title]], room.title, `Ideas, inspiration and furniture for your ${esc(room.title.toLowerCase())}.`)}<section class="ik-hero small"><img src="${inspiration[i % 12].src}" alt="" ><div class="ik-hero-card"><h2>${esc(room.title)} inspiration</h2><p>Make the most of your space with smart solutions and everyday comfort.</p><a class="ik-btn" href="${base}${P}/ideas/">Get inspired</a></div></section><section class="ik-sec"><h2>Shop by category</h2><div class="ik-subrail">${cats.map(c => tile(base, c)).join('')}</div></section>${carousel(base, `Popular in ${room.title.toLowerCase()}`, byPopularity(cats.flatMap(c => inCategory(c.slug)).filter((p, i, all) => all.indexOf(p) === i)).slice(0, 12))}<section class="ik-sec"><h2>Plan your ${esc(room.title.toLowerCase())}</h2><p>Use our planning tools or book a planning appointment with an IKEA expert.</p><a class="ik-link" href="${base}${P}/customer-service/services/planning-consultation/">Planning services</a></section>`
 }
 
-function offersPage(base) {
+function offersPage(base, query = {}) {
   const offerDepts = ['sofas-armchairs-700640', 'bathroom-ba001', 'baby-kids-bc001', 'beds-mattresses-bm001', 'storage-organization-st001', 'kitchen-appliances-ka001'].map(s => categoryIndex.get(s))
   return `${head(base, [], 'IKEA Offers, Sales and Deals', 'Save online and in-store. <a href="#terms">See full Terms and Conditions</a>')}
   <section class="ik-hero small"><img src="${RI}/kitchen-planning.jpg" alt=""><div class="ik-hero-card ik-family-yellow"><h2>IKEA Family members: Make your dream kitchen a reality</h2><p>Members save on SEKTION kitchens during the offer period.</p><a class="ik-btn" href="${base}${P}/ikea-family/">Join or log in</a></div></section>
   <section class="ik-sec"><h2>Make room for fall. Save online and in-store.</h2><p>Discover lower prices across the store, from storage to sofas.</p></section>
   <section class="ik-sec"><h2>Get more savings in-store</h2><p>Visit the As-is section and find in-store-only offers at your local IKEA.</p><a class="ik-link" href="${base}${P}/stores/">Find a Location</a></section>
   <section class="ik-sec"><h2>Explore offers</h2><div class="ik-chips"><a href="${base}${P}/offers/">All offers</a>${offerDepts.map(d => `<a href="${base}${P}/cat/${d.slug}/">${esc(d.title)}</a>`).join('')}</div></section>
-  ${filterBar(base, `${base}${P}/offers/`)}${emptyResults(base, 'offers')}
+  <section class="ik-sec"><h2>All offers</h2><p>New lower prices and IKEA Family member prices across the store.</p></section>
+  ${listing(base, `${base}${P}/offers/`, query, byPopularity(deals()), { keepOrder: true })}
   <section class="ik-sec"><h2>Shop by offer</h2><div class="ik-subrail">${offerDepts.map(d => tile(base, d)).join('')}</div></section>
   <section class="ik-sec" id="terms"><h3>Terms and Conditions</h3><p>Offers are valid for a limited time, while supplies last, and may vary by store and online. IKEA Family offers require a valid IKEA Family membership.</p></section>`
 }
@@ -124,7 +143,7 @@ function storesPage(base, req) {
   const list = st ? storeList.filter(s => s[1] === st) : storeList
   const states = [...new Set(storeList.map(s => s[1]))]
   return `${head(base, [], 'Find an IKEA location near you')}<form class="ik-form inline" action="${base}${P}/stores/" method="get"><label for="store-state">Filter by state</label><select id="store-state" name="state"><option value="">All states</option>${states.map(s => `<option${s === st ? ' selected' : ''}>${s}</option>`).join('')}</select><button class="ik-btn">Search</button></form>
-  <section class="ik-sec"><h2>IKEA locations</h2>${list.length ? `<ul class="ik-stores">${list.map(([c, s]) => `<li><h3>IKEA ${esc(c)}, ${s}</h3><p>Store hours, directions and services are shown on the store’s own page on the real site.</p></li>`).join('')}</ul>` : `<p>No IKEA locations were captured for ${esc(st)}.</p>`}<p class="ik-note">List captured from the first 30 locations on the real page (Oct 2026).</p></section>
+  <section class="ik-sec"><h2>IKEA locations</h2>${list.length ? `<ul class="ik-stores">${list.map(([c, s]) => `<li><h3>IKEA ${esc(c)}, ${s}</h3><p>Open today 10 a.m.–9 p.m.</p></li>`).join('')}</ul>` : `<p>There are no IKEA stores in ${esc(st)}.</p>`}</section>
   <section class="ik-sec"><h2>IKEA in Best Buy: A new way to plan and order</h2><p>Plan and order IKEA kitchens and more with an IKEA co-worker at selected Best Buy stores.</p></section>
   <section class="ik-sec"><h2>Pick-up locations (furniture/large orders)</h2><p>Collect your order at a pick-up location near you.</p><a class="ik-link" href="${base}${P}/customer-service/services/pickup-locations-pub71efcf80/">Pick-up locations</a></section>`
 }
@@ -137,8 +156,8 @@ function trackPage(base, { order = '', email = '', error = '', result = '' } = {
   <section class="ik-sec"><h2>Understand your order status</h2><ol class="ik-steps">${steps.map(s => `<li><h3>${s}</h3><p>${{ 'Preparing order': 'You can still cancel the order or change the delivery date.', 'Picking order': 'The order can no longer be canceled, but items can be returned after you receive them.', 'Preparing delivery': 'Your order is being packed and handed to the carrier.', 'On its way': 'Your order is out for delivery or ready for pick-up.', Delivered: 'Your order has been delivered or collected.' }[s]}</p></li>`).join('')}</ol></section>${helpBox(base)}`
 }
 
-function newPage(base) {
-  return `${head(base, [['Products', '/cat/products-products/'], ['New arrivals']], 'Shop new arrivals', 'New products, colors and collections — arriving all the time.')}${filterBar(base, `${base}${P}/new/new-products/`)}${emptyResults(base, 'new arrivals')}<section class="ik-sec"><h2>Explore categories</h2><div class="ik-subrail">${featuredDepts.slice(0, 8).map(d => tile(base, d)).join('')}</div></section>`
+function newPage(base, query = {}) {
+  return `${head(base, [['Products', '/cat/products-products/'], ['New arrivals']], 'Shop new arrivals', 'New products, colors and collections — arriving all the time.')}${listing(base, `${base}${P}/new/new-products/`, query, byPopularity(newArrivals()), { keepOrder: true })}<section class="ik-sec"><h2>Explore categories</h2><div class="ik-subrail">${featuredDepts.slice(0, 8).map(d => tile(base, d)).join('')}</div></section>`
 }
 
 function loginPage(base, { error = '', email = '' } = {}) {
@@ -206,7 +225,7 @@ export function ikeaSite({ render, fixture = false }) {
     router.get(`${P}/cat/:slug/`, (req, res, next) => {
       const cat = categoryIndex.get(req.params.slug)
       if (!cat) return next()
-      render(req, res, cat.title, categoryPage(base(res), cat))
+      render(req, res, cat.title, categoryPage(base(res), cat, req.query))
     })
     router.get(`${P}/rooms/`, page('IKEA Rooms', b => roomsPage(b)))
     router.get(`${P}/rooms/:slug/`, (req, res, next) => {
@@ -214,9 +233,9 @@ export function ikeaSite({ render, fixture = false }) {
       if (i < 0) return next()
       render(req, res, rooms[i].title, roomPage(base(res), rooms[i], i))
     })
-    router.get(`${P}/offers/`, page('IKEA Offers, Sales and Deals', b => offersPage(b)))
+    router.get(`${P}/offers/`, page('IKEA Offers, Sales and Deals', (b, req) => offersPage(b, req.query)))
     router.get(`${P}/ideas/`, page('Home ideas and design inspiration', b => ideasPage(b)))
-    router.get(`${P}/new/new-products/`, page('Shop new arrivals', b => newPage(b)))
+    router.get(`${P}/new/new-products/`, page('Shop new arrivals', (b, req) => newPage(b, req.query)))
     router.get(`${P}/customer-service/services/`, page('Services', b => servicesPage(b)))
     router.get(`${P}/shoppingcart/`, page('Shopping bag', b => `${head(b, [], 'Shopping bag')}<section class="ik-empty-bag"><h2>Your bag is empty</h2><p>When you add products to your shopping bag, they will appear here.</p><a class="ik-btn" href="${b}${P}/cat/products-products/">Continue shopping</a> <a class="ik-btn ik-btn-secondary" href="${b}${P}/profile/login/">Log in or sign up</a></section>`))
     router.get(`${P}/favorites/`, page('Favorites', b => `${head(b, [], 'Favorites')}<section class="ik-empty-bag"><h2>Your list is empty</h2><p>Save the products you love by selecting the heart. Log in to keep your favorites across devices.</p><a class="ik-btn" href="${b}${P}/profile/login/">Log in or sign up</a></section>`))
@@ -248,7 +267,8 @@ export function ikeaSite({ render, fixture = false }) {
   router.get(`${P}/customer-service/track-manage-order/lookup/`, (req, res) => {
     const order = typeof req.query.order === 'string' ? req.query.order.trim() : '', email = typeof req.query.email === 'string' ? req.query.email.trim() : ''
     const error = !order || !email ? 'Enter your order number and the email or phone number used for the order.' : ''
-    const result = error ? '' : `<div class="ik-results-empty" role="status"><h3>We couldn’t find your order</h3><p>No order matching <strong>${esc(order)}</strong> was found for this email or phone number. Check the details and try again.</p></div>`
+    const found = !error && listOrders({ store: 'ikea' }).find(o => o.order_number === order && String(o.customer?.email || '').toLowerCase() === email.toLowerCase())
+    const result = error ? '' : found ? `<div class="ik-results-empty" role="status" data-order-status="preparing"><h3>Order ${esc(found.order_number)}: Preparing order</h3><p>${found.items.map(i => `${esc(i.title)} × ${i.qty}`).join('<br>')}</p><p>Total $${found.totals.total.toFixed(2)} · ${found.fulfillment.method === 'pickup' ? `Click &amp; Collect at ${esc(found.fulfillment.store_location)}` : 'Delivery'}</p></div>` : `<div class="ik-results-empty" role="status"><h3>We couldn’t find your order</h3><p>No order matching <strong>${esc(order)}</strong> was found for this email or phone number. Check the details and try again.</p></div>`
     render(req, res, 'Track and manage your order', trackPage(base(res), { order, email, error, result }), error ? 400 : 200)
   })
   router.get(`${P}/customer-service/gift-cards-pub3d1efe50/balance/`, (req, res) => {

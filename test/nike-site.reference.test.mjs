@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { startServer } from './helpers.js'
 
-test('Nike reference site reproduces nike.com chrome and service pages without adding purchasable products', async () => {
+test('Nike reference site reproduces nike.com chrome and service pages; the shelf never makes captured or fixture listings purchasable', async () => {
   const srv = await startServer()
   try {
     const c = srv.client()
@@ -14,8 +14,10 @@ test('Nike reference site reproduces nike.com chrome and service pages without a
 
     const listing = await c.get('/nike/w/mens-shoes-nik1zy7ok?gender=Men')
     assert.equal(listing.status, 200)
-    assert.match(listing.text, /<h1>Men&#39;s Shoes &amp; Sneakers<\/h1>/)
-    assert.doesNotMatch(listing.text, /data-product-kind|data-reference-state="uncaptured"/)
+    assert.match(listing.text, /<h1>Men&#39;s Shoes &amp; Sneakers <span class="nks-count">\(\d+\)<\/span><\/h1>/)
+    // The nike.com assortment (shelf.js) fills category grids; nothing is marked uncaptured.
+    assert.match(listing.text, /data-shelf-product="[^"]+"/)
+    assert.doesNotMatch(listing.text, /data-reference-state="uncaptured"/)
     assert.equal((await c.get('/nike/w/not-a-real-category')).status, 404)
 
     for (const path of ['/help', '/help/a/returns-policy', '/retail', '/gift-cards', '/membership', '/cart', '/orders/details', '/sitemap', '/men', '/jordan']) {

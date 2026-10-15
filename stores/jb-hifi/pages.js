@@ -5,8 +5,10 @@ import { orderStatus } from '../../lib/retail-state.js'
 import { DEPARTMENT_DEFS, slugify, selectedProduct, lineKey, stockLimit } from './catalog.js'
 import { catalogHome, catalogListing, collectionFor } from './browsing.js'
 import { siteHeader, siteFooter, siteHome } from './site.js'
-import { PRODUCTS } from './data.js'
-import { esc, money, disclaimer } from '../../lib/html.js'
+import { LISTED } from './data.js'
+import { shelfImage, shelfGallery } from './shelf-art.js'
+import { DEPARTMENTS as SITE_DEPARTMENTS } from './site-data.js'
+import { esc, money, disclaimer, publicNotice } from '../../lib/html.js'
 import { byId, productPath, STATES, SHIPPING_METHODS, COURIER_METHOD, PREORDER_BONUS } from './data.js'
 
 const NAME = 'JB Hi-Fi'
@@ -22,17 +24,17 @@ export function supportInformationPage(base, topic = 'Shopping information') {
  const title = String(topic).slice(0,100)
  const q = title.toLowerCase()
  let content
- if (/password|signing in/.test(q)) content = '<p>Password recovery is unavailable in this shop. Sign in using an existing account or continue shopping as a guest where offered.</p>'
- else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Financing applications and new gift-card purchases are unavailable in this shop.</p>'
- else if (/cookie|privacy/.test(q)) content = '<p>This synthetic shop uses a session cookie to keep your basket, account and checkout together. Orders are recorded for the benchmark. Real retailer advertising and tracking services are not connected.</p>'
- else if (/return|refund|cancel/.test(q)) content = '<p>Review the item, format, delivery choice and total before placing your order. Digital redemption codes may have different return conditions from physical products. Post-order returns, refunds and cancellation requests are unavailable in this shop.</p>'
+ if (/password|signing in/.test(q)) content = '<p>To reset your password, select Forgot your password? on the log in page. You can also check out as a guest.</p>'
+ else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Gift cards can be redeemed at the payment step of checkout.</p>'
+ else if (/cookie|privacy/.test(q)) content = '<p>We use cookies to keep your cart, account and checkout together and to improve your shopping experience. See our Privacy policy for more information.</p>'
+ else if (/return|refund|cancel/.test(q)) content = '<p>Review the item, format, delivery choice and total before placing your order. Digital redemption codes may have different return conditions from physical products. To cancel an order or request a return, open the order in your account or contact our Customer Support team.</p>'
  else if (/delivery|shipping|collection/.test(q)) content = '<p>Product pages show available fulfilment choices. Confirm your address or collection store at checkout to see the order-specific delivery estimate and charges. Pre-orders are fulfilled when available; wait for collection confirmation before visiting a store.</p>'
- else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming. This is a synthetic shopping environment: local orders record your selected items without charging a real payment method.</p>'
+ else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming.</p>' + publicNotice('<p>This is not the real JB Hi-Fi website: orders record your selected items without charging a real payment method.</p>')
  else if (/read more/.test(q)) content = '<p>PEGI 18 identifies games intended for adults. You must confirm you are 18 or over before adding this age-rated game to your bag.</p>'
  else if (/edit/.test(q)) content = '<p>Prices are in Australian dollars and include GST.</p>'
- else if (/mobile phones/.test(q)) content = '<p>Mobile phones are not included in this shop’s current catalogue. Browse the available technology and gaming departments instead.</p>'
- else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat and telephone support are unavailable in this shop. Product availability and delivery options are shown on the product page and at checkout.</p>'
- else content = '<p>This service is unavailable in this shop. You can browse products, check availability and complete the supported shopping flows.</p>'
+ else if (/mobile phones/.test(q)) content = '<p>Mobile phones are not currently available to buy online. Browse our technology and gaming departments instead.</p>'
+ else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat is currently unavailable; please try again later. Product availability and delivery options are shown on the product page and at checkout.</p>'
+ else content = '<p>This service is currently unavailable. Please try again later.</p>'
  return `<section><h1>${esc(title)}</h1>${content}<p><a href="${base}/">Continue shopping</a> · <a href="${base}/account/orders">Your account and orders</a></p></section>`
 }
 // JB prints AUD prices with a plain "$" ("$129.00"); only the checkout total carries an "AUD" prefix.
@@ -91,9 +93,21 @@ function addedModal(base, p, closeHref) {
 function badges(p) { return p.badges.length ? `<div class="jb-badges">${p.badges.map(b => `<span class="jb-badge-tag is-${b.toLowerCase().replace(/[^a-z]+/g, '-')}">${esc(b)}</span>`).join('')}</div>` : '' }
 function stars(p) { return p.stars ? `<div class="jb-stars" aria-label="Rated ${p.stars} out of 5 from ${p.reviews} reviews">&#9733;&#9733;&#9733;&#9733;&#9733; <span>${p.stars} (${p.reviews})</span></div>` : '' }
 function priceTag(p, big = false) { return `<div class="jb-tag ${big ? 'jb-tag-big' : ''}"><span>${tagPrice(p.price)}</span></div>` }
-export function artwork(p,className='') { return productImage('jb-hifi',p,{className}) }
+export function artwork(p,className='') { return p.shelf ? shelfImage(p,{className}) : productImage('jb-hifi',p,{className}) }
 const optionText = p => p.variantId ? `<div class="jb-fine">${esc(p.variantLabel)}</div>` : ''
-function related(p) { return PRODUCTS.filter(u=>u.id!==p.id&&u.crumbs[0]===p.crumbs[0]).slice(0,6) }
+function related(p) {
+ if(fixtureCatalog) return LISTED.filter(u=>u.id!==p.id&&u.crumbs[0]===p.crumbs[0]).slice(0,6)
+ const pool=LISTED.filter(u=>u.id!==p.id&&u.crumbs[0]===p.crumbs[0]&&u.orderable!==false)
+ return [...pool.filter(u=>u.type===p.type),...pool.filter(u=>u.type!==p.type)].slice(0,6)
+}
+// Department and category links for a product's breadcrumb (all departments in the Products menu).
+function crumbHref(base,p,i) {
+ const dept=collectionFor(p.crumbs[0])
+ if(dept)return `${base}/collections/${dept.slug}${i?'/'+slugify(p.type):''}`
+ const site=SITE_DEPARTMENTS.find(d=>d.title===p.crumbs[0])
+ return `${base}/collections/${site?.slug||'all'}`
+}
+const wasPrice=p=>p.ticket&&p.ticket>p.price?`<div class="jb-was"><span class="jb-save">SAVE ${tagPrice(p.ticket-p.price)}</span> <s>${tagPrice(p.ticket)}</s></div>`:''
 function ctaForm(base, p, returnTo, block = true) {
   if (p.variants && !p.variantId) return `<a class="jb-btn ${block?'jb-btn-block':''}" href="${productPath(base,p)}">Choose options</a>`
   if (!p.orderable || p.stock === 0) return `<span class="jb-btn jb-btn-grey ${block ? 'jb-btn-block' : ''}" aria-disabled="true">${esc(p.cta)}</span>`
@@ -109,7 +123,7 @@ export function tile(base, p, returnTo) {
   <h3><a href="${detail}">${esc(p.title)}</a></h3>
   <div class="jb-subtitle">${esc(p.subtitle)}</div>${optionText(p)}
   ${stars(p)}
-  ${priceTag(p)}
+  ${priceTag(p)}${wasPrice(p)}
   ${p.deliveryFrom ? `<div class="jb-delivery-from">+ DELIVERY FROM ${tagPrice(p.deliveryFrom)}</div>` : ''}
   ${ctaForm(base, p, returnTo)}
 </article>`
@@ -125,7 +139,7 @@ export function productPage({ base, p, siblings, availability, stores = [], perk
   const self = productPath(base, p)+(p.variantId?'?variant='+p.variantId:'')
   const inStore = p.orderable && !p.badges.includes('ONLINE ONLY')
   const preorder = p.cta === 'Pre-order'
-  const availPanel = availability && !fixtureCatalog ? `<div class="jb-store-panel"><p>Store pickup availability has not been verified.</p></div>` : availability ? `<div class="jb-store-panel"><div class="jb-store-panel-head"><b>Your store</b> &nbsp;·&nbsp; Click &amp; Collect &nbsp;·&nbsp; Check store availability</div>
+  const availPanel = availability && !fixtureCatalog ? `<div class="jb-store-panel"><p>Store stock information is currently unavailable. Please try again later.</p></div>` : availability ? `<div class="jb-store-panel"><div class="jb-store-panel-head"><b>Your store</b> &nbsp;·&nbsp; Click &amp; Collect &nbsp;·&nbsp; Check store availability</div>
     ${inStore ? `<p>Stores near <b>${esc(availability === 'my location' ? 'your location' : availability)}</b>:</p><ul class="jb-store-list">${stores.map(s => `<li><a href="${base}/stores/${s.id}"><b>${esc(s.name)}</b></a><br><span class="jb-fine">${esc(s.address)}</span><br><span class="jb-avail-ok">&#10003; Click &amp; Collect${preorder ? ` — pre-order now, collect from ${esc(p.preloadFrom ?? p.releaseLong)}` : ''}</span></li>`).join('')}</ul>` : `<p class="jb-error">Sorry, there are no in-store options available for this product.</p>`}
     <a class="jb-fine" href="${self}">Close</a></div>` : ''
   const deliveryText = !p.orderable ? (p.cta==='Coming soon'?'Coming soon':'Out of stock') : preorder ? `Available to pre-order${p.preloadFrom ? ` — delivery starts ${esc(p.preloadFrom)}` : ''}` : 'Available for delivery'
@@ -135,16 +149,18 @@ export function productPage({ base, p, siblings, availability, stores = [], perk
   <p class="jb-perks-title">WANT A $10 WELCOME COUPON*?</p>
   <p class="jb-perks-sub">JOIN FOR FREE MEMBER BENEFITS!</p>
   <p class="jb-fine">Valid for 28 days from issue. T&amp;Cs apply.</p>
-  <a class="jb-btn jb-btn-block" href="${base}/perks">Explore JB Perks</a><p class="jb-fine">Real coupons are not issued in this shop.</p>
+  <a class="jb-btn jb-btn-block" href="${base}/perks">Explore JB Perks</a>${publicNotice('<p class="jb-fine">This is not the real JB Hi-Fi website. Real coupons are not issued.</p>')}
 </aside>` : ''
   const referenceDlc = reference ? `<section class="jb-dlc jb-reference-dlc"><h2 class="jb-display">${esc(PREORDER_BONUS.heading)}</h2><img src="/static/reference/jb-hifi/preorder-dlc.jpg" alt="Pre-Order DLC!"><div><h3>${esc(PREORDER_BONUS.title)}</h3><p>${esc(PREORDER_BONUS.text)}</p><p class="jb-fine">${esc(PREORDER_BONUS.ends)}</p></div></section>` : ''
   const variants = siblings.map(s => `<a class="jb-variant ${s.id === p.id ? 'is-selected' : ''}" href="${productPath(base, s)}" aria-current="${s.id === p.id ? 'true' : 'false'}"><b>${esc(s.variantLabel)}</b><span>${tagPrice(s.price)}</span></a>`).join('')
-  const crumbs = [`<a href="${base}/">Home</a>`, ...p.crumbs.map((c,i) => `<a href="${base}/collections/${collectionFor(p.crumbs[0])?.slug||'gaming'}${i?'/'+slugify(p.type):''}">${esc(c)}</a>`), esc(p.title)].join(' &rsaquo; ')
+  const crumbs = [`<a href="${base}/">Home</a>`, ...p.crumbs.map((c,i) => `<a href="${crumbHref(base,p,i)}">${esc(c)}</a>`), esc(p.title)].join(' &rsaquo; ')
+  // Assortment games list the same title on its other consoles, like JB's "Primary Format - Games" buttons.
+  const formats = p.shelf && p.platformName && / games$/.test(p.type) ? LISTED.filter(u=>u.shelf&&u.title===p.title&&/ games$/.test(u.type)) : []
   return `<nav class="jb-crumbs" aria-label="Breadcrumb">${crumbs}</nav>
 <div class="jb-pdp${reference ? ' jb-reference-pdp' : ''}">
   <div class="jb-gallery">
     <div class="jb-gallery-top">${isGame ? '<span class="jb-badge-tag is-pre-order-dlc">PRE-ORDER DLC</span>' : ''}<a href="${base}/search?query=${encodeURIComponent(p.title)}" class="jb-fine">Similar items &rsaquo;</a></div>
-    ${productGallery('jb-hifi',p)}
+    ${p.shelf ? shelfGallery(p) : productGallery('jb-hifi',p)}
     ${p.variants?`<div class="jb-gallery-options" aria-label="Product image options">${p.variants.map(v=>`<a href="${productPath(base,p)}?variant=${v.id}" ${v.id===p.variantId?'aria-current="true"':''}>${artwork(selectedProduct(p,v.id))}<span>${esc(v.label)}</span></a>`).join('')}</div>`:''}
     ${referenceDlc}
   </div>
@@ -153,10 +169,11 @@ export function productPage({ base, p, siblings, availability, stores = [], perk
     ${isGame ? `<div class="jb-platform-logo">${reference ? `<img src="/static/reference/jb-hifi/${p.platform === 'ps5' ? 'ps5' : 'xbox'}-mark.png" alt="${esc(p.platformName)}">` : esc(p.platformName)}</div>` : ''}
     ${reference ? '' : `<a class="jb-brand-label" href="${base}/brands/${slugify(p.brand)}">${esc(p.brand)}</a>`}<h1>${esc(p.title)}</h1>${optionText(p)}${stars(p)}
     <div class="jb-ids">MODEL: ${esc(p.model ?? p.id)} &nbsp; SKU: ${esc(p.id)}${reference ? '' : ` &nbsp; PLU: ${esc(p.model ?? p.id)}`}</div>
-    ${reference ? `<div class="jb-tag jb-tag-big"><span><i class="jb-reference-currency">$</i><b class="jb-reference-amount">${esc(tagPrice(p.price).slice(1))}</b></span></div>` : priceTag(p, true)}
+    ${reference ? `<div class="jb-tag jb-tag-big"><span><i class="jb-reference-currency">$</i><b class="jb-reference-amount">${esc(tagPrice(p.price).slice(1))}</b></span></div>` : priceTag(p, true)+wasPrice(p)}
     <div class="jb-bnpl"><a href="${informationHref(base, 'afterpay')}" class="jb-bnpl-afterpay">${reference ? '<img src="/static/reference/jb-hifi/bnpl-afterpay.svg" alt="afterpay">' : 'afterpay'}</a><a href="${informationHref(base, 'zip')}" class="jb-bnpl-zip">${reference ? '<img src="/static/reference/jb-hifi/bnpl-zip.svg" alt="zip">' : 'zip'}</a><a href="${informationHref(base, 'PayPal')}" class="jb-bnpl-paypal">${reference ? '<img src="/static/reference/jb-hifi/bnpl-paypal.svg" alt="PayPal">' : 'PayPal'}</a></div>
     <div class="jb-coupon-row">${reference ? '<img class="jb-coupon-smile" src="/static/reference/jb-hifi/coupon-smile.svg" alt="">' : '&#127991;'} <div><a href="${base}/account/login?return_to=${encodeURIComponent(self)}">Log in</a> to see if you have coupons.</div></div>
     ${isGame ? `<div class="jb-variants"><div class="jb-label">Primary Format - Games</div><div class="jb-variant-row">${reference ? '' : `<a class="jb-variant" href="${base}/products/grand-theft-auto-vi-the-goodtime-state-vice-city-collection"><b>The Goodtime State - Vice City Collection</b><span>${tagPrice(699)}</span></a>`}${variants}</div></div>` : ''}
+    ${formats.length>1?`<div class="jb-variants"><div class="jb-label">Primary Format - Games</div><div class="jb-variant-row">${formats.map(u=>`<a class="jb-variant ${u.id===p.id?'is-selected':''}" href="${productPath(base,u)}" aria-current="${u.id===p.id}"><b>${esc(u.platformName)}</b><span>${tagPrice(u.price)}</span></a>`).join('')}</div></div>`:''}
     ${p.variants?`<form method="get" action="${productPath(base,p)}" class="jb-option-form"><label for="product-variant">Choose ${Object.keys(p.variants[0].attributes).join(' / ')}<select id="product-variant" name="variant">${p.variants.map(v=>`<option value="${v.id}" ${v.id===p.variantId?'selected':''}>${esc(v.label)} — ${tagPrice(v.price)}${v.stock===0?' · Out of stock':''}</option>`).join('')}</select></label><button class="jb-btn jb-btn-black">Update option</button></form>`:''}
     ${error?`<p class="jb-error" role="alert">${esc(error)}</p>`:''}${reference ? '' : `<p class="jb-fine">Sold by JB Hi-Fi · ${p.orderable&&p.stock>0?'Available to order':'Not currently available'}</p>`}
     <div class="jb-cta-row">${ctaForm(base, p, self, false)}<a class="jb-heart-btn" href="${base}/wishlist/add?id=${p.id}${p.variantId?'&variant='+encodeURIComponent(p.variantId):p.variants?'&variant='+encodeURIComponent(p.variants[0].id):''}" aria-label="Add to wishlist">&#9825;</a></div>
@@ -263,7 +280,7 @@ export function accountPage({ base, user, orders }) {
 export function wishlistPage({ base, p, user }) {
   return `<div class="jb-auth jb-wishlist">
   ${user ? `<h1>Added to your wishlist</h1><p>${esc(p.title)} is in your wishlist.</p><a class="jb-btn" href="${productPath(base, p)+(p.variantId?'?variant='+encodeURIComponent(p.variantId):'')}">Back to product</a>`
-    : `<h1>You're one step away from having this in your wishlist!</h1><p>Create a free JB Hi-Fi account to save ${esc(p.title)} in your wishlist. Real Perks coupons are not issued here.</p>
+    : `<h1>You're one step away from having this in your wishlist!</h1><p>Create a free JB Hi-Fi account to save ${esc(p.title)} in your wishlist.</p>${publicNotice('<p class="jb-fine">This is not the real JB Hi-Fi website. Real Perks coupons are not issued.</p>')}
   <div class="jb-modal-actions"><a class="jb-btn" href="${base}/account/register">Create account</a><a class="jb-btn jb-btn-black" href="${base}/account/login?return_to=${encodeURIComponent(productPath(base, p)+(p.variantId?'?variant='+encodeURIComponent(p.variantId):''))}">Log in</a></div>
   <p><a href="${productPath(base, p)+(p.variantId?'?variant='+encodeURIComponent(p.variantId):'')}">Back to product</a></p>`}
 </div>`
@@ -272,7 +289,7 @@ export function wishlistPage({ base, p, user }) {
 export function simplePage({ title, html }) { return `<div class="jb-simple"><h1>${esc(title)}</h1>${html}</div>` }
 
 export function storesPage({ base, query, stores }) {
-  if (!fixtureCatalog) return `<div class="jb-simple"><h1>Find a store</h1><p>Retail-store pickup availability has not been verified. This is not a no-stock result.</p></div>`
+  if (!fixtureCatalog) return `<div class="jb-simple"><h1>Find a store</h1><p>Store stock information is currently unavailable. Please try again later.</p></div>`
   return `<nav class="jb-crumbs" aria-label="Breadcrumb"><a href="${base}/">Home</a> &rsaquo; Stores</nav>
 <div class="jb-simple"><h1>Find a store</h1>
   <form method="get" action="${base}/stores" class="jb-avail-form"><label for="store-q" class="visually-hidden">Enter postcode or suburb</label><input id="store-q" name="q" type="text" placeholder="Enter postcode or suburb" value="${esc(query)}"><button type="submit" class="jb-btn jb-btn-black jb-btn-small">Search</button></form>
@@ -335,8 +352,8 @@ export function informationPage({ urls, t, values = {}, errors = {}, stores = nu
   const reference = nativeCart(t)
   const method = values.delivery_method || 'delivery'
   const pointId = values.point_id || points[0]?.id
-  const radio = (id, label, icon) => `<label class="jb-method ${method === id ? 'is-selected' : ''}" for="delivery_method_${id}"><input type="radio" id="delivery_method_${id}" name="delivery_method" value="${id}" ${!fixtureCatalog && id === 'pickup' ? 'disabled' : ''} ${method === id ? 'checked' : ''}><span class="jb-method-icon" aria-hidden="true">${reference ? `<img src="/static/reference/jb-hifi/checkout-${id === 'collection_point' ? 'collection' : id}.svg" alt="">` : icon}</span><span>${label}</span>${id === 'delivery' ? '<span class="jb-method-cost">Calculated at next step</span>' : id === 'pickup' ? (fixtureCatalog ? '<span class="jb-method-cost">Free</span>' : '<span class="jb-method-cost">Not verified</span>') : ''}</label>`
-  const storeList = !fixtureCatalog ? `<div class="jb-notice">Retail-store pickup availability has not been verified.</div>` : stores ? (stores.length ? `<div class="jb-store-results" role="radiogroup" aria-label="Pickup locations">${stores.map(s => `<label class="jb-store-option ${values.store_id === s.id ? 'is-selected' : ''}" for="store_${s.id}"><input type="radio" id="store_${s.id}" name="store_id" value="${s.id}" ${values.store_id === s.id ? 'checked' : ''}><span><b>${esc(s.name)}</b><br><span class="jb-fine">${esc(s.address)}</span><br><span class="jb-fine">${esc(collectNote(t))} Bring your confirmation email/SMS and photo ID.</span></span><span class="jb-store-cost">Free</span></label>`).join('')}</div>`
+  const radio = (id, label, icon) => `<label class="jb-method ${method === id ? 'is-selected' : ''}" for="delivery_method_${id}"><input type="radio" id="delivery_method_${id}" name="delivery_method" value="${id}" ${!fixtureCatalog && id === 'pickup' ? 'disabled' : ''} ${method === id ? 'checked' : ''}><span class="jb-method-icon" aria-hidden="true">${reference ? `<img src="/static/reference/jb-hifi/checkout-${id === 'collection_point' ? 'collection' : id}.svg" alt="">` : icon}</span><span>${label}</span>${id === 'delivery' ? '<span class="jb-method-cost">Calculated at next step</span>' : id === 'pickup' ? (fixtureCatalog ? '<span class="jb-method-cost">Free</span>' : '<span class="jb-method-cost">Unavailable</span>') : ''}</label>`
+  const storeList = !fixtureCatalog ? `<div class="jb-notice">Store pickup is currently unavailable for this order.</div>` : stores ? (stores.length ? `<div class="jb-store-results" role="radiogroup" aria-label="Pickup locations">${stores.map(s => `<label class="jb-store-option ${values.store_id === s.id ? 'is-selected' : ''}" for="store_${s.id}"><input type="radio" id="store_${s.id}" name="store_id" value="${s.id}" ${values.store_id === s.id ? 'checked' : ''}><span><b>${esc(s.name)}</b><br><span class="jb-fine">${esc(s.address)}</span><br><span class="jb-fine">${esc(collectNote(t))} Bring your confirmation email/SMS and photo ID.</span></span><span class="jb-store-cost">Free</span></label>`).join('')}</div>`
     : `<div class="jb-error-box">No stores available with your item<br><span class="jb-fine">Ship your items or search elsewhere.</span></div>`) : ''
   return `<form id="jb-saved-address-form" method="get" action="${urls.information}"></form><div class="jb-co${reference ? ' jb-reference-checkout' : ''}">
   <form method="post" action="${urls.information}" class="jb-co-form" novalidate id="jb-information-form">
@@ -436,7 +453,7 @@ export function paymentPage({ urls, t, info, shipping, pickupStore, collectionPo
     : collection ? ['Method', `${esc(shipping.name)} · ${aud(shipping.price)}`, urls.information]
     : ['Method', `${esc(shipping.name)} (${esc(shipping.eta)}) · ${aud(shipping.price)}`, urls.shipping]
   const pmOption = (id, label, panel) => `<div class="jb-pay-option ${pm === id ? 'is-selected' : ''}"><label class="jb-pay-head" for="payment_method_${id}"><input type="radio" id="payment_method_${id}" name="payment_method" value="${id}" ${pm === id ? 'checked' : ''}> ${label}</label><div class="jb-pay-panel">${panel}</div></div>`
-  const redirectNote = (name) => `<p class="jb-fine">${name} is recorded as your payment choice here. External authorisation and finance applications are not connected; no real payment is taken.</p>`
+  const redirectNote = (name) => `<p class="jb-fine">After you place your order, your ${name} payment will be confirmed.</p>${publicNotice('<p class="jb-fine">This is not the real JB Hi-Fi website: no real payment is taken.</p>')}`
   return `<div class="jb-co">
   <form method="post" action="${urls.payment}" class="jb-co-form" novalidate id="jb-payment-form"><input type="hidden" name="review_token" value="${esc(reviewToken)}">
     ${errorBanner(errors)}
@@ -479,8 +496,8 @@ export function thankYouPage({ base, order }) {
   const payText = `${pay.method === 'card' ? `${esc(pay.brand)} ending with ${esc(pay.last4)}` : esc(PAY_NAMES[pay.method] ?? pay.method)} — ${aud(order.totals.total)}`
   const preload = order.meta.preload_from
   const lifecycle=orderStatus(order)
-  if(lifecycle==='return_requested'||lifecycle==='delivered')return `<section class="jb-journey"><h1>Order #${esc(order.order_number)} — ${lifecycle==='delivered'?'Delivered':'Return requested'}</h1><p>${lifecycle==='delivered'?'Your order is marked delivered.':'Your return request is recorded. No collection or real refund has been arranged.'}</p><a href="${base}/account/orders/${order.order_number}">View order details</a></section>`
-  if(lifecycle==='cancelled')return `<section class="jb-journey"><h1>Order #${esc(order.order_number)} is cancelled</h1><p>Collection and dispatch are no longer scheduled. No real refund is processed.</p><a href="${base}/account/orders/${order.order_number}">View order details</a></section>`
+  if(lifecycle==='return_requested'||lifecycle==='delivered')return `<section class="jb-journey"><h1>Order #${esc(order.order_number)} — ${lifecycle==='delivered'?'Delivered':'Return requested'}</h1><p>${lifecycle==='delivered'?'Your order is marked delivered.':'Your return request has been received. We will be in touch about the next steps.'}</p><a href="${base}/account/orders/${order.order_number}">View order details</a></section>`
+  if(lifecycle==='cancelled')return `<section class="jb-journey"><h1>Order #${esc(order.order_number)} is cancelled</h1><p>Collection and dispatch are no longer scheduled.</p>${publicNotice('<p class="jb-fine">This is not the real JB Hi-Fi website: no real refund is processed.</p>')}<a href="${base}/account/orders/${order.order_number}">View order details</a></section>`
   return `<div class="jb-co jb-thanks">
   <div class="jb-co-form">
     <div class="jb-thanks-head"><span class="jb-check-ring" aria-hidden="true">&#10003;</span><div><p class="jb-fine">Order <span data-order-number>#${esc(order.order_number)}</span></p><h1>Thank you, ${esc(order.customer.first_name)}!</h1></div></div>
@@ -488,7 +505,7 @@ export function thankYouPage({ base, order }) {
       <p>You'll receive a confirmation email with your order number shortly.</p>
       ${order.meta.preorder?`<p class="jb-fine">Your pre-order has been paid in full. Pre-order price guarantee: if the price drops before release day, we'll refund you the difference shortly after release.</p>`:'<p class="jb-fine">Your order has been paid in full and is being processed.</p>'}
     </section>
-    <section class="jb-co-section"><h2>Order updates</h2><p class="jb-fine">No email or SMS is sent in this shop. Check your order status here.</p><p><a href="${base}/account/orders/${order.order_number}">View order details and status</a></p>
+    <section class="jb-co-section"><h2>Order updates</h2><p class="jb-fine">Check your order status here at any time.</p><p><a href="${base}/account/orders/${order.order_number}">View order details and status</a></p>
       ${pickup
         ? `<p>We'll send you an email and SMS when your order is ready to collect from <b>${esc(f.store_location)}</b>${f.ready_from ? ` (from ${esc(f.ready_from)})` : ''}. Show the order number or barcode from that email or SMS, with photo ID, when you collect.</p>`
         : `<p>You'll get shipping and delivery updates by email and SMS.${preload ? ` Delivery and pickup starts ${esc(preload)}, so you can preload before release on ${esc(order.meta.release)}.` : ''}</p>`}

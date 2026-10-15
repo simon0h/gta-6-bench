@@ -67,14 +67,16 @@ function hero(base, { eyebrow, title, text, tone, image, links, tall }) {
 }
 
 // ---------- homepage ----------
-export function homePage(base) {
-  const observed = capturedSearchProducts.slice(0, 8)
+// rows: product rows from the shelf (shelf-pages.js), placed where nike.com's
+// homepage carries its product carousels.
+export function homePage(base, rows = {}) {
   return `<div class="nkx-home" data-reference-state="catalog"><h1 class="sr-only">Nike. Just Do It</h1>
 ${hero(base, { eyebrow: 'Jayden Reed, Wide Receiver', title: 'FULLY INVESTED', text: 'Built for the season ahead. Shop football cleats, gloves and training gear.', tone: 'night', tall: true, links: [['Shop Football', '/us-football'], ['Shop Cleats', '/w/soccer-shoes-1gdj0zy7ok']] })}
 <div class="nkx-split">
 ${hero(base, { eyebrow: 'Jordan', title: 'AIR JORDAN 1 HIGH OG "ROYAL"', text: 'A classic colorway returns.', tone: 'royal', links: [['Shop', '/w/mens-jordan-1-shoes-4fokyznik1zy7ok']] })}
 ${hero(base, { eyebrow: 'Nike Hybrid RN', title: 'Train Everything', text: 'One shoe for running, lifting and everything between.', tone: 'stone', image: img(12), links: [['Shop', '/training/hybrid']] })}
 </div>
+${rows.top || ''}
 ${hero(base, { eyebrow: 'Brice Turang, Second Baseman', title: 'CROWN THE SEASON', text: 'Baseball gear built for October.', tone: 'clay', links: [['Shop Baseball', '/baseball']] })}
 <div class="nkx-split">
 ${hero(base, { eyebrow: "A'ja Wilson", title: 'Last Word', text: "A'Two, A'ja Wilson's signature shoe.", tone: 'berry', image: img(18), links: [['Shop Basketball', '/basketball']] })}
@@ -82,9 +84,10 @@ ${hero(base, { eyebrow: 'NikeSKIMS', title: 'BODY OBSESSED', text: 'Sculpting fa
 </div>
 ${hero(base, { eyebrow: 'Running', title: 'EVERY. DAY. SPEED.', text: 'Daily trainers with race-day energy.', tone: 'sky', image: img(28), links: [['Shop Running', '/running'], ['Running Shoe Finder', '/running-shoe-finder']] })}
 ${hero(base, { eyebrow: 'Soccer', title: 'BRIGHT LIGHTS PACK', text: 'Boots made to be seen under the lights.', tone: 'volt', image: img(7), links: [['Shop Soccer', '/soccer']] })}
+${rows.mid || ''}
 <section class="nkx-section">${sectionHead('TRENDING')}<div class="nkx-tiles nkx-tiles-3">${tile(base, '/w/new-mens-3n82yznik1', 'New Arrivals', { image: img(8), cta: 'Shop' })}${tile(base, '/w/mens-best-76m50znik1', 'Best Sellers', { image: img(15), cta: 'Shop' })}${tile(base, '/w/sale-3yaep', 'Shop All Sale', { image: img(19), cta: 'Shop' })}</div></section>
 <section class="nkx-section">${sectionHead('Shop by Sport')}<div class="nkx-tiles nkx-tiles-4">${tile(base, '/running', 'Running', { image: img(21) })}${tile(base, '/basketball', 'Basketball', { image: img(4) })}${tile(base, '/soccer', 'Soccer', { image: img(7) })}${tile(base, '/golf', 'Golf', { image: img(1) })}</div></section>
-<section class="nkx-section nkx-observed">${sectionHead('Captured from Nike search', `<a href="${base}/w?q=gta%206">View search (gta 6)</a>`)}<p class="nkx-muted">Public listing details captured from nike.com search on October 6, 2026. Sizes, stock and purchase have not been verified.</p><div class="nkx-tiles nkx-tiles-4">${observed.map(p => `<a class="nkx-product" href="${base}${esc(p.path)}"><img src="${p.image}" alt="${esc(p.alt)}"><span class="nkx-product-title">${esc(p.title)}</span><span class="nkx-muted">${esc(p.subtitle)}</span></a>`).join('')}</div></section>
+${rows.end || ''}
 <section class="nkx-join">${'<h2 class="nkx-display">BECOME A MEMBER</h2>'}<p>Sign up for free. Join the community.</p><div class="nkx-hero-ctas">${A(base, '/membership', 'Join Us', 'nkx-btn nkx-btn-dark')}${A(base, '/register', 'Sign In', 'nkx-btn nkx-btn-outline')}</div></section>
 </div>`
 }

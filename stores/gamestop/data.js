@@ -3,6 +3,7 @@ import { applyCatalogPolicy, fixtureCatalog } from '../../lib/catalog-policy.js'
 import { catalogEvidence } from './catalog-evidence.js'
 import { RETAIL_PRODUCTS, DEPARTMENTS, HUBS } from './catalog.js'
 import { expandGameStop } from './catalog500.js'
+import { SHELF as SHELF_ROWS } from './shelf.js'
 export { DEPARTMENTS, HUBS }
 // Listings as they appear on gamestop.com (research/gamestop.md, 2026-09-29).
 export const TAX_RATE = 0.07125 // cart showed $5.70 estimated tax on $79.99 before any address
@@ -93,17 +94,45 @@ for (const p of PRODUCTS) {
 if (fixtureCatalog) expandGameStop(PRODUCTS)
 applyCatalogPolicy('gamestop', PRODUCTS, catalogEvidence)
 if (!fixtureCatalog) for (const p of PRODUCTS) { p.catalogType = 'game'; p.catalogPlatform = p.platform; p.simulatedStock = true }
-export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
+// Reference mode: the everyday GameStop assortment (shelf.js) sits around the
+// evidenced GTA VI rows. PRODUCTS stays the evidenced array, so catalog policy,
+// inventory reports and purchase guards keep describing only those rows; ALL is
+// what shoppers browse. Fixture mode keeps its authored catalog unchanged.
+export const SHELF = fixtureCatalog ? [] : SHELF_ROWS
+export const ALL = fixtureCatalog ? PRODUCTS : [...SHELF.slice(0, 20), ...PRODUCTS, ...SHELF.slice(20)]
+const index = new Map()
+for (const p of ALL) if (!index.has(p.id)) index.set(p.id, p)
+export const byId = (id) => index.get(String(id)) ?? null
 
 export function productPath(base, p) {
+  if (p.shelf) return `${base}/${p.urlPath}/products/${p.slug}/${p.id}.html`
   return p.id.startsWith("448") || ["gs-gta-v-preowned","gs-dualsense-white"].includes(p.id) ? `${base}/video-games/${encodeURIComponent(p.category)}/products/${p.slug}/${p.id}.html` : `${base}/products/${p.id}`
 }
 
+const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+const haystacks = new Map()
+const hay = p => { let h = haystacks.get(p); if (h === undefined) haystacks.set(p, h = norm(p.title + ' ' + p.keywords)); return h }
+// Every query token must appear; matches are then ordered by relevance: the
+// whole query in the title, title-token hits, then the evidenced listings, then
+// the default best-seller order.
 export function search(q) {
-  const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = norm(q).split(' ').filter(Boolean)
-  if (!tokens.length) return [...PRODUCTS]
-  return PRODUCTS.filter(p => { const hay = norm(p.title + ' ' + p.keywords); return tokens.every(t => hay.includes(t)) })
+  if (!tokens.length) return [...ALL]
+  if (fixtureCatalog) return ALL.filter(p => tokens.every(t => hay(p).includes(t)))
+  const phrase = tokens.join(' ')
+  const scored = []
+  ALL.forEach((p, i) => {
+    const h = hay(p)
+    if (!tokens.every(t => h.includes(t))) return
+    const title = ' ' + norm(p.title) + ' ', words = ' ' + h + ' '
+    let score = title.includes(' ' + phrase + ' ') ? 40 : title.includes(phrase) ? 30 : words.includes(' ' + phrase + ' ') ? 20 : 0
+    for (const t of tokens) score += title.includes(' ' + t + ' ') ? 4 : title.includes(t) ? 2 : words.includes(' ' + t + ' ') ? 1 : 0
+    const family = ' ' + norm(p.family) + ' '
+    if (tokens.some(t => family.includes(' ' + t + ' '))) score += 3
+    if (!p.shelf) score += 5
+    scored.push([score, i, p])
+  })
+  return scored.sort((a, b) => b[0] - a[0] || a[1] - b[1]).map(x => x[2])
 }
 
 export const STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
@@ -179,13 +208,13 @@ export const FILTERS = ['platform','category','price','availability','condition'
 export function parseFilters(query) {return Object.fromEntries(FILTERS.filter(k=>query[k]).map(k=>[k,['sort','rating'].includes(k)?String(query[k]):multi(query[k])]))}
 export function collection(slug) {
   const d = DEPARTMENTS.find(d=>d.id===slug)
-  if(d) return {...d,products:PRODUCTS.filter(p=>p.department===slug || slug==='toys-games' && p.department.startsWith('toys-games/'))}
+  if(d) return {...d,products:ALL.filter(p=>p.department===slug || slug==='toys-games' && p.department.startsWith('toys-games/'))}
   const h = HUBS[slug]
-  if(h) return {...h,id:slug,products:PRODUCTS.filter(h.matches).map(p=>{
+  if(h) return {...h,id:slug,products:ALL.filter(h.matches).map(p=>{
     if(slug!=='pre-owned' || !p.variants) return p
     const variants=p.variants.filter(v=>['Pre-Owned','Refurbished'].includes(v.options.Condition))
     return variants.length ? selectedProduct({...p,variants},variants[0].id) : p
   })}
-  if(slug==='gaming-accessories/controllers') return {name:'Controllers',description:'Choose your platform and condition.',id:slug,products:PRODUCTS.filter(p=>p.family==='controller')}
+  if(slug==='gaming-accessories/controllers') return {name:'Controllers',description:'Choose your platform and condition.',id:slug,products:ALL.filter(p=>p.family==='controller')}
   return null
 }

@@ -1,12 +1,13 @@
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
-import { productImage, productGallery } from '../../lib/product-assets.js'
+import { productImage as assetImage, productGallery as assetGallery } from '../../lib/product-assets.js'
+import { shelfImage, shelfGallery } from './shelf.js'
 import { productPhoto } from '../../lib/product-photos.js'
 import { DEPARTMENTS, CAMPAIGNS, categorySlug } from './catalog.js'
 import { FOOTER_COLUMNS, ACCOUNT_LINKS } from './site.js'
-import { esc, money, disclaimer } from '../../lib/html.js'
+import { esc, money, disclaimer, publicNotice } from '../../lib/html.js'
 import {
-  PRODUCTS, quantityLimit, byId, selectedProduct, eligibleMethods, productPath, productHref, facets, countdown, SORTS, DELIVERY_METHODS, INTERNATIONAL_DELIVERY, PDP_DELIVERY_ORDER, CHECKOUT_DELIVERY_ORDER,
+  CATALOG, quantityLimit, byId, selectedProduct, eligibleMethods, productPath, productHref, facets, countdown, SORTS, DELIVERY_METHODS, INTERNATIONAL_DELIVERY, PDP_DELIVERY_ORDER, CHECKOUT_DELIVERY_ORDER,
   COLLECT_STORES, BENCHMARK_COLLECT_STORE, TITLES, MAX_QTY, RELEASE_TEXT, RELEASE_SHORT, DISPATCH_TEXT, PREORDER_NOTICE_1, PREORDER_NOTICE_2, LEGAL_TEXT,
 } from './data.js'
 
@@ -21,17 +22,17 @@ export function supportInformationPage(base, topic = 'Shopping information') {
  const title = String(topic).slice(0,100)
  const q = title.toLowerCase()
  let content
- if (/password|signing in/.test(q)) content = '<p>Password recovery is unavailable in this shop. Sign in using an existing account or continue shopping as a guest where offered.</p>'
- else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Financing applications and new gift-card purchases are unavailable in this shop.</p>'
- else if (/cookie|privacy/.test(q)) content = '<p>This synthetic shop uses a session cookie to keep your basket, account and checkout together. Orders are recorded for the benchmark. Real retailer advertising and tracking services are not connected.</p>'
+ if (/password|signing in/.test(q)) content = '<p>To reset your password, use the Forgotten password link on the sign in page. You can also check out as a guest where offered.</p>'
+ else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Gift cards and eVouchers can be redeemed at the payment step of checkout.</p>'
+ else if (/cookie|privacy/.test(q)) content = '<p>We use cookies to keep your basket, account and checkout together and to improve your shopping experience. You can change your choices at any time from Cookie preferences.</p>'
  else if (/return|refund|cancel/.test(q)) content = '<p>Review the item, format, delivery choice and total before placing your order. Digital redemption codes may have different return conditions from physical products. You can save a support enquiry from your order details. This does not approve a cancellation or refund.</p>'
  else if (/delivery|shipping|collection/.test(q)) content = '<p>Product pages show available fulfilment choices. Confirm your address or collection store at checkout to see the order-specific delivery estimate and charges. Pre-orders are fulfilled when available; wait for collection confirmation before visiting a store.</p>'
- else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming. This is a synthetic shopping environment: local orders record your selected items without charging a real payment method.</p>'
+ else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming.</p>' + publicNotice('<p>This is not the real GAME website: orders record your selected items without charging a real payment method.</p>')
  else if (/read more/.test(q)) content = '<p>PEGI 18 identifies games intended for adults. You must confirm you are 18 or over before adding this age-rated game to your bag.</p>'
- else if (/edit/.test(q)) content = '<p>Prices are displayed in pounds sterling and include VAT. Currency switching is unavailable in this UK shop.</p>'
- else if (/mobile phones/.test(q)) content = '<p>Mobile phones are not included in this shop’s current catalogue. Browse the available technology and gaming departments instead.</p>'
- else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat and telephone support are unavailable in this shop. Product availability and delivery options are shown on the product page and at checkout.</p>'
- else content = '<p>This service is unavailable in this shop. You can browse products, check availability and complete the supported shopping flows.</p>'
+ else if (/edit/.test(q)) content = '<p>Prices are displayed in pounds sterling and include VAT. Our UK website sells in pounds sterling only.</p>'
+ else if (/mobile phones/.test(q)) content = '<p>We don’t currently sell mobile phones online. Browse our technology and gaming departments instead.</p>'
+ else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat is currently unavailable; please try again later or send us a message from Contact Us. Product availability and delivery options are shown on the product page and at checkout.</p>'
+ else content = '<p>This service is currently unavailable. Please try again later.</p>'
  return `<section><h1>${esc(title)}</h1>${content}<p><a href="${base}/">Continue shopping</a> · <a href="${base}/account">Your account and orders</a></p></section>`
 }
 const gbp = (n) => money(n, 'GBP')
@@ -84,7 +85,7 @@ function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
     <form class="gu-search" action="${base}/searchresults" method="get" role="search">
       <input type="search" name="descriptionfilter" value="${esc(q)}" placeholder="Search product or brand" aria-label="Search product or brand" list="gu-suggestions">
       <button type="submit" aria-label="Search">${ICON.search}</button>
-      <datalist id="gu-suggestions">${[...new Set(PRODUCTS.map(p=>p.brand)), "Nintendo", "headset", "LEGO", "gta 6", "monitor"].map(x=>`<option value="${esc(x)}">`).join('')}</datalist>
+      <datalist id="gu-suggestions">${[...new Set(CATALOG.map(p=>p.brand)), "Nintendo", "headset", "LEGO", "gta 6", "monitor"].map(x=>`<option value="${esc(x)}">`).join('')}</datalist>
     </form>
     <nav class="gu-icons" aria-label="Account and bag">
       <a href="${base}/stores">${ICON.pin}<span>Stores</span></a>
@@ -159,6 +160,9 @@ ${cookieChoice ? '' : cookieBanner(base, back)}
 }
 
 // ---- browse ----
+// Assortment rows draw their pictures from the store's own /images/products/ route (shelf.js).
+const productImage = (store, p, opts) => p.shelf ? shelfImage('/'+store, p, opts) : assetImage(store, p, opts)
+const productGallery = (store, p) => p.shelf ? shelfGallery('/'+store, p) : assetGallery(store, p)
 export function artwork(p,className='') { return productImage('game-uk',{...p,variantId:p.option},{className}) }
 
 function tile(base, p, back) {
@@ -174,7 +178,8 @@ function tile(base, p, back) {
 
 // Homepage sections in the order seen on www.game.co.uk (2026-09-29 / 2026-10-13): round
 // category shortcuts, Coming Soon hero, Gifts For Gamers, Frasers Plus band, Trending, Gift Shop.
-// Product tiles only ever show catalogue rows (reference mode: the two GTA VI listings).
+// Reference mode adds the real homepage's Coming Soon carousel plus department rows from the
+// GAME assortment (shelf.js), so GTA VI is one product among many.
 const SHORTCUTS = [['Coming Soon','/coming-soon'],['XBOX','/xbox/all-xbox'],['PlayStation','/playstation'],['Nintendo','/nintendo'],['Pokemon','/pokemon'],['LEGO','/lego'],['Toys','/toys'],['PC','/pc-gaming']]
 const SHORTCUT_ICON = {
   XBOX: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><path d="M15 14c6 4 12 12 18 22M33 14c-6 4-12 12-18 22" stroke="currentColor" stroke-width="3" fill="none"/></svg>',
@@ -189,18 +194,35 @@ const GIFT_SHOP = [['Gifts For Gamers','/gifts/gifts-for-gamers','Headsets, cont
 
 export function homePage({ base, products }) {
   const gta = products.filter(p => p.kind === 'game' && p.preorder)
-  const trending = fixtureCatalog ? [...gta, ...products.filter(p=>['991202','992007','992001','991203'].includes(p.id))].slice(0,6) : gta
-  const section = (title, list, href) => `<section class="gu-trending"><div class="gu-section-title"><h2>${esc(title)}</h2><a href="${href}">Shop all →</a></div><div class="gu-grid gu-shelf">${list.slice(0,4).map(p=>tile(base,p,base+'/')).join('')}</div></section>`
+  const pick = ids => ids.map(id => products.find(p => p.id === id)).filter(Boolean)
+  // Trending as on www.game.co.uk (2026-10-13): GTA VI, FC27, Star Wars Galactic Racer, Yu-Gi-Oh! Beyond the Brave.
+  const trending = fixtureCatalog ? [...gta, ...products.filter(p=>['991202','992007','992001','991203'].includes(p.id))].slice(0,6) : pick(['756802','753767','754376','740026'])
+  const section = (title, list, href, row='') => `<section class="gu-trending"${row?` data-home-row="${row}"`:''}><div class="gu-section-title"><h2>${esc(title)}</h2><a href="${href}">Shop all →</a></div><div class="gu-grid gu-shelf">${list.slice(0,4).map(p=>tile(base,p,base+'/')).join('')}</div></section>`
+  const shelf = products.filter(p => p.shelf)
+  const dealPct = p => (p.ticketPrice - p.price) / p.ticketPrice
+  const comingSoon = fixtureCatalog ? '' : section('Coming Soon', pick(['756802','900043','757759','756389']), base+'/coming-soon', 'coming-soon')
+  const shelfRows = fixtureCatalog ? '' : [
+    section('Top Deals', [...shelf].filter(p => !p.preorder && p.ticketPrice > p.price).sort((a,b) => dealPct(b) - dealPct(a) || b.price - a.price).filter((p,i,a) => a.findIndex(x => x.category === p.category) === i), base+'/deals', 'deals'),
+    section('Nintendo Switch 2', pick(['719937','719950','753530','758743']), base+'/nintendo', 'nintendo'),
+    section('Controllers & Headsets', pick(['384553','371325','857967','712252']), base+'/accessories', 'accessories'),
+    section('Trading Cards', pick(['741118','740747','741022','741183']), base+'/toys/trading-cards', 'trading-cards'),
+    section('PC Gaming', pick(['735536','414107','394064','384680']), base+'/pc-gaming', 'pc-gaming'),
+    section('LEGO', pick(['921347','988225','702500','988246']), base+'/lego', 'lego'),
+    section('Tech', pick(['700010','389751','388435','807125']), base+'/tech', 'tech'),
+    section('Plush & Board Games', pick(['397092','418479','890547','725624']), base+'/toys', 'toys'),
+  ].join('')
   const discoveries = [['Gaming PCs & Laptops','/pc-gaming/laptops','laptop'],['Plush & Soft Toys','/toys/soft-toys','plush-rabbit'],['Creative Building Sets','/lego/building-sets','brick-city-bus'],['Trading Card Storage','/toys/trading-cards/card-storage','card-binder-red']]
   const fixtureExtras = fixtureCatalog ? `<section class="gu-popular"><div class="gu-section-title"><h2>Popular Categories</h2><a href="${base}/searchresults">Shop all →</a></div><div class="gu-discoveries">${discoveries.map(([title,url,photo])=>`<a href="${base}${url}">${productPhoto(photo,title)}<h3>${title}</h3><span>Shop all →</span></a>`).join('')}</div></section>
   ${section('Level up your PC setup',products.filter(p=>p.departments.includes('pc-gaming')),base+'/pc-gaming')}
   ${section('Great finds under £30',products.filter(p=>p.campaigns.includes('under-30')&&!p.keywords.includes('gta')),base+'/campaign/under-30')}` : ''
   return `<section class="gu-circles" aria-label="Shop by category">${SHORTCUTS.map(([name,url],i)=>`<a href="${base}${url}"><span class="gu-circle gu-circle-${i}">${i===0&&gta[0]?artwork(gta[0]):SHORTCUT_ICON[name]}</span><span>${esc(name)}</span></a>`).join('')}</section>
   <section class="gu-hero" aria-labelledby="gu-hero-title"><div class="gu-hero-copy"><p class="gu-hero-kicker">PRE-ORDER NOW</p><h1 id="gu-hero-title">Coming Soon</h1><p>Be first in line for the biggest upcoming releases on PlayStation and Xbox.</p><a class="gu-btn gu-btn-black" href="${base}/coming-soon">Shop Now</a></div><div class="gu-hero-covers" aria-hidden="true">${gta.slice(0,2).map(p=>productImage('game-uk',p)).join('')}</div></section>
+  ${comingSoon}
   <section class="gu-gifts-panel"><div><h2>Gifts For Gamers</h2><p>Find their next game, console or favourite accessory.</p></div><div class="gu-campaign-links"><a class="gu-btn" href="${base}/games">Games</a><a class="gu-btn" href="${base}/playstation">PS5</a><a class="gu-btn" href="${base}/xbox/all-xbox">XBOX</a><a class="gu-btn" href="${base}/nintendo">Switch</a></div></section>
   <section class="gu-fplus"><div><b>FRASERS<span>PLUS</span></b><h2>SPREAD THE COST OF GIFTING*</h2><p>Buy now. Pay in 3, interest free.</p><small>Representative APR 29.9% (variable). Credit subject to status. Terms apply.</small></div><a class="gu-btn gu-btn-light" href="${base}/frasersplus">Find out more</a></section>
-  <section class="gu-trending"><div class="gu-section-title"><h2>Trending</h2><a href="${base}/coming-soon">Shop all →</a></div><div class="gu-grid gu-shelf">${trending.map(p=>tile(base,p,base+'/')).join('')}</div></section>
+  <section class="gu-trending" data-home-row="trending"><div class="gu-section-title"><h2>Trending</h2><a href="${base}/coming-soon">Shop all →</a></div><div class="gu-grid gu-shelf">${trending.map(p=>tile(base,p,base+'/')).join('')}</div></section>
   <section class="gu-gift-shop"><div class="gu-section-title"><h2>Gift Shop</h2><a href="${base}/gifts">Shop all gifts →</a></div><div class="gu-cat-grid">${GIFT_SHOP.map(([l,u,d],i)=>`<a class="gu-cat-tile gu-tone-${i%6}" href="${base}${u}"><span class="gu-cat-mark" aria-hidden="true">${esc(l.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase())}</span><span>${esc(l)}</span><small>${esc(d)}</small></a>`).join('')}</div></section>
+  ${shelfRows}
   ${fixtureExtras}`
 }
 
@@ -229,7 +251,7 @@ export function searchPage({ base, q='', products, facetProducts=products, filte
 export function productPage({ base, p, modal = null, qty = 1, wished = false, option = '', error = '' }) {
   const original = p
   p = selectedProduct(p,option) || p
-  const related = PRODUCTS.filter(x=>x.id!==p.id && x.family!==p.family && x.departments.some(d=>p.departments.includes(d))).sort((a,b)=>Number(b.category===p.category)-Number(a.category===p.category)).slice(0,4)
+  const related = CATALOG.filter(x=>x.id!==p.id && x.family!==p.family && x.departments.some(d=>p.departments.includes(d))).sort((a,b)=>Number(b.category===p.category)-Number(a.category===p.category)).slice(0,4)
   const path = productPath(base, p)
   const isGame = p.kind === 'game'
   const hidden = (n, v) => `<input type="hidden" name="${n}" value="${esc(v)}">`
@@ -243,7 +265,7 @@ export function productPage({ base, p, modal = null, qty = 1, wished = false, op
   if (modal === 'preorder') {
     modalHtml = `<div class="gu-modal-backdrop"><div class="gu-modal" role="dialog" aria-labelledby="modal-title">
   <div class="gu-modal-head"><h2 id="modal-title">Pre-order</h2><a class="gu-modal-close" href="${path}" aria-label="Close">&times;</a></div>
-  <div class="gu-modal-body">${productImage('game-uk',p)}<div><p>${PREORDER_NOTICE_1}</p><p><b>${RELEASE_TEXT}</b></p><p>${PREORDER_NOTICE_2}</p></div></div>
+  <div class="gu-modal-body">${productImage('game-uk',p)}<div><p>${PREORDER_NOTICE_1}</p><p><b>${p.releaseText||RELEASE_TEXT}</b></p><p>${PREORDER_NOTICE_2}</p></div></div>
   <div class="gu-modal-foot"><a class="gu-btn gu-btn-black" href="${path}">Cancel</a>${addForm('Add to bag', 'gu-btn')}</div>
 </div></div>`
   } else if (modal === 'age') {
@@ -282,12 +304,12 @@ export function productPage({ base, p, modal = null, qty = 1, wished = false, op
       <button class="gu-btn gu-btn-block gu-cta" type="submit" ${modal||!quantityLimit(p) ? 'disabled' : ''}>${!quantityLimit(p)?'Out of stock':modal ? 'Adding...' : cta.label}</button>
     </form>
     <script>document.getElementById('gu-share').addEventListener('click',async function(){var result=document.getElementById('gu-share-result');try{await navigator.clipboard.writeText(location.origin+${JSON.stringify(path+(option?'?option='+encodeURIComponent(option):''))});result.textContent='Link copied'}catch(e){result.textContent='Copy this address: '+location.origin+${JSON.stringify(path+(option?'?option='+encodeURIComponent(option):''))}}});${original.options?`document.getElementById('option').addEventListener('change',function(){document.getElementById('gu-buy-form').requestSubmit(document.getElementById('gu-option-preview'))})`:''}</script>
-    ${p.preorder ? `<div class="gu-countdown"><b>Release Date: ${RELEASE_SHORT}</b><span>${countdown() ?? 'Out now'}</span></div>` : ''}
+    ${p.preorder ? `<div class="gu-countdown"><b>Release Date: ${p.releaseShort||RELEASE_SHORT}</b><span>${countdown(Date.now(), p.release||undefined) ?? 'Out now'}</span></div>` : ''}
     ${p.pegi ? `<p class="gu-pegi-line"><b>Pegi Rating:</b> Suitable for people aged ${p.pegi} and over. <a href="${informationHref(base, 'Read More...')}">Read More...</a></p>` : ''}
   </div>
   <div class="gu-pdp-info">
     <details class="gu-acc" open><summary>Description</summary><div class="gu-acc-body">
-      ${p.preorder ? `<p class="gu-preorder-info">${ICON.info}<span>${PREORDER_NOTICE_1} <b>${RELEASE_TEXT}</b>. ${PREORDER_NOTICE_2}</span></p>` : ''}
+      ${p.preorder ? `<p class="gu-preorder-info">${ICON.info}<span>${PREORDER_NOTICE_1} <b>${p.releaseText||RELEASE_TEXT}</b>. ${PREORDER_NOTICE_2}</span></p>` : ''}
       <p>Product code: ${esc(p.id)}</p>
       <p><b>${esc(p.title)}</b></p>
       ${p.description.map(d => `<p>${esc(d)}</p>`).join('')}
@@ -296,7 +318,7 @@ export function productPage({ base, p, modal = null, qty = 1, wished = false, op
     </div></details>
     <details class="gu-acc"><summary>Delivery &amp; Returns</summary><div class="gu-acc-body">
       <ul class="gu-delivery-list">${p.digital?`<li><b>Email delivery</b><span>UK redemption code. Check account region and compatibility before purchase.</span><b>Free</b></li>`:deliveryList}${collectLine}</ul>
-      ${p.benchmarkPickup ? '<p class="gu-fine">Benchmark scenario: Click &amp; Collect is an authored local simulation for this task. It is not a claim about live GAME pre-order collection availability.</p>' : p.preorder ? `<p class="gu-fine">Click &amp; Collect is not available for pre-order items. Pre-orders are dispatched via Express Delivery the day before the launch date.</p>` : ''}
+      ${p.benchmarkPickup ? '<p class="gu-fine">Click &amp; Collect for this pre-order is available at '+esc(BENCHMARK_COLLECT_STORE)+' only.</p>' : p.preorder ? `<p class="gu-fine">Click &amp; Collect is not available for pre-order items. Pre-orders are dispatched via Express Delivery the day before the launch date.</p>` : ''}
       <p class="gu-fine">Returns: unwanted items can be returned within 28 days of delivery. Sealed software and digital codes cannot be returned once opened or redeemed.</p>
     </div></details>
   </div>
@@ -328,7 +350,7 @@ export function cartPage({ base, t, notice = null }) {
       <button type="submit" name="action" value="remove" class="gu-link-btn">Remove</button><button type="submit" name="action" value="wishlist" class="gu-link-btn">Move to wish list</button>
     </form>
     <p class="gu-fine">${l.product.digital ? 'This product is a digital code and will be delivered by email.' : `This product will be delivered by ${esc(l.product.carrier)}, and may arrive separately to other items in your basket.`}</p>
-    ${l.product.preorder ? `<p class="gu-fine gu-preorder-info">${ICON.info} Pre-order: available for delivery from ${RELEASE_TEXT}. Your entire order will be held until all items are available.</p>` : ''}
+    ${l.product.preorder ? `<p class="gu-fine gu-preorder-info">${ICON.info} Pre-order: available for delivery from ${l.product.releaseText||RELEASE_TEXT}. Your entire order will be held until all items are available.</p>` : ''}
   </div>
 </div>`).join('')
   return `<div class="gu-cart">
@@ -435,7 +457,7 @@ export function deliveryPage({ base, t, email, guest, preorderInBag, values = {}
       <p class="gu-fine">We'll only use your mobile number for delivery updates.</p>
     </section>
     <section class="gu-co-section"><h2>Delivery method</h2>
-      ${benchmarkCollection ? '<p class="gu-notice">Benchmark scenario: collection for this pre-order is an authored local simulation. Collection stock is available only at GAME London - Sports Direct, Oxford Street.</p>' : preorderInBag ? `<p class="gu-preorder-info">${ICON.info} Your bag contains a pre-order item. Your whole order will be held and dispatched via Express Delivery the day before the launch date (${DISPATCH_TEXT}).</p>` : ''}
+      ${benchmarkCollection ? '<p class="gu-notice">Click &amp; Collect for this pre-order is available only at GAME London - Sports Direct, Oxford Street.</p>' : preorderInBag ? `<p class="gu-preorder-info">${ICON.info} Your bag contains a pre-order item. Your whole order will be held and dispatched via Express Delivery the day before the launch date (${DISPATCH_TEXT}).</p>` : ''}
       ${radios}
       <div class="gu-field gu-collect-store"><label for="collectStore">Collection store</label><select id="collectStore" name="collectStore" ${!canCollect ? 'disabled' : ''}><option value="">Select a store</option>${COLLECT_STORES.map(s => `<option value="${esc(s)}" ${values.collectStore === s ? 'selected' : ''} ${benchmarkCollection&&s!==BENCHMARK_COLLECT_STORE?'disabled':''}>${esc(s)}${benchmarkCollection&&s!==BENCHMARK_COLLECT_STORE?' — Unavailable':''}</option>`).join('')}</select>${errors.collectStore ? `<span class="gu-error">${esc(errors.collectStore)}</span>` : ''}
       ${benchmarkCollection?`<h3>Pickup person</h3><p class="gu-fine">Name the person authorized to collect this order.</p><div class="gu-2col">${input('pickupFirstName','Pickup first name',{required:true})}${input('pickupLastName','Pickup last name',{required:true})}</div>${input('pickupEmail','Pickup email',{type:'email',required:true})}${input('pickupPhone','Pickup phone',{type:'tel',required:true})}`:''}</div>
@@ -475,17 +497,17 @@ export function paymentPage({ base, t, delivery, preorderInBag, values = {}, err
     <section class="gu-co-section"><h2>How would you like to pay?</h2>
       <div class="gu-paytabs">
         <label class="gu-paytab"><input type="radio" name="paymentMethod" value="card" ${pm === 'card' ? 'checked' : ''}><span><b>Credit/Debit card</b><small>VISA, VISA Debit, Mastercard, Maestro</small></span></label>
-        <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="applepay" disabled><span><b>Apple Pay</b><small>Unavailable in this shop</small></span></label>
+        <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="applepay" disabled><span><b>Apple Pay</b><small>Currently unavailable</small></span></label>
         <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="frasersplus" disabled><span><b>Frasers Plus</b><small>Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable). Credit subject to status. Not available for this order.</small></span></label>
-        <label class="gu-paytab${preorderInBag ? ' is-disabled' : ''}"><input type="radio" name="paymentMethod" value="paypal" ${pm === 'paypal' ? 'checked' : ''} ${preorderInBag ? 'disabled' : ''}><span><b>PayPal</b><small>${preorderInBag ? 'PayPal is not available for pre-orders.' : 'Recorded locally; no PayPal account is connected.'}</small></span></label>
+        <label class="gu-paytab${preorderInBag ? ' is-disabled' : ''}"><input type="radio" name="paymentMethod" value="paypal" ${pm === 'paypal' ? 'checked' : ''} ${preorderInBag ? 'disabled' : ''}><span><b>PayPal</b><small>${preorderInBag ? 'PayPal is not available for pre-orders.' : 'Pay with your PayPal account.'}</small></span></label>
       </div>
       <div class="gu-paypanel" data-panel="card">
         ${input('cardNumber', 'Card number', { extra: 'autocomplete="cc-number" inputmode="numeric" placeholder="0000 0000 0000 0000"', required: true })}
         <div class="gu-2col">${input('expiry', 'Expiry date (MM/YY)', { extra: 'autocomplete="cc-exp" placeholder="MM/YY"', required: true })}${input('cvv', 'Security code (CVV)', { extra: 'autocomplete="cc-csc" inputmode="numeric" maxlength="4"', required: true })}</div>
         ${input('nameOnCard', 'Name on card', { extra: 'autocomplete="cc-name"', required: true })}
-        <p class="gu-fine">${ICON.lock} Use test card details only. No bank authorisation or 3D Secure authentication is performed.</p>
+        <p class="gu-fine">${ICON.lock} Your payment details are encrypted and sent securely.</p>${publicNotice('<p class="gu-fine">This is not the real GAME website. Use test card details only: no card is charged and no bank authorisation or 3D Secure authentication is performed.</p>')}
       </div>
-      <div class="gu-paypanel" data-panel="paypal"><p>This choice records a local PayPal payment selection. No PayPal sign-in, redirect or payment takes place.</p></div>
+      <div class="gu-paypanel" data-panel="paypal"><p>Pay with PayPal when you place your order.</p>${publicNotice('<p>This is not the real GAME website: no PayPal sign-in, redirect or payment takes place.</p>')}</div>
     </section>
     <section class="gu-co-section"><h2>Billing address</h2>
       <label class="gu-check"><input type="checkbox" id="billingSame" name="billingSame" value="1" ${values.billingSame === undefined || values.billingSame ? 'checked' : ''}> Billing address same as delivery address</label>

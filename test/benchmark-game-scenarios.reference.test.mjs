@@ -80,7 +80,8 @@ for(const family of ['availability_fallback','pickup_required']) test(`GAME ${fa
   await add(c)
   let page=await guest(c,task)
   assert.equal(page.status,200)
-  assert.match(page.text,/authored local simulation/)
+  assert.match(page.text,/Click &amp; Collect for this pre-order is available only at GAME London/)
+  assert.doesNotMatch(page.text,/authored local simulation/)
   if(family==='availability_fallback') {
     assert.match(page.text,/Shipping unavailable/)
     assert.equal((await c.post('/game-uk/checkout/delivery',delivery(task))).status,400)

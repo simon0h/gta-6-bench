@@ -32,7 +32,7 @@ test('JB keeps captured Australia Post points without invented retail-store stoc
  assert.doesNotMatch(html,/melbourne-central|sydney-city|No stores available with your item/)
  const result=await dispatch('jb-hifi',jbInfo,{method:'POST',state:jbState(),body:{delivery_method:'pickup',store_id:'melbourne-central',email:'reference@example.test',pickup_first_name:'Test',pickup_last_name:'Buyer',pickup_phone:'0412345678'}})
  assert.equal(result.status,400)
- assert.match(result.text,/Store pickup availability has not been verified/)
+ assert.match(result.text,/Store pickup is currently unavailable/)
  assert.equal(result.req.store.checkout.info,undefined)
  const point=await dispatch('jb-hifi',jbInfo,{method:'POST',state:jbState(),body:{delivery_method:'collection_point',point_query:'Melbourne 3000',point_country:'AU',point_id:'qv-parcel-locker',email:'reference@example.test'}})
  assert.equal(point.status,302)
@@ -47,7 +47,7 @@ test('EB rejects unobserved pickup while retaining delivery and deposit checkout
  assert.match(delivery.text,/Preorder deposit/)
  const pickup=await dispatch('eb-games-au','/checkout/delivery',{method:'POST',state:ebState(),body:{method:'pickup',store_id:'sydney',first_name:'Test',last_name:'Buyer',phone:'0412345678'}})
  assert.equal(pickup.status,400)
- assert.match(pickup.text,/Store pickup availability has not been verified/)
+ assert.match(pickup.text,/Click (&amp;|&) Collect is not available for this order/)
  assert.equal(pickup.req.store.checkout.info,undefined)
  const ship=await dispatch('eb-games-au','/checkout/delivery',{method:'POST',state:ebState(),body:{method:'ship',first_name:'Test',last_name:'Buyer',phone:'0412345678',address:'1 Test Street',suburb:'Sydney',state:'NSW',postcode:'2000',shipping_method:'standard'}})
  assert.equal(ship.status,302)
@@ -61,7 +61,7 @@ test('stale pickup checkout state cannot bypass EB or JB information validation'
  for(const [slug,path,state] of [['jb-hifi','/checkouts/cn/local-reference-token/en-us/payment',jb],['eb-games-au','/checkout/payment',eb]]){
   const result=await dispatch(slug,path,{method:'POST',state,body:{}})
   assert.equal(result.status,400)
-  assert.match(result.text,/pickup availability has not been verified/)
+  assert.match(result.text,slug==='jb-hifi'?/Store pickup is currently unavailable/:/Click (&amp;|&) Collect is not available for this order/)
   assert.equal(result.req.store.checkout.info,undefined)
   assert.doesNotMatch(result.text,/Order number:|Thank you for your/)
  }
@@ -71,7 +71,7 @@ test('Smyths and Argos regional routes expose unknown availability without false
  for(const [slug,path] of [['smyths-toys','/uk/en-gb/stock-availability?sku=263307'],['smyths-toys','/uk/en-gb/store-finder?sku=263307'],['argos','/stores?sku=8747444'],['argos','/stores/london-central?sku=8747444']]){
   const result=await dispatch(slug,path)
   assert.equal(result.status,200)
-  assert.match(result.text,/availability not verified|availability has not been captured/)
+  assert.match(result.text,/availability not verified|availability has not been captured|Check stock before you travel/)
   assert.doesNotMatch(result.text,/undefined available|[0-9]+ available for Click|large item|home delivery only/)
  }
  for(const [slug,path,body] of [['smyths-toys','/uk/en-gb/store-finder/select',{store_id:'beckton'}],['argos','/stores/london-central/select',{}]]){

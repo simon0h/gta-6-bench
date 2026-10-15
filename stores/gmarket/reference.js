@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { referenceRetailStore, observedProduct } from '../reference-retail.js'
 import { layout, home, installSite, searchPage, productPage } from './site.js'
+import { installShelf, searchShelf } from './shelf-pages.js'
 
 export const catalogObservations = [
   { id: '4796016651', title: 'PS5 GTA6 Grand Theft Auto VI 한글판 예약판매', platform: 'ps5' },
@@ -10,14 +11,23 @@ export const catalogObservations = [
   facts: ['title', 'native_id', 'platform', 'seller', 'displayed_price'],
 }))
 
+const cartCount = req => (req.store.gmShelf?.cart || []).reduce((sum, line) => sum + line.qty, 0)
+
 let renderPage
 const store = referenceRetailStore({ slug: 'gmarket', name: 'Gmarket (G마켓)', country: 'KR', currency: 'KRW', availability: 'listing_only',
-  chrome({ req, base, title, body }) { return layout(base, title, req.store.user, body, req.query) },
+  chrome({ req, base, title, body }) { return layout(base, title, req.store.user, body, req.query, cartCount(req)) },
   observations: catalogObservations, queryKeys: ['keyword', 'q'], searchRoutes: ['/n/search', '/search'],
-  matches: query => typeof query === 'string' && query.trim().toLowerCase() === 'ps5gta6', capturedSearch: '/n/search?keyword=ps5gta6',
-  search(req, res, { render, base, query }) { render(req, res, `${query.trim()} 검색결과`, searchPage(base, query.trim(), catalogObservations)) },
+  // Every non-empty keyword searches the shelf plus the captured GTA 6 observations.
+  matches: query => typeof query === 'string' && query.trim().length > 0 && query.trim().length <= 100, capturedSearch: '/n/search?keyword=ps5gta6',
+  search(req, res, { render, base, query }) {
+    const q = query.trim()
+    render(req, res, `${q} 검색결과`, searchPage(base, q, searchShelf(q, catalogObservations), req.query))
+  },
   install(router, { render, coverage, baseOf }) {
     renderPage = render
+    // Shelf routes come first; non-shelf IDs fall through to the observation and
+    // coverage handlers, so GTA 6 purchase attempts still reach the 409 guard.
+    installShelf(router, { render, coverage, baseOf })
     router.get(['/Item', '/product/:sku'], (req, res) => {
       const id = req.params.sku || req.query.goodscode || req.query.goodsCode
       const p = catalogObservations.find(p => p.id === id)

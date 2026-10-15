@@ -8,12 +8,13 @@ import { retailState, saveAddress, orderStatus } from '../../lib/retail-state.js
 import { registerJourneys, rememberProduct, privateOrder, locationFor, savedAddressValues, savedAddressPicker, checkoutAddress } from './journeys.js'
 import { validateCard } from '../../lib/payment.js'
 import { authenticate, createAccount, findAccount, publicAccount } from '../../lib/accounts.js'
-import { PRODUCTS, byId, productPath, search, totals, STATES, WALMART_PLUS, selectedProduct, lineKey, stockLimit, validCart, cartLines, arrivalSummary } from './data.js'
+import { PRODUCTS, CATALOG, byId, productPath, search, totals, STATES, WALMART_PLUS, selectedProduct, lineKey, stockLimit, validCart, cartLines, arrivalSummary } from './data.js'
 import * as P from './pages.js'
 import * as B from './browse.js'
 import { DEPARTMENTS, CAMPAIGNS, SELLERS, categorySlug } from './catalog.js'
 import { esc } from '../../lib/html.js'
 import { installParity } from './parity.js'
+import { shelfGallery } from './shelf.js'
 
 const NAME = 'Walmart'
 const router = Router()
@@ -67,8 +68,9 @@ function renderProduct(req,res,product,{status=200,error=''}={}) {
   const recent = retailState(req)
   recent.recentVariants ||= {}
   recent.recentVariants[product.id] = product.variantId || null
-  const similar=PRODUCTS.filter(x=>x.id!==product.id && x.department===product.department && !x.sponsored).slice(0,8)
-  const sponsored=product.kind==='game' ? PRODUCTS.find(x=>x.sponsored && x.id!==product.id):null
+  const peers=CATALOG.filter(x=>x.id!==product.id && x.department===product.department && !x.sponsored)
+  const similar=[...peers.filter(x=>x.category===product.category),...peers.filter(x=>x.category!==product.category)].slice(0,8)
+  const sponsored=product.kind==='game' ? CATALOG.find(x=>x.sponsored && x.id!==product.id):null
   return render(req,res,{title:`${product.title} - Walmart.com`,status,body:P.productPage({base:res.locals.base,p:product,similar,sponsored,error,location:locationFor(req)})})
 }
 
@@ -92,14 +94,14 @@ installParity(router, { render, tile: P.tile })
 registerJourneys(router, { render, notFound, gateUrl, addToCart })
 
 // ---- browse ----
-router.get('/', (req,res)=>render(req,res,{title:'Walmart.com | Save Money. Live better.',body:P.homePage({base:res.locals.base,products:PRODUCTS})}))
+router.get('/', (req,res)=>render(req,res,{title:'Walmart.com | Save Money. Live better.',body:P.homePage({base:res.locals.base,products:CATALOG})}))
 router.get('/search',(req,res)=>{
  const q=String(req.query.q??'')
  render(req,res,{title:`${q || 'Shop all'} - Walmart.com`,q,body:P.searchPage({base:res.locals.base,q,filters:B.filtersFrom(req.query),page:req.query.page,products:search(q)})})
 })
 router.get('/departments',(req,res)=>render(req,res,{title:'All Departments - Walmart.com',body:B.departmentsPage({base:res.locals.base,tile:P.tile})}))
 router.get('/cp/pharmacy/5431',(req,res)=>render(req,res,{title:'Pharmacy - Walmart.com',body:B.servicePage({base:res.locals.base,slug:'pharmacy'})}))
-router.get('/cp/halloween/9516159',(req,res)=>render(req,res,{title:'Halloween inspiration - Walmart.com',body:B.listingPage({base:res.locals.base,route:`${res.locals.base}/cp/halloween/9516159`,title:'Halloween inspiration',description:'Seasonal costumes and Halloween decorations are not stocked in this assortment. Explore family games and creative supplies for a cozy night in.',source:PRODUCTS.filter(p=>p.department==='toys' && p.category!=='Bikes'),filters:B.filtersFrom(req.query),page:req.query.page,tile:P.tile})}))
+router.get('/cp/halloween/9516159',(req,res)=>render(req,res,{title:'Halloween inspiration - Walmart.com',body:B.listingPage({base:res.locals.base,route:`${res.locals.base}/cp/halloween/9516159`,title:'Halloween inspiration',description:'Get ready for a cozy Halloween night in with family games and creative supplies.',source:CATALOG.filter(p=>p.department==='toys' && p.category!=='Bikes'),filters:B.filtersFrom(req.query),page:req.query.page,tile:P.tile})}))
 router.get('/cp/:slug/:id',(req,res)=>{
  const d=DEPARTMENTS.find(d=>d.id===req.params.id && d.slug===req.params.slug)
  if(!d)return notFound(req,res)
@@ -107,9 +109,9 @@ router.get('/cp/:slug/:id',(req,res)=>{
 })
 router.get('/browse/:category',(req,res)=>{
  // Menu categories from the fixture department list stay browsable even when the active catalog has none of them.
- const category=PRODUCTS.find(p=>categorySlug(p.category)===req.params.category)?.category ?? DEPARTMENTS.flatMap(d=>d.categories).find(c=>categorySlug(c)===req.params.category)
+ const category=CATALOG.find(p=>categorySlug(p.category)===req.params.category)?.category ?? DEPARTMENTS.flatMap(d=>d.categories).find(c=>categorySlug(c)===req.params.category)
  if(!category)return notFound(req,res)
- const source=PRODUCTS.filter(p=>p.category===category)
+ const source=CATALOG.filter(p=>p.category===category)
  render(req,res,{title:`${category} - Walmart.com`,body:B.listingPage({base:res.locals.base,route:`${res.locals.base}/browse/${req.params.category}`,title:category,source,filters:B.filtersFrom(req.query),page:req.query.page,tile:P.tile})})
 })
 router.get('/shop/:slug',(req,res)=>{
@@ -118,10 +120,10 @@ router.get('/shop/:slug',(req,res)=>{
  if(campaign)return render(req,res,{title:`${campaign.title} - Walmart.com`,body:B.campaignPage({...common,campaign})})
  if(!['savings','get-it-fast'].includes(req.params.slug))return notFound(req,res)
  const deals=req.params.slug==='savings'
- render(req,res,{title:deals?'Rollbacks & More - Walmart.com':'Get it Fast - Walmart.com',body:B.listingPage({...common,route:`${base}/shop/${req.params.slug}`,title:deals?'Rollbacks & More':'Get it Fast',description:deals?'Lower prices on everyday favorites.':fixtureCatalog?'Items with shipping estimates of tomorrow. Pickup and same-day delivery are not available.':'Items with captured next-day shipping estimates. Regional pickup and delivery availability is unverified.',source:PRODUCTS.filter(p=>deals?p.wasPrice:p.arrival.day==='tomorrow' && p.stock>0)})})
+ render(req,res,{title:deals?'Rollbacks & More - Walmart.com':'Get it Fast - Walmart.com',body:B.listingPage({...common,route:`${base}/shop/${req.params.slug}`,title:deals?'Rollbacks & More':'Get it Fast',description:deals?'Lower prices on everyday favorites.':'Items that can arrive tomorrow with shipping.',source:CATALOG.filter(p=>deals?p.wasPrice:p.arrival.day==='tomorrow' && p.stock>0)})})
 })
 router.get('/seller/:id',(req,res)=>{
- const seller=Object.hasOwn(SELLERS,req.params.id)?SELLERS[req.params.id]:null;if(!seller || (!fixtureCatalog && !PRODUCTS.some(p=>p.sellerId===seller.id)))return notFound(req,res)
+ const seller=Object.hasOwn(SELLERS,req.params.id)?SELLERS[req.params.id]:null;if(!seller || (!fixtureCatalog && !CATALOG.some(p=>p.sellerId===seller.id)))return notFound(req,res)
  render(req,res,{title:`${seller.name} - Walmart.com`,body:B.sellerPage({base:res.locals.base,seller,filters:B.filtersFrom(req.query),page:req.query.page,tile:P.tile})})
 })
 for(const path of ['/services','/services/:slug','/store-directory','/plus'])router.get(path,(req,res)=>{
@@ -139,13 +141,13 @@ router.get('/ip/:id/pickup',(req,res)=>{
  const p=byId(req.params.id),base=res.locals.base
  if(!p||p.kind!=='game')return notFound(req,res)
  const zip=String(req.query.zip??locationFor(req).zip),valid=/^\d{5}$/.test(zip)
- render(req,res,{title:`Pickup options - ${p.title}`,status:valid?200:400,body:`<section class="wm-pickup-availability"><a href="${productPath(base,p)}">Back to item</a><h1>Check nearby stores</h1><h2>${esc(p.title)}</h2><form method="get" action="${base}/ip/${p.id}/pickup"><label for="pickup-zip">ZIP code</label><input id="pickup-zip" name="zip" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}" value="${esc(zip)}" required><button class="wm-pill" type="submit">Update location</button></form>${valid?`<p role="status"><b>${fixtureCatalog?'Pickup not available':'Pickup availability unverified'}</b> near ${esc(zip)}.</p><p>${fixtureCatalog?'Shipping is available for this item.':'The captured product page offered shipping preorder and a Check nearby link. No store-level pickup result was captured.'}</p><a class="wm-pill" href="${productPath(base,p)}">Continue with shipping</a>`:'<p class="wm-error" role="alert">Enter a valid 5-digit ZIP code.</p>'}</section>`})
+ render(req,res,{title:`Pickup options - ${p.title}`,status:valid?200:400,body:`<section class="wm-pickup-availability"><a href="${productPath(base,p)}">Back to item</a><h1>Check nearby stores</h1><h2>${esc(p.title)}</h2><form method="get" action="${base}/ip/${p.id}/pickup"><label for="pickup-zip">ZIP code</label><input id="pickup-zip" name="zip" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}" value="${esc(zip)}" required><button class="wm-pill" type="submit">Update location</button></form>${valid?`<p role="status"><b>${fixtureCatalog?'Pickup not available':'Pickup availability varies by store'}</b> near ${esc(zip)}.</p><p>${fixtureCatalog?'This item is available for shipping.':'This item is available for shipping. Contact your local store for pickup availability.'}</p><a class="wm-pill" href="${productPath(base,p)}">Continue with shipping</a>`:'<p class="wm-error" role="alert">Enter a valid 5-digit ZIP code.</p>'}</section>`})
 })
 router.get('/ip/:id/gallery',(req,res)=>{
  const product=byId(req.params.id);if(!product)return notFound(req,res)
  const p=selectedProduct(product,req.query.variant ?? product.variants?.[0].id)
  if(!p)return renderProduct(req,res,selectedProduct(product,product.variants?.[0].id),{status:400,error:'That option is not available. Choose one of the listed options.'})
- render(req,res,{title:`${p.title} - Product gallery`,body:`<section class="wm-product-gallery"><a href="${productPath(res.locals.base,p)}${p.variantId?`?variant=${encodeURIComponent(p.variantId)}`:''}">Back to item</a><h1>${esc(p.title)}</h1><div>${productGallery('walmart',p)}<article><h2>Product image & details</h2><p>Use the item specifications and selected option to check size, pack and compatibility.</p><ul>${p.features.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>${p.variants?`<h3>Available choices</h3><ul>${p.variants.map(v=>`<li><a href="${productPath(res.locals.base,p)}?variant=${v.id}">${esc(Object.values(v.options).join(' · '))}</a></li>`).join('')}</ul>`:''}</article></div></section>`})
+ render(req,res,{title:`${p.title} - Product gallery`,body:`<section class="wm-product-gallery"><a href="${productPath(res.locals.base,p)}${p.variantId?`?variant=${encodeURIComponent(p.variantId)}`:''}">Back to item</a><h1>${esc(p.title)}</h1><div>${p.shelf?shelfGallery(p):productGallery('walmart',p)}<article><h2>Product image & details</h2><p>Use the item specifications and selected option to check size, pack and compatibility.</p><ul>${p.features.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>${p.variants?`<h3>Available choices</h3><ul>${p.variants.map(v=>`<li><a href="${productPath(res.locals.base,p)}?variant=${v.id}">${esc(Object.values(v.options).join(' · '))}</a></li>`).join('')}</ul>`:''}</article></div></section>`})
 })
 router.get('/ip/:slug/:id',(req,res)=>{
  const product=byId(req.params.id);if(!product)return notFound(req,res)
@@ -176,7 +178,7 @@ router.get('/pac',(req,res)=>{
  const base=res.locals.base,p=selectedProduct(byId(req.query.id),req.query.variant)
  const line=p&&req.store.cart.find(l=>lineKey(l.pid,l.variantId)===lineKey(p.id,p.variantId))
  if(!line)return res.redirect(`${base}/cart`)
- const recommendations=PRODUCTS.filter(x=>x.id!==p.id && x.department===p.department).slice(0,8)
+ const recommendations=CATALOG.filter(x=>x.id!==p.id && x.department===p.department).slice(0,8)
  render(req,res,{title:'Added to cart | Relevant recommendations',body:P.addedPage({base,p,qty:line.qty,t:totals(req.store),recommendations})})
 })
 

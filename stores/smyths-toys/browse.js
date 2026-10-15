@@ -3,6 +3,11 @@ import { productImage, productGallery } from '../../lib/product-assets.js'
 import { products as canonicalProducts } from './data.js'
 import { expandSmyths, CATALOG_PLATFORMS, compactPages, merchandisingPlatform } from './expansion.js'
 import { esc, money } from '../../lib/html.js'
+import { shelfProducts, shelfImage } from './shelf.js'
+import { shelfTile } from './shelf-pages.js'
+
+// Reference mode shows the Smyths shop floor (shelf.js) next to the GTA VI listings; fixture mode keeps its own catalogue.
+export const shelf = fixtureCatalog ? [] : shelfProducts
 
 // Deterministic local inventory. Names, reviews, stock and prices are fixtures, not live retailer data.
 export const departmentPaths = { Toys: '/toys', 'Baby Room': '/baby', Outdoor: '/outdoor', 'Gaming & Tech': '/gaming-and-tech' }
@@ -69,9 +74,9 @@ export function resolveProduct(p, options={}) {
 }
 export const optionInput = (p,input) => Object.fromEntries((p.options||[]).filter(o=>typeof input[`option_${o.name}`]==='string').map(o=>[o.name,input[`option_${o.name}`]]))
 export const quantityLimit = p => Math.min(p.purchaseLimit ?? p.stock ?? 4,p.kind==='other'?10:4)
-export function artwork(p) { return productImage('smyths-toys',p,{className:'product-art'}) }
+export function artwork(p) { return p?.shelf ? shelfImage(p,{className:'product-art'}) : productImage('smyths-toys',p,{className:'product-art'}) }
 export function browseTiles(base, products, currency='GBP',returnTo='') {
- return `<div class="browse-grid">${products.map(p=>`<article class="browse-tile" data-sku="${esc(p.sku)}"><a href="${base}${p.path}${returnTo&&p.kind==='other'?`?return=${encodeURIComponent(returnTo)}`:''}">${artwork(p)}<small>${esc(p.brand||'Rockstar Games')} · ${esc(p.category||'Pre-order games')}</small><h2>${esc(p.title)}</h2></a>${p.rating ? `<p class="rating">★ ${p.rating} <span>(${p.reviews})</span></p>` : ''}<strong class="browse-price">${p.variants?.some(v=>v.price!==p.price)?'From ':''}${p.price == null && p.unit_price == null ? 'Price not verified' : money(p.price??p.unit_price,currency)}</strong><p>${p.catalogEvidence?.availability === 'unknown' ? 'Check availability' : p.kind==='other'?(p.stock?'In stock':'Currently out of stock'):'Pre-order — 12 November 2026'}</p><a href="${base}${p.path}${returnTo&&p.kind==='other'?`?return=${encodeURIComponent(returnTo)}`:''}">View product</a></article>`).join('')}</div>`
+ return `<div class="browse-grid">${products.map(p=>p.shelf?shelfTile(base,p,returnTo):`<article class="browse-tile" data-sku="${esc(p.sku)}"><a href="${base}${p.path}${returnTo&&p.kind==='other'?`?return=${encodeURIComponent(returnTo)}`:''}">${artwork(p)}<small>${esc(p.brand||'Rockstar Games')} · ${esc(p.category||'Pre-order games')}</small><h2>${esc(p.title)}</h2></a>${p.rating ? `<p class="rating">★ ${p.rating} <span>(${p.reviews})</span></p>` : ''}<strong class="browse-price">${p.variants?.some(v=>v.price!==p.price)?'From ':''}${p.price == null && p.unit_price == null ? 'Price coming soon' : money(p.price??p.unit_price,currency)}</strong><p>${p.catalogEvidence?.availability === 'unknown' ? 'Check availability' : p.kind==='other'?(p.stock?'In stock':'Currently out of stock'):'Pre-order — 12 November 2026'}</p><a href="${base}${p.path}${returnTo&&p.kind==='other'?`?return=${encodeURIComponent(returnTo)}`:''}">View product</a></article>`).join('')}</div>`
 }
 export const ages=[['baby','0–12 months',0,1],['1-2','1–2 years',1,2],['3-4','3–4 years',3,4],['5-7','5–7 years',5,7],['8-11','8–11 years',8,11],['12-16','12–16 years',12,16],['18+','18 years and over',18,99]]
 const str=x=>typeof x==='string'?x.trim():''

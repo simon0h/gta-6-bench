@@ -69,7 +69,7 @@ test('GAME help search, category/article and local case validation/ownership wor
  for(const route of ['help/categories/account','help/articles/reward-elite','frasersplus'])assert.equal((await c.get('/game-uk/'+route)).status,200)
  assert.match((await c.get('/game-uk/help/articles/reward-elite')).text,/31 July 2024/)
  const invalid=await c.post('/game-uk/contact',{category:'forged',email:'guest@example.com',subject:'Keep this subject',message:'A helpful detailed message.'});assert.equal(invalid.status,400);assert.match(invalid.text,/Keep this subject/)
- const ok=await c.post('/game-uk/contact',{category:'Store feedback',email:'guest@example.com',subject:'Store visit',message:'Please note this local store visit feedback.'});assert.match(ok.text,/saved locally/);const path=new URL(ok.url).pathname;assert.equal((await s.client().get(path)).status,404)
+ const ok=await c.post('/game-uk/contact',{category:'Store feedback',email:'guest@example.com',subject:'Store visit',message:'Please note this local store visit feedback.'});assert.match(ok.text,/we have received your request/);assert.doesNotMatch(ok.text,/saved locally/);const path=new URL(ok.url).pathname;assert.equal((await s.client().get(path)).status,404)
  await login(c);assert.equal((await c.get(path)).status,404);assert.doesNotMatch((await c.get('/game-uk/contact/requests')).text,/Store visit/)
  }finally{await s.close()}
 })

@@ -3,9 +3,10 @@
 // pages, local stand-ins for off-site links, the HTML site map and /sitemap.xml.
 // Category grids only show products from this store's catalogue (PRODUCTS); where argos.co.uk would list
 // items the catalogue does not carry, the page keeps the real structure and shows a "0 products" state.
-import { esc } from '../../lib/html.js'
+import { esc, publicNotice } from '../../lib/html.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { PRODUCTS } from './data.js'
+import { SHELF, byPopularity } from './shelf.js'
 import { cards } from './catalog.js'
 import { UTILITY, MENU, PROMOS, FOOTER, LEGAL, BRAND_HOMES } from './site-data.js'
 import { INFO, LANDINGS, FEATURES } from './site-content.js'
@@ -27,14 +28,36 @@ export const ICONS = {
 // ---------- category index (built from the captured mega menu) ----------
 export const CATEGORIES = new Map()
 for (const m of MENU) {
-  CATEGORIES.set(trim(m.path), { title: m.h1 || m.label, dept: m, top: true })
+  CATEGORIES.set(trim(m.path), { key: trim(m.path), title: m.h1 || m.label, dept: m, top: true })
   for (const g of m.groups) for (const [label, path] of g.links) {
     if (!path.includes('/c:') || CATEGORIES.has(trim(path))) continue
-    CATEGORIES.set(trim(path), { title: label.replace(/^Shop all /, ''), dept: m, group: g })
+    CATEGORIES.set(trim(path), { key: trim(path), title: label.replace(/^Shop all /, ''), dept: m, group: g })
   }
 }
 const gta = PRODUCTS.filter(p => p.kind !== 'other' && p.department === 'gaming')
+// Reference mode: category grids list the everyday assortment for that category, with the evidenced
+// GTA VI listings placed among the games where argos.co.uk would list them (never as the whole page).
+const inPaths = paths => SHELF.filter(p => p.paths.some(x => paths.includes(x)))
+const among = (list, extra, at = 4) => [...list.slice(0, at), ...extra, ...list.slice(at)]
+const isShopAll = cat => /^shop all/i.test(cat.group?.links.find(([, x]) => trim(x) === cat.key)?.[0] || '')
+function referenceProducts(cat) {
+  const m = cat.dept, label = cat.title.toLowerCase()
+  if (m.id === 'christmas' && cat.top) return byPopularity(SHELF.filter(p => ['toys', 'technology', 'gaming', 'health-and-beauty', 'christmas'].includes(p.menu))).slice(0, 48)
+  if (m.id === 'gaming') {
+    if (/pre-order/.test(label)) return gta
+    if (cat.top) return among(byPopularity(SHELF.filter(p => p.menu === 'gaming')), gta, 6)
+    const platform = cat.group?.platform
+    const own = isShopAll(cat) ? inPaths(cat.group.links.map(([, x]) => trim(x))) : inPaths([cat.key])
+    const games = platform && /games|playstation|xbox/.test(label) ? gta.filter(p => p.platform === platform) : []
+    return among(byPopularity(own), games, 3)
+  }
+  if (cat.top) return byPopularity(SHELF.filter(p => p.menu === m.id))
+  // A group's "Shop all" link covers the whole department section the menu column stands for.
+  if (isShopAll(cat)) return byPopularity(SHELF.filter(p => p.menu === m.id))
+  return byPopularity(inPaths([cat.key]))
+}
 function productsFor(cat) {
+  if (!fixtureCatalog) return referenceProducts(cat)
   const m = cat.dept, label = cat.title.toLowerCase()
   if (m.id === 'gaming') {
     const platform = cat.group?.platform
@@ -53,7 +76,7 @@ export function header(base, { cart = [], user } = {}) {
   const count = cart.reduce((n, p) => n + p.qty, 0)
   const mega = `<details class="shop-menu ar-mega-host"><summary>${ICONS.menu}<span>Shop</span></summary><div class="ar-mega"><p class="ar-mega-title">Shop by department</p><ul>${MENU.map(m => `<li><a class="ar-dept" href="${esc(base + m.path)}">${esc(m.label)} ${chevron}</a><div class="ar-sub"><a class="ar-sub-all" href="${esc(base + m.path)}">Shop all ${esc(m.label)} ${chevron}</a><div class="ar-sub-cols">${m.groups.map(g => `<div><p>${esc(g.title)}</p>${g.links.map(l => link(base, l)).join('')}</div>`).join('')}</div></div></li>`).join('')}</ul><div class="ar-mega-promos">${PROMOS.map(l => link(base, l)).join('')}<a href="${base}/features/advice-and-inspiration">Advice &amp; Inspiration</a><a href="${base}/sitemap">Site map</a></div></div></details>`
   const trending = `<details class="shop-menu trending-menu"><summary><span>Trending</span></summary><div class="ar-trending">${PROMOS.map(l => link(base, l)).join('')}<a href="${base}/events/voucher-discount-codes">Voucher codes</a><a href="${base}/features/gaming">Upcoming games</a></div></details>`
-  return `<header class="ar-header"><div class="topline"><nav aria-label="Customer services">${UTILITY.map(l => link(base, l)).join('')}</nav></div><div class="nav"><a class="brand" href="${base}/" aria-label="Argos logo - go to homepage"><span>Argos</span></a><form action="${base}/search" method="get" role="search"><label class="visually-hidden" for="site-search">Search Argos</label><input id="site-search" name="q" placeholder="What are you looking for?" list="search-suggestions" autocomplete="off"><datalist id="search-suggestions">${PRODUCTS.slice(0, 60).map(p => `<option value="${esc(p.title)}"></option>`).join('')}</datalist><button aria-label="Search">${ICONS.search}<span class="visually-hidden">Search</span></button></form><a class="nav-action" href="${base}/account/login">${ICONS.account}<span>${user ? 'Your account' : 'Account'}</span></a><a class="nav-action" href="${base}/wishlist">${ICONS.heart}<span>Wishlist</span></a><a class="nav-action" href="${base}/basket">${ICONS.trolley}<span>Trolley</span>${count ? `<b class="ar-badge" aria-label="${count} items">${count}</b>` : ''}</a></div><nav class="departments" aria-label="Shop navigation">${mega}${trending}<a class="ar-event" href="${base}/events/big-event">The Big Red Event</a><span class="ar-nav-links"><a href="${base}/stores">${ICONS.store}Stores</a><a href="${base}/help">Help</a><a href="${base}/features/advice-and-inspiration">Advice &amp; Inspiration</a></span></nav><a class="ar-promo-strip" href="${base}/help/delivery-and-collection-guide">${ICONS.van}<span><strong>Small Item Delivery £4.95, free over £100</strong></span></a></header>`
+  return `<header class="ar-header"><div class="topline"><nav aria-label="Customer services">${UTILITY.map(l => link(base, l)).join('')}</nav></div><div class="nav"><a class="brand" href="${base}/" aria-label="Argos logo - go to homepage"><span>Argos</span></a><form action="${base}/search" method="get" role="search"><label class="visually-hidden" for="site-search">Search Argos</label><input id="site-search" name="q" placeholder="What are you looking for?" list="search-suggestions" autocomplete="off"><datalist id="search-suggestions">${[...PRODUCTS, ...byPopularity(SHELF).slice(0, 40)].slice(0, 60).map(p => `<option value="${esc(p.title)}"></option>`).join('')}</datalist><button aria-label="Search">${ICONS.search}<span class="visually-hidden">Search</span></button></form><a class="nav-action" href="${base}/account/login">${ICONS.account}<span>${user ? 'Your account' : 'Account'}</span></a><a class="nav-action" href="${base}/wishlist">${ICONS.heart}<span>Wishlist</span></a><a class="nav-action" href="${base}/basket">${ICONS.trolley}<span>Trolley</span>${count ? `<b class="ar-badge" aria-label="${count} items">${count}</b>` : ''}</a></div><nav class="departments" aria-label="Shop navigation">${mega}${trending}<a class="ar-event" href="${base}/events/big-event">The Big Red Event</a><span class="ar-nav-links"><a href="${base}/stores">${ICONS.store}Stores</a><a href="${base}/help">Help</a><a href="${base}/features/advice-and-inspiration">Advice &amp; Inspiration</a></span></nav><a class="ar-promo-strip" href="${base}/help/delivery-and-collection-guide">${ICONS.van}<span><strong>Small Item Delivery £4.95, free over £100</strong></span></a></header>`
 }
 
 export function footer(base, disclaimerHtml) {
@@ -65,21 +88,32 @@ const crumbs = (base, trail) => `<nav class="breadcrumbs" aria-label="Breadcrumb
 const deptTile = (base, m) => `<a class="ar-tile" href="${esc(base + m.path)}"><span class="ar-tile-art ar-art-${m.id}" aria-hidden="true">${esc(m.label.split(' ')[0][0])}</span><span>${esc(m.label)}</span></a>`
 const byId = id => MENU.find(m => m.id === id)
 
+const PRICE_BANDS = [['Up to £25', 0, 25], ['£25 - £50', 25, 50], ['£50 - £100', 50, 100], ['£100 - £250', 100, 250], ['£250 and above', 250, Infinity]]
+const qvals = v => (Array.isArray(v) ? v : [v]).filter(x => typeof x === 'string' && x)
+const PER_PAGE = 24
 function resultsBlock(base, products, route, query = {}, { filters = true } = {}) {
   const sort = typeof query.sort === 'string' ? query.sort : 'relevance'
-  const list = [...products]
+  const prices = qvals(query.price), brandSel = qvals(query.brand), ratingSel = qvals(query.rating)
+  const bands = PRICE_BANDS.filter(([l]) => prices.includes(l)), minRating = ratingSel.includes('3 or more') ? 3 : ratingSel.includes('4 or more') ? 4 : 0
+  const list = products.filter(p => (!bands.length || bands.some(([, lo, hi]) => p.unit_price >= lo && p.unit_price < hi)) && (!brandSel.length || brandSel.includes(p.brand)) && (!minRating || (p.rating || 0) >= minRating) && (query.collect !== '1' || (p.methods || []).includes('pickup')) && (query.fast !== '1' || (p.methods || []).includes('ship') && !p.bulky))
   if (sort === 'price-low') list.sort((a, b) => a.unit_price - b.unit_price)
   if (sort === 'price-high') list.sort((a, b) => b.unit_price - a.unit_price)
-  if (sort === 'rating') list.sort((a, b) => (b.rating || 0) - (a.rating || 0))
-  const brands = [...new Set(products.map(p => p.brand).filter(Boolean))]
-  const n = list.length
-  const panel = `<details class="filter-panel" open><summary>Filter <span>Price, brand and rating</span></summary><form action="${esc(route)}" method="get" class="facets"><input type="hidden" name="sort" value="${esc(sort)}"><h2>Filter by</h2><fieldset><legend>Price</legend>${['Up to £25', '£25 - £50', '£50 - £100', '£100 - £250', '£250 and above'].map(r => `<label class="facet-option"><input type="checkbox" name="price" value="${esc(r)}"> ${esc(r)}</label>`).join('')}</fieldset><fieldset><legend>Brand</legend>${brands.length ? brands.map(b => `<label class="facet-option"><input type="checkbox" name="brand" value="${esc(b)}"> ${esc(b)} (${products.filter(p => p.brand === b).length})</label>`).join('') : '<p class="ar-muted">No brands to show</p>'}</fieldset><fieldset><legend>Customer Rating</legend>${['4 or more', '3 or more'].map(r => `<label class="facet-option"><input type="checkbox" name="rating" value="${esc(r)}"> ${esc(r)}</label>`).join('')}</fieldset><fieldset><legend>Delivery &amp; collection</legend><label class="facet-option"><input type="checkbox" name="fast" value="1"> Fast Track delivery</label><label class="facet-option"><input type="checkbox" name="collect" value="1"> Collect in store</label></fieldset><div class="filter-actions"><button>Apply</button><a href="${esc(route)}">Clear all</a></div></form></details>`
-  return `<div class="${filters ? 'catalog-layout ' : ''}ar-results">${filters ? panel : ''}<section><div class="listing-controls"><p><strong>${n} ${n === 1 ? 'product' : 'products'}</strong></p><form method="get" action="${esc(route)}" class="sort-form"><label for="sort">Sort by</label><select id="sort" name="sort">${[['relevance', 'Relevance'], ['price-low', 'Price: Low - High'], ['price-high', 'Price: High - Low'], ['rating', 'Customer Rating']].map(([v, l]) => `<option value="${v}" ${sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select><button class="secondary">Sort</button></form></div>${n ? cards(base, list) : `<div class="ar-empty"><h2>Sorry, there are no products available here right now</h2><p>This benchmark shop only lists products from its own catalogue, and none are in this category. Try another category or search for a product.</p><p><a class="button" href="${base}/search">Search all products</a> <a class="button secondary" href="${base}/">Back to homepage</a></p></div>`}</section></div>`
+  if (sort === 'rating') list.sort((a, b) => (b.rating || 0) - (a.rating || 0) || (b.reviews || 0) - (a.reviews || 0))
+  const brands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort()
+  const n = list.length, pages = Math.max(1, Math.ceil(n / PER_PAGE)), page = Math.min(pages, Math.max(1, parseInt(query.page) || 1))
+  const shown = list.slice((page - 1) * PER_PAGE, page * PER_PAGE)
+  const keep = Object.entries(query).filter(([k]) => ['sort', 'price', 'brand', 'rating', 'fast', 'collect'].includes(k)).flatMap(([k, v]) => qvals(v).map(x => [k, x]))
+  const pageHref = p => { const u = new URLSearchParams(keep); if (p > 1) u.set('page', String(p)); const q = u.toString(); return route + (q ? `?${q}` : '') }
+  const checked = on => on ? ' checked' : ''
+  const panel = `<details class="filter-panel" open><summary>Filter <span>Price, brand and rating</span></summary><form action="${esc(route)}" method="get" class="facets"><input type="hidden" name="sort" value="${esc(sort)}"><h2>Filter by</h2><fieldset><legend>Price</legend>${PRICE_BANDS.map(([r]) => `<label class="facet-option"><input type="checkbox" name="price" value="${esc(r)}"${checked(prices.includes(r))}> ${esc(r)}</label>`).join('')}</fieldset><fieldset><legend>Brand</legend>${brands.length ? brands.map(b => `<label class="facet-option"><input type="checkbox" name="brand" value="${esc(b)}"${checked(brandSel.includes(b))}> ${esc(b)} (${products.filter(p => p.brand === b).length})</label>`).join('') : '<p class="ar-muted">No brands to show</p>'}</fieldset><fieldset><legend>Customer Rating</legend>${['4 or more', '3 or more'].map(r => `<label class="facet-option"><input type="checkbox" name="rating" value="${esc(r)}"${checked(ratingSel.includes(r))}> ${esc(r)}</label>`).join('')}</fieldset><fieldset><legend>Delivery &amp; collection</legend><label class="facet-option"><input type="checkbox" name="fast" value="1"${checked(query.fast === '1')}> Fast Track delivery</label><label class="facet-option"><input type="checkbox" name="collect" value="1"${checked(query.collect === '1')}> Collect in store</label></fieldset><div class="filter-actions"><button>Apply</button><a href="${esc(route)}">Clear all</a></div></form></details>`
+  const pager = pages > 1 ? `<nav class="pagination" aria-label="Product pages">${page > 1 ? `<a rel="prev" href="${esc(pageHref(page - 1))}">Previous</a>` : ''}${Array.from({ length: pages }, (_, i) => i + 1).map(i => `<a ${i === page ? 'aria-current="page" ' : ''}href="${esc(pageHref(i))}">${i}</a>`).join('')}<span>Page ${page} of ${pages}</span>${page < pages ? `<a rel="next" href="${esc(pageHref(page + 1))}">Next</a>` : ''}</nav>` : ''
+  const sortHidden = keep.filter(([k]) => k !== 'sort').map(([k, v]) => `<input type="hidden" name="${esc(k)}" value="${esc(v)}">`).join('')
+  return `<div class="${filters ? 'catalog-layout ' : ''}ar-results">${filters ? panel : ''}<section><div class="listing-controls"><p><strong>${n} ${n === 1 ? 'product' : 'products'}</strong>${n > PER_PAGE ? ` · Showing ${(page - 1) * PER_PAGE + 1}–${Math.min(page * PER_PAGE, n)}` : ''}</p><form method="get" action="${esc(route)}" class="sort-form">${sortHidden}<label for="sort">Sort by</label><select id="sort" name="sort">${[['relevance', 'Relevance'], ['price-low', 'Price: Low - High'], ['price-high', 'Price: High - Low'], ['rating', 'Customer Rating']].map(([v, l]) => `<option value="${v}" ${sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select><button class="secondary">Sort</button></form></div>${n ? cards(base, shown) : `<div class="ar-empty"><h2>Sorry, there are no products available here right now</h2><p>${products.length ? 'No products match your filters. Try removing a filter.' : 'Try another category or search for a product.'}</p><p><a class="button" href="${base}/search">Search all products</a> <a class="button secondary" href="${base}/">Back to homepage</a></p></div>`}${pager}</section></div>`
 }
 
 function departmentPage(base, cat, query) {
   const m = cat.dept, products = productsFor(cat)
-  return `${crumbs(base, [[cat.title]])}<section class="ar-dept-hero ar-art-${m.id}"><div><h1>${esc(cat.title)}</h1><p>Shop ${esc(m.label.toLowerCase())} at Argos. Get it fast with same day delivery, or Click &amp; Collect from your nearest store.</p></div></section><h2 class="ar-section-title">Shop by category</h2><div class="ar-cat-tiles">${m.groups.map(g => `<a class="ar-cat-tile" href="${esc(base + g.links[0][1])}"><span class="ar-tile-art ar-art-${m.id}" aria-hidden="true">${esc(g.title[0])}</span><span>${esc(g.title)}</span></a>`).join('')}</div><div class="ar-dept-layout"><aside class="ar-dept-nav" aria-label="${esc(m.label)} categories">${m.groups.map(g => `<section><h2>${esc(g.title)}</h2>${g.links.map(l => link(base, l)).join('')}</section>`).join('')}</aside><div><div class="ar-promo-row"><a class="ar-promo-card ar-promo-red" href="${base}/events/big-event"><strong>The Big Red Event</strong><span>Shop the event ${chevron}</span></a><a class="ar-promo-card" href="${base}/help/delivery-and-collection-guide"><strong>Fast Track same day delivery</strong><span>Order by 1pm, £7.95 ${chevron}</span></a><a class="ar-promo-card" href="${base}/help/argos-pay"><strong>Argos Pay</strong><span>Buy what you love, pay at your pace ${chevron}</span></a></div><h2 class="ar-section-title">Popular in ${esc(cat.title)}</h2>${resultsBlock(base, products, base + m.path, query, { filters: false })}<section class="ar-seo"><h2>${esc(cat.title)} at Argos</h2><p>Browse ${esc(m.label.toLowerCase())} by category using the links above, compare features and prices, then choose home delivery or Click &amp; Collect. Prices include VAT.</p></section></div></div>`
+  return `${crumbs(base, [[cat.title]])}<section class="ar-dept-hero ar-art-${m.id}"><div><h1>${esc(cat.title)}</h1><p>Shop ${esc(m.label.toLowerCase())} at Argos. Get it fast with same day delivery, or Click &amp; Collect from your nearest store.</p></div></section><h2 class="ar-section-title">Shop by category</h2><div class="ar-cat-tiles">${m.groups.map(g => `<a class="ar-cat-tile" href="${esc(base + g.links[0][1])}"><span class="ar-tile-art ar-art-${m.id}" aria-hidden="true">${esc(g.title[0])}</span><span>${esc(g.title)}</span></a>`).join('')}</div><div class="ar-dept-layout"><aside class="ar-dept-nav" aria-label="${esc(m.label)} categories">${m.groups.map(g => `<section><h2>${esc(g.title)}</h2>${g.links.map(l => link(base, l)).join('')}</section>`).join('')}</aside><div><div class="ar-promo-row"><a class="ar-promo-card ar-promo-red" href="${base}/events/big-event"><strong>The Big Red Event</strong><span>Shop the event ${chevron}</span></a><a class="ar-promo-card" href="${base}/help/delivery-and-collection-guide"><strong>Fast Track same day delivery</strong><span>Order by 1pm, £7.95 ${chevron}</span></a><a class="ar-promo-card" href="${base}/help/argos-pay"><strong>Argos Pay</strong><span>Buy what you love, pay at your pace ${chevron}</span></a></div><h2 class="ar-section-title">${fixtureCatalog ? 'Popular in' : 'Shop all'} ${esc(cat.title)}</h2>${resultsBlock(base, products, base + m.path, query, { filters: !fixtureCatalog })}<section class="ar-seo"><h2>${esc(cat.title)} at Argos</h2><p>Browse ${esc(m.label.toLowerCase())} by category using the links above, compare features and prices, then choose home delivery or Click &amp; Collect. Prices include VAT.</p></section></div></div>`
 }
 
 function categoryPage(base, cat, query) {
@@ -92,18 +126,33 @@ function categoryPage(base, cat, query) {
 }
 
 function infoPage(base, path, pg) {
-  const sec = s => `<section class="ar-info-section"${s.id ? ` id="${esc(s.id)}"` : ''}><h2>${esc(s.h2)}</h2>${(s.p || []).map(t => `<p>${esc(t)}</p>`).join('')}${s.list ? `<ul>${s.list.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${s.cards ? `<div class="ar-info-cards">${s.cards.map(([h, t]) => `<article><h3>${esc(h)}</h3><p>${esc(t)}</p><span class="ar-muted">Not sold in this shop</span></article>`).join('')}</div>` : ''}${s.links ? `<p class="ar-links">${s.links.map(l => link(base, l)).join('')}</p>` : ''}</section>`
+  const sec = s => `<section class="ar-info-section"${s.id ? ` id="${esc(s.id)}"` : ''}><h2>${esc(s.h2)}</h2>${(s.p || []).map(t => `<p>${esc(t)}</p>`).join('')}${s.list ? `<ul>${s.list.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${s.cards ? `<div class="ar-info-cards">${s.cards.map(([h, t]) => `<article><h3>${esc(h)}</h3><p>${esc(t)}</p>${publicNotice('<span class="ar-muted">Not sold on this website</span>')}</article>`).join('')}</div>` : ''}${s.links ? `<p class="ar-links">${s.links.map(l => link(base, l)).join('')}</p>` : ''}</section>`
   const isHelp = path.startsWith('/help')
-  return `${crumbs(base, isHelp ? [['Help', '/help'], [pg.crumb || pg.title]] : [[pg.crumb || pg.title]])}<div class="ar-info"><h1>${esc(pg.h1 || pg.title)}</h1>${pg.sections.map(sec).join('')}${pg.note ? `<p class="ar-note">${esc(pg.note)}</p>` : ''}${pg.links ? `<p class="ar-links">${pg.links.map(l => link(base, l)).join('')}</p>` : ''}<aside class="ar-help-cta"><h2>Still need help?</h2><p><a href="${base}/help">Help &amp; FAQs</a> · <a href="${base}/help/contact">Contact us</a> · <a href="${base}/stores">Find a store</a></p></aside></div>`
+  return `${crumbs(base, isHelp ? [['Help', '/help'], [pg.crumb || pg.title]] : [[pg.crumb || pg.title]])}<div class="ar-info"><h1>${esc(pg.h1 || pg.title)}</h1>${pg.sections.map(sec).join('')}${pg.note ? `<p class="ar-note">${esc(pg.note)}</p>` : ''}${pg.publicNote ? publicNotice(`<p class="ar-note">${esc(pg.publicNote)}</p>`) : ''}${pg.links ? `<p class="ar-links">${pg.links.map(l => link(base, l)).join('')}</p>` : ''}<aside class="ar-help-cta"><h2>Still need help?</h2><p><a href="${base}/help">Help &amp; FAQs</a> · <a href="${base}/help/contact">Contact us</a> · <a href="${base}/stores">Find a store</a></p></aside></div>`
 }
 
-function landingPage(base, path, l) {
+function landingShelf(path, l) {
+  const deals = byPopularity(SHELF.filter(p => p.deal))
+  const inMenus = ids => SHELF.filter(p => ids.includes(p.menu))
+  if (path === '/list/3-for-20-on-selected-toys' || path === '/sd/gold-jewellery') return SHELF.filter(p => p.paths.includes(path))
+  if (path === '/list/shop-the-traitors') return SHELF.filter(p => p.paths.includes(path) || p.shelfCat === 'boardgame')
+  if (path === '/sd/1-to-2-years-toys') return byPopularity(SHELF.filter(p => p.paths.includes(path) || p.shelfCat === 'earlylearning'))
+  if (path === '/events/christmas-gifts') return byPopularity(inMenus(['toys', 'technology', 'gaming', 'health-and-beauty', 'jewellery-and-watches', 'christmas'])).slice(0, 48)
+  if (/toys-offers/.test(path)) return byPopularity(inMenus(['toys', 'baby-and-nursery']).filter(p => p.deal || p.unit_price <= 30))
+  if (/garden-diy/.test(path)) return byPopularity(inMenus(['garden-and-diy']))
+  if (/top-100/.test(path)) return deals.slice(0, 100)
+  if (/voucher|amazing-deals/.test(path)) return deals
+  if (/big-event/.test(path)) return deals.filter(p => (l.tiles || []).includes(p.menu))
+  return []
+}
+function landingPage(base, path, l, query = {}) {
   const products = /gaming|christmas|big-event/.test(path) ? gta : []
-  return `${crumbs(base, [[l.title]])}<section class="ar-event-hero"><div><p class="eyebrow">Argos</p><h1>${esc(l.title)}</h1><p>${esc(l.intro)}</p></div></section><h2 class="ar-section-title">Shop by department</h2><div class="ar-tiles">${l.tiles.map(id => byId(id)).filter(Boolean).map(m => deptTile(base, m)).join('')}</div>${products.length ? `<h2 class="ar-section-title">Pre-order the biggest games</h2>${cards(base, products)}` : `<div class="ar-empty"><h2>No offers to show right now</h2><p>${esc(l.empty || 'Offers change regularly. This benchmark shop has no products in this event.')}</p><p><a class="button" href="${base}/">Back to homepage</a></p></div>`}`
+  const shelf = fixtureCatalog ? [] : landingShelf(path, l)
+  return `${crumbs(base, [[l.title]])}<section class="ar-event-hero"><div><p class="eyebrow">Argos</p><h1>${esc(l.title)}</h1><p>${esc(l.intro)}</p></div></section><h2 class="ar-section-title">Shop by department</h2><div class="ar-tiles">${l.tiles.map(id => byId(id)).filter(Boolean).map(m => deptTile(base, m)).join('')}</div>${shelf.length ? `<h2 class="ar-section-title">Shop the offers</h2>${resultsBlock(base, shelf, base + path, query)}${products.length ? `<h2 class="ar-section-title">Pre-order the biggest games</h2>${cards(base, products)}` : ''}` : products.length ? `<h2 class="ar-section-title">Pre-order the biggest games</h2>${cards(base, products)}` : `<div class="ar-empty"><h2>No offers to show right now</h2><p>${esc(l.empty || 'Offers change regularly. Check back soon for new deals.')}</p><p><a class="button" href="${base}/">Back to homepage</a></p></div>`}`
 }
 
 function featurePage(base, f) {
-  return `${crumbs(base, [[f.title]])}<section class="ar-event-hero ar-feature-hero"><div><h1>${esc(f.title)}</h1><p>${esc(f.intro)}</p></div></section><div class="ar-guides">${f.guides.map(([h, t, p]) => `<a class="ar-guide" href="${esc(base + p)}"><h2>${esc(h)}</h2><p>${esc(t)}</p><span>Explore ${chevron}</span></a>`).join('')}</div>${f.showGames && gta.length ? `<h2 class="ar-section-title">Coming soon</h2>${cards(base, gta)}` : ''}`
+  return `${crumbs(base, [[f.title]])}<section class="ar-event-hero ar-feature-hero"><div><h1>${esc(f.title)}</h1><p>${esc(f.intro)}</p></div></section><div class="ar-guides">${f.guides.map(([h, t, p]) => `<a class="ar-guide" href="${esc(base + p)}"><h2>${esc(h)}</h2><p>${esc(t)}</p><span>Explore ${chevron}</span></a>`).join('')}</div>${f.showGames && gta.length ? `<h2 class="ar-section-title">Coming soon</h2>${cards(base, gta)}` : ''}${f.showGames && !fixtureCatalog ? `<h2 class="ar-section-title">Out now</h2>${cards(base, byPopularity(SHELF.filter(p => p.catalogType === 'game' && p.new)).slice(0, 8))}` : ''}`
 }
 
 // ---------- homepage ----------
@@ -116,10 +165,10 @@ export function homeSections(base) {
 // ---------- site map ----------
 const SERVICE_LINKS = [['Customer services', [['Help & FAQs', '/help'], ['Contact us', '/help/contact'], ['Store finder', '/stores'], ['Track your order', '/order/tracking'], ['Returns & refunds', '/help/returns-product-support-and-repairs'], ['Delivery & collection', '/help/delivery-and-collection-guide']]], ['Ways to pay & offers', [['Gift cards', '/help/gift-cards'], ['Voucher codes', '/events/voucher-discount-codes'], ['Argos Pay', '/help/argos-pay'], ['Nectar at Argos', '/help/nectar'], ['Payment types', '/help/payment-types'], ['Shop our top 100 deals', '/list/shop-top-100-deals'], ['The Big Red Event', '/events/big-event']]], ['Inspiration', [['Advice & inspiration', '/features/advice-and-inspiration'], ['Upcoming Games', '/features/gaming'], ['Christmas Gifts', '/events/christmas-gifts']]], ['Your account', [['Account', '/account/login'], ['Your orders', '/orders'], ['Wishlist', '/wishlist'], ['Trolley', '/basket']]], ['About Argos', [...FOOTER.at(-1).links, ...LEGAL]]]
 function sitemapPage(base) {
-  return `${crumbs(base, [['Site map']])}<h1>Site map</h1><p>Every department, category and service page in this shop.</p><div class="ar-sitemap">${MENU.map(m => `<section><h2><a href="${esc(base + m.path)}">${esc(m.label)}</a></h2>${m.groups.map(g => `<h3>${esc(g.title)}</h3><ul>${g.links.map(l => `<li>${link(base, l)}</li>`).join('')}</ul>`).join('')}</section>`).join('')}${SERVICE_LINKS.map(([h, links]) => `<section><h2>${esc(h)}</h2><ul>${links.map(l => `<li>${link(base, l)}</li>`).join('')}</ul></section>`).join('')}</div>`
+  return `${crumbs(base, [['Site map']])}<h1>Site map</h1><p>Every department, category and service page on Argos.co.uk.</p><div class="ar-sitemap">${MENU.map(m => `<section><h2><a href="${esc(base + m.path)}">${esc(m.label)}</a></h2>${m.groups.map(g => `<h3>${esc(g.title)}</h3><ul>${g.links.map(l => `<li>${link(base, l)}</li>`).join('')}</ul>`).join('')}</section>`).join('')}${SERVICE_LINKS.map(([h, links]) => `<section><h2>${esc(h)}</h2><ul>${links.map(l => `<li>${link(base, l)}</li>`).join('')}</ul></section>`).join('')}</div>`
 }
 function sitemapPaths() {
-  const set = new Set(['/', '/search', '/brands', '/stores', '/help', '/help/contact', '/order/tracking', '/account/login', '/basket', '/wishlist', '/sitemap', ...[...CATEGORIES.keys()].map(p => p + '/'), ...Object.keys(INFO), ...Object.keys(LANDINGS), ...Object.keys(FEATURES), ...PRODUCTS.map(p => `/product/${p.sku}`)])
+  const set = new Set(['/', '/search', '/brands', '/stores', '/help', '/help/contact', '/order/tracking', '/account/login', '/basket', '/wishlist', '/sitemap', ...[...CATEGORIES.keys()].map(p => p + '/'), ...Object.keys(INFO), ...Object.keys(LANDINGS), ...Object.keys(FEATURES), ...PRODUCTS.map(p => `/product/${p.sku}`), ...SHELF.map(p => `/product/${p.sku}`)])
   return [...set]
 }
 
@@ -133,7 +182,7 @@ export function mountSite(router, { render, notFound }) {
     render(req, res, cat.title, cat.top ? departmentPage(base(res), cat, req.query) : categoryPage(base(res), cat, req.query))
   })
   for (const [path, pg] of Object.entries(INFO)) router.get(path, (req, res) => render(req, res, pg.title, infoPage(base(res), path, pg)))
-  for (const [path, l] of Object.entries(LANDINGS)) router.get(path, (req, res) => render(req, res, l.title, landingPage(base(res), path, l)))
+  for (const [path, l] of Object.entries(LANDINGS)) router.get(path, (req, res) => render(req, res, l.title, landingPage(base(res), path, l, req.query)))
   for (const [path, f] of Object.entries(FEATURES)) router.get(path, (req, res) => render(req, res, f.title, featurePage(base(res), f)))
   router.get('/basket', (req, res) => res.redirect(`${base(res)}/trolley`))
   router.get('/help/contact-us', (req, res) => res.redirect(`${base(res)}/help/contact`))

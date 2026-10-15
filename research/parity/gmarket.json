@@ -660,5 +660,27 @@
       "real": "https://policy.gmarket.co.kr/terms-policy/buyer-use",
       "path": "/terms-policy/buyer-use"
     }
-  ]
+  ],
+  "shelf": {
+    "captured_at": "2026-10-13",
+    "file": "stores/gmarket/shelf.js",
+    "sources": [
+      "https://www.gmarket.co.kr/n/best",
+      "https://www.gmarket.co.kr/n/best?groupCode=100000006",
+      "https://www.gmarket.co.kr/n/best?groupCode=100000003",
+      "https://www.gmarket.co.kr/n/best?groupCode=100000001",
+      "https://www.gmarket.co.kr/n/best?groupCode=100000007",
+      "https://www.gmarket.co.kr/n/best?groupCode=100001001",
+      "https://www.gmarket.co.kr/n/best?groupCode=100001002",
+      "https://www.gmarket.co.kr/n/best?groupCode=100001003",
+      "https://www.gmarket.co.kr/n/best?groupCode=100001004",
+      "https://www.gmarket.co.kr/n/best?groupCode=100001007",
+      "https://www.gmarket.co.kr/n/best?groupCode=100001009",
+      "https://www.gmarket.co.kr/n/best?groupCode=100001011",
+      "https://www.gmarket.co.kr/n/search?keyword=ps5",
+      "https://www.gmarket.co.kr/n/search?keyword=닌텐도 스위치2 게임",
+      "https://www.gmarket.co.kr/"
+    ],
+    "notes": "Reference-mode assortment (284 items). Most titles, prices, discount rates and goodscodes are copied from the public best/search listings on these pages; a minority of rows (brand items filling department gaps, e.g. LG OLED TV, Dyson, Lego) use the same naming style with assigned 10-digit goodscodes. Satisfaction/review/purchase counts are copied where shown and otherwise generated deterministically. Homepage rows follow the captured order: 지금 제일 잘 나가는 상품, 이마트몰 (오반장), 스타배송 베스트/무료배송; superdeal, digital, games and fashion/beauty rows are added. GTA 6 stays the two evidenced observations in reference.js."
+  }
 }

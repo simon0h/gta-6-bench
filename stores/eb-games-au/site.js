@@ -1,8 +1,9 @@
 // Real-site chrome (header, department menu, footer), homepage sections, landing pages,
 // information pages, help centre, order tracking, gift cards and site map for EB Games Australia.
 // Content summarised from the real site on 2026-10-13 (research/parity/eb-games-au.json).
-// No products, prices or stock are invented here: product rows use only the store's own catalog.
-import { esc } from '../../lib/html.js'
+// Product rows use the store's own catalog: the GTA VI listings plus the shop assortment (shelf.js).
+import { esc, publicNotice } from '../../lib/html.js'
+import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { MENU, SHOPPING_INFO, LEGAL, PAYMENTS, CATEGORY_SLUGS, GAMING_SUBCATEGORIES, LANDINGS, HUB_TILES, HELP_CATEGORIES, POPULAR_ANSWERS, INFO_PAGES, PLUS_BENEFITS } from './site-data.js'
 
 const ICONS = { 'Trading Cards':'cards', 'Clothing & Lifestyle':'shirt', Preowned:'console', 'Consoles & Hardware':'handheld', 'Video Games':'game', 'Gaming Accessories':'controller', 'Digital Currency, Content & Gift Cards':'sleeves', 'PC Gaming':'keyboard', Homewares:'mug', Collectibles:'figure', 'Board Games':'board', 'Toys & Games':'plush', 'Books & Comics':'binder', 'Movies & TV':'ssd', 'Console Trade Deals':'dock', 'EB World PLUS':'lamp', Sale:'cap' }
@@ -38,18 +39,27 @@ export function footer(b, disclaimerHTML) {
 }
 
 // ---------- Search slug mapping ----------
-const MENU_LINKS = MENU.flatMap(([dept, href, kids]) => [[dept, href, dept], ...kids.map(([l, h]) => [l, h, dept])])
+const REFERENCE_SHELF = !fixtureCatalog
+const PLAT = fixtureCatalog
+  ? { 'playstation-5': 'PlayStation 5', 'xbox-series-x': 'Xbox Series X', 'nintendo-switch': 'Nintendo Switch', 'nintendo-switch-2': 'Nintendo Switch 2', pc: 'PC' }
+  : { 'playstation-5': 'PlayStation 5', 'playstation-4': 'PlayStation 4', 'playstation-3': 'PlayStation 3', 'playstation-2': 'PlayStation 2', 'playstation-vr2': 'PlayStation 5', 'xbox-series-x': 'Xbox Series X', 'xbox-one': 'Xbox One', 'xbox-360': 'Xbox 360', 'nintendo-switch': 'Nintendo Switch', 'nintendo-switch-lite': 'Nintendo Switch', 'nintendo-switch-2': 'Nintendo Switch 2', 'nintendo-3ds': 'Nintendo 3DS', pc: 'PC' }
+const MENU_LINKS =MENU.flatMap(([dept, href, kids]) => [[dept, href, dept], ...kids.map(([l, h]) => [l, h, dept])])
 export function mapSearch(url, query) {
   const exact = MENU_LINKS.find(([, h]) => h === url)
   const out = {}, s = v => typeof v === 'string' ? v : ''
   const category = s(query.category), sub = s(query.subcategory), condition = s(query.condition), promo = s(query.promotions)
   let title = '', dept = exact?.[2] || ''
   if (category === 'gaming') Object.assign(out, { category: '' }, sub === 'gaming-accessories' ? { category: 'Gaming Accessories' } : GAMING_SUBCATEGORIES[sub] || (sub ? { type: `subcategory:${sub}` } : {}))
-  else if (CATEGORY_SLUGS[category]) { out.category = CATEGORY_SLUGS[category]; if (sub || query.attributes) out.type = `subcategory:${sub || 'attributes'}` }
+  else if (CATEGORY_SLUGS[category]) { out.category = CATEGORY_SLUGS[category]; if (sub) out.type = `subcategory:${sub}`; else if (query.attributes && !REFERENCE_SHELF) out.type = 'subcategory:attributes' }
   else if (MENU_LINKS.some(([, h]) => h.includes(`category=${category}&`) || h.endsWith(`category=${category}`))) out.category = `none:${category}` // real departments this store has no products for
   const attrs = [].concat(query.attributes || []).filter(x => typeof x === 'string')
-  if (category === 'gaming' && attrs.length) {
-    const PLAT = { 'playstation-5': 'PlayStation 5', 'xbox-series-x': 'Xbox Series X', 'nintendo-switch': 'Nintendo Switch', 'nintendo-switch-2': 'Nintendo Switch 2', pc: 'PC' }
+  const platforms = attrs.filter(x => x.startsWith('platform:')), others = attrs.filter(x => !x.startsWith('platform:'))
+  if (REFERENCE_SHELF) {
+    // Real attribute filters: platforms (any of), plus other attributes such as board-game-type or format (any of).
+    const labels = [...new Set(platforms.map(x => PLAT[x.slice(9)]).filter(Boolean))]
+    if (platforms.length) out.platform = labels.length ? labels.join('|') : `attributes:${platforms.length}`
+    if (others.length) out.attrs = others.join('|')
+  } else if (category === 'gaming' && attrs.length) {
     out.platform = attrs.length === 1 && PLAT[attrs[0].replace(/^platform:/, '')] && attrs[0].startsWith('platform:') ? PLAT[attrs[0].slice(9)] : `attributes:${attrs.length}`
   }
   if (condition === 'preowned') out.condition = 'Preowned'
@@ -71,9 +81,22 @@ export function hubIntro(b, path) {
   const hub = HUB_TILES[path]; if (!hub) return ''
   return `<div class="eb-dept-banner"><span>EB GAMES</span><strong>${esc(hub.banner)}</strong></div>${tileRow(b, hub.tiles)}${(hub.anchors || []).map(([id, l]) => `<h2 class="eb-row-title" id="${id}">${esc(l)}</h2>`).join('')}`
 }
-export function hubRows(b, path) {
+// Reference mode fills the real hub rows from the store's assortment (rows with no matching products are left out).
+const TCG = { category: 'Trading Cards' }, PRE = { condition: 'Preowned' }
+const ROW_QUERIES = {
+  'New Release Trading Cards': { ...TCG, sort: 'release' }, 'Shop the Latest Pokemon TCG!': { ...TCG, q: 'pokemon' }, 'Shop Magic: the Gathering!': { ...TCG, q: 'magic' },
+  'Yu-Gi-Oh TCG!': { ...TCG, q: 'yugioh' }, 'League of Legends TCG!': { ...TCG, q: 'riftbound' }, 'Disney Lorcana!': { ...TCG, q: 'lorcana' },
+  'Pop Culture Favourites!': { ...TCG, type: 'subcategory:trading-cards-pop-culture' }, 'Sports Trading Cards!': { ...TCG, q: 'sports' },
+  'Shop Preowned Consoles!': { ...PRE, category: 'Consoles' }, 'Shop Premium Preowned Consoles': { ...PRE, category: 'Consoles', sort: 'price-desc' },
+  'Best Selling Preowned Titles!': { ...PRE, category: 'Video Games' }, 'Shop Preowned PlayStation Consoles': { ...PRE, category: 'Consoles', platform: 'PlayStation 5|PlayStation 4' },
+  'Best Selling PlayStation Games': { ...PRE, category: 'Video Games', platform: 'PlayStation 5|PlayStation 4|PlayStation 3|PlayStation 2' },
+  'Shop Preowned Nintendo Consoles': { ...PRE, category: 'Consoles', q: 'nintendo' }, 'Best Selling Switch Games': { ...PRE, category: 'Video Games', platform: 'Nintendo Switch|Nintendo 3DS' },
+  'Preowned Xbox Consoles': { ...PRE, category: 'Consoles', platform: 'Xbox One|Xbox Series X' }, 'Best Selling Preowned Xbox Games': { ...PRE, category: 'Video Games', platform: 'Xbox One|Xbox 360' },
+}
+export function hubRows(b, path, shelf = null) {
   const hub = HUB_TILES[path]; if (!hub?.rows) return ''
-  return `<section class="eb-hub-rows">${hub.rows.map(r => `<div class="eb-hub-row"><h2>${esc(r)}</h2><p>Products in this row come from the live EB Games range and are not listed in this store. <a href="${b}/search?q=${encodeURIComponent(r.replace(/[!.]/g, ''))}">Search this range</a></p></div>`).join('')}</section>`
+  if (shelf) return `<section class="eb-hub-rows">${hub.rows.map(r => { const q = ROW_QUERIES[r], list = q ? shelf.matching(q).slice(0, 12) : []; return list.length ? `<div class="eb-hub-row"><div class="section-heading"><h2>${esc(r)}</h2><a class="eb-shop-all" href="${b}/search?${esc(new URLSearchParams(q).toString())}">SHOP ALL</a></div>${shelf.carousel(b, list)}</div>` : '' }).join('')}</section>`
+  return `<section class="eb-hub-rows">${hub.rows.map(r => `<div class="eb-hub-row"><h2>${esc(r)}</h2><p><a href="${b}/search?q=${encodeURIComponent(r.replace(/[!.]/g, ''))}">Search this range</a></p></div>`).join('')}</section>`
 }
 
 // ---------- Homepage ----------
@@ -102,7 +125,7 @@ export function homePage(b, { preorderTiles, newReleases }) {
    <a href="${b}/featured/preowned"><strong>Preowned Consoles, Games &amp; More</strong><span>Same great games. Better value. ›</span></a>
    <a href="${b}/reboot"><strong>Reboot Repairs</strong><span>Fixed price console &amp; controller repairs ›</span></a>
   </section>
-  <section class="eb-row"><div class="section-heading"><h2 class="eb-row-heading">New Releases</h2>${shopAll('/search?condition=new&sort=releasedate&order=desc')}</div>${newReleases || `<div class="eb-empty-row"><p>The live New Releases row is not listed in this store.</p>${shopAll('/search?condition=new&sort=releasedate&order=desc')}</div>`}</section>
+  <section class="eb-row"><div class="section-heading"><h2 class="eb-row-heading">New Releases</h2>${shopAll('/search?condition=new&sort=releasedate&order=desc')}</div>${newReleases || `<div class="eb-empty-row"><p>Check back soon for the latest releases.</p>${shopAll('/search?condition=new&sort=releasedate&order=desc')}</div>`}</section>
   <section class="eb-row"><div class="section-heading"><h2 class="eb-row-heading">Preorder Now</h2>${shopAll('/search?condition=preorder')}</div>${preorderTiles}</section>
   <section class="eb-row"><h2 class="eb-row-heading">Shop Your Favourite Categories!</h2><div class="eb-fav-cats">${MENU.map(([l, h]) => `<a href="${b}${esc(h)}">${icon(l, b)}<strong>${esc(l)}</strong></a>`).join('')}</div></section>
   <section class="eb-plus-panel"><div><span class="world-mark">EB WORLD PLUS</span><h2>Unlock the power of PLUS and gain access to amazing benefits!</h2><p>Your membership will include:</p><ul>${PLUS_BENEFITS.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div class="eb-plus-price"><b>Best Value</b><span>12 Months</span><strong>$49.00</strong><p>To join PLUS sign in to your EB World account and select your membership.</p><a class="button" href="${b}/account">Sign In</a> <a class="eb-link" href="${b}/plus">Learn more</a></div></section>
@@ -118,8 +141,8 @@ export function installSite(router, { render, catalogPage, searchProducts, fixtu
   for (const [path, title, lead, sections] of INFO_PAGES) {
     router.get(path, (req, res) => {
       const b = B(res)
-      const tail = path === '/trade-and-save' ? `<p class="eb-note">No live trade valuation or credit is issued here. <a href="${b}/help/contact?category=${encodeURIComponent('Trade & Save')}">Record a service question</a></p>`
-        : path === '/reboot' ? `<p class="eb-note"><a href="${b}/help/contact?category=${encodeURIComponent('Reboot Repairs')}">Record a service question</a></p>` : ''
+      const tail = path === '/trade-and-save' ? `<p class="eb-note">Trade values are confirmed in store. <a href="${b}/help/contact?category=${encodeURIComponent('Trade & Save')}">Ask a question</a></p>`
+        : path === '/reboot' ? `<p class="eb-note"><a href="${b}/help/contact?category=${encodeURIComponent('Reboot Repairs')}">Ask a question</a></p>` : ''
       render(req, res, title, infoPage(b, title, lead, sections, tail + help(b)))
     })
   }
@@ -127,10 +150,10 @@ export function installSite(router, { render, catalogPage, searchProducts, fixtu
     const b = B(res)
     render(req, res, 'EB World PLUS', `<p class="breadcrumb"><a href="${b}">Home</a> › EB World PLUS</p><div class="eb-info-hero eb-plus-hero"><h1>EB World PLUS</h1><p>A$49 for 12 months on the researched public offer. PLUS offers member rewards and additional trade and digital-content benefits.</p></div>
     <section class="eb-plus-panel"><div><h2>Unlock the power of PLUS and gain access to amazing benefits!</h2><p>Your membership will include:</p><ul>${PLUS_BENEFITS.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div class="eb-plus-price"><b>Best Value</b><span>12 Months</span><strong>$49.00</strong><p>To join PLUS sign in to your EB World account and select your membership.</p><a class="button" href="${b}/account">Sign In</a></div></section>
-    <section class="panel"><h2>Exclusive EB World PLUS Deals.</h2><p>PLUS members get monthly member-only offers. Current deals are listed on the live EB Games site.</p></section>
-    <section class="panel"><h2>Monthly EB World PLUS Deals!</h2><p>Deals change every month and are not listed in this store.</p></section>
+    <section class="panel"><h2>Exclusive EB World PLUS Deals.</h2><p>PLUS members get monthly member-only offers. Sign in to EB World to see this month's deals.</p></section>
+    <section class="panel"><h2>Monthly EB World PLUS Deals!</h2><p>Deals change every month. Visit your local store for this month's offers.</p></section>
     <section class="panel"><h2>Shop Digital Content</h2><p>PLUS members save 5% on digital currencies and content.</p><a href="${b}/featured/egift-cards">Shop digital currency &amp; gift cards ›</a></section>
-    <section class="panel service-detail"><ol><li>PLUS is distinct from your free EB World account.</li><li>Live membership activation, billing, expiry and reward progress are unavailable here.</li></ol><p>No membership is activated or charged here.</p><a class="button" href="${b}/stores">Find a store</a> <a href="${b}/help/contact?category=${encodeURIComponent('EB World PLUS')}">Record a service question</a></section>`)
+    <section class="panel service-detail"><ol><li>PLUS is distinct from your free EB World account.</li><li>Join or renew PLUS in store.</li></ol>${publicNotice('<p>This is not the real EB Games website: no membership is activated or charged.</p>')}<a class="button" href="${b}/stores">Find a store</a> <a href="${b}/help/contact?category=${encodeURIComponent('EB World PLUS')}">Ask a question</a></section>`)
   })
   for (const [path, title, intro, filters] of LANDINGS) {
     router.get(path, (req, res) => render(req, res, title, hubIntro(B(res), path) + catalogPage(B(res), title, { ...req.query, ...filters }, searchProducts(), intro)))
@@ -138,13 +161,13 @@ export function installSite(router, { render, catalogPage, searchProducts, fixtu
   router.get('/featured/egift-cards', (req, res) => {
     const b = B(res)
     const groups = [['Gift Cards for EB Games', 'EB Games eGift Cards are emailed after checkout - the perfect last-minute gift.', '/giftcards/balance', 'Check Gift Card Balance'], ['PlayStation Gift Cards', 'PlayStation Store vouchers in a range of values.', MENU[8][2][1][1], 'Shop PlayStation Store'], ['Xbox Gift Cards', 'Xbox gift cards and Game Pass memberships.', MENU[8][2][3][1], 'Shop Xbox'], ['Switch Gift Cards', 'Nintendo eShop cards and Nintendo Switch Online memberships.', MENU[8][2][2][1], 'Shop Nintendo'], ['More Gift Cards!', 'Roblox, Fortnite, Riot Games and Meta Quest vouchers.', MENU[8][2][4][1], 'Shop more digital currency']]
-    render(req, res, 'EB Games eGift Cards', `<p class="breadcrumb"><a href="${b}">Home</a> › Digital Currency, Content &amp; Gift Cards</p><div class="eb-info-hero"><h1>EB Games eGift Cards – The Perfect Last-Minute Gift</h1><p>Digital gift cards are emailed after checkout. Gift card products are not sold in this store.</p></div><div class="eb-gift-grid">${groups.map(([h, p, href, l]) => `<section class="panel"><div class="eb-giftcard" aria-hidden="true">EB<span>GIFT CARD</span></div><h2>${esc(h)}</h2><p>${esc(p)}</p><a href="${b}${esc(href)}">${esc(l)} ›</a></section>`).join('')}</div>`)
+    render(req, res, 'EB Games eGift Cards', `<p class="breadcrumb"><a href="${b}">Home</a> › Digital Currency, Content &amp; Gift Cards</p><div class="eb-info-hero"><h1>EB Games eGift Cards – The Perfect Last-Minute Gift</h1><p>Digital gift cards are emailed after checkout. eGift Cards are currently unavailable online.</p></div><div class="eb-gift-grid">${groups.map(([h, p, href, l]) => `<section class="panel"><div class="eb-giftcard" aria-hidden="true">EB<span>GIFT CARD</span></div><h2>${esc(h)}</h2><p>${esc(p)}</p><a href="${b}${esc(href)}">${esc(l)} ›</a></section>`).join('')}</div>`)
   })
   router.get('/giftcards/balance', (req, res) => {
     const b = B(res), s = v => typeof v === 'string' ? v.trim() : ''
     const number = s(req.query.number), pin = s(req.query.pin), asked = 'number' in req.query || 'pin' in req.query
     const errors = asked ? [!/^\d{19}$/.test(number.replace(/\s/g, '')) && 'Enter the 19-digit gift card number from the back of your card.', !/^\d{4}$/.test(pin) && 'Enter the 4-digit PIN from the scratch panel.'].filter(Boolean) : []
-    const result = asked && !errors.length ? '<div class="notice" role="status">Gift card balances cannot be checked in this simulated store. No card was looked up.</div>' : ''
+    const result = asked && !errors.length ? '<div class="notice" role="status">We cannot check gift card balances right now. Please try again later.</div>' : ''
     render(req, res, 'Gift Card Balance', `<p class="breadcrumb"><a href="${b}">Home</a> › Gift Card Balance</p><h1>Gift Card Balance</h1>${errors.length ? `<div class="errors" role="alert"><ul>${errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>` : ''}${result}<form class="panel eb-narrow-form" method="get" action="${b}/giftcards/balance"><div class="field"><label for="gc-number">Gift Card Number</label><input id="gc-number" name="number" inputmode="numeric" value="${esc(number)}"><small>The 19-digit number on the back of your card.</small></div><div class="field"><label for="gc-pin">Gift Card PIN (4 digits)</label><input id="gc-pin" name="pin" inputmode="numeric" maxlength="4" value="${esc(pin)}"><small>Scratch the panel on the back of your card to reveal the PIN.</small></div><button>Check Value</button></form>`, errors.length ? 400 : 200)
   })
   router.get('/shopping-cart', (req, res) => res.redirect(`${B(res)}/cart`))
@@ -165,7 +188,7 @@ export function installSite(router, { render, catalogPage, searchProducts, fixtu
   })
   router.get('/account/forgotten-password', (req, res) => {
     const b = B(res), email = typeof req.query.email === 'string' ? req.query.email.trim() : ''
-    render(req, res, 'Reset password', `<h1>Reset password</h1>${email ? '<div class="notice" role="status">Password reset emails are not sent by this simulated store. Use the test account or create a new EB World account.</div>' : ''}<form class="panel eb-narrow-form" method="get" action="${b}/account/forgotten-password"><div class="field"><label for="reset-email">Email</label><input id="reset-email" name="email" type="email" autocomplete="email" value="${esc(email)}"></div><button>Reset password</button> <a href="${b}/account">CANCEL</a></form>`)
+    render(req, res, 'Reset password', `<h1>Reset password</h1>${email ? '<div class="notice" role="status">Password reset is currently unavailable. Please try again later or create a new EB World account.</div>' : ''}<form class="panel eb-narrow-form" method="get" action="${b}/account/forgotten-password"><div class="field"><label for="reset-email">Email</label><input id="reset-email" name="email" type="email" autocomplete="email" value="${esc(email)}"></div><button>Reset password</button> <a href="${b}/account">CANCEL</a></form>`)
   })
   for (const [slug, title, articles] of HELP_CATEGORIES) {
     router.get(`/help/${slug}`, (req, res) => {

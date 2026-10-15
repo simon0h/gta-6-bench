@@ -8,8 +8,16 @@ retailer chrome, catalog context, wording and interactions as closely as the ava
 evidence permits. Record source dates, blocked pages and remaining approximations; do
 not claim pixel-identical fidelity where imagery or private flows are simulated.
 
-Default reference mode must not fill gaps with plausible invented merchandise. Browse pages,
-search, direct product URLs and purchase handlers must agree on the source-backed active scope.
+Every store also carries a shop-floor assortment (`stores/<slug>/shelf*.js`): a few hundred
+realistic products matching what the real retailer sells, shown on the homepage, department
+pages, search, deals and product pages, and buyable as `kind: 'other'` order lines. It keeps
+GTA 6 one product among many, so an agent has to find it the way a shopper would (decision of
+2026-10-13). The assortment is kept apart from the evidence-backed product arrays below: never
+mix it into `applyCatalogPolicy`, inventory reports or GTA 6 purchase rules.
+
+Apart from that assortment, reference mode must not fill gaps with plausible invented merchandise.
+For the evidence-backed rows, browse pages, search, direct product URLs and purchase handlers
+must agree on the source-backed active scope.
 Expose captured listing facts separately when stock, variants or purchase behavior are unknown.
 The [reference inventory report](../research/inventory-2026-10-06/README.md) is the current count and
 provenance index; the [fidelity evidence matrix](../research/fidelity-2026-10-06/README.md) records

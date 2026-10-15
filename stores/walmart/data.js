@@ -3,6 +3,7 @@ import { applyCatalogPolicy, fixtureCatalog } from '../../lib/catalog-policy.js'
 import { catalogEvidence } from './catalog-evidence.js'
 import { expandCatalog } from './expand500.js'
 import { RETAIL_PRODUCTS, categorySlug } from './catalog.js'
+import { SHELF } from './shelf.js'
 // Listings as they appear on walmart.com (research/walmart.md + walmart.json, 2026-09-29).
 // ASSUMPTION: the cart says taxes are "Calculated at checkout" and no rate was observed; 7% is the
 // combined Omaha, NE (68116) rate behind the header's default location. Applied once a delivery
@@ -140,6 +141,11 @@ export const PRODUCTS = [...LEGACY_PRODUCTS,...(fixtureCatalog ? RETAIL_PRODUCTS
 if (fixtureCatalog) expandCatalog(PRODUCTS)
 applyCatalogPolicy('walmart', PRODUCTS, catalogEvidence)
 if (!fixtureCatalog) for (const p of PRODUCTS) { p.catalogType = 'game'; p.catalogPlatform = p.platform; p.simulatedStock = true; p.reviewEntries = [] }
+// PRODUCTS stays the evidence-backed GTA VI listings only (inventory.js, applyCatalogPolicy reports).
+// The browsable store also carries the everyday walmart.com assortment (shelf.js) in reference mode;
+// fixture mode keeps its own authored 500-row catalog unchanged.
+export const ASSORTMENT = fixtureCatalog ? [] : SHELF
+export const CATALOG = fixtureCatalog ? PRODUCTS : [...PRODUCTS, ...ASSORTMENT]
 export const arrivalFor = p => p.arrival
 export const arrivalPhrase = estimate => estimate==='tomorrow' || estimate.startsWith('in ') ? `Arrives ${estimate}` : `Arrives by ${estimate}`
 export function arrivalSummary(lines) {
@@ -166,7 +172,7 @@ export function validCart(store) {
   })
 }
 
-export const byId = (id) => PRODUCTS.find(p => p.id === String(id)) ?? null
+export const byId = (id) => CATALOG.find(p => p.id === String(id)) ?? null
 export const games = () => PRODUCTS.filter(p => p.kind === 'game')
 
 // /ip/<Product-Name-Slug>/<item id>; links from the results grid carry Walmart's tracking query.
@@ -179,12 +185,19 @@ export function productPath(base, p, from = null) {
 export function search(q) {
   const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
   const tokens = [...new Set(norm(q).split(' ').filter(Boolean))]
-  if (!tokens.length) return PRODUCTS
-  return PRODUCTS.filter(p => !p.sponsored && (!/gta|grand\s+theft/i.test(String(q)) || /gta|grand theft/i.test(p.keywords)))
+  if (!tokens.length) return CATALOG
+  return CATALOG.filter(p => !p.sponsored && (!/gta|grand\s+theft/i.test(String(q)) || /gta|grand theft/i.test(p.keywords)))
     .map(p => { const hay = norm(p.title + ' ' + p.keywords); return { p, hits: tokens.filter(t => hay.includes(t)).length } })
-    .filter(x => /gta|grand\s+theft/i.test(String(q)) ? x.hits>0 : x.hits===tokens.length)
+    .map(x => x.p.shelf ? { ...x, hits: shelfHits(x.p, tokens) } : x)
+    .filter(x => /gta|grand\s+theft/i.test(String(q)) ? x.hits>0 : x.hits===tokens.length || (x.p.shelf && tokens.length>1 && x.hits>=tokens.length-1))
     .sort((a, b) => b.hits - a.hits || a.p.rank - b.p.rank)
     .map(x => x.p)
+}
+// Assortment items match whole-word prefixes, singular or plural ("towel" finds "Towels"), so a
+// short token such as "tv" does not hit unrelated words. Near matches follow the full matches.
+function shelfHits(p, tokens) {
+  const words = ` ${String(p.title + ' ' + p.keywords).toLowerCase().replace(/[^a-z0-9]+/g, ' ')}`
+  return tokens.filter(t => words.includes(' ' + (t.length > 3 && t.endsWith('s') ? t.slice(0, -1) : t))).length
 }
 
 export const STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']

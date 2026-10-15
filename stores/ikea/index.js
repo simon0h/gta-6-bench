@@ -17,7 +17,7 @@ const fixtureConfig = {
   catalogDescription: 'Furniture and home accessories.', products,
   membership: 'Hej! Log in or sign up', heroAlt: 'A sunny living room with a sofa, shelving and home accessories',
   benefit: 'Make yourself at home', benefitText: 'Save your favorites and keep all your home ideas in one place.',
-  delivery: 'Standard delivery is free in this shopping experience. Delivery dates and in-store collection are not offered.',
+  delivery: 'Free standard delivery on online orders.',
   nav: ['Products', 'Rooms', 'Deals', 'Design & ideas', 'Services'],
   stylesheet: '/static/depth.css', chrome: ikeaChrome, extend(router, context) { ikeaJourneys(router, context); ikeaDepth(router, context); router.use(ikeaSite({ render: context.render, fixture: true })) },
 }

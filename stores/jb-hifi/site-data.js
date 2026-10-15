@@ -11,18 +11,18 @@ export const DEPARTMENTS = [
   D('computers-tablets', 'Computers & Tablets', 'Laptops, tablets, desktops, monitors and everything to keep you working, studying and creating.', [
     ['laptops', 'Laptops', /laptop/i], ['tablets', 'Tablets', /tablet/i], ['desktop-computers', 'Desktop Computers', /desktop/i],
     ['monitors', 'Monitors', /monitor/i], ['printers-ink', 'Printers & Ink', /printer/i], ['networking', 'Networking', /network|router/i],
-    ['computer-accessories', 'Computer Accessories', /keyboard|mice|mouse|webcam|usb hub|storage/i]]),
+    ['computer-accessories', 'Computer Accessories', /accessor|keyboard|mice|mouse|webcam|usb hub|storage/i]]),
   D('mobile-phones', 'Mobile Phones', 'The latest iPhone and Android phones, prepaid handsets, plans and accessories.', [
-    ['iphone', 'iPhone', /iphone/i], ['android-phones', 'Android Phones', /unlocked|android|galaxy|pixel/i], ['prepaid-phones', 'Prepaid Phones', /prepaid/i],
+    ['iphone', 'iPhone', /^iphone/i], ['android-phones', 'Android Phones', /^(?:unlocked|android)/i], ['prepaid-phones', 'Prepaid Phones', /prepaid/i],
     ['phone-cases', 'Phone Cases', /phone case/i], ['phone-chargers', 'Phone Chargers', /charger/i], ['power-banks', 'Power Banks', /power bank/i]]),
   D('wearables', 'Wearables', 'Smart watches, fitness trackers and the bands to go with them.', [
     ['smart-watches', 'Smart Watches', /smartwatch|smart watch/i], ['fitness-trackers', 'Fitness Trackers', /fitness|tracker/i], ['watch-straps', 'Watch Straps', /strap/i]]),
   D('tvs-home-theatre', 'TVs & Home Theatre', 'Big screens and big sound: TVs, soundbars, projectors and streaming players.', [
-    ['tvs', 'TVs', /television|\btv\b/i], ['soundbars', 'Soundbars', /soundbar/i], ['projectors', 'Projectors', /projector/i],
+    ['tvs', 'TVs', /television|^tvs\b/i], ['soundbars', 'Soundbars', /soundbar/i], ['projectors', 'Projectors', /projector/i],
     ['streaming-players', 'Streaming Players', /streaming/i], ['blu-ray-players', 'Blu-ray & DVD Players', /blu-ray player|dvd player/i], ['tv-wall-brackets', 'TV Wall Brackets', /bracket|cable/i]]),
   D('headphones-audio', 'Headphones & Audio', 'Headphones, earbuds and speakers for home and on the go.', [
     ['headphones', 'Headphones', /headphone/i], ['earbuds', 'Earbuds', /earbud/i], ['portable-speakers', 'Portable Speakers', /portable speaker/i],
-    ['smart-speakers', 'Smart Speakers', /smart speaker/i], ['turntables', 'Turntables', /turntable/i], ['hi-fi-systems', 'Hi-Fi Systems', /hi-fi|\bspeakers\b/i]]),
+    ['smart-speakers', 'Smart Speakers', /smart speaker/i], ['turntables', 'Turntables', /turntable/i], ['hi-fi-systems', 'Hi-Fi Systems', /hi-fi|bookshelf speakers|stereo receiver/i]]),
   D('cameras', 'Cameras', 'Cameras, lenses and drones for every kind of shooter.', [
     ['mirrorless-cameras', 'Mirrorless Cameras', /mirrorless/i], ['dslr-cameras', 'DSLR Cameras', /dslr/i], ['action-cameras', 'Action Cameras', /action camera/i],
     ['instant-cameras', 'Instant Cameras', /instant/i], ['camera-lenses', 'Camera Lenses', /lens/i], ['drones', 'Drones', /drone/i]]),
@@ -31,7 +31,7 @@ export const DEPARTMENTS = [
     ['pc-gaming', 'PC Gaming', /pc gam/i], ['gaming-accessories', 'Gaming Accessories', /accessor|racing wheel|carry case|charging/i], ['game-pre-orders', 'Game Pre-orders', /pre-order/i]]),
   D('home-appliances', 'Home Appliances', 'Kitchen, laundry, floor care and climate control for every room.', [
     ['coffee-machines', 'Coffee Machines', /coffee/i], ['vacuums', 'Vacuums', /vacuum|floor care/i], ['kitchen-appliances', 'Kitchen Appliances', /kettle|microwave|kitchen/i],
-    ['fridges-freezers', 'Fridges & Freezers', /fridge|freezer/i], ['washing-machines-dryers', 'Washing Machines & Dryers', /washing|dryer/i], ['heating-cooling', 'Heating & Cooling', /climate|purifier|heater|fan/i]]),
+    ['fridges-freezers', 'Fridges & Freezers', /fridge|freezer/i], ['washing-machines-dryers', 'Washing Machines & Dryers', /washing|dryer/i], ['heating-cooling', 'Heating & Cooling', /climate|heating|purifier|heater|fan/i]]),
   D('smart-home', 'Smart Home', 'Security cameras, video doorbells, smart lighting and more for a connected home.', [
     ['security-cameras', 'Security Cameras', /security camera/i], ['video-doorbells', 'Video Doorbells', /doorbell/i], ['smart-lighting', 'Smart Lighting', /lighting|bulb/i],
     ['smart-plugs-power', 'Smart Plugs & Power', /smart plug|smart home device/i]]),
@@ -114,7 +114,7 @@ export const INFO_PAGES = {
   '/pages/jb-hi-fi-business': ['JB Hi-Fi Business', 'Technology solutions for businesses, government and education.', [['For business', p('JB Hi-Fi Business supplies hardware, software and services to organisations of all sizes through a dedicated team and its own site. This page is a local summary.')]], [['Contact us', '/pages/contact-us']]],
   '/pages/education': ['JB Hi-Fi Education', 'Device programs for schools and students.', [['For schools', p('JB Hi-Fi Education runs bring-your-own-device portals for schools, with recommended devices and support. This page is a local summary.')]], [['Computers & Tablets', '/collections/computers-tablets']]],
   '/pages/product-recalls': ['Product recalls', 'Current product safety recalls for products sold by JB Hi-Fi.', [['Current recalls', p('If a product you bought is recalled, stop using it and follow the instructions in the recall notice. Recalls are also listed on the ACCC Product Safety Australia website.')]], [['Contact us', '/pages/contact-us']]],
-  '/pages/privacy-policy': ['Privacy policy', 'How JB Hi-Fi collects, uses and protects your personal information.', [['What we collect', p('We collect the details you give us when you order, create an account, join JB Perks or contact us, and information about how you use our website.')], ['How we use it', p('To process orders, provide services, send you offers you have agreed to receive and improve our stores and website.')], ['This environment', p('In this benchmark clone, information stays in your browser session and local test data. Nothing is sent to JB Hi-Fi.')]], [['Terms & conditions', '/pages/terms-and-conditions']]],
+  '/pages/privacy-policy': ['Privacy policy', 'How JB Hi-Fi collects, uses and protects your personal information.', [['What we collect', p('We collect the details you give us when you order, create an account, join JB Perks or contact us, and information about how you use our website.')], ['How we use it', p('To process orders, provide services, send you offers you have agreed to receive and improve our stores and website.')], ['Your choices', p('You can update your contact preferences or unsubscribe from marketing at any time from your account.')]], [['Terms & conditions', '/pages/terms-and-conditions']]],
   '/pages/terms-and-conditions': ['Terms & conditions', 'The terms that apply when you shop at JB Hi-Fi online.', [['Pricing', p('All prices are in Australian dollars and include GST. Discounts apply to the previous ticketed or advertised price.')], ['Orders', p('An order is accepted when we confirm it. Some items have a per-order quantity limit.')], ['Pre-orders', p('Pre-orders are paid in full at the time of order and are covered by our pre-order price guarantee.')]], [['Privacy policy', '/pages/privacy-policy']]],
 }
 
