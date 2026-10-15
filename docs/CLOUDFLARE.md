@@ -126,6 +126,6 @@ visit the store, submit a result, and verify its grade appears in the dashboard.
 Repeat an active cart check after the container sleeps to verify restoration.
 
 The local checks exercise the five-link limit, run compatibility, isolated task
-state, private grading, deadlines, authorization, session/account restoration,
+state, private grading, task timing, authorization, session/account restoration,
 concurrent commits and persistence failure. They do not substitute for the image
 build and live Cloudflare smoke checks.

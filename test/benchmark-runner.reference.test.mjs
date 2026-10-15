@@ -13,12 +13,12 @@ test('runner keeps failure evidence and separates agent failures from environmen
   const outputDirectory = path.join(directory, 'report')
   const original = getTask('bestbuy-purchase-ps5')
   const tasks = [
-    { ...original, id: 'runner-public-contract', timeout_ms: 10_000 },
-    { ...original, id: 'runner-adapter-failure', timeout_ms: 10_000 },
-    { ...original, id: 'runner-timeout', timeout_ms: 1200 },
-    { ...original, id: 'runner-missing-store', store: 'missing-store', timeout_ms: 10_000 },
+    { ...original, id: 'runner-public-contract' },
+    { ...original, id: 'runner-adapter-failure' },
+    { ...original, id: 'runner-slow' },
+    { ...original, id: 'runner-missing-store', store: 'missing-store' },
   ]
-  const observations = { inputs: [], apiStatuses: null, externalBlocked: false, timeoutNavigated: false, timeoutAborted: false }
+  const observations = { inputs: [], apiStatuses: null, externalBlocked: false, slowNavigated: false, slowAbortedEarly: false }
   let invocation = 0
   const adapter = async ({ page, task, startUrl, recordAction, signal }) => {
     const scenario = invocation++
@@ -39,18 +39,20 @@ test('runner keeps failure evidence and separates agent failures from environmen
       return { finalResponse: { outcome: 'not_purchased', reason: 'not_attempted', message: 'Only inspected the assigned storefront.' }, metrics: { cost_usd: .01, input_tokens: 10, output_tokens: 5 } }
     }
     if (scenario === 1) throw new Error('Intentional adapter integration failure')
-    observations.timeoutNavigated = true
-    signal.addEventListener('abort', () => { observations.timeoutAborted = true }, { once: true })
-    await new Promise(() => {}) // No timers or mutations continue after timeout.
+    // There is no time limit: a slow agent is never cut off.
+    observations.slowNavigated = true
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    observations.slowAbortedEarly = signal.aborted
+    return { outcome: 'not_purchased', reason: 'not_attempted', message: 'Took its time.' }
   }
   const report = await runSuite({ tasks, outputDirectory, adapter, agentLabel: 'runner-integration-adapter' })
-  const [contract, failure, timeout, missing] = report.results
+  const [contract, failure, slow, missing] = report.results
 
   await t.test('the adapter receives an opaque public task with no evaluator labels', () => {
     assert.equal(observations.inputs.length, 3, 'an unavailable environment must never invoke its adapter')
     for (let index = 0; index < observations.inputs.length; index++) {
       const input = observations.inputs[index]
-      assert.deepEqual(Object.keys(input).sort(), ['id', 'instruction', 'request', 'store', 'timeout_ms', 'version'])
+      assert.deepEqual(Object.keys(input).sort(), ['id', 'instruction', 'request', 'store', 'version'])
       assert.match(input.id, /^[a-f0-9]{16}$/)
       assert.notEqual(input.id, tasks[index].id)
       assert.equal('expected' in input, false)
@@ -86,15 +88,16 @@ test('runner keeps failure evidence and separates agent failures from environmen
     assert.deepEqual(stored, failure)
   })
 
-  await t.test('task timeout aborts the adapter and stays distinct from an environment failure', () => {
-    assert.equal(observations.timeoutNavigated, true)
-    assert.equal(observations.timeoutAborted, true)
-    assert.equal(timeout.grade.status, 'failed')
-    assert.equal(timeout.environment_error, null)
-    assert.match(timeout.agent_error, /Task exceeded 1200ms/)
-    assert.ok(timeout.grade.reasons.some(reason => reason.code === 'timed_out'))
-    assert.equal(timeout.artifacts.screenshot, true)
-    assert.equal(timeout.artifacts.trace, true)
+  await t.test('a slow task is never cut off and records how long it took', () => {
+    assert.equal(observations.slowNavigated, true)
+    assert.equal(observations.slowAbortedEarly, false)
+    assert.equal(slow.agent_error, null)
+    assert.equal(slow.environment_error, null)
+    assert.ok(slow.elapsed_ms >= 1500)
+    assert.equal(slow.grade.reasons.some(reason => reason.code === 'timed_out'), false)
+    assert.equal(slow.final_response.message, 'Took its time.')
+    assert.equal(slow.artifacts.screenshot, true)
+    assert.equal(slow.artifacts.trace, true)
   })
 
   await t.test('missing stores become environment errors excluded from the success denominator', () => {
@@ -115,7 +118,7 @@ test('runner keeps failure evidence and separates agent failures from environmen
     const html = await readFile(path.join(outputDirectory, 'index.html'), 'utf8')
     assert.match(html, /runner-integration-adapter/)
     assert.match(html, /Intentional adapter integration failure/)
-    assert.match(html, /runner-timeout/)
+    assert.match(html, /runner-slow/)
     assert.match(html, /runner-missing-store/)
     assert.match(html, /trace\.zip/)
     await assert.rejects(runSuite({ tasks: [original], outputDirectory, adapter }), /EEXIST|already exists/i)

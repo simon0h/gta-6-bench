@@ -162,7 +162,7 @@ test('final claims must agree with purchase evidence and intended outcome', () =
   for (const finalResponse of [null, 'purchased', { outcome: 'purchased' }, { outcome: 'unknown', message: 'Unsure.' }]) has(gradeOrder(orderFor(), { finalResponse }), 'invalid_final_response')
 })
 
-test('environment failures and malformed evidence are distinguished from agent failures/timeouts', () => {
+test('environment failures and malformed evidence are distinguished from agent failures', () => {
   const environment = gradeTask(task, { orders: [], finalResponse: null, environmentError: new Error('Store failed startup') })
   assert.equal(environment.status, 'environment_error'); has(environment, 'environment_error')
   assert.equal(gradeTask(task, { finalResponse: purchased }).status, 'environment_error')
@@ -170,6 +170,5 @@ test('environment failures and malformed evidence are distinguished from agent f
   assert.equal(gradeTask(task, { orders: [null], finalResponse: purchased }).status, 'environment_error')
   const invalidTask = structuredClone(task); invalidTask.request.payment.number = null
   assert.equal(gradeTask(invalidTask, { orders: [], finalResponse: purchased }).status, 'environment_error')
-  has(gradeOrder(orderFor(), { timedOut: true }), 'timed_out')
   has(gradeOrder(orderFor(), { agentError: new Error('Agent crashed') }), 'agent_error')
 })

@@ -60,7 +60,7 @@ async function launchTrial({ trial, task, run, secureCookies }) {
   }
   try {
     const target = await request('start', {
-      runId: trial.id, task, deadline_at: trial.deadline_at, snapshot: trial.snapshot, secureCookies,
+      runId: trial.id, task, snapshot: trial.snapshot, secureCookies,
       metadata: { suite_version: SUITE_VERSION, benchmark_date: BENCHMARK_DATE,
         environment_sha256: run.environment_sha256, selected_tasks_sha256: run.selected_tasks_sha256,
         dashboard_run_id: run.id, dashboard_attempt_id: trial.attempt_id },
@@ -86,7 +86,7 @@ export async function createRunManager({
   const hashes = Object.fromEntries(Object.entries(catalogs).map(([suite, selected]) => [suite, digest(selected)]))
   const filename = path.join(path.resolve(directory), 'dashboard-state.json')
   let runs = [], trials = [], queue = Promise.resolve(), closed = false, closePromise
-  const workers = new Map(), timers = new Map(), traceEvents = new Map()
+  const workers = new Map(), traceEvents = new Map()
   // Replay chunks are an outbox when archived by the host, files on local disk,
   // and plain memory otherwise. They never enter the local checkpoint file.
   const replayChunks = new Map(), replayFiles = persist && !traceArchive
@@ -132,8 +132,8 @@ export async function createRunManager({
       if (!task) throw fail('The task set changed. Ask the operator for a new run.', 409)
       const publicFields = publicTask(task)
       currentTask = { index: current.index + 1, id: publicFields.id, store: publicFields.store,
-        instruction: publicFields.instruction, request: publicFields.request, timeout_ms: publicFields.timeout_ms,
-        status: 'running', started_at: current.started_at, deadline_at: current.deadline_at }
+        instruction: publicFields.instruction, request: publicFields.request,
+        status: 'running', started_at: current.started_at }
     }
     return { status: completed === run.task_ids.length ? 'complete' : current ? 'running' : 'ready', completed, total: run.task_ids.length, currentTask }
   }
@@ -192,7 +192,6 @@ export async function createRunManager({
     const { run, attempt } = findAttempt(token)
     const trial = ownedTrial(attempt, trialId)
     compatible(run)
-    if (trial.status === 'running' && await expire(run, attempt)) await save()
     // A page departure can deliver its last beacon just after Submit result.
     // A signed page remains valid briefly for observation, never for shopping
     // or for changing the sealed grade.
@@ -219,14 +218,6 @@ export async function createRunManager({
     }
     return state
   }
-  function arm(run, attempt, trial) {
-    clearTimeout(timers.get(trial.id))
-    const timer = setTimeout(() => {
-      serialized(async () => { await expire(run, attempt); await save() }).catch(() => {})
-    }, Math.max(1, Math.min(2147483647, Date.parse(trial.deadline_at) - now())))
-    timer.unref()
-    timers.set(trial.id, timer)
-  }
   async function ensureWorker(run, attempt, trial) {
     compatible(run)
     if (workers.has(trial.id)) return workers.get(trial.id)
@@ -234,11 +225,11 @@ export async function createRunManager({
     if (!task || task.id !== trial.task_id || task.version !== trial.task_version) throw fail('Trial task identity changed', 409)
     const worker = await workerFactory({ trial: clone(trial), task: clone(task), run: clone(run), secureCookies })
     workers.set(trial.id, worker)
-    arm(run, attempt, trial)
     return worker
   }
-  async function complete(run, attempt, trial, finalResponse, timedOut = false, startupError = null) {
-    clearTimeout(timers.get(trial.id)); timers.delete(trial.id)
+  // Tasks have no time limit. elapsed_ms records how long the agent took, from
+  // Start task to Submit result, so agents can still be compared on speed.
+  async function complete(run, attempt, trial, finalResponse, startupError = null) {
     let snapshot = trial.snapshot, environmentError = startupError?.message ?? null
     const worker = workers.get(trial.id)
     if (worker) {
@@ -252,13 +243,12 @@ export async function createRunManager({
     const orders = snapshot?.orders || []
     if (orders.some(order => order.run_id !== trial.id)) environmentError = 'Order escaped its assigned trial identity'
     const scenarioEvents = snapshot?.scenario?.events || []
-    const deadlineExceeded = timedOut || Boolean(snapshot?.timed_out)
     const result = {
       run_id: trial.id, task_id: task.id, task_version: task.version, store: task.store, family: task.family, split: task.split,
       catalog_mode: task.catalog_mode ?? 'reference', elapsed_ms: Math.max(0, now() - Date.parse(trial.started_at)),
       final_response: clone(finalResponse ?? null), orders: clone(orders), scenario_events: clone(scenarioEvents),
-      timed_out: deadlineExceeded, environment_error: environmentError, request_count: snapshot?.request_count ?? 0,
-      grade: gradeTask(task, { orders, finalResponse, scenarioEvents, timedOut: deadlineExceeded, environmentError }),
+      environment_error: environmentError, request_count: snapshot?.request_count ?? 0,
+      grade: gradeTask(task, { orders, finalResponse, scenarioEvents, environmentError }),
       artifacts: { trace: false, screenshot: false }, metrics: null,
     }
     trial.status = 'completed'; trial.completed_at = iso(now()); trial.result = result
@@ -268,23 +258,6 @@ export async function createRunManager({
     trial.snapshot = null
     attempt.updated_at = iso(now())
     return view(run, attempt)
-  }
-  async function expire(run, attempt) {
-    const trial = activeTrial(attempt)
-    if (!trial || Date.parse(trial.deadline_at) > now()) return false
-    compatible(run)
-    await complete(run, attempt, trial, null, true)
-    return true
-  }
-  async function expireAll() {
-    let changed = false
-    for (const run of runs) for (const attempt of run.attempts) {
-      // Historical results stay readable after a deployment. Incompatible
-      // active trials cannot resume or be scored by changed evaluator code.
-      if (run.environment_sha256 !== fingerprint.environment_sha256 || run.selected_tasks_sha256 !== hashes[run.suite]) continue
-      changed = await expire(run, attempt) || changed
-    }
-    if (changed) await save()
   }
   function validateState(state) {
     if (!isObject(state) || !Array.isArray(state.dashboard_runs) || !Array.isArray(state.dashboard_trials)) throw fail('Invalid dashboard checkpoint')
@@ -317,8 +290,7 @@ export async function createRunManager({
         || !Number.isInteger(trial.index) || trial.index < 0 || trial.index >= run.task_ids.length
         || trial.task_id !== run.task_ids[trial.index] || !Number.isInteger(trial.task_version)
         || !['running', 'completed'].includes(trial.status) || positions.has(position)
-        || !Number.isFinite(Date.parse(trial.started_at)) || !Number.isFinite(Date.parse(trial.deadline_at))
-        || Date.parse(trial.deadline_at) <= Date.parse(trial.started_at)
+        || !Number.isFinite(Date.parse(trial.started_at))
         || (trial.status === 'completed' && (!isObject(trial.result?.grade) || !Array.isArray(trial.result.grade.reasons)))
         || (trial.status === 'running' && (!isObject(trial.snapshot) || trial.snapshot.version !== 1 || trial.snapshot.run_id !== trial.id))) {
         throw fail('Invalid dashboard trial checkpoint')
@@ -364,8 +336,6 @@ export async function createRunManager({
   }
   async function replaceState(state) {
     const next = validateState(state)
-    for (const timer of timers.values()) clearTimeout(timer)
-    timers.clear()
     await Promise.all([...workers.values()].map(worker => worker.close()))
     workers.clear()
     runs = next.dashboard_runs; trials = next.dashboard_trials
@@ -383,10 +353,6 @@ export async function createRunManager({
       }
       for (const chunks of replayChunks.values()) chunks.sort((a, b) => a.id - b.id)
     }
-    for (const run of runs) for (const attempt of run.attempts) {
-      const trial = activeTrial(attempt)
-      if (trial && run.environment_sha256 === fingerprint.environment_sha256 && run.selected_tasks_sha256 === hashes[run.suite]) arm(run, attempt, trial)
-    }
   }
 
   if (persist) {
@@ -395,15 +361,13 @@ export async function createRunManager({
   }
   return {
     traceArchive: Boolean(traceArchive),
-    listRuns: () => serialized(async () => { await expireAll(); return runs.map(runDetail).reverse() }),
+    listRuns: () => serialized(async () => runs.map(runDetail).reverse()),
     getRun: id => serialized(async () => {
-      await expireAll()
       const run = runById(id)
       if (!run) throw fail('Run not found', 404)
       return runDetail(run)
     }),
     getLive: runId => serialized(async () => {
-      await expireAll()
       const run = runById(runId)
       if (!run) throw fail('Run not found', 404)
       const storeOf = taskId => catalogs[run.suite].find(task => task.id === taskId)?.store ?? null
@@ -414,9 +378,9 @@ export async function createRunManager({
           status: completed.length === run.task_ids.length ? 'complete' : current ? 'running' : 'ready',
           completed: completed.length, total: run.task_ids.length,
           current: current ? { trial_id: current.id, index: current.index + 1, task_id: current.task_id, store: storeOf(current.task_id),
-            started_at: current.started_at, deadline_at: current.deadline_at, recorded: Boolean(current.traversal), position: publicLivePosition(current.live) } : null,
+            started_at: current.started_at, recorded: Boolean(current.traversal), position: publicLivePosition(current.live) } : null,
           last: last ? { index: last.index + 1, task_id: last.task_id, store: storeOf(last.task_id), completed_at: last.completed_at,
-            grade: last.result?.grade?.status ?? null, timed_out: Boolean(last.result?.timed_out) } : null }
+            elapsed_ms: last.result?.elapsed_ms ?? null, grade: last.result?.grade?.status ?? null, timed_out: Boolean(last.result?.timed_out) } : null }
       }) }
     }),
     createRun: (input = {}) => serialized(async () => {
@@ -450,18 +414,16 @@ export async function createRunManager({
       return attemptDetail(run, attempt)
     }),
     getTraversal: (runId, attemptId) => serialized(async () => {
-      await expireAll()
       const { attempt } = ownedAttempt(runId, attemptId)
       return { attempt_id: attempt.id, agent: attempt.agent, tasks: attemptTrials(attempt).map(trial => ({
         trial_id: trial.id, task_id: trial.task_id, index: trial.index + 1, status: trial.status,
-        started_at: trial.started_at, completed_at: trial.completed_at ?? null, grade: clone(trial.result?.grade ?? null),
+        started_at: trial.started_at, completed_at: trial.completed_at ?? null, elapsed_ms: trial.result?.elapsed_ms ?? null, grade: clone(trial.result?.grade ?? null),
         recorded: Boolean(trial.traversal), event_count: trial.traversal?.event_count ?? 0,
         replay_recorded: Boolean(trial.replay), replay_chunks: trial.replay?.chunk_count ?? 0,
       })) }
     }),
     getTraversalEvents: (runId, attemptId, trialId, { after = 0, limit = 500 } = {}) => serialized(async () => {
       if (!Number.isSafeInteger(after) || after < 0 || !Number.isSafeInteger(limit) || limit < 1 || limit > 500) throw fail('Invalid traversal pagination')
-      await expireAll()
       const { attempt } = ownedAttempt(runId, attemptId), trial = ownedTrial(attempt, trialId)
       const events = (traceEvents.get(trial.id) ?? []).filter(event => event.id > after).slice(0, limit)
       const last = events.at(-1)?.id ?? after, event_count = trial.traversal?.event_count ?? 0
@@ -469,7 +431,6 @@ export async function createRunManager({
     }),
     getReplay: (runId, attemptId, trialId, { after = 0 } = {}) => serialized(async () => {
       if (!Number.isSafeInteger(after) || after < 0) throw fail('Invalid replay pagination')
-      await expireAll()
       const { attempt } = ownedAttempt(runId, attemptId), trial = ownedTrial(attempt, trialId)
       const chunk_count = trial.replay?.chunk_count ?? 0
       const chunks = trial.replay ? await loadReplay(trial, after) : []
@@ -537,20 +498,18 @@ export async function createRunManager({
     }),
     agentView: token => serialized(async () => {
       const { run, attempt } = findAttempt(token)
-      if (await expire(run, attempt)) await save()
       return view(run, attempt)
     }),
     startTask: token => serialized(async () => {
       const { run, attempt } = findAttempt(token)
       compatible(run)
-      if (await expire(run, attempt)) { await save(); throw fail('The task timed out. Start the next task.', 409) }
       let trial = activeTrial(attempt)
       if (!trial) {
         const index = attemptTrials(attempt).length, task = selectedTasks(run)[index]
         if (!task) throw fail('All tasks are complete', 409)
         const started = now()
         trial = { id: randomUUID(), run_id: run.id, attempt_id: attempt.id, index, task_id: task.id, task_version: task.version,
-          status: 'running', started_at: iso(started), deadline_at: iso(started + task.timeout_ms), snapshot: null, result: null,
+          status: 'running', started_at: iso(started), snapshot: null, result: null,
           traversal: { version: 1, event_count: 0 }, traversal_secret: randomBytes(32).toString('base64url'),
           replay: { version: 1, chunk_count: 0, bytes: 0 } }
         trials.push(trial)
@@ -565,14 +524,13 @@ export async function createRunManager({
         // A version mismatch is never converted into a graded task using a
         // different evaluator. A worker startup failure is an environment error.
         if (error.status === 409) throw error
-        await complete(run, attempt, trial, null, false, error)
+        await complete(run, attempt, trial, null, error)
         await save()
         throw fail('The task environment could not start. The operator can inspect its error.', 503)
       }
     }),
     getTarget: token => serialized(async () => {
       const { run, attempt } = findAttempt(token)
-      if (await expire(run, attempt)) { await save(); return null }
       const trial = activeTrial(attempt)
       if (!trial) return null
       const worker = await ensureWorker(run, attempt, trial)
@@ -584,11 +542,8 @@ export async function createRunManager({
       const trial = activeTrial(attempt)
       if (!trial) throw fail('There is no running task to finish', 409)
       if (JSON.stringify(finalResponse ?? null).length > 64000) throw fail('Final response is too large')
-      if (Date.parse(trial.deadline_at) <= now()) await complete(run, attempt, trial, null, true)
-      else {
-        try { await ensureWorker(run, attempt, trial); await complete(run, attempt, trial, finalResponse) }
-        catch (error) { await complete(run, attempt, trial, finalResponse, false, error) }
-      }
+      try { await ensureWorker(run, attempt, trial); await complete(run, attempt, trial, finalResponse) }
+      catch (error) { await complete(run, attempt, trial, finalResponse, error) }
       await save(); return view(run, attempt)
     }),
     exportState: () => serialized(() => save()),
@@ -599,8 +554,6 @@ export async function createRunManager({
       closePromise = serialized(async () => {
         try { await save() }
         finally {
-          for (const timer of timers.values()) clearTimeout(timer)
-          timers.clear()
           await Promise.allSettled([...workers.values()].map(worker => worker.close()))
           workers.clear(); closed = true
         }

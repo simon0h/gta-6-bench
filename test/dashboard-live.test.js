@@ -67,7 +67,8 @@ test('live tracker follows the current page, steps reached and last action of a 
   assert.deepEqual(position.action, { kind: 'change', label: 'quantity', at: new Date(clock).toISOString(), path: '/bestbuy/cart' })
   assert.equal(position.pages, 3)
   assert.equal(position.actions, 2)
-  assert.equal(current.deadline_at, (await m.getRun(run.id)).attempts[0].trials[0].deadline_at)
+  assert.equal(current.started_at, (await m.getRun(run.id)).attempts[0].trials[0].started_at)
+  assert.equal('deadline_at' in current, false)
   // Signed page identifiers and search terms never reach the tracker.
   assert.doesNotMatch(JSON.stringify(live), /page_id|st=gta|\.[\w-]{43}/)
   // The run listing stays as it was.
@@ -79,6 +80,7 @@ test('live tracker follows the current page, steps reached and last action of a 
   assert.equal(live.agents[0].current, null)
   assert.equal(live.agents[0].last.index, 1)
   assert.equal(live.agents[0].last.grade, (await m.getRun(run.id)).attempts[0].trials[0].result.grade.status)
+  assert.equal(live.agents[0].last.elapsed_ms, (await m.getRun(run.id)).attempts[0].trials[0].result.elapsed_ms)
   // A departure beacon after submitting does not bring the position back.
   await events(m, attempt, trialId, cart.page_id, [{ kind: 'click', label: 'late' }])
   assert.equal((await m.exportState()).dashboard_trials[0].live, undefined)

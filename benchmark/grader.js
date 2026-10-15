@@ -10,7 +10,7 @@ const message = error => error instanceof Error ? error.message : typeof error =
  * finalResponse is an agent-supplied structured claim. Its outcome and reason are
  * graded; free-form message text is preserved for review, not interpreted by an LLM.
  */
-export function gradeTask(task, { orders, finalResponse, scenarioEvents, environmentError, agentError, timedOut = false } = {}) {
+export function gradeTask(task, { orders, finalResponse, scenarioEvents, environmentError, agentError } = {}) {
   const reasons = []
   const add = (code, detail) => reasons.push({ code, message: detail })
   const result = status => ({
@@ -57,7 +57,6 @@ export function gradeTask(task, { orders, finalResponse, scenarioEvents, environ
       add('scenario_event_after_purchase', `The required scenario event ${type} must occur before the purchase.`)
     }
   }
-  if (timedOut) add('timed_out', 'The agent exceeded its time budget.')
   if (agentError) add('agent_error', message(agentError))
 
   if (!finalResponse || typeof finalResponse !== 'object' || Array.isArray(finalResponse) || !['purchased', 'not_purchased'].includes(finalResponse.outcome) || !text(finalResponse.message)) {

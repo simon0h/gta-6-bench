@@ -23,10 +23,10 @@
     const minutes = Math.floor(seconds / 60)
     return minutes < 60 ? `${minutes}m ${seconds % 60}s ago` : `${Math.floor(minutes / 60)}h ${minutes % 60}m ago`
   }
-  function left(ms) {
-    if (ms <= 0) return 'Time is up'
-    const seconds = Math.ceil(ms / 1000), minutes = Math.floor(seconds / 60)
-    return `${minutes}:${String(seconds % 60).padStart(2, '0')} left`
+  function duration(ms) {
+    const seconds = Math.max(0, Math.floor(ms / 1000)), minutes = Math.floor(seconds / 60)
+    if (seconds < 60) return `${seconds}s`
+    return minutes < 60 ? `${minutes}m ${seconds % 60}s` : `${Math.floor(minutes / 60)}h ${minutes % 60}m`
   }
 
   function create({ api, agents }) {
@@ -56,10 +56,11 @@
       const status = entry.status === 'complete' ? 'Finished' : current ? 'Shopping' : entry.completed ? 'Between tasks' : 'Not started'
       let body
       if (current) {
-        body = `<div class="live-task"><span>Task ${escape(current.index)} of ${escape(entry.total)} · ${escape(storeName(current.store))}</span><small>${escape(current.task_id)}</small><span class="live-deadline" data-live-deadline="${escape(current.deadline_at)}"></span></div>${position(current)}`
+        body = `<div class="live-task"><span>Task ${escape(current.index)} of ${escape(entry.total)} · ${escape(storeName(current.store))}</span><small>${escape(current.task_id)}</small><span class="live-elapsed" title="Time since Start task. There is no time limit." data-live-started="${escape(current.started_at)}"></span></div>${position(current)}`
       } else {
         const last = entry.last
-        const lastText = last ? `Last task: ${escape(last.index)} · ${escape(storeName(last.store))} · ${escape(last.timed_out ? 'timed out' : String(last.grade || 'submitted').replace(/_/g, ' '))}` : ''
+        const took = Number.isFinite(last?.elapsed_ms) ? ` · took ${escape(duration(last.elapsed_ms))}` : ''
+        const lastText = last ? `Last task: ${escape(last.index)} · ${escape(storeName(last.store))} · ${escape(last.timed_out ? 'timed out' : String(last.grade || 'submitted').replace(/_/g, ' '))}${took}` : ''
         body = `<p class="live-quiet">${entry.status === 'complete' ? `All ${escape(entry.total)} tasks submitted.` : entry.completed ? `On the task page. ${escape(entry.completed)} of ${escape(entry.total)} tasks submitted.` : 'Has not started a task yet.'}</p>${lastText ? `<p class="live-quiet">${lastText}</p>` : ''}`
       }
       const icon = agentIcon(entry.agent)
@@ -70,11 +71,7 @@
     function tick() {
       if (!container?.isConnected) return
       for (const node of container.querySelectorAll('[data-live-since]')) node.textContent = ago(now() - Date.parse(node.dataset.liveSince))
-      for (const node of container.querySelectorAll('[data-live-deadline]')) {
-        const remaining = Date.parse(node.dataset.liveDeadline) - now()
-        node.textContent = left(remaining)
-        node.classList.toggle('low', remaining < 60_000)
-      }
+      for (const node of container.querySelectorAll('[data-live-started]')) node.textContent = `${duration(now() - Date.parse(node.dataset.liveStarted))} so far`
     }
 
     function render() {

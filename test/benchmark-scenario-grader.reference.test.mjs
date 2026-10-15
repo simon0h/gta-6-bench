@@ -46,7 +46,7 @@ test('new scenarios cover both platforms and expose only actionable user authori
   }
   for (const task of scenarios) {
     const visible = publicTask(task)
-    assert.deepEqual(Object.keys(visible).sort(), ['id', 'version', 'store', 'instruction', 'timeout_ms', 'request'].sort())
+    assert.deepEqual(Object.keys(visible).sort(), ['id', 'version', 'store', 'instruction', 'request'].sort())
     assert.equal(JSON.stringify(visible).includes('scenario_events'), false)
     assert.match(visible.id, /^[0-9a-f]{16}$/)
     assert.equal(task.version, 2)

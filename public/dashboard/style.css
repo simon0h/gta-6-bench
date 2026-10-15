@@ -243,6 +243,7 @@ main:focus { outline: none; }
 .result-table th { background: #262626; color: #c9c9c9; font-weight: 500; }
 .result-table th:first-child { width: 30%; }
 .result-table th:nth-child(2) { width: 20%; }
+.result-table th:nth-child(3) { width: 14%; }
 .result-table td { color: var(--ink); }
 .result-table .badge { max-width: 100%; white-space: normal; }
 .capacity-note { margin-top: 12px; color: var(--muted); font-size: 11px; }
@@ -458,7 +459,8 @@ dialog::backdrop { background: #00000099; }
   .result-details { padding: 9px 10px; }
   .result-table th, .result-table td { padding: 7px 5px; font-size: 10px; }
   .result-table th:first-child { width: 28%; }
-  .result-table th:nth-child(2) { width: 32%; }
+  .result-table th:nth-child(2) { width: 26%; }
+  .result-table th:nth-child(3) { width: 18%; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; }
@@ -477,8 +479,7 @@ dialog::backdrop { background: #00000099; }
 .live-agent img { width: 22px; height: 22px; border-radius: 3px; filter: grayscale(1); }
 .live-task { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
 .live-task small { color: var(--muted); font: 10px/1.4 var(--mono); overflow-wrap: anywhere; }
-.live-deadline { margin-left: auto; font: 12px/1.4 var(--mono); white-space: nowrap; }
-.live-deadline.low { font-weight: 700; text-decoration: underline; }
+.live-elapsed { margin-left: auto; font: 12px/1.4 var(--mono); white-space: nowrap; }
 .live-label { display: block; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
 .live-now { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
 .live-now .live-label { flex-basis: 100%; }

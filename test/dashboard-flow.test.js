@@ -139,7 +139,7 @@ test('HTTP backend caps a run at five links and protects browser assignment and 
   assert.equal(illegalOperatorAction.status, 403)
 })
 
-test('HTTP checkpoint restart retains the active deadline, routing cookie and shopper cart', async t => {
+test('HTTP checkpoint restart retains the task start time, routing cookie and shopper cart', async t => {
   const host = await server(t), operator = browser(host.base), agent = browser(host.base)
   const run = await createRun(operator), attempt = await addAttempt(operator, run)
   await agent.request(`/agent/${attempt.token}`)
@@ -158,7 +158,7 @@ test('HTTP checkpoint restart retains the active deadline, routing cookie and sh
 
   const replacement = await server(t, JSON.parse(JSON.stringify(state))), restored = browser(replacement.base, cookies)
   const after = (await restored.request(`/agent/${attempt.token}/state`)).body
-  assert.equal(after.currentTask.deadline_at, before.currentTask.deadline_at)
+  assert.equal(after.currentTask.started_at, before.currentTask.started_at)
   assert.equal(after.currentTask.id, before.currentTask.id)
   const cart = await restored.request('/bestbuy/cart')
   assert.equal(cart.status, 200)
