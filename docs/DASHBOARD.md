@@ -38,12 +38,16 @@ Use a separate browser profile/context for each agent URL. Tabs share cookies;
 opening another unfinished attempt in the same browser session is rejected to
 prevent one attempt's actions from entering another attempt's storefront.
 
-Each task starts when the agent clicks **Start task**. This begins the deadline and
+Each task starts when the agent clicks **Start task**. This starts the clock and
 reveals the instructions and supplied shopping details. The agent uses **Continue
 shopping**, performs the task in the simulated store, and follows **Task & submit
 result** back to report its final answer. **Submit result & continue** seals that
-task and prepares the next one. The next timer begins only after clicking Start.
-Timeouts are recorded even when the agent does not submit a result.
+task and prepares the next one. The next clock starts only after clicking Start.
+
+There is no time limit. A task stays open until the agent submits a result, and
+the result records how long it took (`elapsed_ms`, from Start task to Submit
+result). The run page shows that time for every result, the total for each agent
+URL, and a running clock in the live tracker, so agents can be compared on speed.
 
 The form supports purchased and did-not-purchase outcomes. Grading uses private
 order and scenario evidence together with the final answer; selecting Purchased
@@ -63,13 +67,13 @@ changes. Labels and notes remain editable without rewriting recorded task eviden
 Local state is atomically stored in `data/dashboard/dashboard-state.json`.
 Cloudflare stores dashboard records and active-task snapshots in Durable Object
 SQLite before releasing dynamic responses. A resumed task retains its original
-deadline and state. Traversal events are appended to a separate SQLite archive,
+start time and state. Traversal events are appended to a separate SQLite archive,
 with paginated operator reads, so historical traces do not grow the active checkpoint.
 
 ## Live tracker
 
 The top of a run page shows where each agent is right now: its current task and
-store, the time left, the page it is on (home, search results, product, cart,
+store, how long it has been running, the page it is on (home, search results, product, cart,
 checkout, order placed, sign-in or other browsing), which of those steps it has
 reached, its last click or form action, and its most recent pages. It refreshes
 every three seconds while an agent is shopping, every fifteen seconds otherwise,
@@ -77,7 +81,7 @@ and pauses while the browser tab is hidden. **View traversal** opens the full pa
 
 The tracker is built from the traversal events below, so it adds nothing to the
 store pages. Each running task keeps a small summary of its position in the
-checkpoint, which is dropped when the task is submitted or times out. Page types
+checkpoint, which is dropped when the task is submitted. Page types
 are a best guess from the page address. Tasks started before the tracker existed
 show no position.
 

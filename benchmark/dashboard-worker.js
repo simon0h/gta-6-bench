@@ -8,27 +8,21 @@ import { exportSessions, prepareSessionImport, sessionStates } from '../lib/sess
 import { exportScenarioState, restoreScenarioState, finalizeScenario } from '../lib/benchmark-scenarios.js'
 import { benchmarkDate } from '../lib/payment.js'
 
-let app, server, runId, deadline, timer, initialized = false, timedOut = false, requests = 0
+// Tasks have no time limit: the storefront stays open until the agent submits.
+let app, server, runId, initialized = false, requests = 0
 
-function seal(timeout = false) {
+function seal() {
   if (!app) return
-  timedOut ||= timeout
   app.locals.benchmarkFinished = true
   finalizeOrders()
   finalizeScenario()
-  clearTimeout(timer)
-}
-
-function checkDeadline() {
-  if (deadline && Date.now() >= deadline && !app.locals.benchmarkFinished) seal(true)
 }
 
 function snapshot() {
-  checkDeadline()
   return {
     version: 1, run_id: runId, sessions: exportSessions({ runId }), orders: exportOrders(), accounts: exportAccounts(),
     scenario: exportScenarioState(sessionStates({ runId })), errors: structuredClone(app.locals.benchmarkErrors),
-    finished: Boolean(app.locals.benchmarkFinished), timed_out: timedOut, request_count: requests,
+    finished: Boolean(app.locals.benchmarkFinished), request_count: requests,
   }
 }
 
@@ -41,8 +35,6 @@ async function handle(message) {
     const task = message.task
     if (!task || (task.catalog_mode ?? 'reference') !== process.env.CATALOG_MODE) throw new Error('Trial catalog mode mismatch')
     benchmarkDate()
-    deadline = Date.parse(message.deadline_at)
-    if (!Number.isFinite(deadline)) throw new Error('Trial requires a deadline')
     app = await createApp({ persist: false, captcha: { mode: 'off', stores: [] }, benchmark: {
       runId, stores: [task.store], scenario: task.scenario,
       metadata: { ...message.metadata, run_id: runId, task_id: task.id, task_version: task.version, catalog_mode: task.catalog_mode ?? 'reference' },
@@ -57,7 +49,7 @@ async function handle(message) {
     if (message.snapshot) {
       const saved = message.snapshot
       if (saved.version !== 1 || saved.run_id !== runId || !Array.isArray(saved.errors)
-        || typeof saved.finished !== 'boolean' || typeof saved.timed_out !== 'boolean'
+        || typeof saved.finished !== 'boolean'
         || !Number.isInteger(saved.request_count) || saved.request_count < 0
         || !Array.isArray(saved.orders) || saved.orders.some(order => order.run_id !== runId)) throw new Error('Invalid trial checkpoint')
       const sessions = prepareSessionImport(saved.sessions, { runId })
@@ -66,35 +58,26 @@ async function handle(message) {
       sessions(); orders(); accounts()
       restoreScenarioState(saved.scenario, sessionStates({ runId }))
       app.locals.benchmarkErrors = structuredClone(saved.errors)
-      timedOut = saved.timed_out
       requests = saved.request_count
-      if (saved.finished) seal(timedOut)
+      if (saved.finished) seal()
     }
     app.use((error, req, res, next) => {
       app.locals.benchmarkErrors.push({ method: req.method, path: req.path, error: error.message })
       res.status(500).send('Benchmark environment error')
     })
     server = createServer((req, res) => {
-      checkDeadline()
       requests++
       app(req, res)
     })
     await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve) })
-    checkDeadline()
-    if (!app.locals.benchmarkFinished) {
-      timer = setTimeout(() => seal(true), Math.max(1, deadline - Date.now()))
-      timer.unref()
-    }
     return { baseUrl: `http://127.0.0.1:${server.address().port}`, startPath: `/${task.store}` }
   }
   if (!app) throw new Error('Trial has not started')
   if (message.type === 'snapshot') {
-    checkDeadline()
-    if (message.finish) seal(false)
+    if (message.finish) seal()
     return { snapshot: snapshot() }
   }
   if (message.type === 'stop') {
-    clearTimeout(timer)
     server.closeAllConnections()
     await new Promise(resolve => server.close(resolve))
     return { stopped: true }

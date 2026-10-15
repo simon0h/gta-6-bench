@@ -125,20 +125,40 @@ test('local atomic checkpoints reload and reject changed environment or task def
   await assert.rejects(taskChanged.startTask(a.token), /environment or task set changed/)
 })
 
-test('deadline closes the storefront and records timeout failure even without a final response', async t => {
-  const shortTask = { ...selected('bestbuy-budget_decline-ps5'), timeout_ms: 600 }
-  const m = await manager(t, { taskSets: set(shortTask) }), { run, a } = await attempt(m)
+test('a task has no time limit: it stays open and records how long it took', async t => {
+  let clock = Date.parse('2026-10-15T12:00:00Z')
+  const m = await manager(t, { now: () => clock }), { run, a } = await attempt(m)
   const target = await m.startTask(a.token)
-  const deadline = Date.parse((await m.agentView(a.token)).currentTask.deadline_at)
-  await new Promise(resolve => setTimeout(resolve, Math.max(1, deadline - Date.now() + 50)))
-  assert.equal(await m.getTarget(a.token), null)
+  const view = await m.agentView(a.token)
+  assert.equal('deadline_at' in view.currentTask, false)
+  assert.equal('timeout_ms' in view.currentTask, false)
+  // Hours later the task is still running and its store still answers.
+  clock += 5 * 60 * 60 * 1000
+  assert.equal((await m.agentView(a.token)).status, 'running')
+  assert.notEqual(await m.getTarget(a.token), null)
+  assert.equal((await fetch(target.baseUrl + '/bestbuy')).status, 200)
+  clock += 1234
+  await m.finishTask(a.token, { outcome: 'not_purchased', reason: 'budget_exceeded', message: 'Over budget.' })
   const record = (await m.getRun(run.id)).attempts[0].trials[0]
   assert.equal(record.status, 'completed')
-  assert.equal(record.result.grade.status, 'failed')
-  assert.equal(record.result.timed_out, true)
-  assert.ok(record.result.grade.reasons.some(reason => reason.code === 'timed_out'))
-  assert.equal((await m.agentView(a.token)).status, 'complete')
-  await assert.rejects(fetch(target.baseUrl + '/bestbuy'), /fetch failed/)
+  assert.equal(record.result.elapsed_ms, 5 * 60 * 60 * 1000 + 1234)
+  assert.equal('timed_out' in record.result, false)
+  assert.equal(record.result.grade.reasons.some(reason => reason.code === 'timed_out'), false)
+  assert.equal((await m.getTraversal(run.id, a.id)).tasks[0].elapsed_ms, 5 * 60 * 60 * 1000 + 1234)
+})
+
+test('checkpoints saved while tasks had deadlines still load', async t => {
+  const m = await manager(t), { run, a } = await attempt(m)
+  await m.startTask(a.token)
+  const saved = await m.exportState()
+  const trial = saved.dashboard_trials[0]
+  trial.deadline_at = new Date(Date.parse(trial.started_at) + 60_000).toISOString()
+  trial.snapshot.timed_out = false
+  const restored = await manager(t)
+  await restored.importState(saved)
+  assert.equal((await restored.agentView(a.token)).status, 'running')
+  await restored.finishTask(a.token, { outcome: 'not_purchased', reason: 'budget_exceeded', message: 'Over budget.' })
+  assert.equal((await restored.getRun(run.id)).attempts[0].trials[0].status, 'completed')
 })
 
 test('scenario checkpoint reconnects immutable scoped sessions, signed-in membership and availability flags', () => {

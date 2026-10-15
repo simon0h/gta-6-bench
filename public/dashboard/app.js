@@ -55,6 +55,12 @@
     if (!Number.isFinite(parsed.getTime())) return 'Just created'
     return parsed.toLocaleDateString(undefined, { month: 'short', day: 'numeric', ...(includeTime ? { hour: 'numeric', minute: '2-digit' } : { year: 'numeric' }) })
   }
+  function duration(ms) {
+    if (!Number.isFinite(ms)) return '—'
+    const seconds = Math.max(0, Math.round(ms / 1000)), minutes = Math.floor(seconds / 60)
+    if (seconds < 60) return `${seconds}s`
+    return minutes < 60 ? `${minutes}m ${seconds % 60}s` : `${Math.floor(minutes / 60)}h ${minutes % 60}m`
+  }
   function taskCount(run) { return Number(run.task_count ?? run.tasks?.length ?? (run.suite === 'all240' ? 240 : 30)) }
   function attempts(run) { return Array.isArray(run?.attempts) ? run.attempts : [] }
   function suiteName(run) { return run.suite === 'all240' ? 'All 240 tasks' : 'Original 30 tasks' }
@@ -131,7 +137,10 @@
   function renderResults(attempt) {
     const results = resultList(attempt)
     if (!results.length) return ''
-    return `<details class="result-details"><summary>View ${results.length} task result${results.length === 1 ? '' : 's'}${Number.isFinite(attempt.summary?.passed) ? ` · ${attempt.summary.passed} passed` : ''}</summary><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Notes</th></tr></thead><tbody>${results.map((result, index) => `<tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(result.grade?.reasons?.map(reason => reason.message).filter(Boolean).join('; ') || result.final_response?.message || result.reason || result.message || result.notes || '—')}</td></tr>`).join('')}</tbody></table></details>`
+    // Tasks have no time limit; each result records how long the agent took.
+    const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite)
+    const total = timed.length ? ` · ${duration(timed.reduce((sum, ms) => sum + ms, 0))} total` : ''
+    return `<details class="result-details"><summary>View ${results.length} task result${results.length === 1 ? '' : 's'}${Number.isFinite(attempt.summary?.passed) ? ` · ${attempt.summary.passed} passed` : ''}${total}</summary><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Time taken</th><th scope="col">Notes</th></tr></thead><tbody>${results.map((result, index) => `<tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(duration(result.elapsed_ms))}</td><td>${escape(result.grade?.reasons?.map(reason => reason.message).filter(Boolean).join('; ') || result.final_response?.message || result.reason || result.message || result.notes || '—')}</td></tr>`).join('')}</tbody></table></details>`
   }
 
   function renderAttempt(attempt, index, run) {

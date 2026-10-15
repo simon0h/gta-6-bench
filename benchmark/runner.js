@@ -46,7 +46,7 @@ export async function runSuite({ tasks, outputDirectory, baseline = 'reference',
         await mkdir(runDirectory, { recursive: true })
         const actions = [], consoleErrors = [], blockedRequests = []
         const artifacts = { trace: false, screenshot: false }
-        let worker, context, page, finalResponse, agentError, environmentError = launchError, timedOut = false, orders = [], scenarioEvents = [], metrics = null, started = Date.now()
+        let worker, context, page, finalResponse, agentError, environmentError = launchError, orders = [], scenarioEvents = [], metrics = null, started = Date.now()
         const controller = new AbortController()
         const recordAction = action => {
           if (!controller.signal.aborted) actions.push({ elapsed_ms: Date.now() - started, ...action })
@@ -81,20 +81,17 @@ export async function runSuite({ tasks, outputDirectory, baseline = 'reference',
             }
           })
           started = Date.now()
-          let timer
           try {
+            // Tasks have no time limit; elapsed_ms records how long the agent took.
             const input = { page, task: publicTask(task), startUrl: worker.startUrl, recordAction, signal: controller.signal }
-            const attempt = Promise.resolve().then(() => adapter ? adapter(input) : runBaseline(baseline, input))
-            const response = await Promise.race([attempt, new Promise((resolve, reject) => {
-              timer = setTimeout(() => { timedOut = true; controller.abort(); reject(new Error(`Task exceeded ${task.timeout_ms}ms`)) }, task.timeout_ms)
-            })])
+            const response = await Promise.resolve().then(() => adapter ? adapter(input) : runBaseline(baseline, input))
             finalResponse = response?.finalResponse ?? response
             if (response?.metrics) {
               const { cost_usd, input_tokens, output_tokens } = response.metrics
               metrics = Object.fromEntries(Object.entries({ cost_usd, input_tokens, output_tokens }).filter(([, value]) => Number.isFinite(value) && value >= 0))
             }
           } catch (error) { agentError = errorText(error) }
-          finally { clearTimeout(timer); controller.abort() }
+          finally { controller.abort() }
           // Freeze on settlement, before screenshot/trace work, so late actions
           // cannot change the scored transaction after the agent has finished.
           const snapshot = await worker.snapshot(true)
@@ -119,7 +116,7 @@ export async function runSuite({ tasks, outputDirectory, baseline = 'reference',
         const result = {
           run_id: runId, task_id: task.id, task_version: task.version, store: task.store, family: task.family, split: task.split, catalog_mode: task.catalog_mode ?? 'reference', repeat,
           elapsed_ms: Date.now() - started, metrics, action_count: actions.length, final_response: finalResponse ?? null,
-          grade: gradeTask(task, { orders, finalResponse, scenarioEvents, environmentError, agentError, timedOut }),
+          grade: gradeTask(task, { orders, finalResponse, scenarioEvents, environmentError, agentError }),
           scenario_events: scenarioEvents,
           environment_error: environmentError ?? null, agent_error: agentError ?? null,
           artifact_directory: relative, artifacts,

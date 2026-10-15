@@ -1,7 +1,7 @@
 const token = document.body.dataset.token
 const base = `/agent/${encodeURIComponent(token)}`
 const $ = id => document.getElementById(id)
-let state, busy = false
+let state
 async function api(path, body) {
   const response = await fetch(base + path, { credentials: 'same-origin', ...(body !== undefined ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : {}) })
   const data = await response.json()
@@ -22,13 +22,12 @@ function render(next) {
   if (!task) {
     $('status').textContent = 'Ready to start'
     $('title').textContent = 'Your next task'
-    $('instruction').textContent = 'Start when you are ready. Your instructions and shopping details will appear here, and the task timer will begin.'
+    $('instruction').textContent = 'Start when you are ready. Your instructions and shopping details will appear here.'
     $('request').textContent = 'Details are revealed when this task starts.'
     $('start').hidden = false
     $('resume').hidden = true
     $('finish-section').hidden = true
-    $('timing').textContent = 'Each task starts with a fresh shopping environment.'
-    timer()
+    $('timing').textContent = 'Each task starts with a fresh shopping environment. There is no time limit.'
     return
   }
   $('status').textContent = task.status === 'running' ? 'In progress' : 'Ready to start'
@@ -40,15 +39,7 @@ function render(next) {
   $('resume').hidden = !running
   $('resume').href = `/${task.store}`
   $('finish-section').hidden = !running
-  $('timing').textContent = `${Math.round(task.timeout_ms / 1000)} seconds allowed after starting`
-  timer()
-}
-function timer() {
-  const deadline = state?.currentTask?.deadline_at
-  if (!deadline || state?.currentTask?.status !== 'running') { $('timer').textContent = ''; return }
-  const left = Math.max(0, Math.ceil((new Date(deadline).getTime() - Date.now()) / 1000))
-  $('timer').textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')} remaining`
-  if (left === 0 && !busy) { busy = true; api('/state').then(render).catch(e => error(e.message)).finally(() => { busy = false }) }
+  $('timing').textContent = 'There is no time limit. Submit your result when you are done.'
 }
 $('start').addEventListener('click', async () => {
   error(''); $('start').disabled = true
@@ -63,13 +54,12 @@ $('outcome').addEventListener('change', () => {
 $('finish').addEventListener('submit', async event => {
   event.preventDefault(); error('')
   const button = event.submitter
-  button.disabled = true; busy = true
+  button.disabled = true
   try {
     render(await api('/finish', { outcome: $('outcome').value, message: $('message').value.trim(), ...($('outcome').value === 'not_purchased' ? { reason: $('reason').value } : {}) }))
     event.target.reset(); $('reason-field').hidden = true; $('reason').required = false
     window.scrollTo({ top: 0, behavior: 'smooth' })
   } catch (e) { error(e.message) }
-  finally { button.disabled = false; busy = false }
+  finally { button.disabled = false }
 })
 api('/state').then(render).catch(e => { $('loading').hidden = true; error(e.message) })
-setInterval(timer, 1000)

@@ -249,7 +249,7 @@ test('hosted checkpoint restores dashboard metadata and an active isolated task 
   const resumed = client(base)
   for (const [name, value] of cookies) resumed.jar.set(name, value)
   const nextView = await resumed.json(`/agent/${attempt.token}/state`)
-  assert.equal(nextView.currentTask.deadline_at, publicView.currentTask.deadline_at)
+  assert.equal(nextView.currentTask.started_at, publicView.currentTask.started_at)
   assert.equal((await resumed.get('/bestbuy/cart')).status, 200)
   const next = await state()
   assert.equal(next.dashboard_trials[0].snapshot.sessions.length, 1)

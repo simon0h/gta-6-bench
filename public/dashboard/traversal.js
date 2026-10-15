@@ -155,8 +155,12 @@
       clearTimeout(timer)
       if (dialog.open && state && !document.hidden) timer = setTimeout(() => refresh(false), 5000)
     }
+    function took(ms) {
+      const seconds = Math.max(0, Math.round(ms / 1000)), minutes = Math.floor(seconds / 60)
+      return seconds < 60 ? `${seconds}s` : minutes < 60 ? `${minutes}m ${seconds % 60}s` : `${Math.floor(minutes / 60)}h ${minutes % 60}m`
+    }
     function renderTasks() {
-      const markup = state.tasks.length ? state.tasks.map((task, index) => `<button class="traversal-task${String(task.trial_id) === state.selected ? ' selected' : ''}" type="button" data-traversal-task="${escape(task.trial_id)}"${String(task.trial_id) === state.selected ? ' aria-current="true"' : ''}><span class="traversal-task-name">${escape(task.task_id || `Task ${index + 1}`)}</span><span class="traversal-task-meta"><span>${escape(label(task.grade?.status || task.status || 'In progress'))}</span><span>${task.recorded === false ? 'Unavailable' : `${Number(task.event_count) || 0} events`}</span></span></button>`).join('') : '<p class="traversal-empty">No tasks started yet.</p>'
+      const markup = state.tasks.length ? state.tasks.map((task, index) => `<button class="traversal-task${String(task.trial_id) === state.selected ? ' selected' : ''}" type="button" data-traversal-task="${escape(task.trial_id)}"${String(task.trial_id) === state.selected ? ' aria-current="true"' : ''}><span class="traversal-task-name">${escape(task.task_id || `Task ${index + 1}`)}</span><span class="traversal-task-meta"><span>${escape(label(task.grade?.status || task.status || 'In progress'))}${Number.isFinite(task.elapsed_ms) ? ` · ${escape(took(task.elapsed_ms))}` : ''}</span><span>${task.recorded === false ? 'Unavailable' : `${Number(task.event_count) || 0} events`}</span></span></button>`).join('') : '<p class="traversal-empty">No tasks started yet.</p>'
       const container = find('.traversal-tasks')
       if (container.innerHTML !== markup) {
         const focused = document.activeElement?.dataset.traversalTask

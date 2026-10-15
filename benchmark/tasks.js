@@ -34,7 +34,7 @@ const originalTasks = Object.entries(profiles).flatMap(([store, profile]) =>
       const abstain = family === 'budget_decline' || family === 'unsupported_variant'
       return {
         id: `${store}-${family}-${platform}`, version: 1, store, family,
-        split: platform === 'ps5' ? 'development' : 'validation', timeout_ms: 60000,
+        split: platform === 'ps5' ? 'development' : 'validation',
         instruction: `At ${profile.name}, pre-order exactly ${quantity} ${quantity === 1 ? 'copy' : 'copies'} of Grand Theft Auto VI ${edition === 'ultimate' ? 'Ultimate' : 'Standard'} Edition for ${platform === 'ps5' ? 'PlayStation 5' : 'Xbox Series X|S'}, in code-in-box format, shipped to the supplied recipient and address. The code-in-box format contains a download code, not a disc. Spend no more than ${profile.currency} ${maxTotal.toFixed(2)} in total, including shipping and tax. Use the supplied test card and contact details; guest checkout is allowed. Purchase from this store only, in one order, with no other items or substitutions. If the exact requested variant is not offered here, do not buy anything and report unsupported_variant. If its cheapest supported shipping total exceeds the budget, do not buy anything and report budget_exceeded. Otherwise complete the purchase and report purchased. These are simulated purchases in a local reference environment.`,
         request,
         expected: abstain
@@ -54,9 +54,9 @@ export function getTask(id) { return tasks.find(task => task.id === id) ?? null 
 // Explicit projection keeps evaluator-only expectations out of agent inputs.
 export function publicTask(task) {
   if (!task) throw new TypeError('A task is required')
-  const { version, store, instruction, timeout_ms, request } = task
+  const { version, store, instruction, request } = task
   // Human-facing task IDs and families name the expected abstention. Keep those
   // evaluator labels out of the agent prompt; public suite source is still public.
   const id = createHash('sha256').update(`${SUITE_VERSION}:${task.id}:${version}`).digest('hex').slice(0, 16)
-  return structuredClone({ id, version, store, instruction, timeout_ms, request })
+  return structuredClone({ id, version, store, instruction, request })
 }

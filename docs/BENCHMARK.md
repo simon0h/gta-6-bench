@@ -43,8 +43,9 @@ are excluded from the success-rate denominator. Always inspect their count.
 ## Task contract and coverage
 
 `benchmark/tasks.js` is the versioned task manifest. Each case specifies its
-instruction, user-supplied structured requirements, time budget, and evaluator
-expectations. The public projection omits expectations and outcome-revealing
+instruction, user-supplied structured requirements and evaluator
+expectations. Tasks have no time limit; each result records how long the agent
+took as `elapsed_ms`. The public projection omits expectations and outcome-revealing
 family labels. Public task IDs are opaque. Inputs include fictitious contact
 details and a test card for this local simulation.
 
@@ -141,7 +142,7 @@ export const metadata = {
 export async function run({ page, task, startUrl, recordAction, signal }) {
   await page.goto(startUrl)
   // Pass task.instruction and task.request to your agent and give it browser
-  // tools backed by this page. Respect signal.aborted and task.timeout_ms.
+  // tools backed by this page. There is no time limit; return when the agent is done.
   // Call recordAction({type: 'click', description: 'Open a product'}) as useful.
   return {
     finalResponse: {
