@@ -9,7 +9,7 @@ import { tasks } from '../benchmark/tasks.js'
 const replayEvents = chunks => chunks.flatMap(chunk => JSON.parse(gunzipSync(Buffer.from(chunk.data, 'base64')).toString('utf8')))
 
 test('browser replay records pages, pointer and typing with passwords and card fields masked; operator can play it', { skip: process.env.RUN_BROWSER_TESTS !== '1', timeout: 120_000 }, async t => {
-  const task = { ...tasks.find(task => task.id === 'bestbuy-budget_decline-ps5'), timeout_ms: 120_000 }
+  const task = tasks.find(task => task.id === 'bestbuy-budget_decline-ps5')
   const manager = await createRunManager({ persist: false, environment: { environment_sha256: 'replay-browser-test' }, taskSets: { original30: [task], all240: [task] } })
   const app = await createDashboardApp({ manager })
   const server = await new Promise(resolve => { const listener = app.listen(0, '127.0.0.1', () => resolve(listener)) })

@@ -6,7 +6,7 @@ import { createRunManager } from '../benchmark/dashboard-manager.js'
 import { tasks } from '../benchmark/tasks.js'
 
 test('browser traversal captures page lineage and actions without field values; operator can inspect it', { skip: process.env.RUN_BROWSER_TESTS !== '1', timeout: 120_000 }, async t => {
-  const task = { ...tasks.find(task => task.id === 'bestbuy-budget_decline-ps5'), timeout_ms: 120_000 }
+  const task = tasks.find(task => task.id === 'bestbuy-budget_decline-ps5')
   const manager = await createRunManager({ persist: false, environment: { environment_sha256: 'traversal-browser-test' }, taskSets: { original30: [task], all240: [task] } })
   const app = await createDashboardApp({ manager })
   const server = await new Promise(resolve => { const listener = app.listen(0, '127.0.0.1', () => resolve(listener)) })
