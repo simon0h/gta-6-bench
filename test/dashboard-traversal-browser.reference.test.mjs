@@ -56,7 +56,7 @@ test('browser traversal captures page lineage and actions without field values; 
   operator.on('pageerror', error => errors.push(error.message))
   await operator.goto(`${origin}/dashboard#/runs/${run.id}`)
   await operator.getByLabel('Comments').fill('Draft retained while inspecting traversal')
-  await operator.getByRole('button', { name: 'View traversal', exact: true }).click()
+  await operator.locator('.agent-card').getByRole('button', { name: 'View traversal', exact: true }).click()
   await operator.locator('#traversal-dialog').waitFor()
   await operator.locator('.traversal-graph-node').first().waitFor()
   assert.ok(await operator.locator('.traversal-graph-node').count() >= 3)

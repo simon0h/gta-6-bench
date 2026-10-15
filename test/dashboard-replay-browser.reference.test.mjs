@@ -58,7 +58,7 @@ test('browser replay records pages, pointer and typing with passwords and card f
   const operator = await browser.newPage({ viewport: { width: 1365, height: 1000 } })
   operator.on('pageerror', error => errors.push(error.message))
   await operator.goto(`${origin}/dashboard#/runs/${run.id}`)
-  await operator.getByRole('button', { name: 'View traversal', exact: true }).click()
+  await operator.locator('.agent-card').getByRole('button', { name: 'View traversal', exact: true }).click()
   await operator.locator('#traversal-dialog').waitFor()
   await operator.getByRole('button', { name: 'Watch replay', exact: true }).click()
   await operator.locator('#replay-dialog .rr-player').waitFor()
