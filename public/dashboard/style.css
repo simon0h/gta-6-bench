@@ -408,10 +408,6 @@ main:focus { outline: none; }
 .url-bar input:focus { box-shadow: none; }
 .url-bar .button { min-height: 28px; padding: 3px 10px; font-size: 13px; }
 .url-bar .button svg { width: 14px; height: 14px; }
-.link-utilities { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; padding: 0 2px; }
-.copy-prompt { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 4px 0; background: transparent; color: var(--accent); font-size: 13px; font-weight: 500; }
-.copy-prompt:hover { text-decoration: underline; }
-.copy-prompt svg { width: 14px; height: 14px; }
 .entry-fields { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: start; gap: 14px; }
 .entry-fields > div { min-width: 0; }
 .entry-fields textarea { min-height: 64px; max-height: 240px; }
@@ -952,7 +948,6 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
   .agent-card-top .url-bar { order: 3; grid-column: 1 / -1; }
   .agent-body { padding: 12px; }
   .url-bar > svg, .url-bar .button svg { display: none; }
-  .link-utilities { flex-wrap: wrap; }
   .auth-card { padding: 22px 18px; }
   .dialog-content { padding: 16px 16px 6px; }
   .dialog-header { margin: -16px -16px 14px; padding-left: 16px; }
