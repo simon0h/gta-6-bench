@@ -232,3 +232,31 @@ earlier reasoning stays valid and repeat reading is billed at the cheaper cached
 rate. The chat only reads results; it cannot change grades, runs or tasks, and
 agents never see it. It uses the same `ANTHROPIC_API_KEY` as the summary; locally
 the chat is kept in memory.
+
+## Feedback
+
+**Feedback** in the sidebar opens the real site in a frame so you can click
+through it and leave notes, like a design review tool. Pick a store or a
+dashboard page from **Jump to**, or type a path. **Desktop**, **Tablet** and
+**Phone** change the frame's width.
+
+Switch to **Comment** (or press C) and click anything on the page: a numbered pin
+drops there and a box asks for your note. Pins remember the page, the element you
+clicked and the spot inside it, so they come back in the right place when the page
+is opened again, even at another width. While commenting, the page does not react
+to clicks; scrolling still works. Press Esc or pick **Browse** to use the page again.
+
+The panel on the right lists notes for this page or all pages. Notes can be
+edited, resolved, reopened and deleted. **Copy notes** copies every open note as
+plain text grouped by store (page, element, screen size and the note), ready to
+paste into a chat with Claude; **Download** saves the same text as a `.md` file.
+
+Pins and the note box are drawn by the dashboard over the frame. Store pages are
+not changed, and agents never see any of it: the endpoints need operator sign-in.
+On Cloudflare the notes are kept in the Durable Object's SQLite (`feedback_notes`
+table, up to 500 notes); a local dashboard keeps them in memory. A local dashboard
+does not serve store pages on its own address, so only dashboard pages open there.
+
+If this browser has opened an agent link, store pages would be sent to that
+agent's task, so the viewer refuses to show them and asks you to use a private
+window. Dashboard pages still work.

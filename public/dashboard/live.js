@@ -132,5 +132,5 @@
     return { mount, stop, refresh: load }
   }
 
-  window.DashboardLive = { create, storeName }
+  window.DashboardLive = { create, storeName, stores: Object.keys(stores) }
 })()

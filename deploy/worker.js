@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto'
 import { CheckpointCoordinator, isStaticRequest, readBounded, STATE_LIMIT } from './coordinator.js'
 import { SUMMARY_HEADER, summaryView, writeRunSummary } from '../benchmark/ai-summary.js'
 import { CHAT_HEADER, chatFull, chatStream, chatView, validQuestion } from '../benchmark/ai-chat.js'
+import { FEEDBACK_HEADER, applyFeedback } from '../benchmark/feedback.js'
 
 const IDLE_MS = 10 * 60 * 1000
 const STORE_KEYS = ['sessions', 'orders', 'accounts', 'dashboard_runs', 'dashboard_trials', 'dashboard_tasks']
@@ -29,6 +30,7 @@ export class Storefront extends DurableObject {
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS traversal_events (trial_id TEXT NOT NULL, event_id INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (trial_id, event_id))')
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS run_summaries (run_id TEXT PRIMARY KEY, value TEXT NOT NULL)')
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS run_chats (run_id TEXT PRIMARY KEY, value TEXT NOT NULL)')
+    this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS feedback_notes (id TEXT PRIMARY KEY, value TEXT NOT NULL)')
     this.answering = new Set()
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS replay_chunks (trial_id TEXT NOT NULL, chunk_id INTEGER NOT NULL, bytes INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (trial_id, chunk_id))')
     this.coordinator = new CheckpointCoordinator({
@@ -196,6 +198,8 @@ export class Storefront extends DurableObject {
     }
     const headers = new Headers(response.headers)
     const traceTrial = headers.get(TRACE_HEADER), replayTrial = headers.get(REPLAY_HEADER), summaryRun = headers.get(SUMMARY_HEADER), chatRun = headers.get(CHAT_HEADER)
+    const feedbackOperation = headers.get(FEEDBACK_HEADER)
+    headers.delete(FEEDBACK_HEADER)
     headers.delete(TRACE_HEADER)
     headers.delete(REPLAY_HEADER)
     headers.delete(SUMMARY_HEADER)
@@ -209,6 +213,8 @@ export class Storefront extends DurableObject {
     if (chatRoute && chatRun && response.status === 200 && ['GET', 'POST', 'DELETE'].includes(request.method)) {
       return this.chat(request, response, headers, decodeURIComponent(chatRoute[1]), chatRun)
     }
+    const feedbackRoute = /^\/dashboard\/api\/feedback(?:\/[^/]+)?\/?$/i.test(url.pathname)
+    if (feedbackRoute && feedbackOperation && response.status === 200) return this.feedback(response, headers)
     const route = url.pathname.match(/^\/dashboard\/api\/runs\/[^/]+\/attempts\/[^/]+\/(traversal|replay)\/([^/]+)\/?$/i)
     const kind = route?.[1].toLowerCase(), trialId = kind === 'replay' ? replayTrial : traceTrial
     if (request.method !== 'GET' || response.status !== 200 || !trialId || !route) return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
@@ -259,6 +265,24 @@ export class Storefront extends DurableObject {
       this.ctx.storage.sql.exec('INSERT OR REPLACE INTO run_summaries (run_id, value) VALUES (?, ?)', body.run_id, JSON.stringify(saved))
     }
     return reply(200, summaryView({ configured: Boolean(apiKey), saved, key: body.key, finished: body.finished }))
+  }
+
+  // Feedback notes from the dashboard viewer. Node has checked sign-in and the
+  // request; this object keeps one row per note.
+  async feedback(response, headers) {
+    const operation = JSON.parse(new TextDecoder().decode(await readBounded(response, STATE_LIMIT)))
+    for (const name of ['content-length', 'content-encoding', 'etag']) headers.delete(name)
+    headers.set('content-type', 'application/json; charset=utf-8')
+    headers.set('cache-control', 'no-store')
+    const saved = this.ctx.storage.sql.exec('SELECT value FROM feedback_notes').toArray().map(row => JSON.parse(row.value))
+    let result
+    try { result = applyFeedback(saved, operation) } catch (error) {
+      if (!error.status) throw error
+      return new Response(JSON.stringify({ error: error.message }), { status: error.status, headers })
+    }
+    if (result.changed) this.ctx.storage.sql.exec('INSERT OR REPLACE INTO feedback_notes (id, value) VALUES (?, ?)', result.changed.id, JSON.stringify(result.changed))
+    if (result.removed) this.ctx.storage.sql.exec('DELETE FROM feedback_notes WHERE id = ?', result.removed)
+    return new Response(JSON.stringify({ comments: result.comments, agent_browser: operation.agent_browser === true }), { status: operation.op === 'add' ? 201 : 200, headers })
   }
 
   // Chat about a run. Node has checked sign-in and sent the run data and where
@@ -316,6 +340,7 @@ export default {
       result.headers.delete(REPLAY_HEADER)
       result.headers.delete(SUMMARY_HEADER)
       result.headers.delete(CHAT_HEADER)
+      result.headers.delete(FEEDBACK_HEADER)
       return result
     } catch (error) {
       console.error(JSON.stringify({ event: 'hosting_request_failed', message: error.message }))
