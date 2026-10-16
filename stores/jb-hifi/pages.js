@@ -117,7 +117,7 @@ function ctaForm(base, p, returnTo, block = true) {
 export function tile(base, p, returnTo) {
   const detail=productPath(base,p)+(p.variantId?'?variant='+p.variantId:'')
   return `<article class="jb-tile">
-  ${badges(p)}
+  ${badges(p) || '<div class="jb-badges" aria-hidden="true"></div>'}
   <a class="jb-heart" href="${base}/wishlist/add?id=${p.id}${p.variantId?'&variant='+encodeURIComponent(p.variantId):p.variants?'&variant='+encodeURIComponent(p.variants[0].id):''}" aria-label="Add ${esc(p.title)} to wishlist">&#9825;</a>
   <a class="jb-tile-art" href="${detail}">${artwork(p)}</a>
   <h3><a href="${detail}">${esc(p.title)}</a></h3>
@@ -170,15 +170,15 @@ export function productPage({ base, p, siblings, availability, stores = [], perk
     ${reference ? '' : `<a class="jb-brand-label" href="${base}/brands/${slugify(p.brand)}">${esc(p.brand)}</a>`}<h1>${esc(p.title)}</h1>${optionText(p)}${stars(p)}
     <div class="jb-ids">${p.model ? `MODEL: ${esc(p.model)} &nbsp; ` : ''}SKU: ${esc(p.id)}${reference || !p.model ? '' : ` &nbsp; PLU: ${esc(p.model)}`}</div>
     ${reference ? `<div class="jb-tag jb-tag-big"><span><i class="jb-reference-currency">$</i><b class="jb-reference-amount">${esc(tagPrice(p.price).slice(1))}</b></span></div>` : priceTag(p, true)+wasPrice(p)}
-    <div class="jb-bnpl"><a href="${informationHref(base, 'afterpay')}" class="jb-bnpl-afterpay">${reference ? '<img src="/static/reference/jb-hifi/bnpl-afterpay.svg" alt="afterpay">' : 'afterpay'}</a><a href="${informationHref(base, 'zip')}" class="jb-bnpl-zip">${reference ? '<img src="/static/reference/jb-hifi/bnpl-zip.svg" alt="zip">' : 'zip'}</a><a href="${informationHref(base, 'PayPal')}" class="jb-bnpl-paypal">${reference ? '<img src="/static/reference/jb-hifi/bnpl-paypal.svg" alt="PayPal">' : 'PayPal'}</a></div>
-    <div class="jb-coupon-row">${reference ? '<img class="jb-coupon-smile" src="/static/reference/jb-hifi/coupon-smile.svg" alt="">' : '&#127991;'} <div><a href="${base}/account/login?return_to=${encodeURIComponent(self)}">Log in</a> to see if you have coupons.</div></div>
+    <div class="jb-bnpl"><a href="${informationHref(base, 'afterpay')}" class="jb-bnpl-afterpay"><img src="/static/reference/jb-hifi/bnpl-afterpay.svg" alt="afterpay"></a><a href="${informationHref(base, 'zip')}" class="jb-bnpl-zip"><img src="/static/reference/jb-hifi/bnpl-zip.svg" alt="zip"></a><a href="${informationHref(base, 'PayPal')}" class="jb-bnpl-paypal"><img src="/static/reference/jb-hifi/bnpl-paypal.svg" alt="PayPal"></a></div>
+    <div class="jb-coupon-row"><img class="jb-coupon-smile" src="/static/reference/jb-hifi/coupon-smile.svg" alt=""> <div><a href="${base}/account/login?return_to=${encodeURIComponent(self)}">Log in</a> to see if you have coupons.</div></div>
     ${isGame ? `<div class="jb-variants"><div class="jb-label">Primary Format - Games</div><div class="jb-variant-row">${reference ? '' : `<a class="jb-variant" href="${base}/products/grand-theft-auto-vi-the-goodtime-state-vice-city-collection"><b>The Goodtime State - Vice City Collection</b><span>${tagPrice(699)}</span></a>`}${variants}</div></div>` : ''}
     ${formats.length>1?`<div class="jb-variants"><div class="jb-label">Primary Format - Games</div><div class="jb-variant-row">${formats.map(u=>`<a class="jb-variant ${u.id===p.id?'is-selected':''}" href="${productPath(base,u)}" aria-current="${u.id===p.id}"><b>${esc(u.platformName)}</b><span>${tagPrice(u.price)}</span></a>`).join('')}</div></div>`:''}
     ${p.variants?`<form method="get" action="${productPath(base,p)}" class="jb-option-form"><label for="product-variant">Choose ${Object.keys(p.variants[0].attributes).join(' / ')}<select id="product-variant" name="variant">${p.variants.map(v=>`<option value="${v.id}" ${v.id===p.variantId?'selected':''}>${esc(v.label)} — ${tagPrice(v.price)}${v.stock===0?' · Out of stock':''}</option>`).join('')}</select></label><button class="jb-btn jb-btn-black">Update option</button></form>`:''}
     ${error?`<p class="jb-error" role="alert">${esc(error)}</p>`:''}${reference ? '' : `<p class="jb-fine">Sold by JB Hi-Fi · ${p.orderable&&p.stock>0?'Available to order':'Not currently available'}</p>`}
     <div class="jb-cta-row">${ctaForm(base, p, self, false)}<a class="jb-heart-btn" href="${base}/wishlist/add?id=${p.id}${p.variantId?'&variant='+encodeURIComponent(p.variantId):p.variants?'&variant='+encodeURIComponent(p.variants[0].id):''}" aria-label="Add to wishlist">&#9825;</a></div>
     ${p.notice.length ? `<div class="jb-notice"><span class="jb-notice-icon" aria-hidden="true">!</span><ul>${p.notice.map(n => `<li>${esc(n)}</li>`).join('')}</ul></div>` : ''}
-    ${reference ? '<h2 class="jb-display">Description</h2>' : `<h2 class="jb-display">Key features</h2><ul>${p.specs.slice(0,4).map(([k,v])=>`<li>${esc(k)}: ${esc(v)}</li>`).join('')}</ul>`}
+    ${reference ? '<h2 class="jb-display">Description</h2>' : `<h2 class="jb-display">Key features</h2><ul>${(p.features?.length ? p.features.slice(0,6) : p.specs.slice(0,4).map(([k,v])=>`${k}: ${v}`)).map(f=>`<li>${esc(f)}</li>`).join('')}</ul>`}
     ${p.rating ? `<p class="jb-fine">Rating: <b>${esc(p.rating)}</b> &nbsp; Consumer Advice: <b>${esc(p.rating)}</b></p>` : ''}
     ${p.release ? `<div class="jb-kv"><span>Release date</span><b>${esc(p.release)}</b></div>` : ''}
     ${isGame ? `<div class="jb-kv jb-kv-stack"><span>Pre-order price guarantee</span><span class="jb-fine">If the price of your pre-order drops before release day, we'll refund you the difference shortly after release.</span></div>` : ''}
@@ -303,12 +303,12 @@ export function trackOrderPage({ base, values = {}, error = null, order = null }
     <li><b>Order #${esc(order.order_number)}</b> — placed ${esc(new Date(order.created_at).toLocaleDateString('en-AU'))}</li>
     ${order.items.map(i => `<li>${esc(i.title)}${byId(i.sku) ? ` (${esc(byId(i.sku).subtitle)})` : ''} × ${i.qty}</li>`).join('')}
     <li>Status: ${order.meta.preorder?'Pre-order confirmed':'Processing'}, paid in full. ${order.fulfillment.method === 'pickup' ? `Click &amp; Collect from ${esc(order.fulfillment.store_location)}.` : `We'll email you when it ships.`}</li></ul></div>` : ''
-  return `<div class="jb-auth"><h1>Track your order</h1>
+  return `<div class="jb-auth"><h1>Track your order</h1><p>Enter the order number from your confirmation email, plus the mobile number or email address you used at checkout.</p>
   ${result}${error ? `<p class="jb-error" role="alert">${esc(error)}</p>` : ''}
   <form method="post" action="${base}/account/orders">
     <div class="jb-field"><label for="order_number">Order number</label><input id="order_number" name="order_number" type="text" inputmode="numeric" value="${esc(values.order_number ?? '')}"></div>
-    <div class="jb-field"><label for="track_phone">Mobile number</label><input id="track_phone" name="phone" type="tel" value="${esc(values.phone||'')}"></div><p class="jb-fine">Use the browser where you placed this order. You can also use the order email below.</p>
-    <div class="jb-field"><label for="track_email">Email (alternative)</label><input id="track_email" name="email" type="email" autocomplete="email" value="${esc(values.email ?? '')}"></div>
+    <div class="jb-field"><label for="track_phone">Mobile number</label><input id="track_phone" name="phone" type="tel" value="${esc(values.phone||'')}"></div>
+    <div class="jb-field"><label for="track_email">Or the email address used at checkout</label><input id="track_email" name="email" type="email" autocomplete="email" value="${esc(values.email ?? '')}"></div>
     <button class="jb-btn jb-btn-block" type="submit">Track order</button>
   </form>
   <p class="jb-fine">Have an account? <a href="${base}/account/login?return_to=${encodeURIComponent(`${base}/account`)}">Log in</a> to see all your orders.</p>
@@ -360,7 +360,7 @@ export function informationPage({ urls, t, values = {}, errors = {}, stores = nu
   <form method="post" action="${urls.information}" class="jb-co-form" novalidate id="jb-information-form">
     ${errorBanner(errors)}
     ${reference && !user ? `<div class="jb-checkout-login"><img src="/static/reference/jb-hifi/checkout-cart.png" alt=""><b>Checkout faster</b><a class="jb-btn jb-btn-black" href="${urls.cart.replace(/\/cart$/, '')}/account/login?return_to=${encodeURIComponent(urls.information)}">Log in</a></div>` : ''}
-    <section class="jb-co-section"><div class="jb-express"><span>Express checkout</span><div class="jb-express-btns"><button type="button" class="jb-express-btn jb-express-paypal" disabled>PayPal</button>${reference ? '' : '<button type="button" class="jb-express-btn jb-express-gpay" disabled>G Pay</button>'}</div><div class="jb-or">OR</div></div></section>
+    <section class="jb-co-section"><div class="jb-express"><span>Express checkout</span><div class="jb-express-btns">${reference ? '<button type="button" class="jb-express-btn jb-express-paypal" disabled>PayPal</button>' : '<button type="button" class="jb-express-btn jb-express-paypal" disabled aria-label="PayPal"><b class="jb-pp-pay">Pay</b><b class="jb-pp-pal">Pal</b></button>'}${reference ? '' : `<button type="button" class="jb-express-btn jb-express-gpay" disabled aria-label="G Pay"><svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.3-8.5 2.3-6.2 0-11.5-4.2-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg><span>Pay</span></button>`}</div><div class="jb-or">OR</div></div></section>
     <section class="jb-co-section"><h2>Your details</h2>
       ${user ? `<p class="jb-fine">Logged in as ${esc(user.email)} · <a href="${urls.logout}">Log out</a></p>` : ''}
       ${coField('email', 'Email', values, errors, { type: 'email', extra: 'autocomplete="email"' })}

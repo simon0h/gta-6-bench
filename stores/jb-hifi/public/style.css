@@ -231,10 +231,11 @@ label.jb-check input{accent-color:#000;width:16px;height:16px;margin:0}
 .jb-express{text-align:center}
 .jb-express>span{display:block;font-size:13px;color:#707070;margin-bottom:8px}
 .jb-express-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.jb-express-btn{height:48px;border:0;font:700 17px Roboto,Arial,sans-serif}
-.jb-express-paypal{background:#ffc439;color:#003087;font-style:italic}
-.jb-express-gpay{background:#000;color:#fff}
-.jb-express-btn:disabled{opacity:.45;cursor:not-allowed}
+.jb-express-btn{height:48px;border:0;border-radius:5px;font:700 17px Roboto,Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:6px}
+.jb-express-paypal{background:#ffc439;color:#003087;font:italic 800 21px/1 Verdana,Arial,sans-serif;letter-spacing:-.5px;gap:0}
+.jb-pp-pay{color:#003087}.jb-pp-pal{color:#009cde}
+.jb-express-gpay{background:#000;color:#fff;font:500 21px/1 'Product Sans',Roboto,Arial,sans-serif}
+.jb-express-btn:disabled{opacity:1;cursor:default}
 .jb-or{display:flex;align-items:center;gap:12px;color:#707070;font-size:12px;margin-top:18px}
 .jb-or::before,.jb-or::after{content:"";flex:1;border-top:1px solid #e1e1e1}
 .jb-methods,.jb-ship-methods,.jb-pay-options,.jb-store-results{border:1px solid #d9d9d9;border-radius:5px;overflow:hidden;margin:8px 0 16px}
