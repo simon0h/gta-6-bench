@@ -112,7 +112,7 @@ router.get('/en-us/collection/:id',(req,res)=>{
  const [id,title,intro,predicate]=collection
  render(req,res,{title,body:P.searchPage({base:res.locals.base,heading:title,intro,products:filterProducts(LISTED.filter(predicate),req.query),options:req.query,action:`${res.locals.base}/en-us/collection/${id}`})})
 })
-router.get('/en-us/pages/deals',(req,res)=>render(req,res,{title:'Deals',body:P.searchPage({base:res.locals.base,heading:'Deals',intro:ASSORTMENT.length?'Autumn Sale: save up to 85% on games, editions and add-ons. Offers end 10/22/2026 11:59 PM PT.':'Explore Autumn offers on full games and editions. Offers end October 15, 2026.',products:filterProducts(LISTED.filter(p=>p.price!==null&&p.originalPrice>p.price),req.query),options:req.query,action:`${res.locals.base}/en-us/pages/deals`})}))
+router.get('/en-us/pages/deals',(req,res)=>render(req,res,{title:'Deals',body:P.searchPage({base:res.locals.base,heading:'Deals',intro:ASSORTMENT.length?'Autumn Sale: save up to 85% on games, editions and add-ons. Offers end 10/22/2026 11:59 PM PT.':'Explore Autumn offers on full games and editions. Offers end 10/22/2026 11:59 PM PT.',products:filterProducts(LISTED.filter(p=>p.price!==null&&p.originalPrice>p.price),req.query),options:req.query,action:`${res.locals.base}/en-us/pages/deals`})}))
 router.get('/en-us/pages/subscriptions',(req,res)=>render(req,res,{title:'PlayStation Plus',body:P.subscriptionsPage({base:res.locals.base})}))
 // The header search field submits ?q=; the store's own search URL is a path: /en-us/search/{q}.
 router.get('/en-us/search', (req, res) => {

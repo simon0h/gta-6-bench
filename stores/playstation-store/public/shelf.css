@@ -100,3 +100,32 @@
 .ps-direct-specs div { display: grid; grid-template-columns: 140px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ps-line); }
 .ps-direct-specs dt { color: var(--ps-muted); }
 .ps-direct-specs dd { margin: 0; color: #000; }
+
+/* ESRB rating icon: fit longer ratings such as E10+ inside the frame. */
+.ps-esrb-badge { width: auto; min-width: 30px; padding: 0 3px; font-size: 12px; letter-spacing: -.3px; }
+.ps-esrb-small { min-width: 24px; height: 28px; padding: 0 2px; font-size: 9px; }
+
+/* Feature list icons on product pages (PlayStation feature glyphs). */
+.ps-compat li:has(.ps-feature-icon)::before { content: none; }
+.ps-feature-icon { width: 24px; height: 24px; flex: none; }
+
+/* Dark product body (Grand Theft Auto VI page): keep every text run legible on the dark background. */
+.ps-reference-hero+.ps-product-body .ps-edition-card { color: #fff; }
+.ps-reference-hero+.ps-product-body .ps-edition-card .ps-promo { color: #d6d6d6; }
+.ps-reference-hero+.ps-product-body .ps-tile-title,
+.ps-reference-hero+.ps-product-body .ps-tile-price,
+.ps-reference-hero+.ps-product-body .ps-legal-info h3,
+.ps-reference-hero+.ps-product-body .ps-info-table dd { color: #fff; }
+.ps-reference-hero+.ps-product-body .ps-tile-type,
+.ps-reference-hero+.ps-product-body .ps-info-table dt { color: #a9a9a9; }
+body:has(.ps-reference-hero) .ps-footer { margin-top: 0; }
+
+/* Grand Theft Auto VI key art fills the square tile like the rest of the shelf. */
+.ps-tile-art img[src*="/playstation-store/gta-vi-"] { object-fit: cover; }
+
+/* Sony account pages: PlayStation logo in place of a text mark. */
+.ps-logo-mark img { width: 72%; height: 72%; }
+.ps-sony-header .ps-logo-mark, .ps-logo-mark-lg { background: none; }
+.ps-sony-header .ps-logo-mark img { filter: brightness(0) invert(1); }
+.ps-logo-mark-lg { width: 64px; height: 64px; }
+.ps-drawer-login p { max-width: 320px; margin: 0 auto 24px; color: var(--ps-muted); text-align: center; }

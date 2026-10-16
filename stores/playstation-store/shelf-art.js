@@ -54,9 +54,10 @@ function gameArt(p, view) {
   const bg = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${view % 2 ? c2 : c1}"/><stop offset="1" stop-color="${view % 2 ? c1 : c2}"/></linearGradient><linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></linearGradient></defs><rect width="600" height="600" fill="url(#${id})"/>`
   if (view > 0) return svg(`${motif(p.genres, h + view * 7, a, b, 1 + view * 0.25)}<rect width="600" height="600" fill="url(#${id}s)" opacity=".6"/>`, bg)
   const isCurrency = p.contentType === 'consumable'
-  const badge = p.contentType === 'add-on' || isCurrency || p.type === 'PREMIUM EDITION' || p.type === 'GAME BUNDLE'
-    ? `<rect x="40" y="40" rx="6" width="${(isCurrency ? 'IN-GAME CURRENCY' : p.type === 'PREMIUM EDITION' || p.type === 'GAME BUNDLE' ? p.editionName.toUpperCase() : p.type).length * 13 + 30}" height="40" fill="#fff" opacity=".92"/><text x="55" y="68" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="20" fill="#111">${esc(isCurrency ? 'IN-GAME CURRENCY' : p.type === 'PREMIUM EDITION' || p.type === 'GAME BUNDLE' ? p.editionName.toUpperCase() : p.type)}</text>` : ''
-  const coins = isCurrency ? [0, 1, 2, 3, 4].map(i => `<ellipse cx="${430 - (i % 2) * 20}" cy="${300 - i * 34}" rx="90" ry="28" fill="hsl(45 90% ${55 - i * 3}%)" stroke="hsl(40 80% 35%)" stroke-width="4"/>`).join('') : ''
+  // Premium editions and bundles carry the edition name in the cover lockup, above the title.
+  const edition = (p.type === 'PREMIUM EDITION' || p.type === 'GAME BUNDLE') && p.editionName !== 'Standard Edition'
+  const badge = edition ? `<text x="40" y="128" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="${p.editionName.length > 22 ? 22 : 28}" letter-spacing="2" fill="hsl(45 90% 70%)">${esc(p.editionName.toUpperCase())}</text>` : ''
+  const coins = isCurrency ? [0, 1, 2, 3, 4].map(i => `<ellipse cx="${430 - (i % 2) * 20}" cy="${215 - i * 32}" rx="86" ry="26" fill="hsl(45 90% ${55 - i * 3}%)" stroke="hsl(40 80% 35%)" stroke-width="4"/>`).join('') : ''
   const name = isCurrency ? p.title.split(' - ').at(-1) : p.contentType === 'add-on' ? p.title : p.editionName !== 'Standard Edition' && p.title.endsWith(p.editionName) ? p.title.slice(0, -p.editionName.length).trim() : p.title
   return svg(`${motif(p.genres, h, a, b)}${coins}<rect width="600" height="600" fill="url(#${id}s)"/>${badge}${titleBlock(name, isCurrency ? 440 : 445, isCurrency ? 14 : 16)}<text x="40" y="490" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#fff" opacity=".8">${esc(p.publisher)}</text>`, bg)
 }
