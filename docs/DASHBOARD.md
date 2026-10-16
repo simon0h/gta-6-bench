@@ -9,12 +9,12 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
 1. Click **New run**, choose a name, and select **Original 30 tasks**
    (the default), **All 240 tasks** or **My tasks** (tick the saved tasks to include;
    see [My tasks](#my-tasks)).
-2. Click **Add agent URL**. Select Grokbot, Dots or Muse and add optional tags and
+2. On the **Config** tab, click **Generate new session URL**. Select Grokbot, Dots or Muse and add optional tags and
    comments. You can generate up to five URLs per run, including repeated agents.
 3. Use **Copy prompt** or **Copy URL** and give the link to that agent.
 4. Refresh the run to review progress and each submitted task's private grade.
    Update labels, comments and comma-separated tags with **Save**.
-5. Click **View traversal** on an agent, then select a task. Follow connected page
+5. On the **Results** tab, open a task row and click **View traversal**, then select a task. Follow connected page
    nodes or switch to **All events**. Drag the canvas to pan, use the zoom controls
    or **Fit view**, and select a node to inspect requests, clicks, forms and timing.
    The graph refreshes every five seconds while open; **JSON** downloads the selected
@@ -81,8 +81,8 @@ The run page has three tabs, and the chosen tab stays put when the page refreshe
   tasks and environment errors) and **Passed** filter it, with counts; a text box
   and an agent picker narrow it further. Click a row to see Expected output,
   Actual output and Failure reason.
-- **Agents**: one card per agent URL, with its link, prompt, comments and
-  **View traversal**. **See results** jumps to that agent's rows in Results.
+- **Config**: one card per session URL, with its link, prompt, tags and
+  comments.
 
 The chat about this run is a small window in the bottom right corner, opened and
 closed with the round button there (or Esc). It stays open while you switch tabs,

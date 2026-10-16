@@ -30,7 +30,7 @@
   const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '' }, openResults: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
   let toastTimer
   // The run page is split into tabs, as on Cloudflare's dashboard. The open tab is remembered on this device.
-  const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Agents']]
+  const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Config']]
   try { const saved = localStorage.getItem('dashboard-run-tab'); if (runTabs.some(([key]) => key === saved)) state.runTab = saved } catch { /* storage blocked */ }
   function setRunTab(tab) {
     state.runTab = tab
@@ -144,7 +144,7 @@
     const links = state.runs.reduce((sum, run) => sum + attemptCount(run), 0)
     const complete = state.runs.reduce((sum, run) => sum + attempts(run).filter(entry => ['completed', 'complete', 'finished'].includes(entry.status)).length, 0)
     $('#main').innerHTML = `
-      <div class="stats-grid" role="group" aria-label="Run summary"><div class="stat"><div class="stat-label">${icon('run')}Total runs</div><div class="stat-value">${state.runs.length}</div></div><div class="stat"><div class="stat-label">${icon('link')}Agent URLs</div><div class="stat-value">${links}</div></div><div class="stat"><div class="stat-label">${icon('check')}Completed attempts</div><div class="stat-value">${complete}</div></div></div>
+      <div class="stats-grid" role="group" aria-label="Run summary"><div class="stat"><div class="stat-label">${icon('run')}Total runs</div><div class="stat-value">${state.runs.length}</div></div><div class="stat"><div class="stat-label">${icon('link')}Session URLs</div><div class="stat-value">${links}</div></div><div class="stat"><div class="stat-label">${icon('check')}Completed attempts</div><div class="stat-value">${complete}</div></div></div>
       ${state.runs.length ? `<section class="panel"><div class="panel-head"><h2>Run history</h2><span class="panel-sub">${state.runs.length} run${state.runs.length === 1 ? '' : 's'}</span><div class="panel-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh runs" title="Refresh runs">${icon('refresh')}</button><button class="button primary small" data-action="new-run">${icon('plus')}New run</button></div></div><div class="run-list" role="region" aria-label="Run history" tabindex="0"><table class="run-table"><thead><tr><th scope="col">Run</th><th scope="col">Task set</th><th scope="col">Agents</th><th scope="col">Progress</th><th scope="col">Created</th></tr></thead><tbody>${state.runs.map(run => {
         const entries = attempts(run)
         const completed = entries.reduce((sum, entry) => sum + progress(entry, run).completed, 0)
@@ -256,10 +256,10 @@
     const id = escape(attempt.id)
     return `<article class="agent-card" data-attempt="${id}"><form class="attempt-form" data-attempt="${id}">
       <div class="agent-card-top"><div class="agent-identity"><img class="agent-logo" src="${agent.icon}" alt=""><div class="agent-select-wrap"><label for="agent-${id}">Agent</label><select name="agent" id="agent-${id}">${options(draft.agent)}</select></div></div><div class="agent-card-actions"><span class="entry-number">URL ${String(index + 1).padStart(2, '0')}</span>${statusBadge(attempt)}</div></div>
-      <div class="agent-body"><div class="url-bar">${icon('link')}<input type="text" aria-label="Agent URL ${index + 1}" readonly value="${escape(url)}" autocomplete="off" spellcheck="false"><button class="button" type="button" data-action="copy-url" data-attempt="${id}">${icon('copy')}Copy URL</button></div><div class="link-utilities"><button class="copy-prompt" type="button" data-action="copy-prompt" data-attempt="${id}">${icon('prompt')}Copy prompt</button><a class="open-agent" href="${escape(url)}" target="_blank" rel="noopener">Open task${icon('external')}</a></div>
+      <div class="agent-body"><div class="url-bar">${icon('link')}<input type="text" aria-label="Session URL ${index + 1}" readonly value="${escape(url)}" autocomplete="off" spellcheck="false"><button class="button" type="button" data-action="copy-url" data-attempt="${id}">${icon('copy')}Copy URL</button></div><div class="link-utilities"><button class="copy-prompt" type="button" data-action="copy-prompt" data-attempt="${id}">${icon('prompt')}Copy prompt</button></div>
       <div class="entry-fields"><div><label for="tags-${id}">Tags</label><input name="tags" id="tags-${id}" value="${escape(draft.tags)}" placeholder="Use comma to separate" maxlength="500" autocomplete="off"></div><div><label for="comments-${id}">Comments</label><textarea name="comments" id="comments-${id}" placeholder="Model, settings, notes" maxlength="5000" rows="2">${escape(draft.comments)}</textarea></div></div></div>
       <div class="agent-card-footer"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="Task results submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><div class="progress-fill" style="width:${p.percentage}%"></div></div><span>${p.completed} / ${p.total} results</span></div><div class="save-group"><span class="save-feedback${draft.dirty ? ' dirty' : ''}" role="status">${draft.dirty ? 'Unsaved changes' : 'Saved'}</span><button class="button secondary small" type="submit"${draft.dirty && !state.saving.has(attempt.id) ? '' : ' disabled'}>${state.saving.has(attempt.id) ? 'Saving…' : 'Save'}</button></div></div>
-      </form><div class="attempt-traversal"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${id}">${icon('tasks')}View traversal</button>${attemptResults(attempt)}</div></article>`
+      </form></article>`
   }
 
   function toneCounts(results) {
@@ -267,12 +267,7 @@
     for (const result of results) { const tone = resultTone(result); if (tone in counts) counts[tone]++ }
     return counts
   }
-  function attemptResults(attempt) {
-    const results = resultList(attempt)
-    if (!results.length) return ''
-    const counts = toneCounts(results)
-    return `<span class="attempt-results"><span class="result-count passed">${counts.passed} passed</span> · <span class="result-count failed">${counts.failed + counts.error} failed</span></span><button class="button quiet small" type="button" data-action="agent-results" data-attempt="${escape(attempt.id)}">See results${icon('arrow')}</button>`
-  }
+
 
   // AI summary, written by Claude from the graded results on request and kept
   // by the server. It never changes a grade.
@@ -459,7 +454,7 @@
     const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite), time = timed.reduce((sum, ms) => sum + ms, 0)
     const share = count => results.length ? `${Math.round(count / results.length * 100)}% of finished tasks` : 'No results yet'
     return `<div class="stats-grid run-summary" role="group" aria-label="Run results">
-      <div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${completed}</div><div class="stat-note">of ${total} across ${entries.length} agent URL${entries.length === 1 ? '' : 's'}</div></div>
+      <div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${completed}</div><div class="stat-note">of ${total} across ${entries.length} session URL${entries.length === 1 ? '' : 's'}</div></div>
       <div class="stat"><div class="stat-label"><span class="swatch passed"></span>Passed</div><div class="stat-value positive">${counts.passed}</div><div class="stat-note">${share(counts.passed)}</div></div>
       <div class="stat"><div class="stat-label"><span class="swatch failed"></span>Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div><div class="stat-note">${share(counts.failed)}</div></div>
       <div class="stat"><div class="stat-label"><span class="swatch error"></span>Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div><div class="stat-note">A store or setup problem, not the agent</div></div>
@@ -545,8 +540,8 @@
   document.addEventListener('focusout', event => { if (event.target.matches?.('.rate-plot')) hideRate(event.target) })
   function renderAgentTable(run) {
     const entries = attempts(run)
-    const head = `<div class="panel-head"><h2>Agents</h2><span class="panel-sub">${entries.length} / 5 URLs</span><div class="panel-actions"><button class="button quiet small" type="button" data-action="run-tab" data-tab="agents">Manage agent URLs</button></div></div>`
-    if (!entries.length) return `<section class="panel" aria-label="Agents">${head}<div class="panel-body panel-empty"><p>No agent URLs yet.</p><button class="button primary" data-action="new-attempt">${icon('plus')}Add agent URL</button></div></section>`
+    const head = `<div class="panel-head"><h2>Agents</h2><span class="panel-sub">${entries.length} / 5 URLs</span><div class="panel-actions"><button class="button quiet small" type="button" data-action="run-tab" data-tab="agents">Manage session URLs</button></div></div>`
+    if (!entries.length) return `<section class="panel" aria-label="Agents">${head}<div class="panel-body panel-empty"><p>No session URLs yet.</p><button class="button primary" data-action="new-attempt">${icon('plus')}Generate new session URL</button></div></section>`
     const rows = entries.map((attempt, index) => {
       const results = resultList(attempt), counts = toneCounts(results), p = progress(attempt, run), agent = agentData(attempt.agent)
       const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite)
@@ -560,15 +555,15 @@
   }
   function renderAgentsTab(run) {
     const entries = attempts(run)
-    return `<div class="section-heading"><div><h2>Agent URLs<span class="section-count">${entries.length} / 5</span></h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="button primary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five agent URLs"' : ''}>${icon('plus')}Add agent URL</button></div></div>
-      ${entries.length ? `<div class="agent-grid">${entries.map((attempt, index) => renderAttempt(attempt, index, run)).join('')}</div>${entries.length >= 5 ? '<p class="capacity-note">Five-URL limit reached.</p>' : ''}` : `<section class="empty-state"><h2>No agent URLs yet</h2><button class="button primary" data-action="new-attempt">${icon('plus')}Add agent URL</button></section>`}`
+    return `<div class="section-heading"><div><h2>Session URLs</h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="button primary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five session URLs"' : ''}>${icon('plus')}Generate new session URL</button></div></div>
+      ${entries.length ? `<div class="agent-grid">${entries.map((attempt, index) => renderAttempt(attempt, index, run)).join('')}</div>${entries.length >= 5 ? '<p class="capacity-note">Five-URL limit reached.</p>' : ''}` : `<section class="empty-state"><h2>No session URLs yet</h2><button class="button primary" data-action="new-attempt">${icon('plus')}Generate new session URL</button></section>`}`
   }
 
   function renderDetail() {
     const run = state.selected, entries = attempts(run), rows = runResults(run), tab = state.runTab
     document.title = `${runName(run)} · GTA 6 Bench`
     const tabs = runTabs.map(([key, name]) => {
-      const count = key === 'results' ? rows.length : key === 'agents' ? entries.length : null
+      const count = key === 'results' ? rows.length : null
       return `<button class="run-tab" type="button" role="tab" id="run-tab-${key}" data-action="run-tab" data-tab="${key}" aria-selected="${key === tab}" aria-controls="run-tab-panel">${name}${count === null ? '' : `<span class="tab-count">${count}</span>`}</button>`
     }).join('')
     let body
@@ -662,7 +657,7 @@
     if (type === 'attempt' && (!state.selected || attempts(state.selected).length >= 5)) return
     const dialog = $('#create-dialog')
     const isRun = type === 'run'
-    dialog.innerHTML = `<form id="${isRun ? 'create-run-form' : 'create-attempt-form'}"><div class="dialog-content"><div class="dialog-header"><h2 id="dialog-title">${isRun ? 'New run' : 'Add agent URL'}</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="Close dialog">×</button></div>${isRun ? `<div class="field"><label for="run-name">Run name</label><input id="run-name" name="name" required maxlength="120" value="${escape(`Run · ${new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`)}" autocomplete="off"></div><div class="field"><label for="run-suite">Task set</label><select id="run-suite" name="suite"><option value="original30">Original 30 tasks</option><option value="all240">All 240 tasks</option><option value="custom">My tasks (${tasks.count()})</option></select></div><div class="field" id="run-task-picker" hidden>${tasks.runPicker()}</div>` : `<div class="field"><label for="new-agent">Agent</label><select id="new-agent" name="agent">${options('grokbot')}</select></div><div class="field"><label for="new-tags">Tags <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input name="tags" id="new-tags" placeholder="baseline, v2" maxlength="500"><p class="field-help">Comma-separated.</p></div>`}<p class="form-error" role="alert"></p></div><div class="dialog-footer"><button class="button quiet" type="button" data-action="close-dialog">Cancel</button><button class="button primary" type="submit">${icon(isRun ? 'plus' : 'link')}${isRun ? 'Create run' : 'Create URL'}</button></div></form>`
+    dialog.innerHTML = `<form id="${isRun ? 'create-run-form' : 'create-attempt-form'}"><div class="dialog-content"><div class="dialog-header"><h2 id="dialog-title">${isRun ? 'New run' : 'Generate new session URL'}</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="Close dialog">×</button></div>${isRun ? `<div class="field"><label for="run-name">Run name</label><input id="run-name" name="name" required maxlength="120" value="${escape(`Run · ${new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`)}" autocomplete="off"></div><div class="field"><label for="run-suite">Task set</label><select id="run-suite" name="suite"><option value="original30">Original 30 tasks</option><option value="all240">All 240 tasks</option><option value="custom">My tasks (${tasks.count()})</option></select></div><div class="field" id="run-task-picker" hidden>${tasks.runPicker()}</div>` : `<div class="field"><label for="new-agent">Agent</label><select id="new-agent" name="agent">${options('grokbot')}</select></div><div class="field"><label for="new-tags">Tags <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input name="tags" id="new-tags" placeholder="Use comma to separate" maxlength="500"></div>`}<p class="form-error" role="alert"></p></div><div class="dialog-footer"><button class="button quiet" type="button" data-action="close-dialog">Cancel</button><button class="button primary" type="submit">${icon(isRun ? 'plus' : 'link')}${isRun ? 'Create run' : 'Generate URL'}</button></div></form>`
     dialog.showModal()
     const first = dialog.querySelector('input, select')
     first?.focus()
@@ -734,7 +729,7 @@
       if (!attempt) return
       const url = entryUrl(attempt)
       const prompt = `Open ${url} in a separate browser session for this agent URL to begin this GTA 6 Bench run. Follow the instructions on the task page. Use Start task to begin each task, then shop on the store's website. Return to the task page after shopping and use Submit result to report purchased or not_purchased, with a reason or message. Advance through the tasks sequentially until the run is complete.`
-      await copy(action === 'copy-url' ? url : prompt, action === 'copy-url' ? 'Agent URL copied' : 'Agent prompt copied')
+      await copy(action === 'copy-url' ? url : prompt, action === 'copy-url' ? 'Session URL copied' : 'Agent prompt copied')
     }
   })
 
@@ -826,7 +821,7 @@
         updateRun(run)
         $('#create-dialog').close()
         render()
-        toast('Agent URL created')
+        toast('Session URL created')
       } else {
         const run = state.selected, id = form.dataset.attempt, draft = state.drafts.get(id)
         const savedDraft = { ...draft }

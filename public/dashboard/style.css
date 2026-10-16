@@ -225,7 +225,6 @@ main:focus { outline: none; }
 .section-heading > div { min-width: 0; }
 .section-heading h2 { font-size: 16px; line-height: 1.35; }
 .section-heading p { margin-top: 2px; color: var(--muted); font-size: 13px; }
-.section-count { margin-left: 8px; color: var(--muted); font-size: 13px; font-weight: 400; font-variant-numeric: tabular-nums; }
 .section-actions { display: flex; align-items: center; gap: 6px; flex: none; }
 
 /* Tables: grey header row, thin row lines, compact rows. */
@@ -316,7 +315,7 @@ main:focus { outline: none; }
 /* The original app artwork includes its own inset. */
 .agent-logo[src$=".webp"], .agent-stack img[src$=".webp"] { padding: 1px; }
 
-/* Agent URLs tab: one panel per agent URL. */
+/* Config tab: one panel per session URL. */
 .agent-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
 .agent-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper); box-shadow: var(--shadow); }
 .agent-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
@@ -335,9 +334,9 @@ main:focus { outline: none; }
 .url-bar .button { min-height: 28px; padding: 3px 10px; font-size: 13px; }
 .url-bar .button svg { width: 14px; height: 14px; }
 .link-utilities { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; padding: 0 2px; }
-.copy-prompt, .open-agent { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 4px 0; background: transparent; color: var(--accent); font-size: 13px; font-weight: 500; }
-.copy-prompt:hover, .open-agent:hover { text-decoration: underline; }
-.copy-prompt svg, .open-agent svg { width: 14px; height: 14px; }
+.copy-prompt { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 4px 0; background: transparent; color: var(--accent); font-size: 13px; font-weight: 500; }
+.copy-prompt:hover { text-decoration: underline; }
+.copy-prompt svg { width: 14px; height: 14px; }
 .entry-fields { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: start; gap: 14px; }
 .entry-fields > div { min-width: 0; }
 .entry-fields textarea { min-height: 64px; max-height: 240px; }
@@ -349,12 +348,6 @@ main:focus { outline: none; }
 .save-feedback { color: var(--muted); font-size: 13px; }
 .save-feedback.error { color: var(--red); }
 .save-feedback.dirty { color: var(--amber); }
-.attempt-traversal { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; padding: 6px 10px; border-top: 1px solid var(--line); }
-.attempt-results { margin-left: auto; font-size: 13px; }
-.attempt-traversal .button svg:last-child:not(:first-child) { width: 12px; height: 12px; }
-.result-count { font-weight: 600; }
-.result-count.passed { color: var(--green); }
-.result-count.failed { color: var(--red); }
 .capacity-note { margin-top: 12px; color: var(--muted); font-size: 13px; }
 
 /* Results tab: one table of every task, filtered in place. */
