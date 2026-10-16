@@ -76,7 +76,7 @@
 
     function render() {
       if (!container?.isConnected) return
-      const heading = '<div class="panel-head"><h2>Live tracker</h2></div>'
+      const heading = '<div class="panel-head"><h2>Live tracker</h2><div class="panel-actions"><button class="icon-button" type="button" data-action="refresh" aria-label="Refresh results" title="Refresh results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/></svg></button></div></div>'
       let content
       if (error && !data) content = `<p class="live-error" role="alert">${escape(error)}</p>`
       else if (!data) content = '<p class="live-quiet" role="status">Loading live positions…</p>'

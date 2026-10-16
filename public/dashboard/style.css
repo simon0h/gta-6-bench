@@ -176,7 +176,7 @@ main:focus { outline: none; }
 .page-heading h1 { font-size: 24px; font-weight: 600; line-height: 1.25; letter-spacing: -.2px; overflow-wrap: anywhere; text-wrap: balance; }
 .page-heading p { margin-top: 4px; color: var(--muted); font-size: 13.5px; }
 .page-actions { display: flex; align-items: center; gap: 8px; }
-.title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.run-status-row { display: flex; margin-bottom: 6px; }
 
 /* Buttons: one solid blue button for the main action; outlined for the rest. */
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 5px 12px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--paper); color: var(--ink); font-size: 13.5px; font-weight: 500; line-height: 1.4; white-space: nowrap; transition: background-color .12s, border-color .12s; }
@@ -317,7 +317,7 @@ main:focus { outline: none; }
 .agent-logo[src$=".webp"], .agent-stack img[src$=".webp"] { padding: 1px; }
 
 /* Agent URLs tab: one panel per agent URL. */
-.agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 16px; align-items: start; }
+.agent-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
 .agent-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper); box-shadow: var(--shadow); }
 .agent-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
 .agent-identity { display: flex; align-items: center; gap: 10px; min-width: 0; }

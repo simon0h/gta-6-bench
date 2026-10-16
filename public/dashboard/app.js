@@ -552,7 +552,7 @@
     else if (tab === 'agents') body = renderAgentsTab(run)
     else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderRateChart(run)}${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
     $('#main').innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/">All runs</a><span aria-hidden="true">/</span><span>${escape(runName(run))}</span></nav>
-      <div class="page-heading run-detail-heading"><div><div class="title-row"><h1>${escape(runName(run))}</h1>${runStatus(run)}</div><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><div class="page-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div></div>
+      <div class="page-heading run-detail-heading"><div><div class="run-status-row">${runStatus(run)}</div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div></div>
       <div class="run-tabs" role="tablist" aria-label="Run sections">${tabs}</div>
       <div id="run-tab-panel" class="run-tab-panel" role="tabpanel" aria-labelledby="run-tab-${tab}">${body}</div>${renderChatDock(run)}`
     if (tab === 'overview') live.mount($('#live-panel'), run.id); else live.stop()
