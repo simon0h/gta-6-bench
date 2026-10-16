@@ -19,12 +19,14 @@ const FORM = {
   poster: 'poster', lamp: 'lamp', mug: 'mug', hoodie: 'hoodie', tshirt: 'tee shirt', 'gaming-chair': 'gaming chair', monitor: 'monitor', webcam: 'webcam',
   keyboard: 'keyboard', mouse: 'mouse', 'gaming-headset': 'headset', controller: 'controller',
 }
+// Catalog platform codes the illustrator would otherwise print verbatim on the box band.
+const ART_PLATFORM = { switch2: 'switch-2', xboxone: 'xbox-one' }
 const cache = new Map()
 export function shelfDescriptor(p) {
   const type = p.catalogType === 'game' ? 'game' : p.catalogType === 'console' && !['amiibo', 'vr-headset'].includes(p.family) ? 'console' : 'other'
   return {
     store: 'gamestop', id: p.id, aliases: [p.id], title: type === 'other' && FORM[p.family] ? FORM[p.family] : p.title, canonicalTitle: p.title.replace(/ - (?:PlayStation|Xbox|Nintendo|Retro).*$/, ''),
-    type, category: p.department, brand: p.brand, platform: p.catalogPlatform || null, edition: type === 'game' ? 'standard' : null,
+    type, category: p.department, brand: p.brand, platform: ART_PLATFORM[p.catalogPlatform] || p.catalogPlatform || null, edition: type === 'game' ? 'standard' : null,
     format: type === 'game' ? (p.format || 'disc') : 'physical', variant: null, specs: p.specs, sourceArt: { urls: [], photo: null, inline: null, shape: null },
     identity: { store: 'gamestop-shelf', id: p.id }, assetKey: `gamestop-shelf-${p.id}`,
     raw: { ...p, title: undefined, type: undefined, shape: undefined, description: '', catalogType: type === 'other' ? undefined : type },
