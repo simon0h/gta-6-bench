@@ -56,7 +56,7 @@ installSite(router, { render })
 installShelfMedia(router)
 
 // ---- browse ----
-router.get('/information', (req,res) => render(req,res,{ title: 'Shopping information', body: P.supportInformationPage(res.locals.base, typeof req.query.topic === 'string' ? req.query.topic : 'Shopping information') }))
+router.get('/information', (req,res) => render(req,res,{ title: 'Customer Services | GAME', body: P.supportInformationPage(res.locals.base, typeof req.query.topic === 'string' ? req.query.topic : 'Shopping information') }))
 router.get('/', (req, res) => render(req, res, { title: 'GAME | Gaming Specialist For Consoles, Games & Accessories!', body: P.homePage({ base: res.locals.base, products: CATALOG }) }))
 
 // The working search URL on game.co.uk is /searchresults?descriptionfilter=...; /search?q= is a 404 there too (it falls through to the product route below).
@@ -94,7 +94,7 @@ router.post('/cookies', (req, res) => {
 // ---- bag ----
 router.get('/cart', (req, res) => {
   enterScenarioCart(req.store)
-  render(req, res, { title: 'GAME > Cart', body: P.cartPage({ base: res.locals.base, t: totals(req.store), notice: req.query.notice ? String(req.query.notice) : null }) })
+  render(req, res, { title: 'GAME > Cart', body: P.cartPage({ base: res.locals.base, t: totals(req.store), notice: req.query.notice ? String(req.query.notice) : null, user: req.store.user }) })
 })
 
 router.post('/cart/add', (req, res) => {

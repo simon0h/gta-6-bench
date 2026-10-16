@@ -204,3 +204,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 .gu-social-icon{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#000;color:#fff}
 .gu-chips a.is-active{background:#000;color:#fff;border-color:#000}
 @media(min-width:701px){.gu-gift-shop .gu-cat-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+/* round 2: mega menu columns, help/store cards, deals tiles, store hours */
+@media(min-width:701px){.gu-mega-item .gu-mega{grid-template-columns:repeat(3,minmax(0,250px)) 220px;justify-content:center;gap:48px}.gu-cat-tiles .gu-cat-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+.gu-journey-cards article h2{font-size:16px;line-height:1.35;margin:0 0 8px}.gu-journey-cards article h2 a{text-decoration:none}.gu-journey-cards article h2 a:hover{text-decoration:underline}.gu-journey-cards article p{margin:0 0 6px;font-size:13px}
+@media(min-width:901px){.gu-store-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.gu-store-cards article{display:flex;flex-direction:column}.gu-store-address{color:#333}.gu-store-hours b{color:#0b6e4f;margin-right:6px}.gu-store-more{margin-top:auto;padding-top:10px;font-weight:600;font-size:13px}.gu-store-count{font-weight:600}
+.gu-hours{border-collapse:collapse;min-width:280px;margin:0 0 6px;font-size:14px}.gu-hours th,.gu-hours td{text-align:left;padding:6px 24px 6px 0;border-bottom:1px solid #eee}.gu-hours th{font-weight:500}
+.gu-fplus-grid{margin-bottom:28px}
+body.gu-mode-auth{min-height:100vh;display:flex;flex-direction:column}body.gu-mode-auth .gu-main{flex:1 0 auto;width:100%;box-sizing:border-box}

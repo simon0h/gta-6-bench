@@ -19,17 +19,19 @@ function informationHref(base, label) {
  return base + (routes[text] || '/information?topic=' + encodeURIComponent(text))
 }
 export function supportInformationPage(base, topic = 'Shopping information') {
- const title = String(topic).slice(0,100)
- const q = title.toLowerCase()
+ const raw = String(topic).slice(0,100)
+ const title = ({ Edit: 'Currency', Newsletter: 'Thanks for signing up' })[raw] || raw
+ const q = raw.toLowerCase()
  let content
- if (/password|signing in/.test(q)) content = '<p>To reset your password, use the Forgotten password link on the sign in page. You can also check out as a guest where offered.</p>'
+ if (q === 'newsletter') content = '<p>You\'re on the list. Look out for the latest releases, pre-order news and exclusive offers from GAME in your inbox.</p><p>You can unsubscribe at any time using the link at the bottom of any of our emails.</p>'
+ else if (/password|signing in/.test(q)) content = '<p>To reset your password, use the Forgotten password link on the sign in page. You can also check out as a guest where offered.</p>'
  else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Gift cards and eVouchers can be redeemed at the payment step of checkout.</p>'
- else if (/cookie|privacy/.test(q)) content = '<p>We use cookies to keep your basket, account and checkout together and to improve your shopping experience. You can change your choices at any time from Cookie preferences.</p>'
+ else if (/cookie|privacy/.test(q)) content = '<p>We use cookies to keep your bag, account and checkout together and to improve your shopping experience. You can change your choices at any time from Cookie preferences.</p>'
  else if (/return|refund|cancel/.test(q)) content = '<p>Review the item, format, delivery choice and total before placing your order. Digital redemption codes may have different return conditions from physical products. You can save a support enquiry from your order details. This does not approve a cancellation or refund.</p>'
  else if (/delivery|shipping|collection/.test(q)) content = '<p>Product pages show available fulfilment choices. Confirm your address or collection store at checkout to see the order-specific delivery estimate and charges. Pre-orders are fulfilled when available; wait for collection confirmation before visiting a store.</p>'
  else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming.</p>' + publicNotice('<p>This is not the real GAME website: orders record your selected items without charging a real payment method.</p>')
  else if (/read more/.test(q)) content = '<p>PEGI 18 identifies games intended for adults. You must confirm you are 18 or over before adding this age-rated game to your bag.</p>'
- else if (/edit/.test(q)) content = '<p>Prices are displayed in pounds sterling and include VAT. Our UK website sells in pounds sterling only.</p>'
+ else if (/edit/.test(q)) content = '<p>You are shopping on the GAME UK website. Prices are shown in pounds sterling (£ GBP) and include VAT.</p><p>We deliver to addresses in the United Kingdom. International Delivery is available for selected products; the cost and delivery time are shown at checkout.</p>'
  else if (/mobile phones/.test(q)) content = '<p>We don’t currently sell mobile phones online. Browse our technology and gaming departments instead.</p>'
  else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat is currently unavailable; please try again later or send us a message from Contact Us. Product availability and delivery options are shown on the product page and at checkout.</p>'
  else content = '<p>This service is currently unavailable. Please try again later.</p>'
@@ -89,6 +91,18 @@ function minibag(base, t, closeHref) {
 </div>`
 }
 
+// Second mega-menu column per department, linking to the real site's landing pages (site-data.js).
+const MEGA_EXTRA = {
+  gaming: ['Shop by Platform', [['PlayStation', '/playstation'], ['Xbox', '/xbox/all-xbox'], ['Nintendo', '/nintendo'], ['PC Gaming', '/pc-gaming'], ['Games by Genre', '/games'], ['PlayStation Games', '/playstation/games'], ['Nintendo Games', '/nintendo/games'], ['Gaming Sale', '/sale/gaming']]],
+  digital: ['Shop by Platform', [['PlayStation Digital', '/playstation/digital-gaming'], ['Xbox Game Pass', '/xbox/digital-downloads/xbox-game-pass'], ['Xbox Gift Cards', '/xbox/digital-downloads/xbox-gift-cards'], ['Nintendo eShop', '/nintendo/eshop'], ['Nintendo Switch Online', '/nintendo/eshop/nintendo-switch-online'], ['All Gift Cards', '/digital/gift-cards']]],
+  'pc-gaming': ['PC Accessories', [['Headsets', '/pc-gaming/accessories/headsets'], ['Keyboards', '/pc-gaming/accessories/keyboards'], ['Mice', '/pc-gaming/accessories/mice'], ['Gaming Monitors', '/pc-gaming/accessories/gaming-monitors'], ['Mouse Pads', '/pc-gaming/accessories/mouse-pads'], ['PC Gaming Deals', '/deals/pc']]],
+  tech: ['Shop Tech', [['Headphones & Earbuds', '/tech/headphones-and-earbuds'], ['Smart Lighting', '/tech/smart-tech/smart-lighting'], ['Handheld Consoles', '/tech/handheld-consoles'], ['VR', '/tech/vr'], ['Tablets', '/tech/tablets'], ['Tech Deals', '/deals/tech']]],
+  lego: ['Shop LEGO', [['All LEGO', '/lego/all-lego'], ['New LEGO', '/lego/new-lego'], ['LEGO Pokémon', '/lego/pokemon'], ['LEGO Deals', '/lego/lego-deals']]],
+  toys: ['Shop Toys', [['All Toys', '/toys/all-toys'], ['Plushies & Soft Toys', '/toys/plushies-and-soft-toys'], ['Pokémon', '/pokemon'], ['Toy Deals', '/deals/toys']]],
+  'toys/trading-cards': ['Shop Trading Cards', [['Booster Packs', '/toys/trading-cards/booster-packs'], ['New Trading Cards', '/toys/trading-cards/new'], ['Pokémon', '/pokemon'], ['Trading Cards Coming Soon', '/coming-soon/trading-cards'], ['Trading Card Deals', '/deals/tcg']]],
+}
+const MEGA_CAMPAIGNS = { gaming: ['coming-soon', 'gifts-for-gamers', 'under-30'], digital: ['gifts-for-gamers', 'under-30'], 'pc-gaming': ['pc-setup', 'coming-soon', 'under-30'], tech: ['pc-setup', 'gifts-for-gamers', 'under-30'], lego: ['gifts-for-gamers', 'under-30'], toys: ['gifts-for-gamers', 'under-30'], 'toys/trading-cards': ['coming-soon', 'gifts-for-gamers', 'under-30'] }
+
 function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
   return `<header class="gu-header">
   <div class="gu-row1">
@@ -108,7 +122,7 @@ function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
       </div>
     </nav>
   </div>
-  <details class="gu-navigation" open><summary>Shop departments <span aria-hidden="true">☰</span></summary><nav class="gu-nav" aria-label="Shop by category">${DEPARTMENTS.map(d=>`<div class="gu-mega-item"><a href="${base}/${d.id}">${esc(d.title)}</a><details class="gu-menu-disclosure"><summary aria-label="Explore ${esc(d.title)}"><span aria-hidden="true">⌄</span></summary><div class="gu-mega"><div><h4>${esc(d.title)}</h4><a class="gu-shop-all" href="${base}/${d.id}">Shop all ${esc(d.title)}</a>${d.categories.map(c=>`<a href="${base}/${d.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div><div><h4>Discover</h4>${d.id==='gaming'?`<a href="${searchHref(base,'grand theft auto vi')}">GTA VI Pre-Order</a>`:''}${CAMPAIGNS.map(c=>`<a href="${base}/campaign/${c.id}">${esc(c.title)}</a>`).join('')}</div><a class="gu-menu-photo" href="${base}/${d.id}">${productPhoto(d.photo,d.title)}<b>Explore ${esc(d.title)} →</b></a></div></details></div>`).join('')}</nav></details>
+  <details class="gu-navigation" open><summary>Shop departments <span aria-hidden="true">☰</span></summary><nav class="gu-nav" aria-label="Shop by category">${DEPARTMENTS.map(d=>`<div class="gu-mega-item"><a href="${base}/${d.id}">${esc(d.title)}</a><details class="gu-menu-disclosure"><summary aria-label="Explore ${esc(d.title)}"><span aria-hidden="true">⌄</span></summary><div class="gu-mega"><div><h4>${esc(d.title)}</h4><a class="gu-shop-all" href="${base}/${d.id}">Shop all ${esc(d.title)}</a>${d.categories.map(c=>`<a href="${base}/${d.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div>${MEGA_EXTRA[d.id]?`<div><h4>${esc(MEGA_EXTRA[d.id][0])}</h4>${MEGA_EXTRA[d.id][1].map(([l,u])=>`<a href="${base}${u}">${esc(l)}</a>`).join('')}</div>`:''}<div><h4>Discover</h4>${d.id==='gaming'?`<a href="${searchHref(base,'grand theft auto vi')}">GTA VI Pre-Order</a>`:''}${CAMPAIGNS.filter(c=>(MEGA_CAMPAIGNS[d.id]||MEGA_CAMPAIGNS.gaming).includes(c.id)).map(c=>`<a href="${base}/campaign/${c.id}">${esc(c.title)}</a>`).join('')}</div><a class="gu-menu-photo" href="${base}/${d.id}">${productPhoto(d.photo,d.title)}<b>Explore ${esc(d.title)} →</b></a></div></details></div>`).join('')}</nav></details>
   <div class="gu-promo" id="gu-promo"><a href="${base}/frasersplus">${esc(PROMOS[2])}</a></div>
 </header>`
 }
@@ -389,9 +403,9 @@ ${modal ? '' : `<div class="gu-sticky" hidden><div class="gu-sticky-inner"><span
 }
 
 // ---- bag ----
-export function cartPage({ base, t, notice = null }) {
+export function cartPage({ base, t, notice = null, user = null }) {
   if (!t.lines.length) {
-    return `<div class="gu-cart-empty">${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}<h1>Your Bag Is Empty</h1><div class="gu-empty-icon">${ICON.bag}</div><p>We'll hold your bag for 30 days.</p><p>Sign in or register to sync your bag to any device.</p><p><a href="${base}/wishlist">View saved items</a> · <a href="${base}/recently-viewed">Recently viewed</a></p><a class="gu-btn" href="${base}/login?returnurl=cart">Sign In</a></div>`
+    return `<div class="gu-cart-empty">${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}<h1>Your Bag Is Empty</h1><div class="gu-empty-icon">${ICON.bag}</div><p>We'll hold your bag for 30 days.</p>${user ? '' : '<p>Sign in or register to sync your bag to any device.</p>'}<p><a href="${base}/wishlist">View saved items</a> · <a href="${base}/recently-viewed">Recently viewed</a></p>${user ? `<a class="gu-btn" href="${base}/">Continue shopping</a>` : `<a class="gu-btn" href="${base}/login?returnurl=cart">Sign In</a>`}</div>`
   }
   const rows = t.lines.map(l => `<div class="gu-line">
   <a href="${productHref(base, l.product)}">${artwork(l.product)}</a>
