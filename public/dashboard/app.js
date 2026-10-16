@@ -17,11 +17,12 @@
     refresh: '<path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/>',
     tasks: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 8 1 1 2-2M14 8h2M8 13h8M8 17h5"/>',
     prompt: '<path d="m5 6 6 6-6 6M13 18h6"/>',
+    spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
   }
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const $ = selector => document.querySelector(selector)
-  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, resultTabs: new Map(), resultsOpen: new Set() }
+  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, resultTabs: new Map(), resultsOpen: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map() }
   let toastTimer
   const live = window.DashboardLive.create({ api, agents })
 
@@ -200,6 +201,51 @@
       </form><div class="attempt-traversal"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${id}">${icon('tasks')}View traversal</button></div>${renderResults(attempt)}</article>`
   }
 
+  // AI summary, written by Claude from the graded results on request and kept
+  // by the server. It never changes a grade.
+  function renderSummary(run) {
+    const data = state.summaries.get(run.id), writing = state.writingSummary.has(run.id)
+    const error = state.summaryErrors.get(run.id)
+    const button = label => `<button class="button secondary small" type="button" data-action="write-summary"${writing ? ' disabled' : ''}>${icon('spark')}${writing ? 'Writing…' : label}</button>`
+    let body = '', action = ''
+    if (!data) body = '<p class="ai-summary-note">Loading…</p>'
+    else if (data.error) body = `<p class="ai-summary-error">Couldn’t load the summary. ${escape(data.error)}</p>`
+    else if (!data.configured) body = state.local
+      ? '<p class="ai-summary-note">To turn this on, start the dashboard with <code>ANTHROPIC_API_KEY</code> set to a Claude API key.</p>'
+      : '<p class="ai-summary-note">To turn this on, add a Claude API key in Cloudflare: open the gta-6-bench Worker, go to Settings, then Variables and Secrets, and add a secret named <code>ANTHROPIC_API_KEY</code>.</p>'
+    else if (!data.summary) {
+      body = data.finished ? `<p class="ai-summary-note">${writing ? `Claude is reading ${data.finished} result${data.finished === 1 ? '' : 's'}. This can take up to a minute.` : 'Get a short write-up of how each agent did and where it went wrong.'}</p>` : '<p class="ai-summary-note">You can write a summary once agents have finished some tasks.</p>'
+      if (data.finished) action = button('Write summary')
+    } else {
+      const summary = data.summary
+      const added = data.finished - data.written_from
+      const stale = data.stale ? ` · <span class="stale">${added > 0 ? `${added} new result${added === 1 ? '' : 's'} since then` : 'Results changed since then'}</span>` : ''
+      body = `<p class="ai-summary-overview">${escape(summary.overview)}</p>
+        ${summary.agents?.length ? `<ul class="ai-summary-agents">${summary.agents.map(item => `<li>${item.agent ? `<img src="${agentData(item.agent).icon}" alt="">` : ''}<div><strong>${escape(item.label)}</strong><span>${escape(item.summary)}</span></div></li>`).join('')}</ul>` : ''}
+        ${summary.patterns?.length ? `<ul class="ai-summary-patterns">${summary.patterns.map(line => `<li>${escape(line)}</li>`).join('')}</ul>` : ''}
+        <p class="ai-summary-meta">${writing ? 'Updating…' : `Written ${escape(date(data.written_at, true))} from ${data.written_from} result${data.written_from === 1 ? '' : 's'}${stale}`}</p>`
+      if (data.stale) action = button('Update summary')
+    }
+    return `<section class="ai-summary" aria-label="AI summary" aria-busy="${writing}"><div class="ai-summary-top"><div><h2>AI summary</h2><p>Written by Claude from this run’s results. It doesn’t change any grades.</p></div>${action}</div>${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</section>`
+  }
+  function refreshSummary() {
+    const node = $('.ai-summary')
+    if (node && state.selected) node.outerHTML = renderSummary(state.selected)
+  }
+  async function writeSummary(runId) {
+    if (state.writingSummary.has(runId)) return
+    state.writingSummary.add(runId); state.summaryErrors.delete(runId)
+    refreshSummary()
+    try {
+      state.summaries.set(runId, await api(`/runs/${encodeURIComponent(runId)}/summary`, { method: 'POST' }))
+    } catch (error) {
+      state.summaryErrors.set(runId, error.message)
+    } finally {
+      state.writingSummary.delete(runId)
+      if (state.selected?.id === runId) refreshSummary()
+    }
+  }
+
   function renderDetail() {
     const run = state.selected, entries = attempts(run)
     const results = entries.flatMap(resultList)
@@ -208,6 +254,7 @@
     document.title = `${runName(run)} · GTA 6 Bench`
     $('#main').innerHTML = `<div class="page-heading run-detail-heading"><div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><button class="button secondary" data-action="new-run">${icon('plus')}New run</button></div>
       <div class="stats-grid run-summary" role="group" aria-label="Run results"><div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${counts.completed}</div></div><div class="stat"><div class="stat-label">Passed</div><div class="stat-value positive">${counts.passed}</div></div><div class="stat"><div class="stat-label">Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div></div><div class="stat"><div class="stat-label">Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div></div></div>
+      ${renderSummary(run)}
       <section class="live-panel" id="live-panel" aria-label="Live tracker"></section>
       <div class="section-heading"><div><h2>Agent URLs<span class="section-count">${entries.length} / 5</span></h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five agent URLs"' : ''}>${icon('plus')}Add agent URL</button></div></div>
       ${entries.length ? `<div class="agent-grid">${entries.map((attempt, index) => renderAttempt(attempt, index, run)).join('')}</div>${entries.length >= 5 ? '<p class="capacity-note">Five-URL limit reached.</p>' : ''}` : `<section class="empty-state"><h2>No agent URLs yet</h2><button class="button primary" data-action="new-attempt">${icon('plus')}Add agent URL</button></section>`}`
@@ -226,8 +273,10 @@
     if (initial) $('#main').innerHTML = '<div role="status" aria-label="Loading runs"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row"></div></div>'
     const id = selectedId()
     try {
-      const [list, detail] = await Promise.all([api('/runs'), id ? api(`/runs/${encodeURIComponent(id)}`) : Promise.resolve(null)])
+      const [list, detail, summary] = await Promise.all([api('/runs'), id ? api(`/runs/${encodeURIComponent(id)}`) : Promise.resolve(null),
+        id ? api(`/runs/${encodeURIComponent(id)}/summary`).catch(error => ({ error: error.message })) : Promise.resolve(null)])
       if (number !== state.loadNumber || !state.authenticated) return
+      if (id && summary) state.summaries.set(id, summary)
       state.runs = (list.runs || []).sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       state.selected = detail ? (detail.run || detail) : null
       if (state.selected) setRun(state.selected)
@@ -305,6 +354,7 @@
     if (action === 'close-dialog') $('#create-dialog').close()
     if (action === 'refresh') { control.disabled = true; await load(); if (control.isConnected) control.disabled = false }
     if (action === 'retry-session') { control.disabled = true; await initialize() }
+    if (action === 'write-summary' && state.selected) await writeSummary(state.selected.id)
     if (action === 'result-tab') {
       state.resultTabs.set(control.dataset.attempt, control.dataset.filter)
       applyResultFilter(control.closest('.result-details'), control.dataset.filter)

@@ -1,6 +1,7 @@
 import { DurableObject } from 'cloudflare:workers'
 import { timingSafeEqual } from 'node:crypto'
 import { CheckpointCoordinator, isStaticRequest, readBounded, STATE_LIMIT } from './coordinator.js'
+import { SUMMARY_HEADER, summaryView, writeRunSummary } from '../benchmark/ai-summary.js'
 
 const IDLE_MS = 10 * 60 * 1000
 const STORE_KEYS = ['sessions', 'orders', 'accounts', 'dashboard_runs', 'dashboard_trials']
@@ -25,6 +26,7 @@ export class Storefront extends DurableObject {
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS checkpoint (kind TEXT NOT NULL, ordinal INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (kind, ordinal))')
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)')
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS traversal_events (trial_id TEXT NOT NULL, event_id INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (trial_id, event_id))')
+    this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS run_summaries (run_id TEXT PRIMARY KEY, value TEXT NOT NULL)')
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS replay_chunks (trial_id TEXT NOT NULL, chunk_id INTEGER NOT NULL, bytes INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (trial_id, chunk_id))')
     this.coordinator = new CheckpointCoordinator({
       prepare: () => this.prepare(),
@@ -190,10 +192,15 @@ export class Storefront extends DurableObject {
       response = await this.coordinator.fetch(request)
     }
     const headers = new Headers(response.headers)
-    const traceTrial = headers.get(TRACE_HEADER), replayTrial = headers.get(REPLAY_HEADER)
+    const traceTrial = headers.get(TRACE_HEADER), replayTrial = headers.get(REPLAY_HEADER), summaryRun = headers.get(SUMMARY_HEADER)
     headers.delete(TRACE_HEADER)
     headers.delete(REPLAY_HEADER)
+    headers.delete(SUMMARY_HEADER)
     const url = new URL(request.url)
+    const summaryRoute = url.pathname.match(/^\/dashboard\/api\/runs\/([^/]+)\/summary\/?$/i)
+    if (summaryRoute && summaryRun && response.status === 200 && ['GET', 'POST'].includes(request.method)) {
+      return this.summary(request, response, headers, decodeURIComponent(summaryRoute[1]), summaryRun)
+    }
     const route = url.pathname.match(/^\/dashboard\/api\/runs\/[^/]+\/attempts\/[^/]+\/(traversal|replay)\/([^/]+)\/?$/i)
     const kind = route?.[1].toLowerCase(), trialId = kind === 'replay' ? replayTrial : traceTrial
     if (request.method !== 'GET' || response.status !== 200 || !trialId || !route) return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
@@ -219,6 +226,32 @@ export class Storefront extends DurableObject {
     const last = events.at(-1)?.id ?? after
     return new Response(JSON.stringify({ ...body, events, next_cursor: last < body.event_count ? last : null }), { status: 200, headers })
   }
+
+  // Node has checked operator sign-in and built the run data. The Worker holds
+  // the Claude key (the container has no internet) and keeps each run's summary.
+  async summary(request, response, headers, routeRun, summaryRun) {
+    const body = JSON.parse(new TextDecoder().decode(await readBounded(response, STATE_LIMIT)))
+    if (body.run_id !== summaryRun || body.run_id !== routeRun || typeof body.key !== 'string' || !Number.isSafeInteger(body.finished)
+      || (request.method === 'POST' && (!body.input || !Array.isArray(body.input.agents)))) throw new Error('Invalid authorized summary response')
+    for (const name of ['content-length', 'content-encoding', 'etag']) headers.delete(name)
+    headers.set('content-type', 'application/json; charset=utf-8')
+    headers.set('cache-control', 'no-store')
+    const reply = (status, value) => new Response(JSON.stringify(value), { status, headers })
+    const apiKey = this.env.ANTHROPIC_API_KEY
+    const row = this.ctx.storage.sql.exec('SELECT value FROM run_summaries WHERE run_id = ?', body.run_id).toArray()[0]
+    let saved = row ? JSON.parse(row.value) : null
+    if (request.method === 'POST') {
+      if (!apiKey) return reply(409, { error: 'Add a Claude API key first: a Worker secret named ANTHROPIC_API_KEY.' })
+      let summary
+      try { summary = await writeRunSummary({ apiKey, input: body.input }) } catch (error) {
+        console.error(JSON.stringify({ event: 'run_summary_failed', status: error.status ?? null }))
+        return reply(error.status || 502, { error: error.status ? error.message : 'Could not write the summary. Try again.' })
+      }
+      saved = { key: body.key, finished: body.finished, summary, written_at: new Date().toISOString() }
+      this.ctx.storage.sql.exec('INSERT OR REPLACE INTO run_summaries (run_id, value) VALUES (?, ?)', body.run_id, JSON.stringify(saved))
+    }
+    return reply(200, summaryView({ configured: Boolean(apiKey), saved, key: body.key, finished: body.finished }))
+  }
 }
 
 export default {
@@ -237,6 +270,7 @@ export default {
       result.headers.set('X-Robots-Tag', headers['X-Robots-Tag'])
       result.headers.delete(TRACE_HEADER)
       result.headers.delete(REPLAY_HEADER)
+      result.headers.delete(SUMMARY_HEADER)
       return result
     } catch (error) {
       console.error(JSON.stringify({ event: 'hosting_request_failed', message: error.message }))

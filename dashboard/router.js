@@ -5,6 +5,7 @@ import { createRequire } from 'node:module'
 import path from 'node:path'
 import { readBounded, RESPONSE_LIMIT } from '../deploy/coordinator.js'
 import { dynamicTraversalRequest } from '../benchmark/traversal.js'
+import { SUMMARY_HEADER, finishedCount, summaryInput, summaryKey, summaryView, writeRunSummary } from '../benchmark/ai-summary.js'
 
 const publicDirectory = fileURLToPath(new URL('../public/dashboard/', import.meta.url))
 const require = createRequire(import.meta.url)
@@ -56,7 +57,7 @@ function runWithUrls(run, req) {
   return { ...run, task_count: run.task_count ?? run.task_ids?.length ?? (run.suite === 'all240' ? 240 : 30), attempts: (run.attempts || []).map(attempt => attemptWithUrl(attempt, req)) }
 }
 
-export function createDashboardRouter({ manager, apiToken, local = false }) {
+export function createDashboardRouter({ manager, apiToken, local = false, anthropicApiKey = process.env.ANTHROPIC_API_KEY, writeSummary = writeRunSummary }) {
   if (!manager) throw new Error('A run manager is required')
   if (!local && !apiToken) throw new Error('Dashboard requires a BENCHMARK_API_TOKEN')
   const router = express.Router()
@@ -103,6 +104,30 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
     res.json({ run: runWithUrls(run, req) })
   }))
   router.get('/dashboard/api/runs/:id/live', action(async (req, res) => res.json(await manager.getLive(req.params.id))))
+  // AI run summary. On Cloudflare the container has no internet and no key:
+  // Node checks sign-in and builds the run data, then the Worker calls Claude
+  // and keeps the summary. Locally, Node does both and keeps it in memory.
+  const summaries = new Map()
+  const summaryState = async id => {
+    const run = await manager.getRun(id)
+    if (!run) throw Object.assign(new Error('Run not found'), { status: 404 })
+    const input = summaryInput(run)
+    return { run_id: run.id, input, key: await summaryKey(input), finished: finishedCount(input) }
+  }
+  router.get('/dashboard/api/runs/:id/summary', action(async (req, res) => {
+    const { run_id, key, finished } = await summaryState(req.params.id)
+    if (manager.traceArchive) { res.set(SUMMARY_HEADER, run_id); return res.json({ run_id, key, finished }) }
+    res.json(summaryView({ configured: Boolean(anthropicApiKey), saved: summaries.get(run_id), key, finished }))
+  }))
+  router.post('/dashboard/api/runs/:id/summary', action(async (req, res) => {
+    const { run_id, input, key, finished } = await summaryState(req.params.id)
+    if (!finished) return res.status(409).json({ error: 'Finish at least one task before writing a summary.' })
+    if (manager.traceArchive) { res.set(SUMMARY_HEADER, run_id); return res.json({ run_id, key, finished, input }) }
+    if (!anthropicApiKey) return res.status(409).json({ error: 'Set ANTHROPIC_API_KEY before starting the dashboard to turn on summaries.' })
+    const summary = await writeSummary({ apiKey: anthropicApiKey, input })
+    summaries.set(run_id, { key, finished, summary, written_at: new Date().toISOString() })
+    res.json(summaryView({ configured: true, saved: summaries.get(run_id), key, finished }))
+  }))
   router.post('/dashboard/api/runs/:id/attempts', action(async (req, res) => res.status(201).json({ attempt: attemptWithUrl(await manager.addAttempt(req.params.id, req.body || {}), req) })))
   router.patch('/dashboard/api/runs/:id/attempts/:attempt', action(async (req, res) => res.json({ attempt: attemptWithUrl(await manager.updateAttempt(req.params.id, req.params.attempt, req.body || {}), req) })))
   router.get('/dashboard/api/runs/:id/attempts/:attempt/traversal', action(async (req, res) => {

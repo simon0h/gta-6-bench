@@ -148,3 +148,24 @@ npm run hosting:check
 RUN_BROWSER_TESTS=1 node --test test/dashboard-traversal-browser.reference.test.mjs
 RUN_BROWSER_TESTS=1 node --test test/dashboard-replay-browser.reference.test.mjs
 ```
+
+## AI summary
+
+The run page has an **AI summary** card. Click **Write summary** and Claude
+(`claude-opus-5-5`) reads the run's graded results and writes a short overview,
+one line per agent on how it did and its biggest weak spot, and up to four
+patterns across the run. Passed tasks are sent as one line each; tasks that did
+not pass also send their expected output, actual output and failure reasons.
+Card numbers in agent messages are hidden first. Nothing from the store pages,
+traversal or replays is sent.
+
+The summary is kept with the run. When more results arrive the card says how many
+are new and offers **Update summary**; it is never rewritten on its own, so each
+summary is one Claude request. It never changes a grade, and agents never see it:
+the endpoints need operator sign-in.
+
+It needs a Claude API key. On Cloudflare, add a Worker secret named
+`ANTHROPIC_API_KEY` (see [Cloudflare hosting](CLOUDFLARE.md#ai-summary-key)).
+For a local dashboard, start it with `ANTHROPIC_API_KEY` set; local summaries are
+kept in memory until the dashboard stops. Without a key the card says how to turn
+it on.

@@ -69,6 +69,18 @@ the public Worker. Dashboard APIs require operator sign-in. The legacy `/api/*`
 endpoints except `/api/health` require the operator bearer token; they do not
 contain isolated dashboard task evidence. Read that evidence in the dashboard.
 
+## AI summary key
+
+The run page's [AI summary](DASHBOARD.md#ai-summary) calls Claude from the Worker,
+because the container has no internet access. Add a Claude API key as a second
+Worker secret named `ANTHROPIC_API_KEY`: in Cloudflare open Workers & Pages >
+gta-6-bench > Settings > Variables and Secrets and add it as a Secret, or run
+`npx wrangler secret put ANTHROPIC_API_KEY`, or add an `ANTHROPIC_API_KEY=` line to
+`.dev.vars` before `npm run deploy -- --secrets-file .dev.vars`. Never commit it.
+Adding or changing it does not restart the container or sign anyone out. Without
+it, everything else works and the summary card says it is not set up. Summaries
+are kept in a `run_summaries` table in the Durable Object's SQLite database.
+
 ## Deploy from GitHub
 
 Workers Builds is connected to `simon0h/gta-6-bench`, with `main` as the production
