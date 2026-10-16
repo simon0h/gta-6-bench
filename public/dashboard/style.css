@@ -372,7 +372,28 @@ main:focus { outline: none; }
 .results-search input { min-height: 32px; padding-left: 32px; }
 .results-toolbar select { min-height: 32px; width: auto; max-width: 220px; }
 .results-total { margin-left: auto; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
-.result-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; }
+/* Per-URL result cards above the results table; a pressed card filters the table. */
+.link-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 12px; margin-bottom: 16px; }
+.link-result { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper); box-shadow: var(--shadow); color: var(--ink); text-align: left; }
+.link-result:hover { border-color: var(--line-strong); }
+.link-result[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.link-result-top { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 14px; }
+.link-result-top img { width: 24px; height: 24px; padding: 3px; flex: none; border: 1px solid var(--line); border-radius: 5px; background: #ffffff; object-fit: contain; }
+.link-result-top strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.link-result-top small { margin-left: auto; color: var(--muted); font-size: 12px; white-space: nowrap; }
+.link-result-rate { display: flex; align-items: baseline; gap: 6px; font-size: 26px; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.link-result-rate small { color: var(--muted); font-size: 12.5px; font-weight: 400; }
+.link-result-counts { display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: 13px; font-weight: 500; }
+.link-result-counts .passed { color: var(--green); }
+.link-result-counts .failed { color: var(--red); }
+.link-result-counts .error { color: var(--amber); }
+.link-result-meta { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.result-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; table-layout: fixed; }
+/* Fixed column widths, so opening a row's details never shifts the columns. */
+.result-table th:nth-child(2) { width: 140px; }
+.result-table th:nth-child(3) { width: 190px; }
+.result-table th:nth-child(4) { width: 160px; }
+.result-table th:nth-child(5) { width: 96px; }
 .result-table th { height: 36px; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--fill); color: var(--muted); text-align: left; font-size: 12px; font-weight: 600; white-space: nowrap; }
 .result-table th:last-child, .result-time { text-align: right; }
 .result-table td { padding: 9px 12px; border-top: 1px solid var(--line); vertical-align: middle; }
@@ -808,11 +829,15 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
   .results-total { margin-left: 0; flex-basis: 100%; }
   /* On phones the results table drops the store and time and shows only each agent's logo. */
   .result-table { min-width: 0; }
-  .result-table th:nth-child(2), .result-store, .result-table th:last-child, .result-time { display: none; }
+  /* Squeezed to zero width rather than removed, so an open row's details still span the same columns. */
+  .result-table th:nth-child(2), .result-table th:last-child { width: 0; }
+  .result-table th:nth-child(2), .result-store, .result-table th:last-child, .result-time { padding: 0 !important; overflow: hidden; visibility: hidden; font-size: 0; }
   .result-task { overflow-wrap: break-word; }
   .result-table .result-badge { white-space: normal; }
   .result-table th, .result-table td { padding-left: 10px; padding-right: 10px; }
   .result-agent .agent-cell { gap: 0; font-size: 0; }
+  .result-table th:nth-child(3) { width: 56px; }
+  .result-table th:nth-child(4) { width: 112px; }
   .result-table .result-outputs td { padding: 12px; }
   .result-compare { grid-template-columns: minmax(0, 1fr); }
   .live-facts { grid-template-columns: 1fr 1fr; }

@@ -168,6 +168,30 @@
   function runResults(run) {
     return attempts(run).flatMap((attempt, index) => resultList(attempt).map((result, n) => ({ attempt, index, result, key: `${attempt.id}:${result.task_id || n}` })))
   }
+  // One card per agent URL above the results table. Clicking a card shows only
+  // that URL's tasks; clicking it again shows every URL.
+  function renderLinkResults(run) {
+    const entries = attempts(run), view = state.resultsView
+    if (entries.length < 1) return ''
+    const cards = entries.map((attempt, index) => {
+      const results = resultList(attempt), counts = toneCounts(results), p = progress(attempt, run), agent = agentData(attempt.agent)
+      const finished = counts.passed + counts.failed + counts.error
+      const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite)
+      const rate = finished ? `${Math.round(counts.passed / finished * 100)}%` : '—'
+      return `<button class="link-result" type="button" data-action="pick-agent" data-attempt="${escape(attempt.id)}" aria-pressed="${view.agent === attempt.id}">
+        <span class="link-result-top"><img src="${agent.icon}" alt=""><strong>${escape(agent.name)}</strong><small>URL ${String(index + 1).padStart(2, '0')}</small></span>
+        <span class="link-result-rate">${rate}<small>passed</small></span>
+        <span class="link-result-counts"><span class="passed">${counts.passed} passed</span><span class="failed">${counts.failed} failed</span>${counts.error ? `<span class="error">${counts.error} environment error${counts.error === 1 ? '' : 's'}</span>` : ''}</span>
+        <span class="link-result-meta">${p.completed} / ${p.total} tasks${timed.length ? ` · ${escape(duration(timed.reduce((sum, ms) => sum + ms, 0)))}` : ''}</span></button>`
+    }).join('')
+    return `<div class="link-results" role="group" aria-label="Results for each agent URL">${cards}</div>`
+  }
+  function pickAgent(id) {
+    state.resultsView.agent = id
+    for (const card of document.querySelectorAll('.link-result')) card.setAttribute('aria-pressed', String(card.dataset.attempt === id))
+    if ($('#results-agent')) $('#results-agent').value = id
+    applyResults()
+  }
   // The All / Failed / Passed filter. "Failed" holds every graded task that did not pass.
   const resultFilters = [['all', 'All'], ['failed', 'Failed'], ['passed', 'Passed']]
   function renderResultsTab(run) {
@@ -183,7 +207,7 @@
         <tr class="result-row" data-action="toggle-result" tabindex="0" aria-expanded="${open}"><td class="result-task"><span class="chevron">${icon('arrow')}</span><span>${escape(label)}</span></td><td class="result-store">${escape(store)}</td><td class="result-agent"><span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}</span></td><td>${resultBadge(result)}</td><td class="result-time">${escape(duration(result.elapsed_ms))}</td></tr>
         <tr class="result-outputs"${open ? '' : ' hidden'}><td colspan="5">${resultOutputs(result)}<div class="result-links"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${escape(attempt.id)}">${icon('tasks')}View traversal</button></div></td></tr></tbody>`
     }).join('')
-    return `<section class="panel results-panel" id="results-panel" aria-label="Task results"><div class="results-toolbar"><div class="segmented" role="tablist" aria-label="Filter task results">${segments}</div><label class="results-search">${icon('search')}<input id="results-query" type="search" placeholder="Filter by task, store or agent" aria-label="Filter by task, store or agent" value="${escape(view.query)}" autocomplete="off"></label>${agentPicker}<span class="results-total" id="results-total" role="status"></span></div>
+    return `${renderLinkResults(run)}<section class="panel results-panel" id="results-panel" aria-label="Task results"><div class="results-toolbar"><div class="segmented" role="tablist" aria-label="Filter task results">${segments}</div><label class="results-search">${icon('search')}<input id="results-query" type="search" placeholder="Filter by task, store or agent" aria-label="Filter by task, store or agent" value="${escape(view.query)}" autocomplete="off"></label>${agentPicker}<span class="results-total" id="results-total" role="status"></span></div>
       <div class="table-scroll"><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Store</th><th scope="col">Agent</th><th scope="col">Result</th><th scope="col">Time taken</th></tr></thead>${groups}</table></div><p class="result-empty" hidden>No tasks match.</p></section>`
   }
   // Filtering happens in place, so typing in the filter box keeps its focus.
@@ -681,6 +705,7 @@
     }
     if (action === 'run-tab' && state.selected) { setRunTab(control.dataset.tab); render(); $('#run-tab-' + control.dataset.tab)?.focus() }
     if (action === 'result-filter') { state.resultsView.filter = control.dataset.filter; applyResults() }
+    if (action === 'pick-agent') pickAgent(state.resultsView.agent === control.dataset.attempt ? 'all' : control.dataset.attempt)
     if (action === 'toggle-result') toggleResult(control.closest('.result-group'))
     if (action === 'agent-results' && state.selected) {
       setRunTab('results')
@@ -715,7 +740,7 @@
 
   document.addEventListener('change', event => {
     if (event.target.id === 'run-suite') $('#run-task-picker').hidden = event.target.value !== 'custom'
-    if (event.target.id === 'results-agent') { state.resultsView.agent = event.target.value; applyResults() }
+    if (event.target.id === 'results-agent') pickAgent(event.target.value)
   })
   document.addEventListener('input', event => {
     if (event.target.id === 'results-query') { state.resultsView.query = event.target.value; applyResults(); return }
