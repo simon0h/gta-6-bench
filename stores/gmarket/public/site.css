@@ -364,3 +364,6 @@ body.gm{margin:0;background:var(--gm-bg);color:var(--gm-text);font:14px/1.5 -app
 .gm-location form{display:grid;gap:8px;margin-top:14px}
 .gm-location input{padding:10px;border:1px solid #ccc;border-radius:6px;font:inherit}
 .gm-card-hero{background:linear-gradient(120deg,#1b1d22,#3a3f4a)}
+/* 홈쇼핑 모아보기: one row per channel; on phones the row scrolls sideways like the app. */
+.gm-tv .gm-sec-head h2 .gm-onair{margin-left:6px}
+@media (max-width:760px){.gm-tv .gm-cards{display:flex;overflow-x:auto;scrollbar-width:none;gap:12px}.gm-tv .gm-cards>*{flex:0 0 42%}.gm-tv .gm-sec-head{flex-wrap:wrap}}
