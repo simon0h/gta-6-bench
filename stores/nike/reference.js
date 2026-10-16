@@ -23,7 +23,7 @@ function installSite(router, { render, coverage, baseOf }) {
 
   router.get(['/t/:slug/:style', '/launch/r/:style'], (req, res) => {
     const p = capturedProductAt(req.path)
-    return p ? render(req, res, p.title, capturedNikeProduct(baseOf(res), p)) : coverage(req, res, 'Product has not been captured', 404)
+    return p ? render(req, res, p.title, capturedNikeProduct(baseOf(res), p)) : coverage(req, res, "We can't find the page you are looking for", 404)
   })
 
   // Departments and hubs.
@@ -39,7 +39,7 @@ function installSite(router, { render, coverage, baseOf }) {
   // Category listings.
   router.get('/w/:slug', (req, res) => {
     const info = site.LISTINGS.get(req.params.slug)
-    if (!info) return coverage(req, res, 'Category has not been captured', 404)
+    if (!info) return coverage(req, res, "We can't find the page you are looking for", 404)
     render(req, res, info.title, site.listingPage(baseOf(res), req.params.slug, info, req.query))
   })
 
@@ -47,7 +47,7 @@ function installSite(router, { render, coverage, baseOf }) {
   page('/help', 'Get Help', (base, req) => site.helpPage(base, str(req.query.q)))
   router.get('/help/a/:slug', (req, res) => {
     const a = site.helpArticle(baseOf(res), req.params.slug)
-    return a ? render(req, res, a.title, a.html) : coverage(req, res, 'Help article has not been captured', 404)
+    return a ? render(req, res, a.title, a.html) : coverage(req, res, "We can't find the page you are looking for", 404)
   })
   for (const [path, info] of Object.entries(INFO_PAGES)) page(path, info.title, (base, req) => site.infoPage(base, { ...info, choice: ['yes', 'no'].includes(req.query.share) ? req.query.share : '', sent: !!str(req.query.feedback) }))
   page('/membership', 'Nike Membership', base => site.membershipPage(base))
@@ -152,7 +152,7 @@ for (const menu of MENUS) {
   const title = dept ? `${menu.label}'s Shoes, Clothing & Accessories`.replace("Kids's", "Kids'") : menu.label
   router.get(menu.path, (req, res) => {
     const base = baseOf(res), items = shelf.filter(pick)
-    const rows = row(base, dept ? 'Trending Now' : `Shop ${menu.label}`, top(items, 12)) + (dept ? row(base, 'Just In', top(items, 12, p => p.newness)) : '')
+    const rows = row(base, dept ? 'Trending Now' : `Shop ${menu.label}`, top(dept ? items.filter(p => p.brand !== 'Converse' && p.type !== 'socks') : items, 12)) + (dept ? row(base, 'Just In', top(items, 12, p => p.newness)) : '')
     render(req, res, title, withRows(dept ? site.departmentPage(base, menu) : site.hubPage(base, menu.path, menu.label, menu.groups), rows))
   })
 }
@@ -185,6 +185,35 @@ router.get(['/w', '/search'], (req, res, next) => {
   if (!items.length) return next()
   render(req, res, `Search results for ${q}`, searchGrid(baseOf(res), q, items, req.query))
 })
+
+// Guide and story pages close with the products they talk about, as on nike.com.
+const GUIDE_ROWS = {
+  '/air': ['Shop Nike Air', p => /\bAir\b/.test(p.title) && p.cat === 'shoes'],
+  '/air-force-1': ['Shop Air Force 1', p => /Force 1/.test(p.title)],
+  '/air-max': ['Shop Air Max', p => /Air Max/.test(p.title)],
+  '/flyease': ['Shop Easy On and Off Shoes', p => /EasyOn|FlyEase|Slide|Calm|Victori|Benassi/.test(p.title) || p.type === 'sandals'],
+  '/flyknit': ['Shop Lightweight Running', p => p.sport === 'running' && ['race', 'road'].includes(p.type)],
+  '/free': ['Shop Nike Free', p => /Free|Flex Runner|Metcon/.test(p.title)],
+  '/react': ['Shop Cushioned Running', p => p.cat === 'shoes' && p.sport === 'running' && p.type === 'road'],
+  '/running/vaporfly': ['Shop Racing Shoes', p => p.type === 'race' || p.type === 'track'],
+  '/zoomx': ['Shop ZoomX', p => /Vaporfly|Alphafly|Invincible|Vomero|Zoom Fly|Streakfly|Dragonfly|Victory/.test(p.title)],
+  '/space-hippie': ['Shop Sustainable Materials', p => p.tags.split(' ').includes('sustainable') || /Next Nature/.test(p.title)],
+  '/sustainability': ['Shop Sustainable Materials', p => p.tags.split(' ').includes('sustainable') || /Next Nature/.test(p.title)],
+  '/teens': ['Shop Big Kids', p => p.age === 'big'],
+  '/running-shoe-finder': ['Shop Running Shoes', p => p.cat === 'shoes' && (p.sport === 'running' || p.sport === 'trail') && p.g !== 'kids'],
+  '/product-news': ['Just In', p => p.badge === 'Just In' || p.badge === 'Coming Soon'],
+  '/nikeskims-lookbook': ['Shop NikeSKIMS', p => p.brand === 'NikeSKIMS'],
+  '/nikeskims-bra-guide': ['Shop NikeSKIMS Bras', p => p.brand === 'NikeSKIMS' && p.type === 'bras'],
+  '/nikeskims-collection-guide': ['Shop NikeSKIMS', p => p.brand === 'NikeSKIMS'],
+}
+for (const [path, [heading, pick]] of Object.entries(GUIDE_ROWS)) {
+  const info = INFO_PAGES[path]
+  if (!info || HUB_ITEMS[path]) continue
+  router.get(path, (req, res) => {
+    const base = baseOf(res), items = top(shelf.filter(pick), 12)
+    render(req, res, info.title, site.infoPage(base, info) + (items.length ? `<div class="nkx-info-shop">${row(base, heading, items)}</div>` : ''))
+  })
+}
 
 installShelf(router, { render, baseOf })
 router.use(store.router)

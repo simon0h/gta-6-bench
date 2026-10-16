@@ -5,6 +5,7 @@
 import { createHash } from 'node:crypto'
 import { renderProductAsset } from '../../lib/product-asset-art.js'
 import { SECTIONS } from './shelf-data.js'
+import { nikeShoeArt } from './shoe-art.js'
 
 const hash = s => createHash('sha256').update(s).digest()
 const ALPHA = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -254,6 +255,8 @@ export function shelfArt(p, color, view = 0) {
   const key = `${color.style}:${view}`
   if (cache.has(key)) return cache.get(key)
   if (p.type === 'sunglasses') { const svg = eyewearArt(p, color, view); cache.set(key, svg); return svg }
+  // Shoes are drawn per Nike model family (shoe-art.js) so styles read apart.
+  if (p.cat === 'shoes') { const svg = nikeShoeArt(p, color, view); cache.set(key, svg); return svg }
   const second = color.name.split('/')[1] || ''
   // The shared renderer reads "Sleeve" as a textile sleeve, "Football" as a ball and "Fitness" as
   // equipment; garments keep their garment silhouette without those words.
