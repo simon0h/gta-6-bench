@@ -290,10 +290,6 @@
     for (const result of results) { const tone = resultTone(result); if (tone in counts) counts[tone]++ }
     return counts
   }
-  function money(spend) {
-    return [...spend].map(([currency, cents]) => `${currency ? `${currency} ` : ''}${(cents / 100).toFixed(2)}`).join(' + ')
-  }
-  const hasIssue = (result, key) => Array.isArray(result.issues) && result.issues.some(issue => issue.key === key)
 
 
   // AI summary, written by Claude from the graded results on request and kept
@@ -542,28 +538,6 @@
     $('#results-panel')?.scrollIntoView({ block: 'start' })
   }
 
-  // Buy tasks and refuse tasks scored separately: an agent can lean towards
-  // buying too readily (the costly mistake) or towards giving up.
-  function renderBuyRefuse(run) {
-    const entries = attempts(run).filter(attempt => resultList(attempt).some(result => ['passed', 'failed'].includes(resultTone(result))))
-    if (!entries.length) return ''
-    const rows = entries.map(attempt => {
-      const results = resultList(attempt).filter(result => ['passed', 'failed'].includes(resultTone(result))), agent = agentData(attempt.agent)
-      const buy = results.filter(result => result.expected_outcome === 'purchased'), refuse = results.filter(result => result.expected_outcome === 'not_purchased')
-      const passed = list => list.filter(result => resultTone(result) === 'passed').length
-      const all = passed(results), bought = refuse.filter(result => hasIssue(result, 'wrongly_bought')).length, refused = buy.filter(result => hasIssue(result, 'wrongly_refused')).length
-      const spend = new Map()
-      for (const result of results) if (result.wrong_spend) spend.set(result.wrong_spend.currency, (spend.get(result.wrong_spend.currency) || 0) + Math.round(result.wrong_spend.amount * 100))
-      const index = attempts(run).indexOf(attempt)
-      const share = (count, list) => list.length ? `${count}<small> / ${list.length}</small>` : '—'
-      return `<tr><td><span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}<small>URL ${String(index + 1).padStart(2, '0')}</small></span></td>
-        <td class="num">${Math.round(all / results.length * 100)}%</td>
-        <td class="num">${share(passed(buy), buy)}</td><td class="num">${share(passed(refuse), refuse)}</td>
-        <td class="num${bought ? ' negative' : ''}">${share(bought, refuse)}</td><td class="num${refused ? ' warning' : ''}">${share(refused, buy)}</td>
-        <td class="num${spend.size ? ' negative' : ''}">${spend.size ? escape(money(spend)) : '—'}</td></tr>`
-    }).join('')
-    return `<section class="panel" aria-label="Buy and refuse tasks"><div class="panel-head"><h2>Buy vs refuse</h2></div><div class="table-scroll"><table class="data-table buy-refuse-table"><thead><tr><th scope="col">Agent</th><th scope="col" class="num">Pass rate</th><th scope="col" class="num" title="Tasks where the right answer was to buy">Buy tasks passed</th><th scope="col" class="num" title="Tasks where the right answer was not to buy">Refuse tasks passed</th><th scope="col" class="num" title="Placed an order on a task that needed a refusal">Wrongly bought</th><th scope="col" class="num" title="Placed no order on a task that needed a purchase">Wrongly refused</th><th scope="col" class="num" title="Total of every order placed on a failed task">Spent on failed tasks</th></tr></thead><tbody>${rows}</tbody></table></div></section>`
-  }
   // Success rate over the run: one line per agent, its pass rate after each
   // finished task. Colors follow the agent's URL slot, so they never shift.
   function renderRateChart(run) {
@@ -657,7 +631,7 @@
     let body
     if (tab === 'results') body = renderResultsTab(run)
     else if (tab === 'agents') body = renderAgentsTab(run)
-    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderIssues(run, rows)}${renderBuyRefuse(run)}${renderRateChart(run)}${renderTypeBars(rows)}${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
+    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderIssues(run, rows)}${renderRateChart(run)}${renderTypeBars(rows)}${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
     $('#main').innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/">All runs</a><span aria-hidden="true">/</span><span>${escape(runName(run))}</span></nav>
       <div class="page-heading run-detail-heading"><div><div class="run-status-row">${runStatus(run)}</div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div></div>
       <div class="run-tabs" role="tablist" aria-label="Run sections">${tabs}</div>

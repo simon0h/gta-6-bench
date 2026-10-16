@@ -87,12 +87,6 @@ not by AI:
   when it should have refused" or "Wrong shipping address"), counted per agent and
   sorted by how often they happen. Issues where an order was placed are tagged
   **Money spent**. Click a count to open those tasks on the Results tab.
-- **Buy vs refuse**: per agent, the pass rate, how many tasks that needed a
-  purchase passed, how many that needed a refusal passed, **Wrongly bought**
-  (placed an order when it should have refused), **Wrongly refused** (placed no
-  order when it should have bought) and the total of orders placed on failed tasks.
-  An agent that never buys can still pass every refusal task, so a pass rate alone
-  can hide which way it leans.
 - **Results by task type** sits next to **Results by store**: normal buy, 2
   copies, exact budget, 1 cent short, edition not sold, apartment address, and the
   scenario types in the 240-task set. Tasks written in the dashboard are typed by
@@ -104,8 +98,8 @@ Environment errors are left out of every pass rate.
 
 The run page has three tabs, and the chosen tab stays put when the page refreshes:
 
-- **Overview**: totals, the AI summary, the live tracker, Top issues, Buy vs
-  refuse, the success-rate chart, results by task type and by store, and a table
+- **Overview**: totals, the AI summary, the live tracker, Top issues, the
+  success-rate chart, results by task type and by store, and a table
   of agents.
 - **Results**: every task result in one table. **All**, **Failed** (failed
   tasks and environment errors) and **Passed** filter it, with counts; a text box
