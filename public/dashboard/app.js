@@ -180,7 +180,7 @@
       const rate = finished ? `${Math.round(counts.passed / finished * 100)}%` : '—'
       return `<button class="link-result" type="button" data-action="pick-agent" data-attempt="${escape(attempt.id)}" aria-pressed="${view.agent === attempt.id}">
         <span class="link-result-top"><img src="${agent.icon}" alt=""><strong>${escape(agent.name)}</strong><small>URL ${String(index + 1).padStart(2, '0')}</small></span>
-        <span class="link-result-rate">${rate}<small>passed</small></span>${counts.passed + counts.failed ? `<span class="link-result-range">${rangeTag(counts.passed, counts.passed + counts.failed)}</span>` : ''}
+        <span class="link-result-rate">${rate}<small>passed</small></span>
         <span class="link-result-counts"><span class="passed">${counts.passed} passed</span><span class="failed">${counts.failed} failed</span>${counts.error ? `<span class="error">${counts.error} environment error${counts.error === 1 ? '' : 's'}</span>` : ''}</span>
         <span class="link-result-meta">${p.completed} / ${p.total} tasks${timed.length ? ` · ${escape(duration(timed.reduce((sum, ms) => sum + ms, 0)))}` : ''}</span></button>`
     }).join('')
@@ -289,18 +289,6 @@
     const counts = { passed: 0, failed: 0, error: 0 }
     for (const result of results) { const tone = resultTone(result); if (tone in counts) counts[tone]++ }
     return counts
-  }
-  // With only a few tasks, a pass rate could easily be some way off the agent's
-  // real rate. This is the range it likely sits in (a 95% Wilson interval).
-  const rangeHelp = 'With this many tasks, the real pass rate is likely somewhere in this range. Smaller gaps between agents are probably luck.'
-  function passRange(passed, graded) {
-    if (!graded) return ''
-    const z = 1.96, rate = passed / graded, scale = 1 + z * z / graded
-    const middle = (rate + z * z / (2 * graded)) / scale, half = z * Math.sqrt(rate * (1 - rate) / graded + z * z / (4 * graded * graded)) / scale
-    return `${Math.max(0, Math.round((middle - half) * 100))}–${Math.min(100, Math.round((middle + half) * 100))}%`
-  }
-  function rangeTag(passed, graded) {
-    return graded ? `<span class="pass-range" title="${escape(rangeHelp)}">likely ${passRange(passed, graded)}</span>` : ''
   }
   function money(spend) {
     return [...spend].map(([currency, cents]) => `${currency ? `${currency} ` : ''}${(cents / 100).toFixed(2)}`).join(' + ')
@@ -494,13 +482,13 @@
     const share = count => results.length ? `${Math.round(count / results.length * 100)}% of finished tasks` : 'No results yet'
     return `<div class="stats-grid run-summary" role="group" aria-label="Run results">
       <div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${completed}</div><div class="stat-note">of ${total} across ${entries.length} session URL${entries.length === 1 ? '' : 's'}</div></div>
-      <div class="stat"><div class="stat-label"><span class="swatch passed"></span>Passed</div><div class="stat-value positive">${counts.passed}</div><div class="stat-note">${share(counts.passed)}${counts.passed + counts.failed ? ` · ${rangeTag(counts.passed, counts.passed + counts.failed)}` : ''}</div></div>
+      <div class="stat"><div class="stat-label"><span class="swatch passed"></span>Passed</div><div class="stat-value positive">${counts.passed}</div><div class="stat-note">${share(counts.passed)}</div></div>
       <div class="stat"><div class="stat-label"><span class="swatch failed"></span>Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div><div class="stat-note">${share(counts.failed)}</div></div>
       <div class="stat"><div class="stat-label"><span class="swatch error"></span>Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div><div class="stat-note">A store or setup problem, not the agent</div></div>
       <div class="stat"><div class="stat-label">Time taken</div><div class="stat-value">${timed.length ? duration(time) : '—'}</div><div class="stat-note">${timed.length ? `${duration(time / timed.length)} per task on average` : 'No results yet'}</div></div></div>`
   }
   // One bar per store or task type: green passed, red failed, amber
-  // environment errors. Bars built on only a few tasks are greyed out.
+  // environment errors.
   function renderBars(rows, { title, group, name, sort }) {
     if (!rows.length) return ''
     const groups = new Map()
@@ -516,8 +504,7 @@
     const list = sort ? [...groups].sort(sort) : [...groups]
     return `<section class="panel" aria-label="${escape(title)}"><div class="panel-head"><h2>${escape(title)}</h2><div class="panel-actions legend"><span><span class="swatch passed"></span>Passed</span><span><span class="swatch failed"></span>Failed</span><span><span class="swatch error"></span>Environment error</span></div></div>
       <div class="panel-body store-bars">${list.map(([key, entry]) => {
-        const graded = entry.passed + entry.failed, few = graded < 5
-        return `<div class="store-bar${few ? ' few' : ''}"><span class="store-bar-name">${escape(name(key))}</span><div class="bar" role="img" aria-label="${entry.passed} passed, ${entry.failed} failed, ${entry.error} environment errors"><span class="passed" style="width:${width(entry.passed, entry.total)}"></span><span class="failed" style="width:${width(entry.failed, entry.total)}"></span><span class="error" style="width:${width(entry.error, entry.total)}"></span></div><span class="store-bar-count">${entry.passed} / ${entry.total} passed</span><span class="store-bar-range">${few ? `<span class="pass-range" title="Too few tasks to say much on their own">few tasks</span>` : rangeTag(entry.passed, graded)}</span></div>`
+        return `<div class="store-bar"><span class="store-bar-name">${escape(name(key))}</span><div class="bar" role="img" aria-label="${entry.passed} passed, ${entry.failed} failed, ${entry.error} environment errors"><span class="passed" style="width:${width(entry.passed, entry.total)}"></span><span class="failed" style="width:${width(entry.failed, entry.total)}"></span><span class="error" style="width:${width(entry.error, entry.total)}"></span></div><span class="store-bar-count">${entry.passed} / ${entry.total} passed</span></div>`
       }).join('')}</div></section>`
   }
   const renderStoreBars = rows => renderBars(rows, { title: 'Results by store', group: result => result.store, name: slug => slug ? storeName(slug) : 'Other', sort: (a, b) => b[1].total - a[1].total })
@@ -570,7 +557,7 @@
       const index = attempts(run).indexOf(attempt)
       const share = (count, list) => list.length ? `${count}<small> / ${list.length}</small>` : '—'
       return `<tr><td><span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}<small>URL ${String(index + 1).padStart(2, '0')}</small></span></td>
-        <td class="num">${Math.round(all / results.length * 100)}%${rangeTag(all, results.length)}</td>
+        <td class="num">${Math.round(all / results.length * 100)}%</td>
         <td class="num">${share(passed(buy), buy)}</td><td class="num">${share(passed(refuse), refuse)}</td>
         <td class="num${bought ? ' negative' : ''}">${share(bought, refuse)}</td><td class="num${refused ? ' warning' : ''}">${share(refused, buy)}</td>
         <td class="num${spend.size ? ' negative' : ''}">${spend.size ? escape(money(spend)) : '—'}</td></tr>`
