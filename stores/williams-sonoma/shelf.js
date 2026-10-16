@@ -12,6 +12,8 @@
 //           C clearance · +key extra subcategory (last path segment of a /shop/ link)
 //   colors  comma-separated color names
 import { subcategories } from './site-data.js'
+import { moreBlocks } from './shelf-more.js'
+import { capturedSearchProducts } from './search-reference.js'
 
 const sub = (dept, key, art, rows, about) => ({ dept, key, art, rows, about })
 const blocks = [
@@ -647,6 +649,8 @@ John Boos|John Boos Maple Top Kitchen Cart|895.00||4.7|102||`,
   'Islands and carts that add prep space.'),
 ]
 
+blocks.push(...moreBlocks)
+
 const slugify = value => value.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[®™]/g, '').replace(/['’]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 const hash = s => { let n = 2166136261; for (const c of String(s)) n = Math.imul(n ^ c.codePointAt(0), 16777619); return n >>> 0 }
 const round95 = n => Math.max(0.95, Math.round(n) - 0.05)
@@ -678,7 +682,7 @@ for (const block of blocks) {
     const colors = colorText ? colorText.split(',').map(s => s.trim()).filter(Boolean) : []
     const primary = subPath(block.key)
     shelf.push(Object.freeze({
-      id, item, brand, title, dept: block.dept, type: subcategories.get(primary).label, art: block.art, about: block.about,
+      id, item, brand, title, dept: block.dept, type: subcategories.get(primary).label, art: block.artFor?.(title) || block.art, about: block.about,
       path: `/products/${id}/`, primary,
       subs: Object.freeze([primary, ...flags.filter(f => f.startsWith('+')).map(f => subPath(f.slice(1)))]),
       price: sizes[0].price, was: sizes[0].was, sizes: Object.freeze(sizes), colors: Object.freeze(colors),
@@ -689,7 +693,8 @@ for (const block of blocks) {
     }))
   }
 }
-const seen = new Set()
+// Captured "gta 6" search listings keep their read-only pages; no shelf row may take their path.
+const seen = new Set(capturedSearchProducts.map(p => p.path.split('/').filter(Boolean).at(-1)))
 for (const p of shelf) { if (seen.has(p.id)) throw new Error(`williams-sonoma shelf: duplicate product id ${p.id}`); seen.add(p.id) }
 export const shelfById = new Map(shelf.map(p => [p.id, p]))
 export const shelfBySku = new Map(shelf.flatMap(p => p.sizes.map(s => [s.sku, p])))
