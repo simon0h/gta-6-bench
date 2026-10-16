@@ -93,7 +93,7 @@ const DETAILS = {
 const detailsFor = p => DETAILS[p.shape] || ['Well designed, functional and affordable — made for everyday life at home.', 'Easy to clean and care for.', 'Read the care instructions included with the product.']
 function reviewSummary(p) {
   const w = p.rating >= 4.6 ? [79, 13, 4, 2, 2] : p.rating >= 4.3 ? [64, 21, 8, 4, 3] : [50, 24, 12, 7, 7]
-  return `<div class="iks-reviews"><p class="iks-score"><strong>${p.rating.toFixed(1)}</strong>${stars(p.rating, p.reviews)}</p><dl>${w.map((n, i) => `<dt>${5 - i} stars</dt><dd><meter min="0" max="100" value="${n}">${n}%</meter> ${n}%</dd>`).join('')}</dl></div>`
+  return `<div class="iks-reviews"><p class="iks-score"><strong>${p.rating.toFixed(1)}</strong>${stars(p.rating, p.reviews)}</p><dl>${w.map((n, i) => `<dt>${5 - i} ${i === 4 ? 'star' : 'stars'}</dt><dd><meter min="0" max="100" value="${n}">${n}%</meter> ${n}%</dd>`).join('')}</dl></div>`
 }
 export function productBody(base, p, query = {}, errors = []) {
   const cat = categoryIndex.get(p.cat), dept = categoryIndex.get(p.dept)

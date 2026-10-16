@@ -106,3 +106,5 @@
   .iks-filters label{white-space:normal}
 }
 .iks-options input{width:auto;margin:0}
+.iks-bag-info .iks-artno-box{color:#fff;font-size:12px;line-height:18px}
+.iks-checkout .iks-checkout-form{max-width:640px}
