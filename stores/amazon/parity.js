@@ -58,7 +58,7 @@ export function gatewayHome({ base, user = null }) {
     ${card(base, 'Shop for your home essentials', [['Cleaning Tools', 'floor-mop', sub('Health & Household', 'Household Supplies')], ['Home Storage', 'storage-bins', sub('Home & Kitchen', 'Storage & Organization')], ['Home Decor', 'planter-stoneware-white', sub('Home & Kitchen', 'Home Décor')], ['Bedding', 'bedding-white', sub('Home & Kitchen', 'Bedding')]], ['Discover more in Home', D('Home & Kitchen')])}
     ${card(base, 'Gaming accessories', [['Headsets', 'gaming-headset', sub('Video Games', 'Gaming Accessories')], ['Keyboards', 'keyboard', sub('Computers', 'Computer Accessories & Peripherals')], ['Computer mice', 'mouse', sub('Computers', 'Computer Accessories & Peripherals')], ['Chairs', 'gaming-chair', sub('Video Games', 'Gaming Accessories')]], ['See more', sub('Video Games', 'Gaming Accessories')])}
     ${signinCard}
-    ${card(base, 'Shop deals in Fashion', [['Jeans under $50', 'jeans', sub("Women's Fashion", 'Clothing')], ['Tops under $25', 'tshirt', sub("Women's Fashion", 'Clothing')], ['Dresses under $30', 'hoodie', sub("Women's Fashion", 'Clothing')], ['Shoes under $50', 'canvas-sneakers', sub("Women's Fashion", 'Shoes')]], ['See all deals', '/gp/goldbox'])}
+    ${card(base, 'Shop deals in Fashion', [['Jeans under $50', 'jeans', sub("Women's Fashion", 'Clothing')], ['Tops under $25', 'tshirt', sub("Women's Fashion", 'Clothing')], ['Hoodies under $30', 'hoodie', sub("Women's Fashion", 'Clothing')], ['Shoes under $50', 'canvas-sneakers', sub("Women's Fashion", 'Shoes')]], ['See all deals', '/gp/goldbox'])}
     ${card(base, 'Refresh your space', [['Dining', 'dining-table-oak', sub('Home & Kitchen', 'Kitchen & Dining')], ['Home', 'sofa-gray-three-seat', D('Home & Kitchen')], ['Kitchen', 'stand-mixer', sub('Home & Kitchen', 'Kitchen & Dining')], ['Health and Beauty', 'serum', D('Beauty & Personal Care')]], ['See more', D('Home & Kitchen')])}
     ${card(base, 'New home arrivals under $50', [['Kitchen & dining', 'mug-set-cream', sub('Home & Kitchen', 'Kitchen & Dining')], ['Home improvement', 'ceramic-lamp', D('Tools & Home Improvement')], ['Décor', 'planter-stoneware-white', sub('Home & Kitchen', 'Home Décor')], ['Bedding & bath', 'bath-towels', sub('Home & Kitchen', 'Bath')]], ['Shop the latest from Home', D('Home & Kitchen')])}
     ${card(base, 'Top categories in Kitchen appliances', [['Cooker', 'dutch-oven', sub('Home & Kitchen', 'Kitchen & Dining')], ['Coffee', 'espresso-machine', sub('Home & Kitchen', 'Kitchen & Dining')], ['Pots and Pans', 'frying-pan', sub('Home & Kitchen', 'Kitchen & Dining')], ['Kettles', 'kettle', sub('Home & Kitchen', 'Kitchen & Dining')]], ['Explore all products in Kitchen', sub('Home & Kitchen', 'Kitchen & Dining')])}
@@ -69,7 +69,7 @@ export function gatewayHome({ base, user = null }) {
     ${card(base, 'Homeroom to homework', [['Backpacks', 'backpack', sub('Luggage', 'Backpacks')], ['Notebooks', 'notebooks', sub('Office Products', 'Office & School Supplies')], ['Laptops', 'laptop', sub('Computers', 'Laptops')], ['Headphones', 'headphones', sub('Electronics', 'Headphones')]], ['Explore more', D('Office Products')])}
     ${card(base, 'The latest listens', [['Vinyl', 'vinyl-blue-hour', sub('CDs & Vinyl', 'Vinyl')], ['Headphones', 'headphones-cream', sub('Electronics', 'Headphones')], ['Speakers', 'speaker', sub('Electronics', 'Home Audio')], ['Amazon Music', 'earbuds-white', '/music/player']], ['Listen now', '/music/player'])}
     ${card(base, 'Wireless Tech', [['Smartphones', 'smartphone', sub('Electronics', 'Cell Phones & Accessories')], ['Watches', 'smartwatch-black', sub('Electronics', 'Wearable Technology')], ['Headphones', 'earbuds', sub('Electronics', 'Headphones')], ['Tablets', 'tablet', sub('Computers', 'Tablets')]], ['Discover more', D('Electronics')])}
-    ${card(base, 'Fashion trends you like', [['Dresses', 'hoodie', sub("Women's Fashion", 'Clothing')], ['Knits', 'tshirt', sub("Men's Fashion", 'Clothing')], ['Jackets', 'windbreaker-blue', sub("Men's Fashion", 'Clothing')], ['Jewelry', 'analog-watch', sub("Women's Fashion", 'Jewelry')]], ['Explore more', '/amazon-fashion/b?node=7141123011'])}
+    ${card(base, 'Fashion trends you like', [['Skirts', 'tennis-skirt-black', sub("Women's Fashion", 'Clothing')], ['Knits', 'tshirt', sub("Men's Fashion", 'Clothing')], ['Jackets', 'windbreaker-blue', sub("Men's Fashion", 'Clothing')], ['Jewelry', 'analog-watch', sub("Women's Fashion", 'Jewelry')]], ['Explore more', '/amazon-fashion/b?node=7141123011'])}
   </div>
   ${strip(base, 'Best Sellers in Home & Kitchen', bestIn('1055398'), D('Home & Kitchen'), 'See more')}
   <section class="azp-row"><div class="azp-row-head"><h2>Everyday essentials you might like</h2><a href="${base}${D('Health & Household')}">See more</a></div><div class="azp-strip azp-strip-cats">${[['Paper towels', 'paper-towels', 'Health & Household', 'Household Supplies'], ['Laundry', 'laundry-detergent', 'Health & Household', 'Household Supplies'], ['Trash bags', 'trash-bags', 'Health & Household', 'Household Supplies'], ['Dish soap', 'dish-soap', 'Health & Household', 'Household Supplies'], ['Cleaning wipes', 'cleaning-wipes', 'Health & Household', 'Household Supplies'], ['Coffee', 'coffee', 'Grocery & Gourmet Food', 'Beverages'], ['Snacks', 'cookies', 'Grocery & Gourmet Food', 'Snacks'], ['Pet food', 'dog-food', 'Pet Supplies', 'Dogs']].map(([label, key, d, s]) => `<a href="${base}${sub(d, s)}">${photo(key, label)}<span>${esc(label)}</span></a>`).join('')}</div></section>
@@ -164,13 +164,29 @@ const gameProducts = node => node === '468642' || ['20972781011', '20972814011',
 const FASHION_NODES = ['7147440011', '7147441011', '7147442011', '7147443011']
 const nodeProducts = node => [...gameProducts(node), ...ASSORTMENT.filter(p => p.stock > 0 && (p.nodes.includes(node) || (node === '7141123011' && FASHION_NODES.includes(p.deptNode))))]
 
+// A category page is never empty on amazon.com. When this catalog has nothing filed under a
+// subcategory, its page shows the department's items; departments without stock of their own
+// show the closest department (Kindle -> Books, Industrial -> Tools, Handmade -> Home & Kitchen).
+// Thin pages (fewer than 8 items) are topped up the same way, so a row never shows a lone product.
+const DEPT_FALLBACK = { '154606011': '283155', '16310091': '228013', '11260432011': '1055398', '7147443011': '7141123011', '7147442011': '7141123011' }
+const stockedProducts = (node, deptNode = node) => {
+  const list = []
+  // Video Games subpages keep only their own titles when they have any; an empty one shows
+  // Gaming Accessories rather than the department's game listings.
+  const chain = deptNode === '468642' ? [node, '19201981011'] : [node, deptNode, DEPT_FALLBACK[deptNode]]
+  for (const n of chain) {
+    if (list.length >= 8 || (list.length && deptNode === '468642')) break
+    if (n) for (const p of nodeProducts(n)) if (!list.includes(p)) list.push(p)
+  }
+  return list
+}
 export function departmentLanding(base, req, node) {
   const dept = node === FASHION.node ? FASHION : departmentByNode(node)
-  return landing({ base, req, dept, current: dept, action: `/${dept.slug}/b`, hidden: { node: dept.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path]], sideLinks: dept.subs, tiles: dept.subs, products: nodeProducts(dept.node) })
+  return landing({ base, req, dept, current: dept, action: `/${dept.slug}/b`, hidden: { node: dept.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path]], sideLinks: dept.subs, tiles: dept.subs, products: stockedProducts(dept.node) })
 }
 export function subcategoryLanding(base, req, node) {
   const { dept, sub: current } = subcategoryByNode(node)
-  return landing({ base, req, dept, current, action: '/b', hidden: { node: current.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path], [current.label, current.path]], sideTitle: `<a href="${base}${dept.path}">&lsaquo; ${esc(dept.label)}</a>`, sideLinks: dept.subs, tiles: dept.subs.filter(s => s.node !== current.node), products: nodeProducts(current.node) })
+  return landing({ base, req, dept, current, action: '/b', hidden: { node: current.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path], [current.label, current.path]], sideTitle: `<a href="${base}${dept.path}">&lsaquo; ${esc(dept.label)}</a>`, sideLinks: dept.subs, tiles: dept.subs.filter(s => s.node !== current.node), products: stockedProducts(current.node, dept.node) })
 }
 // "Shop by category" row on the existing Video Games / catalog department pages.
 export function shopByCategory(base, nodeId) {
@@ -230,7 +246,7 @@ const INFO = {
   '/coupons': ['Digital Coupons', 'Clip coupons and save on products across Amazon. Discounts are applied at checkout.', [['How coupons work', 'Clip a coupon on the product or coupons page; the savings are applied when you check out.'], ['Coupons available here', 'There are no coupons available for your account right now.']], [["Today's Deals", '/gp/goldbox']]],
   '/same-day-delivery': ['Same-Day Delivery', 'Get eligible items delivered today in select cities. Prime members get free same-day delivery on qualifying orders.', [['How it works', 'Look for “Today” delivery on eligible items and order by the cutoff time shown.'], ['Your address', 'Delivery options for each item are shown on its product page and at checkout.']], [['Shipping Rates and Delivery Estimates', helpNode('468520')]]],
   '/hz/mycd/myx': ['Manage Your Content and Devices', 'View and manage your digital content, devices, preferences and privacy settings.', [['Content', 'Kindle books, apps, videos and music you own.'], ['Devices', 'Register, deregister and manage Echo, Fire TV, Kindle and other devices.'], ['Your content', 'You have no digital content or registered devices.']], [['Your Account', '/gp/css/homepage.html']]],
-  '/your-product-safety-alerts': ['Recalls and Product Safety Alerts', 'Amazon notifies customers about recalls and safety alerts for products they bought.', [['Your alerts', 'There are no recalls or product safety alerts for orders in this browser.'], ['Report a safety concern', 'Contact Customer Service to report a product safety issue.']], [['Customer Service', HELP_PATH], ['Your Orders', '/gp/css/order-history']]],
+  '/your-product-safety-alerts': ['Recalls and Product Safety Alerts', 'Amazon notifies customers about recalls and safety alerts for products they bought.', [['Your alerts', 'There are no recalls or product safety alerts for items you bought.'], ['Report a safety concern', 'Contact Customer Service to report a product safety issue.']], [['Customer Service', HELP_PATH], ['Your Orders', '/gp/css/order-history']]],
   '/adprefs': ['Your Ads Privacy Choices', 'Control whether Amazon shows you interest-based ads.', [['Interest-based ads', 'Amazon may use information about your activity to show ads for products you might like. You can opt out of interest-based ads at any time.'], ['Your choice', 'Interest-based ads are turned off for your account.']], [['Privacy Notice', helpNode('468496')]]],
   '/ap/cnep': ['Login & security', 'Edit your name, email, mobile number, password and two-step verification settings.', [['Account details', 'Sign in to view and edit the name, email and password on your account.'], ['Two-Step Verification', 'Two-step verification adds a one-time code to your sign-in. It is not available for your account at this time.']], [['Your Account', '/gp/css/homepage.html'], ['Sign-in help', '/help/signin']]],
   '/cpe/yourpayments/wallet': ['Your Payments', 'Manage payment methods, view transactions and set your default purchase preference.', [['Wallet', 'You have no saved cards. Add a card at checkout; your orders show only the card brand and last four digits.'], ['Transactions', 'Order totals are shown in Your Orders.']], [['Your Orders', '/gp/css/order-history'], ['Payment methods and charges', '/help/payment']]],
@@ -243,10 +259,20 @@ const INFO = {
 }
 export const INFO_PATHS = Object.keys(INFO)
 
+// Program and company pages open with a banner in the program's colours, then their topics as cards;
+// help and policy pages stay plain articles, as on amazon.com.
+const INFO_THEME = {
+  '/amazonprime': ['#0F79AF', '#00A8E1'], '/gp/video/storefront': ['#0F171E', '#1A98FF'], '/music/player': ['#0D0D26', '#25D1DA'],
+  '/fresh': ['#1E5B2E', '#5BA53A'], '/pharmacy': ['#0B4F6C', '#16A3B5'], '/same-day-delivery': ['#0F79AF', '#00A8E1'],
+  '/amazonbasics': ['#232F3E', '#FF9900'], '/coupons': ['#B12704', '#E47911'], '/sustainability': ['#11483B', '#3E8E5E'],
+  '/amazon-visa': ['#131A22', '#37475A'], '/amazon-store-card': ['#131A22', '#37475A'], '/amazon-secured-card': ['#131A22', '#37475A'], '/amazon-business-card': ['#131A22', '#37475A'],
+}
 function infoPage(base, path) {
   const [h1, intro, sections, links] = INFO[path]
   const isHelp = path.startsWith(HELP_PATH)
-  return `${crumbs(base, isHelp ? [['Help & Customer Service', HELP_PATH], [h1, path]] : [['Amazon.com', '/'], [h1, path]])}<div class="azp-info"><article><h1>${esc(h1)}</h1><p class="azp-lead">${esc(intro)}</p>${sections.map(([h, p]) => `<section><h2>${esc(h)}</h2><p>${esc(p)}</p></section>`).join('')}</article><aside class="azp-info-side"><h2>Related</h2>${links.map(([l, p]) => `<p>${L(base, p, l)}</p>`).join('')}<p>${L(base, HELP_PATH, 'Customer Service')}</p></aside></div>`
+  const [c1, c2] = INFO_THEME[path] ?? ['#232F3E', '#485769']
+  const head = isHelp ? `<h1>${esc(h1)}</h1><p class="azp-lead">${esc(intro)}</p>` : `<header class="azp-info-hero" style="background:linear-gradient(100deg,${c1},${c2})"><h1>${esc(h1)}</h1><p class="azp-lead">${esc(intro)}</p></header>`
+  return `${crumbs(base, isHelp ? [['Help & Customer Service', HELP_PATH], [h1, path]] : [['Amazon.com', '/'], [h1, path]])}<div class="azp-info${isHelp ? '' : ' azp-info-program'}"><article>${head}<div class="azp-info-sections">${sections.map(([h, p]) => `<section><h2>${esc(h)}</h2><p>${esc(p)}</p></section>`).join('')}</div></article><aside class="azp-info-side"><h2>Related</h2>${links.map(([l, p]) => `<p>${L(base, p, l)}</p>`).join('')}<p>${L(base, HELP_PATH, 'Customer Service')}</p></aside></div>`
 }
 
 // ---------------------------------------------------------------- site directory and sitemap.xml
@@ -263,10 +289,23 @@ function sitemapXml(base) {
 }
 
 // ---------------------------------------------------------------- gift cards, registry, pickup locations
+// Drawn gift card designs for the "Shop by type" tiles (a card face per delivery type).
+const gcSmile = (x, y, c) => `<path d="M${x} ${y}q34 15 68 0" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round"/><path d="M${x + 62} ${y - 6}l8 5-9 4" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`
+const gcFace = (fill, ink, accent, tag) => `<rect x="40" y="52" width="240" height="150" rx="14" fill="${fill}"/><text x="62" y="98" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="700" fill="${ink}">amazon</text>${gcSmile(64, 108, accent)}<text x="62" y="184" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="${ink}">${tag}</text>`
+function giftCardArt(kind, label) {
+  const face = gcFace
+  const art = {
+    egift: `<rect x="96" y="22" width="128" height="210" rx="18" fill="#232F3E"/><rect x="104" y="40" width="112" height="174" rx="6" fill="#F3F3F3"/><rect x="116" y="58" width="72" height="8" rx="4" fill="#D5D9D9"/><g transform="translate(89 55) scale(.44)">${face('#FF9900', '#131921', '#131921', 'eGift Card')}</g><rect x="116" y="188" width="88" height="8" rx="4" fill="#D5D9D9"/><rect x="116" y="200" width="56" height="8" rx="4" fill="#D5D9D9"/><rect x="146" y="28" width="28" height="5" rx="2.5" fill="#37475A"/>`,
+    print: `<rect x="70" y="26" width="180" height="210" rx="4" fill="#fff" stroke="#D5D9D9" stroke-width="2"/><g transform="translate(86 52) scale(.62)">${face('#232F3E', '#fff', '#FF9900', 'Print at Home')}</g><rect x="96" y="176" width="128" height="8" rx="4" fill="#E3E6E6"/><rect x="96" y="192" width="92" height="8" rx="4" fill="#E3E6E6"/><path d="M70 214h180" stroke="#D5D9D9" stroke-dasharray="6 5" stroke-width="2"/>`,
+    mail: `<rect x="44" y="96" width="232" height="134" rx="6" fill="#F7E7D4"/><path d="M44 102l116 74 116-74" fill="none" stroke="#E2C9AA" stroke-width="3"/><g transform="translate(64 24) scale(.8) rotate(-6 160 127)">${face('#FF9900', '#131921', '#131921', 'Gift Card')}</g><g transform="translate(246 56)"><ellipse cx="-13" cy="0" rx="14" ry="8" fill="#C7202F" transform="rotate(-25 -13 0)"/><ellipse cx="13" cy="0" rx="14" ry="8" fill="#C7202F" transform="rotate(25 13 0)"/><circle r="6" fill="#A3151F"/></g>`,
+    reload: `<g transform="translate(0 20)">${face('#067D62', '#fff', '#FFD814', 'Reload Your Balance')}</g><circle cx="244" cy="74" r="26" fill="#FFD814"/><path d="M244 62v24M232 74h24" stroke="#131921" stroke-width="5" stroke-linecap="round"/>`,
+  }[kind]
+  return `<svg class="azp-gc-art" viewBox="0 0 320 256" role="img" aria-label="${esc(label)}"><rect width="320" height="256" fill="#F7F8F8"/>${art}</svg>`
+}
 function giftCards(base) {
-  const types = [['eGift Cards', 'Delivered by email or text in minutes', 'smartphone'], ['Print at Home', 'Print a gift card or send it as a PDF', 'printer'], ['Gift Cards by Mail', 'Free One-Day Shipping on eligible orders', 'tote'], ['Reload Your Balance', 'Add funds to your own gift card balance', 'powerbank-black']]
-  return `${crumbs(base, [['Amazon.com', '/'], ['Gift Cards', GIFT_CARDS_PATH]])}<div class="azp-gift"><header class="azp-gift-hero"><div><h1>Gift Cards</h1><p>The gift of choice. Redeemable toward millions of items on Amazon.com. Never expire, no fees.</p></div><div class="azp-gc-card" aria-hidden="true"><span>amazon</span><b>Gift Card</b></div></header>
-  <section><h2>Shop by type</h2><div class="azp-gc-types">${types.map(([t, c, k]) => `<a href="${base}${t === 'Reload Your Balance' ? '/reload-your-balance' : GIFT_CARDS_PATH + '#' + t.toLowerCase().replace(/\W+/g, '-')}" id="${t.toLowerCase().replace(/\W+/g, '-')}">${photo(k, t)}<b>${esc(t)}</b><span class="az-fine">${esc(c)}</span></a>`).join('')}</div></section>
+  const types = [['eGift Cards', 'Delivered by email or text in minutes', 'egift'], ['Print at Home', 'Print a gift card or send it as a PDF', 'print'], ['Gift Cards by Mail', 'Free One-Day Shipping on eligible orders', 'mail'], ['Reload Your Balance', 'Add funds to your own gift card balance', 'reload']]
+  return `${crumbs(base, [['Amazon.com', '/'], ['Gift Cards', GIFT_CARDS_PATH]])}<div class="azp-gift"><header class="azp-gift-hero"><div><h1>Gift Cards</h1><p>The gift of choice. Redeemable toward millions of items on Amazon.com. Never expire, no fees.</p></div><svg class="azp-gc-card" viewBox="40 52 240 150" aria-hidden="true">${gcFace('#FF9900', '#131921', '#131921', 'Gift Card')}</svg></header>
+  <section><h2>Shop by type</h2><div class="azp-gc-types">${types.map(([t, c, k]) => `<a href="${base}${t === 'Reload Your Balance' ? '/reload-your-balance' : GIFT_CARDS_PATH + '#' + t.toLowerCase().replace(/\W+/g, '-')}" id="${t.toLowerCase().replace(/\W+/g, '-')}">${giftCardArt(k, t)}<b>${esc(t)}</b><span class="az-fine">${esc(c)}</span></a>`).join('')}</div></section>
   <section><h2>Shop by occasion</h2><div class="azp-chips">${['Birthday', 'Thank You', 'Congratulations', 'Holiday', 'Wedding', 'Baby', 'Graduation', 'Just Because'].map(o => `<span class="azp-chip">${o}</span>`).join('')}</div></section>
   <div class="azp-noresults"><h3>Gift card purchases are not available for your account.</h3><p>Gift cards can't be bought, redeemed or applied to orders on your account right now. <a href="${base}/help/payment">Payment methods and charges</a></p></div>
   <section><h2>Gift card help</h2><p>${L(base, '/reload-your-balance', 'Reload Your Balance')} &middot; ${L(base, '/currency-converter', 'Amazon Currency Converter')} &middot; ${L(base, HELP_PATH, 'Customer Service')}</p></section></div>`
@@ -278,12 +317,31 @@ function registries(base, q) {
   ${name ? `<div class="azp-noresults" role="status"><h3>No registries found for "${esc(name)}".</h3><p>Check the spelling or try a different registry type.</p></div>` : ''}
   <div class="azp-reg-types">${[['Wedding Registry', 'Free 20% completion discount and a 365-day return window.', 'mug-set-cream'], ['Baby Registry', 'Free Welcome Box and 15% completion discount.', 'crib-wood'], ['Birthday Gift List', 'Share a list of ideas for birthdays.', 'teddy'], ['Custom Gift List', 'Lists for any occasion.', 'board-game']].map(([t, c, k]) => `<section>${photo(k, t)}<h2>${t}</h2><p>${c}</p><a class="az-btn az-btn-outline az-btn-sm" href="${esc(base + signinPath('/registries'))}">Create</a></section>`).join('')}</div></div>`
 }
+// Pickup points near a ZIP code: Hub Lockers carry one-word names, as on amazon.com.
+const LOCKER_NAMES = ['Aurora', 'Basil', 'Cobalt', 'Dune', 'Ember', 'Fable', 'Gizmo', 'Harbor', 'Indigo', 'Juniper', 'Kestrel', 'Lumen', 'Maple', 'Nectar', 'Orbit', 'Pebble', 'Quill', 'Ripple', 'Sable', 'Tundra']
+const PICKUP_KINDS = [
+  ['Amazon Hub Locker', 'Whole Foods Market', 'Open daily 7:00 AM - 10:00 PM', 'Packages held for 3 days'],
+  ['Amazon Hub Locker', 'Apartment building lobby', 'Open 24 hours', 'Packages held for 3 days'],
+  ['Amazon Hub Counter', 'Partner store', 'Mon-Sat 9:00 AM - 9:00 PM, Sun 10:00 AM - 7:00 PM', 'Packages held for 14 days'],
+  ['Amazon Fresh', 'Amazon Fresh store', 'Open daily 7:00 AM - 10:00 PM', 'Pickup and returns drop-off'],
+  ['Amazon Hub Locker', 'Convenience store', 'Open 24 hours', 'Packages held for 3 days'],
+  ['Amazon Hub Locker', 'Shopping center', 'Mon-Sat 10:00 AM - 9:00 PM, Sun 11:00 AM - 7:00 PM', 'Packages held for 3 days'],
+]
+function pickupResults(zip) {
+  const n = Number(zip)
+  const rows = PICKUP_KINDS.map(([kind, host, hours, hold], i) => {
+    const name = kind === 'Amazon Fresh' ? 'Amazon Fresh Pickup' : kind === 'Amazon Hub Counter' ? 'Amazon Hub Counter' : `Amazon Hub Locker - ${LOCKER_NAMES[(n + i * 7) % LOCKER_NAMES.length]}`
+    const miles = (0.3 + i * 0.6 + ((n >> i) % 5) / 10).toFixed(1)
+    return `<li class="azp-pickup"><div><b>${esc(name)}</b><p class="az-fine">${esc(host)} &middot; ${esc(zip)}</p><p>${esc(hours)}</p><p class="az-fine">${esc(hold)}</p></div><span class="azp-pickup-mi">${miles} mi</span></li>`
+  })
+  return `<section class="azp-pickups" role="status"><h2>${rows.length} pickup locations near ${esc(zip)}</h2><ol>${rows.join('')}</ol><p class="az-fine">Choose a pickup location as your delivery address at checkout when it is offered for your items.</p></section>`
+}
 function pickup(base, q) {
   const zip = typeof q.zip === 'string' ? q.zip.trim().slice(0, 10) : ''
   const bad = zip && !/^\d{5}$/.test(zip)
   return `${crumbs(base, [['Amazon.com', '/'], ['Amazon Pickup Locations', '/ulp/view']])}<div class="azp-info"><article><h1>Amazon Pickup Locations</h1><p class="azp-lead">Pick up your packages at an Amazon Hub Locker, Amazon Hub Counter or select stores, at a time that works for you.</p>
   <form class="azp-reg-search" method="get" action="${base}/ulp/view"><label for="ulp-zip">Search by ZIP code</label><input id="ulp-zip" name="zip" inputmode="numeric" value="${esc(zip)}" ${bad ? 'aria-invalid="true"' : ''}><button class="az-btn" type="submit">Search</button>${bad ? '<p class="az-field-error" role="alert">Please enter a valid 5-digit ZIP code.</p>' : ''}</form>
-  ${zip && !bad ? `<div class="azp-noresults" role="status"><h3>No pickup locations to show near ${esc(zip)}.</h3><p>Try another ZIP code, or ship your order to the address you enter at checkout.</p></div>` : ''}
+  ${zip && !bad ? pickupResults(zip) : ''}
   ${[['Amazon Hub Locker', 'Self-service kiosks in grocery stores, convenience stores and apartment buildings. Packages are held for 3 days.'], ['Amazon Hub Counter', 'Pick up at a staffed counter in participating retail stores. Packages are held for up to 14 days.'], ['Whole Foods Market and Amazon Fresh stores', 'Pick up eligible orders and drop off returns at select stores.']].map(([h, p]) => `<section><h2>${h}</h2><p>${p}</p></section>`).join('')}</article>
   <aside class="azp-info-side"><h2>Related</h2><p>${L(base, '/hub', 'Become an Amazon Hub Partner')}</p><p>${L(base, helpNode('468520'), 'Shipping Rates and Delivery Estimates')}</p><p>${L(base, '/gp/css/returns/homepage.html', 'Returns & Replacements')}</p></aside></div>`
 }

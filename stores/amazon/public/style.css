@@ -432,3 +432,23 @@ input[aria-invalid=true],select[aria-invalid=true]{border-color:#D00;box-shadow:
 .azp-facet-brands label{display:block;font-size:14px;margin:4px 0}
 @media(max-width:600px){.az-shelf-gallery{grid-template-columns:minmax(0,1fr)}.az-shelf-thumbs{flex-direction:row;order:2}.az-shelf-thumbs a{width:48px}.az-shelf-gallery>.az-fine{grid-column:1}}
 .az-list-price,.az-list-price s{font-size:12px!important}
+/* Long facet lists fold under "See more", like amazon.com */
+.az-facet-more summary{list-style:none;cursor:pointer;color:var(--link);font-size:12px;margin:6px 0 2px}.az-facet-more summary::-webkit-details-marker{display:none}
+.az-facet-more summary::before{content:"\25BE\00a0"}.az-facet-more[open] summary{display:none}
+.az-prodinfo h3{font-size:18px;font-weight:700;margin:24px 0 6px}
+.az-customers-say{max-width:720px;margin-top:22px}.az-customers-say h3{font-size:18px;font-weight:700;margin:0 0 6px}.az-customers-say p{margin:0 0 6px;font-size:14px;line-height:20px}
+.az-say-aspects{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.az-say-aspects span{border:1px solid #D5D9D9;border-radius:8px;padding:5px 10px;font-size:13px;color:#007600;background:#fff}
+.az-no-reviews{font-size:16px;font-weight:700;margin:0 0 8px}.az-review-this{font-size:18px;font-weight:700;margin:22px 0 4px}
+.azp-info-hero{color:#fff;border-radius:8px;padding:34px 36px;margin-bottom:22px}.azp-info-program .azp-info-hero h1{font-size:34px;line-height:40px;font-weight:700;margin:0 0 10px}.azp-info-hero .azp-lead{max-width:640px;margin:0;font-size:17px}
+.azp-info-program .azp-info-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.azp-info-program .azp-info-sections section{border:1px solid #D5D9D9;border-radius:8px;padding:16px 18px;background:#fff}.azp-info-program .azp-info-sections h2{margin:0 0 6px}.azp-info-program .azp-info-sections p{margin:0;font-size:14px;line-height:20px}
+@media(max-width:760px){.azp-info-program .azp-info-sections{grid-template-columns:1fr}.azp-info-hero{padding:22px}.azp-info-program .azp-info-hero h1{font-size:26px;line-height:32px}}
+.azp-pickups h2{font-size:18px;font-weight:700;margin:16px 0 8px}.azp-pickups ol{list-style:none;padding:0;margin:0;border:1px solid #D5D9D9;border-radius:8px}
+.azp-pickup{display:flex;justify-content:space-between;gap:16px;padding:12px 16px;border-top:1px solid #E7E7E7}.azp-pickup:first-child{border-top:0}.azp-pickup p{margin:2px 0;font-size:13px}.azp-pickup-mi{font-size:13px;color:#565959;white-space:nowrap}
+.az-account-menu>div{padding-top:24px}.az-flyout-new{display:block;text-align:center;font-size:11px;margin-top:6px}.az-account-menu .az-flyout-new a{display:inline;padding:0;color:var(--link)}
+.az-flyout-close{position:absolute;top:2px;right:6px;background:none;border:0;font-size:20px;line-height:20px;color:#565959;cursor:pointer;padding:2px 4px}.az-flyout-close:hover{color:#0F1111}
+svg.azp-gc-card{display:block;padding:0;background:none;overflow:visible}
+.azp-gc-art{display:block;width:100%;height:auto;border-radius:6px;margin-bottom:6px}
+/* Phones: results come first and the filters follow them, as in the Amazon app */
+@media(max-width:760px){.az-search-body{display:flex;flex-direction:column}.az-search-body>.az-results{order:1}.az-search-body>.az-facets{order:2;max-height:none;overflow:visible;margin:20px 0 0}}
+/* Narrow cart rail: rounded-rectangle buttons so wrapped labels don't turn into ovals */
+.az-ewc .az-btn{border-radius:8px;line-height:15px;padding:6px}

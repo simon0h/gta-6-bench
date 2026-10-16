@@ -48,7 +48,17 @@ export function browseResults({base,q='',dept='',sort='',filters={},results,inCa
  const ret=`${endpoint}?${queryString(state,{page:current>1?current:''})}`
  const pool=search(q,dept,'',{},node)
  const choices=field=>[...new Set(pool.map(p=>p[field]).filter(Boolean))].sort().map(x=>[x,x])
- const checkboxes=(name,label,options)=>options.length?`<fieldset class="az-facet"><legend>${label}</legend>${options.map(([v,l])=>`<label class="az-filter-check"><input type="checkbox" name="${name}" value="${esc(v)}" ${values(filters[name]).includes(v)?'checked':''}> ${esc(l)}</label>`).join('')}</fieldset>`:''
+ const check=name=>([v,l])=>`<label class="az-filter-check"><input type="checkbox" name="${name}" value="${esc(v)}" ${values(filters[name]).includes(v)?'checked':''}> ${esc(l)}</label>`
+ // Like amazon.com, a long list shows its most common entries first and folds the rest under "See more".
+ const checkboxes=(name,label,options)=>{
+  if(!options.length) return ''
+  if(options.length<=12) return `<fieldset class="az-facet"><legend>${label}</legend>${options.map(check(name)).join('')}</fieldset>`
+  const count=new Map();for(const p of pool){const v=p[{type:'typeLabel',platform:'platformKey'}[name]||name];if(v)count.set(v,(count.get(v)||0)+1)}
+  const top=[...options].sort((a,b)=>(count.get(b[0])||0)-(count.get(a[0])||0)||a[1].localeCompare(b[1])).slice(0,10)
+  const rest=options.filter(o=>!top.includes(o))
+  const open=rest.some(([v])=>values(filters[name]).includes(v))
+  return `<fieldset class="az-facet"><legend>${label}</legend>${top.map(check(name)).join('')}<details class="az-facet-more"${open?' open':''}><summary>See more</summary>${rest.map(check(name)).join('')}</details></fieldset>`
+ }
  const select=(name,label,options)=>`<div class="az-facet"><h3><label for="az-${name}">${label}</label></h3><select id="az-${name}" name="${name}"><option value="">All</option>${options.map(([v,l])=>`<option value="${esc(v)}" ${filters[name]===v?'selected':''}>${esc(l)}</option>`).join('')}</select></div>`
  const facetHTML=`<aside class="az-facets" aria-label="Filters"><form method="get" action="${base}${endpoint}">${hidden({k:q,node,s:sort})}<div class="az-facet"><h3><label for="az-department">Department</label></h3><select id="az-department" name="i">${DEPARTMENTS.map(([v,l])=>`<option value="${v}" ${(dept||ancestorNodes(node)[0]?.id||'')===v?'selected':''}>${esc(l)}</option>`).join('')}</select></div>
  ${checkboxes('platform','Video Game Platform',CATALOG_PLATFORMS.map(p=>[p.id,p.label]).filter(([v])=>pool.some(p=>p.platformKey===v)))}

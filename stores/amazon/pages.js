@@ -113,7 +113,7 @@ export function layout({ base, title, body, cartCount = 0, user = null, chrome =
       <button type="submit" class="az-search-go" aria-label="Go"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="#0F1111" stroke-width="2.4"/><path d="M15 15l6 6" stroke="#0F1111" stroke-width="2.6" stroke-linecap="round"/></svg></button>
     </form>
     <span class="az-lang" title="English · United States"><span class="az-flag" aria-hidden="true"></span><span class="az-nav-line2">EN</span></span>
-    <div class="az-account-nav"><a class="az-nav-item" href="${user ? `${base}/gp/css/homepage.html` : esc(base + signinPath(here))}"><span class="az-nav-line1">Hello, ${user ? esc(user.first_name || 'there') : 'sign in'}</span><span class="az-nav-line2">Account &amp; Lists</span></a><details class="az-account-menu"><summary aria-label="Expand Account and Lists">&#9662;</summary><div><p>${user ? `Hello, ${esc(user.first_name || 'there')}` : `<a class="az-btn az-btn-block" href="${esc(base + signinPath(here))}">Sign in</a>`}</p><div class="az-account-flyout-cols"><section><h3>Your Lists</h3><a href="${base}/hz/wishlist/ls">View your lists</a><a href="${base}/gp/history">Browsing History</a><a href="${base}/cart">Your cart and saved items</a></section><section><h3>Your Account</h3><a href="${base}/gp/css/homepage.html">Account dashboard</a><a href="${base}/gp/css/order-history">Your Orders</a><a href="${base}/a/addresses">Your Addresses</a><a href="${base}/help">Customer Service</a>${user ? `<a href="${base}/gp/flex/sign-out.html">Sign out</a>` : ''}</section></div><button type="button" class="az-link-btn" data-account-close>Close account menu</button></div></details></div>
+    <div class="az-account-nav"><a class="az-nav-item" href="${user ? `${base}/gp/css/homepage.html` : esc(base + signinPath(here))}"><span class="az-nav-line1">Hello, ${user ? esc(user.first_name || 'there') : 'sign in'}</span><span class="az-nav-line2">Account &amp; Lists</span></a><details class="az-account-menu"><summary aria-label="Expand Account and Lists">&#9662;</summary><div><p>${user ? `Hello, ${esc(user.first_name || 'there')}` : `<a class="az-btn az-btn-block" href="${esc(base + signinPath(here))}">Sign in</a><span class="az-flyout-new">New customer? <a href="${esc(base + signinPath(here))}">Start here.</a></span>`}</p><div class="az-account-flyout-cols"><section><h3>Your Lists</h3><a href="${base}/hz/wishlist/ls">View your lists</a><a href="${base}/gp/history">Browsing History</a><a href="${base}/cart">Saved for later</a></section><section><h3>Your Account</h3><a href="${base}/gp/css/homepage.html">Account</a><a href="${base}/gp/css/order-history">Your Orders</a><a href="${base}/a/addresses">Your Addresses</a><a href="${base}/help">Customer Service</a>${user ? `<a href="${base}/gp/flex/sign-out.html">Sign out</a>` : ''}</section></div><button type="button" class="az-flyout-close" data-account-close aria-label="Close account menu">&times;</button></div></details></div>
     <a class="az-nav-item az-nav-orders" href="${base}/gp/css/order-history"><span class="az-nav-line1">Returns</span><span class="az-nav-line2">&amp; Orders</span></a>
     <a class="az-nav-cart" href="${base}/gp/cart/view.html?ref_=nav_cart" aria-label="${plural(cartCount)} in cart"><span class="az-cart-count">${cartCount}</span>${cartSvg()}<span class="az-nav-line2">Cart</span></a>
   </div>
@@ -271,9 +271,30 @@ ${productRow(base,'Customers also considered',recommendations(p),nodePath(base,p
 </section>
 <section class="az-description"><h2 class="az-h2">Product Description</h2><p>${isGame?esc(GAME.description):esc(p.about.join(' '))}</p></section>
 <section class="az-reviews"><h2 class="az-h2">Customer reviews</h2>
-  ${p.rating ? `<div class="az-stars"><span aria-hidden="true">${'★'.repeat(Math.round(p.rating.stars))}${'☆'.repeat(5 - Math.round(p.rating.stars))}</span> ${esc(p.rating.stars)} out of 5 &middot; ${esc(p.rating.count)} global ratings</div><div class="az-review-bars">${starShares(p.rating.stars).map((pct, i) => `<div><span>${5 - i} star</span><span class="az-bar"><i style="width:${pct}%"></i></span><span>${pct}%</span></div>`).join('')}</div>`
-    : `<div class="az-review-bars">${[5, 4, 3, 2, 1].map(n => `<div><span>${n} star</span><span class="az-bar"></span><span>0%</span></div>`).join('')}</div><p><a href="${esc(base + signinPath(ret))}">Sign in to see customer reviews.</a></p>`}
+  ${p.rating ? `<div class="az-stars"><span aria-hidden="true">${'★'.repeat(Math.round(p.rating.stars))}${'☆'.repeat(5 - Math.round(p.rating.stars))}</span> ${esc(p.rating.stars)} out of 5 &middot; ${esc(p.rating.count)} global ratings</div><div class="az-review-bars">${starShares(p.rating.stars).map((pct, i) => `<div><span>${5 - i} star</span><span class="az-bar"><i style="width:${pct}%"></i></span><span>${pct}%</span></div>`).join('')}</div>${customersSay(p)}`
+    : `<p class="az-no-reviews">No customer reviews</p><div class="az-review-bars">${[5, 4, 3, 2, 1].map(n => `<div><span>${n} star</span><span class="az-bar"></span><span>0%</span></div>`).join('')}</div><h3 class="az-review-this">Review this product</h3><p class="az-fine">Share your thoughts with other customers</p><p><a class="az-btn az-btn-outline" href="${esc(base + signinPath(ret))}">Write a customer review</a></p>`}
 </section><script src="${base}/static/catalog.js" defer></script>`
+}
+
+// "Customers say": the short review summary amazon.com shows under the rating histogram.
+const SAY = {
+  videogames: ['gameplay, graphics and replay value', ['Gameplay', 'Graphics', 'Value for money']],
+  stripbooks: ['writing, story and characters, and many say it was hard to put down', ['Readability', 'Story quality', 'Value for money']],
+  beauty: ['results, texture and value, and many say it is gentle on their skin', ['Effectiveness', 'Texture', 'Value for money']],
+  'fashion-womens': ['fit, comfort and quality, and many say it is true to size', ['Fit', 'Comfort', 'Quality']],
+  'fashion-mens': ['fit, comfort and quality, and many say it is true to size', ['Fit', 'Comfort', 'Quality']],
+  'fashion-boys': ['fit, comfort and durability', ['Fit', 'Comfort', 'Durability']],
+  'fashion-girls': ['fit, comfort and durability', ['Fit', 'Comfort', 'Durability']],
+  pets: ['quality and value, and many say their pets love it', ['Pet enjoyment', 'Quality', 'Value for money']],
+  grocery: ['taste, freshness and value', ['Taste', 'Freshness', 'Value for money']],
+  hpc: ['quality, value and how well it works', ['Effectiveness', 'Value for money', 'Quality']],
+  'toys-and-games': ['fun, quality and value, and many say it makes a great gift', ['Fun factor', 'Quality', 'Gift value']],
+  'baby-products': ['quality, comfort and value', ['Quality', 'Comfort', 'Value for money']],
+}
+function customersSay(p) {
+  if (!p.rating || p.rating.stars < 4) return ''
+  const [what, aspects] = SAY[p.department] ?? ['quality, performance and value, and many say it is easy to use', ['Quality', 'Ease of use', 'Value for money']]
+  return `<div class="az-customers-say"><h3>Customers say</h3><p>Customers like the ${esc(what)}. Several mention that it arrived quickly and matched the description.</p><p class="az-fine">Generated from the text of customer reviews</p><div class="az-say-aspects">${aspects.map(a => `<span>&#10003; ${esc(a)}</span>`).join('')}</div></div>`
 }
 
 // ---------------------------------------------------------------- cart
