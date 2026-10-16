@@ -158,12 +158,22 @@ export const MENU = {
 }
 export const categoryByCode = code => CATEGORY_ROWS.find(c => c.code === code)
 
-// Store finder regions as listed on /storefinder. Only the first ten store names (East of England)
-// were captured; Beckton/Salford are the clone's existing collection branches and Thurrock is named
-// on the real In-store events page. Other regions list no names rather than invented ones.
+// Store finder regions as listed on /storefinder. The East of England names were read from the real
+// store finder; the other regions list towns from the Smyths UK estate as best known (not checked against the
+// live finder, which could not be fetched). Beckton/Salford
+// are the collection branches used at checkout; Thurrock is named on the real In-store events page.
 export const REGIONS = ['East of England', 'South East', 'North West', 'Wales', 'London', 'Yorkshire & The Humber', 'North East', 'Scotland', 'West Midlands', 'Northern Ireland', 'East Midlands', 'South West']
 export const STORES = {
   'East of England': ['Biggleswade', 'Chelmsford', 'Colchester', 'Harlow', 'Ipswich', 'Luton', 'Norwich', 'Peterborough', 'Rayleigh Weir', 'Stevenage'],
-  London: ['Beckton', 'Thurrock'],
-  'North West': ['Salford'],
+  'South East': ['Ashford', 'Basingstoke', 'Brighton', 'Crawley', 'High Wycombe', 'Maidstone', 'Milton Keynes', 'Oxford', 'Portsmouth', 'Reading', 'Slough', 'Southampton'],
+  'North West': ['Blackpool', 'Bolton', 'Chester', 'Liverpool Aintree', 'Liverpool Speke', 'Preston', 'Salford', 'Stockport', 'Warrington', 'Wigan'],
+  Wales: ['Bridgend', 'Cardiff', 'Llandudno', 'Newport', 'Swansea', 'Wrexham'],
+  London: ['Beckton', 'Croydon', 'Enfield', 'Hayes', 'Romford', 'Staples Corner', 'Thurrock'],
+  'Yorkshire & The Humber': ['Bradford', 'Doncaster', 'Huddersfield', 'Hull', 'Leeds', 'Sheffield', 'Wakefield', 'York'],
+  'North East': ['Gateshead', 'Middlesbrough', 'Newcastle', 'Sunderland'],
+  Scotland: ['Aberdeen', 'Ayr', 'Dundee', 'East Kilbride', 'Edinburgh', 'Falkirk', 'Glasgow Braehead', 'Glasgow Parkhead', 'Inverness', 'Kirkcaldy', 'Livingston'],
+  'West Midlands': ['Birmingham', 'Coventry', 'Merry Hill', 'Stoke-on-Trent', 'Telford', 'Walsall', 'Wolverhampton', 'Worcester'],
+  'Northern Ireland': ['Belfast', 'Craigavon', 'Londonderry', 'Newry', 'Newtownabbey'],
+  'East Midlands': ['Chesterfield', 'Derby', 'Leicester', 'Lincoln', 'Mansfield', 'Northampton', 'Nottingham'],
+  'South West': ['Bournemouth', 'Bristol Cribbs Causeway', 'Bristol Brislington', 'Cheltenham', 'Exeter', 'Gloucester', 'Plymouth', 'Swindon', 'Taunton'],
 }
