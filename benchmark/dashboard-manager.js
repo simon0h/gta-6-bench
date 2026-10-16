@@ -581,6 +581,11 @@ export async function createRunManager({
         else traceEvents.delete(trial_id)
       }
     }),
+    // Router-only: whether two agent URLs belong to the same run. Never shown to agents.
+    sameRun: (first, second) => serialized(async () => {
+      try { return findAttempt(first).run.id === findAttempt(second).run.id }
+      catch (error) { if (error.status === 404) return false; throw error }
+    }),
     agentView: token => serialized(async () => {
       const { run, attempt } = findAttempt(token)
       return view(run, attempt)

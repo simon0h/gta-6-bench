@@ -912,7 +912,7 @@
       const attempt = attempts(state.selected).find(item => item.id === control.dataset.attempt)
       if (!attempt) return
       const url = entryUrl(attempt)
-      const prompt = `Open ${url} in a separate browser session for this agent URL to begin this GTA 6 Bench run. Follow the instructions on the task page. Use Start task to begin each task, then shop on the store's website. Return to the task page after shopping and use Submit result to report purchased or not_purchased, with a reason or message. Advance through the tasks sequentially until the run is complete.`
+      const prompt = `Before you start, clear this browser's cookies and site data for ${new URL(url).host}, so nothing from an earlier run is left over. Then open ${url} in a separate browser session for this agent URL to begin this GTA 6 Bench run. Follow the instructions on the task page. Use Start task to begin each task, then shop on the store's website. Return to the task page after shopping and use Submit result to report purchased or not_purchased, with a reason or message. Advance through the tasks sequentially until the run is complete.`
       await copy(action === 'copy-url' ? url : prompt, action === 'copy-url' ? 'Session URL copied' : 'Agent prompt copied')
     }
   })
