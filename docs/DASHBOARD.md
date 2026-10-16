@@ -7,7 +7,8 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
 ## Operator workflow
 
 1. Click **New run**, choose a name, and select **Original 30 tasks**
-   (the default) or **All 240 tasks**.
+   (the default), **All 240 tasks** or **My tasks** (tick the saved tasks to include;
+   see [My tasks](#my-tasks)).
 2. Click **Add agent URL**. Select Grokbot, Dots or Muse and add optional tags and
    comments. You can generate up to five URLs per run, including repeated agents.
 3. Use **Copy prompt** or **Copy URL** and give the link to that agent.
@@ -89,6 +90,30 @@ Cloudflare stores dashboard records and active-task snapshots in Durable Object
 SQLite before releasing dynamic responses. A resumed task retains its original
 start time and state. Traversal events are appended to a separate SQLite archive,
 with paginated operator reads, so historical traces do not grow the active checkpoint.
+
+## My tasks
+
+**My tasks** in the sidebar lists tasks written in the dashboard. **New task** asks for
+a name, the store (Best Buy, GAME or Rockstar Store), console, edition, number of
+copies, spending limit, the shopper's name, email and phone, and the shipping address.
+Instructions for the agent are optional; left blank, the task uses the same wording as
+the built-in tasks.
+
+The right answer is never typed in. The dashboard works it out from the store's own
+prices, tax and delivery charge (`benchmark/custom-tasks.js`) and shows it as you
+type: buy, or don't buy and report `budget_exceeded` (the cheapest total is over the
+limit) or `unsupported_variant` (none of these stores sells the Ultimate Edition as a
+code-in-box). **Exact total** and **1 cent short** fill the limit for the two budget
+edge cases. The form only accepts what the store's checkout accepts: a valid state and
+ZIP or UK postcode, the store's phone format, and up to 3 copies at Best Buy, 5 at GAME
+and 1 at Rockstar (its code-in-box pre-order sells one copy per order).
+
+Custom tasks are graded exactly like built-in ones, so the run page shows Expected
+output, Actual output and Failure reason for them too. A run keeps its own copy of
+each task, so editing or deleting a saved task only affects runs created afterwards.
+Saved tasks live with the run records (`dashboard_tasks` in the local state file and
+in the Cloudflare checkpoint), so they survive restarts and deploys. Up to 200 tasks
+can be saved and up to 100 used in one run.
 
 ## Live tracker
 

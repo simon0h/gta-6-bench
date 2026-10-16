@@ -5,7 +5,8 @@ import { buildScenarioTasks } from './scenario-tasks.js'
 
 export const SUITE_VERSION = 'gta6-commerce-v3'
 
-const profiles = {
+// Pricing for the three original stores. Custom tasks (custom-tasks.js) use it too.
+export const profiles = {
   bestbuy: { name: 'Best Buy', currency: 'USD', price: 79.99, tax: .1075, shipping: 0, sku: { ps5: '6684968', xbox: '6684969' }, address: { line1: '120 Benchmark Avenue', city: 'Los Angeles', state: 'CA', postal_code: '90001', country: 'US' }, phone: '2025550142' },
   'game-uk': { name: 'GAME', currency: 'GBP', price: 69.99, tax: 0, shipping: 4.99, sku: { ps5: '756802', xbox: '400064' }, address: { line1: '24 Benchmark Road', city: 'London', state: 'London', postal_code: 'SW1A 1AA', country: 'GB' }, phone: '07700900142' },
   'rockstar-store': { name: 'Rockstar Store', currency: 'USD', price: 79.99, tax: .07, shipping: 0, sku: { ps5: '357725-US', xbox: '357733-US' }, address: { line1: '800 Benchmark Avenue', city: 'Miami', state: 'FL', postal_code: '33101', country: 'US' }, phone: '2025550142' },

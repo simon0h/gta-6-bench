@@ -103,6 +103,11 @@ export function createDashboardRouter({ manager, apiToken, local = false, anthro
     if (!run) return res.status(404).json({ error: 'Run not found' })
     res.json({ run: runWithUrls(run, req) })
   }))
+  router.get('/dashboard/api/tasks', action(async (req, res) => res.json(await manager.listTasks())))
+  router.post('/dashboard/api/tasks/preview', action(async (req, res) => res.json(await manager.previewTask(req.body || {}))))
+  router.post('/dashboard/api/tasks', action(async (req, res) => res.status(201).json({ task: await manager.createTask(req.body || {}) })))
+  router.put('/dashboard/api/tasks/:id', action(async (req, res) => res.json({ task: await manager.updateTask(req.params.id, req.body || {}) })))
+  router.delete('/dashboard/api/tasks/:id', action(async (req, res) => res.json(await manager.deleteTask(req.params.id))))
   router.get('/dashboard/api/runs/:id/live', action(async (req, res) => res.json(await manager.getLive(req.params.id))))
   // AI run summary. On Cloudflare the container has no internet and no key:
   // Node checks sign-in and builds the run data, then the Worker calls Claude
@@ -155,7 +160,7 @@ export function createDashboardRouter({ manager, apiToken, local = false, anthro
   router.get('/dashboard/live.js', (req, res) => res.sendFile(`${publicDirectory}/live.js`))
   router.get('/dashboard', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
   router.get('/dashboard/', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
-  for (const file of ['app.js', 'style.css', 'portal.js', 'portal.css', 'capture.js', 'traversal.js', 'recorder.js', 'replay.js']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))
+  for (const file of ['app.js', 'tasks.js', 'style.css', 'portal.js', 'portal.css', 'capture.js', 'traversal.js', 'recorder.js', 'replay.js']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))
   for (const [file, source] of Object.entries(vendor)) {
     router.get(`/dashboard/vendor/${file}`, (req, res) => res.set('Cache-Control', 'private, max-age=86400').type(file.endsWith('.css') ? 'css' : 'text/javascript').sendFile(source))
   }

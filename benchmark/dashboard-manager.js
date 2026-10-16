@@ -3,8 +3,9 @@ import { randomBytes, randomUUID, createHash } from 'node:crypto'
 import { readFile, mkdir, writeFile, rename, unlink } from 'node:fs/promises'
 import path from 'node:path'
 import { tasks, publicTask, SUITE_VERSION } from './tasks.js'
+import { buildCustomTask, cheapestTotal, customTaskOptions, normalizeCustomTask, newCustomTaskId, CUSTOM_TASK_LIMIT, CUSTOM_RUN_LIMIT } from './custom-tasks.js'
 import { gradeTask } from './grader.js'
-import { describeResult } from './outcome.js'
+import { describeResult, expectedOutput } from './outcome.js'
 import { publicLivePosition, updateLivePosition, validLivePosition } from './live.js'
 import { environmentFingerprint, summarize } from './report.js'
 import { BENCHMARK_DATE } from './environment.js'
@@ -86,7 +87,9 @@ export async function createRunManager({
   }))
   const hashes = Object.fromEntries(Object.entries(catalogs).map(([suite, selected]) => [suite, digest(selected)]))
   const filename = path.join(path.resolve(directory), 'dashboard-state.json')
-  let runs = [], trials = [], queue = Promise.resolve(), closed = false, closePromise
+  // Saved custom tasks are what dashboard users wrote. A run made from them
+  // keeps its own copy (run.tasks), so later edits never change a run.
+  let runs = [], trials = [], customTasks = [], queue = Promise.resolve(), closed = false, closePromise
   const workers = new Map(), traceEvents = new Map()
   // Replay chunks are an outbox when archived by the host, files on local disk,
   // and plain memory otherwise. They never enter the local checkpoint file.
@@ -107,9 +110,10 @@ export async function createRunManager({
   }
   const attemptTrials = attempt => trials.filter(trial => trial.attempt_id === attempt.id).sort((a, b) => a.index - b.index)
   const activeTrial = attempt => attemptTrials(attempt).find(trial => trial.status === 'running')
-  const selectedTasks = run => catalogs[run.suite]
+  const selectedTasks = run => run.suite === 'custom' ? run.tasks : catalogs[run.suite]
+  const taskSetHash = run => run.suite === 'custom' ? digest(run.tasks) : hashes[run.suite]
   function compatible(run) {
-    if (run.environment_sha256 !== fingerprint.environment_sha256 || run.selected_tasks_sha256 !== hashes[run.suite]
+    if (run.environment_sha256 !== fingerprint.environment_sha256 || run.selected_tasks_sha256 !== taskSetHash(run)
       || run.suite_version !== SUITE_VERSION) throw fail('The benchmark environment or task set changed. Generate a new run to avoid mixing versions.', 409)
   }
   function attemptDetail(run, attempt) {
@@ -131,6 +135,14 @@ export async function createRunManager({
     if (!trial.result || !task || task.id !== trial.task_id) return {}
     return describeResult(task, trial.result)
   }
+  // A saved task plus what the agent will be told and the right answer.
+  function preview(task) {
+    return { instruction: task.instruction, request: clone(task.request), answer: clone(task.expected), expected_output: expectedOutput(task),
+      cheapest_total: cheapestTotal(task.store, task.request.quantity) }
+  }
+  function taskView(saved) {
+    return { ...clone(saved), preview: preview(buildCustomTask(saved)) }
+  }
   function runDetail(run) {
     return { ...clone(run), attempts: run.attempts.map(attempt => attemptDetail(run, attempt)) }
   }
@@ -150,7 +162,7 @@ export async function createRunManager({
     return { status: completed === run.task_ids.length ? 'complete' : current ? 'running' : 'ready', completed, total: run.task_ids.length, currentTask }
   }
   function traceState() {
-    return { dashboard_runs: clone(runs), dashboard_trials: clone(trials),
+    return { dashboard_runs: clone(runs), dashboard_trials: clone(trials), dashboard_tasks: clone(customTasks),
       dashboard_trace_events: [...traceEvents].flatMap(([trial_id, events]) => events.map(event => ({ trial_id, ...clone(event) }))),
       ...(traceArchive ? { dashboard_replay_chunks: [...replayChunks].flatMap(([trial_id, chunks]) => chunks.map(chunk => ({ trial_id, ...chunk }))) } : {}) }
   }
@@ -276,13 +288,16 @@ export async function createRunManager({
     const next = clone(state), ids = new Set(), tokens = new Set(), attempts = new Map()
     for (const run of next.dashboard_runs) {
       if (!isObject(run) || run.version !== 1 || typeof run.id !== 'string' || ids.has(run.id)
-        || !Object.hasOwn(catalogs, run.suite) || typeof run.name !== 'string' || run.name.length > 120
+        || !(Object.hasOwn(catalogs, run.suite) || run.suite === 'custom') || typeof run.name !== 'string' || run.name.length > 120
         || typeof run.environment_sha256 !== 'string' || typeof run.selected_tasks_sha256 !== 'string'
         || typeof run.suite_version !== 'string' || !Number.isFinite(Date.parse(run.created_at))
         || !Array.isArray(run.task_ids) || !run.task_ids.length || new Set(run.task_ids).size !== run.task_ids.length
         || !Array.isArray(run.attempts) || run.attempts.length > 5) throw fail('Invalid dashboard run checkpoint')
       ids.add(run.id)
-      if (run.selected_tasks_sha256 === hashes[run.suite]
+      if (run.suite === 'custom' && (!Array.isArray(run.tasks) || run.tasks.length !== run.task_ids.length
+        || run.tasks.some((task, index) => !isObject(task) || task.id !== run.task_ids[index] || !Number.isInteger(task.version) || !isObject(task.request) || !isObject(task.expected)))) throw fail('Invalid custom run checkpoint')
+      if (run.suite !== 'custom' && run.tasks !== undefined) throw fail('Invalid dashboard run checkpoint')
+      if (run.suite !== 'custom' && run.selected_tasks_sha256 === hashes[run.suite]
         && JSON.stringify(run.task_ids) !== JSON.stringify(catalogs[run.suite].map(task => task.id))) throw fail('Dashboard task identities do not match the pinned task set')
       for (const attempt of run.attempts) {
         if (!isObject(attempt) || typeof attempt.id !== 'string' || attempts.has(attempt.id)
@@ -320,6 +335,15 @@ export async function createRunManager({
       const records = next.dashboard_trials.filter(trial => trial.attempt_id === id).sort((a, b) => a.index - b.index)
       if (records.some((trial, index) => trial.index !== index || (trial.status === 'running' && index !== records.length - 1))) throw fail('Dashboard trials must be sequential')
     }
+    if (next.dashboard_tasks === undefined) next.dashboard_tasks = []
+    if (!Array.isArray(next.dashboard_tasks) || next.dashboard_tasks.length > CUSTOM_TASK_LIMIT) throw fail('Invalid custom task checkpoint')
+    const customIds = new Set()
+    next.dashboard_tasks = next.dashboard_tasks.map(saved => {
+      if (!isObject(saved) || customIds.has(saved.id) || !Number.isFinite(Date.parse(saved.created_at)) || !Number.isFinite(Date.parse(saved.updated_at))) throw fail('Invalid custom task checkpoint')
+      buildCustomTask(saved)
+      customIds.add(saved.id)
+      return { id: saved.id, version: saved.version, created_at: saved.created_at, updated_at: saved.updated_at, ...normalizeCustomTask(saved) }
+    })
     if (next.dashboard_trace_events === undefined) next.dashboard_trace_events = []
     if (!Array.isArray(next.dashboard_trace_events)) throw fail('Invalid traversal checkpoint')
     const eventIds = new Map()
@@ -350,7 +374,7 @@ export async function createRunManager({
     const next = validateState(state)
     await Promise.all([...workers.values()].map(worker => worker.close()))
     workers.clear()
-    runs = next.dashboard_runs; trials = next.dashboard_trials
+    runs = next.dashboard_runs; trials = next.dashboard_trials; customTasks = next.dashboard_tasks
     traceEvents.clear()
     for (const { trial_id, ...event } of next.dashboard_trace_events) {
       if (!traceEvents.has(trial_id)) traceEvents.set(trial_id, [])
@@ -382,7 +406,7 @@ export async function createRunManager({
     getLive: runId => serialized(async () => {
       const run = runById(runId)
       if (!run) throw fail('Run not found', 404)
-      const storeOf = taskId => catalogs[run.suite].find(task => task.id === taskId)?.store ?? null
+      const storeOf = taskId => selectedTasks(run).find(task => task.id === taskId)?.store ?? null
       return { run_id: run.id, server_time: iso(now()), agents: run.attempts.map(attempt => {
         const records = attemptTrials(attempt), current = activeTrial(attempt)
         const completed = records.filter(trial => trial.status === 'completed'), last = completed.at(-1)
@@ -397,15 +421,56 @@ export async function createRunManager({
     }),
     createRun: (input = {}) => serialized(async () => {
       const suite = input.suite ?? 'original30'
-      if (!Object.hasOwn(catalogs, suite)) throw fail('Choose original30 or all240')
+      if (!Object.hasOwn(catalogs, suite) && suite !== 'custom') throw fail('Choose original30, all240 or custom')
       const name = input.name ?? `Benchmark ${iso(now()).slice(0, 10)}`
       if (typeof name !== 'string' || !name.trim() || name.length > 120) throw fail('Use a run name of 1–120 characters')
+      let selected = catalogs[suite]
+      if (suite === 'custom') {
+        const ids = input.task_ids
+        if (!Array.isArray(ids) || !ids.length) throw fail('Choose at least one of your tasks for this run.')
+        if (ids.length > CUSTOM_RUN_LIMIT) throw fail(`A run can have at most ${CUSTOM_RUN_LIMIT} of your tasks.`)
+        if (new Set(ids).size !== ids.length) throw fail('Each task can be in a run only once.')
+        selected = ids.map(id => {
+          const saved = customTasks.find(task => task.id === id)
+          if (!saved) throw fail('One of the chosen tasks no longer exists. Refresh and try again.', 404)
+          return buildCustomTask(saved)
+        })
+      }
       const run = { version: 1, id: randomUUID(), name: name.trim(), suite, created_at: iso(now()), suite_version: SUITE_VERSION,
-        environment_sha256: fingerprint.environment_sha256, selected_tasks_sha256: hashes[suite],
-        task_ids: catalogs[suite].map(task => task.id), attempts: [] }
+        environment_sha256: fingerprint.environment_sha256, selected_tasks_sha256: suite === 'custom' ? digest(selected) : hashes[suite],
+        task_ids: selected.map(task => task.id), ...(suite === 'custom' ? { tasks: clone(selected) } : {}), attempts: [] }
       runs.push(run)
       try { await save() } catch (error) { runs = runs.filter(item => item !== run); throw error }
       return runDetail(run)
+    }),
+    listTasks: () => serialized(async () => ({ tasks: customTasks.map(taskView).reverse(), stores: customTaskOptions() })),
+    previewTask: input => serialized(async () => {
+      const task = buildCustomTask({ ...normalizeCustomTask(input), id: 'custom-preview00', version: 1 })
+      return preview(task)
+    }),
+    createTask: input => serialized(async () => {
+      if (customTasks.length >= CUSTOM_TASK_LIMIT) throw fail(`You can save up to ${CUSTOM_TASK_LIMIT} tasks. Delete one first.`, 409)
+      const fields = normalizeCustomTask(input)
+      const saved = { id: newCustomTaskId(randomUUID()), version: 1, created_at: iso(now()), updated_at: iso(now()), ...fields }
+      customTasks.push(saved)
+      try { await save({ captureWorkers: false }) } catch (error) { customTasks = customTasks.filter(item => item !== saved); throw error }
+      return taskView(saved)
+    }),
+    updateTask: (id, input) => serialized(async () => {
+      const index = customTasks.findIndex(task => task.id === id)
+      if (index === -1) throw fail('Task not found', 404)
+      const previous = customTasks[index]
+      const saved = { id, version: previous.version + 1, created_at: previous.created_at, updated_at: iso(now()), ...normalizeCustomTask(input) }
+      customTasks[index] = saved
+      try { await save({ captureWorkers: false }) } catch (error) { customTasks[index] = previous; throw error }
+      return taskView(saved)
+    }),
+    deleteTask: id => serialized(async () => {
+      const previous = customTasks
+      if (!customTasks.some(task => task.id === id)) throw fail('Task not found', 404)
+      customTasks = customTasks.filter(task => task.id !== id)
+      try { await save({ captureWorkers: false }) } catch (error) { customTasks = previous; throw error }
+      return { deleted: id }
     }),
     addAttempt: (runId, input) => serialized(async () => {
       const run = runById(runId)
