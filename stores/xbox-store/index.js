@@ -44,7 +44,7 @@ function signinWall(req, res, returnTo) {
   req.store.checkout.returnTo = returnTo
   res.redirect(P.signinUrl(res.locals.base))
 }
-const notFound = (req, res) => render(req, res, 'Page not found', P.simplePage({ title: 'Sorry, we can\'t find that page', html: `<p>The item may no longer be available.</p><a class="xb-btn xb-btn-buy" href="${res.locals.base}/">Go to Xbox home</a>` }), { status: 404 })
+const notFound = (req, res) => render(req, res, 'Page not found', P.simplePage({ title: 'Sorry, we can\'t find that page', html: `<p>The page or item you're looking for may have moved, or it may no longer be available.</p><form class="xb-404-search" action="${res.locals.base}/en-US/search/results" method="get" role="search"><label for="nf-q">Search Xbox.com</label><input id="nf-q" type="search" name="q" placeholder="Search games, consoles and accessories"><button type="submit" class="xb-btn xb-btn-grey">Search</button></form><p class="xb-404-links"><a class="xb-btn xb-btn-buy" href="${res.locals.base}/">Go to Xbox home</a> <a class="xb-btn xb-btn-grey" href="${res.locals.base}/en-US/games/all-games/console">Browse all games</a></p>` }), { status: 404 })
 
 // Reads the payment picker (purchase dialog and cart checkout share it). Returns { payment, billing, values, errors }.
 function readPayment(req, saved) {

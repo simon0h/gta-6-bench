@@ -5,6 +5,7 @@
 import { renderProductAsset } from '../../lib/product-asset-art.js'
 import { productGallery, productImage } from '../../lib/product-assets.js'
 import { keyArt, drawsKeyArt } from './key-art.js'
+import { codeCardArt, drawsCodeCard } from './code-card-art.js'
 
 const ROOT = '/xbox-store/shelf-art'
 const cache = new Map()
@@ -27,7 +28,7 @@ export function shelfArt(p, view) {
   if (!cache.has(key)) {
     if (cache.size > 600) cache.delete(cache.keys().next().value)
     // Games and add-ons get xbox.com-style full-bleed key art; devices and gift cards keep the product drawings.
-    cache.set(key, drawsKeyArt(p) ? keyArt(p, Number(view)) : renderProductAsset(descriptor(p), Number(view)))
+    cache.set(key, drawsKeyArt(p) ? keyArt(p, Number(view)) : drawsCodeCard(p) ? codeCardArt(p, Number(view)) : renderProductAsset(descriptor(p), Number(view)))
   }
   return cache.get(key)
 }

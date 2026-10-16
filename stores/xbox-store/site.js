@@ -6,7 +6,8 @@
 import { esc } from '../../lib/html.js'
 import { getOrder } from '../../lib/orders.js'
 import { MENU, FOOTER, LEGAL, ALL_MICROSOFT } from './site-data.js'
-import { CATALOG as PRODUCTS, productPath, isBuyable } from './data.js'
+import { heroArt, cardArt, coverCollage, coverPicks, consolesSvg } from './hero-art.js'
+import { CATALOG as PRODUCTS, productPath, isBuyable, COLLECTIONS } from './data.js'
 
 // ---------- chrome ----------
 export function megaNav(base) {
@@ -22,13 +23,13 @@ export function footerCols(base) {
 const href = (base, p) => p.startsWith('/') ? base + p : p
 const cta = (base, [label, path], cls = 'xs-btn') => `<a class="${cls}" href="${href(base, path)}">${esc(label)}</a>`
 function hero(base, pg) {
-  return `<section class="xs-hero xs-hero-${pg.tone || 'green'}"><div class="xs-hero-copy">${pg.eyebrow ? `<p class="xs-eyebrow">${esc(pg.eyebrow)}</p>` : ''}<h1>${esc(pg.h1)}</h1>${pg.intro ? `<p class="xs-lede">${esc(pg.intro)}</p>` : ''}${pg.ctas ? `<div class="xs-ctas">${pg.ctas.map((c, i) => cta(base, c, i ? 'xs-btn xs-btn-ghost' : 'xs-btn')).join('')}</div>` : ''}</div><div class="xs-hero-art" aria-hidden="true"><span></span><span></span><span></span></div></section>`
+  return `<section class="xs-hero xs-hero-${pg.tone || 'green'}"><div class="xs-hero-copy">${pg.eyebrow ? `<p class="xs-eyebrow">${esc(pg.eyebrow)}</p>` : ''}<h1>${esc(pg.h1)}</h1>${pg.intro ? `<p class="xs-lede">${esc(pg.intro)}</p>` : ''}${pg.ctas ? `<div class="xs-ctas">${pg.ctas.map((c, i) => cta(base, c, i ? 'xs-btn xs-btn-ghost' : 'xs-btn')).join('')}</div>` : ''}</div>${heroArt(pg) || '<div class="xs-hero-art" aria-hidden="true"><span></span><span></span><span></span></div>'}</section>`
 }
 function section(base, s, ctx) {
   const id = s.id ? ` id="${esc(s.id)}"` : ''
   let body = ''
   if (s.text) body += (Array.isArray(s.text) ? s.text : [s.text]).map(t => `<p>${esc(t)}</p>`).join('')
-  if (s.cards) body += `<div class="xs-cards${s.cards.length === 2 ? ' xs-cards-2' : ''}">${s.cards.map(c => `<article class="xs-card"${c.id ? ` id="${esc(c.id)}"` : ''}><div class="xs-card-art" aria-hidden="true"></div><div class="xs-card-body">${c.tag ? `<p class="xs-tag">${esc(c.tag)}</p>` : ''}<h3>${esc(c.h)}</h3>${c.text ? `<p>${esc(c.text)}</p>` : ''}${c.cta ? cta(base, c.cta, 'xs-link') : ''}</div></article>`).join('')}</div>`
+  if (s.cards) body += `<div class="xs-cards${s.cards.length === 2 ? ' xs-cards-2' : ''}">${s.cards.map(c => `<article class="xs-card"${c.id ? ` id="${esc(c.id)}"` : ''}>${cardArt(c)}<div class="xs-card-body">${c.tag ? `<p class="xs-tag">${esc(c.tag)}</p>` : ''}<h3>${esc(c.h)}</h3>${c.text ? `<p>${esc(c.text)}</p>` : ''}${c.cta ? cta(base, c.cta, 'xs-link') : ''}</div></article>`).join('')}</div>`
   if (s.list) body += `<ul class="xs-list">${s.list.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`
   if (s.table) body += `<div class="xs-table-wrap"><table class="xs-table"><thead><tr>${s.table[0].map(h => `<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${s.table.slice(1).map(r => `<tr>${r.map((c, i) => i ? `<td>${esc(c)}</td>` : `<th scope="row">${esc(c)}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`
   if (s.faq) body += `<div class="xs-faq">${s.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>`
@@ -42,7 +43,7 @@ function section(base, s, ctx) {
 const popularityOf = p => p.popularity ?? ({ '9p3h4968grsm': 17000, '9nnzsnhlr63l': 9000 })[p.id] ?? 0
 function productRow(base, { filter, empty, more, limit = 10, sort }, ctx) {
   const list = PRODUCTS.filter(filter).sort(sort || ((a, b) => popularityOf(b) - popularityOf(a)))
-  if (!list.length) return `<div class="xs-empty"><p class="xs-empty-title">${esc(empty || 'No games found.')}</p><p>This store's catalog only lists the titles shown on its game pages.</p>${more ? cta(base, more, 'xs-link') : ''}</div>`
+  if (!list.length) return `<div class="xs-empty"><p class="xs-empty-title">${esc(empty || 'No games found.')}</p><p>Check back soon for more.</p>${more ? cta(base, more, 'xs-link') : ''}</div>`
   return `<div class="xb-grid xs-row">${list.slice(0, limit).map(p => ctx.tile(base, p)).join('')}</div>${more ? cta(base, more, 'xs-link xs-more') : ''}`
 }
 const countLabel = (label, filter) => `${label} (${PRODUCTS.filter(filter).length})`
@@ -96,10 +97,10 @@ export const PAGES = {
   '/en-US/games': {
     h1: 'XBOX games', eyebrow: 'GAMES', intro: 'Explore new releases, best sellers and the games coming to Xbox Game Pass.', ctas: [['Join Game Pass', '/en-US/xbox-game-pass'], ['Browse Games', '/en-US/xbox-game-pass/games']],
     sections: [
-      { h: 'New releases', products: { filter: p => isGame(p) && p.ribbon !== 'PRE-ORDER' && isBuyable(p), empty: 'No new releases are listed in this store right now.', more: ['EXPLORE MORE', '/en-US/games/all-games/console'] } },
-      { h: 'Best sellers', sub: 'Pre-orders available now', products: { filter: buyableGames, empty: 'No best sellers are listed in this store right now.', more: ['EXPLORE MORE', '/en-US/games/all-games/console'] } },
+      { h: 'New releases', products: { filter: p => isGame(p) && p.ribbon !== 'PRE-ORDER' && isBuyable(p) && (COLLECTIONS.find(c => c.id === 'new-releases')?.test(p) ?? true), sort: (a, b) => new Date(b.release || 0) - new Date(a.release || 0), empty: 'No new releases are available right now.', more: ['EXPLORE MORE', '/en-US/games/all-games/console'] } },
+      { h: 'Best sellers', sub: 'Pre-orders available now', products: { filter: buyableGames, empty: 'No best sellers are available right now.', more: ['EXPLORE MORE', '/en-US/games/all-games/console'] } },
       { h: 'XBOX GAME PASS', band: true, text: 'Play hundreds of high-quality games on console, PC and cloud with Xbox Game Pass.', ctas: [['EXPLORE XBOX GAME PASS', '/en-US/xbox-game-pass']] },
-      { h: 'Recently added to XBOX Game Pass', products: { filter: p => isGame(p) && (p.subscriptions || []).length > 0, empty: 'No Game Pass titles are listed in this store.', more: ['EXPLORE MORE', '/en-US/xbox-game-pass/games'] } },
+      { h: 'Recently added to XBOX Game Pass', products: { filter: p => isGame(p) && (p.subscriptions || []).length > 0, empty: 'No Game Pass titles are available right now.', more: ['EXPLORE MORE', '/en-US/xbox-game-pass/games'] } },
       { h: 'Buy once, play anywhere', text: 'Xbox Play Anywhere games are yours to play on Xbox consoles and Windows PCs with one purchase, with progress that goes with you.', ctas: [['EXPLORE XBOX PLAY ANYWHERE', '/en-US/games/xbox-play-anywhere']] },
       { h: 'Browse by genre', html: base => `<nav class="xs-chips" aria-label="Genres">${[['Action and adventure', 'Action & adventure'], ['Platformer', 'Platformer'], ['Family and kids', 'Family & kids'], ['Racing and flying', 'Racing & flying'], ['Role-playing', 'Role playing'], ['Shooter', 'Shooter'], ['Sports', 'Sports'], ['Strategy', 'Strategy']].map(([l, v]) => `<a href="${base}/en-US/games/genre/${encodeURIComponent(v)}">${esc(l)}</a>`).join('')}</nav>` },
       { h: 'Enjoy more ways to play with XBOX', cards: [
@@ -132,7 +133,7 @@ export const PAGES = {
   '/en-US/xbox-game-pass/deals': {
     h1: 'Deals with Game Pass', eyebrow: 'XBOX GAME PASS', intro: 'Game Pass members save on select games, add-ons and DLC in the Microsoft Store.', ctas: [['JOIN GAME PASS', '/en-US/xbox-game-pass']], crumbs: [['Game Pass', '/en-US/xbox-game-pass']],
     sections: [
-      { h: 'Member deals', products: { filter: p => p.listPrice && p.listPrice > p.price, empty: 'No member deals are listed in this store right now.', more: ['SEE ALL DEALS', '/en-US/promotions/sales/sales-and-specials'] } },
+      { h: 'Member deals', products: { filter: p => p.listPrice && p.listPrice > p.price, empty: 'No member deals are available right now.', more: ['SEE ALL DEALS', '/en-US/promotions/sales/sales-and-specials'] } },
       { h: 'How member discounts work', list: ['Discounts apply to eligible games and add-ons while your membership is active.', 'Prices shown at checkout include the member discount for your signed-in account.', 'Some discounts are only available with Ultimate or Premium.'] },
       GP_FAQ,
     ],
@@ -152,30 +153,30 @@ export const PAGES = {
     h1: 'Play on Xbox.com', eyebrow: 'XBOX CLOUD GAMING', intro: 'Jump into games instantly in your browser with Xbox Cloud Gaming. Sign in with your Microsoft account to see your library and Game Pass games.', ctas: [['JOIN GAME PASS', '/en-US/xbox-game-pass'], ['EXPLORE CLOUD GAMING', '/en-US/cloud-gaming']],
     sections: [
       { h: 'Your library', html: base => `<div class="xs-empty"><p class="xs-empty-title">Sign in to see your games</p><p>Your purchases appear in My library.</p><a class="xs-link" href="${base}/account/library">My library</a></div>` },
-      { h: 'Cloud games', products: { filter: p => (p.platforms || []).includes('Cloud'), empty: 'No cloud-playable games are listed in this store.', more: ['Shop all console games', '/en-US/games/all-games/console'] } },
+      { h: 'Cloud games', products: { filter: p => (p.platforms || []).includes('Cloud'), empty: 'No cloud-playable games are available right now.', more: ['Shop all console games', '/en-US/games/all-games/console'] } },
     ],
   },
   '/en-US/games/xbox-play-anywhere': simple('GAMES', 'XBOX PLAY ANYWHERE', 'Buy once, play anywhere: play your digital games on Xbox consoles and Windows PCs, with saves, add-ons and achievements that go with you.', [
     { h: 'What is XBOX Play Anywhere?', cards: [card('Buy once, play anywhere', 'One purchase of a Play Anywhere game lets you play it on Xbox console and Windows PC.'), card('Progress goes with you', 'Your saves, add-ons and achievements move with you between devices.')] },
-    { h: '1,000 games and growing', products: { filter: p => (p.capabilities || []).includes('Xbox Play Anywhere'), empty: 'No Xbox Play Anywhere titles are listed in this store.', more: ['BROWSE ALL GAMES', '/en-US/games/all-games/console'] } },
+    { h: '1,000 games and growing', products: { filter: p => (p.capabilities || []).includes('Xbox Play Anywhere'), empty: 'No Xbox Play Anywhere titles are available right now.', more: ['BROWSE ALL GAMES', '/en-US/games/all-games/console'] } },
     { h: 'Ready to play?', cards: [card('Play on XBOX Series X|S', '', 'EXPLORE CONSOLES', '/en-US/consoles'), card('Play on PC', '', 'DOWNLOAD THE APP', '/en-US/xbox-on-pc'), card('Play on gaming handhelds', '', 'LEARN MORE', '/en-US/xbox-on-handhelds')] },
     { h: 'Enjoy more ways to play with Game Pass', ctas: [['EXPLORE GAME PASS', '/en-US/xbox-game-pass']] },
   ], { ctas: [['BROWSE ALL GAMES', '/en-US/games/all-games/console']] }),
   '/en-US/games/free-to-play': simple('GAMES', 'FREE-TO-PLAY GAMES ON XBOX', 'Jump in for free. Online multiplayer is not required to play free-to-play games on Xbox consoles.', [
-    { h: 'Most-played free games', products: { filter: p => p.price === 0, empty: 'No free-to-play games are listed in this store.', more: ['LEARN MORE', '/en-US/games/all-games/console'] } },
+    { h: 'Most-played free games', products: { filter: p => p.price === 0, empty: 'No free-to-play games are available right now.', more: ['LEARN MORE', '/en-US/games/all-games/console'] } },
     { h: 'Explore more free-to-play genres on XBOX', html: base => `<nav class="xs-chips" aria-label="Free-to-play genres">${['ACTION ADVENTURE GAMES', 'FIGHTING GAMES', 'STRATEGY GAMES', 'KIDS & FAMILY GAMES', 'RACING & FLYING', 'ROLE PLAYING GAMES', 'SHOOTER GAMES', 'SPORTS GAMES'].map(l => `<a href="${base}/en-US/games/genres">${esc(l)}</a>`).join('')}</nav>` },
     { h: 'In-game benefits', text: 'Game Pass Ultimate members get in-game content and perks in popular free-to-play games.', ctas: [['JOIN GAME PASS', '/en-US/xbox-game-pass']] },
     { h: 'POWER YOUR DREAMS', ctas: [['EXPLORE CONSOLES', '/en-US/consoles']] },
   ]),
   '/en-US/games/optimized': simple('GAMES', 'OPTIMIZED FOR XBOX SERIES X|S', 'Games built to take advantage of the speed and power of Xbox Series X|S.', [
-    { h: 'Featured games Optimized for XBOX Series X|S', products: { filter: p => isGame(p) && (p.capabilities || []).some(c => /Optimized/.test(c)), empty: 'No optimized games are listed in this store.', more: ['BROWSE OPTIMIZED GAMES', '/en-US/games/all-games/console'] } },
+    { h: 'Featured games Optimized for XBOX Series X|S', products: { filter: p => isGame(p) && (p.capabilities || []).some(c => /Optimized/.test(c)), empty: 'No optimized games are available right now.', more: ['BROWSE OPTIMIZED GAMES', '/en-US/games/all-games/console'] } },
     { h: 'Amazing visual fidelity', text: 'Up to 4K resolution, HDR and ray tracing on Xbox Series X.' },
     { h: 'Next-gen framerates', text: 'Up to 120 frames per second in supported games.' },
     { h: 'Faster load times', text: 'The custom SSD gets you into your games faster, and Quick Resume lets you switch between games.' },
     { h: 'XBOX Smart Delivery', text: 'Buy a supported game once and always get the best version for your console.' },
   ], { ctas: [['BROWSE OPTIMIZED GAMES', '/en-US/games/all-games/console']] }),
   '/en-US/handhelds/handheld-compatibility': simple('GAMES', 'Optimized for handhelds', 'Find games that are verified to play well on Windows gaming handhelds, with controller support, readable text and handheld-friendly settings.', [
-    { h: 'Handheld compatible games', products: { filter: p => ['Optimized', 'Compatible'].includes(p.handheld), empty: 'No handheld-verified games are listed in this store.', more: ['Shop all PC games', '/en-US/games/all-games/pc'] } },
+    { h: 'Handheld compatible games', products: { filter: p => ['Optimized', 'Compatible'].includes(p.handheld), empty: 'No handheld-verified games are available right now.', more: ['Shop all PC games', '/en-US/games/all-games/pc'] } },
     { h: 'What the labels mean', list: ['Optimized for handhelds: plays great with default settings on a handheld.', 'Playable: may need minor adjustments, such as text size or an on-screen keyboard.', 'Unsupported: not recommended on handhelds.'] },
   ], { ctas: [['XBOX on handhelds', '/en-US/xbox-on-handhelds']] }),
   '/en-US/games/backward-compatibility': simple('GAMES', 'XBOX Backward Compatible Games Library', 'Play thousands of Xbox One, Xbox 360 and original Xbox games on Xbox Series X|S.', [
@@ -186,8 +187,8 @@ export const PAGES = {
   '/en-US/promotions/sales/sales-and-specials': {
     h1: 'XBOX Sales & Specials', eyebrow: 'DEALS', intro: 'Find the latest deals on digital games, controllers and accessories.', ctas: [['SEE ALL DEALS', '/en-US/games/all-games/console']],
     sections: [
-      { h: 'This week’s digital game deals', products: { filter: p => p.type !== 'hardware' && p.listPrice && p.listPrice > p.price, limit: 15, empty: 'No digital game deals are listed in this store this week.', more: ['SHOP MORE', '/en-US/games/collection/deals'] } },
-      { h: 'Controllers & accessories on sale', products: { filter: p => p.type === 'hardware' && p.listPrice && p.listPrice > p.price, empty: 'No controllers or accessories are on sale in this store.', more: ['SHOP MORE', '/en-US/store/b/xbox-accessories?price=sale'] } },
+      { h: 'This week’s digital game deals', products: { filter: p => p.type !== 'hardware' && p.listPrice && p.listPrice > p.price, limit: 15, empty: 'No digital game deals are available right now.', more: ['SHOP MORE', '/en-US/games/collection/deals'] } },
+      { h: 'Controllers & accessories on sale', products: { filter: p => p.type === 'hardware' && p.listPrice && p.listPrice > p.price, empty: 'No controllers or accessories are on sale right now.', more: ['SHOP MORE', '/en-US/store/b/xbox-accessories?price=sale'] } },
       { h: 'Deals with Game Pass', band: true, text: 'Members save on select games and add-ons.', ctas: [['JOIN GAME PASS', '/en-US/xbox-game-pass'], ['Deals with Game Pass', '/en-US/xbox-game-pass/deals']] },
       { h: 'Receive an XBOX gift card? Redeem your code to apply on digital games.', ctas: [['REDEEM CODE', '/en-US/redeem']] },
     ],
@@ -252,7 +253,7 @@ export const PAGES = {
   '/en-US/accessories': {
     h1: 'Accessories', eyebrow: 'DEVICES', intro: 'Controllers, headsets, storage and more for Xbox consoles, PC and mobile.', ctas: [['Design your controller', '/en-US/xbox-design-lab'], ['Where to buy', '/en-US/where-to-buy#accessories']],
     sections: [
-      { get h() { return countLabel('Accessories', isAccessory) }, html: (base, ctx) => `<nav class="xs-chips" aria-label="Accessory categories">${ACCESSORY_CHIPS.map(([l, id]) => `<a href="${base}/en-US/accessories#${id}">${esc(l)}</a>`).join('')}</nav>${PRODUCTS.some(isAccessory) ? productRow(base, { filter: isAccessory, limit: 10, more: ['SHOP ALL ACCESSORIES', '/en-US/store/b/xbox-accessories'] }, ctx) : `<div class="xs-empty"><p class="xs-empty-title">${PRODUCTS.some(p => p.type === 'hardware') ? 'Accessories are listed in Shop all products.' : 'No accessories are sold in this store.'}</p><p>Try a different category or clear your filters.</p><a class="xs-link" href="${base}/en-US/games/browse?type=hardware">CLEAR FILTERS</a></div>`}` },
+      { get h() { return countLabel('Accessories', isAccessory) }, html: (base, ctx) => `<nav class="xs-chips" aria-label="Accessory categories">${ACCESSORY_CHIPS.map(([l, id]) => `<a href="${base}/en-US/accessories#${id}">${esc(l)}</a>`).join('')}</nav>${PRODUCTS.some(isAccessory) ? productRow(base, { filter: isAccessory, limit: 10, more: ['SHOP ALL ACCESSORIES', '/en-US/store/b/xbox-accessories'] }, ctx) : `<div class="xs-empty"><p class="xs-empty-title">${PRODUCTS.some(p => p.type === 'hardware') ? 'Accessories are listed in Shop all products.' : 'No accessories match your selection.'}</p><p>Try a different category or clear your filters.</p><a class="xs-link" href="${base}/en-US/games/browse?type=hardware">CLEAR FILTERS</a></div>`}` },
       { h: 'Controllers', id: 'controllers', text: 'Xbox Wireless Controllers, Elite Series 2 and Xbox Adaptive Controller.', ctas: [['XBOX Design Lab', '/en-US/xbox-design-lab']], products: { filter: inCategory('Controllers', 'PC accessories'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Controllers') } },
       { h: 'Mobile gaming accessories', id: 'mobile', text: 'Clips and controllers for playing on phones and tablets.', products: { filter: inCategory('Mobile gaming'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Mobile gaming') } },
       { h: 'Handheld gaming accessories', id: 'handheld', text: 'Cases and accessories for Windows gaming handhelds.', products: { filter: inCategory('Handheld gaming'), limit: 5, empty: 'No items in this category right now.', more: shopCategory('Handheld gaming') } },
@@ -355,16 +356,14 @@ export const PAGES = {
     { h: 'More support options', ctas: [['Contact support', '/en-US/support/contact'], ['Get self-help support', '/en-US/support']] },
   ]),
   '/en-US/store/b/gift-cards': simple('MICROSOFT STORE', 'Microsoft and XBOX Gift Cards', 'Give the gift of games, apps and more. Gift cards add money to a Microsoft account to spend in Microsoft Store and on Xbox.', [
-    { h: 'Shop gift cards', cards: [card('The perfect gift for gamers', 'Xbox gift cards can be used for games, add-ons and Game Pass.'), card('Giving made easy', 'Send a digital code by email or give a physical card.'), card('Gift Card FAQ', 'Answers to common gift card questions.', 'Read the FAQ', '/en-US/store/b/gift-cards#faq'), card('Redeem a gift card', 'Add a gift card to your Microsoft account balance.', 'Learn more', '/en-US/redeem')], html: (base, ctx) => PRODUCTS.some(p => p.type === 'gift-card') ? productRow(base, { filter: p => p.type === 'gift-card', limit: 10, sort: (a, b) => a.rank - b.rank, more: ['SHOP ALL GIFT CARDS', '/en-US/search/results?type=gift-cards'] }, ctx) : `<div class="xs-empty"><p class="xs-empty-title">Gift cards are not sold in this store.</p><p>You can still redeem an Xbox or Microsoft gift card code.</p><a class="xs-link" href="${base}/en-US/redeem">Redeem a code</a></div>` },
+    { h: 'Shop gift cards', cards: [card('The perfect gift for gamers', 'Xbox gift cards can be used for games, add-ons and Game Pass.'), card('Giving made easy', 'Send a digital code by email or give a physical card.'), card('Gift Card FAQ', 'Answers to common gift card questions.', 'Read the FAQ', '/en-US/store/b/gift-cards#faq'), card('Redeem a gift card', 'Add a gift card to your Microsoft account balance.', 'Learn more', '/en-US/redeem')], html: (base, ctx) => PRODUCTS.some(p => p.type === 'gift-card') ? productRow(base, { filter: p => p.type === 'gift-card', limit: 10, sort: (a, b) => a.rank - b.rank, more: ['SHOP ALL GIFT CARDS', '/en-US/search/results?type=gift-cards'] }, ctx) : `<div class="xs-empty"><p class="xs-empty-title">Gift cards are currently unavailable online.</p><p>You can still redeem an Xbox or Microsoft gift card code.</p><a class="xs-link" href="${base}/en-US/redeem">Redeem a code</a></div>` },
     { h: 'Give 100+ games with Game Pass', ctas: [['Join Game Pass', '/en-US/xbox-game-pass']] },
     { h: 'Frequently Asked Questions', id: 'faq', faq: [['What can I purchase with an XBOX gift card?', 'Games, add-ons, subscriptions such as Game Pass, movies and apps in Microsoft Store on Xbox and Windows.'], ['Where can you use an XBOX or Microsoft gift card?', 'Redeem it to your Microsoft account, then use the balance in Microsoft Store on Xbox, Windows and the web.'], ['How do you gift XBOX Game Pass?', 'Buy a Game Pass gift card or digital code and send it to the recipient.']] },
     STORE_WHY,
   ]),
   '/en-US/store/locations/find-a-store': simple('MICROSOFT STORE', 'Microsoft Experience Centers', 'Visit us to explore the latest Microsoft devices, get expert support and join in-person gaming events.', [
-    { h: 'Microsoft Experience Center - Fifth Avenue', html: () => `<address class="xs-address">677 Fifth Avenue, New York, NY 10022-4210</address>`, ctas: [['Book an appointment', '/en-US/contactus']] },
-    { h: 'Expert support experience like no other', text: 'Get hands-on help and device support from Microsoft experts.' },
-    { h: 'In-person gaming events', text: 'Join community events and tournaments.' },
-    { h: 'Best-in-class devices', text: 'Try Surface, Xbox and Windows devices.' },
+    { h: 'Microsoft Experience Center - Fifth Avenue', html: () => `<div class="xs-store-card"><address class="xs-address">677 Fifth Avenue, New York, NY 10022-4210<br>(212) 824-3100</address><dl class="xs-hours"><dt>Monday – Saturday</dt><dd>10:00 AM – 8:00 PM</dd><dt>Sunday</dt><dd>11:00 AM – 6:00 PM</dd></dl></div>`, ctas: [['Book an appointment', '/en-US/contactus']] },
+    { h: 'Why visit', cards: [card('Expert support experience like no other', 'Get hands-on help and device support from Microsoft experts.'), card('In-person gaming events', 'Join community events and tournaments.'), card('Best-in-class devices', 'Try Surface, Xbox and Windows devices.')] },
     { h: 'Frequently asked questions', faq: [['What is a Microsoft Experience Center?', 'A Microsoft location where you can explore products, get support and attend events.'], ['How do I get help if I am unable to come in to the Microsoft Experience Center?', 'Contact Microsoft Support online.'], ['Can I return products at the Microsoft Experience Center?', 'Returns for online orders are handled online; see the returns policy.'], ['Will you open any other stores?', 'There are no other Microsoft retail stores announced at this time.']] },
   ]),
 }
@@ -414,10 +413,10 @@ const EXTRA_SITEMAP = [
 ]
 export function sitemapPage(base) {
   const block = (title, links) => `<section class="xs-sm-block"><h2>${esc(title)}</h2><ul>${links.map(([l, p]) => `<li><a href="${base}${p}">${esc(l)}</a></li>`).join('')}</ul></section>`
-  return `<div class="xs-page"><section class="xs-hero xs-hero-light"><div class="xs-hero-copy"><p class="xs-eyebrow">XBOX</p><h1>Sitemap</h1><p class="xs-lede">Every section of this Xbox Store, from Game Pass and games to support and Microsoft Store policies.</p></div></section><div class="xs-sitemap">
+  return `<div class="xs-page"><section class="xs-hero xs-hero-light"><div class="xs-hero-copy"><p class="xs-eyebrow">XBOX</p><h1>Sitemap</h1><p class="xs-lede">Find your way around Xbox.com, from Game Pass and games to support and Microsoft Store policies.</p></div></section><div class="xs-sitemap">
   ${block('Home', [['Xbox home', '/']])}
-  ${MENU.map(m => m.groups.map(g => block(m.groups.length > 1 || g.title !== m.label ? `${m.label}: ${g.title}` : m.label, g.links.map(([l, p]) => [l, p]))).join('')).join('')}
-  ${FOOTER.map(c => block(`Footer: ${c.title}`, c.links)).join('')}
+  ${MENU.map(m => m.groups.map(g => block({ Devices: 'All devices', Shop: 'Shop Xbox', Support: 'Xbox Support', Account: 'Your account', Developers: 'Xbox developers' }[g.title] || g.title, g.links.map(([l, p]) => [l, p]))).join('')).join('')}
+  ${FOOTER.map(c => block(c.title === 'Microsoft Store' ? 'Shop Microsoft Store' : c.title === 'For Developers' ? 'Xbox for developers' : c.title, c.links)).join('')}
   ${block('Legal', LEGAL)}
   ${EXTRA_SITEMAP.map(([t, l]) => block(t, l)).join('')}
   </div></div>`
@@ -447,9 +446,12 @@ export function homeHero(base) {
     { id: 'consoles', cls: 'xs-slide-hw', eyebrow: 'XBOX SERIES X|S', h: 'Power your dreams', text: 'The fastest, most powerful Xbox consoles.', ctas: [['SHOP CONSOLES', '/en-US/consoles'], ['COMPARE CONSOLES', '/en-US/consoles/compare']] },
   ]
   return `<section class="xs-carousel" aria-roledescription="carousel" aria-label="Featured">
-  <div class="xs-slides">${slides.map((s, i) => `<article class="xs-slide ${s.cls}" id="slide-${s.id}" aria-roledescription="slide" aria-label="${i + 1} of ${slides.length}"><div class="xs-slide-copy"><p class="xs-eyebrow">${esc(s.eyebrow)}</p><h2>${esc(s.h)}</h2><p>${esc(s.text)}</p><div class="xs-ctas">${s.ctas.map((c, j) => `<a class="xs-btn${j ? ' xs-btn-ghost' : ''}" href="${base}${c[1]}">${esc(c[0])}</a>`).join('')}</div></div>${s.id === 'gta' && gta ? `<a class="xs-slide-cover" href="${base}${productPath('', gta)}" aria-label="View Grand Theft Auto VI"><img src="/static/reference/xbox-store/gta-vi-cover.png" alt="Grand Theft Auto VI cover art"></a>` : ''}${s.id === 'outer-worlds' && outer ? `<a class="xs-slide-cover" href="${base}${productPath('', outer)}" aria-label="View The Outer Worlds 2"><img src="/xbox-store/shelf-art/${outer.id}/0.svg" alt="The Outer Worlds 2 cover art"></a>` : ''}</article>`).join('')}</div>
-  <nav class="xs-dots" aria-label="Choose slide">${slides.map((s, i) => `<a href="#slide-${s.id}" aria-label="Go to slide ${i + 1}: ${esc(s.h)}"></a>`).join('')}</nav></section>`
+  <div class="xs-slides">${slides.map((s, i) => `<article class="xs-slide ${s.cls}" id="slide-${s.id}" aria-roledescription="slide" aria-label="${i + 1} of ${slides.length}"><div class="xs-slide-copy"><p class="xs-eyebrow">${esc(s.eyebrow)}</p><h2>${esc(s.h)}</h2><p>${esc(s.text)}</p><div class="xs-ctas">${s.ctas.map((c, j) => `<a class="xs-btn${j ? ' xs-btn-ghost' : ''}" href="${base}${c[1]}">${esc(c[0])}</a>`).join('')}</div></div>${s.id === 'gta' && gta ? `<a class="xs-slide-cover" href="${base}${productPath('', gta)}" aria-label="View Grand Theft Auto VI"><img src="/static/reference/xbox-store/gta-vi-cover.png" alt="Grand Theft Auto VI cover art"></a>` : ''}${s.id === 'outer-worlds' && outer ? `<a class="xs-slide-cover" href="${base}${productPath('', outer)}" aria-label="View The Outer Worlds 2"><img src="/xbox-store/shelf-art/${outer.id}/0.svg" alt="The Outer Worlds 2 cover art"></a>` : ''}${s.id === 'gamepass' ? coverCollage(coverPicks(p => (p.subscriptions || []).length > 0, 9), 'xs-collage-slide') : ''}${s.id === 'consoles' ? `<div class="xs-slide-device" aria-hidden="true">${consolesSvg()}</div>` : ''}</article>`).join('')}</div>
+  <nav class="xs-dots" aria-label="Choose slide">${slides.map((s, i) => `<a href="#slide-${s.id}" aria-label="Go to slide ${i + 1}: ${esc(s.h)}"></a>`).join('')}</nav><script>${CAROUSEL_JS}</script></section>`
 }
+// Keeps the active dot in step with the visible slide, and moves the carousel sideways on a dot click
+// instead of jumping the page to the slide's anchor. The dots and slides still work without it.
+const CAROUSEL_JS = `(function(){var c=document.currentScript.parentNode,r=c.querySelector('.xs-slides'),n=c.querySelector('.xs-dots'),d=[].slice.call(n.querySelectorAll('a'));n.classList.add('js');function u(){var i=Math.round(r.scrollLeft/Math.max(1,r.clientWidth));d.forEach(function(a,j){a.classList.toggle('is-active',j===i);a.setAttribute('aria-current',j===i?'true':'false')})}r.addEventListener('scroll',u,{passive:true});d.forEach(function(a,j){a.addEventListener('click',function(e){e.preventDefault();r.scrollTo({left:j*r.clientWidth,behavior:'smooth'})})});u()})()`
 const ICON_USER = 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21a8 8 0 0 1 16 0'
 export function shopStrip(base, user) {
   const items = [['XBOX GAME PASS', '/en-US/xbox-game-pass', 'M4 5h16v14H4z M8 9h8 M8 13h5'], ['GAMES', '/en-US/games', 'M6 8h12a3 3 0 0 1 3 3v2a3 3 0 0 1-5 2l-1-1H9l-1 1a3 3 0 0 1-5-2v-2a3 3 0 0 1 3-3z'], ['CONSOLES', '/en-US/consoles', 'M8 3h8v18H8z M12 7v1'], ['ACCESSORIES', '/en-US/accessories', 'M4 14a8 8 0 0 1 16 0v4h-4v-5 M4 18v-4h4v5'], ['DEALS', '/en-US/promotions/sales/sales-and-specials', 'M3 12l9-9h9v9l-9 9z M16 8h.01'], ['REDEEM CODE', '/en-US/redeem', 'M3 7h18v10H3z M7 12h10'], ['WISH LIST', '/en-US/wishlist', 'M12 20s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z'], user ? ['MY ACCOUNT', '/account', ICON_USER] : ['SIGN IN', '/login.live.com/oauth20_authorize.srf?prompt=select_account', ICON_USER]]
