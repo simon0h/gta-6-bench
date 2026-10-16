@@ -171,8 +171,10 @@ can be saved and up to 100 used in one run.
 
 The Overview tab of a run page shows where each agent is right now: its current task and
 store, how long it has been running, the page it is on (home, search results, product, cart,
-checkout, order placed, sign-in or other browsing), which of those steps it has
-reached, its last click or form action, and its most recent pages. It refreshes
+checkout, order placed, sign-in or other browsing), a timeline of the pages it
+went through in order (up to the last eight, each with how far into the task it
+opened, the current one marked "Now" with its last click or form action), and how
+many pages it has opened. It refreshes
 every three seconds while an agent is shopping, every fifteen seconds otherwise,
 and pauses while the browser tab is hidden. **View traversal** opens the full path.
 

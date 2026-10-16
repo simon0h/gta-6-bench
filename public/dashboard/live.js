@@ -7,8 +7,6 @@
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const FAST = 3000, SLOW = 15000
   const kinds = { home: 'Home page', search: 'Search results', product: 'Product page', cart: 'Cart', checkout: 'Checkout', ordered: 'Order placed', account: 'Sign-in / account', browse: 'Browsing' }
-  const stages = ['home', 'search', 'product', 'cart', 'checkout', 'ordered']
-  const stageNames = { home: 'Home', search: 'Search', product: 'Product', cart: 'Cart', checkout: 'Checkout', ordered: 'Order placed' }
   const actions = { click: 'Clicked', submit: 'Submitted', change: 'Changed field' }
   const stores = {
     amazon: 'Amazon', argos: 'Argos', bestbuy: 'Best Buy', chewy: 'Chewy', coupang: 'Coupang', 'eb-games-au': 'EB Games', 'game-uk': 'GAME',
@@ -37,20 +35,31 @@
     const agentName = key => agents[key]?.name || key
     const agentIcon = key => agents[key]?.icon || ''
 
+    // The pages the agent went through, oldest first, as a timeline. Each stop
+    // shows how far into the task it opened; the last one is where it is now.
+    function timeline(current, live) {
+      const trail = live.trail?.length ? live.trail : [live.page]
+      const started = Date.parse(current.started_at)
+      const at = value => Number.isFinite(started) && Number.isFinite(Date.parse(value)) ? `${duration(Date.parse(value) - started)} in` : ''
+      const stops = trail.map((stop, index) => {
+        const last = index === trail.length - 1
+        const action = last && live.action && Date.parse(live.action.at) >= Date.parse(stop.at)
+          ? `<span class="live-step-action">${escape(actions[live.action.kind] || 'Acted')}${live.action.label ? ` “${escape(live.action.label)}”` : ''}</span>` : ''
+        return `<li class="${last ? 'current' : ''}"${last ? ' aria-current="step"' : ''}><span class="live-step-dot" aria-hidden="true"></span><div class="live-step-main"><strong>${escape(kinds[stop.kind] || 'Page')}</strong><code title="${escape(stop.path)}">${escape(stop.path)}</code>${action}</div><span class="live-step-time">${last ? 'Now' : escape(at(stop.at))}</span></li>`
+      }).join('')
+      const earlier = live.pages > trail.length ? '<p class="live-earlier">Earlier pages are in View traversal.</p>' : ''
+      return `<div class="live-timeline"><span class="live-label">Timeline</span>${earlier}<ol>${stops}</ol></div>`
+    }
+
     function position(current) {
       const live = current.position
       if (current.recorded === false) return '<p class="live-quiet">This task started before location tracking, so its position is unknown.</p>'
       if (!live?.page) return '<p class="live-quiet">Opening the store…</p>'
-      const seen = new Set(live.seen || [])
-      const strip = stages.map(stage => `<li class="${live.page.kind === stage ? 'current' : seen.has(stage) ? 'seen' : ''}"${live.page.kind === stage ? ' aria-current="step"' : ''}>${escape(stageNames[stage])}</li>`).join('')
-      const trail = (live.trail || []).map(stop => `<li title="${escape(stop.path)}">${escape(stageNames[stop.kind] || kinds[stop.kind] || 'Page')}</li>`).join('')
       const action = live.action
         ? `${escape(actions[live.action.kind] || 'Acted')}${live.action.label ? ` “${escape(live.action.label)}”` : ''} · <span data-live-since="${escape(live.action.at)}"></span>`
         : 'No clicks or form entries yet'
-      return `<div class="live-now"><span class="live-label">Now on</span><strong>${escape(kinds[live.page.kind] || 'Page')}</strong><code title="${escape(live.page.path)}">${escape(live.page.path)}</code></div>
-        <ol class="live-stages" aria-label="Shopping steps reached">${strip}</ol>
-        <dl class="live-facts"><div><dt>Last action</dt><dd>${action}</dd></div><div><dt>Last activity</dt><dd>${live.last_at ? `<span data-live-since="${escape(live.last_at)}"></span>` : '—'}</dd></div><div><dt>Pages opened</dt><dd>${escape(live.pages)}</dd></div></dl>
-        ${trail ? `<div class="live-trail"><span class="live-label">Recent pages</span><ol>${trail}</ol></div>` : ''}`
+      return `${timeline(current, live)}
+        <dl class="live-facts"><div><dt>Last action</dt><dd>${action}</dd></div><div><dt>Last activity</dt><dd>${live.last_at ? `<span data-live-since="${escape(live.last_at)}"></span>` : '—'}</dd></div><div><dt>Pages opened</dt><dd>${escape(live.pages)}</dd></div></dl>`
     }
 
     function card(entry, index) {
