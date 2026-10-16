@@ -40,3 +40,7 @@ function revealLinkedDetails() {
 }
 window.addEventListener('hashchange', revealLinkedDetails)
 revealLinkedDetails()
+// On phones the filter rail starts collapsed (like the app's "Sort & Filter" sheet); tap a heading to open it.
+if (window.matchMedia('(max-width: 820px)').matches) {
+  document.querySelectorAll('.wm-facets details[open]').forEach(d => { if (!d.querySelector('input:checked:not([value=""])')) d.open = false })
+}

@@ -5,7 +5,7 @@ import { shelfImage, shelfGallery } from './shelf.js'
 // Assortment items (shelf.js) are not part of the evidence-backed image catalog; they use their own art.
 const productGallery = (store, p) => p.shelf ? shelfGallery(p) : assetGallery(store, p)
 import { esc, money, disclaimer, publicNotice } from '../../lib/html.js'
-import { productPath, STATES, LOCATION, arrivalFor, arrivalSummary, arrivalPhrase, optionText, lineKey, PREORDER_PRICE_GUARANTEE, WALMART_PLUS } from './data.js'
+import { CATALOG, productPath, STATES, LOCATION, arrivalFor, arrivalSummary, arrivalPhrase, optionText, lineKey, PREORDER_PRICE_GUARANTEE, WALMART_PLUS } from './data.js'
 
 import { DEPARTMENTS, SELLERS, departmentPath, categorySlug } from './catalog.js'
 import * as Browse from './browse.js'
@@ -119,6 +119,12 @@ function ratingLine(p) {
 }
 
 // Product tile: badge ribbon, square image, heart, pill CTA, price, title, stars, Save with W+, fulfillment line, ESRB.
+// "Discover Great Brands" in the cart: Walmart's own brands (Great Value, Mainstays, onn., Equate...), one per brand.
+const STORE_BRANDS = ['Great Value', 'Mainstays', 'onn.', 'Equate', "Parent's Choice", 'Pen+Gear', 'Better Homes & Gardens', 'Ozark Trail', 'Vibrant Life', 'Hyper Tough']
+function greatBrands(t) {
+  const inCart = new Set(t.lines.map(l => l.pid)), seen = new Set()
+  return CATALOG.filter(p => p.shelf && STORE_BRANDS.includes(p.brand) && !inCart.has(p.id) && p.stock !== 0 && !['Meat & Seafood', 'Fresh Produce', 'Deli'].includes(p.category) && !seen.has(p.brand) && seen.add(p.brand)).slice(0, 6)
+}
 export function tile(base, p, { from = 'search', longCta = false } = {}) {
   const href = productPath(base, p, from === 'search')
   const cta = p.stock === 0 ? 'Out of stock' : p.variants ? 'Options' : longCta && p.cta === 'Add' ? 'Add to cart' : p.cta
@@ -195,7 +201,7 @@ export function reviewsSection(p, {base='/walmart',rating='',sort='relevant'}={}
   const all=p.reviewEntries ?? []
   const shown=all.filter(r=>!rating || String(r.stars)===rating).sort((a,b)=>sort==='newest'?b.date.localeCompare(a.date):sort==='highest'?b.stars-a.stars:sort==='lowest'?a.stars-b.stars:0)
   const bars=ratingBreakdown(p.rating,p.ratings)
-  const histogram=bars.length?`<ul class="wm-rev-bars" aria-label="Rating breakdown">${bars.map(([k,n])=>`<li><span>${k} star${k===1?'':'s'}</span><span class="wm-rev-bar"><span style="width:${Math.round(n/p.ratings*100)}%"></span></span><span>${n}</span></li>`).join('')}</ul>`:''
+  const histogram=bars.length?`<ul class="wm-rev-bars" aria-label="Rating breakdown">${bars.map(([k,n])=>`<li><span>${k} star${k===1?'':'s'}</span><span class="wm-rev-bar"><span style="width:${Math.round(n/p.ratings*100)}%"></span></span><span>${n.toLocaleString('en-US')}</span></li>`).join('')}</ul>`:''
   const empty=rating?`<p>No reviews match this selection.</p><a href="${base}/reviews/product/${p.id}">Show all reviews</a>`:''
   return `<section class="wm-reviews" id="reviews"><h2>Customer ratings &amp; reviews</h2><div class="wm-reviews-sum"><div class="wm-rev-score"><b>${p.rating ?? 'No ratings yet'}</b>${p.rating ? ` out of 5<br>${starGlyphs(p.rating)}<br><small>(${p.ratings} ratings | ${p.reviews} reviews)</small>`:''}</div>${histogram}</div><form action="${base}/reviews/product/${p.id}" class="wm-review-filters"><label for="review-rating">Star rating</label><select id="review-rating" name="rating"><option value="">All ratings</option>${[5,4,3,2,1].map(n=>`<option value="${n}" ${String(n)===rating?'selected':''}>${n} stars</option>`).join('')}</select><label for="review-sort">Sort reviews</label><select id="review-sort" name="sort">${[['relevant','Most relevant'],['newest','Newest'],['highest','Highest rated'],['lowest','Lowest rated']].map(([v,l])=>`<option value="${v}" ${v===sort?'selected':''}>${l}</option>`).join('')}</select><button class="wm-pill wm-pill-sm">Apply</button></form>${shown.length?shown.map(r=>`<article class="wm-review">${starGlyphs(r.stars)}<b>${esc(r.title)}</b><p>${esc(r.body)}</p><small>${esc(r.name)} · ${esc(reviewDate(r.date))}</small></article>`).join(''):empty}</section>`
 }
@@ -309,7 +315,7 @@ export function cartPage({ base, t, saved, user, flags, location=LOCATION }) {
       ${lines}
     </div>
     ${savedSection(base, saved)}
-    <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Discover Great Brands</h2></div><div class="wm-carousel wm-carousel-brands">${['Great Value', 'Mainstays', 'onn.', 'Play Day', 'Rockstar Games'].map(b => `<a class="wm-brand-tile" href="${base}/search?q=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div></section>
+    <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Discover Great Brands</h2></div>${greatBrands(t).length ? `<div class="wm-carousel">${greatBrands(t).map(p => tile(base, p, { from: 'cart', longCta: true })).join('')}</div>` : `<div class="wm-carousel wm-carousel-brands">${['Great Value', 'Mainstays', 'onn.', 'Equate', "Parent's Choice"].map(b => `<a class="wm-brand-tile" href="${base}/search?q=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>`}</section>
   </div>
   <aside class="wm-summary" id="checkout-section">
     <form method="post" action="${base}/cart/checkout">
@@ -556,12 +562,12 @@ export function thankyouPage({ base, order, status = 'processing' }) {
   const a = order.shipping_address, pay = order.payment, tt = order.totals
   const trialEnd = new Date(new Date(order.created_at).getTime() + 30 * 864e5).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   return `<div class="wm-ty">
-  <div class="wm-ty-head">${ICON.check}<div><h1>Thanks for your order!</h1><p>${status === 'cancelled' ? 'This order has been cancelled. Your original receipt appears below.' : 'Your order has been recorded. View tracking for its current status.'}</p><p class="wm-ty-num">Order# <span data-order-number>${esc(order.order_number)}</span></p></div></div>
+  <div class="wm-ty-head">${ICON.check}<div><h1>Thanks for your order!</h1><p>${status === 'cancelled' ? 'This order has been cancelled. Your original receipt appears below.' : 'Now kick back and relax, we&rsquo;ll take care of the rest!'}</p><p class="wm-ty-num">Order# <span data-order-number>${esc(order.order_number)}</span></p></div></div>
   <div class="wm-ty-actions"><a class="wm-pill" href="${base}/orders/${order.id}/tracking">Track my order</a><a class="wm-pill wm-pill-white" href="${base}/orders/${order.id}">View order details</a><a class="wm-pill wm-pill-white" href="${base}/">Keep shopping</a></div>
   <div class="wm-ty-grid">
     <div>
       <section class="wm-card"><div class="wm-card-head">${ICON.truck}<div><h2>Shipping</h2><p>${status === 'cancelled' ? 'Shipping cancelled' : esc(arrivalPhrase(order.fulfillment.eta))}</p></div></div>
-        ${order.items.map((it,i) => `<div class="wm-co-item"><div><div class="wm-co-item-title">${esc(it.title)}</div><div class="wm-fine">Qty ${it.qty}${order.meta.options?.[i] ? ` · ${esc(Object.entries(order.meta.options[i].options).map(([k,v])=>`${k}: ${v}`).join(' · '))} · ${status === 'cancelled' ? 'Shipping cancelled' : esc(arrivalPhrase(order.meta.options[i].eta))}` : ''}</div></div><div class="wm-co-item-price">${money(it.unit_price * it.qty)}</div></div>`).join('')}
+        ${order.items.map((it,i) => `<div class="wm-co-item"><div><div class="wm-co-item-title">${esc(it.title)}</div><div class="wm-fine">${[`Qty ${it.qty}`, ...(order.meta.options?.[i] ? [...Object.entries(order.meta.options[i].options ?? {}).map(([k,v])=>`${esc(k)}: ${esc(v)}`), status === 'cancelled' ? 'Shipping cancelled' : esc(arrivalPhrase(order.meta.options[i].eta))] : [])].join(' · ')}</div></div><div class="wm-co-item-price">${money(it.unit_price * it.qty)}</div></div>`).join('')}
         <div class="wm-co-sub"><h3>Delivery address</h3><address>${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a.line1)}${a.line2 ? `, ${esc(a.line2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.postal_code)}<br>${esc(phoneText(a.phone))}</address></div>
       </section>
       <section class="wm-card"><h2>Payment method</h2><p>${pay.method === 'card' ? `${esc(pay.brand)} ending in ${esc(pay.last4)}` : 'PayPal'}</p></section>
