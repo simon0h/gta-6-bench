@@ -25,6 +25,7 @@ function stubManager(overrides = {}) {
     startTask: async () => ({ startPath: '/bestbuy' }),
     finishTask: async () => agentState,
     getTarget: async () => null,
+    sameRun: async () => true,
     exportState: async () => ({}),
     close: async () => {},
     ...overrides,
@@ -172,6 +173,7 @@ test('an unfinished attempt cannot be silently replaced by another agent URL in 
   const manager = stubManager({
     agentView: async token => ({ ...agentState, status: token === agentToken ? previousStatus : 'ready' }),
     startTask: async () => { starts++; return { startPath: '/bestbuy' } },
+    sameRun: async () => true,
   })
   const { base } = await dashboard(t, { manager })
   for (previousStatus of ['ready', 'running']) {

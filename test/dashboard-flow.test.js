@@ -135,6 +135,10 @@ test('HTTP backend caps a run at five links and protects browser assignment and 
   assert.match(switching.text, /separate browser/)
   const separate = browser(host.base)
   assert.equal((await separate.request(`/agent/${attempts[1].token}`)).status, 200)
+  // A URL from a newer run takes over a browser left on an unfinished run.
+  const nextRun = await createRun(operator, 'Next run'), nextAttempt = await addAttempt(operator, nextRun, { agent: 'grokbot' })
+  assert.equal((await agent.request(`/agent/${nextAttempt.token}`)).status, 200)
+  assert.equal((await agent.request(`/agent/${nextAttempt.token}/state`)).status, 200)
   const crossSite = await agent.request(`/agent/${attempts[0].token}/start`, { method: 'POST', json: {}, headers: { origin: 'https://unrelated.example', 'sec-fetch-site': 'cross-site' } })
   assert.equal(crossSite.status, 403)
   const illegalOperatorAction = await operator.request('/dashboard/api/runs', { method: 'POST', headers: { ...operatorHeaders, origin: 'https://unrelated.example' }, json: { name: 'Cross-site' } })

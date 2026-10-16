@@ -231,8 +231,11 @@ export function createDashboardRouter({ manager, apiToken, local = false, anthro
     if (previous && previous !== req.params.token) {
       let view
       try { view = await manager.agentView(previous) } catch (error) { if (error.status !== 404) throw error }
-      if (view && view.status !== 'complete') {
-        const message = 'This browser is already assigned to another unfinished agent attempt. Open this URL in a separate browser profile or private browsing session.'
+      // Two URLs of one run in one browser would mean two agents sharing it.
+      // A URL from a newer run takes the browser over: the earlier run was
+      // usually abandoned, and its URL can still be reopened elsewhere.
+      if (view && view.status !== 'complete' && await manager.sameRun(previous, req.params.token)) {
+        const message = 'This browser is already being used for another session URL in this run. Open this URL in a separate browser profile or private browsing window.'
         if (req.method === 'GET') res.status(409).type('html').send(noticePage({ title: 'Use a separate browser session', message }))
         else res.status(409).json({ error: message })
         return false
