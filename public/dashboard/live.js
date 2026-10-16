@@ -80,7 +80,7 @@
       let content
       if (error && !data) content = `<p class="live-error" role="alert">${escape(error)}</p>`
       else if (!data) content = '<p class="live-quiet" role="status">Loading live positions…</p>'
-      else if (!data.agents.length) content = '<p class="live-quiet">Add an agent URL to track it here.</p>'
+      else if (!data.agents.length) content = '<p class="live-quiet">Generate a session URL to track it here.</p>'
       else content = `${error ? `<p class="live-error" role="alert">Couldn’t refresh: ${escape(error)}</p>` : ''}<div class="live-grid">${data.agents.map(card).join('')}</div>`
       const html = `${heading}<div class="panel-body">${content}</div>`
       // Skip identical redraws so focus and hover stay put between updates.
