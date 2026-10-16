@@ -1,6 +1,7 @@
 import { scenarioStockFor } from '../../lib/benchmark-scenarios.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
-import { esc, money, disclaimer } from '../../lib/html.js'
+import { esc, disclaimer } from '../../lib/html.js'
+import { money } from './media.js'
 import { productPath, STATES, PAYMENT_TYPES, SHIP_ZIP, STORE_LOCATION, ARRIVES, PREORDER_ARRIVAL, byTcin, selectedProduct, stockLimit, lineKey, PRODUCTS, arrivalSummary } from './data.js'
 
 import { DEPARTMENTS } from './catalog.js'
@@ -167,8 +168,8 @@ function cartLine(base, l, storeLocation) {
     ${optionText(p)?`<p class="tg-fine">${esc(optionText(p))}</p>`:""}${p.preorder ? `<div class="tg-line-release" data-test="preorderStreetDate">Release date ${esc(p.release)}</div>` : ''}${p.addon ? `<p class="tg-fine">Protection plan &middot; ${esc(p.shippingNote)}</p>` : `<a href="${base}/services/pickup-delivery" class="tg-fine">Ships free - exclusions apply</a>
     <fieldset class="tg-methods"><legend class="visually-hidden">Delivery method</legend>
       <label class="is-selected"><input type="radio" name="method-${p.tcin}" value="shipping" checked> <b>Shipping</b> <span class="tg-fine">${esc(p.eta)} &middot; ${p.price >= 35 ? "Free" : "Free on $35+ orders"}</span></label>
-      <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="pickup" disabled> <b>Order Pickup</b> <span class="tg-fine">${fixtureCatalog || (p.kind === 'game' && storeLocation === STORE_LOCATION) ? 'Not available' : 'Availability unverified'} at ${esc(storeLocation)}</span></label>
-      <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="driveup" disabled> <b>Drive Up</b> <span class="tg-fine">${fixtureCatalog || (p.kind === 'game' && storeLocation === STORE_LOCATION) ? 'Not available' : 'Availability unverified'} at ${esc(storeLocation)}</span></label>
+      <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="pickup" disabled> <b>Order Pickup</b> <span class="tg-fine">${fixtureCatalog || p.shelf || (p.kind === 'game' && storeLocation === STORE_LOCATION) ? 'Not available' : 'Availability unverified'} at ${esc(storeLocation)}</span></label>
+      <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="driveup" disabled> <b>Drive Up</b> <span class="tg-fine">${fixtureCatalog || p.shelf || (p.kind === 'game' && storeLocation === STORE_LOCATION) ? 'Not available' : 'Availability unverified'} at ${esc(storeLocation)}</span></label>
     </fieldset>`}
     <form method="post" action="${base}/cart/update" class="tg-line-actions">
       <input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}
@@ -185,7 +186,7 @@ function cartLine(base, l, storeLocation) {
 
 export function cartPage({ base, t, saved = [], user, promo, promoError, promoValue = '', recs, storeLocation = STORE_LOCATION }) {
   const unavailable=t.lines.some(l=>scenarioStockFor(l.product,'shipping')===0)
-  const availabilityNotice=t.lines.some(l=>l.product.kind==='game') ? `<p class="benchmark-fulfillment" role="status">This local storefront supports shipping only; pickup checkout is unavailable.</p>${unavailable?'<p class="benchmark-availability" role="alert">Shipping unavailable. This item can no longer be purchased. No order has been placed.</p>':''}` : ''
+  const availabilityNotice=t.lines.some(l=>l.product.kind==='game') ? `<p class="benchmark-fulfillment" role="status">This item is available for shipping only; pickup checkout is unavailable.</p>${unavailable?'<p class="benchmark-availability" role="alert">Shipping unavailable. This item can no longer be purchased. No order has been placed.</p>':''}` : ''
   const promoDrawer = promo ? `<div class="tg-drawer-backdrop"><aside class="tg-drawer" role="dialog" aria-labelledby="promo-title" data-test="promo-code-modal-drawer">
   <div class="tg-drawer-head"><h2 id="promo-title">Add promo code</h2><a class="tg-drawer-close" href="${base}/cart" aria-label="close">&times;</a></div>
   <form method="post" action="${base}/cart/promo"><label for="promo">Promo code</label><input id="promo" name="code" type="text" minlength="4" maxlength="36" value="${esc(promoValue)}" ${promoError ? 'aria-invalid="true" aria-describedby="promo-err"' : ''}>${promoError ? `<span class="tg-error" id="promo-err" role="alert">${esc(promoError)}</span>` : ''}<button type="submit" class="tg-btn tg-btn-block">Apply</button></form>
@@ -334,7 +335,7 @@ export function checkoutPage({ base, step, t, checkout, values = {}, errors = {}
           ${input('billingAddress1', 'Address line 1')}
           <div class="tg-3col">${input('billingZip', 'Zip code')}${input('billingCity', 'City')}${stateSelect('billingState', 'State')}</div>
         </div>
-        <p class="tg-fine">Enter your card for this checkout. A reusable payment card is not saved.</p>
+        <p class="tg-fine">Your card details are encrypted and used only for this order.</p>
       </div>
       <details class="tg-giftcard"${errors.giftCardNumber || values.giftCardNumber ? ' open' : ''}><summary>Add gift card</summary><h3>Pay with a Target GiftCard</h3><div class="tg-3col">${input('giftCardNumber', 'Card number')}${input('giftCardAccess', 'Access number')}<div class="tg-field tg-field-btn"><button type="submit" name="action" value="giftcard" class="tg-btn tg-btn-outline">Apply</button></div></div></details>
       <button type="submit" class="tg-btn">Save and continue</button>
