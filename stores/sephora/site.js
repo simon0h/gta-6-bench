@@ -10,6 +10,7 @@ import { shelfCard, shelfRow, listing, basketCount, sessionOrders } from './shel
 import { CATEGORIES, DEPARTMENTS, NAV, FOOTER, LEGAL, HELP_TOPICS, INFO, QUICK_LINKS, FILTERS } from './site-data.js'
 
 import { brandSlug } from './shelf.js'
+import { renderArt } from './shelf-art.js'
 export { brandSlug }
 const BRANDS = [...new Set([...capturedSearchProducts.map(p => p.brand), ...shelfBrands])].sort((a, b) => a.localeCompare(b)).map(name => ({ name, slug: brandSlug(name) }))
 const EXTRA_BRANDS = { 'sephora-collection': 'SEPHORA COLLECTION', kayali: 'KAYALI' }
@@ -40,7 +41,7 @@ export function siteChrome({ req, base, title, body }) {
   }
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | Sephora</title><link rel="stylesheet" href="/static/unavailable.css"><link rel="stylesheet" href="${base}/static/depth.css"><link rel="stylesheet" href="${base}/static/site.css"><script src="${base}/static/catalog.js" defer></script></head><body class="sephora sp-depth sp-srp-page sx">
   <a class="skip" href="#main">Skip to content</a>
-  <div class="sp-promo sx-promo"><strong>Get 5X Points†† on Sephora Collection.</strong> Ends 10/7. ††Terms apply. ${a(base, '/profile/BeautyInsider', 'JOIN BEAUTY INSIDER ›')}</div>
+  <div class="sp-promo sx-promo"><strong>Get 5X Points†† on Sephora Collection.</strong> <span class="sx-promo-terms">Ends 10/27. ††Terms apply.</span> ${a(base, '/profile/BeautyInsider', 'JOIN BEAUTY INSIDER ›')}</div>
   <header class="sp-header sx-header">
     <a class="sp-logo" href="${base}/" aria-label="Sephora home">SEPHORA</a>
     <form class="sp-search" action="${base}/search" role="search"><label class="sr-only" for="sp-search">Search</label><input id="sp-search" name="keyword" type="search" autocomplete="off" value="${esc(typeof query === 'string' ? query : '')}" placeholder="Search"><button aria-label="Search">${icon('search')}</button></form>
@@ -85,6 +86,27 @@ const SLIDES = [
   ['CLEAN AT SEPHORA', 'Oil-Balancing Hydration', 'These blemish-safe moisturizers won’t clog pores.', '/shop/moisturizing-cream-oils-mists', 'sx-s4'],
   ['', 'New K18 Longevity Scalp Serum', 'Retain up to 19,000 more hairs and 70% fewer grays* with this formula. *After 3 months of nightly use.', capturedSearchProducts.find(p => p.id === 'P525639')?.path || '/brand/k18-biomimetic-hairscience', 'sx-s5'],
 ]
+// Hero and category-tile art: the store's drawn packshots (no white backdrop) over the slide colour.
+const topReviewed = list => list.toSorted((x, y) => y.reviews - x.reviews)
+const packshot = (p, v = p.variants?.[0]) => renderArt(p, v).replace('<rect width="400" height="400" fill="#fff"/>', '').replace(/ role="img" aria-label="[^"]*"/, '').replace('viewBox="0 0 400 400" width="400" height="400"', 'viewBox="60 28 280 340" focusable="false"')
+const KAYALI_BODY = [['Body Cream', 'jar', '#f3dcc8'], ['Lip Balm', 'tube', '#d8c3e3'], ['Body Butter', 'jar-small', '#cfe0ae']].map(([name, art, color]) => ({ brand: 'KAYALI', name, art, color }))
+const SLIDE_PICKS = {
+  'sx-s1': () => KAYALI_BODY,
+  'sx-s2': () => shelfProducts.filter(p => p.brand === 'KAYALI').slice(0, 2),
+  'sx-s3': () => topReviewed(categoryProducts('foundation-makeup').filter(p => p.flags.has('excl'))).slice(0, 3),
+  'sx-s4': () => topReviewed(categoryProducts('moisturizing-cream-oils-mists').filter(p => p.flags.has('clean'))).slice(0, 3),
+}
+const slideArt = cls => {
+  if (cls === 'sx-s5') {
+    const k18 = capturedSearchProducts.find(p => p.id === 'P525639')
+    return k18 ? `<img src="${esc(k18.image)}" alt="" loading="lazy">` : ''
+  }
+  return (SLIDE_PICKS[cls]?.() || []).map(p => packshot(p)).join('')
+}
+const tileImage = slug => {
+  const p = topReviewed(categoryProducts(slug))[0]
+  return p ? packshot(p) : ''
+}
 export function homePage(base, req) {
   const user = req.store?.user
   const hour = new Date().getHours()
@@ -94,13 +116,13 @@ export function homePage(base, req) {
   const tiles = [['Makeup', 'makeup-cosmetics'], ['Skincare', 'skincare'], ['Hair', 'hair-products'], ['Fragrance', 'fragrance'], ['Bath & Body', 'bath-body'], ['Tools & Brushes', 'makeup-tools'], ['Mini Size', 'travel-size-toiletries'], ['Gifts', 'gifts']]
   return `<h1 class="sr-only">Sephora Homepage</h1>
   <section class="sx-greeting"><p><strong>${greet}, ${esc(user?.first_name || 'Beautiful')}. ☀️</strong> ${user ? `You're signed in. ${a(base, '/profile/BeautyInsider', 'View your Beauty Insider benefits ▸')}` : `Join Beauty Insider to earn points with every purchase. ${a(base, '/login', 'Sign In')} ${a(base, '/registration', 'Create Account')}`}</p></section>
-  <section class="sx-hero" aria-label="Featured">${SLIDES.map(([tag, h, t, p, cls]) => `<a class="sx-slide ${cls}" href="${esc(base + p)}"><span class="sx-slide-art" aria-hidden="true"></span><span class="sx-slide-copy">${tag ? `<small>${esc(tag)}</small>` : ''}<strong>${esc(h)}</strong><span>${esc(t)}</span><em>SHOP NOW ▸</em></span></a>`).join('')}</section>
+  <section class="sx-hero" aria-label="Featured">${SLIDES.map(([tag, h, t, p, cls]) => `<a class="sx-slide ${cls}" href="${esc(base + p)}"><span class="sx-slide-art" aria-hidden="true">${slideArt(cls)}</span><span class="sx-slide-copy">${tag ? `<small>${esc(tag)}</small>` : ''}<strong>${esc(h)}</strong><span>${esc(t)}</span><em>SHOP NOW ▸</em></span></a>`).join('')}</section>
   ${row(base, 'Chosen For You', ps.slice(0, 12), ['Show more', '/shop/skincare'], ' data-reference-state="catalog"')}
   ${shelfRow(base, 'New Arrivals', shelf.filter(p => p.flags.has('new')).slice(0, 12), ['Show more', '/beauty/new-beauty-products'])}
-  <section class="sx-row"><div class="sx-row-head"><h2>Shop by Category</h2></div><div class="sx-cats">${tiles.map(([l, s], i) => `<a href="${base}/shop/${s}"><span class="sx-cat-dot sx-c${i}" aria-hidden="true"></span>${esc(l)}</a>`).join('')}</div></section>
+  <section class="sx-row"><div class="sx-row-head"><h2>Shop by Category</h2></div><div class="sx-cats">${tiles.map(([l, s], i) => `<a href="${base}/shop/${s}"><span class="sx-cat-dot sx-c${i}" aria-hidden="true">${tileImage(s)}</span>${esc(l)}</a>`).join('')}</div></section>
   ${shelfRow(base, 'Bestselling Makeup', pick('makeup-cosmetics'), ['Show more', '/shop/makeup-cosmetics'])}
   <section class="sx-row"><div class="sx-row-head"><h2>Beauty Offers</h2>${a(base, '/beauty/beauty-offers', 'See all')}</div><div class="sx-offers">
-    <a href="${base}/beauty/beauty-offers"><small>BEAUTY INSIDER</small><strong>Get 5X Points on Sephora Collection</strong><span>Ends 10/7. Terms apply.</span><em>SHOP NOW ▸</em></a>
+    <a href="${base}/beauty/beauty-offers"><small>BEAUTY INSIDER</small><strong>Get 5X Points on Sephora Collection</strong><span>Ends 10/27. Terms apply.</span><em>SHOP NOW ▸</em></a>
     <a href="${base}/rewards"><small>REWARDS BAZAAR</small><strong>Redeem your points</strong><span>Deluxe samples, minis and experiences.</span><em>REDEEM NOW ▸</em></a>
     <a href="${base}/beauty/free-beauty-samples"><small>SAMPLES</small><strong>Free samples with every order</strong><span>Choose two free samples at checkout.</span><em>LEARN MORE ▸</em></a>
     <a href="${base}/sale"><small>SALE</small><strong>Sale</strong><span>Shop limited-time markdowns.</span><em>SHOP NOW ▸</em></a></div></section>
@@ -245,15 +267,17 @@ export function sitemapXml(origin, base) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...new Set(paths)].map(p => `  <url><loc>${esc(origin + base + p)}</loc></url>`).join('\n')}\n</urlset>\n`
 }
 
+const BADGE_LABEL = { NEW: 'New', 'ONLINE ONLY': 'Online Only' }
+const highlightChips = p => `<ul class="sx-hl-chips">${[BADGE_LABEL[p.badge] || '', p.colors, p.rating ? `${p.rating} ★ average from ${p.reviewDisplay} reviews` : ''].filter(Boolean).map(h => `<li>${esc(h)}</li>`).join('')}</ul>`
 export function productExtras(base, p) {
   const text = {
-    Highlights: `${p.brand} ${p.title}.${p.rating ? ` Rated ${p.rating} out of 5 by ${p.reviewDisplay} reviewers.` : ''}`,
+    Highlights: '',
     'About the Product': `${p.title}, from ${p.brand}.`,
     Ingredients: 'Please be aware that ingredient lists may change or vary from time to time. Please refer to the ingredient list on the product package you receive for the most up-to-date list of ingredients.',
     'How to Use': 'See the product packaging for directions and warnings.',
     'About the Brand': `Discover more from ${p.brand} at Sephora.`,
   }
-  return `<section class="sx-pdp-extra"><div class="sx-panel sx-fulfil"><h2>Get It Shipped</h2><p>This item is currently unavailable for online purchase.</p>${a(base, `/brand/${brandSlug(p.brand)}`, `Shop all ${p.brand}`)}</div>${Object.entries(text).map(([h, t]) => `<details class="sx-acc"${h === 'Highlights' ? ' open' : ''}><summary><h2>${h}</h2></summary><p>${esc(t)}</p></details>`).join('')}</section>`
+  return `<section class="sx-pdp-extra"><div class="sx-panel sx-fulfil"><h2>Get It Shipped</h2><p>This item is currently unavailable for online purchase.</p>${a(base, `/brand/${brandSlug(p.brand)}`, `Shop all ${p.brand}`)}</div>${Object.entries(text).map(([h, t]) => `<details class="sx-acc"${h === 'Highlights' ? ' open' : ''}><summary><h2>${h}</h2></summary>${h === 'Highlights' ? highlightChips(p) : `<p>${esc(t)}</p>`}</details>`).join('')}</section>`
 }
 
 // ---------- routes ----------
