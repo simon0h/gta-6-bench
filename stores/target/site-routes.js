@@ -2,7 +2,7 @@
 // /c/<slug>/-/N-<id> paths, help/policy/information pages, store locator, gift card balance,
 // registry search, email sign-up, feedback and the site map. Forms work without JavaScript and
 // never contact a real service.
-import { esc } from '../../lib/html.js'
+import { esc, publicNotice } from '../../lib/html.js'
 import * as S from './site.js'
 import * as D from './site-data.js'
 import { STORES, selectedStore } from './journeys.js'
@@ -64,18 +64,18 @@ export function installSite(router, { render, notFound, browseRender, products }
     <section class="tg-journey-card"><h2>Find a registry or wish list</h2><form method="get" action="${base}/gift-registry" class="tg-journey-form">${field('firstName', 'First name', first, 'autocomplete="off"')}${field('lastName', 'Last name', last, 'autocomplete="off" required')}<button class="tg-btn tg-btn-outline">Search</button></form>${searched ? `<p role="status">${last ? `No registries or wish lists found for ${esc(`${first} ${last}`.trim())}.` : 'Enter a last name to search.'}</p>` : ''}</section></div>
     <section class="tg-group"><h2>Easy for everyone</h2><p>Free returns on registry gifts for one year after the event date, a welcome kit and a completion discount on Target.com.</p></section>
     <section class="tg-group"><h2>Download the Target App</h2><p>Scan items in store to add them to your registry.</p><a href="${base}${D.node('target-app', 'N-4th2r')}">Learn about the Target App</a></section>
-    <section class="tg-group"><h2>Registry &amp; Wish List help</h2><p>Public registries and gift tracking are not available in this local store; wish lists are private to your account.</p><a href="${base}/help">Target Help</a></section></div></div>`)
+    <section class="tg-group"><h2>Registry &amp; Wish List help</h2><p>Wish lists are private to your account. Sign in to view, edit or add items to your list.</p><a href="${base}/help">Target Help</a></section></div></div>`)
   })
 
   router.get('/feedback', (req, res) => page(req, res, 'Feedback', feedbackForm(res.locals.base)))
   router.post('/feedback', (req, res) => {
     const message = clean(req.body.message, 2000)
     if (message.length < 5) return page(req, res, 'Feedback', feedbackForm(res.locals.base, 'Tell us a little more (at least 5 characters).', message), 400)
-    page(req, res, 'Feedback', `<div class="tg-journey tg-narrow"><h1>Thanks for your feedback</h1><p>Your comments were received by this local store. Nothing is sent to Target.</p><a class="tg-btn" href="${res.locals.base}/">Continue shopping</a></div>`)
+    page(req, res, 'Feedback', `<div class="tg-journey tg-narrow"><h1>Thanks for your feedback</h1><p>We read every comment and use it to make Target better for all guests.</p>${publicNotice('<p class="tg-fine">Your comments were received by this local store. Nothing is sent to Target.</p>')}<a class="tg-btn" href="${res.locals.base}/">Continue shopping</a></div>`)
   })
   router.post('/newsletter', (req, res) => {
     const email = clean(req.body.email, 200), ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-    page(req, res, 'Sign up', `<div class="tg-journey tg-narrow"><h1>${ok ? 'Thanks for signing up!' : 'Check your email address'}</h1><p>${ok ? 'This local store does not send emails, so no message will arrive.' : 'Enter a valid email address in the sign-up box below.'}</p><a class="tg-btn" href="${res.locals.base}/">Continue shopping</a></div>`, ok ? 200 : 400)
+    page(req, res, 'Sign up', `<div class="tg-journey tg-narrow"><h1>${ok ? 'Thanks for signing up!' : 'Check your email address'}</h1><p>${ok ? 'You’re on the list for top deals, the latest trends and more from Target.' : 'Enter a valid email address in the sign-up box below.'}</p>${ok ? publicNotice('<p class="tg-fine">This local store does not send emails, so no message will arrive.</p>') : ''}<a class="tg-btn" href="${res.locals.base}/">Continue shopping</a></div>`, ok ? 200 : 400)
   })
 
   router.get('/sitemap', (req, res) => page(req, res, 'Site map', S.sitemapPage(res.locals.base)))

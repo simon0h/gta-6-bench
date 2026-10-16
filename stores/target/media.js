@@ -4,6 +4,8 @@ import { esc } from '../../lib/html.js'
 // locally rendered illustrations come from this store's own /shelf-art route instead.
 const shelfArt = html => html.replace(/\/product-assets\/target\/(\d+)\/(\d+)\.svg/g, '/target/shelf-art/$1/$2.svg')
 export const productImage = (p,className='') => p.shelf ? shelfArt(assetImage('target',p,{className})) : assetImage('target',p,{className})
+// Target.com writes prices with a thousands separator ($1,399.99).
+export const money = amount => { const n = Number(amount) || 0; return `${n < 0 ? '-' : ''}$${Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
 export const optionText = p => Object.entries(p.selectedOptions || {}).map(([k,v])=>`${k}: ${v}`).join(' · ')
 
 // Small, consistent outline icons stay legible at header and fulfillment sizes.
