@@ -54,7 +54,7 @@ function notFound(req, res) {
 }
 
 function purchaseError(req,res) {
-  return render(req,res,'Check your selection',P.simplePage({title:'Check your selection',html:`<p>Choose an available item and a quantity from 1 to 5${fixtureCatalog?', within the available stock':', within the local per-order limit'}. No items were added.</p><a href="${res.locals.base}/cart">Review your cart</a> · <a href="${res.locals.base}/">Continue shopping</a>`}),{status:400})
+  return render(req,res,'Check your selection',P.simplePage({title:'Check your selection',html:`<p>Choose an available item and a quantity from 1 to 5${fixtureCatalog?', within the available stock':', within the per-order limit for this item'}. No items were added.</p><a href="${res.locals.base}/cart">Review your cart</a> · <a href="${res.locals.base}/">Continue shopping</a>`}),{status:400})
 }
 
 
@@ -135,7 +135,7 @@ router.get('/dp/:asin', productHandler)
 router.get('/gp/product/:asin', productHandler)
 router.get('/:slug/dp/:asin', productHandler)
 
-router.get('/tradein', (req, res) => render(req, res, 'Amazon Trade-In', P.simplePage({ title: 'Amazon Trade-In', html: `<p>Trade-in appraisal, shipping labels, and gift-card credit are not available in this storefront. You can browse accessories or contact Customer Service about a local order.</p><p><a href="${res.locals.base}/b?node=gaming-accessories">Browse gaming accessories</a> · <a href="${res.locals.base}/help">Customer Service</a></p>` })))
+router.get('/tradein', (req, res) => render(req, res, 'Amazon Trade-In', P.simplePage({ title: 'Amazon Trade-In', html: `<p>Get an Amazon Gift Card when you trade in eligible video games, consoles and accessories. Trade-in appraisals for video games are not available for your account right now. You can browse accessories or contact Customer Service about an existing order.</p><p><a href="${res.locals.base}/b?node=gaming-accessories">Browse gaming accessories</a> · <a href="${res.locals.base}/help">Customer Service</a></p>` })))
 
 // ---- cart ----
 // Search-tile "Add to cart" (and the PDP bundle button) add in place: the shopper is sent back to the
@@ -380,7 +380,7 @@ router.post(STEP.pay, (req, res) => {
 })
 router.post(`${STEP.pay}/promo`, (req, res) => {
   if (!gate(req, res, 'pay')) return
-  req.store.checkout.promoError = 'Gift card balances and promotional codes are unavailable in this storefront. Your order total has not changed.'
+  req.store.checkout.promoError = 'The promotional code you entered is not valid. Your order total has not changed.'
   res.redirect(`${res.locals.base}${STEP.pay}`)
 })
 

@@ -1,4 +1,6 @@
 // Progressive enhancements: every destination and form also has a regular page.
+const searchDept = document.querySelector('#searchDropdownBox'), searchDeptLabel = document.querySelector('.az-search-facade-label')
+searchDept?.addEventListener('change', () => { if (searchDeptLabel) searchDeptLabel.textContent = searchDept.value ? searchDept.selectedOptions[0].textContent : 'All' })
 const locationDialog = document.querySelector('#az-location-dialog')
 document.querySelectorAll('[data-location-open]').forEach(link => link.addEventListener('click', event => {
   if (!locationDialog?.showModal) return
