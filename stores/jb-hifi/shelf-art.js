@@ -4,7 +4,7 @@
 // the shared /product-assets index only knows the evidenced GTA VI inventory.
 import { createHash } from 'node:crypto'
 import { esc } from '../../lib/html.js'
-import { renderProductAsset } from '../../lib/product-asset-art.js'
+import { renderProductAsset, describeProductAsset } from '../../lib/product-asset-art.js'
 
 const BASE = '/jb-hifi'
 const CONSOLE = /consoles$/
@@ -50,10 +50,21 @@ function descriptor(p) {
   return { store: 'jb-hifi', id: p.id, aliases: [p.id], title: artTitle, canonicalTitle: p.title, type, category: p.crumbs[0], brand: p.brand, platform: p.platform || null, edition: game ? 'standard' : null, format: game ? (p.platform === 'switch-2' || p.platform === 'switch' ? 'cartridge' : p.platform === 'pc' ? 'digital' : 'disc') : 'physical', variant: null, identity: { type, store: 'jb-hifi', id: p.id }, assetKey, specs, raw, variants: [] }
 }
 
+// The shared renderer captions each drawing with its view name ("Product view", "Close-up"…) along the
+// bottom edge. A retailer's pack shot carries no such caption, so it is taken out of the picture here;
+// the view name stays in the image's accessible title and the gallery's alt text.
+function withoutViewCaption(svg, label) {
+  const caption = new RegExp(`<text\\b[^>]*>${esc(label).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</text>(?=\\s*</svg>\\s*$)`)
+  return svg.replace(caption, '')
+}
+
 const cache = new Map()
 export function shelfArtSvg(p, view) {
   const key = `${p.id}:${view}`
-  if (!cache.has(key)) cache.set(key, renderProductAsset(descriptor(p), view))
+  if (!cache.has(key)) {
+    const d = descriptor(p)
+    cache.set(key, withoutViewCaption(renderProductAsset(d, view), describeProductAsset(d, view).label))
+  }
   return cache.get(key)
 }
 export const shelfArtUrl = (p, view = 0) => `${BASE}/shelf-art/${encodeURIComponent(p.id)}/${view}.svg`

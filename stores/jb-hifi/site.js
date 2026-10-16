@@ -4,7 +4,7 @@
 // products from the store's own catalogue (data.js); nothing here adds inventory.
 import { esc, publicNotice } from '../../lib/html.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
-import { productPhoto } from '../../lib/product-photos.js'
+import { productPhoto, photoStyle } from '../../lib/product-photos.js'
 import { PRODUCTS, LISTED, ASSORTMENT, productPath } from './data.js'
 import { DEPARTMENT_DEFS, CAMPAIGNS, slugify } from './catalog.js'
 import { DEPARTMENTS, UTILITIES, NEW_MENU, DEALS_MENU, SERVICES_MENU, POPULAR_BRANDS, FOOTER, LEGAL, HELP_TOPICS, HELP_ARTICLES, INFO_PAGES, BLOGS } from './site-data.js'
@@ -36,7 +36,7 @@ export function siteHeader(base, cartCount, user, reference = false) {
     return `<a href="${base}${href}"><span class="jb-ico">${icon(ico)}</span>${label}</a>`
   }).join('')
   return `<header class="jb-header">
- <div class="jb-strip"><span><b>Seen it cheaper?</b> Ask for a JB Deal! <a href="${base}/pages/contact-us">Live chat</a> or call <a href="${base}/pages/contact-us">13 52 44</a></span><button type="button" aria-label="Close" onclick="this.parentNode.remove()">&times;</button></div>
+ <div class="jb-strip"><span><b>Seen it cheaper?</b> Ask for a JB Deal! <span class="jb-strip-chat"><a href="${base}/pages/contact-us">Live chat</a> or call</span> <a class="jb-strip-call" href="${base}/pages/contact-us">13 52 44</a></span><button type="button" aria-label="Close" onclick="this.parentNode.remove()">&times;</button></div>
  <div class="jb-bar"><a class="jb-logo" href="${base}/" aria-label="JB Hi-Fi home">${reference ? '<img class="jb-reference-logo" src="/static/reference/jb-hifi/jb-logo.svg" alt="">' : '<span class="jb-wordmark">JB HI-FI</span>'}<span class="jb-tagline">ALWAYS CHEAP PRICES</span></a>
  <form class="jb-search" action="${base}/search" method="get" role="search"><input type="search" name="query" list="jb-search-suggestions" placeholder="Search products, brands, and more…" aria-label="Search products, brands, and more"><button type="submit" aria-label="Search"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4"/></svg></button><datalist id="jb-search-suggestions">${['Grand Theft Auto VI', 'PS5', 'Xbox Series X', 'headphones', 'laptop', 'iPhone', 'vinyl', 'TV'].map(v => `<option value="${v}"></option>`).join('')}</datalist></form>
  <nav class="jb-utils" aria-label="Account">${utils}</nav></div>
@@ -101,7 +101,7 @@ function heroCarousel(base, games, artwork) {
   const art = (p, href) => p ? `<a class="jb-hero-art" href="${href}" tabindex="-1" aria-hidden="true">${artwork(p)}</a>` : ''
   const tv = find('Samsung 65" S90F 4K OLED Smart TV [2025]'), phone = find('Apple iPhone 17 Pro 256GB (Cosmic Orange)'), sw = find('Nintendo Switch 2 Console + Mario Kart World Bundle')
   const slides = [
-    slide(1, 'jb-hero-deals', 'RED HOT DEALS · ENDS SUNDAY', 'Big screens. Bigger savings.', 'Save on OLED and Mini LED TVs, soundbars, laptops and headphones from Samsung, LG, Sony and more.', `<a class="jb-btn" href="${base}/collections/deals">Shop Red Hot Deals</a><a class="jb-btn jb-btn-black" href="${base}/collections/tvs">Shop TVs</a>`, art(tv, `${base}/collections/tvs`), '^Discounts apply to previous ticketed price. While stocks last.'),
+    slide(1, 'jb-hero-deals', 'RED HOT DEALS · ENDS SUNDAY', 'Big screens. Bigger savings.', 'Save on OLED and Mini LED TVs, soundbars, laptops and headphones from Samsung, LG, Sony and more.', `<a class="jb-btn" href="${base}/collections/deals">Shop Red Hot Deals</a><a class="jb-btn jb-btn-black" href="${base}/collections/tvs">Shop TVs</a>`, tv && photoStyle('television') ? `<a class="jb-hero-art jb-hero-photo" href="${base}/collections/tvs" tabindex="-1" aria-hidden="true">${productPhoto('television')}</a>` : art(tv, `${base}/collections/tvs`), '^Discounts apply to previous ticketed price. While stocks last.'),
     slide(2, 'jb-hero-phone', 'NEW · APPLE', 'iPhone 17 Pro', 'The most powerful iPhone yet. Trade in your old phone and save at JB Hi-Fi.', `<a class="jb-btn" href="${base}/collections/iphone">Shop iPhone</a><a class="jb-btn jb-btn-black" href="${base}/pages/tradein">Trade-in</a>`, art(phone, phone ? productPath(base, phone) : base)),
     ps5 ? slide(3, 'jb-hero-gta', 'PRE-ORDER NOW · RELEASES 19 NOV 26', 'Grand Theft Auto VI', 'Code in Box for PlayStation 5 and Xbox Series X|S. Pick up your copy in store to preload from 12 November.', `<a class="jb-btn" href="${base}/collections/game-pre-orders">Pre-order now</a><a class="jb-btn jb-btn-black" href="${productPath(base, ps5)}">PS5</a>${games.filter(g => g !== ps5).map(g => `<a class="jb-btn jb-btn-black" href="${productPath(base, g)}">Xbox</a>`).join('')}`, art(ps5, productPath(base, ps5)), 'Pre-order price guarantee applies.') : '',
     slide(4, 'jb-hero-switch', 'NINTENDO SWITCH 2', 'Race into Mario Kart World', 'Nintendo Switch 2 + Mario Kart World bundle, plus the latest Switch 2 games and accessories.', `<a class="jb-btn" href="${base}/collections/nintendo-switch">Shop Nintendo Switch 2</a>`, art(sw, sw ? productPath(base, sw) : base)),
@@ -193,7 +193,7 @@ const STORE_DIRECTORY = [
   ['TAS', ['Hobart', 'Launceston']],
   ['NT', ['Casuarina']],
 ]
-function storeFinderPage(base, query, stores) {
+export function storeFinderPage(base, query, stores) {
   const q = String(query || '').toLowerCase()
   const groups = STORE_DIRECTORY.map(([st, names]) => [st, names.filter(n => !q || n.toLowerCase().includes(q) || st.toLowerCase() === q)]).filter(([, n]) => n.length)
   const pickup = stores.length ? `<section class="jb-info-section"><h2>Click &amp; Collect stores</h2><ul class="jb-store-list">${stores.map(s => `<li><a href="${base}/stores/${s.id}"><b>${esc(s.name)}</b></a><br><span class="jb-fine">${esc(s.address)}</span></li>`).join('')}</ul></section>` : `<p class="jb-notice">Store pickup availability for online orders is confirmed at checkout.</p>`
