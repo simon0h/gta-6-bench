@@ -16,7 +16,7 @@ export function header(req, b, { cartCount, storeName, user }) {
   <header class="eb-header"><div class="eb-header-row">
    <details class="mega-menu"><summary aria-label="Shop all departments">☰</summary><div><h2>Shop By Category</h2>${MENU.map(([label, href, kids]) => `<details class="eb-mobile-dept"><summary>${esc(label)}</summary>${a(b, href, `Shop all ${label}`)}${kids.map(([l, h]) => a(b, h, l)).join('')}</details>`).join('')}<h2>Shopping Information</h2>${SHOPPING_INFO.map(([l, h]) => a(b, h, l)).join('')}</div></details>
    <a class="brand" href="${b}" aria-label="EB Games home">EB <span>GAMES</span></a><span class="zing" aria-hidden="true">ZiNG!</span>
-   <form class="search" method="get" action="${b}/search" role="search"><label for="site-search">Search</label><input id="site-search" type="search" name="q" value="${esc(req.query.q)}" placeholder="Search" autocomplete="off" list="eb-suggestions"><datalist id="eb-suggestions"></datalist><button aria-label="Search">Search</button></form>
+   <form class="search" method="get" action="${b}/search" role="search"><label for="site-search">Search</label><input id="site-search" type="search" name="q" value="${req.path === '/search' ? esc(req.query.q) : ''}" placeholder="Search" autocomplete="off" list="eb-suggestions"><datalist id="eb-suggestions"></datalist><button aria-label="Search">Search</button></form>
    <a class="store-choice eb-hdr-icon" href="${b}/stores"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>${esc(storeName || 'Find a Store')}<small>${storeName ? 'Find a Store' : 'Choose a store'}</small></span></a>
    <a class="header-account eb-hdr-icon" href="${b}/account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg><span>${user ? `Hi, ${esc(user.first_name)}<small>EB World</small>` : 'Sign in or sign up<small>EB World</small>'}</span></a>
    <a class="header-track eb-hdr-icon" href="${b}/order-history"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v9H3zM14 9h4l3 3v3h-7zM6 18a2 2 0 1 0 0-.1zM17 18a2 2 0 1 0 0-.1z"/></svg><span>Track Order</span></a>
@@ -77,7 +77,16 @@ export function mapSearch(url, query) {
 
 // Sub-department tiles carry a small product picture, like the real site's category tiles.
 const TILE_ICONS = [[/^trading card home$|^we buy tcg$/i, 'cards'], [/controller/i, 'controller'], [/nintendo|3ds|handheld/i, 'handheld'], [/playstation|xbox|console|retro|arcade|virtual/i, 'console'], [/pc games|video games|new release/i, 'game'], [/lego/i, 'bricks'], [/plush|toys|nerf|beyblade|tamagotchi/i, 'plush'], [/classic games|tabletop|party|dungeons|puzzle|board/i, 'board'], [/drinkware|dining|kitchen/i, 'mug'], [/lighting|candle|smart home/i, 'lamp'], [/stationery|books|manga|poster/i, 'binder'], [/keyboard|desktop|laptop/i, 'keyboard'], [/mice/i, 'mouse'], [/headset|audio|microphone|streaming/i, 'headphones'], [/t-shirt|hoodie|sleepwear|socks|costume/i, 'shirt'], [/hats|beanie/i, 'cap'], [/bags|wallet|cases/i, 'case'], [/pop vinyl|pop mart|figure|statue|replica|black series|limited release/i, 'figure'], [/storage|memory/i, 'ssd'], [/racing/i, 'wheel'], [/charger|cable/i, 'cable']]
-const tileMark = (b, l) => { const icon = TILE_ICONS.find(([re]) => re.test(l))?.[1]; return icon ? `<span class="eb-sub-mark eb-sub-icon" aria-hidden="true"><img src="${b}/static/catalog-${icon}.svg" alt=""></span>` : `<span class="eb-sub-mark eb-mark-${[...l].reduce((n, c) => n + c.charCodeAt(0), 0) % 6}" aria-hidden="true">${esc(monogram(l))}</span>` }
+// Platform tiles carry a platform badge (brand colour, model name) the way the real tiles show platform logos.
+const platformBadge = l => {
+  const m = /^(PlayStation|Xbox|Nintendo)(?: (\d|Series X|One|360|Switch 2|Switch|3DS|Store|Trade Deals))?$/.exec(l); if (!m) return ''
+  const [, brand, model = ''] = m, cls = { PlayStation: 'ps', Xbox: 'xbox', Nintendo: 'nin' }[brand]
+  const word = brand === 'Xbox' ? 'XBOX' : brand
+  if (!model) return `<span class="eb-plat-mark eb-plat-${cls} eb-plat-word" aria-hidden="true"><b>${esc(word)}</b></span>`
+  const big = brand === 'PlayStation' && /^\d$/.test(model) ? `PS${model}` : model === 'Trade Deals' ? 'Trade' : model
+  return `<span class="eb-plat-mark eb-plat-${cls}" aria-hidden="true"><small>${esc(word)}</small><b>${esc(big)}</b></span>`
+}
+const tileMark = (b, l) => { const badge = platformBadge(l); if (badge) return badge; const icon = TILE_ICONS.find(([re]) => re.test(l))?.[1]; return icon ? `<span class="eb-sub-mark eb-sub-icon" aria-hidden="true"><img src="${b}/static/catalog-${icon}.svg" alt=""></span>` : `<span class="eb-sub-mark eb-mark-${[...l].reduce((n, c) => n + c.charCodeAt(0), 0) % 6}" aria-hidden="true">${esc(monogram(l))}</span>` }
 // Franchise monogram: first letters of the name's main words (Magic: The Gathering -> MG, Yu-Gi-Oh! -> YGO).
 const monogram = l => l.normalize('NFKD').replace(/[^A-Za-z0-9 -]/g, '').split(/[\s-]+/).filter(w => w && !/^(the|and|of|trading|card|cards|game|games|home|all|see)$/i.test(w)).map(w => w[0].toUpperCase()).join('').slice(0, 3) || l.slice(0, 2).toUpperCase()
 export const tileRow = (b, tiles, heading = '') => tiles.length ? `${heading ? `<h2 class="eb-row-title">${esc(heading)}</h2>` : ''}<div class="eb-sub-tiles">${tiles.map(([l, h]) => `<a href="${b}${esc(h)}">${tileMark(b, l)}<strong>${esc(l)}</strong></a>`).join('')}</div>` : ''
@@ -153,7 +162,7 @@ export function installSite(router, { render, catalogPage, searchProducts, fixtu
   }
   router.get('/plus', (req, res) => {
     const b = B(res)
-    render(req, res, 'EB World PLUS', `<p class="breadcrumb"><a href="${b}">Home</a> › EB World PLUS</p><div class="eb-info-hero eb-plus-hero"><h1>EB World PLUS</h1><p>A$49 for 12 months on the researched public offer. PLUS offers member rewards and additional trade and digital-content benefits.</p></div>
+    render(req, res, 'EB World PLUS', `<p class="breadcrumb"><a href="${b}">Home</a> › EB World PLUS</p><div class="eb-info-hero eb-plus-hero"><h1>EB World PLUS</h1><p>Our premium membership: A$49 for 12 months of extra member deals, bonus trade value and Double Carrots.</p></div>
     <section class="eb-plus-panel"><div><h2>Unlock the power of PLUS and gain access to amazing benefits!</h2><p>Your membership will include:</p><ul>${PLUS_BENEFITS.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div><div class="eb-plus-price"><b>Best Value</b><span>12 Months</span><strong>$49.00</strong><p>To join PLUS sign in to your EB World account and select your membership.</p><a class="button" href="${b}/account">Sign In</a></div></section>
     <section class="panel"><h2>Exclusive EB World PLUS Deals.</h2><p>PLUS members get monthly member-only offers. Sign in to EB World to see this month's deals.</p></section>
     <section class="panel"><h2>Monthly EB World PLUS Deals!</h2><p>Deals change every month. Visit your local store for this month's offers.</p></section>
@@ -161,7 +170,7 @@ export function installSite(router, { render, catalogPage, searchProducts, fixtu
     <section class="panel service-detail"><ol><li>PLUS is distinct from your free EB World account.</li><li>Join or renew PLUS in store.</li></ol>${publicNotice('<p>This is not the real EB Games website: no membership is activated or charged.</p>')}<a class="button" href="${b}/stores">Find a store</a> <a href="${b}/help/contact?category=${encodeURIComponent('EB World PLUS')}">Ask a question</a></section>`)
   })
   for (const [path, title, intro, filters] of LANDINGS) {
-    router.get(path, (req, res) => render(req, res, title, hubIntro(B(res), path) + catalogPage(B(res), title, { ...req.query, ...filters }, searchProducts(), intro)))
+    router.get(path, (req, res) => render(req, res, title, `<p class="breadcrumb"><a href="${B(res)}">Home</a> › ${esc(title)}</p>` + hubIntro(B(res), path) + catalogPage(B(res), title, { ...req.query, ...filters }, searchProducts(), intro).replace(`<p class="breadcrumb"><a href="${B(res)}">Home</a> › Shop</p>`, '')))
   }
   router.get('/featured/egift-cards', (req, res) => {
     const b = B(res)
@@ -172,7 +181,7 @@ export function installSite(router, { render, catalogPage, searchProducts, fixtu
     const b = B(res), s = v => typeof v === 'string' ? v.trim() : ''
     const number = s(req.query.number), pin = s(req.query.pin), asked = 'number' in req.query || 'pin' in req.query
     const errors = asked ? [!/^\d{19}$/.test(number.replace(/\s/g, '')) && 'Enter the 19-digit gift card number from the back of your card.', !/^\d{4}$/.test(pin) && 'Enter the 4-digit PIN from the scratch panel.'].filter(Boolean) : []
-    const result = asked && !errors.length ? '<div class="notice" role="status">We cannot check gift card balances right now. Please try again later.</div>' : ''
+    const result = asked && !errors.length ? '<div class="notice eb-notice-warn" role="status">We can’t check your gift card balance online right now. Please try again later, or ask in any EB Games store.</div>' : ''
     render(req, res, 'Gift Card Balance', `<p class="breadcrumb"><a href="${b}">Home</a> › Gift Card Balance</p><h1>Gift Card Balance</h1>${errors.length ? `<div class="errors" role="alert"><ul>${errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>` : ''}${result}<form class="panel eb-narrow-form" method="get" action="${b}/giftcards/balance"><div class="field"><label for="gc-number">Gift Card Number</label><input id="gc-number" name="number" inputmode="numeric" value="${esc(number)}"><small>The 19-digit number on the back of your card.</small></div><div class="field"><label for="gc-pin">Gift Card PIN (4 digits)</label><input id="gc-pin" name="pin" inputmode="numeric" maxlength="4" value="${esc(pin)}"><small>Scratch the panel on the back of your card to reveal the PIN.</small></div><button>Check Value</button></form>`, errors.length ? 400 : 200)
   })
   router.get('/shopping-cart', (req, res) => res.redirect(`${B(res)}/cart`))
