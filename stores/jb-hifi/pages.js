@@ -75,6 +75,25 @@ function checkoutHeader(base, { steps = [], current }, reference = false) {
 </header>`
 }
 
+// Accessories that go with a product, for the "Enhance your product" row in the added-to-cart panel.
+const ENHANCE = {
+  Headphones: ['Phone chargers', 'Power banks', 'Portable speakers'], Earbuds: ['Phone chargers', 'Power banks', 'Phone cases'],
+  iPhone: ['Phone cases', 'Phone chargers', 'Power banks', 'Earbuds'], 'Android phones': ['Phone cases', 'Phone chargers', 'Power banks', 'Earbuds'],
+  Laptops: ['Computer accessories', 'Monitors', 'Microsoft 365', 'Antivirus & security'], Tablets: ['Computer accessories', 'Phone chargers', 'Microsoft 365'],
+  'Desktop computers': ['Monitors', 'Computer accessories', 'Microsoft 365'], Monitors: ['Computer accessories'],
+  TVs: ['Soundbars', 'TV wall brackets', 'Streaming players', '4K Ultra HD'], Projectors: ['Soundbars', 'Streaming players'], Soundbars: ['TV wall brackets', 'Streaming players'],
+  'PlayStation consoles': ['PS5 accessories', 'PS5 games'], 'Xbox consoles': ['Xbox accessories', 'Xbox games'], 'Nintendo Switch consoles': ['Nintendo Switch accessories', 'Nintendo Switch games'],
+  'PS5 games': ['PS5 accessories'], 'Xbox games': ['Xbox accessories'], 'Nintendo Switch games': ['Nintendo Switch accessories'],
+  'Mirrorless cameras': ['Camera lenses', 'Computer accessories'], 'Action cameras': ['Computer accessories', 'Power banks'], 'Smart watches': ['Watch straps', 'Phone chargers'],
+  Turntables: ['Vinyl', 'Hi-Fi systems'], Vinyl: ['Turntables'], 'Instant cameras': ['Instant cameras'],
+}
+function enhancements(p) {
+  const types = ENHANCE[p.type]
+  if (!types || fixtureCatalog || !p.shelf) return related(p)
+  const picks = types.flatMap(t => LISTED.filter(u => u.type === t && u.id !== p.id && u.orderable !== false).slice(0, 3))
+  return [...picks, ...related(p)].filter((u, i, a) => a.findIndex(v => v.id === u.id) === i).slice(0, 6)
+}
+
 // Full-screen "Item added to your cart!" panel (the ?added= fallback keeps it working without JavaScript).
 function addedModal(base, p, closeHref) {
   const actions = `<div class="jb-modal-actions"><a class="jb-btn jb-btn-black" href="${base}/cart">Review cart</a><a class="jb-btn" href="${base}/checkout">Checkout</a></div>`
@@ -84,7 +103,7 @@ function addedModal(base, p, closeHref) {
   <div class="jb-modal-top"><span class="jb-check" aria-hidden="true">&#10003;</span><h2 id="added-title">Item added to your cart!</h2></div>
   <div class="jb-modal-item">${artwork(p)}<div class="jb-modal-name"><b>${esc(p.title)}</b><div class="jb-subtitle">${esc(p.subtitle)}</div>${optionText(p)}<strong>${aud(p.price)}</strong></div>${actions}</div>
   <h3 class="jb-display">Enhance your product</h3>
-  <div class="jb-carousel">${related(p).map(u => tile(base, u, closeHref)).join('')}</div>
+  <div class="jb-carousel">${enhancements(p).map(u => tile(base, u, closeHref)).join('')}</div>
   ${actions}
 </div></div>`
 }
@@ -232,7 +251,7 @@ export function cartPage({ base, t, couponError }) {
     <form method="post" action="${base}/checkout"><button type="submit" class="jb-btn jb-btn-block">Checkout</button></form>
   </aside>
 </div>
-<section><h2 class="jb-display">Don’t forget these</h2><div class="jb-carousel">${related(t.lines[0].product).map(u => tile(base, u, `${base}/cart`)).join('')}</div></section>`
+<section><h2 class="jb-display">Don’t forget these</h2><div class="jb-carousel">${enhancements(t.lines[0].product).map(u => tile(base, u, `${base}/cart`)).join('')}</div></section>`
 }
 
 function referenceCartPage({ base, t, couponError }) {
