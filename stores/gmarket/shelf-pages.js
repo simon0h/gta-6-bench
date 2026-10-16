@@ -18,8 +18,9 @@ const PAGE = 40
 
 // --- art -------------------------------------------------------------------
 // Locally rendered product illustrations (no external images). The hint picks a
-// category-appropriate drawing; games and consoles use the platform renderer.
-const artTitle = { loafers: 'leather shoes', toothpaste: 'compact powder', brushes: 'tooth brush set', vitamin: 'vitamin bottle', 'lego set': 'building blocks toy', drill: '드릴', appliance: 'kettle', 'coffee machine': 'espresso machine', desktop: 'mini pc', media: 'vinyl record', tire: '공구 세트', pens: 'eyeliner pencil', 'cushion compact': 'blush', 'hair dryer': 'hair dryer' }
+// category-appropriate drawing; games and consoles use the platform renderer. Drinks and
+// milk are drawn as bottles rather than the generic food pouch.
+const artTitle = { loafers: 'leather shoes', toothpaste: 'compact powder', brushes: 'tooth brush set', vitamin: 'vitamin bottle', 'lego set': 'building blocks toy', drill: '드릴', appliance: 'kettle', 'coffee machine': 'espresso machine', desktop: 'mini pc', media: 'vinyl record', tire: '공구 세트', pens: 'eyeliner pencil', 'cushion compact': 'blush', 'hair dryer': 'hair dryer', 'bottled water': 'water bottle', beverages: 'soda bottle', milk: 'plastic bottle' }
 const artCache = new Map()
 export function shelfArt(p, view = 0) {
   const key = `${p.code}:${view}`
@@ -28,7 +29,7 @@ export function shelfArt(p, view = 0) {
   const hint = artTitle[p.art] || p.art
   const descriptor = g && (g.type === 'game' || g.type === 'console')
     ? { type: g.type, platform: g.platform, title: g.name || p.title, raw: { title: g.name || p.title, catalogType: g.type, platform: g.platform }, assetKey: `gmarket-shelf-${p.code}` }
-    : { title: hint, raw: { title: hint, type: ['pantry', 'beverages'].includes(p.art) ? p.art : p.art === 'hair dryer' ? 'hair dryer' : undefined, category: p.art === 'hair dryer' ? 'Beauty' : undefined }, assetKey: `gmarket-shelf-${p.code}` }
+    : { title: hint, raw: { title: hint, type: p.art === 'pantry' ? p.art : p.art === 'hair dryer' ? 'hair dryer' : undefined, category: p.art === 'hair dryer' ? 'Beauty' : undefined }, assetKey: `gmarket-shelf-${p.code}` }
   // Drop the English view caption; the page labels views in Korean.
   const svg = renderProductAsset(descriptor, view).replace(/<text[^>]*>(?:Product view|Reverse or interior view|Construction and material detail|Component and alternate views|Cover artwork|Rear packaging and illustrated scenes|Illustrated game world|Case and media)<\/text>/g, '')
   if (artCache.size > 600) artCache.delete(artCache.keys().next().value)
@@ -187,7 +188,7 @@ export function cartView(base, lines, messages = []) {
 ${messages.length ? `<div class="gm-alert" role="alert">${messages.map(m => `<p>${esc(m)}</p>`).join('')}</div>` : ''}
 <div class="gm-cart-grid">${lines.length ? `<section class="gm-panel gm-left"><h2 class="sr-only">담은 상품</h2><ul class="gm-lines">${lines.map(l => lineView(base, l, `<div class="gm-line-ctrl"><form method="post" action="${base}/cart/update"><input type="hidden" name="line" value="${esc(lineKey(l))}"><label class="sr-only" for="q-${esc(lineKey(l))}">수량</label><input id="q-${esc(lineKey(l))}" name="qty" type="number" min="1" max="10" value="${l.qty}" inputmode="numeric"><button class="gm-btn outline small" name="action" value="update">변경</button><button class="gm-linkbtn" name="action" value="remove">삭제</button></form></div>`)).join('')}</ul></section>`
     : `<section class="gm-panel gm-cart-empty"><p class="gm-pending-icon" aria-hidden="true">🛒</p><p><strong>장바구니에 담긴 상품이 없습니다.</strong></p><p class="gm-muted">원하는 상품을 장바구니에 담아보세요.</p><a class="gm-btn outline" href="${base}/">쇼핑 계속하기</a></section>`}
-<aside class="gm-panel gm-summary gm-left"><h2>결제 예정 금액</h2><dl><dt>상품금액 (${count}개)</dt><dd>${won(t.subtotal)}</dd><dt>배송비</dt><dd>${won(t.shipping)}</dd><dt>할인금액</dt><dd>-${won(t.list_savings)}</dd><dt class="total">총 결제금액</dt><dd class="total">${won(t.total)}</dd></dl>${lines.length ? `<a class="gm-btn wide" href="${base}/checkout?mode=cart">주문하기 (${lines.length})</a>` : '<button class="gm-btn wide" disabled>주문하기</button>'}</aside></div>`
+<aside class="gm-panel gm-summary gm-left"><h2>결제 예정 금액</h2><dl><dt>상품금액 (${count}개)</dt><dd>${won(t.subtotal + t.list_savings)}</dd><dt>할인금액</dt><dd class="gm-minus">-${won(t.list_savings)}</dd><dt>배송비</dt><dd>${t.shipping ? `+${won(t.shipping)}` : won(0)}</dd><dt class="total">총 결제금액</dt><dd class="total">${won(t.total)}</dd></dl>${lines.length ? `<a class="gm-btn wide" href="${base}/checkout?mode=cart">주문하기 (${lines.length})</a>` : '<button class="gm-btn wide" disabled>주문하기</button>'}</aside></div>`
 }
 
 export function checkoutView(base, { lines, user, values = {}, messages = [] }) {
@@ -200,14 +201,14 @@ ${messages.length ? `<div class="gm-alert" role="alert">${messages.map(m => `<p>
 <section class="gm-panel gm-left"><h2>주문 상품 (${lines.length})</h2><ul class="gm-lines">${lines.map(l => lineView(base, l)).join('')}</ul></section>
 <section class="gm-panel gm-left"><h2>결제수단</h2><p><label class="gm-check"><input type="radio" name="method" value="card" checked> 신용/체크카드</label></p><div class="gm-form-grid">${f('name_on_card', '카드 소유자 이름', 'autocomplete="cc-name" required')}<label for="co-card">카드번호</label><input id="co-card" name="card_number" inputmode="numeric" autocomplete="cc-number" required><label for="co-exp">유효기간 (MM/YY)</label><input id="co-exp" name="expiry" value="${esc(values.expiry || '')}" placeholder="MM/YY" autocomplete="cc-exp" required><label for="co-cvv">CVC</label><input id="co-cvv" name="cvv" inputmode="numeric" autocomplete="cc-csc" required></div></section>
 <label class="gm-check gm-terms"><input type="checkbox" name="terms" value="1"${values.terms === '1' ? ' checked' : ''}> [필수] 주문 상품정보 및 결제대행 서비스 이용약관, 개인정보 제3자 제공에 동의합니다.</label></div>
-<aside class="gm-panel gm-summary gm-left"><h2>최종 결제금액</h2><dl><dt>상품금액</dt><dd>${won(t.subtotal)}</dd><dt>배송비</dt><dd>${won(t.shipping)}</dd><dt class="total">총 결제금액</dt><dd class="total">${won(t.total)}</dd></dl><button class="gm-btn wide">${won(t.total)} 결제하기</button></aside></form>`
+<aside class="gm-panel gm-summary gm-left"><h2>최종 결제금액</h2><dl><dt>상품금액</dt><dd>${won(t.subtotal + t.list_savings)}</dd><dt>할인금액</dt><dd class="gm-minus">-${won(t.list_savings)}</dd><dt>배송비</dt><dd>${t.shipping ? `+${won(t.shipping)}` : won(0)}</dd><dt class="total">총 결제금액</dt><dd class="total">${won(t.total)}</dd></dl><button class="gm-btn wide">${won(t.total)} 결제하기</button></aside></form>`
 }
 
 export function confirmationView(base, order) {
   const a = order.shipping_address
   return `<div class="gm-cart-head"><h1 class="gm-page-title">주문완료</h1><ol class="gm-steps"><li><span>01</span>장바구니</li><li><span>02</span>주문/결제</li><li aria-current="step"><span>03</span>주문완료</li></ol></div>
 <section class="gm-panel gm-complete" data-order-number="${esc(order.order_number)}"><p class="gm-pending-icon" aria-hidden="true">✅</p><h2>주문이 완료되었습니다.</h2><p>주문번호 <strong>${esc(order.order_number)}</strong></p><p class="gm-muted">주문 내역은 나의 G마켓 &gt; 주문/배송조회에서 확인할 수 있습니다. 확인 메일을 ${esc(order.customer.email)}(으)로 보냈습니다.</p></section>
-<section class="gm-panel gm-left"><h2>주문 상품</h2><ul class="gm-lines">${order.items.map(i => `<li class="gm-line"><div class="gm-line-info"><a href="${base}/Item?goodscode=${esc(i.sku)}">${esc(i.title)}</a><p class="gm-muted">수량 ${i.qty}개</p></div><p class="gm-line-price"><strong>${won(i.unit_price * i.qty)}</strong></p></li>`).join('')}</ul></section>
+<section class="gm-panel gm-left"><h2>주문 상품</h2><ul class="gm-lines">${order.items.map(i => `<li class="gm-line">${shelfByCode.get(i.sku) ? `<a href="${base}/Item?goodscode=${esc(i.sku)}" class="gm-line-img">${img(base, shelfByCode.get(i.sku))}</a>` : '<span></span>'}<div class="gm-line-info"><a href="${base}/Item?goodscode=${esc(i.sku)}">${esc(i.title)}</a><p class="gm-muted">수량 ${i.qty}개</p></div><p class="gm-line-price"><strong>${won(i.unit_price * i.qty)}</strong></p></li>`).join('')}</ul></section>
 <section class="gm-panel gm-left"><h2>배송지</h2><p>${esc(order.customer.first_name)} · ${esc(order.customer.phone || '')}</p><p>(${esc(a.postal_code)}) ${esc(a.city)} ${esc(a.line1)} ${esc(a.line2 || '')}</p></section>
 <section class="gm-panel gm-left"><h2>결제 정보</h2><dl class="gm-dl"><dt>결제수단</dt><dd>신용카드 (${esc(order.payment.brand || '')} ****${esc(order.payment.last4)})</dd><dt>상품금액</dt><dd>${won(order.totals.subtotal)}</dd><dt>배송비</dt><dd>${won(order.totals.shipping)}</dd><dt>총 결제금액</dt><dd><strong>${won(order.totals.total)}</strong></dd></dl></section>
 <p><a class="gm-btn" href="${base}/">쇼핑 계속하기</a> <a class="gm-btn outline" href="${base}/myg/orders">주문/배송조회</a></p>`
