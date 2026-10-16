@@ -336,3 +336,60 @@ main#page-content{max-width:1440px;margin:0 auto;padding:22px 32px 56px;min-heig
  .cw-cart-line{grid-template-columns:72px minmax(0,1fr)}.cw-cart-line img{width:72px;height:72px}.cw-line-price{grid-column:2;text-align:left}
  .cw-field-grid{grid-template-columns:1fr}
 }
+
+/* Round 2: filter toggle on phones, order confirmation, order history, clinics, brands, 404 */
+.cw-filter-check{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+.cw-filter-open{display:none}
+.cw-autoship-hint{color:#128a4f;font-size:13px!important}.cw-stock{color:#128a4f;font-size:13px!important;font-weight:700}
+.cw-pdp-rating{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.cw-pdp-rating strong{color:var(--cw-ink)}
+.cw-confirm{max-width:none;margin:6px 0 0}
+.cw-confirm-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}.cw-confirm-head svg{flex:0 0 auto;margin-top:4px}
+.cw-confirm-head h1{margin-bottom:6px}.cw-confirm-head p{margin:2px 0}
+.cw .cw-confirm-h3{font-size:15px;margin:16px 0 4px}.cw-cart-summary .cw-confirm-h3+p{margin:0;font-size:14px}
+.cw-cart-summary .cw-btn-block{margin-top:12px}.cw-confirm-more{margin-top:8px!important}
+.cw-co-title{color:var(--cw-ink);text-decoration:none}.cw-co-title:hover{text-decoration:underline}
+.cw-progress{display:grid;grid-template-columns:repeat(4,1fr);list-style:none;padding:0;margin:14px 0 8px;font-size:13px;color:var(--cw-muted)}
+.cw-progress li{position:relative;padding-top:22px;text-align:center}
+.cw-progress li::before{content:"";position:absolute;top:4px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#c9cfd6;z-index:1}
+.cw-progress li::after{content:"";position:absolute;top:9px;left:-50%;width:100%;height:3px;background:#dfe3e8}
+.cw-progress li:first-child::after{display:none}
+.cw-progress .is-done{color:#128a4f;font-weight:700}.cw-progress .is-done::before{background:#128a4f}
+.cw-confirm-autoship{background:var(--cw-sky);border-color:transparent}.cw-confirm-autoship h2{font-size:20px}
+.cw-order-card{padding:0;overflow:hidden}
+.cw-order-head{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:center;background:var(--cw-bg-soft);padding:12px 18px;border-bottom:1px solid var(--cw-line);font-size:14px}
+.cw-order-head div{display:grid}.cw-order-head a{margin-left:auto;font-weight:700}
+.cw-order-body{padding:16px 18px}.cw-order-body h2{font-size:18px;margin:0 0 2px}
+.cw-order-status{color:#128a4f;font-weight:700;font-size:14px;margin:0 0 8px}
+.cw-order-line{display:flex;gap:14px;align-items:center;padding:10px 0;border-top:1px solid var(--cw-line)}
+.cw-order-line img{border:1px solid #eef0f2;border-radius:6px}.cw-order-line p{flex:1;margin:0;font-size:14px}
+.cw-order-line .cw-btn{padding:6px 16px;font-size:14px}
+.cw-clinic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.cw-clinic{border:1px solid var(--cw-line);border-radius:var(--cw-radius);padding:18px}.cw-clinic h3{font-size:17px;margin-bottom:6px}
+.cw-clinic p{margin:0 0 10px;font-size:14px}
+.cw-clinic-hours{margin:0 0 10px;font-size:14px}.cw-clinic-hours div{display:flex;gap:10px}.cw-clinic-hours dt{width:70px;font-weight:700}.cw-clinic-hours dd{margin:0}
+.cw-clinic-links a{font-weight:700}
+.cw-brand-az{margin-top:36px}
+.cw-az-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.cw-az-nav a{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;border:1px solid var(--cw-line);border-radius:8px;font-weight:700;text-decoration:none}
+.cw-az-group{border-top:1px solid var(--cw-line);padding:12px 0}.cw-az-group h3{font-size:20px}
+.cw-az-group ul{list-style:none;padding:0;margin:0;columns:4;column-gap:24px}.cw-az-group li{padding:3px 0;font-size:15px;break-inside:avoid}
+.cw-az-group a{color:var(--cw-text);text-decoration:none}.cw-az-group a:hover{color:var(--cw-blue);text-decoration:underline}
+.empty.reference-coverage.cw-404{display:flex;gap:32px;align-items:center;text-align:left;background:var(--cw-sky);border-radius:var(--cw-radius);padding:40px 48px;margin-top:8px}
+.cw-404-art{color:var(--cw-blue);flex:0 0 auto}.empty.reference-coverage.cw-404 h1{font-size:34px;margin:0 0 10px}.empty.reference-coverage.cw-404 p{max-width:640px;margin:0 0 14px}
+.cw-404-links .cw-btn{margin:4px 6px 4px 0}
+.cw-location{max-width:460px}
+@media (max-width:1100px){.cw-clinic-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cw-az-group ul{columns:3}}
+@media (max-width:760px){
+ .cw-filter-wrap{display:flex;flex-direction:column}
+ .cw-filter-open{display:block;border:2px solid var(--cw-blue);border-radius:999px;padding:9px 16px;text-align:center;font-weight:700;color:var(--cw-blue);cursor:pointer;background:#fff}
+ .cw-filter-wrap .cw-filters{display:none;margin-top:12px}
+ .cw-filter-check:checked~.cw-filters{display:block}
+ .cw-filter-check:checked+.cw-filter-open{background:var(--cw-sky)}
+ .cw-filter-check:focus-visible+.cw-filter-open{outline:3px solid var(--cw-yellow);outline-offset:2px}
+ .cw-line-form select{width:auto}
+ .cw-progress{font-size:12px}
+ .cw-order-head{gap:8px 20px}.cw-order-head a{margin-left:0;flex-basis:100%}
+ .cw-order-line{flex-wrap:wrap}.cw-order-line .cw-btn{margin-left:86px}
+ .cw-clinic-grid{grid-template-columns:1fr}.cw-az-group ul{columns:2}
+ .empty.reference-coverage.cw-404{flex-direction:column;align-items:flex-start;padding:24px 20px;gap:12px}.cw-404-art svg{width:64px;height:64px}.empty.reference-coverage.cw-404 h1{font-size:26px}
+}

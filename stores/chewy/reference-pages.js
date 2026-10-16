@@ -25,6 +25,28 @@ const faq = list => `<div class="cw-faq">${list.map(([q, a]) => `<details><summa
 const sections = list => list.map(([h, ...ps]) => `<section class="cw-copy-section"><h2>${esc(h)}</h2>${ps.map(p => Array.isArray(p) ? `<ul>${p.map(li => `<li>${li}</li>`).join('')}</ul>` : `<p>${p}</p>`).join('')}</section>`).join('')
 const notCaptured = (base, what = 'this category') => `<div class="cw-empty" data-catalog-state="no-listings"><span class="cw-empty-art">${paw(64)}</span><h2>We couldn’t find any items here right now</h2><p>There are no items to show for ${esc(what)} at the moment. Please check back soon, or try another category.</p><p><a class="cw-btn" href="${base}/deals/todays-deals-2723">Shop Today's Deals</a> <a class="cw-btn cw-btn-outline" href="${base}/app/site-map">Browse the site map</a></p></div>`
 
+// Chewy Vet Care clinics for the location finder (Chewy runs no retail stores).
+const HOURS = [['Mon–Fri', '8 a.m.–7 p.m.'], ['Sat', '8 a.m.–5 p.m.'], ['Sun', '9 a.m.–5 p.m.']]
+const CLINICS = [
+  ['Gilbert', '3061 S Val Vista Dr, Suite 104', 'Gilbert', 'AZ', '85295'], ['Peoria', '8285 W Lake Pleasant Pkwy, Suite 110', 'Peoria', 'AZ', '85382'],
+  ['Scottsdale', '10101 N 90th St, Suite 120', 'Scottsdale', 'AZ', '85258'], ['Tempe', '1825 E Elliot Rd, Suite 101', 'Tempe', 'AZ', '85284'],
+  ['Aurora', '23955 E Plaza Ave, Suite 140', 'Aurora', 'CO', '80016'], ['Davie', '4401 S University Dr', 'Davie', 'FL', '33328'],
+  ['Boca Raton', '9840 Glades Rd, Suite 6', 'Boca Raton', 'FL', '33434'], ['Sandy Springs', '6125 Roswell Rd, Suite 300', 'Sandy Springs', 'GA', '30328'],
+  ['Plano', '2001 Preston Rd, Suite 200', 'Plano', 'TX', '75093'], ['Fort Worth', '5900 Overton Ridge Blvd, Suite 120', 'Fort Worth', 'TX', '76132'],
+].map(([n, street, city, state, zip], i) => ({ name: `Chewy Vet Care ${n}`, street, city, state, zip, hours: i % 3 === 1 ? [['Mon–Fri', '7 a.m.–7 p.m.'], ['Sat', '8 a.m.–4 p.m.'], ['Sun', 'Closed']] : HOURS }))
+const STATE_NAMES = { AZ: 'Arizona', CO: 'Colorado', FL: 'Florida', GA: 'Georgia', TX: 'Texas' }
+const zipState = zip => { const n = +zip.slice(0, 3); return n >= 850 && n <= 865 ? 'AZ' : n >= 800 && n <= 816 ? 'CO' : n >= 320 && n <= 349 ? 'FL' : (n >= 300 && n <= 319) || n === 398 || n === 399 ? 'GA' : (n >= 750 && n <= 799) || n === 885 ? 'TX' : '' }
+
+// "Shop All Brands" A–Z index built from the assortment, each linking to a brand search.
+function allBrands(base) {
+  const generics = new Set(['Carprofen', 'Trazodone', 'Methimazole', 'Gabapentin'])
+  const names = [...new Set(SHELF.map(p => p.brand).filter(b => !generics.has(b)))].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }))
+  const groups = new Map()
+  for (const n of names) { const k = /^[a-z]/i.test(n) ? n[0].toUpperCase() : '#'; groups.set(k, [...(groups.get(k) || []), n]) }
+  const id = k => `brands-${k === '#' ? 'num' : k}`
+  return `<section class="cw-section cw-brand-az"><h2>Shop All Brands</h2><nav class="cw-az-nav" aria-label="Brands A to Z">${[...groups.keys()].map(k => `<a href="#${id(k)}">${k}</a>`).join('')}</nav>${[...groups].map(([k, list]) => `<div class="cw-az-group" id="${id(k)}"><h3>${k}</h3><ul>${list.map(n => `<li><a href="${base}/s?query=${encodeURIComponent(n)}">${esc(n)}</a></li>`).join('')}</ul></div>`).join('')}</section>`
+}
+
 const FILTER_OPTIONS = {
   Autoship: ['Autoship eligible'], Brand: BRANDS.slice(0, 6).map(b => b.label), 'Breed Size': ['Extra Small', 'Small', 'Medium', 'Large', 'Extra Large'],
   Price: ['Under $10', '$10 - $25', '$25 - $50', '$50 - $100', '$100 & Above'], 'Customer Rating': ['4 Stars & Up', '3 Stars & Up', '2 Stars & Up', '1 Star & Up'],
@@ -205,7 +227,7 @@ export function installChewyReferencePages(inner) {
   router.get('/customer-care', (req, res) => {
     const base = baseOf(res)
     const topics = [['Track an order', '/app/account/orderhistory'], ['Shipping info', '/app/content/shipping-info'], ['Start a return', '/app/content/return-policy'], ['Autoship', '/app/content/autoship'], ['Pharmacy & prescriptions', '/app/content/pharmacy'], ['Account & sign in', '/app/account'], ['Gift cards', '/app/content/gift-card-terms'], ['Chewy Vet Care', '/vet-care'], ['FAQs', '/app/content/faq']]
-    render(req, res, 'Chewy Help', `<section class="cw-hero-band"><div><p class="cw-eyebrow">24/7 Help</p><h1>Chewy Help</h1><h2>Get help from our experts 24/7</h2><p>Award-winning customer service, any time of day.</p></div>${paw(150)}</section><div class="cw-contact-grid"><section><h2>Call us</h2><p><a href="tel:+18006724399">${PHONE}</a></p><p>Available 24/7</p></section><section id="chat"><h2>Chat</h2><p>Chat with a customer service expert in the Chewy app or on chewy.com.</p><p class="cw-muted">Chat is currently unavailable. Please call us 24/7 at ${PHONE}.</p></section><section><h2>Connect with a Vet</h2><p>Chat for free with a licensed vet tech.</p><p><a href="${base}/b/connect-vet-16616">Connect with a Vet</a></p></section></div><section class="cw-section"><h2>How can we help?</h2><div class="cw-topic-grid">${topics.map(([l, p]) => `<a href="${base}${p}">${l}</a>`).join('')}</div></section>`)
+    render(req, res, 'Chewy Help', `<section class="cw-hero-band"><div><p class="cw-eyebrow">24/7 Help</p><h1>Chewy Help</h1><h2>Get help from our experts 24/7</h2><p>Award-winning customer service, any time of day.</p></div>${paw(150)}</section><div class="cw-contact-grid"><section><h2>Call us</h2><p><a href="tel:+18006724399">${PHONE}</a></p><p>Available 24/7</p></section><section id="chat"><h2>Chat</h2><p>Chat with a customer service expert in the Chewy app or on chewy.com.</p><p>Available 24/7</p><p><a href="${base}/mobile-app">Chat in the Chewy app</a></p></section><section><h2>Connect with a Vet</h2><p>Chat for free with a licensed vet tech.</p><p><a href="${base}/b/connect-vet-16616">Connect with a Vet</a></p></section></div><section class="cw-section"><h2>How can we help?</h2><div class="cw-topic-grid">${topics.map(([l, p]) => `<a href="${base}${p}">${l}</a>`).join('')}</div></section>`)
   })
   router.get('/app/content/autoship', (req, res) => {
     const base = baseOf(res)
@@ -226,8 +248,15 @@ export function installChewyReferencePages(inner) {
   router.get('/vet-care', (req, res) => render(req, res, 'Chewy Vet Care', infoPage(baseOf(res), { title: 'Chewy Vet Care', eyebrow: 'Health Services', lede: 'In-person routine and urgent care from Chewy’s veterinary teams, with records and prescriptions connected to your Chewy account.', cta: ['Find a clinic', '/vet-care/locations'], list: [['Care for every stage', ['Wellness exams and vaccines', 'Sick visits and urgent care', 'Dental care', 'Spay, neuter and surgery']], ['Connect with a Vet', `Not sure you need a visit? <a href="${baseOf(res)}/b/connect-vet-16616">Chat for free with a licensed vet tech</a>.`], ['CarePlus', `Pair visits with <a href="${baseOf(res)}/pet-insurance">CarePlus pet insurance and wellness plans</a>.`], ['Get the Chewy app', 'Book appointments and manage your pet’s records in the Chewy app.']] })))
   router.get('/vet-care/locations', (req, res) => {
     const base = baseOf(res), zip = str(req.query.zip)
-    const valid = /^\d{5}$/.test(zip)
-    render(req, res, 'Find a Chewy Vet Care Clinic', `${crumbs(base, [['Chewy Vet Care', '/vet-care'], ['Locations']])}<h1 class="cw-page-title">Chewy Vet Care Locations</h1><p class="cw-lede">Chewy doesn’t operate retail stores. Chewy Vet Care clinics offer in-person veterinary care in select U.S. markets.</p><form class="cw-form cw-inline-form" method="get" action="${base}/vet-care/locations"><label for="clinic-zip">Find a clinic near you (ZIP code)</label><input id="clinic-zip" name="zip" inputmode="numeric" autocomplete="postal-code" value="${esc(zip)}"><button class="cw-btn" type="submit">Find a clinic</button></form>${zip ? valid ? `<div class="cw-empty"><h2>Clinic results for ${esc(zip)}</h2><p>We couldn’t find a Chewy Vet Care clinic near ${esc(zip)}. Try another ZIP code, or chat with a vet tech for free.</p><p><a href="${base}/b/connect-vet-16616">Chat with a vet tech instead</a></p></div>` : '<p class="cw-error" role="alert">Please enter a valid 5-digit ZIP code.</p>' : ''}`)
+    const valid = /^\d{5}$/.test(zip), state = valid ? zipState(zip) : ''
+    const near = state ? CLINICS.filter(c => c.state === state).sort((a, b) => Math.abs(+a.zip - +zip) - Math.abs(+b.zip - +zip)) : []
+    const card = c => `<article class="cw-clinic"><h3>${esc(c.name)}</h3><p>${esc(c.street)}<br>${esc(c.city)}, ${c.state} ${c.zip}</p><dl class="cw-clinic-hours">${c.hours.map(([d, h]) => `<div><dt>${d}</dt><dd>${h}</dd></div>`).join('')}</dl><p class="cw-clinic-links"><a href="${base}/mobile-app">Book an appointment</a> · <a href="${base}/vet-care">Services</a></p></article>`
+    const byState = [...new Set(CLINICS.map(c => c.state))].map(st => `<section class="cw-section"><h2>${esc(STATE_NAMES[st])}</h2><div class="cw-clinic-grid">${CLINICS.filter(c => c.state === st).map(card).join('')}</div></section>`).join('')
+    const results = !zip ? byState
+      : !valid ? `<p class="cw-error" role="alert">Please enter a valid 5-digit ZIP code.</p>${byState}`
+      : near.length ? `<section class="cw-section"><h2>${near.length} clinic${near.length === 1 ? '' : 's'} near ${esc(zip)}</h2><div class="cw-clinic-grid">${near.map(card).join('')}</div></section>`
+      : `<div class="cw-empty"><h2>There are no Chewy Vet Care clinics near ${esc(zip)} yet</h2><p>We’re opening new clinics every year. In the meantime, <a href="${base}/b/connect-vet-16616">chat for free with a licensed vet tech</a>.</p></div>${byState}`
+    render(req, res, 'Find a Chewy Vet Care Clinic', `${crumbs(base, [['Chewy Vet Care', '/vet-care'], ['Locations']])}<h1 class="cw-page-title">Chewy Vet Care Locations</h1><p class="cw-lede">Wellness exams, vaccines, dental care, surgery and sick visits from Chewy’s veterinary teams in Arizona, Colorado, Florida, Georgia and Texas.</p><form class="cw-form cw-inline-form" method="get" action="${base}/vet-care/locations"><label for="clinic-zip">Find a clinic near you (ZIP code)</label><input id="clinic-zip" name="zip" inputmode="numeric" autocomplete="postal-code" value="${esc(zip)}"><button class="cw-btn" type="submit">Find a clinic</button></form>${results}`)
   })
   router.get('/pet-insurance', (req, res) => render(req, res, 'CarePlus Pet Insurance & Wellness', infoPage(baseOf(res), { title: 'CarePlus Pet Insurance & Wellness Plans', eyebrow: 'Chewy Health', lede: 'Give your pet the best possible health coverage with Pet Insurance and Wellness plans from CarePlus by Chewy.', cta: ['Get a quote', '/customer-care'], list: [['Pet Insurance', 'Accident and illness coverage that helps with unexpected vet bills, from any licensed vet.'], ['Wellness plans', 'Help budget for routine care such as exams, vaccines and preventatives.'], ['Why CarePlus?', ['Use any licensed veterinarian', 'Manage claims in the Chewy app', 'Available for dogs and cats']]] })))
   router.get('/expert-health-tips', (req, res) => render(req, res, 'Expert Health Tips', infoPage(baseOf(res), { title: 'Expert Health Tips', eyebrow: 'PetMD', lede: 'PetMD is Chewy’s veterinarian-reviewed pet health library.', cta: ['Connect with a Vet', '/b/connect-vet-16616'], list: [['PetMD', 'Vet-reviewed articles on symptoms, conditions, medications, nutrition and behavior for dogs, cats and other pets.'], ['Learn more on Chewy', `<a href="${baseOf(res)}/education">Chewy Education: All About Pets</a>`]] })))
@@ -250,7 +279,7 @@ export function installChewyReferencePages(inner) {
   router.get('/education/:slug', eduPage)
   router.get('/best', (req, res) => {
     const base = baseOf(res)
-    render(req, res, 'Chewy Picks', `${crumbs(base, [['Chewy Picks']])}<h1 class="cw-page-title">Chewy Picks</h1><p class="cw-lede">Top-rated favorites chosen with input from pet parents and Chewy experts.</p>${tiles(base, PICKS_MENU.map(p => [p.label, p.path]))}`)
+    render(req, res, 'Chewy Picks', `${crumbs(base, [['Chewy Picks']])}<h1 class="cw-page-title">Chewy Picks</h1><p class="cw-lede">Top-rated favorites chosen with input from pet parents and Chewy experts.</p>${tiles(base, PICKS_MENU.map(p => [p.label, p.path]))}${PICKS_MENU.slice(0, 4).map(p => productRow(base, p.label, pickProducts(p.path.split('/').pop()).slice(0, 14), p.path)).join('')}`)
   })
   router.get('/best/:slug', (req, res, next) => {
     const pick = PICKS_MENU.find(p => p.path === `/best/${req.params.slug}`); if (!pick) return next()
@@ -264,7 +293,7 @@ export function installChewyReferencePages(inner) {
   })
   router.get('/brands', (req, res) => {
     const base = baseOf(res)
-    render(req, res, 'Popular Brands', `${crumbs(base, [['Popular Brands']])}<h1 class="cw-page-title">Popular Brands</h1><div class="cw-brand-grid">${BRANDS.map(b => `<a href="${base}${b.path}"><strong>${esc(b.label)}</strong><span>${esc(b.text)}</span></a>`).join('')}</div>`)
+    render(req, res, 'Popular Brands', `${crumbs(base, [['Popular Brands']])}<h1 class="cw-page-title">Popular Brands</h1><div class="cw-brand-grid">${BRANDS.map(b => `<a href="${base}${b.path}"><strong>${esc(b.label)}</strong><span>${esc(b.text)}</span></a>`).join('')}</div>${allBrands(base)}`)
   })
   router.get('/brands/:slug', (req, res, next) => {
     const b = BRANDS.find(x => x.path === `/brands/${req.params.slug}`); if (!b) return next()
@@ -355,6 +384,19 @@ export function installChewyReferencePages(inner) {
     render(req, res, 'Order Confirmation', confirmationPage(baseOf(res), o))
   })
 
+  // Delivery ZIP (the shared router still handles the POST and its validation).
+  router.get('/location', (req, res) => {
+    const base = baseOf(res), saved = req.store.location || ''
+    render(req, res, 'Delivery Location', `${crumbs(base, [['Delivery Location']])}<section class="cw-auth cw-location"><h1>Choose your delivery location</h1><p class="cw-muted">Delivery dates and shipping options depend on where your order is going.</p>${saved ? `<p class="cw-ship-meter cw-ship-ok">Delivering to <strong>${esc(saved)}</strong></p>` : ''}<form method="post" action="${base}/location" class="cw-form"><label for="postal-code">ZIP Code</label><input id="postal-code" name="postal_code" value="${esc(saved)}" inputmode="numeric" autocomplete="postal-code" required><button class="cw-btn cw-btn-block" type="submit">Save ZIP Code</button></form><p class="cw-muted">Signed-in customers can manage saved addresses in <a href="${base}/app/account">Account</a>.</p></section>`)
+  })
+  // Unknown pages: Chewy's own "page not found" page, still a 404 with the
+  // uncaptured coverage state the shared router uses.
+  router.use((req, res, next) => {
+    if (req.method !== 'GET' || ['/reference/catalog', '/s', '/search'].includes(req.path)) return next()
+    const base = baseOf(res)
+    render(req, res, 'Page Not Found', `<section class="empty reference-coverage cw-404" data-reference-state="uncaptured"><span class="cw-404-art">${paw(96)}</span><div><p class="cw-eyebrow">Error 404</p><h1>Sorry, we couldn't find that page</h1><p>The page you’re looking for may have moved or no longer exists. Try searching, or start with one of these:</p><p class="cw-404-links"><a class="cw-btn" href="${base}/">Chewy Home</a> <a class="cw-btn cw-btn-outline" href="${base}/deals/todays-deals-2723">Today's Deals</a> <a class="cw-btn cw-btn-outline" href="${base}/customer-care">24/7 Help</a></p></div></section><section class="cw-section"><h2>Shop by pet</h2><div class="cw-tiles cw-tiles-round">${PET_TILES.map(t => tile(base, t.label, t.path)).join('')}</div></section>${productRow(base, 'Popular right now', SHELF.filter(p => !p.rx).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/deals/todays-deals-2723')}`, 404)
+  })
   router.use(inner)
   return router
+
 }
