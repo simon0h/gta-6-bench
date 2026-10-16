@@ -27,7 +27,7 @@
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const $ = selector => document.querySelector(selector)
-  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '' }, openResults: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
+  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '' }, openResults: new Set(), openConfigs: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
   let toastTimer
   // The run page is split into tabs, as on Cloudflare's dashboard. The open tab is remembered on this device.
   const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Config']]
@@ -231,6 +231,19 @@
     panel.querySelector('.result-empty').hidden = shown > 0
     $('#results-total').textContent = `${shown} task${shown === 1 ? '' : 's'}${time ? ` · ${duration(time)} total` : ''}`
   }
+  // Config cards show only their top row until opened; the agent can only be
+  // changed while a card is open.
+  function toggleConfig(card) {
+    const open = !card.classList.contains('open'), button = card.querySelector('.card-toggle')
+    if (open) state.openConfigs.add(card.dataset.attempt); else state.openConfigs.delete(card.dataset.attempt)
+    card.classList.toggle('open', open)
+    card.querySelector('.agent-config').hidden = !open
+    card.querySelector('.agent-name').hidden = open
+    card.querySelector('select[name="agent"]').hidden = !open
+    button.setAttribute('aria-expanded', String(open))
+    button.title = open ? 'Collapse' : 'Expand'
+    button.setAttribute('aria-label', button.getAttribute('aria-label').replace(/^\w+/, open ? 'Collapse' : 'Expand'))
+  }
   function toggleResult(group) {
     const open = !group.classList.contains('open')
     if (open) state.openResults.add(group.dataset.key); else state.openResults.delete(group.dataset.key)
@@ -254,12 +267,14 @@
   function renderAttempt(attempt, index, run) {
     const draft = getDraft(attempt), agent = agentData(draft.agent), url = entryUrl(attempt), p = progress(attempt, run)
     const id = escape(attempt.id)
-    return `<article class="agent-card" data-attempt="${id}"><form class="attempt-form" data-attempt="${id}">
-      <div class="agent-card-top"><div class="agent-identity"><img class="agent-logo" src="${agent.icon}" alt=""><div class="agent-select-wrap"><label for="agent-${id}">Agent</label><select name="agent" id="agent-${id}">${options(draft.agent)}</select></div></div><div class="agent-card-actions"><span class="entry-number">URL ${String(index + 1).padStart(2, '0')}</span>${statusBadge(attempt)}</div></div>
+    const open = state.openConfigs.has(attempt.id)
+    return `<article class="agent-card${open ? ' open' : ''}" data-attempt="${id}"><form class="attempt-form" data-attempt="${id}">
+      <div class="agent-card-top"><div class="agent-identity"><img class="agent-logo" src="${agent.icon}" alt=""><strong class="agent-name"${open ? ' hidden' : ''}>${escape(agent.name)}</strong><select name="agent" id="agent-${id}" aria-label="Agent"${open ? '' : ' hidden'}>${options(draft.agent)}</select></div><div class="agent-card-actions"><span class="entry-number">URL ${String(index + 1).padStart(2, '0')}</span><button class="icon-button card-toggle" type="button" data-action="toggle-config" aria-expanded="${open}" aria-controls="config-${id}" aria-label="${open ? 'Collapse' : 'Expand'} URL ${index + 1}" title="${open ? 'Collapse' : 'Expand'}"><span class="chevron">${icon('arrow')}</span></button></div></div>
+      <div class="agent-config" id="config-${id}"${open ? '' : ' hidden'}>
       <div class="agent-body"><div class="url-bar">${icon('link')}<input type="text" aria-label="Session URL ${index + 1}" readonly value="${escape(url)}" autocomplete="off" spellcheck="false"><button class="button" type="button" data-action="copy-url" data-attempt="${id}">${icon('copy')}Copy URL</button></div><div class="link-utilities"><button class="copy-prompt" type="button" data-action="copy-prompt" data-attempt="${id}">${icon('prompt')}Copy prompt</button></div>
       <div class="entry-fields"><div><label for="tags-${id}">Tags</label><input name="tags" id="tags-${id}" value="${escape(draft.tags)}" placeholder="Use comma to separate" maxlength="500" autocomplete="off"></div><div><label for="comments-${id}">Comments</label><textarea name="comments" id="comments-${id}" placeholder="Model, settings, notes" maxlength="5000" rows="2">${escape(draft.comments)}</textarea></div></div></div>
       <div class="agent-card-footer"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="Task results submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><div class="progress-fill" style="width:${p.percentage}%"></div></div><span>${p.completed} / ${p.total} results</span></div><div class="save-group"><span class="save-feedback${draft.dirty ? ' dirty' : ''}" role="status">${draft.dirty ? 'Unsaved changes' : 'Saved'}</span><button class="button secondary small" type="submit"${draft.dirty && !state.saving.has(attempt.id) ? '' : ' disabled'}>${state.saving.has(attempt.id) ? 'Saving…' : 'Save'}</button></div></div>
-      </form></article>`
+      </div></form></article>`
   }
 
   function toneCounts(results) {
@@ -702,6 +717,7 @@
     if (action === 'result-filter') { state.resultsView.filter = control.dataset.filter; applyResults() }
     if (action === 'pick-agent') pickAgent(state.resultsView.agent === control.dataset.attempt ? 'all' : control.dataset.attempt)
     if (action === 'toggle-result') toggleResult(control.closest('.result-group'))
+    if (action === 'toggle-config') toggleConfig(control.closest('.agent-card'))
     if (action === 'agent-results' && state.selected) {
       setRunTab('results')
       state.resultsView = { filter: 'all', agent: control.dataset.attempt, query: '' }
@@ -756,7 +772,7 @@
     const feedback = form.querySelector('.save-feedback')
     feedback.textContent = draft.dirty ? 'Unsaved changes' : 'Saved'; feedback.className = `save-feedback${draft.dirty ? ' dirty' : ''}`
     form.querySelector('button[type="submit"]').disabled = !draft.dirty || state.saving.has(attempt.id)
-    if (event.target.name === 'agent') form.querySelector('.agent-logo').src = agentData(draft.agent).icon
+    if (event.target.name === 'agent') { form.querySelector('.agent-logo').src = agentData(draft.agent).icon; form.querySelector('.agent-name').textContent = agentData(draft.agent).name }
   })
 
   document.addEventListener('keydown', event => {

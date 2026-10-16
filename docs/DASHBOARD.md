@@ -81,8 +81,8 @@ The run page has three tabs, and the chosen tab stays put when the page refreshe
   tasks and environment errors) and **Passed** filter it, with counts; a text box
   and an agent picker narrow it further. Click a row to see Expected output,
   Actual output and Failure reason.
-- **Config**: one card per session URL, with its link, prompt, tags and
-  comments.
+- **Config**: one row per session URL; open a row with its arrow to see its link,
+  prompt, tags and comments and to change its agent.
 
 The chat about this run is a small window in the bottom right corner, opened and
 closed with the round button there (or Esc). It stays open while you switch tabs,
