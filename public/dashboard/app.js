@@ -46,7 +46,7 @@
     if (launcher) { launcher.setAttribute('aria-expanded', String(open)); launcher.setAttribute('aria-label', label); launcher.title = label; launcher.innerHTML = launcherIcon(open) }
     if (open) { scrollChat(); $('.chat-form textarea')?.focus() }
   }
-  const live = window.DashboardLive.create({ api, agents })
+  const live = window.DashboardLive.create({ api, agents, onUpdate: liveUpdate })
 
   async function api(path, options = {}) {
     const response = await fetch(`/dashboard/api${path}`, {
@@ -281,8 +281,12 @@
       <div class="agent-config" id="config-${id}"${open ? '' : ' hidden'}>
       <div class="agent-body">
       <div class="entry-fields"><div><label for="tags-${id}">Tags</label><input name="tags" id="tags-${id}" value="${escape(draft.tags)}" placeholder="Use comma to separate" maxlength="500" autocomplete="off"></div><div><label for="comments-${id}">Comments</label><textarea name="comments" id="comments-${id}" placeholder="Model, settings, notes" maxlength="5000" rows="2">${escape(draft.comments)}</textarea></div></div></div>
-      <div class="agent-card-footer"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="Task results submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><div class="progress-fill" style="width:${p.percentage}%"></div></div><span>${p.completed} / ${p.total} results</span></div><div class="save-group"><span class="save-feedback${draft.dirty ? ' dirty' : ''}" role="status">${draft.dirty ? 'Unsaved changes' : 'Saved'}</span><button class="button secondary small" type="submit"${draft.dirty && !state.saving.has(attempt.id) ? '' : ' disabled'}>${state.saving.has(attempt.id) ? 'Saving…' : 'Save'}</button></div></div>
+      <div class="agent-card-footer">${resultsProgress(p)}<div class="save-group"><span class="save-feedback${draft.dirty ? ' dirty' : ''}" role="status">${draft.dirty ? 'Unsaved changes' : 'Saved'}</span><button class="button secondary small" type="submit"${draft.dirty && !state.saving.has(attempt.id) ? '' : ' disabled'}>${state.saving.has(attempt.id) ? 'Saving…' : 'Save'}</button></div></div>
       </div></form></article>`
+  }
+
+  function resultsProgress(p) {
+    return `<div class="progress-group"><div class="progress-track" role="progressbar" aria-label="Task results submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><div class="progress-fill" style="width:${p.percentage}%"></div></div><span>${p.completed} / ${p.total} results</span></div>`
   }
 
   function toneCounts(results) {
@@ -745,17 +749,75 @@
       return `<button class="run-tab" type="button" role="tab" id="run-tab-${key}" data-action="run-tab" data-tab="${key}" aria-selected="${key === tab}" aria-controls="run-tab-panel">${name}${count === null ? '' : `<span class="tab-count">${count}</span>`}</button>`
     }).join('')
     let body
-    if (tab === 'results') body = renderResultsTab(run)
+    if (tab === 'results') body = `<div class="slot" id="results-slot">${renderResultsTab(run)}</div>`
     else if (tab === 'agents') body = renderAgentsTab(run)
-    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderIssues(run, rows)}${renderRateChart(run)}${renderTypeBars(rows)}${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
+    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section><div class="slot" id="overview-results">${overviewResults(run, rows)}</div></div>`
     $('#main').innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/">All runs</a><span aria-hidden="true">/</span><span>${escape(runName(run))}</span></nav>
       <div class="page-heading run-detail-heading"><div><div class="run-status-row">${runStatus(run)}</div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div></div>
       <div class="run-tabs" role="tablist" aria-label="Run sections">${tabs}</div>
       <div id="run-tab-panel" class="run-tab-panel" role="tabpanel" aria-labelledby="run-tab-${tab}">${body}</div>${renderChatDock(run)}`
-    if (tab === 'overview') live.mount($('#live-panel'), run.id); else live.stop()
+    // Every tab keeps polling while the run is going, so its numbers stay current.
+    live.mount(tab === 'overview' ? $('#live-panel') : null, run.id)
     if (tab === 'results') applyResults()
     scrollChat()
     renderSidebar()
+  }
+
+  function overviewResults(run, rows) {
+    return `${renderIssues(run, rows)}${renderRateChart(run)}${renderTypeBars(rows)}${renderStoreBars(rows)}${renderAgentTable(run)}`
+  }
+
+  // Live updates. Each live poll says how many tasks every agent has submitted
+  // and whether one is shopping. When that differs from the run on screen, the
+  // run is fetched again and only the parts that show results are redrawn, so
+  // open rows, filters, typing and the chat stay as they are.
+  const progressKey = list => list.map(entry => `${entry.id ?? entry.attempt_id}:${entry.completed}:${entry.status}`).join('|')
+  let liveFetch = null
+  function liveUpdate(result) {
+    const run = state.selected
+    if (!run || run.id !== result.run_id || liveFetch === run.id || state.loading) return
+    if (progressKey(result.agents) !== progressKey(attempts(run))) refreshRun(run.id)
+  }
+  async function refreshRun(id) {
+    liveFetch = id
+    const number = state.loadNumber
+    try {
+      const [detail, summary] = await Promise.all([api(`/runs/${encodeURIComponent(id)}`),
+        state.writingSummary.has(id) ? Promise.resolve(null) : api(`/runs/${encodeURIComponent(id)}/summary`).catch(() => null)])
+      if (number !== state.loadNumber || state.selected?.id !== id || route().view !== 'run') return
+      const before = attempts(state.selected).map(attempt => attempt.id).join()
+      if (summary && !state.writingSummary.has(id)) state.summaries.set(id, summary)
+      setRun(detail.run || detail)
+      if (attempts(state.selected).map(attempt => attempt.id).join() !== before) render(); else patchRun()
+    } catch { /* The next live poll tries again. */ } finally { if (liveFetch === id) liveFetch = null }
+  }
+  function patchRun() {
+    const run = state.selected, rows = runResults(run)
+    const status = $('.run-status-row'), count = $('#run-tab-results .tab-count'), tiles = $('.run-summary')
+    if (status) status.innerHTML = runStatus(run)
+    if (count) count.textContent = rows.length
+    if (tiles) tiles.outerHTML = renderTiles(run, rows)
+    if (state.runTab === 'overview') { refreshSummary(); swap($('#overview-results'), overviewResults(run, rows)) }
+    if (state.runTab === 'results') { swap($('#results-slot'), renderResultsTab(run)); applyResults() }
+    if (state.runTab === 'agents') for (const attempt of attempts(run)) {
+      const node = document.querySelector(`.agent-card[data-attempt="${CSS.escape(attempt.id)}"] .agent-card-footer .progress-group`)
+      if (node) node.outerHTML = resultsProgress(progress(attempt, run))
+    }
+  }
+  // Redraws a part of the page and puts focus (and the cursor in a text box) back where it was.
+  function swap(node, html) {
+    if (!node) return
+    const active = node.contains(document.activeElement) ? document.activeElement : null
+    let target = ''
+    if (active?.id) target = `#${CSS.escape(active.id)}`
+    else if (active?.closest('.result-group')) target = `.result-group[data-key="${CSS.escape(active.closest('.result-group').dataset.key)}"] .result-row`
+    else if (active?.dataset.action) target = `[data-action="${CSS.escape(active.dataset.action)}"]${['attempt', 'issue', 'filter'].map(key => active.dataset[key] ? `[data-${key}="${CSS.escape(active.dataset[key])}"]` : '').join('')}`
+    const selection = active && 'selectionStart' in active ? [active.selectionStart, active.selectionEnd] : null
+    node.innerHTML = html
+    const next = target && node.querySelector(target)
+    if (!next) return
+    next.focus({ preventScroll: true })
+    if (selection) try { next.setSelectionRange(...selection) } catch { /* not a text box */ }
   }
 
   function render() {

@@ -1,5 +1,7 @@
 // Live tracker: where each agent of the open run is right now. It reads the
-// operator-only live summary and never touches the storefront pages.
+// operator-only live summary and never touches the storefront pages. The same
+// poll tells the run page when a task was started or submitted (onUpdate), so
+// every tab stays current; it stops once every agent has finished.
 (() => {
   'use strict'
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
@@ -29,7 +31,7 @@
     return minutes < 60 ? `${minutes}m ${seconds % 60}s` : `${Math.floor(minutes / 60)}h ${minutes % 60}m`
   }
 
-  function create({ api, agents }) {
+  function create({ api, agents, onUpdate }) {
     let runId = null, container = null, data = null, error = '', offset = 0, timer, ticker, sequence = 0, lastHtml = ''
     const now = () => Date.now() + offset
     const agentName = key => agents[key]?.name || key
@@ -89,13 +91,15 @@
     }
 
     function schedule() {
-      clearTimeout(timer)
+      clearTimeout(timer); timer = undefined
       if (!runId) return
+      // A finished run has nothing left to watch; a new session URL mounts again.
+      if (data?.agents.length && data.agents.every(entry => entry.status === 'complete')) return
       timer = setTimeout(load, data?.agents.some(entry => entry.current) ? FAST : SLOW)
     }
 
     async function load() {
-      clearTimeout(timer)
+      clearTimeout(timer); timer = undefined
       if (!runId) return
       if (document.hidden) return // Resumes on visibilitychange.
       const number = ++sequence, id = runId
@@ -104,6 +108,7 @@
         if (number !== sequence || id !== runId) return
         offset = Date.parse(result.server_time) - Date.now() || 0
         data = result; error = ''
+        onUpdate?.(result)
       } catch (failure) {
         if (number !== sequence || id !== runId) return
         error = failure.message
@@ -111,8 +116,10 @@
       render(); schedule()
     }
 
+    // The node is the tracker panel on Overview; other tabs pass none and only
+    // get onUpdate.
     function mount(node, id) {
-      container = node
+      container = node || null
       if (id !== runId) { stop(); runId = id; lastHtml = '' }
       lastHtml = ''
       render()

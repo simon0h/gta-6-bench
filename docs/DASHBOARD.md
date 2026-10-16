@@ -12,7 +12,7 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
 2. On the **Config** tab, click **Generate new session URL**. Select Grokbot, Dots or Muse and add optional tags and
    comments. You can generate up to five URLs per run, including repeated agents.
 3. Use **Copy prompt** or **Copy URL** and give the link to that agent.
-4. Refresh the run to review progress and each submitted task's private grade.
+4. Watch progress and each submitted task's private grade on the run page; it updates by itself while the run is going.
    Update labels, comments and comma-separated tags with **Save**.
 5. On the **Results** tab, open a task row and click **View traversal**, then select a task. Follow connected page
    nodes or switch to **All events**. Drag the canvas to pan, use the zoom controls
@@ -175,6 +175,16 @@ checkout, order placed, sign-in or other browsing), which of those steps it has
 reached, its last click or form action, and its most recent pages. It refreshes
 every three seconds while an agent is shopping, every fifteen seconds otherwise,
 and pauses while the browser tab is hidden. **View traversal** opens the full path.
+
+The same check keeps the rest of the run page current on every tab. When an agent
+starts or submits a task, the page fetches the run again and redraws only the parts
+that show results: the status badge, the number tiles, Top issues, the success-rate
+chart, results by type and store, the Agents table, the Results tab (open rows,
+filters and the filter text stay as they were) and the progress bars on Config.
+Nothing extra is fetched between tasks. Once every agent has submitted every task,
+the page stops checking; generating a new session URL starts it again. The AI
+summary is only written when **Write summary** is pressed; between tasks it just
+shows how many new results it has not read yet.
 
 The tracker is built from the traversal events below, so it adds nothing to the
 store pages. Each running task keeps a small summary of its position in the
