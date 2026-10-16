@@ -20,7 +20,7 @@ const lines = value => Array.isArray(value) ? value.map(line => clean(line)).fil
 const seconds = ms => Number.isFinite(ms) ? Math.round(ms / 1000) : null
 
 /** Agent labels as the dashboard shows them; repeats get their URL number. */
-function labels(attempts) {
+export function agentLabels(attempts) {
   const counts = {}
   for (const attempt of attempts) counts[attempt.agent] = (counts[attempt.agent] || 0) + 1
   return attempts.map((attempt, index) => {
@@ -29,11 +29,17 @@ function labels(attempts) {
   })
 }
 
+/** How a task is named in the run data: its id, or its name for tasks written in the dashboard. */
+export function taskName(run, taskId) {
+  const name = run?.tasks?.find(item => item.id === taskId)?.name
+  return name ? clean(name, 80) : taskId
+}
+
 /** The compact, sanitized run data Claude reads. Passed tasks are one line;
  * tasks that did not pass carry expected/actual output and failure reasons. */
 export function summaryInput(run) {
   const attempts = Array.isArray(run?.attempts) ? run.attempts : []
-  const names = labels(attempts)
+  const names = agentLabels(attempts)
   return {
     run: { name: clean(run?.name, 120), task_set: run?.suite === 'all240' ? 'All 240 tasks' : run?.suite === 'custom' ? 'Tasks written in the dashboard' : 'Original 30 tasks', tasks_per_agent: run?.task_ids?.length ?? null },
     agents: attempts.map((attempt, index) => {
@@ -48,8 +54,7 @@ export function summaryInput(run) {
         total_seconds: timed.length ? seconds(timed.reduce((sum, ms) => sum + ms, 0)) : null,
         tasks: results.map(trial => {
           const result = trial.result, status = result.grade?.status ?? 'unknown'
-          const name = run?.tasks?.find(item => item.id === trial.task_id)?.name
-          const task = { task: name ? clean(name, 80) : trial.task_id, store: result.store, type: FAMILY_NAMES[result.family] || result.family, result: status, seconds: seconds(result.elapsed_ms) }
+          const task = { task: taskName(run, trial.task_id), store: result.store, type: FAMILY_NAMES[result.family] || result.family, result: status, seconds: seconds(result.elapsed_ms) }
           if (status === 'passed') return task
           return { ...task, expected: lines(result.expected_output), actual: lines(result.actual_output),
             failure_reasons: lines(result.failure_reasons?.length ? result.failure_reasons : (result.grade?.reasons || []).map(reason => reason.message)) }
@@ -87,6 +92,13 @@ const SCHEMA = {
 }
 
 const fail = (message, status) => Object.assign(new Error(message), { status })
+/** Plain messages for failed Claude requests, shared with the run chat. */
+export function claudeError(error) {
+  if (error instanceof Anthropic.AuthenticationError || error instanceof Anthropic.PermissionDeniedError) return fail('Claude rejected the API key. Check the ANTHROPIC_API_KEY secret.', 502)
+  if (error instanceof Anthropic.RateLimitError) return fail('Claude is busy right now. Try again in a minute.', 503)
+  if (error instanceof Anthropic.APIError) return fail('Claude could not answer. Try again.', 502)
+  return fail('Could not reach Claude. Try again.', 502)
+}
 
 /** Ask Claude for the summary. Returns { overview, agents: [{ label, agent, summary }], patterns }. */
 export async function writeRunSummary({ apiKey, input, client = new Anthropic({ apiKey, timeout: 120_000, maxRetries: 1 }) }) {
@@ -102,10 +114,7 @@ export async function writeRunSummary({ apiKey, input, client = new Anthropic({ 
       messages: [{ role: 'user', content: `Run results as JSON:\n${JSON.stringify(input)}` }],
     })
   } catch (error) {
-    if (error instanceof Anthropic.AuthenticationError || error instanceof Anthropic.PermissionDeniedError) throw fail('Claude rejected the API key. Check the ANTHROPIC_API_KEY secret.', 502)
-    if (error instanceof Anthropic.RateLimitError) throw fail('Claude is busy right now. Try again in a minute.', 503)
-    if (error instanceof Anthropic.APIError) throw fail('Claude could not write the summary. Try again.', 502)
-    throw fail('Could not reach Claude. Try again.', 502)
+    throw claudeError(error)
   }
   if (response.stop_reason === 'refusal') throw fail('Claude declined to summarize this run.', 502)
   const text = response.content.filter(block => block.type === 'text').map(block => block.text).join('')

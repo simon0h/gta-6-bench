@@ -194,3 +194,23 @@ It needs a Claude API key. On Cloudflare, add a Worker secret named
 For a local dashboard, start it with `ANTHROPIC_API_KEY` set; local summaries are
 kept in memory until the dashboard stops. Without a key the card says how to turn
 it on.
+
+## Chat about a run
+
+Under the AI summary, **Chat about this run** lets you ask Claude questions about
+that run, such as "Why did Muse fail the Rockstar tasks?". Each question sends the
+same results the summary reads (the whole run, so counts are exact), and the first
+question or any question after new results arrive includes a fresh copy. Claude also
+has one tool, a click path lookup: when a question needs to know what an agent did
+on a task, it asks for that agent and task and gets back the pages opened, buttons
+clicked and forms sent, with seconds since the task started (from the traversal
+recording; typed values are never recorded). Replays are not sent.
+
+Answers stream in as they are written. Task ids in an answer are links that open
+and highlight that task's rows on the page. The chat is kept with the run, one chat
+per run shared by everyone signed in, until **Clear chat**. A chat holds up to 30
+questions. Earlier turns are sent back unchanged with each question, so Claude's
+earlier reasoning stays valid and repeat reading is billed at the cheaper cached
+rate. The chat only reads results; it cannot change grades, runs or tasks, and
+agents never see it. It uses the same `ANTHROPIC_API_KEY` as the summary; locally
+the chat is kept in memory.

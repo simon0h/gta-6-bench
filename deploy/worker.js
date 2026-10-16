@@ -2,6 +2,7 @@ import { DurableObject } from 'cloudflare:workers'
 import { timingSafeEqual } from 'node:crypto'
 import { CheckpointCoordinator, isStaticRequest, readBounded, STATE_LIMIT } from './coordinator.js'
 import { SUMMARY_HEADER, summaryView, writeRunSummary } from '../benchmark/ai-summary.js'
+import { CHAT_HEADER, chatFull, chatStream, chatView, validQuestion } from '../benchmark/ai-chat.js'
 
 const IDLE_MS = 10 * 60 * 1000
 const STORE_KEYS = ['sessions', 'orders', 'accounts', 'dashboard_runs', 'dashboard_trials', 'dashboard_tasks']
@@ -27,6 +28,8 @@ export class Storefront extends DurableObject {
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)')
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS traversal_events (trial_id TEXT NOT NULL, event_id INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (trial_id, event_id))')
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS run_summaries (run_id TEXT PRIMARY KEY, value TEXT NOT NULL)')
+    this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS run_chats (run_id TEXT PRIMARY KEY, value TEXT NOT NULL)')
+    this.answering = new Set()
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS replay_chunks (trial_id TEXT NOT NULL, chunk_id INTEGER NOT NULL, bytes INTEGER NOT NULL, value TEXT NOT NULL, PRIMARY KEY (trial_id, chunk_id))')
     this.coordinator = new CheckpointCoordinator({
       prepare: () => this.prepare(),
@@ -192,14 +195,19 @@ export class Storefront extends DurableObject {
       response = await this.coordinator.fetch(request)
     }
     const headers = new Headers(response.headers)
-    const traceTrial = headers.get(TRACE_HEADER), replayTrial = headers.get(REPLAY_HEADER), summaryRun = headers.get(SUMMARY_HEADER)
+    const traceTrial = headers.get(TRACE_HEADER), replayTrial = headers.get(REPLAY_HEADER), summaryRun = headers.get(SUMMARY_HEADER), chatRun = headers.get(CHAT_HEADER)
     headers.delete(TRACE_HEADER)
     headers.delete(REPLAY_HEADER)
     headers.delete(SUMMARY_HEADER)
+    headers.delete(CHAT_HEADER)
     const url = new URL(request.url)
     const summaryRoute = url.pathname.match(/^\/dashboard\/api\/runs\/([^/]+)\/summary\/?$/i)
     if (summaryRoute && summaryRun && response.status === 200 && ['GET', 'POST'].includes(request.method)) {
       return this.summary(request, response, headers, decodeURIComponent(summaryRoute[1]), summaryRun)
+    }
+    const chatRoute = url.pathname.match(/^\/dashboard\/api\/runs\/([^/]+)\/chat\/?$/i)
+    if (chatRoute && chatRun && response.status === 200 && ['GET', 'POST', 'DELETE'].includes(request.method)) {
+      return this.chat(request, response, headers, decodeURIComponent(chatRoute[1]), chatRun)
     }
     const route = url.pathname.match(/^\/dashboard\/api\/runs\/[^/]+\/attempts\/[^/]+\/(traversal|replay)\/([^/]+)\/?$/i)
     const kind = route?.[1].toLowerCase(), trialId = kind === 'replay' ? replayTrial : traceTrial
@@ -252,6 +260,42 @@ export class Storefront extends DurableObject {
     }
     return reply(200, summaryView({ configured: Boolean(apiKey), saved, key: body.key, finished: body.finished }))
   }
+
+  // Chat about a run. Node has checked sign-in and sent the run data and where
+  // each task lives; click paths come from this object's traversal archive.
+  async chat(request, response, headers, routeRun, chatRun) {
+    const body = JSON.parse(new TextDecoder().decode(await readBounded(response, STATE_LIMIT)))
+    if (body.run_id !== chatRun || body.run_id !== routeRun) throw new Error('Invalid authorized chat response')
+    for (const name of ['content-length', 'content-encoding', 'etag']) headers.delete(name)
+    headers.set('cache-control', 'no-store')
+    headers.set('content-type', 'application/json; charset=utf-8')
+    const reply = (status, value) => new Response(JSON.stringify(value), { status, headers })
+    const apiKey = this.env.ANTHROPIC_API_KEY, runId = body.run_id
+    const row = this.ctx.storage.sql.exec('SELECT value FROM run_chats WHERE run_id = ?', runId).toArray()[0]
+    const chat = row ? JSON.parse(row.value) : null
+    if (request.method === 'GET') return reply(200, chatView({ configured: Boolean(apiKey), chat }))
+    if (this.answering.has(runId)) return reply(409, { error: request.method === 'DELETE' ? 'Wait for Claude to finish answering.' : 'Claude is still answering the last question.' })
+    if (request.method === 'DELETE') {
+      this.ctx.storage.sql.exec('DELETE FROM run_chats WHERE run_id = ?', runId)
+      return reply(200, chatView({ configured: Boolean(apiKey), chat: null }))
+    }
+    let question
+    try { question = validQuestion(body.question) } catch (error) { return reply(400, { error: error.message }) }
+    if (!body.input || !Array.isArray(body.input.agents) || typeof body.key !== 'string' || !body.lookup || typeof body.lookup !== 'object') throw new Error('Invalid authorized chat response')
+    if (!apiKey) return reply(409, { error: 'Add a Claude API key first: a Worker secret named ANTHROPIC_API_KEY.' })
+    if (chatFull(chat)) return reply(409, { error: 'This chat is full. Clear it to start a new one.' })
+    this.answering.add(runId)
+    const readClickPath = async (agent, task) => {
+      const ref = Object.hasOwn(body.lookup, agent) && Object.hasOwn(body.lookup[agent], task) ? body.lookup[agent][task] : null
+      if (typeof ref?.trial_id !== 'string') return null
+      return this.ctx.storage.sql.exec('SELECT value FROM traversal_events WHERE trial_id = ? ORDER BY event_id ASC LIMIT 5000', ref.trial_id).toArray().map(item => JSON.parse(item.value))
+    }
+    const stream = chatStream({ apiKey, chat, input: body.input, inputKey: body.key, question, readClickPath,
+      save: saved => { this.ctx.storage.sql.exec('INSERT OR REPLACE INTO run_chats (run_id, value) VALUES (?, ?)', runId, JSON.stringify(saved)) },
+      finish: () => this.answering.delete(runId) })
+    headers.set('content-type', 'application/x-ndjson; charset=utf-8')
+    return new Response(stream, { status: 200, headers })
+  }
 }
 
 export default {
@@ -271,6 +315,7 @@ export default {
       result.headers.delete(TRACE_HEADER)
       result.headers.delete(REPLAY_HEADER)
       result.headers.delete(SUMMARY_HEADER)
+      result.headers.delete(CHAT_HEADER)
       return result
     } catch (error) {
       console.error(JSON.stringify({ event: 'hosting_request_failed', message: error.message }))

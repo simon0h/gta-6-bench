@@ -6,6 +6,8 @@ import path from 'node:path'
 import { readBounded, RESPONSE_LIMIT } from '../deploy/coordinator.js'
 import { dynamicTraversalRequest } from '../benchmark/traversal.js'
 import { SUMMARY_HEADER, finishedCount, summaryInput, summaryKey, summaryView, writeRunSummary } from '../benchmark/ai-summary.js'
+import { CHAT_HEADER, chatFull, chatLookup, chatStream, chatView, validQuestion } from '../benchmark/ai-chat.js'
+import { Readable } from 'node:stream'
 
 const publicDirectory = fileURLToPath(new URL('../public/dashboard/', import.meta.url))
 const require = createRequire(import.meta.url)
@@ -57,7 +59,7 @@ function runWithUrls(run, req) {
   return { ...run, task_count: run.task_count ?? run.task_ids?.length ?? (run.suite === 'all240' ? 240 : 30), attempts: (run.attempts || []).map(attempt => attemptWithUrl(attempt, req)) }
 }
 
-export function createDashboardRouter({ manager, apiToken, local = false, anthropicApiKey = process.env.ANTHROPIC_API_KEY, writeSummary = writeRunSummary }) {
+export function createDashboardRouter({ manager, apiToken, local = false, anthropicApiKey = process.env.ANTHROPIC_API_KEY, writeSummary = writeRunSummary, claudeClient }) {
   if (!manager) throw new Error('A run manager is required')
   if (!local && !apiToken) throw new Error('Dashboard requires a BENCHMARK_API_TOKEN')
   const router = express.Router()
@@ -132,6 +134,49 @@ export function createDashboardRouter({ manager, apiToken, local = false, anthro
     const summary = await writeSummary({ apiKey: anthropicApiKey, input })
     summaries.set(run_id, { key, finished, summary, written_at: new Date().toISOString() })
     res.json(summaryView({ configured: true, saved: summaries.get(run_id), key, finished }))
+  }))
+  // Chat about a run, split the same way as the summary: on Cloudflare the
+  // Worker calls Claude, reads click paths from its archive and keeps the chat.
+  const chats = new Map(), answering = new Set()
+  router.get('/dashboard/api/runs/:id/chat', action(async (req, res) => {
+    const { run_id } = await summaryState(req.params.id)
+    if (manager.traceArchive) { res.set(CHAT_HEADER, run_id); return res.json({ run_id }) }
+    res.json(chatView({ configured: Boolean(anthropicApiKey), chat: chats.get(run_id) }))
+  }))
+  router.delete('/dashboard/api/runs/:id/chat', action(async (req, res) => {
+    const { run_id } = await summaryState(req.params.id)
+    if (manager.traceArchive) { res.set(CHAT_HEADER, run_id); return res.json({ run_id }) }
+    if (answering.has(run_id)) return res.status(409).json({ error: 'Wait for Claude to finish answering.' })
+    chats.delete(run_id)
+    res.json(chatView({ configured: Boolean(anthropicApiKey), chat: null }))
+  }))
+  router.post('/dashboard/api/runs/:id/chat', action(async (req, res) => {
+    const question = validQuestion(req.body?.question)
+    const run = await manager.getRun(req.params.id)
+    if (!run) return res.status(404).json({ error: 'Run not found' })
+    const { run_id, input, key, finished } = await summaryState(req.params.id)
+    if (!finished) return res.status(409).json({ error: 'Finish at least one task before chatting about this run.' })
+    const lookup = chatLookup(run)
+    if (manager.traceArchive) { res.set(CHAT_HEADER, run_id); return res.json({ run_id, input, key, lookup, question }) }
+    if (!anthropicApiKey) return res.status(409).json({ error: 'Set ANTHROPIC_API_KEY before starting the dashboard to turn on chat.' })
+    if (answering.has(run_id)) return res.status(409).json({ error: 'Claude is still answering the last question.' })
+    if (chatFull(chats.get(run_id))) return res.status(409).json({ error: 'This chat is full. Clear it to start a new one.' })
+    answering.add(run_id)
+    const readClickPath = async (agent, task) => {
+      const ref = Object.hasOwn(lookup, agent) && Object.hasOwn(lookup[agent], task) ? lookup[agent][task] : null
+      if (!ref) return null
+      const events = []
+      for (let after = 0; after !== null && events.length < 5000;) {
+        const page = await manager.getTraversalEvents(run_id, ref.attempt_id, ref.trial_id, { after })
+        events.push(...page.events)
+        after = page.next_cursor
+      }
+      return events
+    }
+    const stream = chatStream({ apiKey: anthropicApiKey, client: claudeClient, chat: chats.get(run_id), input, inputKey: key, question, readClickPath,
+      save: chat => { chats.set(run_id, chat) }, finish: () => answering.delete(run_id) })
+    res.type('application/x-ndjson')
+    Readable.fromWeb(stream).pipe(res)
   }))
   router.post('/dashboard/api/runs/:id/attempts', action(async (req, res) => res.status(201).json({ attempt: attemptWithUrl(await manager.addAttempt(req.params.id, req.body || {}), req) })))
   router.patch('/dashboard/api/runs/:id/attempts/:attempt', action(async (req, res) => res.json({ attempt: attemptWithUrl(await manager.updateAttempt(req.params.id, req.params.attempt, req.body || {}), req) })))
