@@ -27,7 +27,7 @@
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const $ = selector => document.querySelector(selector)
-  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '', issue: null }, openResults: new Set(), openConfigs: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
+  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '', issue: null }, issueAgent: 'all', openResults: new Set(), openConfigs: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
   let toastTimer
   // The run page is split into tabs, as on Cloudflare's dashboard. The open tab is remembered on this device.
   const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Config']]
@@ -506,36 +506,141 @@
   const renderStoreBars = rows => renderBars(rows, { title: 'Results by store', group: result => result.store, name: slug => slug ? storeName(slug) : 'Other', sort: (a, b) => b[1].total - a[1].total })
   const renderTypeBars = rows => renderBars(rows, { title: 'Results by task type', group: result => result.task_type, name: type => type || 'Other' })
 
-  // The fix list: every failed task's issues, counted per agent, most common first.
-  // Issues where an order went out are marked, since they cost real money.
-  function renderIssues(run, rows) {
-    const graded = rows.filter(({ result }) => ['passed', 'failed'].includes(resultTone(result)))
-    if (!graded.length) return ''
-    const entries = attempts(run).filter(attempt => resultList(attempt).length), issues = new Map()
-    for (const { attempt, result } of graded) {
-      for (const issue of Array.isArray(result.issues) ? result.issues : []) {
-        const entry = issues.get(issue.key) || { key: issue.key, label: issue.label, total: 0, costly: false, counts: new Map() }
-        entry.total++
-        entry.counts.set(attempt.id, (entry.counts.get(attempt.id) || 0) + 1)
-        if (result.wrong_spend) entry.costly = true
+  // The fix list: every failed task's issues as a pie, most common first.
+  // Clicking a slice or its row opens that issue's details.
+  const issueHelp = {
+    wrongly_bought: ['The task should have ended with nothing bought (the limit was too low, or that edition isn’t sold), but the agent placed an order.', 'Does the agent compare the checkout total with the spending limit, and check the edition is really sold, before it pays?'],
+    wrongly_refused: ['The task could be done, but the agent didn’t place an order.', 'Open View traversal on these tasks to see where it stopped: often it gives up at checkout, or misreads the total as over the limit.'],
+    wrong_reason: ['The agent was right not to buy, but gave the wrong reason, such as “over budget” when the edition isn’t sold.', 'Does the agent tell “too expensive” apart from “not sold in this edition” before it reports?'],
+    wrong_report: ['What the agent reported doesn’t match what it did in the store.', 'Does the agent check the order confirmation before it fills in the result?'],
+    no_result: ['The agent didn’t send back a usable result: the outcome or message was missing, or it contradicted itself.', 'Does the agent go back to the task page and fill in every field of the result form?'],
+    over_budget: ['The order total was over the spending limit.', 'Does the agent check the final total, with tax and delivery, before it pays?'],
+    wrong_item: ['The order had the wrong product, edition, console or store.', 'Does the agent check the edition and console on the product page and again in the cart?'],
+    wrong_quantity: ['The order had more or fewer copies than the task asked for.', 'Does the agent set the quantity and check it in the cart before checkout?'],
+    duplicate_orders: ['The agent placed more than one order. Cancelled orders still count.', 'Does the agent stop after the first order confirmation instead of trying again?'],
+    cancelled: ['The agent cancelled or returned its order.', 'Look at View traversal for why it went back to the order.'],
+    wrong_address: ['The shipping address didn’t match the one in the task.', 'Does the agent copy every address line, including the apartment or unit?'],
+    wrong_contact: ['The name, email or phone didn’t match the task.', 'Does the agent use the shopper’s details from the task rather than ones saved on the account?'],
+    wrong_delivery: ['The delivery method or pickup details were wrong.', 'Does the agent choose the delivery option the task asked for?'],
+    wrong_payment: ['The order was paid with a different card from the one in the task.', 'Does the agent type in the given card instead of using a saved one?'],
+    wrong_price: ['The price paid doesn’t match the store’s real price.', 'Look at the cart and checkout pages in View traversal for a changed price or total.'],
+    missed_step: ['The store changed something during the task, and the agent didn’t deal with it.', 'Open View traversal around the change to see what the agent did next.'],
+    agent_error: ['The agent crashed or stopped before it finished.', 'Check the agent’s own logs for that time.'],
+    other: ['A problem that doesn’t fit the groups above.', 'Read the failure reasons on each task below.'],
+  }
+  // Issues for one agent URL (or all), each with its tasks. Colors follow the
+  // run-wide order, so a slice keeps its color when the agent picker changes.
+  function issueData(rows, agentId = 'all') {
+    const group = list => {
+      const issues = new Map()
+      for (const row of list) for (const issue of Array.isArray(row.result.issues) ? row.result.issues : []) {
+        const entry = issues.get(issue.key) || { key: issue.key, label: issue.label, rows: [] }
+        entry.rows.push(row)
         issues.set(issue.key, entry)
       }
+      return [...issues.values()].sort((a, b) => b.rows.length - a.rows.length || a.label.localeCompare(b.label))
     }
-    const list = [...issues.values()].sort((a, b) => b.total - a.total || Number(b.costly) - Number(a.costly))
-    const head = `<div class="panel-head"><h2>Top issues</h2><span class="panel-sub">What went wrong on failed tasks</span></div>`
-    if (!list.length) return `<section class="panel issues-panel" aria-label="Top issues">${head}<div class="panel-body panel-empty"><p>No issues. Every graded task passed.</p></div></section>`
-    const columns = entries.map((attempt, index) => `<th scope="col" class="num"><span class="agent-cell"><img src="${agentData(attempt.agent).icon}" alt="">${escape(agentData(attempt.agent).name)}${entries.length > 1 ? `<small>URL ${String(attempts(run).indexOf(attempt) + 1).padStart(2, '0')}</small>` : ''}</span></th>`).join('')
-    const body = list.map(issue => `<tr><th scope="row"><span class="issue-name">${escape(issue.label)}</span>${issue.costly ? '<span class="badge red">Money spent</span>' : ''}</th>${entries.map(attempt => {
-      const count = issue.counts.get(attempt.id) || 0
-      return `<td class="num">${count ? `<button class="issue-count" type="button" data-action="show-issue" data-issue="${escape(issue.key)}" data-label="${escape(issue.label)}" data-attempt="${escape(attempt.id)}" title="See these ${count} task${count === 1 ? '' : 's'}">${count}</button>` : '<span class="zero">0</span>'}</td>`
-    }).join('')}</tr>`).join('')
-    return `<section class="panel issues-panel" aria-label="Top issues">${head}<div class="table-scroll"><table class="data-table issues-table"><thead><tr><th scope="col">Issue</th>${columns}</tr></thead><tbody>${body}</tbody></table></div></section>`
+    const graded = rows.filter(({ result }) => ['passed', 'failed'].includes(resultTone(result)))
+    const colors = new Map(group(graded).map((issue, n) => [issue.key, n % 10 + 1]))
+    const mine = graded.filter(({ attempt }) => agentId === 'all' || attempt.id === agentId)
+    const list = group(mine).map(issue => ({ ...issue, color: colors.get(issue.key), costly: issue.rows.some(row => row.result.wrong_spend) }))
+    return { graded: mine, failed: mine.filter(({ result }) => resultTone(result) === 'failed'), list }
+  }
+  function issuePie(list, failed) {
+    const sum = list.reduce((total, issue) => total + issue.rows.length, 0)
+    let start = 0
+    const slices = list.map(issue => {
+      const share = issue.rows.length / sum * 100, gap = list.length > 1 ? Math.min(.8, share / 3) : 0
+      const slice = `<circle class="issue-slice ic${issue.color}" cx="0" cy="0" r="40" pathLength="100" stroke-dasharray="${(share - gap).toFixed(3)} ${(100 - share + gap).toFixed(3)}" stroke-dashoffset="${(-start - gap / 2).toFixed(3)}" data-action="issue-details" data-issue="${escape(issue.key)}"><title>${escape(`${issue.label}: ${issue.rows.length}`)}</title></circle>`
+      start += share
+      return slice
+    }).join('')
+    return `<div class="issue-pie"><svg viewBox="-50 -50 100 100" aria-hidden="true"><g transform="rotate(-90)">${slices}</g></svg><div class="issue-pie-center"><strong>${failed}</strong><span>failed task${failed === 1 ? '' : 's'}</span></div></div>`
+  }
+  function renderIssues(run, rows) {
+    const entries = attempts(run).filter(attempt => resultList(attempt).length)
+    if (state.issueAgent !== 'all' && !entries.some(attempt => attempt.id === state.issueAgent)) state.issueAgent = 'all'
+    const { graded, failed, list } = issueData(rows, state.issueAgent)
+    if (!graded.length && state.issueAgent === 'all') return ''
+    const picker = entries.length > 1 ? `<div class="panel-actions"><select id="issues-agent" aria-label="Agent"><option value="all">All agents</option>${entries.map(attempt => `<option value="${escape(attempt.id)}"${state.issueAgent === attempt.id ? ' selected' : ''}>${escape(agentData(attempt.agent).name)} · URL ${String(attempts(run).indexOf(attempt) + 1).padStart(2, '0')}</option>`).join('')}</select></div>` : ''
+    const head = `<div class="panel-head"><h2>Top issues</h2><span class="panel-sub">What went wrong on failed tasks</span>${picker}</div>`
+    if (!list.length) return `<section class="panel issues-panel" id="issues-panel" aria-label="Top issues">${head}<div class="panel-body panel-empty"><p>No issues. Every graded task passed.</p></div></section>`
+    const sum = list.reduce((total, issue) => total + issue.rows.length, 0)
+    const legend = list.map(issue => `<li><button class="issue-row" type="button" data-action="issue-details" data-issue="${escape(issue.key)}" title="See details"><span class="issue-key ic${issue.color}"></span><span class="issue-name">${escape(issue.label)}${issue.costly ? '<span class="badge red">Money spent</span>' : ''}</span><span class="issue-total">${issue.rows.length}</span><span class="issue-share">${Math.round(issue.rows.length / sum * 100)}%</span><span class="chevron">${icon('arrow')}</span></button></li>`).join('')
+    return `<section class="panel issues-panel" id="issues-panel" aria-label="Top issues">${head}<div class="panel-body issue-chart">${issuePie(list, failed.length)}<ul class="issue-legend">${legend}</ul></div></section>`
+  }
+  function refreshIssues() {
+    const panel = $('#issues-panel')
+    if (panel && state.selected) panel.outerHTML = renderIssues(state.selected, runResults(state.selected))
+  }
+  function moneyText(amount, currency) {
+    try { return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(amount) } catch { return `${currency} ${amount.toFixed(2)}`.trim() }
+  }
+  function tally(values) {
+    const counts = new Map()
+    for (const value of values) counts.set(value, (counts.get(value) || 0) + 1)
+    return [...counts].sort((a, b) => b[1] - a[1])
+  }
+  // One issue in detail: how big it is, what it means, who hit it, where, and every task.
+  function openIssue(key) {
+    const run = state.selected
+    if (!run) return
+    const rows = runResults(run), { graded, failed, list } = issueData(rows, state.issueAgent), issue = list.find(item => item.key === key)
+    if (!issue) return
+    const count = issue.rows.length, [means, look] = issueHelp[key] || issueHelp.other
+    const entries = attempts(run).filter(attempt => graded.some(row => row.attempt === attempt))
+    const hit = new Set(issue.rows.map(row => row.attempt.id))
+    const spend = new Map()
+    for (const { result } of issue.rows) if (result.wrong_spend) spend.set(result.wrong_spend.currency, (spend.get(result.wrong_spend.currency) || 0) + result.wrong_spend.amount)
+    const spent = [...spend].map(([currency, amount]) => moneyText(amount, currency))
+    const facts = [
+      [count, `task${count === 1 ? '' : 's'}`],
+      [`${Math.round(count / failed.length * 100)}%`, `of ${failed.length} failed task${failed.length === 1 ? '' : 's'}`],
+      ...(entries.length > 1 ? [[`${hit.size} of ${entries.length}`, 'agents']] : []),
+      ...(spent.length ? [[spent, 'spent on these orders']] : []),
+    ].map(([value, label]) => `<div class="issue-fact">${[value].flat().map(line => `<strong>${escape(String(line))}</strong>`).join('')}<span>${escape(label)}</span></div>`).join('')
+    const agentRows = entries.map(attempt => {
+      const agent = agentData(attempt.agent), mine = issue.rows.filter(row => row.attempt === attempt).length, finished = graded.filter(row => row.attempt === attempt).length
+      return `<div class="issue-agent"><span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}${entries.length > 1 ? `<small>URL ${String(attempts(run).indexOf(attempt) + 1).padStart(2, '0')}</small>` : ''}</span><div class="bar"><span class="failed" style="width:${finished ? (mine / finished * 100).toFixed(2) : 0}%"></span></div><span class="issue-agent-count">${mine} of ${finished} tasks</span></div>`
+    }).join('')
+    const tallyList = items => `<ul class="issue-tally">${items.map(([name, n]) => `<li><span>${escape(name)}</span><strong>${n}</strong></li>`).join('')}</ul>`
+    const stores = tally(issue.rows.map(({ result }) => result.store ? storeName(result.store) : 'Other'))
+    const types = tally(issue.rows.map(({ result }) => result.task_type || 'Other'))
+    const others = tally(issue.rows.flatMap(({ result }) => (result.issues || []).filter(other => other.key !== key).map(other => other.label)))
+    const tasks = issue.rows.map(({ attempt, result, key: rowKey }) => {
+      const agent = agentData(attempt.agent), label = taskLabel(run, result.task_id) || result.task_id || 'Task'
+      const reasons = Array.isArray(result.failure_reasons) && result.failure_reasons.length ? result.failure_reasons : (result.grade?.reasons || []).map(reason => reason.message).filter(Boolean)
+      return `<li class="issue-task"><div class="issue-task-top"><strong>${escape(label)}</strong><span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}</span><span class="issue-task-meta">${escape([result.store ? storeName(result.store) : '', result.task_type].filter(Boolean).join(' · '))}</span>${result.wrong_spend ? `<span class="badge red">${escape(moneyText(result.wrong_spend.amount, result.wrong_spend.currency))} spent</span>` : ''}<button class="button quiet small" type="button" data-action="issue-open-task" data-key="${escape(rowKey)}">Open</button></div>${bullets(reasons)}</li>`
+    }).join('')
+    const dialog = $('#issue-dialog')
+    dialog.innerHTML = `<div class="issue-dialog-inner"><div class="dialog-header"><h2 id="issue-title"><span class="issue-key ic${issue.color}"></span>${escape(issue.label)}</h2><button type="button" class="icon-button" data-action="close-issue" aria-label="Close">×</button></div>
+      <div class="issue-dialog-body"><div class="issue-facts">${facts}</div>
+        <div class="issue-help"><section><h3>What it means</h3><p>${escape(means)}</p></section><section><h3>Where to look</h3><p>${escape(look)}</p></section></div>
+        <section><h3>By agent</h3><div class="issue-agents">${agentRows}</div></section>
+        <div class="issue-split"><section><h3>By store</h3>${tallyList(stores)}</section><section><h3>By task type</h3>${tallyList(types)}</section></div>
+        ${others.length ? `<section><h3>Also wrong on these tasks</h3>${tallyList(others)}</section>` : ''}
+        <section><h3>Tasks</h3><ul class="issue-tasks">${tasks}</ul></section></div>
+      <div class="dialog-footer"><button class="button quiet" type="button" data-action="close-issue">Close</button><button class="button primary" type="button" data-action="issue-results" data-issue="${escape(key)}" data-label="${escape(issue.label)}">Show on Results</button></div></div>`
+    dialog.showModal()
+    dialog.querySelector('.issue-dialog-body').scrollTop = 0
   }
   function showIssue(key, label, attemptId) {
     setRunTab('results')
     state.resultsView = { filter: 'failed', agent: attemptId || 'all', query: '', issue: { key, label } }
     render()
     $('#results-panel')?.scrollIntoView({ block: 'start' })
+  }
+  // Opens one task's row on the Results tab.
+  function openResult(key) {
+    const run = state.selected
+    if (!run || !runResults(run).some(row => row.key === key)) return
+    setRunTab('results')
+    state.resultsView = { filter: 'all', agent: 'all', query: '', issue: null }
+    state.openResults.add(key)
+    render()
+    const group = [...document.querySelectorAll('.result-group')].find(item => item.dataset.key === key)
+    group?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (group) { group.classList.remove('flash'); void group.offsetWidth; group.classList.add('flash') }
   }
 
   // Success rate over the run: one line per agent, its pass rate after each
@@ -599,6 +704,17 @@
     showRate(plot, Math.round((event.clientX - box.left) / box.width * Number(plot.dataset.span)))
   })
   document.addEventListener('pointerleave', event => { if (event.target.matches?.('.rate-plot')) hideRate(event.target) }, true)
+  // Pointing at a slice or its row lights up both.
+  document.addEventListener('pointerover', event => {
+    const panel = $('#issues-panel')
+    if (!panel) return
+    const key = event.target.closest?.('#issues-panel [data-issue]')?.dataset.issue || ''
+    if ((panel.dataset.hot || '') === key) return
+    panel.dataset.hot = key
+    for (const item of panel.querySelectorAll('[data-issue]')) item.classList.toggle('hot', item.dataset.issue === key)
+  })
+  // Clicking outside the issue window closes it.
+  $('#issue-dialog').addEventListener('click', event => { if (event.target === event.currentTarget) event.currentTarget.close() })
   document.addEventListener('focusout', event => { if (event.target.matches?.('.rate-plot')) hideRate(event.target) })
   function renderAgentTable(run) {
     const entries = attempts(run)
@@ -770,7 +886,10 @@
       state.resultsView = { filter: 'all', agent: control.dataset.attempt, query: '', issue: null }
       render(); window.scrollTo(0, 0)
     }
-    if (action === 'show-issue' && state.selected) showIssue(control.dataset.issue, control.dataset.label, control.dataset.attempt)
+    if (action === 'issue-details') openIssue(control.dataset.issue)
+    if (action === 'close-issue') $('#issue-dialog').close()
+    if (action === 'issue-results' && state.selected) { $('#issue-dialog').close(); showIssue(control.dataset.issue, control.dataset.label, state.issueAgent) }
+    if (action === 'issue-open-task') { $('#issue-dialog').close(); openResult(control.dataset.key) }
     if (action === 'clear-issue') { state.resultsView.issue = null; control.remove(); applyResults() }
     if (action === 'toggle-settings') setSettings($('#settings-menu').hidden)
     if (action === 'set-theme') {
@@ -801,6 +920,7 @@
   document.addEventListener('change', event => {
     if (event.target.id === 'run-suite') $('#run-task-picker').hidden = event.target.value !== 'custom'
     if (event.target.id === 'results-agent') pickAgent(event.target.value)
+    if (event.target.id === 'issues-agent') { state.issueAgent = event.target.value; refreshIssues(); $('#issues-agent')?.focus() }
   })
   document.addEventListener('input', event => {
     if (event.target.id === 'results-query') { state.resultsView.query = event.target.value; applyResults(); return }

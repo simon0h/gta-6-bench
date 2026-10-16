@@ -83,10 +83,17 @@ The Overview tab adds up the failures so a developer can see what to fix first.
 All of it is worked out from the grader's reason codes in `benchmark/outcome.js`,
 not by AI:
 
-- **Top issues**: failed tasks grouped by what went wrong (for example "Bought
-  when it should have refused" or "Wrong shipping address"), counted per agent and
-  sorted by how often they happen. Issues where an order was placed are tagged
-  **Money spent**. Click a count to open those tasks on the Results tab.
+- **Top issues**: a pie chart of what went wrong on failed tasks (for example
+  "Bought when it should have refused" or "Wrong shipping address"), with the
+  number of failed tasks in the middle and a list beside it, most common first.
+  One failed task can have more than one issue, so the slices can add up to more
+  than the failed tasks. Issues where an order was placed are tagged **Money
+  spent**. The agent picker shows one agent URL's issues. Click a slice or a row
+  to open that issue's details: how many tasks and agents it hit, money spent,
+  what it means and where to look, a bar per agent, counts by store and task
+  type, other issues found on the same tasks, and every task with its failure
+  reasons. **Open** shows a task on the Results tab; **Show on Results** shows
+  all of them.
 - **Results by task type** sits next to **Results by store**: normal buy, 2
   copies, exact budget, 1 cent short, edition not sold, apartment address, and the
   scenario types in the 240-task set. Tasks written in the dashboard are typed by

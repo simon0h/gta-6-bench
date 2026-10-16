@@ -283,14 +283,63 @@ main:focus { outline: none; }
 .store-bar { display: grid; grid-template-columns: 130px minmax(0, 1fr) 96px; align-items: center; gap: 12px; font-size: 13px; }
 .store-bar-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .store-bar-count { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-/* Top issues */
-.issues-table th[scope="row"] { min-width: 230px; height: auto; border-bottom: 0; border-top: 1px solid var(--line); background: none; color: var(--ink); font-size: 14px; font-weight: 400; white-space: normal; }
-.issues-table tbody tr:first-child th[scope="row"] { border-top: 0; }
-.issues-table th[scope="row"] .badge { margin-left: 8px; vertical-align: 1px; }
-.issues-table thead .agent-cell { justify-content: flex-end; }
-.issue-count { min-width: 28px; padding: 1px 8px; border-radius: 4px; background: var(--red-soft); color: var(--red); font-weight: 600; font-variant-numeric: tabular-nums; }
-.issue-count:hover { text-decoration: underline; }
-.issues-table .zero { color: var(--muted); }
+/* Top issues: a donut chart with one slice per issue, and a details window
+   for each. Slice colors: blue, orange, aqua, yellow, pink, purple, brick,
+   olive, sky, grey. */
+.issues-panel, .issue-dialog { --i1: #2a78d6; --i2: #eb6834; --i3: #1baf7a; --i4: #eda100; --i5: #e87ba4; --i6: #8a63d2; --i7: #c4453a; --i8: #6f8f2f; --i9: #3fa7c4; --i10: #8d8d96; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.issues-panel, .issue-dialog) { --i1: #3987e5; --i2: #d95926; --i3: #199e70; --i4: #c98500; --i5: #d55181; --i6: #9b7be0; --i7: #d6584c; --i8: #84a83e; --i9: #4bb3cf; --i10: #7d7d87; } }
+:root[data-theme="dark"] :is(.issues-panel, .issue-dialog) { --i1: #3987e5; --i2: #d95926; --i3: #199e70; --i4: #c98500; --i5: #d55181; --i6: #9b7be0; --i7: #d6584c; --i8: #84a83e; --i9: #4bb3cf; --i10: #7d7d87; }
+.ic1 { --c: var(--i1); } .ic2 { --c: var(--i2); } .ic3 { --c: var(--i3); } .ic4 { --c: var(--i4); } .ic5 { --c: var(--i5); } .ic6 { --c: var(--i6); } .ic7 { --c: var(--i7); } .ic8 { --c: var(--i8); } .ic9 { --c: var(--i9); } .ic10 { --c: var(--i10); }
+.issue-chart { display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: center; gap: 32px; }
+.issue-pie { position: relative; width: 220px; height: 220px; }
+.issue-pie svg { width: 100%; height: 100%; overflow: visible; }
+.issue-slice { fill: none; stroke: var(--c); stroke-width: 18; cursor: pointer; transition: stroke-width .12s, opacity .12s; }
+.issue-slice.hot { stroke-width: 24; }
+.issues-panel[data-hot]:not([data-hot=""]) .issue-slice:not(.hot) { opacity: .35; }
+.issue-pie-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.issue-pie-center strong { font-size: 30px; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.issue-pie-center span { color: var(--muted); font-size: 12.5px; }
+.issue-legend { margin: 0; padding: 0; list-style: none; }
+.issue-legend li + li { border-top: 1px solid var(--line); }
+.issue-row { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto 40px 14px; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 6px 8px; border-radius: var(--radius); color: var(--ink); font-size: 14px; text-align: left; }
+.issue-row:hover, .issue-row.hot { background: var(--hover); }
+.issue-row .badge { margin-left: 8px; vertical-align: 1px; }
+.issue-row .chevron { margin: 0; }
+.issue-key { display: inline-block; width: 12px; height: 12px; flex: none; border-radius: 3px; background: var(--c); }
+.issue-total { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.issue-share { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.issue-dialog { width: 760px; padding: 0; }
+.issue-dialog[open] { display: flex; }
+.issue-dialog-inner { display: flex; flex-direction: column; width: 100%; max-height: calc(100dvh - 34px); }
+.issue-dialog .dialog-header { margin: 0; }
+.issue-dialog .dialog-header h2 { display: flex; align-items: center; gap: 10px; }
+.issue-dialog .dialog-footer { margin-top: 0; }
+.issue-dialog-body { display: grid; gap: 22px; padding: 18px 20px 22px; overflow-y: auto; }
+.issue-dialog-body h3 { margin: 0 0 8px; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; }
+.issue-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); border: 1px solid var(--line); border-radius: var(--radius-card); }
+.issue-fact { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; }
+.issue-fact span { margin-top: auto; }
+.issue-fact + .issue-fact { border-left: 1px solid var(--line); }
+.issue-fact strong { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.issue-fact span { color: var(--muted); font-size: 12.5px; }
+.issue-help { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.issue-help p { margin: 0; font-size: 14px; line-height: 1.5; }
+.issue-agents { display: grid; gap: 10px; }
+.issue-agent { display: grid; grid-template-columns: 170px minmax(0, 1fr) 96px; align-items: center; gap: 12px; font-size: 13px; }
+.issue-agent small { margin-left: 6px; color: var(--muted); font-size: 12px; }
+.issue-agent-count { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.issue-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.issue-tally { margin: 0; padding: 0; list-style: none; font-size: 13.5px; }
+.issue-tally li { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px solid var(--line); }
+.issue-tally li:last-child { border-bottom: 0; }
+.issue-tally strong { font-weight: 600; font-variant-numeric: tabular-nums; }
+.issue-tasks { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.issue-task { padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-card); }
+.issue-task-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 13.5px; }
+.issue-task-top .button { margin-left: auto; }
+.issue-task-meta { color: var(--muted); font-size: 12.5px; }
+.issue-task ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.issue-task p { margin: 6px 0 0; color: var(--muted); }
 .issue-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 6px 2px 10px; border-radius: var(--radius); background: var(--red-soft); color: var(--red); font-size: 12.5px; font-weight: 500; }
 .issue-chip svg { width: 14px; height: 14px; }
 /* Per-task checks */
@@ -835,6 +884,17 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
   .run-summary .stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .stat-label svg { display: none; }
   .stat-value { font-size: 22px; }
+  .issue-chart { grid-template-columns: 1fr; gap: 16px; }
+  .issue-pie { width: 180px; height: 180px; margin: 0 auto; }
+  .issue-dialog { width: calc(100% - 16px); max-width: calc(100% - 16px); }
+  .issue-dialog-inner { max-height: calc(100dvh - 18px); }
+  .issue-dialog-body { padding: 16px; }
+  .issue-help, .issue-split { grid-template-columns: 1fr; }
+  .issue-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .issue-fact:nth-child(odd) { border-left: 0; }
+  .issue-fact:nth-child(n + 3) { border-top: 1px solid var(--line); }
+  .issue-agent { grid-template-columns: 96px minmax(0, 1fr) 80px; }
+  .issue-agent small { display: none; }
   .section-heading { flex-wrap: wrap; gap: 10px; }
   .entry-fields { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .agent-card-footer { flex-wrap: wrap; gap: 8px; }
