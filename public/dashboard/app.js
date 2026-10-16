@@ -533,7 +533,7 @@
     traversal.close()
     live.stop()
     $('#auth').hidden = false
-    $('#auth').innerHTML = `<form class="auth-card" id="login-form"><span class="brand-mark" aria-hidden="true">VI</span><div class="eyebrow">GTA 6 Bench</div><h1>Sign in</h1><label for="workspace-token">Operator token</label><input id="workspace-token" name="token" type="password" required autocomplete="current-password"><p class="form-error" role="alert">${escape(error)}</p><button class="button primary" type="submit">Sign in</button></form>`
+    $('#auth').innerHTML = `<form class="auth-card" id="login-form"><span class="brand-mark" aria-hidden="true"></span><div class="eyebrow">GTA 6 Bench</div><h1>Sign in</h1><label for="workspace-token">Operator token</label><input id="workspace-token" name="token" type="password" required autocomplete="current-password"><p class="form-error" role="alert">${escape(error)}</p><button class="button primary" type="submit">Sign in</button></form>`
     $('#workspace-token').focus()
   }
 
@@ -552,7 +552,7 @@
     } catch (error) {
       $('#boot').hidden = true
       $('#auth').hidden = false
-      $('#auth').innerHTML = `<div class="auth-card"><span class="brand-mark" aria-hidden="true">VI</span><h1>Connection unavailable</h1><p>${escape(error.message)}</p><button class="button primary" data-action="retry-session">Try again</button></div>`
+      $('#auth').innerHTML = `<div class="auth-card"><span class="brand-mark" aria-hidden="true"></span><h1>Connection unavailable</h1><p>${escape(error.message)}</p><button class="button primary" data-action="retry-session">Try again</button></div>`
     }
   }
 
