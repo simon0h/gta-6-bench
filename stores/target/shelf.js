@@ -12,7 +12,7 @@
 // kw:extra search words, ps5|xbox|switch|switch-2 (game platform), console, game
 const T = (type, dept, node, rows) => rows.map(r => ({ type, dept, node, r }))
 
-const PHOTOS = { electronics: 'headphones', 'video-games': 'controller', 'home-decor': 'armchair', 'kitchen-dining': 'dutch-oven', grocery: 'apples', household: 'paper-towels', beauty: 'moisturizer', clothing: 'hoodie', baby: 'baby-bottle', toys: 'building-bricks', pets: 'dog-food', health: 'sunscreen', 'sports-outdoors': 'dumbbells-purple', 'school-office': 'notebooks', entertainment: 'book-orchard-house', 'patio-garden': 'tent-green', halloween: 'lantern-cream' }
+const PHOTOS = { electronics: 'headphones', 'video-games': 'controller', 'home-decor': 'armchair', 'kitchen-dining': 'dutch-oven', grocery: 'apples', household: 'paper-towels', beauty: 'moisturizer', clothing: 'hoodie', baby: 'baby-bottle', toys: 'building-bricks', pets: 'dog-food', health: 'sunscreen', 'sports-outdoors': 'dumbbells-purple', 'school-office': 'notebooks', entertainment: 'book-orchard-house', 'patio-garden': 'tent-green', halloween: 'lantern-cream', 'gift-cards': 'card-binder-red' }
 export const SHELF_DEPARTMENTS = [
   ['electronics', 'Electronics', 'N-5xtg6', '/c/electronics/-/N-5xtg6', 'Sound, screens & everyday connections'],
   ['video-games', 'Video Games', 'N-5xtg5', '/c/video-games/-/N-5xtg5', 'Your next great game starts here'],
@@ -31,6 +31,7 @@ export const SHELF_DEPARTMENTS = [
   ['entertainment', 'Books, Music & Movies', 'N-5xsxe', '/c/movies-music-books/-/N-5xsxe', 'Stories, sounds & screens'],
   ['patio-garden', 'Patio & Garden', 'N-5xtq9', '/c/patio-garden/-/N-5xtq9', 'Outdoor living, made easy'],
   ['halloween', 'Halloween', 'N-5xt2o', '/c/halloween/-/N-5xt2o', 'Costumes, candy & spooky decor'],
+  ['gift-cards', 'Gift Cards', 'N-5xsxu', '/c/gift-cards/-/N-5xsxu', 'The gift of choice, for every occasion'],
 ].map(([id, name, node, path, tagline]) => ({ id, name, node, path, tagline, photo: PHOTOS[id] }))
 
 const ROWS = [
@@ -536,14 +537,133 @@ const ROWS = [
     ['Brach\'s Classic Candy Corn - 20oz', 'Brach\'s', 4.99, 0, 4.4, 1100, 'Size:20 oz', 'kw:halloween candy'],
     ['Joyfy 2 Pack Halloween Wind Up Ghost & Pumpkin Toys for Kids', 'Joyfy', 9.23, 15.39, 4.3, 14, 'Count:2', 'kw:halloween toys'],
   ]),
+
+  // ---------------- Gift Cards ----------------
+  ...T('Target GiftCards', 'gift-cards', 'N-5xsxt', [
+    ['Target GiftCard $25', 'Target', 25, 0, 4.9, 12840, 'Value:$25|Delivery:Mailed card|Expiration:No expiration date', 'kw:gift card target giftcard'],
+    ['Target GiftCard $50 - Happy Birthday', 'Target', 50, 0, 4.9, 6310, 'Value:$50|Delivery:Mailed card|Expiration:No expiration date', 'kw:gift card target giftcard birthday'],
+    ['Target GiftCard $100 - Bullseye Holiday', 'Target', 100, 0, 4.9, 4875, 'Value:$100|Delivery:Mailed card|Expiration:No expiration date', 'new kw:gift card target giftcard holiday'],
+  ]),
+  ...T('Food & Restaurant Gift Cards', 'gift-cards', 'N-26m0u', [
+    ['Starbucks Gift Card $25', 'Starbucks', 25, 0, 4.8, 3920, 'Value:$25|Delivery:Mailed card', 'kw:gift card coffee'],
+    ['DoorDash Gift Card $50', 'DoorDash', 50, 0, 4.7, 1460, 'Value:$50|Delivery:Mailed card', 'kw:gift card food delivery'],
+  ]),
+  ...T('Entertainment Gift Cards', 'gift-cards', 'N-4skcx', [
+    ['Netflix Gift Card $30', 'Netflix', 30, 0, 4.8, 2210, 'Value:$30|Delivery:Mailed card', 'kw:gift card streaming'],
+    ['AMC Theatres Gift Card $25', 'AMC Theatres', 25, 0, 4.7, 870, 'Value:$25|Delivery:Mailed card', 'kw:gift card movies'],
+  ]),
+  ...T('Gaming Gift Cards', 'gift-cards', 'N-5xtfh', [
+    ['Xbox Gift Card $25', 'Microsoft', 25, 0, 4.8, 2940, 'Value:$25|Delivery:Mailed card', 'kw:gift card gaming gift cards xbox'],
+    ['Roblox Gift Card $25', 'Roblox', 25, 0, 4.8, 5120, 'Value:$25|Delivery:Mailed card', 'kw:gift card gaming gift cards robux'],
+  ]),
+  ...T('Travel Gift Cards', 'gift-cards', 'N-4skcw', [
+    ['Uber Gift Card $50', 'Uber', 50, 0, 4.7, 1180, 'Value:$50|Delivery:Mailed card', 'kw:gift card rideshare uber eats'],
+    ['Airbnb Gift Card $100', 'Airbnb', 100, 0, 4.7, 430, 'Value:$100|Delivery:Mailed card', 'kw:gift card travel'],
+  ]),
+  ...T('Specialty Gift Cards', 'gift-cards', 'N-iwbiv', [
+    ['Apple Gift Card $50', 'Apple', 50, 0, 4.8, 3380, 'Value:$50|Delivery:Mailed card|Use for:App Store, Apple Store, apple.com', 'kw:gift card apple itunes'],
+  ]),
+  ...T('Visa Gift Cards', 'gift-cards', 'N-x7n3r', [
+    ['Visa Gift Card $50 + $5.95 Fee', 'Visa', 55.95, 0, 4.4, 2650, 'Value:$50|Purchase Fee:$5.95|Delivery:Mailed card', 'kw:gift card prepaid visa'],
+    ['One4all Gift Card $50 + $5.95 Fee', 'One4all', 55.95, 0, 4.3, 390, 'Value:$50|Purchase Fee:$5.95|Delivery:Mailed card', 'kw:gift card one4all'],
+  ]),
+  ...T('Prepaid Phone Cards', 'gift-cards', 'N-ay28t', [
+    ['Straight Talk $45 30-Day Unlimited Plan Airtime Card', 'Straight Talk', 45, 0, 4.5, 760, 'Plan Length:30 days|Delivery:Mailed card', 'kw:prepaid phone airtime'],
+  ]),
+
+  // ---------------- More categories ----------------
+  ...T('Bird Supplies', 'pets', 'N-5xt43', [
+    ['Kaytee Forti-Diet Pro Health Parakeet Food - 5lbs', 'Kaytee', 8.99, 0, 4.7, 640, 'Net Weight:5 lb|Life Stage:Adult', 'kw:bird food bird seed'],
+    ['Wild Harvest Advanced Nutrition Diet for Cockatiels - 4.5lbs', 'Wild Harvest', 7.49, 0, 4.5, 310, 'Net Weight:4.5 lb', 'kw:bird food bird seed'],
+    ['Cotton Rope Bird Perch - Boots & Barkley', 'Boots & Barkley', 6, 0, 4.4, 120, 'Material:Cotton rope', 'kw:bird perch toy'],
+  ]),
+  ...T('Fish Supplies', 'pets', 'N-5xt3e', [
+    ['TetraMin Tropical Flakes Fish Food - 2.2oz', 'Tetra', 7.99, 0, 4.7, 2100, 'Net Weight:2.2 oz', 'kw:fish food'],
+    ['Aqueon LED Aquarium Starter Kit - 10gal', 'Aqueon', 64.99, 79.99, 4.5, 940, 'Capacity:10 gal|Includes:LED hood, filter, heater', 'kw:fish tank aquarium'],
+    ['API Stress Coat Aquarium Water Conditioner - 4 fl oz', 'API', 7.29, 0, 4.8, 1650, 'Size:4 fl oz', 'kw:fish tank water conditioner'],
+  ]),
+  ...T('Small Animal Supplies', 'pets', 'N-5xt3d', [
+    ['Kaytee Timothy Hay for Rabbits & Small Animals - 48oz', 'Kaytee', 14.99, 0, 4.6, 1320, 'Net Weight:48 oz', 'kw:hay rabbit guinea pig'],
+    ['Oxbow Essentials Adult Rabbit Food - 5lbs', 'Oxbow', 16.99, 0, 4.8, 870, 'Net Weight:5 lb|Life Stage:Adult', 'kw:rabbit food'],
+    ['Wooden Small Animal Hideout - Boots & Barkley', 'Boots & Barkley', 10, 0, 4.5, 240, 'Material:Wood', 'kw:hamster guinea pig hideout'],
+  ]),
+  ...T('Baby Clothing', 'clothing', 'N-564pl', [
+    ['Baby 5pk Short Sleeve Bodysuit - Cloud Island White', 'Cloud Island', 12, 0, 4.7, 2140, 'Material:100% Cotton|Count:5', 'sizes:0-3M/3-6M/6-9M/12M kw:baby clothes bodysuit'],
+    ['Baby Fleece Footed Pajama - Cloud Island Light Pink', 'Cloud Island', 10, 0, 4.6, 680, 'Material:100% Polyester', 'new sizes:0-3M/3-6M/6-9M/12M kw:baby clothes pajamas'],
+    ['Baby Boys\' 2pc Sweatshirt and Jogger Set - Cat & Jack Gray', 'Cat & Jack', 18, 0, 4.7, 210, 'Material:Cotton, polyester', 'new sizes:0-3M/3-6M/6-9M/12M kw:baby clothes'],
+  ]),
+  ...T('Toddler Clothing', 'clothing', 'N-23cj2', [
+    ['Toddler Boys\' Long Sleeve Dino Graphic T-Shirt - Cat & Jack Green', 'Cat & Jack', 6, 0, 4.6, 520, 'Material:100% Cotton', 'sizes:2T/3T/4T/5T kw:toddler clothes'],
+    ['Toddler Girls\' Puffer Jacket - Cat & Jack Pink', 'Cat & Jack', 30, 0, 4.7, 310, 'Material:100% Polyester|Closure:Zipper', 'new sizes:2T/3T/4T/5T kw:toddler coat'],
+    ['Toddler Fleece Jogger Pants - Cat & Jack Black', 'Cat & Jack', 8, 0, 4.6, 450, 'Material:Cotton, polyester', 'sizes:2T/3T/4T/5T kw:toddler pants'],
+  ]),
+  ...T('Young Adult', 'clothing', 'N-qh1tf', [
+    ['Women\'s Oversized Fleece Crewneck Sweatshirt - Wild Fable Heather Gray', 'Wild Fable', 20, 0, 4.6, 980, 'Material:Cotton, polyester', 'sizes:XS/S/M/L/XL kw:sweatshirt'],
+    ['Women\'s Corduroy Mini Skirt - Wild Fable Brown', 'Wild Fable', 25, 0, 4.4, 140, 'Material:100% Cotton', 'new sizes:XS/S/M/L/XL kw:skirt'],
+    ['Men\'s Relaxed Fit Straight Leg Jeans - Original Use Light Wash', 'Original Use', 30, 0, 4.5, 360, 'Material:100% Cotton|Fit:Relaxed', 'sizes:30x30/32x30/32x32/34x32 kw:jeans'],
+  ]),
+  ...T('Christmas Decor', 'home-decor', 'N-5xt30', [
+    ['7.5ft Pre-Lit Alberta Spruce Artificial Christmas Tree Clear Lights - Wondershop', 'Wondershop', 200, 0, 4.6, 1840, 'Height:7.5 Feet|Lights:Clear incandescent', 'new kw:christmas tree'],
+    ['100ct LED Mini String Lights Warm White with Green Wire - Wondershop', 'Wondershop', 10, 0, 4.5, 3120, 'Count:100 bulbs|Length:33 ft', 'new kw:christmas lights'],
+    ['40ct Shatter-Resistant Christmas Ornament Set Red & Gold - Wondershop', 'Wondershop', 15, 0, 4.7, 960, 'Count:40', 'new kw:christmas ornaments'],
+    ['Knit Christmas Stocking Red/Cream - Wondershop', 'Wondershop', 15, 0, 4.7, 410, 'Material:Acrylic', 'new kw:christmas stocking'],
+  ]),
+  ...T('Wi-Fi & Networking', 'electronics', 'N-5s7dv', [
+    ['TP-Link Archer AX55 AX3000 Dual-Band Wi-Fi 6 Router', 'TP-Link', 99.99, 129.99, 4.6, 2410, 'Wi-Fi Standard:Wi-Fi 6|Speed:AX3000|Ports:4 gigabit LAN', 'kw:router wifi'],
+    ['eero 6+ Mesh Wi-Fi System - 3pk', 'eero', 199.99, 299.99, 4.5, 1210, 'Wi-Fi Standard:Wi-Fi 6|Coverage:Up to 4,500 sq ft', 'kw:router wifi mesh'],
+    ['NETGEAR Nighthawk AX1800 Wi-Fi 6 Router - RAX10', 'NETGEAR', 129.99, 0, 4.4, 860, 'Wi-Fi Standard:Wi-Fi 6|Speed:AX1800', 'kw:router wifi'],
+  ]),
+  ...T('Pre-owned & Refurbished', 'electronics', 'N-4rtuu', [
+    ['Apple AirPods Pro (2nd Generation) with MagSafe Case (USB-C) - Target Certified Refurbished', 'Apple', 149.99, 0, 4.4, 860, 'Condition:Target Certified Refurbished|Warranty:90 days', 'kw:airpods refurbished'],
+    ['Apple iPad 10.2-inch Wi-Fi 64GB (9th Generation) - Silver - Target Certified Refurbished', 'Apple', 199.99, 0, 4.5, 1340, 'Condition:Target Certified Refurbished|Storage:64GB|Warranty:90 days', 'kw:ipad refurbished'],
+  ]),
+  ...T("Kids' Electronics", 'toys', 'N-5xt9q', [
+    ['Yoto Mini Kids\' Audio Player - Gray', 'Yoto', 69.99, 0, 4.7, 1120, 'Age:3 Years and up|Battery Life:Up to 20 hours', 'kw:kids audio player'],
+    ['Toniebox Starter Set - Light Blue', 'Tonies', 99.99, 0, 4.8, 2050, 'Age:3 Years and up|Includes:Toniebox, Creative-Tonie, charger', 'kw:kids audio player'],
+    ['VTech KidiZoom Camera Pix Plus - Blue', 'VTech', 39.99, 49.99, 4.5, 980, 'Age:3 Years and up', 'kw:kids camera'],
+  ]),
+  ...T('TV Shows', 'entertainment', 'N-5xswt', [
+    ['The Office: The Complete Series (DVD)', 'Universal', 59.99, 0, 4.9, 2210, 'Format:DVD|Discs:38', 'kw:tv shows dvd'],
+    ['Friends: The Complete Series (Blu-ray)', 'Warner Bros.', 79.99, 99.99, 4.9, 1870, 'Format:Blu-ray|Discs:21', 'kw:tv shows blu-ray'],
+    ['Yellowstone: Season Five, Part 1 (DVD)', 'Paramount', 19.99, 0, 4.7, 540, 'Format:DVD|Discs:3', 'kw:tv shows dvd'],
+  ]),
+  ...T('Nutrition & Weight Loss', 'health', 'N-5xu0d', [
+    ['Premier Protein 30g Protein Shake - Chocolate - 11 fl oz/12pk', 'Premier Protein', 29.99, 0, 4.8, 5130, 'Count:12|Protein:30g per shake', 'kw:protein shake'],
+    ['Quest Nutrition Protein Bar - Chocolate Chip Cookie Dough - 4ct', 'Quest Nutrition', 9.49, 0, 4.6, 1980, 'Count:4|Protein:21g per bar', 'kw:protein bar'],
+    ['Orgain Organic Vegan Protein Powder - Creamy Chocolate Fudge - 2.03lbs', 'Orgain', 29.99, 34.99, 4.6, 2740, 'Net Weight:2.03 lb|Protein:21g per serving', 'kw:protein powder'],
+  ]),
 ]
+
+// Target lists many items under more than one category node (e.g. a plush bunny under Easter,
+// a desk organizer under Home Office Ideas). These secondary nodes are added to each item's own.
+const CROSS_LIST = [
+  ['N-wiae5', p => ['Books', 'School & Office Supplies', 'Board Games & Puzzles', 'Building Sets'].includes(p.type)],
+  ['N-5oux8', p => p.department !== 'video-games' && /Disney|Pok[eé]mon|Bluey|Harry Potter|Miffy|Moomin|Barbie|Frozen|Princess|Hocus Pocus|Scoob/i.test(p.title)],
+  ['N-5xt1n', p => /bunny|rabbit|egg hunt/i.test(p.title) && p.department !== 'pets'],
+  ['N-5q0f1', p => p.deal && ['electronics', 'video-games', 'toys', 'kitchen-dining'].includes(p.department)],
+  ['N-5q0f2', p => p.deal && ['electronics', 'toys', 'home-decor', 'kitchen-dining', 'baby'].includes(p.department)],
+  ['N-5xtnz', p => ['School & Office Supplies', 'Storage & Organization'].includes(p.type)],
+  ['N-fh5dt', p => ['Fragrance', 'Skincare', 'Drinkware'].includes(p.type) || /candle|throw/i.test(p.title)],
+  ['N-96d2i', p => p.isNew && ['electronics', 'toys', 'beauty', 'home-decor', 'kitchen-dining', 'gift-cards'].includes(p.department)],
+  ['N-sw90d', p => ['Vitamins & Supplements', 'Exercise & Fitness', 'Skincare', 'Nutrition & Weight Loss'].includes(p.type)],
+  ['N-5xu0a', p => p.type === 'First Aid & Home Health'],
+  ['N-4sm54', p => ['Computers', 'School & Office Supplies', 'Storage & Organization'].includes(p.type) || /desk|office chair/i.test(p.title)],
+  ['N-5xtyp', p => p.type === 'School & Office Supplies' || /backpack|lunch/i.test(p.title) || (p.department === 'clothing' && /kids|girls|boys/i.test(p.title))],
+  ['N-54v3g', p => p.department === 'baby' && /sound machine|kick & play|bottle/i.test(p.title)],
+  ['N-5q0g0', p => ['Bedding', 'Bath', 'Storage & Organization', 'Small Appliances', 'Computers'].includes(p.type)],
+  ['N-2qkae', p => /KBB by Kahlana|Hyde & EEK|Good & Gather|Bread Beauty|Pattern|Mielle|Honey Pot/i.test(p.brand) && p.department !== 'halloween'],
+  ['N-5xt5e', p => p.type === 'Camping Gear' || /pool|water/i.test(p.title) && p.department === 'toys'],
+  ['N-qh1tf', p => /Wild Fable|Original Use/.test(p.brand)],
+  ['N-ng0a0', p => ['grocery', 'household', 'beauty', 'pets'].includes(p.department) && p.rating.count >= 1000],
+]
+
 
 // ---- build product records ----
 const hash = s => { let n = 2166136261; for (const c of String(s)) n = Math.imul(n ^ c.codePointAt(0), 16777619); return n >>>0 }
 const slugify = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 // TCINs the reference policy tests treat as invented fixtures must never be reused here.
 const RESERVED = new Set(['1011529119', '1011545811', '1013468584', '1012260588', '81960427', '84233912', '82900531', '89027781'])
-const DPCI_CLASS = { electronics: '057', 'video-games': '207', 'home-decor': '063', 'kitchen-dining': '072', grocery: '212', household: '060', beauty: '037', clothing: '011', baby: '005', toys: '087', pets: '090', health: '049', 'sports-outdoors': '056', 'school-office': '084', entertainment: '279', 'patio-garden': '066', halloween: '231' }
+const DPCI_CLASS = { electronics: '057', 'video-games': '207', 'home-decor': '063', 'kitchen-dining': '072', grocery: '212', household: '060', beauty: '037', clothing: '011', baby: '005', toys: '087', pets: '090', health: '049', 'sports-outdoors': '056', 'school-office': '084', entertainment: '279', 'patio-garden': '066', halloween: '231', 'gift-cards': '089' }
 const BLURB = {
   electronics: 'Shop with free shipping on orders $35+ and easy returns on most electronics within 30 days.',
   'video-games': 'Play your way with the latest games, consoles and accessories.',
@@ -562,6 +682,7 @@ const BLURB = {
   entertainment: 'Stories, music and movies to enjoy again and again.',
   'patio-garden': 'Make the most of your outdoor space.',
   halloween: 'Get into the spooky spirit with Halloween decor, costumes and treats.',
+  'gift-cards': 'A gift card is always the right size. Arrives in a gift-ready carrier.',
 }
 const SUB_LOVE = ['quality', 'value', 'easy to use', 'design', 'comfort', 'size']
 
@@ -595,12 +716,13 @@ export const SHELF = ROWS.map(({ type, dept, node, r }, i) => {
     description: `${title}. ${BLURB[dept]}${specs.length ? ' ' + specs.map(([k, v]) => `${k}: ${v}.`).join(' ') : ''}`,
     specs: [...specs, ['Brand', brand], ['DPCI', dpci], ['Origin', /Good & Gather|up&up|Threshold|Room Essentials|Brightroom|Cat & Jack|Goodfellow|Universal Thread|All In Motion|Figmint|Hyde/.test(brand) ? 'Imported' : 'Imported or made in USA']],
     shippingNote: dept === 'grocery' && /refrigerat|frozen/i.test(rawSpecs) ? 'This item is shipped in insulated packaging and must arrive within 2 days. Order Pickup and Same Day Delivery are not available for this item.' : 'Standard shipping is available. Order Pickup and Same Day Delivery are not available for this item.',
-    returns: ['grocery', 'health', 'beauty', 'baby'].includes(dept) ? 'Most unopened items in new condition can be returned within 90 days. Opened food, health and personal-care items may have return restrictions.' : dept === 'electronics' || dept === 'video-games' ? 'This item must be returned within 30 days of the date it was purchased in store, shipped, delivered by a Shipt shopper, or made ready for pickup.' : 'Most unopened items in new condition and returned within 90 days will receive a refund or exchange.',
+    returns: dept === 'gift-cards' ? 'Gift cards can’t be returned or exchanged.' : ['grocery', 'health', 'beauty', 'baby'].includes(dept) ? 'Most unopened items in new condition can be returned within 90 days. Opened food, health and personal-care items may have return restrictions.' : dept === 'electronics' || dept === 'video-games' ? 'This item must be returned within 30 days of the date it was purchased in store, shipped, delivered by a Shipt shopper, or made ready for pickup.' : 'Most unopened items in new condition and returned within 90 days will receive a refund or exchange.',
     restricted: false, eta: consoleItem || /TV|Furniture|Patio|Car Seats|Strollers/.test(type) ? 'Arrives in 3–7 business days' : 'Arrives in 2–4 business days',
     keywords: `${brand} ${type} ${department.name} ${kw}`,
     catalogType: game ? 'game' : consoleItem ? 'console' : 'other', catalogPlatform: platform,
   }
-  p.nodes = [...new Set([department.node, node, ...(dept === 'video-games' ? ['N-5xtg6'] : []), ...(dept === 'halloween' ? ['N-5xt3c'] : []), ...(/beauty studio/i.test(title) ? ['N-0cb2f'] : []), ...(/gift card/i.test(title) ? ['N-5xtfh', 'N-5xsxu'] : []), ...(deal ? ['N-4xw74'] : []), ...(p.isNew ? ['N-o9rnh'] : []), ...(p.clearance || (deal && regular >= price * 1.5) ? ['N-5q0ga'] : []), ...(/kids|girls|boys|toddler/i.test(title) && dept === 'clothing' ? ['N-xcoz4'] : [])])]
+  p.nodes = [...new Set([department.node, node, ...(dept === 'video-games' ? ['N-5xtg6'] : []), ...(dept === 'halloween' ? ['N-5xt3c'] : []), ...(/beauty studio/i.test(title) ? ['N-0cb2f'] : []), ...(/gift card/i.test(title) && dept === 'video-games' ? ['N-5xtfh', 'N-5xsxu'] : []), ...(deal ? ['N-4xw74'] : []), ...(p.isNew ? ['N-o9rnh'] : []), ...(p.clearance || (deal && regular >= price * 1.5) ? ['N-5q0ga'] : []), ...(/kids|girls|boys|toddler/i.test(title) && dept === 'clothing' ? ['N-xcoz4'] : [])])]
+  for (const [id, test] of CROSS_LIST) if (!p.nodes.includes(id) && test(p)) p.nodes.push(id)
   const sizes = flags.find(f => f.startsWith('sizes:'))?.slice(6)
   if (sizes) {
     p.optionLabel = 'Size'
@@ -633,6 +755,7 @@ const ART_HINTS = [
   [/Plush Dog Toy/, { title: 'Plush dog toy' }], [/Dog Bed/, { title: 'Pet bed' }], [/Dreamhouse/, { title: 'Dollhouse playset' }],
   [/Cooler/, { shape: 'basket' }], [/Fire Pit/, { shape: 'bowl' }], [/Patio Conversation Set/, { title: 'Patio chair set' }],
   [/Pens|Markers/, { shape: 'pencil' }], [/Desk Organizer/, { title: 'Desk organizer shelf' }], [/Booster Box/, { title: 'Booster pack' }],
+  [/Target GiftCard/, { title: 'Target Gift Card' }], [/Airtime Card/, { title: 'Straight Talk Gift Card' }],
   [/Spiderweb/, { title: 'Spiderweb throw' }], [/Grim Reaper Costume/, { title: 'Costume dress' }], [/Swiffer/, { title: 'Floor mop brush' }],
 ]
 // Asset descriptor for lib/product-asset-art.js renderProductAsset.
