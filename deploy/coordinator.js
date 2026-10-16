@@ -32,6 +32,26 @@ export async function readBounded(response, limit) {
   return output
 }
 
+// Rows to write so the checkpoint table matches state. Only changed rows are
+// written: Cloudflare bills each row written, and most requests change one or two.
+export function checkpointChanges(rows, state, kinds) {
+  const saved = new Map(), counts = new Map()
+  for (const row of rows) {
+    saved.set(`${row.kind}\n${row.ordinal}`, row.value)
+    counts.set(row.kind, Math.max(counts.get(row.kind) ?? 0, row.ordinal + 1))
+  }
+  const writes = [], trims = []
+  for (const kind of kinds) {
+    for (const [ordinal, item] of state[kind].entries()) {
+      const value = JSON.stringify(item)
+      if (saved.get(`${kind}\n${ordinal}`) !== value) writes.push({ kind, ordinal, value })
+    }
+    if ((counts.get(kind) ?? 0) > state[kind].length) trims.push({ kind, from: state[kind].length })
+  }
+  for (const kind of counts.keys()) if (!kinds.includes(kind)) trims.push({ kind, from: 0 })
+  return { writes, trims }
+}
+
 export function isStaticRequest(request) {
   if (!['GET', 'HEAD'].includes(request.method)) return false
   // Trial assets pass through a session middleware in their isolated worker.

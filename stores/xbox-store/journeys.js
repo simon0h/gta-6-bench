@@ -1,5 +1,5 @@
 import { shippingReceipt } from '../playstation-store/physical.js'
-import { findAccount } from '../../lib/accounts.js'
+import { passwordIn } from '../../lib/accounts.js'
 import { randomBytes } from 'node:crypto'
 import { esc, money, publicNotice } from '../../lib/html.js'
 import { appendOrderEvent } from '../../lib/orders.js'
@@ -150,8 +150,8 @@ export function installJourneys(router,{render,signinWall,notFound}) {
     const v=req.body
     if(!validToken(req,'support',v.service_token))return stale(req,res,res.locals.base+'/en-US/support/contact')
     const containsSecret=/\b(?:\d[ -]?){13,19}\b|\b[A-Z0-9]{5}(?:-[A-Z0-9]{5}){4}\b|(?:password|passwd|cvv|card number)\s*[:=]/i
-    const content=(v.subject||'')+' '+(v.message||''),knownPassword=findAccount(req.storeSlug,req.store.user.email)?.password
-    if(containsSecret.test(content)||(knownPassword&&content.includes(knownPassword)))return contact(req,res,{category:v.category,subject:'',message:'',order_id:''},'Remove payment details, passwords and redemption codes before submitting.',400)
+    const content=(v.subject||'')+' '+(v.message||'')
+    if(containsSecret.test(content)||passwordIn(req.storeSlug,req.store.user.email,content))return contact(req,res,{category:v.category,subject:'',message:'',order_id:''},'Remove payment details, passwords and redemption codes before submitting.',400)
     if(!TOPICS.some(t=>t.id===v.category)||!v.subject?.trim()||v.subject.length>120||!v.message?.trim()||v.message.length>2000||(v.order_id&&!ownedOrder(req,v.order_id)))return contact(req,res,{category:v.category,subject:(v.subject||'').slice(0,120),message:(v.message||'').slice(0,2000),order_id:v.order_id},'Choose a topic, enter a subject and message, and select an order belonging to this account.',400)
     validToken(req,'support',v.service_token,'',true)
     const c={id:randomBytes(8).toString('hex'),category:v.category,subject:v.subject.trim(),message:v.message.trim(),order_id:v.order_id||null,created_at:new Date().toISOString(),status:'Received'}

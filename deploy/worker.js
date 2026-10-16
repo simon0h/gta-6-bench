@@ -1,6 +1,6 @@
 import { DurableObject } from 'cloudflare:workers'
 import { timingSafeEqual } from 'node:crypto'
-import { CheckpointCoordinator, isStaticRequest, readBounded, STATE_LIMIT } from './coordinator.js'
+import { CheckpointCoordinator, checkpointChanges, isStaticRequest, readBounded, STATE_LIMIT } from './coordinator.js'
 import { SUMMARY_HEADER, summaryView, writeRunSummary } from '../benchmark/ai-summary.js'
 import { CHAT_HEADER, chatFull, chatStream, chatView, validQuestion } from '../benchmark/ai-chat.js'
 
@@ -52,11 +52,11 @@ export class Storefront extends DurableObject {
     if (!Array.isArray(chunks)) throw new Error('Invalid replay chunk batch')
     const watermarks = new Map(), replayWatermarks = new Map()
     this.ctx.storage.transactionSync(() => {
-      this.ctx.storage.sql.exec('DELETE FROM checkpoint')
-      for (const kind of STORE_KEYS) {
-        for (const [ordinal, value] of state[kind].entries()) {
-          this.ctx.storage.sql.exec('INSERT INTO checkpoint (kind, ordinal, value) VALUES (?, ?, ?)', kind, ordinal, JSON.stringify(value))
-        }
+      const rows = this.ctx.storage.sql.exec('SELECT kind, ordinal, value FROM checkpoint').toArray()
+      const { writes, trims } = checkpointChanges(rows, state, STORE_KEYS)
+      for (const { kind, from } of trims) this.ctx.storage.sql.exec('DELETE FROM checkpoint WHERE kind = ? AND ordinal >= ?', kind, from)
+      for (const { kind, ordinal, value } of writes) {
+        this.ctx.storage.sql.exec('INSERT OR REPLACE INTO checkpoint (kind, ordinal, value) VALUES (?, ?, ?)', kind, ordinal, value)
       }
       for (const event of events) {
         if (!event || typeof event.trial_id !== 'string' || !event.trial_id || !Number.isSafeInteger(event.id) || event.id < 1) throw new Error('Invalid traversal event')
