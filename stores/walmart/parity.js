@@ -4,6 +4,8 @@
 // category landing pages only list products the store's catalog already supports.
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { productPhoto } from '../../lib/product-photos.js'
+import { productImage } from '../../lib/product-assets.js'
+import { shelfImage } from './shelf.js'
 import { esc, publicNotice } from '../../lib/html.js'
 import { PRODUCTS, CATALOG, productPath } from './data.js'
 import { DEPARTMENTS } from './catalog.js'
@@ -31,14 +33,29 @@ export const roundThumb = name => PHOTO[name] ? productPhoto(PHOTO[name], name) 
 
 // "Shop by category" tiles as walmart.com shows them on its department pages.
 const SHOP_BY = {
-  '/cp/electronics/3944': [['TVs & home theater', '/cp/tv-video/1060825', 'television'], ['Home speakers', '/browse/home-audio-theater/3944_77622', 'speaker'], ['Smart home', '/cp/smart-home/1229875', 'smart-plug'], ['Computing & Office', '/cp/computers/3951', 'laptop'], ['PC gaming', '/search?q=pc+gaming', 'gaming-headset'], ['Video games', '/cp/video-games/2636', 'controller'], ['Headphones', '/search?q=headphones', 'headphones'], ['Cell phones', '/cp/cell-phones/1105910', 'smartphone'], ['Cell phone cases', '/search?q=cell+phone+cases', null], ['Wearable tech', '/cp/wearable-technology/1229723', 'smartwatch-black'], ['iPads & tablets', '/cp/ipad-tablets/1078524', 'tablet'], ['Cameras & drones', '/search?q=cameras+and+drones', 'mirrorless-camera']],
+  '/cp/electronics/3944': [['TVs & home theater', '/cp/tv-video/1060825', 'television'], ['Home speakers', '/browse/home-audio-theater/3944_77622', 'speaker'], ['Smart home', '/cp/smart-home/1229875', 'smart-plug'], ['Computing & Office', '/cp/computers/3951', 'laptop'], ['PC gaming', '/search?q=pc+gaming', 'gaming-headset'], ['Video games', '/cp/video-games/2636', 'controller'], ['Headphones', '/search?q=headphones', 'headphones'], ['Cell phones', '/cp/cell-phones/1105910', 'smartphone'], ['Cell phone cases', '/search?q=cell+phone+cases', 'smartphone'], ['Wearable tech', '/cp/wearable-technology/1229723', 'smartwatch-black'], ['iPads & tablets', '/cp/ipad-tablets/1078524', 'tablet'], ['Cameras & drones', '/search?q=cameras+and+drones', 'mirrorless-camera']],
   '/cp/video-games/2636': [['PlayStation', '/cp/playstation-5/3475115', 'ps5-console'], ['Xbox', '/cp/xbox-series-x/9206773', 'xbox-console'], ['Nintendo', '/cp/nintendo-switch/4646529', 'handheld-console'], ['Accessories', '/browse/video-games/video-game-accessories/2636_1229019', 'gaming-headset'], ['Virtual Reality', '/browse/video-games/virtual-reality/2636_5454301', 'vr-headset-white'], ['Savings', '/shop/deals/video-games-and-media', null], ['Grand Theft Auto VI', '/search?q=grand+theft+auto+vi', null]],
 }
 export function shopByCategory(base, path) {
   const list = SHOP_BY[path] ?? (TREE.get(path)?.dept?.children ?? []).filter(n => n.path !== path).map(n => [n.name, n.path, null])
   if (!list.length) return ''
-  return `<section class="wm-shop-by"><h2>Shop by category</h2><nav class="wm-cat-tiles" aria-label="Shop by category">${list.map(([name, p, photo]) => `<a href="${base}${p}">${photo ? productPhoto(photo, name) : `<span class="wm-mono" aria-hidden="true">${esc(initials(name))}</span>`}<span>${esc(name)}</span></a>`).join('')}</nav></section>`
+  return `<section class="wm-shop-by"><h2>Shop by category</h2><nav class="wm-cat-tiles" aria-label="Shop by category">${list.map(([name, p, photo]) => `<a href="${base}${p}">${photo ? productPhoto(photo, name) : categoryThumb(name, p)}<span>${esc(name)}</span></a>`).join('')}</nav></section>`
 }
+
+// A category tile without its own photo shows the top item sold in that category, like walmart.com's tiles.
+const itemArt = p => p.shelf ? shelfImage(p, { alt: '' }) : productImage('walmart', p, { alt: '' })
+function categoryThumb(name, path) {
+  const q = /[?&]q=([^&]+)/.exec(path)?.[1]
+  const items = q && /grand\+theft/.test(q) ? PRODUCTS.filter(p => p.kind === 'game') : FEATURED[path]?.() ?? (TREE.get(path) ? nodeProducts(TREE.get(path)) : [])
+  const pick = [...items].sort((a, b) => (b.ratings ?? 0) - (a.ratings ?? 0))[0]
+  if (q && /grand\+theft/.test(q) && items[0]) return itemArt(items[0])
+  if (pick) return itemArt(pick)
+  const dept = TREE.get(path)?.dept?.name
+  return PHOTO[name] || !dept ? roundThumb(name) : roundThumb(dept)
+}
+// Gift card category tiles: a small card in the category's color, as the real page shows card art.
+const GC_COLORS = ['#0053e2', '#c2477a', '#2a8703', '#6b4f9e', '#e4572e', '#00849a', '#b5651d']
+const giftCardThumb = (name, i) => { const word = name.replace(/ Gift Cards?$/i, '').toUpperCase(); return `<svg class="wm-gc-thumb" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="50" fill="#f2f8fd"/><g transform="rotate(-8 50 50)"><rect x="17" y="30" width="66" height="42" rx="6" fill="${GC_COLORS[i % GC_COLORS.length]}"/><rect x="17" y="40" width="66" height="7" fill="#ffffff33"/><text x="50" y="64" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="${Math.min(9, +(56 / (word.length * 0.64)).toFixed(1))}" fill="#fff" text-anchor="middle">${esc(word)}</text><circle cx="73" cy="37" r="3" fill="#FFC220"/></g></svg>` }
 
 const crumbs = (base, items) => `<nav class="wm-crumbs" aria-label="Breadcrumb"><a href="${base}/">Home</a>${items.map(([n, p]) => p ? ` / <a href="${base}${p}">${esc(n)}</a>` : ` / <span aria-current="page">${esc(n)}</span>`).join('')}</nav>`
 
@@ -185,8 +202,8 @@ export function giftCardsPage(base) {
   const cats = TREE.get('/cp/gift-cards/96894').children
   const faq = [['How do I use a Walmart gift card online?', 'Choose Gift card as the payment method at checkout and enter the card number and PIN. Gift card payment is temporarily unavailable online.'], ['How do I check my Walmart gift card balance?', 'Use Check your gift card balance on this page, the Walmart app, or the receipt from your last purchase.'], ['Where can I find the PIN on a plastic Walmart gift card?', 'Scratch off the coating on the back of the card to reveal the PIN.'], ['What happens if my Walmart gift card is lost or stolen?', 'Treat gift cards like cash. Contact Customer Care with your purchase receipt; balances on lost cards may not be recoverable.'], ['How can I help protect my Walmart.com account?', 'Never share gift card numbers or PINs with anyone asking for payment by gift card. Walmart will never ask you to pay with a gift card over the phone.']]
   return `<div class="wm-giftcards">${crumbs(base, [['Gift Cards']])}<section class="wm-gc-hero"><div><p class="wm-eyebrow">Gift Cards</p><h1>Shop Walmart Gift Cards: Physical &amp; eGift Options</h1><p>Send by email, deliver to their door or pick them up in store.</p><a class="wm-pill wm-pill-white" href="${base}/account/giftcards/balance">Check card balance</a></div><div class="wm-gc-card" aria-hidden="true">${'<span></span>'.repeat(1)}<b>Walmart</b></div></section>
-  <section class="wm-shop-by"><h2>Shop by category</h2><nav class="wm-cat-tiles">${cats.map(n => `<a href="${base}${n.path}"><span class="wm-mono wm-mono-gc" aria-hidden="true">${esc(initials(n.name))}</span><span>${esc(n.name)}</span></a>`).join('')}</nav></section>
-  <section class="wm-gc-row"><h2>Shop by ocassion</h2><nav class="wm-chip-row">${[['Birthday', 'birthday gift cards'], ['Thank you', 'thank you gift cards'], ['Congratulations', 'congratulations gift cards'], ['Holiday', 'holiday gift cards']].map(([l, q]) => `<a class="wm-chip" href="${base}/search?q=${encodeURIComponent(q)}">${l}</a>`).join('')}</nav></section>
+  <section class="wm-shop-by"><h2>Shop by category</h2><nav class="wm-cat-tiles">${cats.map((n, i) => `<a href="${base}${n.path}">${giftCardThumb(n.name, i)}<span>${esc(n.name)}</span></a>`).join('')}</nav></section>
+  <section class="wm-gc-row"><h2>Shop by occasion</h2><nav class="wm-chip-row">${[['Birthday', 'birthday gift cards'], ['Thank you', 'thank you gift cards'], ['Congratulations', 'congratulations gift cards'], ['Holiday', 'holiday gift cards']].map(([l, q]) => `<a class="wm-chip" href="${base}/search?q=${encodeURIComponent(q)}">${l}</a>`).join('')}</nav></section>
   <section class="wm-gc-grid"><article><h2>Gifting made easy</h2><h3>For hosting, celebrating &amp; beyond.</h3><a href="${base}/browse/gifts-registry/restaurant-gift-cards/1094765_96894_8922996_8305131">Restaurant gift cards</a></article><article><h2>Where will you go next?</h2><h3>Options for every adventure.</h3><a href="${base}/browse/gifts-registry/travel-gift-cards/1094765_96894_8922996_9617007">Travel gift cards</a></article><article><h2>Check your gift card balance</h2><p>Enter the card number and PIN to see what's left to spend.</p><a class="wm-pill" href="${base}/account/giftcards/balance">Check balance</a></article><article><h2>Buy gift cards in bulk</h2><p>Corporate and bulk gift card orders are handled by Walmart's corporate gift card program.</p><a href="${base}/cp/about-walmart-business/6136230">Walmart Business</a></article></section>
   <section><h2>Brand favorites</h2><nav class="wm-chip-row">${cats.slice(0, 6).map(n => `<a class="wm-chip" href="${base}${n.path}">${esc(n.name)}</a>`).join('')}</nav></section>
   <section class="wm-gc-ways"><h2>Gift cards your way</h2><div><article><h3>Send by email</h3><p>eGift cards arrive by email, often within minutes.</p></article><article><h3>Deliver to their door</h3><p>Plastic gift cards ship free to the recipient.</p></article><article><h3>Get 'em from the store</h3><p>Pick up gift cards at the register in any Walmart store.</p></article></div></section>
