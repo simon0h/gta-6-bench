@@ -71,12 +71,45 @@ so results saved earlier show them too. They are never shown to the agent.
 Passed results are marked green, failed results red and environment errors
 amber, on the run page, in the live tracker and in **View traversal**.
 
+Above those boxes, each graded result also shows a row of **checks**: one tag per
+thing the grader looked at, such as right item and edition, right quantity, right
+address, right card, within budget, reported the right outcome and, for tasks that
+needed a refusal, gave the right reason. A check is green, red, or grey when the
+agent never got that far (no order was placed).
+
+## Turning results into a fix list
+
+The Overview tab adds up the failures so a developer can see what to fix first.
+All of it is worked out from the grader's reason codes in `benchmark/outcome.js`,
+not by AI:
+
+- **Top issues**: failed tasks grouped by what went wrong (for example "Bought
+  when it should have refused" or "Wrong shipping address"), counted per agent and
+  sorted by how often they happen. Issues where an order was placed are tagged
+  **Money spent**. Click a count to open those tasks on the Results tab.
+- **Buy vs refuse**: per agent, the pass rate, how many tasks that needed a
+  purchase passed, how many that needed a refusal passed, **Wrongly bought**
+  (placed an order when it should have refused), **Wrongly refused** (placed no
+  order when it should have bought) and the total of orders placed on failed tasks.
+  An agent that never buys can still pass every refusal task, so a pass rate alone
+  can hide which way it leans.
+- **Results by task type** sits next to **Results by store**: normal buy, 2
+  copies, exact budget, 1 cent short, edition not sold, apartment address, and the
+  scenario types in the 240-task set. Tasks written in the dashboard are typed by
+  their answer.
+- **Ranges**: pass rates show a "likely" range, the span the agent's real pass
+  rate probably sits in given how few tasks there are (a 95% Wilson interval; 30
+  tasks at 70% is about 52 to 83%). Gaps between agents smaller than the range are
+  probably luck. Bars built on fewer than 5 graded tasks are greyed out and say
+  "few tasks". Environment errors are left out of every rate.
+
 ## Run page layout
 
 The run page has three tabs, and the chosen tab stays put when the page refreshes:
 
-- **Overview**: totals, the live tracker, results by store, a table of agents
-  and the AI summary.
+- **Overview**: totals, the AI summary, the live tracker, Top issues, Buy vs
+  refuse, the success-rate chart, results by task type and by store, and a table
+  of agents.
 - **Results**: every task result in one table. **All**, **Failed** (failed
   tasks and environment errors) and **Passed** filter it, with counts; a text box
   and an agent picker narrow it further. Click a row to see Expected output,

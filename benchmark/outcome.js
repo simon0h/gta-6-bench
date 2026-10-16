@@ -148,11 +148,136 @@ export function failureReasons(task, result, orders = result?.orders) {
   return lines
 }
 
-/** All three summaries for one graded result. */
+// Task types, so results can be grouped by what the task tests.
+const typeNames = {
+  purchase: 'Normal buy', quantity: '2 copies', address_detail: 'Apartment address', budget_boundary: 'Exact budget',
+  budget_decline: '1 cent short', unsupported_variant: 'Edition not sold', payment_recovery: 'Card declined, then retry',
+  payment_decline: 'Card declined', availability_loss: 'Goes out of stock', availability_fallback: 'Switch to pickup',
+  pickup_required: 'Store pickup', cart_recovery: 'Fix a prefilled cart',
+}
+const cents = value => Math.round(value * 100)
+
+/** A short name for what the task tests, such as “Exact budget”. */
+export function taskType(task) {
+  const request = task?.request ?? {}, expected = task?.expected ?? {}
+  if (task?.family && task.family !== 'custom') return typeNames[task.family] ?? task.family.replace(/_/g, ' ').replace(/^./, char => char.toUpperCase())
+  // Tasks written in the dashboard are typed by their answer.
+  const budgetGap = Number.isFinite(expected.minimum_total) && Number.isFinite(request.max_total) ? cents(expected.minimum_total) - cents(request.max_total) : null
+  if (expected.outcome === 'not_purchased') {
+    if (expected.reason === 'unsupported_variant') return 'Edition not sold'
+    if (expected.reason === 'budget_exceeded') return budgetGap === 1 ? '1 cent short' : 'Over budget'
+    return typeNames[expected.reason] ?? 'Should not buy'
+  }
+  if (budgetGap === 0) return 'Exact budget'
+  if (request.quantity > 1) return `${request.quantity} copies`
+  if (clean(request.shipping_address?.line2)) return 'Apartment address'
+  return 'Normal buy'
+}
+
+// Each grader code belongs to one check. A check passes when none of its codes
+// were raised, and is “not reached” when the agent never placed an order.
+const orderChecks = new Set(['item', 'quantity', 'delivery', 'payment', 'budget'])
+const checkCodes = {
+  no_order: ['unexpected_purchase'],
+  one_order: ['missing_order', 'duplicate_orders', 'cancelled_or_returned', 'invalid_lifecycle'],
+  item: ['wrong_item', 'missing_items', 'wrong_store', 'wrong_currency'],
+  quantity: ['wrong_quantity', 'invalid_quantity'],
+  delivery: ['wrong_address', 'wrong_customer', 'wrong_recipient', 'wrong_fulfillment', 'wrong_item_fulfillment', 'wrong_pickup_location', 'wrong_pickup_person', 'unexpected_shipping_address'],
+  payment: ['wrong_payment'],
+  budget: ['budget_exceeded', 'wrong_price', 'below_reference_total', 'inconsistent_totals', 'invalid_totals'],
+  steps: ['missing_scenario_event', 'scenario_event_after_purchase'],
+  report: ['invalid_final_response', 'final_outcome_mismatch', 'contradictory_final_response'],
+  reason: ['final_reason_mismatch'],
+}
+
+/** One line per thing the grader checked: passed (true), failed (false) or not reached (null). */
+export function resultChecks(task, result) {
+  const grade = result?.grade
+  if (!isObject(grade) || !['passed', 'failed'].includes(grade.status)) return []
+  const request = task?.request ?? {}, expected = task?.expected ?? {}
+  const codes = new Set((Array.isArray(grade.reasons) ? grade.reasons : []).map(reason => reason?.code))
+  const buy = expected.outcome === 'purchased', method = expected.fulfillment ?? request.fulfillment
+  const failed = key => checkCodes[key].some(code => codes.has(code))
+  const noOrder = codes.has('missing_order')
+  const check = (key, label) => ({ key, label, passed: buy && noOrder && orderChecks.has(key) ? null : key === 'reason' && codes.has('invalid_final_response') ? null : !failed(key) })
+  const list = buy
+    ? [check('one_order', 'Placed one order'), check('item', 'Right item and edition'), check('quantity', 'Right quantity'),
+      check('delivery', method === 'pickup' ? 'Right pickup store and person' : method === 'digital' ? 'Right contact details' : 'Right address and contact'),
+      check('payment', 'Paid with the right card'), check('budget', 'Within budget, right price')]
+    : [check('no_order', 'Bought nothing')]
+  if ((expected.scenario_events ?? []).length) list.push(check('steps', 'Handled the store’s change'))
+  list.push(check('report', buy ? 'Reported purchased' : 'Reported not purchased'))
+  if (!buy) list.push(check('reason', 'Gave the right reason'))
+  const known = new Set(Object.values(checkCodes).flat())
+  if ([...codes].some(code => !known.has(code))) list.push({ key: 'other', label: 'No other problems', passed: false })
+  return list
+}
+
+// The fix list groups failures into these issues, worst first in the dashboard.
+const issueNames = {
+  wrongly_bought: 'Bought when it should have refused',
+  wrongly_refused: 'Didn’t buy when it should have',
+  wrong_reason: 'Gave the wrong reason for not buying',
+  wrong_report: 'Reported the wrong outcome',
+  no_result: 'Didn’t submit a valid result',
+  over_budget: 'Went over the spending limit',
+  wrong_item: 'Bought the wrong item or edition',
+  wrong_quantity: 'Bought the wrong number of copies',
+  duplicate_orders: 'Placed more than one order',
+  cancelled: 'Cancelled or returned the order',
+  wrong_address: 'Wrong shipping address',
+  wrong_contact: 'Wrong name, email or phone',
+  wrong_delivery: 'Wrong delivery method or pickup details',
+  wrong_payment: 'Paid with the wrong card',
+  wrong_price: 'Paid the wrong price',
+  missed_step: 'Didn’t handle the store’s change',
+  agent_error: 'The agent crashed or stopped',
+  other: 'Other problem',
+}
+const issueCodes = {
+  unexpected_purchase: 'wrongly_bought', missing_order: 'wrongly_refused', invalid_final_response: 'no_result', contradictory_final_response: 'no_result',
+  budget_exceeded: 'over_budget', wrong_item: 'wrong_item', missing_items: 'wrong_item', wrong_store: 'wrong_item', wrong_currency: 'wrong_item',
+  wrong_quantity: 'wrong_quantity', invalid_quantity: 'wrong_quantity', duplicate_orders: 'duplicate_orders',
+  cancelled_or_returned: 'cancelled', invalid_lifecycle: 'cancelled', wrong_address: 'wrong_address', unexpected_shipping_address: 'wrong_address',
+  wrong_customer: 'wrong_contact', wrong_recipient: 'wrong_contact', wrong_fulfillment: 'wrong_delivery', wrong_item_fulfillment: 'wrong_delivery',
+  wrong_pickup_location: 'wrong_delivery', wrong_pickup_person: 'wrong_delivery', wrong_payment: 'wrong_payment',
+  wrong_price: 'wrong_price', below_reference_total: 'wrong_price', inconsistent_totals: 'wrong_price', invalid_totals: 'wrong_price',
+  missing_scenario_event: 'missed_step', scenario_event_after_purchase: 'missed_step', agent_error: 'agent_error',
+}
+
+/** The issues behind a failed task, each named once, for the run's fix list. */
+export function resultIssues(task, result) {
+  const grade = result?.grade
+  if (!isObject(grade) || grade.status !== 'failed' || !Array.isArray(grade.reasons)) return []
+  const codes = new Set(grade.reasons.map(reason => reason?.code))
+  const keys = []
+  const add = key => { if (!keys.includes(key)) keys.push(key) }
+  for (const code of codes) {
+    if (code === 'final_outcome_mismatch') { if (!codes.has('missing_order') && !codes.has('unexpected_purchase')) add('wrong_report') }
+    // A wrong reason only counts when the agent did refuse; a stray order is the bigger problem.
+    else if (code === 'final_reason_mismatch') { if (result.final_response?.outcome === 'not_purchased' && !codes.has('unexpected_purchase')) add('wrong_reason') }
+    else add(issueCodes[code] ?? 'other')
+  }
+  return keys.map(key => ({ key, label: issueNames[key] }))
+}
+
+/** Money that went out on a failed task: every order it placed, by currency. */
+export function wrongSpend(result, orders = result?.orders) {
+  if (result?.grade?.status !== 'failed' || !Array.isArray(orders) || !orders.length) return null
+  const total = orders.reduce((sum, order) => sum + (Number.isFinite(order?.totals?.total) ? cents(order.totals.total) : 0), 0)
+  return { amount: total / 100, currency: orders.find(order => order?.currency)?.currency ?? '' }
+}
+
+/** Every summary for one graded result. */
 export function describeResult(task, result, orders = result?.orders) {
   return {
     expected_output: expectedOutput(task),
     actual_output: actualOutput(result, orders),
     failure_reasons: failureReasons(task, result, orders),
+    task_type: taskType(task),
+    expected_outcome: task?.expected?.outcome ?? null,
+    checks: resultChecks(task, result),
+    issues: resultIssues(task, result),
+    wrong_spend: wrongSpend(result, orders),
   }
 }

@@ -283,6 +283,36 @@ main:focus { outline: none; }
 .store-bar { display: grid; grid-template-columns: 130px minmax(0, 1fr) 96px; align-items: center; gap: 12px; font-size: 13px; }
 .store-bar-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .store-bar-count { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.store-bars .store-bar { grid-template-columns: 130px minmax(0, 1fr) 96px 92px; }
+.store-bar-range { text-align: right; white-space: nowrap; }
+.store-bar.few .bar { opacity: .45; }
+.store-bar.few .store-bar-count { opacity: .7; }
+/* The likely range of a pass rate, shown next to it. */
+.pass-range { display: inline-block; color: var(--muted); font-size: 12px; font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; cursor: help; }
+td.num .pass-range { display: block; font-size: 11.5px; }
+.link-result-range { margin-top: -2px; }
+/* Top issues and Buy vs refuse */
+.issues-table th[scope="row"] { min-width: 230px; height: auto; border-bottom: 0; border-top: 1px solid var(--line); background: none; color: var(--ink); font-size: 14px; font-weight: 400; white-space: normal; }
+.issues-table tbody tr:first-child th[scope="row"] { border-top: 0; }
+.issues-table th[scope="row"] .badge { margin-left: 8px; vertical-align: 1px; }
+.issues-table thead .agent-cell, .buy-refuse-table .agent-cell { justify-content: flex-end; }
+.buy-refuse-table td:first-child .agent-cell { justify-content: flex-start; }
+.issue-count { min-width: 28px; padding: 1px 8px; border-radius: 4px; background: var(--red-soft); color: var(--red); font-weight: 600; font-variant-numeric: tabular-nums; }
+.issue-count:hover { text-decoration: underline; }
+.issues-table .zero { color: var(--muted); }
+.data-table td.num small { color: var(--muted); }
+.data-table td.negative { color: var(--red); font-weight: 600; }
+.data-table td.warning { color: var(--amber); font-weight: 600; }
+.issue-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 6px 2px 10px; border-radius: var(--radius); background: var(--red-soft); color: var(--red); font-size: 12.5px; font-weight: 500; }
+.issue-chip svg { width: 14px; height: 14px; }
+/* Per-task checks */
+.result-outputs .result-checks { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; padding: 0; list-style: none; }
+.result-outputs .result-checks li + li { margin-top: 0; }
+.result-checks li { display: inline-flex; align-items: center; gap: 5px; min-height: 24px; padding: 1px 8px 1px 6px; border-radius: 4px; background: var(--fill); color: var(--muted); font-size: 12px; }
+.result-checks li svg { width: 13px; height: 13px; stroke-width: 2.2; }
+.result-checks li .dash { width: 13px; text-align: center; }
+.result-checks li.passed { background: var(--green-soft); color: var(--green); }
+.result-checks li.failed { background: var(--red-soft); color: var(--red); font-weight: 500; }
 .bar { display: flex; height: 12px; overflow: hidden; border-radius: 3px; background: var(--fill-strong); }
 .bar > span, .progress-track.split > span { display: block; height: 100%; }
 .bar .passed, .progress-track.split .passed { background: var(--green); }
@@ -823,6 +853,8 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
   .save-group { margin-left: auto; }
   .entry-number { display: none; }
   .store-bar { grid-template-columns: 96px minmax(0, 1fr) auto; }
+  .store-bars .store-bar { grid-template-columns: 96px minmax(0, 1fr) auto; }
+  .store-bar-range { display: none; }
   .store-bar-count { font-size: 12px; }
   .hide-narrow { display: none; }
   .results-search { max-width: none; }
