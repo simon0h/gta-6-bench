@@ -74,7 +74,7 @@ test('bestbuy: guest pre-orders the PS5 code-in-box copy for shipping, search to
     assert.match(done.url, /\/bestbuy\/checkout\/r\/thank-you\?order=BBY01-\d{11}&token=/)
     assert.match(done.text, /Thanks for your order!/)
     assert.match(done.text, /Order #: <b data-order-number>BBY01-\d{11}<\/b>/)
-    assert.match(done.text, /This local store is not sending a confirmation email to <b>alex@example\.com<\/b>/)
+    assert.match(done.text, /We'll send a confirmation email to <b>alex@example\.com<\/b>/)
     assert.match(done.text, /Your order will arrive by Release Date: <b>11\/12\/2026<\/b>/)
     assert.match(done.text, /Create an account/)
     assert.doesNotMatch(done.text, /4242 4242 4242 4242|4242424242424242/)
