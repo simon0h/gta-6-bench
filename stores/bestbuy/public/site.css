@@ -296,3 +296,56 @@ a.bbx-chip:hover{border-color:var(--bb-blue);color:var(--bb-blue);text-decoratio
 @media(max-width:1000px){.bbs-scroller{grid-auto-columns:minmax(190px,calc((100% - 32px)/3))}}
 @media(max-width:700px){.bbs-row{padding:16px 12px 8px}.bbs-row-head h2{font-size:19px}.bbs-scroller{grid-auto-columns:minmax(150px,46%);gap:10px}.bbs-card{padding:9px}.bbs-card-title{font-size:13px}.bbs-price{font-size:19px}.bbs-dotd{grid-template-columns:1fr;padding:20px 16px}.bbs-dotd-card{max-width:240px}}
 .bbs-dotd-card .bbs-card-img{max-width:170px;margin:10px auto 0}.bbs-dotd-card .bbs-card-title{min-height:0}
+
+/* ---- Homepage, search, product ratings and store locator polish ---- */
+/* Today's top deals: one row of four on desktop, a compact 2x2 grid on phones. */
+.bbx-deal-strip .bbx-cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+/* Deal of the Day: the featured card sits wide, image beside the details. */
+.bbs-dotd{grid-template-columns:minmax(0,1fr) minmax(0,560px);padding:28px 32px}
+.bbs-dotd h2{font-size:34px}
+.bbs-dotd-card .bbs-card{display:grid;grid-template-columns:200px minmax(0,1fr);column-gap:20px;row-gap:6px;align-content:start;padding:16px}
+.bbs-dotd-card .bbs-card>*{grid-column:2}
+.bbs-dotd-card .bbs-card-img{grid-column:1;grid-row:1/span 6;max-width:none;margin:0;align-self:center}
+.bbs-dotd-card .bbs-flag{position:static;justify-self:start}
+/* Search: the phone filter panel opens from a Filter button instead of filling the first screen. */
+.bb-filters .bb-filter-switch,.bb-filters .bb-filter-button{display:none}
+.bb-rating-summary{display:grid;grid-template-columns:140px minmax(0,380px);justify-content:start;gap:8px 32px;align-items:center}
+.bb-rating-big{display:grid;justify-items:start;gap:2px}
+.bb-rating-big b{font-size:44px;line-height:1}
+.bb-rating-big .bb-star-row{color:#f5a800;letter-spacing:1px}
+.bb-rating-big span:last-child{font-size:13px;color:#55555a}
+.bb-rating-bars{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:13px}
+.bb-rating-bars li{display:grid;grid-template-columns:52px minmax(0,1fr) 56px;gap:10px;align-items:center}
+.bb-rating-bars li span:last-child{text-align:right;color:#55555a}
+.bb-bar{height:8px;border-radius:4px;background:#e0e6ef;overflow:hidden}
+.bb-bar i{display:block;height:100%;background:#0046be}
+.bb-recommend{grid-column:1/-1;margin:6px 0 0;font-size:14px}
+.bbx-store-meta{font-size:14px;margin:4px 0 8px}
+.bbx-open{color:#1d8738}
+.bbx-hours{display:grid;grid-template-columns:max-content max-content;gap:4px 24px;margin:8px 0 16px}
+.bbx-hours dt{font-weight:600}.bbx-hours dd{margin:0}
+.bbx-locator .bbx-store-list .bb-journey-card h2{font-size:20px;margin-bottom:4px}
+/* The gallery counter is enough; Best Buy shows no caption under product images. */
+.bb-depth-gallery .pa-gallery-caption,.bb-pdp .pa-gallery-caption{visibility:hidden}
+@media(max-width:860px){
+  .bb-filters{border:0;padding:0;background:none}
+  .bb-filters>h2{display:none}
+  .bb-filters .bb-filter-button{display:inline-flex;width:max-content;align-items:center;gap:8px;border:1px solid #1d252c;border-radius:6px;padding:9px 16px;font-weight:700;font-size:14px;cursor:pointer;background:#fff}
+  .bb-filter-button::before{content:"";width:16px;height:12px;background:linear-gradient(#1d252c 0 0) 0 0/100% 2px no-repeat,linear-gradient(#1d252c 0 0) 0 5px/70% 2px no-repeat,linear-gradient(#1d252c 0 0) 0 10px/40% 2px no-repeat}
+  .bb-filters form{display:none!important}
+  .bb-filter-switch:checked~form{display:grid!important;margin-top:12px;border:1px solid #e0e6ef;border-radius:10px;padding:12px}
+  .bb-search-body{gap:12px}
+}
+@media(max-width:700px){
+  .bbx-deal-strip .bbx-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .bbx-deal-strip .bbx-card{padding:14px;gap:4px}
+  .bbx-deal-strip .bbx-card>span:not(.bbx-card-ico){display:none}
+  .bbx-deal-strip .bbx-card-ico{margin-bottom:4px}
+  .bbx-tone-outlet .bbx-banner-art{background:radial-gradient(circle at 100% 0,#ffe000 0 56px,transparent 57px),linear-gradient(135deg,transparent 62%,#0046be 62% 76%,transparent 76%),repeating-linear-gradient(135deg,#ffffff0d 0 12px,transparent 12px 24px)}
+  .bbx-banner-copy{max-width:100%}
+  .bbs-dotd{grid-template-columns:minmax(0,1fr);padding:20px 16px}
+  .bbs-dotd h2{font-size:26px}
+  .bbs-dotd-card{max-width:none}
+  .bbs-dotd-card .bbs-card{grid-template-columns:110px minmax(0,1fr);column-gap:12px}
+  .bb-rating-summary{grid-template-columns:1fr}
+}

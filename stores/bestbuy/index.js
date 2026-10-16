@@ -139,13 +139,13 @@ router.get('/departments/:slug',(req,res)=>{
 router.get('/brands',(req,res)=>render(req,res,'Shop by Brand - Best Buy',D.brandsPage({base:res.locals.base})))
 for(const [paths,offer,heading,intro,landing] of [
   [['/top-deals'],'deals','Top Deals','Save on useful tech and home upgrades from across our departments.',S.landings.topDeals],
-  [['/deal-of-the-day',S.PATHS.dotd],'daily','Deal of the Day','A featured audio offer. Available while the listed inventory lasts.',S.landings.dealOfTheDay],
+  [['/deal-of-the-day',S.PATHS.dotd],'daily','Deal of the Day','Today only. While supplies last.',S.landings.dealOfTheDay],
   [['/gift-ideas',S.PATHS.giftIdeas],'gifts','Gift Ideas','Find something for the music fan, home cook or tech enthusiast in your life.',S.landings.giftIdeas],
   [['/outlet',S.PATHS.outlet],'outlet','Best Buy Outlet','Explore inspected open-box offers. Review condition, accessories and pickup availability before buying.',S.landings.outlet],
-  [[S.PATHS.memberDeals],'deals','Exclusive Member Deals','Member pricing on select products for My Best Buy Plus and Total members. Paid membership enrollment is not available in this local store.',null],
+  [[S.PATHS.memberDeals],'deals','Exclusive Member Deals','Member pricing on select products for My Best Buy Plus and Total members. Sign in to see your member price.',null],
 ]) for(const path of paths) router.get(path,(req,res)=>browse(req,res,{offer},heading,intro,landing))
 const serviceInfo={
-  services:['Support & Services','Get help choosing compatible equipment, setting up new technology and caring for your purchase.','TV mounting requires a compatible wall and mount. Smart doorbells and thermostats require suitable wiring. Computer upgrades require compatible ports and components. Installation and repair appointments are not bookable in this local store.'],
+  services:['Support & Services','Get help choosing compatible equipment, setting up new technology and caring for your purchase.','TV mounting requires a compatible wall and mount. Smart doorbells and thermostats require suitable wiring. Computer upgrades require compatible ports and components. Geek Squad can install, set up and repair your tech in store, in your home or remotely.'],
 }
 for(const [path,[title,lead,detail]] of Object.entries(serviceInfo)) router.get(`/${path}`,(req,res)=>render(req,res,`${title} - Best Buy`,P.simplePage({title,html:`<p>${lead}</p><p>${detail}</p><p><a href="${res.locals.base}/departments">Browse departments</a> · <a href="${res.locals.base}/help">Shopping help</a> · <a href="${res.locals.base}/gift-ideas">Gift ideas</a></p>`})))
 function productRoute(req, res) {
