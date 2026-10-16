@@ -33,6 +33,12 @@ export const SHELF_DEPARTMENTS = [
   { key: 'home-improvement', name: 'Home Improvement', path: '/cp/home-improvement/1072864' },
   { key: 'auto', name: 'Auto & Tires', path: '/cp/auto-tires/91083' },
   { key: 'office', name: 'School & Office Supplies', path: '/cp/office-supplies/1229749' },
+  { key: 'arts', name: 'Arts, Crafts, Sewing & Party Supplies', path: '/cp/arts-crafts-sewing/1334134' },
+  { key: 'movies', name: 'Movies & TV', path: '/cp/movies-tv/4096' },
+  { key: 'music', name: 'Music & Vinyl', path: '/cp/music/4104' },
+  { key: 'books', name: 'Books', path: '/cp/books/3920' },
+  { key: 'party', name: 'Seasonal & Celebrations', path: '/cp/party-occasions/2637' },
+  { key: 'gifts', name: 'Gift Cards', path: '/cp/gift-cards/96894' },
 ]
 export const shelfDepartment = key => SHELF_DEPARTMENTS.find(d => d.key === key) ?? null
 
@@ -74,6 +80,23 @@ const SUB = {
   airquality: ['Air Quality', '/browse/home-improvement/air-quality/1072864_133032_1231459'], water: ['Water Purification', '/browse/home-improvement/water-filters/1072864_6610571_1231153'], tools: ['Tools', '/cp/tools/1031899'],
   batteries: ['Batteries & Accessories', '/cp/batteries-accessories/1104292'], oils: ['Oils and Fluids', '/cp/oils-fluids/1104294'], autoelec: ['Auto Electronics', '/cp/auto-electronics/3947'], tires: ['Tires', '/cp/tires-accessories/1077064'],
   school: ['School Supplies', '/cp/school-supplies/1086045'], officesup: ['Office Supplies', null],
+  sewing: ['Sewing Machines & Accessories', '/cp/sewing/1094704'], diecut: ['Die Cutting', '/browse/arts-crafts-sewing/die-cutting/1334134_3123463'], fabric: ['Fabric', '/cp/fabric/4232946'],
+  craftstorage: ['Arts & Crafts Furniture and Storage', '/browse/arts-crafts-sewing/arts-crafts-furniture-and-storage/1334134_6355365'], crafting: ['Craft Supplies', '/cp/crafting/6172404'],
+  artsup: ['Art Supplies', '/cp/art-supplies/5899871'], knitting: ['Knitting & Crochet', '/browse/arts-crafts-sewing/knitting-crochet/1334134_4880989'],
+  movies4k: ['4K Ultra HD Movies', '/browse/4k-ultra-hd-movies/4096_3315790'], bluray: ['Blu-ray Movies', '/browse/movies-tv-shows/blu-ray-movies/4096_616859'], dvd: ['DVD Movies', '/browse/movies-tv-shows/dvd-movies/4096_8073310_7001804'],
+  tv4k: ['4K Ultra HD TV Shows', '/browse/movies-tv-shows/tv-shows-4k-ultra-hd/4096_6003122_2378322'], tvbluray: ['Blu-ray TV Shows', '/browse/movies-tv-shows/tv-shows-blu-ray/4096_6003122_8068379'], tvdvd: ['DVD TV Shows', '/browse/movies-tv-shows/tv-shows-dvd/4096_6003122_3476135'],
+  turntables: ['Turntables', '/browse/musical-instruments/turntables-record-players/7796869_1097690_6268144_2152355_49600'], instruments: ['Musical Instruments', '/browse/musical-instruments/7796869'],
+  rap: ['Rap & Hip-Hop', '/browse/music/rap-hip-hop-on-cds-vinyl/4104_4117'], rock: ['Rock', '/browse/music/rock-music/4104_4118'], pop: ['Pop', '/browse/music/pop-music/4104_4115'],
+  country: ['Country', '/browse/music/country-music/4104_4109'], classical: ['Classical', '/browse/music/classical-music-on-cd-or-vinyl/4104_4108'],
+  kobo: ['Kobo eReaders', '/browse/books/kobo-ereader-devices-accessories/3920_3252253'], kidsbooks: ["Children's Books", '/browse/childrens-kids-books/3920_582053'], textbooks: ['Textbooks', '/browse/textbooks/3920_582377'],
+  teen: ['Teen & Young Adult Books', '/browse/books/teen-young-adult-books/3920_1068785'], magazines: ['Magazines', '/browse/books/magazines/3920_3298715'], bios: ['Biographies & Memoirs', '/browse/books/biographies-memoirs/3920_5196470'],
+  babyshower: ['Baby Shower', '/browse/party-occasions/baby-shower-party-supplies/2637_1042319_4687421'], balloons: ['Balloons', '/browse/party-occasions/balloons/2637_1042319_1212898_3956207'],
+  balloonarch: ['Balloon Arches', '/browse/party-occasions/balloon-arch/2637_1042319_1212898_3956207_2139180_4860386'], balloonscolor: ['Balloons by Color', '/browse/party-occasions/balloons-by-color/2637_1042319_1212898_3956207_6986611'],
+  birthday: ['Birthday Party Supplies', '/browse/party-occasions/birthday-party-supplies/2637_8972913_8516046'], genderreveal: ['Gender Reveal', '/browse/party-occasions/gender-reveal-party-supplies/2637_9103747'],
+  helium: ['Helium Tanks', '/browse/party-occasions/helium-tanks/2637_1042319_1212898_4114382'],
+  gcrestaurant: ['Restaurant Gift Cards', '/browse/gifts-registry/restaurant-gift-cards/1094765_96894_8922996_8305131'], gcretail: ['Retail Gift Cards', '/browse/gifts-registry/retail-gift-cards/1094765_96894_8922996_3374424'],
+  gcprepaid: ['Prepaid Gift Cards', '/browse/cell-phones/phone-data-plans/1105910_4960552'], gcentertainment: ['Entertainment Gift Cards', '/browse/gifts-registry/entertainment-gift-cards/1094765_96894_8922996_2765943'],
+  gctravel: ['Travel Gift Cards', '/browse/gifts-registry/travel-gift-cards/1094765_96894_8922996_9617007'], gclifestyle: ['Lifestyle Gift Cards', '/browse/gifts-registry/lifestyle-gift-cards/1094765_96894_8922996_7573523'],
 }
 
 // [subcategory, title, brand, price, was price, rating, rating count, photo key or ~shape, badge]
@@ -453,6 +476,105 @@ const ROWS = {
     ['officesup', 'Scotch Heavy Duty Shipping Packaging Tape with Dispenser, 6 Rolls', 'Scotch', 15.97, null, 4.8, 3402, '~box', null],
     ['officesup', 'Sharpie Permanent Markers, Fine Point, Black, 12 Count', 'Sharpie', 8.97, null, 4.8, 12006, '~box', null],
   ],
+  arts: [
+    ['sewing', 'Brother XM2701 Lightweight Sewing Machine with 27 Stitches', 'Brother', 129.00, 159.99, 4.5, 21508, '~sewing', 'Best seller'],
+    ['sewing', 'SINGER Simple 3232 Sewing Machine with 32 Built-in Stitches', 'SINGER', 149.00, null, 4.4, 9806, '~sewing', null],
+    ['sewing', 'SINGER Sewing Basics Kit, 130 Pieces', 'SINGER', 9.97, null, 4.6, 3102, '~box', null],
+    ['diecut', 'Cricut Joy Xtra Smart Cutting Machine', 'Cricut', 179.00, 199.00, 4.7, 4210, '~cutter', null],
+    ['diecut', 'Cricut Maker 3 Smart Cutting Machine', 'Cricut', 299.00, 349.00, 4.8, 8302, '~cutter', null],
+    ['fabric', 'Waverly Inspirations 100% Cotton 44" Floral Fabric by the Yard, Blue', 'Waverly Inspirations', 7.97, null, 4.6, 812, '~fabric', null],
+    ['fabric', 'Waverly Inspirations Cotton Precut Fat Quarters, 6 Pack, Assorted Prints', 'Waverly Inspirations', 9.97, null, 4.7, 1206, '~fabric', null],
+    ['craftstorage', 'Mainstays 10 Drawer Rolling Storage Cart, Multicolor', 'Mainstays', 34.97, null, 4.6, 6408, '~drawers', null],
+    ['craftstorage', 'Sterilite 3 Drawer Wide Cart, White', 'Sterilite', 22.97, null, 4.7, 15206, '~drawers', null],
+    ['crafting', 'Mod Podge Waterbase Sealer, Glue and Finish, Matte, 16 fl oz', 'Mod Podge', 8.97, null, 4.8, 7402, '~jar', null],
+    ['crafting', 'Gorilla Dual Temp Mini Hot Glue Gun Kit with 30 Glue Sticks', 'Gorilla', 12.97, null, 4.7, 9806, '~gluegun', null],
+    ['artsup', 'Crayola Crayons, 64 Count', 'Crayola', 3.97, null, 4.8, 25104, 'crayons', 'Best seller'],
+    ['artsup', 'Apple Barrel Acrylic Paint Set, 18 Colors, 2 fl oz Bottles', 'Apple Barrel', 12.97, null, 4.7, 5403, '~paint', null],
+    ['artsup', 'Pen+Gear Sketch Book, 9" x 12", 70 Sheets', 'Pen+Gear', 4.97, null, 4.6, 2208, '~book', null],
+    ['knitting', 'Red Heart Super Saver Yarn, Black, 7 oz', 'Red Heart', 4.97, null, 4.8, 12305, '~yarn', null],
+    ['knitting', 'Lion Brand Pound of Love Yarn, Antique White, 16 oz', 'Lion Brand', 12.97, null, 4.7, 3502, '~yarn', null],
+    ['knitting', 'Boye Ergonomic Crochet Hook Set, 9 Sizes', 'Boye', 14.97, null, 4.6, 2104, '~box', null],
+  ],
+  movies: [
+    ['movies4k', 'Dune: Part Two (4K Ultra HD + Blu-ray + Digital Copy)', 'Warner Bros.', 24.96, 29.96, 4.8, 1852, '~movie', null],
+    ['movies4k', 'Oppenheimer (4K Ultra HD + Blu-ray + Digital Copy)', 'Universal', 26.96, null, 4.8, 3104, '~movie', null],
+    ['movies4k', 'Wicked (4K Ultra HD + Blu-ray + Digital Copy)', 'Universal', 29.96, null, 4.8, 2406, '~movie', 'Popular pick'],
+    ['bluray', 'Inside Out 2 (Blu-ray + DVD + Digital Copy)', 'Disney', 24.96, null, 4.9, 2903, '~movie', null],
+    ['bluray', 'Moana 2 (Blu-ray + DVD + Digital Copy)', 'Disney', 24.96, null, 4.8, 2108, '~movie', null],
+    ['bluray', 'Top Gun: Maverick (Blu-ray + DVD + Digital Copy)', 'Paramount', 14.96, 19.96, 4.9, 9802, '~movie', null],
+    ['dvd', 'The Wild Robot (DVD)', 'Universal', 14.96, null, 4.9, 1504, '~movie', null],
+    ['dvd', 'Twisters (DVD)', 'Universal', 12.96, null, 4.7, 1102, '~movie', null],
+    ['dvd', 'Elf (DVD)', 'Warner Bros.', 7.96, null, 4.9, 6205, '~movie', null],
+    ['tv4k', 'Game of Thrones: The Complete Series (4K Ultra HD + Digital Copy)', 'HBO', 249.96, null, 4.8, 902, '~movie', null],
+    ['tv4k', 'The Mandalorian: The Complete First Season (4K Ultra HD Steelbook)', 'Disney', 59.96, null, 4.8, 1306, '~movie', null],
+    ['tvbluray', 'The Office: The Complete Series (Blu-ray)', 'Universal', 99.96, null, 4.9, 7204, '~movie', null],
+    ['tvbluray', 'Yellowstone: Season 5, Part 1 (Blu-ray)', 'Paramount', 29.96, null, 4.7, 1408, '~movie', null],
+    ['tvdvd', 'Friends: The Complete Series (DVD)', 'Warner Bros.', 59.96, null, 4.9, 12006, '~movie', 'Best seller'],
+    ['tvdvd', 'Yellowstone: Season 1 (DVD)', 'Paramount', 14.96, null, 4.8, 5102, '~movie', null],
+  ],
+  music: [
+    ['turntables', 'Victrola Journey+ Bluetooth Suitcase Record Player, Black', 'Victrola', 49.00, 59.99, 4.3, 8204, '~turntable', null],
+    ['turntables', 'Crosley Cruiser Plus Vintage 3-Speed Bluetooth Suitcase Turntable, Black', 'Crosley', 79.00, null, 4.4, 6008, '~turntable', null],
+    ['turntables', 'Audio-Technica AT-LP60X Fully Automatic Belt-Drive Stereo Turntable, Black', 'Audio-Technica', 149.00, null, 4.6, 4306, '~turntable', null],
+    ['instruments', 'Fender FA-115 Dreadnought Acoustic Guitar Pack, Natural', 'Fender', 179.99, null, 4.7, 1306, '~guitar', null],
+    ['instruments', 'Yamaha PSR-E383 61-Key Portable Keyboard', 'Yamaha', 189.99, null, 4.7, 904, '~keyboard', null],
+    ['rap', 'Kendrick Lamar - GNX - Vinyl', 'Interscope', 29.98, null, 4.8, 822, '~vinyl', null],
+    ['rap', 'Eminem - Curtain Call: The Hits - Vinyl', 'Interscope', 34.98, null, 4.9, 2106, '~vinyl', null],
+    ['rock', 'Fleetwood Mac - Rumours - Vinyl', 'Rhino', 24.98, null, 4.9, 6104, '~vinyl', 'Best seller'],
+    ['rock', 'Nirvana - Nevermind - Vinyl', 'Geffen', 24.98, null, 4.8, 3205, '~vinyl', null],
+    ['pop', 'Taylor Swift - The Tortured Poets Department - Vinyl', 'Republic', 32.98, null, 4.8, 4803, '~vinyl', null],
+    ["pop", "Sabrina Carpenter - Short n' Sweet - Vinyl", 'Island', 29.98, null, 4.8, 2108, '~vinyl', null],
+    ['pop', 'Billie Eilish - Hit Me Hard and Soft - CD', 'Interscope', 13.98, null, 4.8, 1204, '~vinyl', null],
+    ['country', 'Chris Stapleton - Traveller - Vinyl', 'Mercury Nashville', 24.98, null, 4.9, 1806, '~vinyl', null],
+    ['country', 'Morgan Wallen - Dangerous: The Double Album - CD', 'Big Loud', 14.98, null, 4.8, 3402, '~vinyl', null],
+    ['classical', 'Yo-Yo Ma - Six Evolutions: Bach Cello Suites - CD', 'Sony Classical', 17.98, null, 4.8, 402, '~vinyl', null],
+    ['classical', 'Andrea Bocelli - Si - CD', 'Decca', 11.98, null, 4.8, 1105, '~vinyl', null],
+  ],
+  books: [
+    ['kobo', 'Kobo Clara BW 6" eReader, Black', 'Kobo', 129.99, null, 4.5, 904, '~ereader', null],
+    ['kobo', 'Kobo Libra Colour 7" eReader, Black', 'Kobo', 219.99, null, 4.6, 652, '~ereader', null],
+    ['kidsbooks', 'The Very Hungry Caterpillar (Board Book)', 'Eric Carle', 5.98, null, 4.9, 30206, '~book', 'Best seller'],
+    ['kidsbooks', 'Dog Man: Big Jim Begins (Hardcover)', 'Dav Pilkey', 8.48, null, 4.9, 3104, '~book', null],
+    ['kidsbooks', 'Diary of a Wimpy Kid #18: No Brainer (Hardcover)', 'Jeff Kinney', 9.98, null, 4.8, 4502, '~book', null],
+    ['textbooks', 'Campbell Biology, 12th Edition (Hardcover)', 'Lisa A. Urry', 199.99, null, 4.6, 402, '~book', null],
+    ['textbooks', 'Princeton Review SAT Premium Prep, 2026 (Paperback)', 'The Princeton Review', 29.99, null, 4.6, 806, '~book', null],
+    ['teen', 'Sunrise on the Reaping: A Hunger Games Novel (Hardcover)', 'Suzanne Collins', 17.98, null, 4.8, 6208, '~book', null],
+    ["teen", "A Good Girl's Guide to Murder (Paperback)", 'Holly Jackson', 9.98, null, 4.7, 5104, '~book', null],
+    ['magazines', 'Better Homes & Gardens Magazine, 1 Year Subscription', 'Better Homes & Gardens', 5.00, null, 4.5, 2306, '~book', null],
+    ['magazines', 'Taste of Home Magazine, 1 Year Subscription', 'Taste of Home', 10.00, null, 4.6, 1802, '~book', null],
+    ["bios", "I'm Glad My Mom Died (Hardcover)", 'Jennette McCurdy', 15.98, null, 4.8, 4306, '~book', null],
+    ['bios', 'Educated: A Memoir (Paperback)', 'Tara Westover', 11.98, null, 4.8, 9204, '~book', null],
+  ],
+  party: [
+    ['babyshower', 'Way to Celebrate Oh Baby Paper Plates, Blue, 9 in, 24 Count', 'Way to Celebrate', 3.97, null, 4.6, 304, '~plates', null],
+    ['babyshower', 'Way to Celebrate Baby Shower Balloon Banner Kit, Sage Green', 'Way to Celebrate', 9.97, null, 4.5, 208, '~balloon', null],
+    ['balloons', 'Way to Celebrate 12" Latex Balloons, Assorted Colors, 72 Count', 'Way to Celebrate', 5.97, null, 4.5, 2104, '~balloon', 'Best seller'],
+    ['balloons', 'Way to Celebrate Happy Birthday Foil Balloon, 18 in', 'Way to Celebrate', 1.00, null, 4.6, 902, '~balloon', null],
+    ['balloonarch', 'Way to Celebrate Balloon Arch Kit, Gold & White, 100 Pieces', 'Way to Celebrate', 12.97, null, 4.4, 606, '~balloon', null],
+    ['balloonscolor', 'Way to Celebrate 12" Latex Balloons, Pink, 15 Count', 'Way to Celebrate', 1.97, null, 4.5, 702, '~balloon', null],
+    ['balloonscolor', 'Way to Celebrate 12" Latex Balloons, Navy Blue, 15 Count', 'Way to Celebrate', 1.97, null, 4.5, 504, '~balloon', null],
+    ['birthday', 'Way to Celebrate Happy Birthday Paper Plates, Multicolor, 9 in, 24 Count', 'Way to Celebrate', 3.47, null, 4.6, 1206, '~plates', null],
+    ['birthday', 'Way to Celebrate Happy Birthday Banner, Gold, 7 ft', 'Way to Celebrate', 2.97, null, 4.6, 1508, '~box', null],
+    ['genderreveal', 'Way to Celebrate Gender Reveal Balloon Kit, Pink and Blue, 60 Pieces', 'Way to Celebrate', 14.97, null, 4.5, 402, '~balloon', null],
+    ['genderreveal', 'Way to Celebrate Gender Reveal Paper Plates, Pink and Blue, 9 in, 16 Count', 'Way to Celebrate', 2.97, null, 4.5, 206, '~plates', null],
+    ['helium', 'Balloon Time Standard Helium Tank, 8.9 cu ft, Fills up to 30 Balloons', 'Balloon Time', 34.97, null, 4.4, 12004, '~tank', null],
+    ['helium', 'Balloon Time Jumbo Helium Tank, 14.9 cu ft, Fills up to 50 Balloons', 'Balloon Time', 54.97, null, 4.4, 8206, '~tank', null],
+  ],
+  gifts: [
+    ['gcrestaurant', 'Olive Garden $50 Gift Card', 'Olive Garden', 50.00, null, 4.8, 2104, '~card', null, { type: 'giftcard' }],
+    ['gcrestaurant', 'Starbucks $25 Gift Card', 'Starbucks', 25.00, null, 4.9, 6205, '~card', null, { type: 'giftcard' }],
+    ['gcrestaurant', 'Texas Roadhouse $50 Gift Card', 'Texas Roadhouse', 50.00, null, 4.9, 1806, '~card', null, { type: 'giftcard' }],
+    ['gcretail', 'Sephora $50 Gift Card', 'Sephora', 50.00, null, 4.8, 1402, '~card', null, { type: 'giftcard' }],
+    ['gcretail', 'The Home Depot $100 Gift Card', 'The Home Depot', 100.00, null, 4.8, 1104, '~card', null, { type: 'giftcard' }],
+    ['gcprepaid', 'Visa $50 Gift Card (plus $4.88 Purchase Fee)', 'Visa', 54.88, null, 4.5, 9804, '~card', null, { type: 'giftcard' }],
+    ['gcprepaid', 'Mastercard $100 Gift Card (plus $6.95 Purchase Fee)', 'Mastercard', 106.95, null, 4.5, 4206, '~card', null, { type: 'giftcard' }],
+    ['gcentertainment', 'Netflix $30 Gift Card', 'Netflix', 30.00, null, 4.8, 5302, '~card', null, { type: 'giftcard' }],
+    ['gcentertainment', 'AMC Theatres $25 Gift Card', 'AMC Theatres', 25.00, null, 4.8, 2106, '~card', null, { type: 'giftcard' }],
+    ['gctravel', 'Southwest Airlines $100 eGift Card', 'Southwest Airlines', 100.00, null, 4.7, 802, '~card', null, { type: 'giftcard' }],
+    ['gctravel', 'Airbnb $100 Gift Card', 'Airbnb', 100.00, null, 4.7, 604, '~card', null, { type: 'giftcard' }],
+    ['gclifestyle', 'DoorDash $50 Gift Card', 'DoorDash', 50.00, null, 4.7, 3206, '~card', null, { type: 'giftcard' }],
+    ['gclifestyle', 'Uber $50 Gift Card', 'Uber', 50.00, null, 4.7, 2408, '~card', null, { type: 'giftcard' }],
+  ],
 }
 
 // What the item page says, by department: [lead sentence, care/usage line].
@@ -474,7 +596,51 @@ const ABOUT = {
   'home-improvement': ['Tools and home improvement essentials.', 'Read all safety warnings and instructions before use.'],
   auto: ['Auto care essentials for your vehicle.', 'Check your owner manual for the right fit and specification.'],
   office: ['School and office supplies for work and class.', 'Colors and packaging may vary.'],
+  arts: ['Craft, sewing and art supplies for every project.', 'Colors may vary slightly from the picture.'],
+  movies: ['Movies and TV shows to watch at home.', 'Digital copy codes may expire; see the insert for details.'],
+  music: ['Records, CDs, turntables and instruments for every music lover.', 'Opened CDs and vinyl can only be exchanged for the same title.'],
+  books: ['Bestsellers, kids books and more for every reader.', 'Cover art may vary.'],
+  party: ['Party supplies and decorations for every celebration.', 'Balloons are a choking hazard for children under 8. Adult supervision required.'],
+  gifts: ['A gift card is the easy gift that always fits.', 'Gift cards are not returnable and cannot be redeemed for cash except where required by law.'],
 }
+
+// The first "Key item features" bullet, in the voice of a Walmart listing, by subcategory.
+const FEATURE = {
+  produce: 'Fresh and ready to enjoy; great for snacking, lunches and recipes', meat: 'Fresh, never frozen; keep refrigerated and cook to a safe internal temperature', deli: 'Sliced fresh and ready for sandwiches, wraps and snack trays',
+  dairy: 'Good source of calcium and protein; keep refrigerated', bakery: 'Baked fresh, soft texture, perfect for sandwiches and toast', pantry: 'A pantry staple for quick, easy everyday meals', snacks: 'Great for lunchboxes, parties and on-the-go snacking',
+  breakfast: 'A quick and tasty start to your morning', beverages: 'Refreshing taste, great chilled or over ice', coffee: 'Rich, full-bodied flavor for your morning cup', frozen: 'Keep frozen; ready in minutes for an easy meal or snack',
+  cleaning: 'Cleans and freshens surfaces throughout your home', laundry: 'Powerful clean that removes tough stains and odors', paper: 'Strong and absorbent for everyday spills and cleanups', bathroom: 'Soft and strong for everyday comfort',
+  fresheners: 'Eliminates odors and leaves a long-lasting fresh scent', hhkitchen: 'Everyday kitchen essentials for cooking and cleanup',
+  furniture: 'Sturdy construction with a clean, modern look for any room', mattresses: 'Supportive comfort for a better night\'s sleep', kitchen: 'Durable everyday kitchenware that is easy to clean', storage: 'Keeps your space organized and clutter-free',
+  appliances: 'Saves time in the kitchen with simple, easy-to-use controls', vacuums: 'Strong suction for carpets and hard floors', bedding: 'Soft, breathable fabric for a cozy night\'s sleep', decor: 'Adds a warm, finishing touch to any room', bath: 'Soft, absorbent and quick drying',
+  luggage: 'Lightweight and durable for weekend trips and travel', tv: 'Stream your favorite shows and movies in stunning picture quality', audio: 'Rich, room-filling sound for music, movies and games', smarthome: 'Smart devices that make your home more convenient and secure',
+  tablets: 'Portable entertainment for streaming, reading and browsing', computers: 'Fast, reliable performance for work, school and play', phones: 'Stay connected and charged up wherever you go', wearables: 'Track your activity, sleep and notifications from your wrist',
+  headphones: 'Clear sound with a comfortable, secure fit', cameras: 'Capture sharp photos and smooth video', printers: 'Print, copy and scan at home with easy wireless setup',
+  ps: 'Built for PlayStation gaming', xbox: 'Built for Xbox gaming', nintendo: 'Play at home or on the go with Nintendo Switch', gameacc: 'Level up your setup with gear made for gamers', vr: 'Immersive virtual reality gaming and entertainment',
+  giftcards: 'Digital code delivered by email; redeem online or in the console store', figures: 'Highly detailed figure for play and display', dolls: 'Encourages imaginative, creative play', learning: 'Builds early learning skills through hands-on play',
+  blasters: 'Fast-firing fun for indoor and outdoor battles', puzzles: 'Fun for the whole family on game night', collectibles: 'Collect them all and trade with friends', rc: 'Easy-to-use remote control for fast, fun driving',
+  building: 'Build, rebuild and spark creativity', plush: 'Super soft and huggable', ride: 'Sturdy and easy to ride for hours of outdoor fun',
+  women: 'Comfortable fit for everyday wear', men: 'Classic fit and comfortable fabric for everyday wear', kidsclothes: 'Soft, durable and made for play', shoes: 'Cushioned comfort with a durable outsole', accessories: 'Practical style for every day',
+  makeup: 'Long-wearing color with a smooth finish', hair: 'Helps nourish and strengthen hair', skin: 'Dermatologist-tested formula for daily use', fragrance: 'A signature scent for day or night', nails: 'Salon-quality color and shine at home', suncare: 'Broad spectrum protection for sun-filled days',
+  bathbody: 'Gentle cleansing that leaves skin soft and refreshed', oral: 'Helps fight cavities and freshen breath', shaving: 'Smooth, comfortable shave with less irritation', deodorant: 'Long-lasting odor protection',
+  allergy: 'Relief from sneezing, runny nose and itchy, watery eyes', vitamins: 'Daily support for overall health', pain: 'Temporary relief of minor aches and pains', protein: 'Supports muscle recovery and an active lifestyle', firstaid: 'Must-have first aid for home, car and travel',
+  diapers: 'Gentle on baby\'s skin with leak protection you can trust', feeding: 'Mealtime essentials for babies and toddlers', gear: 'Smooth, easy handling for everyday outings', nursery: 'Safe, cozy essentials for baby\'s room',
+  dogfood: 'Complete and balanced nutrition for adult dogs', dogtoys: 'Durable fun for playtime and chewing', dogs: 'Everyday essentials for happy, healthy dogs', catfood: 'Complete and balanced nutrition cats love', cats: 'Everyday essentials for happy, healthy cats', fish: 'Keeps your aquarium clean and healthy',
+  fitness: 'Great for home workouts and the gym', basketball: 'Great grip and feel for indoor and outdoor play', football: 'Built for practice and game day', soccer: 'Durable construction for training and matches', pickleball: 'Lightweight and easy to control', golf: 'Built for distance and control on the course',
+  camping: 'Ready for campsites, tailgates and the backyard', bikes: 'Smooth, comfortable ride for neighborhood trips', patiofurn: 'Weather-resistant comfort for your patio or deck', grills: 'Even heat for burgers, steaks and veggies', charcoal: 'Lights easily and burns evenly for a classic grilled flavor',
+  outdoorcook: 'Makes outdoor cooking easy for family and friends', outdoordecor: 'Brightens up your patio, porch or garden',
+  heaters: 'Fast, efficient warmth for any room', humidifiers: 'Adds moisture to dry indoor air', airquality: 'Helps remove dust, pollen and odors from the air', water: 'Reduces chlorine taste and odor for cleaner-tasting water', tools: 'Durable, reliable performance for projects around the house',
+  batteries: 'Dependable starting power in all seasons', oils: 'Helps keep your vehicle running smoothly mile after mile', autoelec: 'Handy car accessories for a cleaner, more convenient drive', tires: 'All-season traction with a smooth, quiet ride',
+  school: 'Classroom essentials for the school year', officesup: 'Reliable supplies for home and office',
+  sewing: 'Easy to thread and set up for beginners and experienced sewists', diecut: 'Cuts vinyl, iron-on, cardstock and more with the free Design Space app', fabric: 'Soft, easy-to-sew cotton for quilting, apparel and crafts',
+  craftstorage: 'Keeps craft supplies sorted and easy to reach', crafting: 'A craft room essential for DIY projects', artsup: 'Bright, bold colors for kids and artists', knitting: 'Soft, easy-care yarn and tools for knitting and crochet',
+  movies4k: 'Watch in stunning 4K Ultra HD with HDR', bluray: 'Includes Blu-ray, DVD and a digital copy', dvd: 'Plays on any DVD player', tv4k: 'Every episode in 4K Ultra HD', tvbluray: 'Every episode in high definition on Blu-ray', tvdvd: 'Binge every episode at home',
+  turntables: 'Plays 33 1/3, 45 and 78 RPM records with built-in speakers', instruments: 'Everything you need to start playing', rap: 'Pressed on standard black vinyl', rock: 'Pressed on standard black vinyl', pop: 'Includes the full album with lyrics', country: 'Includes the full album with lyrics', classical: 'Studio recording with full liner notes',
+  kobo: 'Glare-free screen that reads like paper, even in sunlight', kidsbooks: 'A family favorite for read-aloud time', textbooks: 'The latest edition for your course', teen: 'A bestselling page-turner for teen readers', magazines: 'Delivered to your door every issue', bios: 'The bestselling memoir',
+  babyshower: 'Coordinating decor for a sweet baby shower', balloons: 'Fill with air or helium', balloonarch: 'Everything you need to build a balloon garland', balloonscolor: 'Fill with air or helium', birthday: 'Bright, festive decor for birthday parties', genderreveal: 'Pink and blue decor for the big reveal', helium: 'Disposable tank with easy-to-use nozzle; ribbon included',
+  gcrestaurant: 'Treat them to a meal out', gcretail: 'Lets them pick out exactly what they want', gcprepaid: 'Use anywhere the card brand is accepted in the U.S.', gcentertainment: 'For movies, shows and more', gctravel: 'For trips, stays and getaways', gclifestyle: 'For rides, meals and everyday treats',
+}
+const NO_CARE = new Set(['paper', 'bathroom', 'bedding', 'decor', 'bath', 'storage', 'fabric', 'kidsbooks', 'textbooks', 'teen', 'bios', 'magazines', 'birthday', 'babyshower'])
 
 const APPAREL_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 const SHOE_SIZES = ['7', '8', '9', '10', '11', '12']
@@ -483,7 +649,7 @@ export const walmartSlug = title => title.replace(/["'’]/g, '').replace(/[^A-Z
 
 function specsFor(dept, sub, title, brand, extra) {
   const specs = { Brand: brand }
-  const size = title.match(/(\d[\d.,]*\s?(?:fl oz|oz|lb|Quart|qt|Count|ct|Pack|Gallon|L|GB|TB|"|-inch| inch|mm|ft|Sheets|Rolls))/i)
+  const size = title.match(/(\d[\d.,]*\s?(?:fl oz|oz|lb|Quart|qt|Count|ct|Pack|Gallon|L|GB|TB|"|-inch| inch|mm|ft|Sheets|(?:Double |Mega |Triple )?Rolls)(?![A-Za-z]))/i)
   if (size) specs['Size'] = size[1].trim()
   if (extra.platform) specs['Video Game Platform'] = { ps5: 'PlayStation 5', ps4: 'PlayStation 4', xbox: 'Xbox Series X|S', 'switch-2': 'Nintendo Switch 2', switch: 'Nintendo Switch' }[extra.platform]
   if (extra.esrb) specs['ESRB Rating'] = extra.esrb
@@ -498,17 +664,31 @@ function specsFor(dept, sub, title, brand, extra) {
 // Sample written reviews (Walmart shows a few under the rating summary); simulated like the counts.
 const REVIEWERS = ['Jessica', 'Mike', 'Tanya', 'Robert', 'Ashley', 'Daniel', 'Maria', 'Chris', 'Brittany', 'Kevin', 'Linda', 'James']
 const REVIEW_TEXT = {
-  groceries: [['Always fresh', 'Arrived on time and well packed. Same quality I get in store.'], ['Good value', 'Price is better than the other stores near me.']],
-  games: [['Great purchase', 'Shipped fast and works as expected. My kids love it.'], ['Worth it', 'Good price compared to other retailers. No issues so far.']],
-  electronics: [['Works great', 'Easy to set up and works exactly as described.'], ['Good for the price', 'Does what I need. Battery and build quality are fine for the money.']],
+  groceries: [['Always fresh', 'Arrived on time and well packed. Same quality I get in store.'], ['Good value', 'Price is better than the other stores near me.'], ['Pantry staple', 'We go through this every week. Delivery makes it so easy to keep stocked.'], ['Will buy again', 'Tastes great and the date was good. No complaints.']],
+  games: [['Great purchase', 'Shipped fast and works as expected. My kids love it.'], ['Worth it', 'Good price compared to other retailers. No issues so far.'], ['Son loves it', 'Got this for my son and he has played it every day since it arrived.'], ['Fast shipping', 'Came in two days, sealed and in perfect condition.']],
+  electronics: [['Works great', 'Easy to set up and works exactly as described.'], ['Good for the price', 'Does what I need. Battery and build quality are fine for the money.'], ['Very happy', 'Setup took about ten minutes. Better than I expected for the price.'], ['Great deal', 'Bought it on Rollback and it has been working perfectly.']],
+  household: [['Stock up item', 'I buy this every month. Cheaper here than at the grocery store.'], ['Works well', 'Does the job and lasts a long time. Good value for the size.'], ['Great price', 'Same product I always buy, just cheaper. Arrived fast.'], ['Love it', 'My go-to brand. Box was a little dented but everything inside was fine.']],
+  beauty: [['Holy grail', 'I have repurchased this so many times. Works as well as pricier brands.'], ['Nice product', 'Exactly as pictured and works great. Price is better than the drugstore.'], ['Recommend', 'Exactly what I use every day. Arrived quickly and well sealed.'], ['Good value', 'Great size for the price. Will order again.']],
+  pets: [['Pets love it', 'Good quality and my pets love it. Great price for the size.'], ['Good value', 'Heavy bag delivered right to my door. Much easier than carrying it from the store.'], ['No complaints', 'Works as described. No issues at all.'], ['Will reorder', 'Same quality as the pet store for less.']],
+  baby: [['Mom approved', 'Works great for us. We go through a lot of these!'], ['Great price', 'Cheaper than buying at the store and arrives in two days.'], ['Great for baby', 'Exactly what we needed for our little one.'], ['Must have', 'Bought this for our second baby too. Works great.']],
+  toys: [['Big hit', 'My kids played with it all weekend. Great gift idea.'], ['Fun for all ages', 'Easy to put together and lots of fun.'], ['Birthday gift', 'Bought as a birthday gift and it was a favorite.'], ['Good quality', 'Sturdier than I expected for the price.']],
+  movies: [['Family movie night', 'Watched it the day it arrived. Picture quality is great and the digital code worked.'], ['Great movie', 'One of my favorites. Case arrived sealed and in perfect shape.'], ['Must own', 'Cheaper than the other stores and shipped fast.'], ['Love it', 'Bought it as a gift and they loved it.']],
+  music: [['Sounds great', 'Arrived well packed and sounds amazing.'], ['Classic', 'A must have for any collection. Shipped fast with no damage.'], ['Great gift', 'Bought this for my daughter and she loves it.'], ['Love it', 'Exactly as described. Great price compared to the record store.']],
+  books: [['Could not put it down', 'Read it in two days. Arrived in great condition.'], ['Great read', 'Highly recommend. Cheaper here than at the bookstore.'], ['Gift for my son', 'He loves this series and reads it every night.'], ['Five stars', 'Exactly what I ordered and it arrived quickly.']],
+  arts: [['Perfect for crafting', 'Great quality for the price. Using it for all my projects.'], ['Love it', 'Easy to use and arrived quickly.'], ['Great for beginners', 'I am new to this and it was simple to get started.'], ['Good value', 'Much cheaper than the craft store.']],
+  party: [['Party was a hit', 'Looked great at my daughter\'s party. Good quality for the price.'], ['Great value', 'Everything we needed and it arrived in time for the party.'], ['Cute', 'Colors are just like the picture.'], ['Will buy again', 'Easy to set up and lasted the whole party.']],
+  gifts: [['Easy gift', 'Arrived quickly and the recipient loved it.'], ['Perfect gift', 'Great last minute gift. Easy to send.'], ['Worked great', 'Card activated with no problems.'], ['Always a hit', 'I give these every year for birthdays.']],
+  home: [['Looks great', 'Looks even better in person and was easy to set up.'], ['Good quality', 'Sturdy and well made for the price.'], ['Love it', 'Exactly what I needed for our new apartment.'], ['Nice', 'Arrived quickly and well packaged. Easy to clean.']],
 }
 const GENERIC_REVIEWS = [['Exactly as described', 'Arrived quickly and matches the description. Would buy again.'], ['Good value', 'Good quality for the price. Packaging was fine.'], ['Will reorder', 'This is my second time buying it. Same quality as last time and it came a day early.'], ['Does the job', 'No complaints. It is exactly what I expected for the price.'], ['Love it', 'Better than I expected. Already recommended it to my sister.'], ['Fast delivery', 'Ordered on Monday and had it Wednesday. Item was well packed and in great shape.'], ['Pretty good', 'Works well overall. The box was a little dented but the item itself was fine.'], ['Great buy', 'Cheaper than the store near me and just as good.']]
 function reviewsFor(title, department, rating, n) {
   const pool = REVIEW_TEXT[department] ?? GENERIC_REVIEWS
-  const [a, b] = pool.length > 2 ? [pool[n % pool.length], pool[(n + 3) % pool.length]] : pool
+  const pick = k => pool[(n + k) % pool.length]
+  const day = (month, k, max) => `2026-${month}-${String(1 + (n * 7 + k * 11) % max).padStart(2, '0')}`
   return [
-    { id: 'r1', stars: 5, name: REVIEWERS[n % 12], title: a[0], body: a[1], date: `2026-09-${String(10 + n % 18).padStart(2, '0')}` },
-    { id: 'r2', stars: rating >= 4.5 ? 5 : 4, name: REVIEWERS[(n + 5) % 12], title: b[0], body: b[1], date: `2026-08-${String(5 + n % 22).padStart(2, '0')}` },
+    { id: 'r1', stars: 5, name: REVIEWERS[n % 12], title: pick(0)[0], body: pick(0)[1], date: day('10', 0, 14) },
+    { id: 'r2', stars: rating >= 4.5 ? 5 : 4, name: REVIEWERS[(n + 5) % 12], title: pick(1)[0], body: pick(1)[1], date: day('09', 1, 28) },
+    { id: 'r3', stars: rating >= 4.6 ? 5 : rating >= 4.2 ? 4 : 3, name: REVIEWERS[(n + 9) % 12], title: pick(2)[0], body: pick(2)[1], date: day('08', 2, 28) },
   ]
 }
 let rank = 100
@@ -529,7 +709,7 @@ export const SHELF = Object.entries(ROWS).flatMap(([department, rows]) => rows.m
     arrival: grocery ? { short: 'tomorrow', day: 'tomorrow', full: 'tomorrow' } : { short: 'in 2 days', day: 'in 2 days', full: 'in 2 days' },
     shippingText: grocery || price >= 35 ? `Free shipping, arrives ${grocery ? 'tomorrow' : 'in 2 days'}` : 'Shipping, arrives in 2 days',
     fulfillment: ['shipping'], sellerId: 'walmart',
-    specs, features: [lead, ...Object.entries(specs).filter(([k]) => !['Sold and shipped by', 'Category'].includes(k)).map(([k, v]) => `${k}: ${v}`), care],
+    specs, features: [FEATURE[sub] ? `${FEATURE[sub]}.` : lead, ...Object.entries(specs).filter(([k]) => !['Sold and shipped by', 'Category'].includes(k)).map(([k, v]) => `${k}: ${v}`), ...(NO_CARE.has(sub) ? [] : [care])],
     crumbs: [dept.name, category], crumbPaths: [dept.path, nodePath],
     returnPolicy: grocery ? 'Grocery items are not returnable. Contact Customer Care within 7 days if an item arrives damaged.' : extra.type === 'giftcard' ? 'Gift cards and digital codes are not returnable.' : 'Free 90-day returns on most items sold by Walmart.com. Electronics have a 30-day return window.',
     keywords: `${title} ${brand} ${category} ${dept.name} ${extra.platform ?? ''} ${extra.type ?? ''}`,
@@ -551,17 +731,85 @@ export const SHELF = Object.entries(ROWS).flatMap(([department, rows]) => rows.m
 }
 
 // ---- artwork: product photographs where one fits, otherwise a packaged-goods illustration ----
-const TONES = { groceries: ['#2a8703', '#eaf6e3'], household: ['#0071dc', '#e6f1fc'], home: ['#a4683a', '#f6ede4'], electronics: ['#1b2a4a', '#e8ecf3'], games: ['#3a1f6b', '#efe9f8'], toys: ['#e4572e', '#fdeee7'], fashion: ['#6b4f9e', '#f0ecf7'], beauty: ['#c2477a', '#fbe9f1'], 'personal-care': ['#00849a', '#e3f4f6'], health: ['#00845a', '#e2f4ec'], baby: ['#5aa4d6', '#eaf4fb'], pets: ['#b5651d', '#f8eee3'], sports: ['#c0392b', '#f9e9e7'], patio: ['#3d7a3a', '#e9f3e8'], 'home-improvement': ['#e67e22', '#fdf0e3'], auto: ['#2c3e50', '#e9edf1'], office: ['#2563a6', '#e7eff8'] }
+const TONES = { groceries: ['#2a8703', '#eaf6e3'], household: ['#0071dc', '#e6f1fc'], home: ['#a4683a', '#f6ede4'], electronics: ['#1b2a4a', '#e8ecf3'], games: ['#3a1f6b', '#efe9f8'], toys: ['#e4572e', '#fdeee7'], fashion: ['#6b4f9e', '#f0ecf7'], beauty: ['#c2477a', '#fbe9f1'], 'personal-care': ['#00849a', '#e3f4f6'], health: ['#00845a', '#e2f4ec'], baby: ['#5aa4d6', '#eaf4fb'], pets: ['#b5651d', '#f8eee3'], sports: ['#c0392b', '#f9e9e7'], patio: ['#3d7a3a', '#e9f3e8'], 'home-improvement': ['#e67e22', '#fdf0e3'], auto: ['#2c3e50', '#e9edf1'], office: ['#2563a6', '#e7eff8'], arts: ['#c2477a', '#fbe9f1'], movies: ['#1b2a4a', '#e8ecf3'], music: ['#3a1f6b', '#efe9f8'], books: ['#7a4b2a', '#f6ede4'], party: ['#e4572e', '#fdeee7'], gifts: ['#0053e2', '#e6f1fc'] }
 const PLATFORM_BAND = { ps5: ['#0070d1', 'PS5'], ps4: ['#003791', 'PS4'], xbox: ['#107c10', 'XBOX SERIES X'], 'switch-2': ['#e60012', 'NINTENDO SWITCH 2'], switch: ['#e60012', 'NINTENDO SWITCH'] }
 const wrap = (s, n) => { const out = []; let line = ''; for (const w of s.split(/\s+/)) { if ((line + ' ' + w).trim().length > n && line) { out.push(line); line = w } else line = (line + ' ' + w).trim() } if (line) out.push(line); return out }
 const label = (p, x, y, width, n, size, color, lines = 3) => wrap(p.title.replace(new RegExp('^' + p.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*'), '').split(',')[0], n).slice(0, lines).map((l, i) => `<text x="${x}" y="${y + i * (size + 4)}" font-family="Arial,Helvetica,sans-serif" font-weight="600" font-size="${size}" fill="${color}" text-anchor="middle">${esc(l)}</text>`).join('')
 // Brand mark on the pack: as large as the panel allows, shrunk so long names still fit inside it.
 const brandText = (p, x, y, size, color, maxWidth = 150) => { const name = p.brand.toUpperCase().slice(0, 18); const fit = Math.max(9, Math.min(size, Math.floor(maxWidth / (name.length * 0.72)))); return `<text x="${x}" y="${y}" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="700" font-size="${fit}" fill="${color}" text-anchor="middle">${esc(name)}</text>` }
+// Item-specific drawings where the generic shape would read as the wrong product.
+function titleShape(p) {
+  const t = p.title
+  if (/Air Fryer/i.test(t)) return `<rect x="130" y="55" width="140" height="215" rx="34" fill="#2b2d31"/><rect x="150" y="72" width="100" height="44" rx="10" fill="#3d4046"/><text x="200" y="100" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#e74c3c" text-anchor="middle">400°F</text><rect x="140" y="138" width="120" height="118" rx="22" fill="#222428"/><rect x="168" y="178" width="64" height="18" rx="9" fill="#111"/><rect x="155" y="240" width="90" height="6" rx="3" fill="#3d4046"/>`
+  if (/Pressure Cooker/i.test(t)) return `<rect x="104" y="118" width="192" height="150" rx="26" fill="#c3c8ce"/><rect x="104" y="118" width="40" height="150" rx="20" fill="#d9dde1"/><rect x="250" y="118" width="46" height="150" rx="20" fill="#aab0b7"/><rect x="160" y="180" width="80" height="54" rx="10" fill="#222"/><rect x="172" y="190" width="56" height="18" rx="3" fill="#4fc3f7"/><circle cx="200" cy="222" r="5" fill="#888"/><ellipse cx="200" cy="118" rx="104" ry="28" fill="#2b2d31"/><ellipse cx="200" cy="112" rx="80" ry="18" fill="#3a3d42"/><rect x="182" y="82" width="36" height="20" rx="8" fill="#444"/><rect x="88" y="150" width="20" height="16" rx="5" fill="#2b2d31"/><rect x="292" y="150" width="20" height="16" rx="5" fill="#2b2d31"/>`
+  if (/Upright Vacuum/i.test(t)) return `<rect x="182" y="20" width="44" height="22" rx="11" fill="none" stroke="#444" stroke-width="7"/><rect x="198" y="38" width="12" height="70" fill="#777"/><rect x="178" y="100" width="52" height="96" rx="22" fill="#cfd8e6" stroke="#7d8ea8" stroke-width="4"/><rect x="186" y="150" width="36" height="38" rx="12" fill="#a9b7cc"/><rect x="170" y="190" width="68" height="44" rx="12" fill="#5b4b8a"/><rect x="128" y="232" width="152" height="32" rx="12" fill="#2f3033"/><circle cx="150" cy="268" r="10" fill="#111"/><circle cx="258" cy="268" r="10" fill="#111"/>`
+  if (/Toothbrush/i.test(t)) return `<ellipse cx="200" cy="270" rx="54" ry="12" fill="#2f3033"/><rect x="184" y="98" width="32" height="170" rx="16" fill="#222"/><circle cx="200" cy="160" r="7" fill="#4fc3f7"/><rect x="193" y="46" width="14" height="58" rx="7" fill="#f2f2f2" stroke="#ccc"/><rect x="188" y="24" width="24" height="32" rx="10" fill="#f2f2f2" stroke="#ccc"/><rect x="193" y="28" width="14" height="22" rx="4" fill="#4fc3f7"/>`
+  if (/Razor/i.test(t)) { const c = /Venus/.test(t) ? '#d9578a' : '#1f3b73'; return `<g transform="rotate(-24 200 160)"><rect x="150" y="40" width="100" height="34" rx="12" fill="#e3e6ea" stroke="#9aa1a9" stroke-width="3"/>${[0, 1, 2, 3, 4].map(i => `<rect x="160" y="${48 + i * 4}" width="80" height="2" fill="#7c848c"/>`).join('')}<rect x="190" y="74" width="20" height="24" fill="#9aa1a9"/><rect x="186" y="96" width="28" height="170" rx="12" fill="${c}"/><rect x="192" y="140" width="16" height="70" rx="6" fill="#2f3033"/></g><rect x="268" y="200" width="60" height="22" rx="8" fill="#e3e6ea" stroke="#9aa1a9" stroke-width="3"/><rect x="268" y="232" width="60" height="22" rx="8" fill="#e3e6ea" stroke="#9aa1a9" stroke-width="3"/>` }
+  if (/Basketball Hoop/i.test(t)) return `<rect x="150" y="34" width="110" height="78" rx="4" fill="#eef2f6" stroke="#2f3033" stroke-width="4"/><rect x="185" y="68" width="40" height="30" fill="none" stroke="#c0392b" stroke-width="3"/><ellipse cx="205" cy="114" rx="22" ry="6" fill="none" stroke="#e67e22" stroke-width="4"/>${[0, 1, 2, 3].map(i => `<line x1="${187 + i * 12}" y1="116" x2="${193 + i * 8}" y2="140" stroke="#ccc" stroke-width="2"/>`).join('')}<rect x="200" y="112" width="10" height="140" fill="#444"/><rect x="150" y="244" width="110" height="36" rx="10" fill="#222"/>`
+  if (/Pickleball/i.test(t)) return `<g transform="rotate(-18 175 150)"><rect x="120" y="50" width="110" height="130" rx="48" fill="#2e86de"/><rect x="162" y="176" width="26" height="74" rx="8" fill="#222"/></g><g transform="rotate(16 250 150)"><rect x="200" y="62" width="110" height="130" rx="48" fill="#e74c3c"/><rect x="242" y="188" width="26" height="74" rx="8" fill="#222"/></g><circle cx="318" cy="246" r="22" fill="#f4d03f"/><circle cx="310" cy="240" r="3" fill="#c9a920"/><circle cx="324" cy="250" r="3" fill="#c9a920"/><circle cx="318" cy="232" r="3" fill="#c9a920"/>`
+  if (/Tape Measure/i.test(t)) return `<rect x="120" y="92" width="150" height="140" rx="34" fill="#f1c40f" stroke="#222" stroke-width="6"/><circle cx="195" cy="162" r="36" fill="#2f3033"/><text x="195" y="168" font-family="Arial Black,Arial,sans-serif" font-size="13" font-weight="700" fill="#f1c40f" text-anchor="middle">STANLEY</text><rect x="262" y="210" width="96" height="20" fill="#f7dc6f" stroke="#b7950b"/>${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<line x1="${270 + i * 11}" y1="210" x2="${270 + i * 11}" y2="${i % 2 ? 216 : 222}" stroke="#222" stroke-width="2"/>`).join('')}<rect x="252" y="204" width="14" height="32" rx="3" fill="#222"/>`
+  if (/Humidifier/i.test(t)) return `<path d="M200 40 C150 90 136 130 136 170 C136 210 166 236 200 236 C234 236 264 210 264 170 C264 130 250 90 200 40 Z" fill="#d6eaf8" stroke="#5dade2" stroke-width="4"/><rect x="126" y="206" width="148" height="60" rx="22" fill="#f4f6f7" stroke="#aab4bd" stroke-width="3"/><circle cx="200" cy="236" r="12" fill="#5dade2"/><path d="M186 38 Q176 22 190 12 M212 36 Q224 22 210 10" fill="none" stroke="#cfe8f7" stroke-width="5" stroke-linecap="round"/>`
+  return null
+}
+// Brand colors for gift card art.
+const GC_BRAND = { 'Olive Garden': '#55652d', Starbucks: '#00704a', 'Texas Roadhouse': '#7a1f1f', Sephora: '#111111', 'The Home Depot': '#f96302', Visa: '#1a1f71', Mastercard: '#2b2b2b', Netflix: '#141414', 'AMC Theatres': '#c8102e', 'Southwest Airlines': '#304cb2', Airbnb: '#ff5a5f', DoorDash: '#eb1700', Uber: '#000000' }
+const hueOf = t => parseInt(createHash('md5').update(t).digest('hex').slice(0, 4), 16) % 360
+const coverText = (text, x, y, n, size, color, lines = 3, weight = 700) => wrap(text, n).slice(0, lines).map((l, i) => `<text x="${x}" y="${y + i * (size + 4)}" font-family="Georgia,'Times New Roman',serif" font-weight="${weight}" font-size="${size}" fill="${color}" text-anchor="middle">${esc(l)}</text>`).join('')
+// Media and party items: a movie case, an album sleeve, a book cover and so on.
+function mediaShape(p, s) {
+  const t = p.title, hue = hueOf(t)
+  if (s === 'movie') {
+    const [band, fmt] = /4K/.test(t) ? ['#111', '4K ULTRA HD'] : /Blu-ray/.test(t) ? ['#0a5bc4', 'BLU-RAY'] : ['#111', 'DVD']
+    const name = t.replace(/\s*\(.*$/, '').replace(/:\s*(The Complete|Season).*$/, '')
+    return `<rect x="108" y="20" width="184" height="262" rx="6" fill="${band}"/><text x="200" y="40" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="13" fill="#fff" text-anchor="middle" letter-spacing="1">${fmt}</text><defs><linearGradient id="mv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="hsl(${hue},45%,42%)"/><stop offset="1" stop-color="hsl(${(hue + 30) % 360},55%,14%)"/></linearGradient></defs><rect x="116" y="48" width="168" height="226" fill="url(#mv)"/>${[`<circle cx="${150 + hue % 90}" cy="118" r="30" fill="hsl(${(hue + 40) % 360},85%,68%)" opacity=".85"/><path d="M116 150 L150 126 L178 142 L214 112 L250 138 L284 122 V172 H116 Z" fill="#000" opacity=".45"/>`, `<path d="M116 172 L200 70 L284 172 Z" fill="#000" opacity=".3"/><circle cx="200" cy="112" r="16" fill="#fff" opacity=".8"/>`, `${[0, 1, 2, 3].map(i => `<rect x="116" y="${64 + i * 26}" width="168" height="12" fill="hsl(${(hue + 60 + i * 20) % 360},70%,60%)" opacity=".5"/>`).join('')}`, `<circle cx="160" cy="120" r="44" fill="#000" opacity=".35"/><circle cx="240" cy="110" r="34" fill="hsl(${(hue + 200) % 360},70%,65%)" opacity=".6"/>`][hue % 4]}${coverText(name.toUpperCase(), 200, 200, 13, 19, '#fff', 3)}<text x="200" y="262" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#ddd" text-anchor="middle">${esc(p.brand.toUpperCase())}</text>`
+  }
+  if (s === 'vinyl') {
+    const [artist, album = ''] = t.split(' - ')
+    const cd = / - CD$/.test(t)
+    return `${cd ? '' : `<circle cx="262" cy="150" r="96" fill="#111"/><circle cx="262" cy="150" r="70" fill="none" stroke="#2a2a2a" stroke-width="2"/><circle cx="262" cy="150" r="28" fill="hsl(${(hue + 40) % 360},55%,55%)"/><circle cx="262" cy="150" r="4" fill="#fff"/>`}<rect x="${cd ? 95 : 70}" y="${cd ? 45 : 50}" width="${cd ? 210 : 200}" height="${cd ? 210 : 200}" fill="hsl(${hue},40%,${cd ? 35 : 45}%)"/><rect x="${cd ? 95 : 70}" y="${cd ? 45 : 50}" width="${cd ? 210 : 200}" height="${cd ? 210 : 200}" fill="none" stroke="#00000033" stroke-width="2"/><rect x="${cd ? 95 : 70}" y="${cd ? 85 : 90}" width="${cd ? 210 : 200}" height="70" fill="hsl(${(hue + 160) % 360},60%,62%)"/><rect x="${cd ? 95 : 70}" y="${cd ? 155 : 160}" width="${cd ? 210 : 200}" height="6" fill="#fff" opacity=".6"/>${coverText(album, cd ? 200 : 170, cd ? 200 : 202, 16, 17, '#fff', 2)}<text x="${cd ? 200 : 170}" y="${cd ? 238 : 238}" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff" text-anchor="middle" letter-spacing="1">${esc(artist.toUpperCase())}</text>`
+  }
+  if (s === 'book') {
+    const name = t.replace(/\s*\(.*$/, '').replace(/,\s*\d.*$/, '')
+    const mag = /Magazine/.test(t)
+    return `<rect x="122" y="26" width="166" height="252" rx="3" fill="#00000022"/><rect x="116" y="20" width="166" height="252" rx="3" fill="hsl(${hue},${mag ? 70 : 45}%,${mag ? 48 : 36}%)"/><rect x="116" y="20" width="12" height="252" fill="#00000033"/>${mag ? `<rect x="134" y="34" width="134" height="34" fill="#fff"/><text x="201" y="58" font-family="Arial Black,Arial,sans-serif" font-weight="700" font-size="${Math.min(18, Math.floor(170 / Math.max(8, p.brand.length)))}" fill="hsl(${hue},70%,35%)" text-anchor="middle">${esc(p.brand.toUpperCase())}</text><rect x="134" y="80" width="134" height="150" fill="hsl(${(hue + 30) % 360},55%,75%)"/><circle cx="201" cy="150" r="36" fill="hsl(${(hue + 200) % 360},60%,60%)"/><rect x="134" y="238" width="96" height="8" fill="#fff"/><rect x="134" y="252" width="70" height="8" fill="#fff" opacity=".8"/>` : `<rect x="134" y="44" width="134" height="2" fill="#ffffffaa"/>${coverText(name, 201, 100, 14, 20, '#fff', 4)}<rect x="166" y="200" width="70" height="2" fill="#ffffffaa"/><rect x="190" y="194" width="22" height="14" fill="hsl(${(hue + 150) % 360},70%,72%)"/><text x="201" y="252" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">${esc(p.brand.toUpperCase())}</text>`}`
+  }
+  if (s === 'balloon') {
+    const cols = /Pink and Blue/.test(t) ? ['#f4a6c1', '#9cc9f0', '#f4a6c1'] : /Pink/.test(t) ? ['#f06292', '#f48fb1', '#ec407a'] : /Navy/.test(t) ? ['#1f2f6b', '#2c3e8c', '#16245a'] : /Gold/.test(t) ? ['#d4af37', '#f5f5f5', '#e8c766'] : /Sage/.test(t) ? ['#9caf88', '#f5f1e6', '#b9c9a7'] : /Foil/.test(t) ? ['#c0c7d1', '#c0c7d1', '#c0c7d1'] : ['#e53935', '#1e88e5', '#fdd835']
+    const b = (cx, cy, c, r) => `<line x1="${cx}" y1="${cy + r * 1.2}" x2="200" y2="285" stroke="#999" stroke-width="2"/><ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r * 1.2}" fill="${c}"/><ellipse cx="${cx - r * 0.35}" cy="${cy - r * 0.45}" rx="${r * 0.18}" ry="${r * 0.3}" fill="#fff" opacity=".45"/><path d="M${cx - 6} ${cy + r * 1.2 + 6} L${cx} ${cy + r * 1.2 - 2} L${cx + 6} ${cy + r * 1.2 + 6} Z" fill="${c}"/>`
+    return /Foil/.test(t) ? `${b(200, 120, '#c0c7d1', 80)}<text x="200" y="112" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="22" fill="#d81b60" text-anchor="middle">Happy</text><text x="200" y="140" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="22" fill="#1e88e5" text-anchor="middle">Birthday</text>` : `${b(140, 110, cols[0], 46)}${b(260, 105, cols[2], 46)}${b(200, 80, cols[1], 52)}`
+  }
+  if (s === 'plates') {
+    const c = /Blue/.test(t) ? '#7fb3e6' : /Pink/.test(t) ? '#f4a6c1' : `hsl(${hue},70%,60%)`
+    const word = /Birthday/.test(t) ? 'Happy Birthday' : /Reveal/.test(t) ? 'He or She?' : 'Oh Baby'
+    return `<ellipse cx="200" cy="232" rx="150" ry="40" fill="#e3e3e3"/><ellipse cx="200" cy="222" rx="150" ry="40" fill="#f2f2f2"/><circle cx="200" cy="150" r="120" fill="#fff" stroke="${c}" stroke-width="16"/><circle cx="200" cy="150" r="92" fill="#fff" stroke="#eee" stroke-width="2"/><text x="200" y="160" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="28" fill="${c}" text-anchor="middle">${word}</text>`
+  }
+  if (s === 'yarn') {
+    const c = /Black/.test(t) ? '#2b2b2b' : /White/.test(t) ? '#efe9dc' : `hsl(${hue},50%,50%)`
+    const line = /Black/.test(t) ? '#444' : '#d8d0bf'
+    return `<ellipse cx="200" cy="160" rx="120" ry="92" fill="${c}"/>${Array.from({ length: 9 }, (_, i) => `<path d="M${96 + i * 24} ${90 + Math.abs(4 - i) * 6} Q${110 + i * 22} 160 ${96 + i * 24} ${230 - Math.abs(4 - i) * 6}" fill="none" stroke="${line}" stroke-width="3"/>`).join('')}<rect x="150" y="98" width="100" height="124" fill="#d62828"/><rect x="150" y="98" width="100" height="26" fill="#fff"/>${brandText(p, 200, 117, 13, '#d62828', 92)}<text x="200" y="168" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff" text-anchor="middle">${/16 oz/.test(t) ? '1 LB' : '7 OZ'}</text>`
+  }
+  if (s === 'turntable') {
+    const c = /Audio-Technica/.test(t) ? '#1e1e1e' : /Crosley/.test(t) ? '#2b2b2b' : '#3a2a20'
+    return `<rect x="50" y="110" width="300" height="150" rx="14" fill="${c}"/><rect x="62" y="118" width="276" height="120" rx="8" fill="#555"/><circle cx="175" cy="178" r="56" fill="#111"/><circle cx="175" cy="178" r="16" fill="hsl(${hue},60%,50%)"/><circle cx="175" cy="178" r="3" fill="#ddd"/><circle cx="300" cy="138" r="10" fill="#bbb"/><path d="M300 138 L290 222 L262 236" fill="none" stroke="#ccc" stroke-width="5" stroke-linecap="round"/>${/Suitcase/.test(t) ? `<rect x="168" y="94" width="64" height="18" rx="8" fill="none" stroke="#c8a165" stroke-width="7"/><circle cx="80" cy="250" r="8" fill="#c8a165"/><circle cx="320" cy="250" r="8" fill="#c8a165"/>` : ''}`
+  }
+  if (s === 'guitar') return `<g transform="rotate(-35 200 160)"><rect x="191" y="-10" width="18" height="160" fill="#5d3a1a"/>${[0, 1, 2, 3, 4].map(i => `<rect x="191" y="${10 + i * 24}" width="18" height="2" fill="#ccc"/>`).join('')}<rect x="186" y="-34" width="28" height="30" rx="5" fill="#3b2410"/><circle cx="200" cy="190" r="50" fill="#d9a35b"/><circle cx="200" cy="262" r="64" fill="#d9a35b"/><ellipse cx="200" cy="218" rx="30" ry="32" fill="#d9a35b"/><circle cx="200" cy="200" r="20" fill="#2b1a0b"/><rect x="180" y="270" width="40" height="8" fill="#3b2410"/></g>`
+  if (s === 'keyboard') return `<rect x="30" y="110" width="340" height="110" rx="8" fill="#222"/><rect x="40" y="120" width="320" height="30" rx="4" fill="#333"/><rect x="170" y="126" width="60" height="16" fill="#4fc3f7"/>${Array.from({ length: 22 }, (_, i) => `<rect x="${42 + i * 14.4}" y="158" width="13" height="56" fill="#fff"/>`).join('')}${Array.from({ length: 21 }, (_, i) => [0, 1, 3, 4, 5].includes(i % 7) ? `<rect x="${51 + i * 14.4}" y="158" width="9" height="34" fill="#111"/>` : '').join('')}`
+  if (s === 'sewing') return `<rect x="70" y="240" width="270" height="34" rx="8" fill="#e9ecef" stroke="#adb5bd" stroke-width="2"/><path d="M90 240 V110 Q90 80 120 80 H320 Q340 80 340 100 V170 H300 V140 H140 V240 Z" fill="#f8f9fa" stroke="#adb5bd" stroke-width="3"/><rect x="290" y="170" width="16" height="50" fill="#adb5bd"/><rect x="295" y="220" width="6" height="20" fill="#666"/><rect x="150" y="96" width="100" height="30" rx="4" fill="${/SINGER/.test(t) ? '#c1121f' : '#0b5394'}"/>${brandText(p, 200, 117, 15, '#fff', 90)}<circle cx="110" cy="180" r="14" fill="#ced4da"/><rect x="170" y="74" width="10" height="16" fill="#e63946"/>`
+  if (s === 'tank') return `<rect x="150" y="70" width="100" height="210" rx="40" fill="#7fb3e6"/><rect x="150" y="150" width="100" height="70" fill="#fff"/>${brandText(p, 200, 180, 13, '#0b5394', 92)}<text x="200" y="202" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="11" fill="#e63946" text-anchor="middle">HELIUM</text><rect x="186" y="46" width="28" height="26" rx="4" fill="#444"/><rect x="210" y="52" width="26" height="8" fill="#666"/><ellipse cx="300" cy="80" rx="34" ry="42" fill="#e53935"/><line x1="300" y1="122" x2="280" y2="270" stroke="#999" stroke-width="2"/>`
+  if (s === 'ereader') return `<rect x="125" y="20" width="160" height="250" rx="16" fill="#1f1f1f"/><rect x="137" y="36" width="136" height="208" rx="3" fill="${/Colour/.test(t) ? '#f3efe6' : '#e9e7e2'}"/>${Array.from({ length: 12 }, (_, i) => `<rect x="148" y="${52 + i * 15}" width="${i % 4 === 3 ? 70 : 114}" height="5" rx="2" fill="#9a9a9a"/>`).join('')}${/Colour/.test(t) ? `<rect x="148" y="52" width="50" height="60" fill="#e76f51"/>` : ''}<text x="205" y="260" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#bbb" text-anchor="middle">kobo</text>`
+  if (s === 'fabric') { const c = /Blue/.test(t) ? '#3d6fb6' : `hsl(${hue},50%,55%)`; return `${[0, 1, 2].map(i => `<rect x="${90 + i * 8}" y="${190 - i * 50}" width="220" height="48" rx="6" fill="${i === 1 ? '#f2c4ce' : c}" stroke="#00000022"/>${Array.from({ length: 7 }, (_, k) => `<circle cx="${112 + i * 8 + k * 30}" cy="${214 - i * 50}" r="7" fill="#fff" opacity=".7"/>`).join('')}`).join('')}` }
+  if (s === 'paint') return `${['#e63946', '#f4a261', '#e9c46a', '#2a9d8f', '#457b9d', '#6a4c93'].map((c, i) => `<rect x="${78 + i * 42}" y="110" width="34" height="130" rx="6" fill="#fff" stroke="#ccc"/><rect x="${78 + i * 42}" y="150" width="34" height="80" fill="${c}"/><rect x="${84 + i * 42}" y="94" width="22" height="18" rx="3" fill="#fff" stroke="#ccc"/>`).join('')}<text x="200" y="270" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="14" fill="#333" text-anchor="middle">APPLE BARREL</text>`
+  if (s === 'cutter') return `<rect x="50" y="140" width="300" height="80" rx="30" fill="#f4f4f4" stroke="#ccc" stroke-width="3"/><rect x="70" y="150" width="260" height="10" rx="5" fill="#d0d0d0"/><rect x="180" y="128" width="40" height="40" rx="8" fill="${/Joy/.test(t) ? '#b6e3d4' : '#9fc5e8'}"/><rect x="30" y="214" width="340" height="16" fill="${/Joy/.test(t) ? '#b6e3d4' : '#9fc5e8'}" opacity=".8"/><text x="200" y="200" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="16" fill="#555" text-anchor="middle">cricut</text>`
+  if (s === 'gluegun') return `<path d="M100 110 H260 Q280 110 280 130 V150 Q280 170 260 170 H210 L222 262 H170 L160 170 H100 Z" fill="#2e7d32"/><rect x="280" y="132" width="50" height="14" fill="#999"/><path d="M330 132 L352 139 L330 146 Z" fill="#666"/><rect x="40" y="132" width="60" height="14" rx="6" fill="#f1f1f1" stroke="#ccc"/><rect x="186" y="186" width="18" height="44" rx="6" fill="#1b5e20"/>`
+  if (s === 'drawers') { const ten = /10 Drawer/.test(t); const cols = ['#e63946', '#f4a261', '#e9c46a', '#2a9d8f', '#457b9d', '#6a4c93', '#e76f51', '#90be6d', '#43aa8b', '#577590']; return `<rect x="130" y="20" width="140" height="${ten ? 250 : 230}" rx="6" fill="#f5f5f5" stroke="#bbb" stroke-width="3"/>${Array.from({ length: ten ? 10 : 3 }, (_, i) => `<rect x="138" y="${28 + i * (ten ? 24 : 72)}" width="124" height="${ten ? 20 : 64}" rx="3" fill="${ten ? cols[i] : '#ececec'}" stroke="#ccc"/><rect x="186" y="${(ten ? 34 : 54) + i * (ten ? 24 : 72)}" width="28" height="6" rx="3" fill="#999"/>`).join('')}<circle cx="146" cy="${ten ? 280 : 260}" r="8" fill="#333"/><circle cx="254" cy="${ten ? 280 : 260}" r="8" fill="#333"/>` }
+  return null
+}
 function shapeSvg(p) {
   const [ink, paper] = TONES[p.department] ?? ['#0071dc', '#eef4fb']
   const s = p.shape
-  let body
-  if (s === 'game') {
+  let body = titleShape(p) ?? mediaShape(p, s)
+  if (body) {}
+  else if (s === 'game') {
     const hue = parseInt(createHash('md5').update(p.title).digest('hex').slice(0, 4), 16) % 360
     const ink = `hsl(${hue},48%,32%)`
     const [band, name] = PLATFORM_BAND[p.platform] ?? ['#333', 'GAME']
@@ -573,7 +821,7 @@ function shapeSvg(p) {
   else if (s === 'bag' || s === 'tray') body = s === 'tray'
     ? `<rect x="70" y="120" width="260" height="130" rx="14" fill="#eceae4" stroke="#bbb" stroke-width="3"/><rect x="88" y="135" width="224" height="100" rx="10" fill="${paper}"/><rect x="100" y="150" width="200" height="34" fill="${ink}"/>${brandText(p, 200, 174, 18, '#fff', 192)}${label(p, 200, 207, 200, 24, 14, '#333', 2)}`
     : `<path d="M120 50 H280 L300 280 H100 Z" fill="${ink}"/><rect x="120" y="40" width="160" height="18" fill="${paper}"/><rect x="118" y="110" width="164" height="110" rx="8" fill="${paper}"/>${brandText(p, 200, 142, 20, ink, 156)}${label(p, 200, 168, 160, 17, 15, '#333')}`
-  else if (s === 'card') body = `<rect x="80" y="70" width="240" height="152" rx="14" fill="${ink}"/><rect x="80" y="110" width="240" height="30" fill="#ffffff22"/>${brandText(p, 200, 102, 24, '#fff', 220)}${label(p, 200, 176, 220, 22, 16, '#fff', 2)}`
+  else if (s === 'card') body = `<rect x="80" y="70" width="240" height="152" rx="14" fill="${GC_BRAND[p.brand] ?? ink}"/><rect x="80" y="110" width="240" height="30" fill="#ffffff22"/>${brandText(p, 200, 102, 24, '#fff', 220)}${label(p, 200, 176, 220, 22, 16, '#fff', 2)}`
   else if (['appliance', 'heater', 'vacuum', 'drill', 'device', 'battery', 'toolbox', 'grill', 'patio', 'luggage', 'mattress', 'tire', 'ball', 'toybox'].includes(s)) {
     const shapes = {
       appliance: `<rect x="120" y="60" width="160" height="200" rx="40" fill="#2b2d31"/><rect x="140" y="90" width="120" height="70" rx="12" fill="#55585e"/><circle cx="200" cy="205" r="22" fill="${ink}"/>`,
@@ -594,7 +842,7 @@ function shapeSvg(p) {
     body = shapes[s]
   } else body = `<rect x="110" y="50" width="180" height="230" rx="8" fill="${ink}"/><rect x="110" y="50" width="180" height="40" rx="8" fill="${paper}"/>${brandText(p, 200, 79, 21, ink, 170)}<rect x="126" y="110" width="148" height="110" rx="6" fill="${paper}"/>${label(p, 200, 142, 140, 13, 17, '#333')}`
   // Upright packs are framed close, so the pack (and its label) fills the tile the way a product photo does.
-  const tight = !s || ['box', 'game', 'bag', 'toybox', 'jar', 'can', 'bottle', 'card', 'device', 'heater', 'vacuum', 'appliance', 'luggage'].includes(s)
+  const tight = !s || ['box', 'game', 'bag', 'toybox', 'jar', 'can', 'bottle', 'card', 'device', 'heater', 'vacuum', 'appliance', 'luggage', 'movie', 'book', 'ereader', 'tank', 'drawers'].includes(s)
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${tight ? '75 12 250 278' : '0 0 400 300'}" width="400" height="300"><rect x="-200" y="-200" width="800" height="700" fill="#fff"/>${body}</svg>`
 }
 const svgUri = svg => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
