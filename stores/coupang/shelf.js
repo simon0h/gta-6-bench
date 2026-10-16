@@ -115,6 +115,9 @@ export function shelfArt(p, view = 0) {
   let svg = renderProductAsset(descriptor, view)
   for (const [en, ko] of Object.entries(VIEW_LABELS)) svg = svg.split(en).join(ko)
   svg = svg.replace(/Synthetic product illustration\. /g, '상품 일러스트. ')
+  // Coupang product images carry no caption: drop the view name stamped under the drawing
+  // (it stays in the SVG <title> for screen readers).
+  svg = svg.replace(/<text x="320" y="572"[^>]*>[^<]*<\/text>/, '')
   if (cache.size > 600) cache.delete(cache.keys().next().value)
   cache.set(key, svg)
   return svg
