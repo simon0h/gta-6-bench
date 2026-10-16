@@ -10,6 +10,7 @@
 // Assortment purchases are recorded as `kind: 'other'` order lines (see index.js).
 import { createHash } from 'node:crypto'
 import { slugify } from './catalog.js'
+import { shelfCopy } from './shelf-copy.js'
 
 const DEPT = {
   CT: 'Computers & Tablets', MP: 'Mobile Phones', WE: 'Wearables', TV: 'TVs & Home Theatre', HA: 'Headphones & Audio',
@@ -402,10 +403,7 @@ export const SHELF = ROWS.trim().split('\n').map(line => {
     ...(platform ? { platform, catalogPlatform: platform, platformName: PLATFORM[platform] } : {}),
     attributes,
     notice: flags.includes('online') ? ['Online only. Not available for Click & Collect.'] : [],
-    description: [
-      `${isGame ? `${title} for ${PLATFORM[platform]}.` : title + '.'} ${SUMMARY[type] || ''}`.trim(),
-      ...(isGame ? [`Classification: ${classification}. Published by ${brand}.`] : [`Backed by the manufacturer's warranty and JB Hi-Fi's expert advice in store and online.`]),
-    ],
+    ...(({ overview, features }) => ({ description: overview, features }))(shelfCopy({ type, brand, title, attributes, isGame, platformName: PLATFORM[platform], classification, summary: SUMMARY[type] })),
     specs: [['Brand', brand], ...(isGame ? [['Console compatibility', PLATFORM[platform]]] : []), ...Object.entries(attributes)],
     keywords: [title, subtitle, ALIASES[title] || '', brand, type, department, ...Object.values(attributes), ...(isGame ? ['video games', 'gaming'] : []), ...(platform === 'ps5' ? ['ps5', 'playstation'] : platform === 'xbox' ? ['xbox'] : /switch/.test(platform || '') ? ['nintendo switch'] : [])].join(' '),
     campaigns: [

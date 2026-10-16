@@ -52,7 +52,9 @@ span.jb-btn-grey{color:#777;cursor:not-allowed}
 .jb-tag span{display:inline-block;background:#FFEC0F;color:#E02020;font-weight:900;font-size:22px;line-height:1;padding:6px 12px 6px 20px;clip-path:polygon(10px 0,100% 0,100% 100%,10px 100%,0 50%)}
 .jb-tag span::first-letter{font-size:.6em;vertical-align:.55em}
 .jb-tag-big span{font-size:42px;padding:8px 18px 8px 30px;clip-path:polygon(18px 0,100% 0,100% 100%,18px 100%,0 50%)}
-.jb-stars{font-size:12px}.jb-stars span{color:#555}
+.jb-stars{font-size:12px;display:flex;align-items:center;gap:6px}.jb-stars span{color:#555}
+.jb-stars .jb-stars-meter{display:inline-block;position:relative;flex:none;width:80px;height:16px;background:url('/static/reference/jb-hifi/recommendation-star-empty.svg') left center/16px 16px repeat-x}
+.jb-stars-meter>i{position:absolute;inset:0 auto 0 0;background:url('/static/reference/jb-hifi/recommendation-star-gold.svg') left center/16px 16px repeat-x}
 
 /* ---- home + search ---- */
 .jb-hero{display:flex;align-items:center;gap:32px;background:#000;color:#fff;padding:32px;margin-bottom:8px}
@@ -231,10 +233,11 @@ label.jb-check input{accent-color:#000;width:16px;height:16px;margin:0}
 .jb-express{text-align:center}
 .jb-express>span{display:block;font-size:13px;color:#707070;margin-bottom:8px}
 .jb-express-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.jb-express-btn{height:48px;border:0;font:700 17px Roboto,Arial,sans-serif}
-.jb-express-paypal{background:#ffc439;color:#003087;font-style:italic}
-.jb-express-gpay{background:#000;color:#fff}
-.jb-express-btn:disabled{opacity:.45;cursor:not-allowed}
+.jb-express-btn{height:48px;border:0;border-radius:5px;font:700 17px Roboto,Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:6px}
+.jb-express-paypal{background:#ffc439;color:#003087;font:italic 800 21px/1 Verdana,Arial,sans-serif;letter-spacing:-.5px;gap:0}
+.jb-pp-pay{color:#003087}.jb-pp-pal{color:#009cde}
+.jb-express-gpay{background:#000;color:#fff;font:500 21px/1 'Product Sans',Roboto,Arial,sans-serif}
+.jb-express-btn:disabled{opacity:1;cursor:default}
 .jb-or{display:flex;align-items:center;gap:12px;color:#707070;font-size:12px;margin-top:18px}
 .jb-or::before,.jb-or::after{content:"";flex:1;border-top:1px solid #e1e1e1}
 .jb-methods,.jb-ship-methods,.jb-pay-options,.jb-store-results{border:1px solid #d9d9d9;border-radius:5px;overflow:hidden;margin:8px 0 16px}

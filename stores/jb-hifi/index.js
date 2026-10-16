@@ -44,7 +44,7 @@ function render(req, res, { title, body, status = 200, checkout = null }) {
 }
 
 function notFound(req, res) {
-  render(req, res, { title: 'Page not found | JB Hi-Fi', status: 404, body: P.simplePage({ title: 'Sorry, we couldn’t find that page', html: `<p>The page you're looking for may have moved or no longer exists.</p><p><a class="jb-btn" href="${res.locals.base}/">Continue shopping</a></p>` }) })
+  render(req, res, { title: 'Page not found | JB Hi-Fi', status: 404, body: P.simplePage({ title: 'Sorry, we couldn’t find that page', html: `<p>The page you're looking for may have moved or no longer exists. Try searching for what you need, or browse one of our popular departments.</p><form class="jb-help-search" method="get" action="${res.locals.base}/search" role="search"><label for="nf-search">Search JB Hi-Fi</label><div><input id="nf-search" name="query" type="search" placeholder="Search products, brands, and more…"><button class="jb-btn jb-btn-black" type="submit">Search</button></div></form><h2>Popular departments</h2><div class="jb-brand-links">${[['TVs','/collections/tvs'],['Laptops','/collections/laptops'],['Headphones','/collections/headphones'],['Mobile Phones','/collections/mobile-phones'],['Gaming','/collections/gaming'],['Home Appliances','/collections/home-appliances'],['Red Hot Deals','/collections/deals']].map(([l,u])=>`<a href="${res.locals.base}${u}">${l}</a>`).join('')}</div><p><a class="jb-btn" href="${res.locals.base}/">Continue shopping</a> &nbsp; <a href="${res.locals.base}/pages/help-and-support">Help &amp; Support</a></p>` }) })
 }
 
 // Only ever send the shopper back to a page inside this store.
