@@ -36,13 +36,14 @@ export function installSite(router, { render, notFound, browseRender, products }
   // Store locator: "Find a store" with ZIP/city search and a services filter.
   router.get(D.FIND_STORES_PATH, (req, res) => {
     const base = res.locals.base, q = clean(req.query.q, 100), wanted = [].concat(req.query.service ?? []).filter(s => SERVICES.includes(s))
-    const found = STORES.filter(s => (!q || `${s.name} ${s.address}`.toLowerCase().includes(q.toLowerCase()) || (/^\d{5}$/.test(q) && s.zip.slice(0, 3) === q.slice(0, 3))) && wanted.every(w => s.services.includes(w)))
+    const near = q || req.store.locationZip || '95065'
+    const found = STORES.filter(s => (q ? `${s.name} ${s.address}`.toLowerCase().includes(q.toLowerCase()) || (/^\d{5}$/.test(q) && s.zip.slice(0, 3) === q.slice(0, 3)) : s.zip.slice(0, 3) === near.slice(0, 3) || s.id === selectedStore(req).id) && wanted.every(w => s.services.includes(w)))
     page(req, res, 'Find a store', `<div class="tg-journey tg-locator"><h1>Find a store</h1>
     <form class="tg-locator-form" method="get" action="${base}${D.FIND_STORES_PATH}"><div class="tg-field"><label for="q">Enter ZIP or city, state</label><input id="q" name="q" value="${esc(q)}" autocomplete="postal-code"></div><fieldset class="tg-service-filter"><legend>Filter by services</legend>${SERVICES.map((s, i) => `<label class="tg-check"><input type="checkbox" name="service" value="${esc(s)}" id="svc${i}"${wanted.includes(s) ? ' checked' : ''}> ${esc(s)}</label>`).join('')}</fieldset><button class="tg-btn" aria-label="search">Search</button></form>
     ${wanted.length ? `<section class="tg-applied"><h2>Applied filters</h2>${wanted.map(w => `<span class="tg-chip">${esc(w)}</span>`).join(' ')} <a href="${base}${D.FIND_STORES_PATH}${q ? '?q=' + encodeURIComponent(q) : ''}">Clear all</a></section>` : ''}
-    <p class="tg-count">${found.length} ${found.length === 1 ? 'store' : 'stores'}${q ? ` near “${esc(q)}”` : ''}</p>
+    <p class="tg-count">${found.length} ${found.length === 1 ? 'store' : 'stores'} near ${q ? `“${esc(q)}”` : esc(near)}</p>
     <div class="tg-locator-list">${found.map(s => `<article class="tg-store-card"><h2><a href="${base}/stores/${s.id}">${esc(s.name)}</a></h2><p>${esc(s.address)}</p><p class="tg-green">Open today ${esc(s.hours)}</p><p class="tg-fine">${s.services.map(esc).join(' · ')}</p><form action="${base}/stores/select" method="post"><input type="hidden" name="store_id" value="${s.id}"><button class="tg-btn tg-btn-outline tg-btn-sm">${selectedStore(req).id === s.id ? 'Your store' : 'Make it my store'}</button></form></article>`).join('') || `<p>No stores match your search. Try another ZIP code or city.</p>`}</div>
-    <p class="tg-fine">This local directory lists a few stores only; hours and services are not live.</p></div>`)
+    <p class="tg-fine">Store hours may vary on holidays. Pharmacy and clinic hours may differ from store hours.</p>${publicNotice('<p class="tg-fine">This local directory lists a few stores only; hours and services are not live.</p>')}</div>`)
   })
 
   // Gift card balance: never invents a balance.

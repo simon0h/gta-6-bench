@@ -97,13 +97,13 @@ router.use((req,res,next)=>{
 // ---- browse ----
 router.get('/', (req,res)=>render(req,res,'Target : Expect More. Pay Less.',S.homePage({base:res.locals.base,catalog:B.catalogHome({base:res.locals.base}),rows:fixtureCatalog?{}:B.homeRows(res.locals.base)})+drawerFor(req,res,res.locals.base+'/')))
 const filterNames=['platform','category','type','material','size','price','availability','brand','format','rating','fulfillment','sort']
-function browseRender(req,res,{q='',pool=search(q),heading='',intro='',outro='',crumbs=true,emptyCategory=false}={}) {
+function browseRender(req,res,{q='',pool=search(q),heading='',subheading='',intro='',outro='',crumbs=true,emptyCategory=false}={}) {
   const base=res.locals.base
   const filters=Object.fromEntries(filterNames.map(k=>[k,String(req.query[k]??'')]))
   const products=refine(pool,filters), page=Math.max(1,Number.parseInt(req.query.page,10)||1)
   const params=new URLSearchParams({...((req.path==='/s'||req.path.startsWith('/s/'))?{searchTerm:q}:{}),...Object.fromEntries(Object.entries(filters).filter(([,v])=>v)),...(page>1?{page:String(page)}:{})})
   const path=`${base}${req.path.startsWith('/s/')?'/s':req.path}${params.size?'?'+params:''}`
-  render(req,res,`${heading||q||'Shop all products'} : Target`,B.listingPage({base,q,pool,products,filters,heading,intro,outro,crumbs,emptyCategory,page,backPath:path,drawer:drawerFor(req,res,path)}),{q})
+  render(req,res,`${heading||q||'Shop all products'} : Target`,B.listingPage({base,q,pool,products,filters,heading,subheading,intro,outro,crumbs,emptyCategory,page,backPath:path,drawer:drawerFor(req,res,path)}),{q})
 }
 // Locally rendered illustrations for the everyday assortment (see media.js).
 const shelfArtCache=new Map()
@@ -124,7 +124,7 @@ router.get('/c/:department',(req,res)=>{
   const pool=CATALOG.filter(p=>!p.addon&&(department?p.department===department.id:campaign.select(p)))
   browseRender(req,res,{pool,heading:department?.name||campaign.name,intro:B.categoryIntro({base,department,campaign})})
 })
-router.get('/weekly-ad',(req,res)=>browseRender(req,res,{pool:CATALOG.filter(p=>p.deal),heading:'This week’s offers',intro:B.categoryIntro({base:res.locals.base,weekly:true})}))
+router.get('/weekly-ad',(req,res)=>browseRender(req,res,{pool:CATALOG.filter(p=>p.deal),heading:'Weekly Ad',subheading:'Shop this week’s deals',intro:B.categoryIntro({base:res.locals.base,weekly:true})}))
 router.get('/b/:brand',(req,res)=>{
   const pool=CATALOG.filter(p=>!p.addon&&B.brandSlug(p.brand)===req.params.brand)
   if(!pool.length)return notFound(req,res)

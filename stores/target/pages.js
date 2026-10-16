@@ -165,7 +165,7 @@ function cartLine(base, l, storeLocation) {
   <div class="tg-line-body">
     <div class="tg-line-top"><a class="tg-line-title" href="${productPath(base, p)}${p.variantId?'?variant='+encodeURIComponent(p.variantId):''}">${esc(p.title)}</a>
       <form method="post" action="${base}/cart/update"><input type="hidden" name="tcin" value="${p.tcin}">${p.variantId?`<input type="hidden" name="variant" value="${p.variantId}">`:""}<button type="submit" name="action" value="remove" class="tg-line-x" aria-label="Remove item ${esc(p.title)}">&times;</button></form></div>
-    ${optionText(p)?`<p class="tg-fine">${esc(optionText(p))}</p>`:""}${p.preorder ? `<div class="tg-line-release" data-test="preorderStreetDate">Release date ${esc(p.release)}</div>` : ''}${p.addon ? `<p class="tg-fine">Protection plan &middot; ${esc(p.shippingNote)}</p>` : `<a href="${base}/services/pickup-delivery" class="tg-fine">Ships free - exclusions apply</a>
+    ${optionText(p)?`<p class="tg-fine">${esc(optionText(p))}</p>`:""}${p.preorder ? `<div class="tg-line-release" data-test="preorderStreetDate">Release date ${esc(p.release)}</div>` : ''}${p.addon ? `<p class="tg-fine">Protection plan &middot; ${esc(p.shippingNote)}</p>` : `<a href="${base}/services/pickup-delivery" class="tg-fine">${p.family ? 'Free shipping on orders $35+' : 'Ships free - exclusions apply'}</a>
     <fieldset class="tg-methods"><legend class="visually-hidden">Delivery method</legend>
       <label class="is-selected"><input type="radio" name="method-${p.tcin}" value="shipping" checked> <b>Shipping</b> <span class="tg-fine">${esc(p.eta)} &middot; ${p.price >= 35 ? "Free" : "Free on $35+ orders"}</span></label>
       <label class="is-disabled"><input type="radio" name="method-${p.tcin}" value="pickup" disabled> <b>Order Pickup</b> <span class="tg-fine">${fixtureCatalog || p.shelf || (p.kind === 'game' && storeLocation === STORE_LOCATION) ? 'Not available' : 'Availability unverified'} at ${esc(storeLocation)}</span></label>
@@ -283,7 +283,7 @@ function summaryAside(base, t, { collapsible = false } = {}) {
   </aside>`
 }
 
-const addressBlock = (a) => `${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a.line1)}${a.line2 ? `<br>${esc(a.line2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.postal_code)}${a.phone ? `<br>${esc(a.phone)}` : ''}`
+const addressBlock = (a) => `${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a.line1)}${a.line2 ? `<br>${esc(a.line2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.postal_code)}${a.phone ? `<br>${esc(String(a.phone).replace(/^\D*(\d{3})\D*(\d{3})\D*(\d{4})\D*$/, '($1) $2-$3'))}` : ''}`
 
 // Target's checkout is one page: Shipping address → Payment → Review & place order, each step a
 // container with active / done / pending states that pushes its own /checkout/<step> URL.
