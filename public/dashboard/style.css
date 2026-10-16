@@ -319,12 +319,15 @@ main:focus { outline: none; }
 .agent-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
 .agent-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper); box-shadow: var(--shadow); }
 .agent-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
-.agent-identity { display: flex; flex: 0 0 220px; align-items: center; gap: 10px; min-width: 0; }
+.agent-identity { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .agent-logo { width: 32px; height: 32px; padding: 6px; flex: none; border: 1px solid var(--line); border-radius: var(--radius); background: #ffffff; object-fit: contain; }
 .agent-identity select { min-height: 30px; max-width: 170px; padding: 3px 30px 3px 10px; font-weight: 600; }
 .agent-name { overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .agent-card:not(.open) .agent-card-top { border-bottom: 0; }
-.agent-card-top .url-bar { flex: 1; margin: 0; }
+/* Name on the left, URL bar centered, URL number and arrow on the right. */
+.agent-card-top { display: grid; grid-template-columns: minmax(212px, 1fr) minmax(0, 720px) minmax(212px, 1fr); }
+.agent-card-top .url-bar { margin: 0; }
+.agent-card-top .agent-card-actions { justify-self: end; }
 .card-toggle { margin-right: -6px; }
 .card-toggle .chevron { margin: 0; transform: rotate(90deg); }
 .agent-card.open .card-toggle .chevron { transform: rotate(-90deg); }
@@ -866,9 +869,8 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
   .brand-name { display: none; }
   .page-heading h1 { font-size: 21px; }
   .agent-identity select { max-width: 130px; }
-  .agent-card-top { flex-wrap: wrap; row-gap: 8px; padding: 10px 12px; }
-  .agent-identity { flex: 1 1 auto; }
-  .agent-card-top .url-bar { order: 3; flex-basis: 100%; }
+  .agent-card-top { grid-template-columns: minmax(0, 1fr) auto; row-gap: 8px; padding: 10px 12px; }
+  .agent-card-top .url-bar { order: 3; grid-column: 1 / -1; }
   .agent-body { padding: 12px; }
   .url-bar > svg, .url-bar .button svg { display: none; }
   .link-utilities { flex-wrap: wrap; }
