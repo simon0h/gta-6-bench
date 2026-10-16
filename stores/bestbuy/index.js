@@ -14,7 +14,7 @@ import { enterScenarioCart, scenarioPayment } from '../../lib/benchmark-scenario
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { installSite } from './site.js'
 import * as S from './site-pages.js'
-import { shelfHome } from './shelf-home.js'
+import { shelfHome, dealOfTheDay } from './shelf-home.js'
 import { shelfArtSvg } from './shelf-art.js'
 
 const router = Router()
@@ -36,7 +36,7 @@ function render(req, res, title, body, { status = 200, chrome = 'full', back = n
   res.status(status).type('html').send(P.layout({ ...locationContext(req.store), base: res.locals.base, title, body, cartCount: totals(req.store).count, user: req.store.user, chrome, back, q: String(req.query.st ?? req.query.q ?? '') }))
 }
 function notFound(req, res) {
-  render(req, res, 'Page Not Found - Best Buy', P.simplePage({ title: "Sorry, we can't find that page.", html: `<p>The page you requested may have moved or is no longer available.</p><p><a href="${res.locals.base}/">Go to the Best Buy home page</a></p>` }), { status: 404 })
+  render(req, res, 'Page Not Found - Best Buy', S.notFoundPage(res.locals.base), { status: 404 })
 }
 
 // BBY01- plus 11 digits, e.g. BBY01-80665361421.
@@ -125,8 +125,8 @@ const FILTERS = ['department','node','platform','category','price','availability
 function browse(req,res,defaults={},heading='',intro='',landing=null) {
   const q=trim(req.query.st??req.query.q)
   const filters={...defaults,...Object.fromEntries(FILTERS.filter(k=>req.query[k]!==undefined).map(k=>[k,String(req.query[k])]))}
-  const wrap=landing?.(res.locals.base)
-  render(req,res,`${q||heading||'Shop'} - Best Buy`,`${wrap?.before??''}${D.searchPage({base:res.locals.base,q,filters,heading,intro,products:refine(search(q).map(p=>localProduct(p,req.store)),filters),embedded:!!wrap})}${wrap?.after??''}`)
+  const wrap=landing?.(res.locals.base,{dealOfTheDay:()=>dealOfTheDay(res.locals.base,CATALOG.map(p=>localProduct(p,req.store)))})
+  render(req,res,`${q||heading||'Shop'} - Best Buy`,`${wrap?.before??''}${D.searchPage({base:res.locals.base,q,filters,heading,intro,products:refine(search(q).map(p=>localProduct(p,req.store)),filters),embedded:!!wrap,fixed:Object.keys(defaults)})}${wrap?.after??''}`)
 }
 router.get('/site/searchpage.jsp',(req,res)=>browse(req,res))
 router.get('/search/suggestions',(req,res)=>res.json(search(trim(req.query.q)).slice(0,6).map(p=>({title:p.title,sku:p.sku,url:`${res.locals.base}/product/${p.slug}/${p.id}/sku/${p.sku}`}))))
@@ -139,7 +139,7 @@ router.get('/departments/:slug',(req,res)=>{
 router.get('/brands',(req,res)=>render(req,res,'Shop by Brand - Best Buy',D.brandsPage({base:res.locals.base})))
 for(const [paths,offer,heading,intro,landing] of [
   [['/top-deals'],'deals','Top Deals','Save on useful tech and home upgrades from across our departments.',S.landings.topDeals],
-  [['/deal-of-the-day',S.PATHS.dotd],'daily','Deal of the Day','Today only. While supplies last.',S.landings.dealOfTheDay],
+  [['/deal-of-the-day',S.PATHS.dotd],'bonus','Deal of the Day','Today only. While supplies last.',S.landings.dealOfTheDay],
   [['/gift-ideas',S.PATHS.giftIdeas],'gifts','Gift Ideas','Find something for the music fan, home cook or tech enthusiast in your life.',S.landings.giftIdeas],
   [['/outlet',S.PATHS.outlet],'outlet','Best Buy Outlet','Explore inspected open-box offers. Review condition, accessories and pickup availability before buying.',S.landings.outlet],
   [[S.PATHS.memberDeals],'deals','Exclusive Member Deals','Member pricing on select products for My Best Buy Plus and Total members. Sign in to see your member price.',null],

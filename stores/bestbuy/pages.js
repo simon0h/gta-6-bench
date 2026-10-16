@@ -341,6 +341,7 @@ export function accountPage({ base, user, orders }) {
 export const STEP_TITLES = { contact: 'Contact info', address: 'Shipping address', shipdetails: 'Shipping details', pickup: 'Pickup details', payment: 'Payment method' }
 // ASSUMPTION: the checkout's own charge-timing line was not captured; this paraphrases Best Buy's Terms & Conditions
 // (pre-orders are preauthorized when ordered and charged when the item ships or is ready for pickup).
+const ORDER_CHARGE_NOTE = 'Your payment method is authorized when you place your order and charged when your items ship or are ready for pickup.'
 const CHARGE_NOTE = 'Pre-orders: we preauthorize your order amount when you place your order. Your payment method is charged when your item ships or is ready for pickup.'
 
 export function formatPhone(digits) {
@@ -415,7 +416,7 @@ export function checkoutPage({ base, user, t, steps, active, co, values = {}, er
       <input type="hidden" name="reviewToken" value="${esc(co.review?.token || '')}">
       <input type="hidden" name="paymentMethod" value="paypal">
       <div class="bb-paypal-chosen"><span class="bb-paypal-mark"><span class="bb-pp1">Pay</span><span class="bb-pp2">Pal</span></span><p>PayPal is your payment method for this order. Select <b>Place order</b> to finish.</p></div>
-      <p class="bb-fine bb-charge-note">${CHARGE_NOTE}</p>
+      <p class="bb-fine bb-charge-note">${t.lines.some(l => l.product.preorder) ? CHARGE_NOTE : ORDER_CHARGE_NOTE}</p>
     </form>
     <form method="post" action="${base}/checkout/payment"><input type="hidden" name="action" value="card"><button class="bb-link-btn" type="submit">Use a credit or debit card instead</button></form>`
     : `<form method="post" action="${base}/checkout/payment" id="payment-form" novalidate>
@@ -434,7 +435,7 @@ export function checkoutPage({ base, user, t, steps, active, co, values = {}, er
         <div class="bb-3col">${f('billingCity', 'City', { id: 'payment.billingAddress.city', extra: 'autocomplete="address-level2" required' })}${stateSelect('billingState', 'payment.billingAddress.state', values.billingState, errors.billingState)}${f('billingPostalCode', 'ZIP code', { id: 'payment.billingAddress.zipcode', extra: 'autocomplete="postal-code" inputmode="numeric" required' })}</div>
       </div>`}
       <details class="bb-giftcard"${errors.giftCardNumber ? ' open' : ''}><summary>Add gift card, store credit or discount code</summary><div class="bb-2col">${f('giftCardNumber', 'Card number or discount code', { id: 'giftCardNumber' })}${f('giftCardPin', 'PIN', { id: 'giftCardPin' })}</div><p class="bb-fine">15, 16 or 18-digit numbers. PIN required. Letters and/or numbers. PIN not required.</p></details>
-      <p class="bb-fine bb-charge-note">${CHARGE_NOTE}</p>
+      <p class="bb-fine bb-charge-note">${t.lines.some(l => l.product.preorder) ? CHARGE_NOTE : ORDER_CHARGE_NOTE}</p>
     </form>
     <div class="bb-or">or</div>
     <form method="post" action="${base}/checkout/payment" class="bb-paypal-form"><input type="hidden" name="action" value="paypal"><button class="bb-paypal" type="submit" aria-label="PayPal"><span class="bb-pp1">Pay</span><span class="bb-pp2">Pal</span></button><p class="bb-fine bb-center">Finance charge may apply</p></form>`,
@@ -560,5 +561,5 @@ export function simplePage({ title, html }) {
 }
 
 export function comparePage({ base, products, catalog }) {
-  return `<section class="bb-section"><h1>Compare Products</h1><form method="get" action="${base}/compare"><p>Select up to three products.</p>${[0,1,2].map(i => `<label>Product ${i+1} <select name="sku"><option value="">Select a product</option>${catalog.map(p => `<option value="${p.sku}" ${products[i]?.sku === p.sku ? 'selected' : ''}>${esc(p.title)}</option>`).join('')}</select></label>`).join(' ')}<button type="submit" class="bb-btn bb-btn-blue">Compare products</button></form>${products.length ? `<div style="overflow-x:auto"><table class="bb-compare"><thead><tr><th>Feature</th>${products.map(p => `<th>${art(p)}<br><a href="${productPath(base,p)}">${esc(p.title)}</a></th>`).join('')}</tr></thead><tbody>${[['Price',p=>money(p.price)],['Compatible Platform',p=>p.platformLabel ?? (/ps5/i.test(p.title) ? 'PlayStation 5' : 'Not applicable')],['Format',p=>p.softwareFormat ?? 'Accessory'],['Release Date',p=>p.release||'Not applicable'],['Availability',p=>p.preorder ? 'Pre-order' : p.stock ? 'Available now' : 'Sold out'],['Brand',p=>p.brand],['Condition',p=>p.condition],...[...new Set(products.flatMap(p=>Object.keys(p.specs||{})))].map(key=>[key,p=>p.specs?.[key]||'—'])].map(([label,value]) => `<tr><th>${label}</th>${products.map(p => `<td>${esc(value(p))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<p>Choose products above to compare their specifications.</p>'}</section>`
+  return `<section class="bb-section"><h1>Compare Products</h1><form method="get" action="${base}/compare"><p>Select up to three products.</p>${[0,1,2].map(i => `<label>Product ${i+1} <select name="sku"><option value="">Select a product</option>${catalog.map(p => `<option value="${p.sku}" ${products[i]?.sku === p.sku ? 'selected' : ''}>${esc(p.title)}</option>`).join('')}</select></label>`).join(' ')}<button type="submit" class="bb-btn bb-btn-blue">Compare products</button></form>${products.length ? `<div style="overflow-x:auto"><table class="bb-compare"><thead><tr><th>Feature</th>${products.map(p => `<th>${art(p)}<br><a href="${productPath(base,p)}">${esc(p.title)}</a></th>`).join('')}</tr></thead><tbody>${[['Price',p=>money(p.price)],...(products.some(p => p.kind === 'game' || p.softwareFormat || p.esrb) ? [['Compatible Platform',p=>p.platformLabel ?? (/ps5/i.test(p.title) ? 'PlayStation 5' : 'Not applicable')],['Format',p=>p.softwareFormat ?? 'Accessory'],['Release Date',p=>p.release||'Not applicable']] : []),['Availability',p=>p.preorder ? 'Pre-order' : p.stock ? 'Available now' : 'Sold out'],['Brand',p=>p.brand],['Condition',p=>p.condition],...[...new Set(products.flatMap(p=>Object.keys(p.specs||{})))].map(key=>[key,p=>p.specs?.[key]||'—'])].map(([label,value]) => `<tr><th>${label}</th>${products.map(p => `<td>${esc(value(p))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>` : '<p>Choose products above to compare their specifications.</p>'}</section>`
 }

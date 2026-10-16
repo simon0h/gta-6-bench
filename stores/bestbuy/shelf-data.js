@@ -447,4 +447,84 @@ export const GROUPS = [
     ['Taylor Swift', 'The Life of a Showgirl [LP] - VINYL', 'TS-LOASG-LP', 29.98, null, 4.8, 640, 'Format: Vinyl; Number of Discs: 1; Genre: Pop; Release Date: 10/03/2025', { art: 'vinyl', type: 'media', nodes: ['Vinyl Records'] }],
     ['Warner Bros.', 'Dune: Part Two [Includes Digital Copy] [4K Ultra HD Blu-ray/Blu-ray]', 'DUNE2-4K', 29.99, 39.99, 4.9, 512, 'Format: 4K Ultra HD Blu-ray; Rating: PG-13; Run Time: 166 minutes', { art: 'blu-ray', type: 'media', nodes: ['Movies & TV Shows'] }],
   ]],
+  // ---------------- More of the assortment (thinner departments) ----------------
+  [{ dept: 'outdoor-living', tree: 'outdoor-living', cat: 'Grills & Outdoor Cooking', nodes: ['Grills & Outdoor Cooking'], art: '', kw: 'grill griddle outdoor cooking bbq smoker pizza oven propane pellet', delivery: false }, [
+    ['Blackstone', '28" Omnivore Griddle with Hood - Black', '2149', 299.99, 349.99, 4.7, 1204, 'Cooking Surface: 524 square inches; Burners: 2; Fuel Type: Propane', { art: 'griddle pan', gift: true }],
+    ['Ninja', 'Woodfire Pro Connect XL Outdoor Grill & Smoker - Gray', 'OG951', 349.99, 449.99, 4.6, 1887, 'Functions: Grill, smoke, air fry, bake, roast, broil, dehydrate; Cooking Area: 180 square inches; Fuel Type: Electric', { art: 'smoker oven' }],
+    ['Traeger', 'Pro 22 Wi-Fi Pellet Grill and Smoker - Bronze', 'TFB57PZBO', 599.99, 699.99, 4.6, 2210, 'Cooking Area: 572 square inches; Hopper Capacity: 18 pounds; Fuel Type: Wood pellets; Wi-Fi: Yes', { art: 'smoker oven' }],
+    ['Ooni', 'Koda 16 Gas Powered Pizza Oven - Black', 'UU-P0B400', 599.00, null, 4.8, 512, 'Maximum Temperature: 950°F; Pizza Size: Up to 16 inches; Fuel Type: Propane', { art: 'pizza oven' }],
+    ['Weber', 'Traveler Portable Gas Grill - Black', '9010001', 329.00, 399.00, 4.5, 860, 'Cooking Area: 320 square inches; Fuel Type: Propane; Burners: 1', { art: 'grill pan' }],
+  ]],
+  [{ dept: 'outdoor-living', tree: 'outdoor-living', cat: 'Patio Furniture', nodes: ['Patio Furniture'], art: '', kw: 'patio furniture outdoor furniture deck backyard heater fire pit lantern' }, [
+    ['Noble House', 'Santa Ana Outdoor Acacia Wood Dining Chair (Set of 2) - Teak', '304856', 199.99, 279.99, 4.4, 186, 'Material: Acacia wood; Seat Height: 18 inches; Assembly Required: Yes', { art: 'patio chair' }],
+    ['Noble House', 'Wilson Outdoor Acacia Wood Rectangular Dining Table - Teak', '302112', 329.99, 429.99, 4.3, 92, 'Material: Acacia wood; Seating Capacity: 6; Table Length: 69 inches', { art: 'outdoor table' }],
+    ['Solo Stove', 'Bonfire 2.0 Smokeless Fire Pit - Stainless Steel', 'SSBON-SS', 249.99, 349.99, 4.8, 1420, 'Diameter: 19.5 inches; Fuel Type: Wood; Weight: 23.5 pounds', { art: 'steel bowl' }],
+    ['Dr. Infrared Heater', 'Indoor/Outdoor Patio Electric Heater - Black', 'DR-238', 129.99, 169.99, 4.4, 1105, 'Heat Output: 1500 watts; Weather Resistance: IP55; Mounting: Wall or ceiling', { art: 'patio heater' }],
+    ['Goal Zero', 'Lighthouse 600 Lantern & USB Power Hub - Black', '32010', 79.95, 99.95, 4.6, 702, 'Brightness: 600 lumens; Battery Life: Up to 320 hours; Charging: USB, solar, hand crank', { art: 'lantern' }],
+  ]],
+  [{ dept: 'home-furniture-office', tree: 'home-furniture-office', cat: 'Office Furniture', nodes: ['Office Furniture'], art: '', kw: 'office furniture desk standing desk office chair ergonomic home office' }, [
+    ['Insignia', 'Electric Standing Desk with 48" x 24" Desktop - Black', 'NS-SD4824B', 199.99, 279.99, 4.4, 1320, 'Desktop Width: 48 inches; Height Range: 28 to 47.6 inches; Motors: 1', { art: 'standing desk' }],
+    ['FlexiSpot', 'E7 Pro Electric Standing Desk 55" x 28" - Black', 'E7PRO-B55', 449.99, 599.99, 4.7, 642, 'Desktop Width: 55 inches; Height Range: 23.6 to 49.2 inches; Motors: 2', { art: 'standing desk' }],
+    ['Serta', 'Ergonomic Executive Office Chair - Bonded Leather - Black', '43672', 189.99, 249.99, 4.3, 1810, 'Material: Bonded leather; Maximum Weight Capacity: 250 pounds; Lumbar Support: Built-in', { art: 'office chair' }],
+    ['Insignia', 'Mesh Back Office Chair - Black', 'NS-OC1MB', 99.99, 149.99, 4.2, 920, 'Material: Mesh; Maximum Weight Capacity: 275 pounds; Adjustable Arms: Yes', { art: 'office chair' }],
+  ]],
+  [{ dept: 'home-furniture-office', tree: 'home-furniture-office', cat: 'Living Room Furniture', nodes: ['Living Room Furniture'], art: '', kw: 'living room furniture tv stand media console sofa loveseat bookcase' }, [
+    ['Walker Edison', 'Modern Farmhouse Media Console for Most TVs Up to 65" - Rustic Oak', 'W58CSDBRO', 229.99, 329.99, 4.6, 2410, 'Maximum TV Size: 65 inches; Maximum Load: 250 pounds; Material: MDF, laminate', { art: 'media console cabinet' }],
+    ['Serta', 'Palisades 61" Loveseat - Gray Fabric', 'CR43535', 399.99, 499.99, 4.3, 412, 'Seating Capacity: 2; Material: Polyester fabric; Assembly Required: Yes', { art: 'sofa', delivery: true }],
+    ['Sauder', 'Beginnings 5-Shelf Bookcase - Highland Oak', '413326', 89.99, 109.99, 4.5, 1902, 'Shelves: 5; Height: 71.18 inches; Material: Engineered wood', { art: 'bookcase shelf', nodes: ['Home Organization'] }],
+  ]],
+  [{ dept: 'home-furniture-office', tree: 'home-furniture-office', cat: 'Home Organization', nodes: ['Home Organization'], art: '', kw: 'home organization storage cable management organizer cube' }, [
+    ['Sauder', 'Select 9-Cube Storage Organizer - Soft White', '414372', 109.99, 129.99, 4.6, 1304, 'Cubes: 9; Height: 44.17 inches; Material: Engineered wood', { art: 'cube storage shelf' }],
+    ['Insignia', 'Cable Management Box - White', 'NS-HZ2050', 19.99, 24.99, 4.5, 702, 'Fits: Power strips up to 13 inches; Material: ABS plastic; Cable Openings: 2', { art: 'storage box' }],
+  ]],
+  [{ dept: 'toys-games', tree: 'toys-games', cat: 'Toys, Games & Crafts', nodes: [], art: '', kw: 'toys lego board games crafts cricut collectibles' }, [
+    ['LEGO', 'Star Wars Millennium Falcon 75375', '6470988', 84.99, null, 4.8, 1420, 'Pieces: 921; Age: 18 years and up; Theme: LEGO Star Wars', { art: 'building bricks toy', nodes: ['Toys'], gift: true }],
+    ['LEGO', 'Icons Wildflower Bouquet 10313', '6427011', 59.99, null, 4.9, 2410, 'Pieces: 939; Age: 18 years and up; Theme: LEGO Icons', { art: 'building bricks toy', nodes: ['Toys'], gift: true }],
+    ['Hasbro Gaming', 'Monopoly Classic Board Game', 'C1009', 19.99, 24.99, 4.8, 3302, 'Players: 2 to 8; Age: 8 years and up; Play Time: 60 to 180 minutes', { art: 'board game puzzle', nodes: ['Toys'] }],
+    ['Pokémon', 'Trading Card Game: Mega Evolution Booster Bundle', '290-87655', 29.99, null, 4.7, 802, 'Booster Packs: 6; Age: 6 years and up; Set: Mega Evolution', { art: 'trading card booster pack', nodes: ['Trading Cards & Collectibles'] }],
+    ['Magic: The Gathering', 'FINAL FANTASY Play Booster Box', 'D42850000', 179.99, 214.99, 4.6, 340, 'Booster Packs: 30; Cards per Pack: 14; Age: 13 years and up', { art: 'trading card booster pack', nodes: ['Trading Cards & Collectibles'] }],
+    ['Cricut', 'Maker 3 Smart Cutting Machine - Blue', '2008021', 349.99, 429.99, 4.7, 1802, 'Maximum Cut Width: 12 inches; Connectivity: Bluetooth; Compatible Materials: 300+', { art: 'craft printer', nodes: ['Crafting'], gift: true }],
+    ['Cricut', 'Joy Xtra Smart Cutting Machine - White', '2009802', 199.99, 249.99, 4.6, 702, 'Maximum Cut Width: 8.5 inches; Connectivity: Bluetooth; Print Then Cut: Yes', { art: 'craft printer', nodes: ['Crafting'] }],
+  ]],
+  [{ dept: 'movies-music', tree: 'movies-music', cat: 'Movies & Music', nodes: [], art: '', kw: 'movies music vinyl blu-ray 4k uhd record' }, [
+    ['Fleetwood Mac', 'Rumours [LP] - VINYL', 'R1-3010', 24.98, 29.98, 4.9, 2105, 'Format: Vinyl; Number of Discs: 1; Genre: Rock; Release Date: 02/04/1977', { art: 'vinyl', type: 'media', nodes: ['Vinyl Records'] }],
+    ['Pink Floyd', 'The Dark Side of the Moon [50th Anniversary] [LP] - VINYL', 'PFR11', 29.98, 34.98, 4.9, 1880, 'Format: Vinyl; Number of Discs: 1; Genre: Rock; Release Date: 03/24/2023', { art: 'vinyl', type: 'media', nodes: ['Vinyl Records'] }],
+    ['Olivia Rodrigo', 'GUTS [LP] - VINYL', 'B003862201', 26.98, null, 4.8, 940, 'Format: Vinyl; Number of Discs: 1; Genre: Pop; Release Date: 09/08/2023', { art: 'vinyl', type: 'media', nodes: ['Vinyl Records'] }],
+    ['Paramount', 'Top Gun: Maverick [Includes Digital Copy] [4K Ultra HD Blu-ray/Blu-ray]', 'TGM-4K', 22.99, 29.99, 4.9, 3102, 'Format: 4K Ultra HD Blu-ray; Rating: PG-13; Run Time: 131 minutes', { art: 'blu-ray', type: 'media', nodes: ['Movies & TV Shows'] }],
+    ['Universal', 'Wicked [Includes Digital Copy] [4K Ultra HD Blu-ray/Blu-ray]', 'WCKD-4K', 29.99, 34.99, 4.8, 610, 'Format: 4K Ultra HD Blu-ray; Rating: PG; Run Time: 160 minutes', { art: 'blu-ray', type: 'media', nodes: ['Movies & TV Shows'] }],
+    ['Disney', 'Inside Out 2 [Includes Digital Copy] [4K Ultra HD Blu-ray/Blu-ray]', 'IO2-4K', 24.99, 34.99, 4.8, 420, 'Format: 4K Ultra HD Blu-ray; Rating: PG; Run Time: 96 minutes', { art: 'blu-ray', type: 'media', nodes: ['Movies & TV Shows'] }],
+  ]],
+  [{ dept: 'electric-transportation', tree: 'electric-transportation', cat: 'Electric Bikes', nodes: ['Electric Bikes'], art: 'bike', kw: 'electric bike e-bike ebike commuter folding electric transportation' }, [
+    ['Aventon', 'Level.2 Commuter Electric Bike w/ 60 mi Max Operating Range & 28 mph Max Speed - Fog', 'LEVEL2-M-FOG', 1599.00, 1799.00, 4.6, 214, 'Maximum Speed: 28 miles per hour; Maximum Range: 60 miles; Maximum Load: 300 pounds'],
+    ['Jetson', 'Haze Folding Electric Bike w/ 25 mi Max Operating Range & 15.5 mph Max Speed - Black', 'HAZE-BLK', 499.99, 699.99, 4.2, 302, 'Maximum Speed: 15.5 miles per hour; Maximum Range: 25 miles; Maximum Load: 264 pounds'],
+    ['GOTRAX', 'Emerge Electric Bike w/ 20 mi Max Operating Range & 15.5 mph Max Speed - Black', 'EBE2-BLK', 449.99, 599.99, 4.1, 840, 'Maximum Speed: 15.5 miles per hour; Maximum Range: 20 miles; Maximum Load: 264 pounds'],
+  ]],
+  [{ dept: 'electric-transportation', tree: 'electric-transportation', cat: 'Electric Scooters', nodes: ['Electric Scooters'], art: 'scooter', kw: 'electric scooter e-scooter electric transportation' }, [
+    ['Segway', 'Ninebot KickScooter E2 Pro w/ 21.7 mi Max Operating Range & 15.5 mph Max Speed - Dark Gray', 'E2PRO', 349.99, 449.99, 4.5, 702, 'Maximum Speed: 15.5 miles per hour; Maximum Range: 21.7 miles; Maximum Load: 220 pounds'],
+  ]],
+  [{ dept: 'car-electronics', tree: 'car-electronics', cat: 'Car Electronics', nodes: [], art: '', kw: 'car electronics dash cam car audio carplay car charger mount jump starter' }, [
+    ['Garmin', 'Dash Cam 67W 1440p Dash Camera - Black', '010-02505-05', 199.99, 249.99, 4.5, 1305, 'Video Resolution: 1440p; Field of View: 180 degrees; Voice Control: Yes', { art: 'camera', nodes: ['Dash Cameras'] }],
+    ['VIOFO', 'A229 Pro 2-Channel 4K Dash Cam - Black', 'A229PRO-2CH', 249.99, 299.99, 4.6, 402, 'Video Resolution: 4K front, 2K rear; Channels: 2; Wi-Fi: Yes', { art: 'camera', nodes: ['Dash Cameras'] }],
+    ['JBL', 'Club 6520 6-1/2" 2-Way Coaxial Car Speakers (Pair) - Black', 'CLUB6520', 79.99, 99.99, 4.6, 1210, 'Speaker Size: 6.5 inches; Speaker Type: 2-way coaxial; Peak Power: 150 watts', { art: 'speaker', nodes: ['Car Audio'] }],
+    ['Belkin', 'BoostCharge 37W Dual Car Charger with USB-C - Black', 'CCB004btBK', 24.99, 29.99, 4.6, 802, 'Ports: USB-C, USB-A; Total Output: 37 watts; Cable Included: No', { art: 'charger', nodes: ['Car Chargers & Mounts'] }],
+    ['NOCO', 'Boost Plus GB40 1000A 12V UltraSafe Lithium Jump Starter', 'GB40', 99.95, 129.95, 4.8, 3402, 'Peak Current: 1000 amps; Battery Type: Lithium-ion; Jump Starts: Up to 20 per charge', { art: 'jump starter charger', nodes: ['Car Chargers & Mounts'] }],
+  ]],
+  [{ dept: 'health-wellness', tree: 'health-wellness', cat: 'Fitness Equipment', nodes: ['Fitness Equipment'], art: 'dumbbell', kw: 'fitness equipment dumbbells weights home gym workout' }, [
+    ['Bowflex', 'SelectTech 552 Adjustable Dumbbells (Pair) - Black', '100131', 429.00, 549.00, 4.8, 3102, 'Weight Range: 5 to 52.5 pounds; Weight Settings: 15; Pieces: 2'],
+    ['Bowflex', 'SelectTech 1090 Adjustable Dumbbell (Single) - Black', '100132', 399.00, 499.00, 4.7, 1206, 'Weight Range: 10 to 90 pounds; Weight Settings: 17; Pieces: 1'],
+    ['Core Home Fitness', 'Adjustable Dumbbell Set 5-50 lb (Pair) - Black', 'CHF-ADJ50', 279.99, 349.99, 4.5, 610, 'Weight Range: 5 to 50 pounds; Weight Settings: 10; Pieces: 2'],
+  ]],
+  [{ dept: 'gaming', tree: 'video-games', cat: 'Video Game Accessories', nodes: ['Video Game Accessories'], art: '', kw: 'video game accessories racing wheel retro arcade console' }, [
+    ['Thrustmaster', 'T248 Racing Wheel and Magnetic Pedals for PS5, PS4 and PC - Black', '4160783', 299.99, 349.99, 4.5, 1102, 'Platform: PlayStation 5, PlayStation 4, PC; Force Feedback: Hybrid; Pedals: 3-pedal set', { art: 'racing wheel', nodes: ['Simulation Racing'] }],
+    ['Thrustmaster', 'T128 Racing Wheel and Magnetic Pedals for Xbox Series X|S, Xbox One and PC - Black', '4460184', 179.99, 199.99, 4.3, 840, 'Platform: Xbox Series X|S, Xbox One, PC; Force Feedback: Hybrid; Pedals: 2-pedal set', { art: 'racing wheel', nodes: ['Simulation Racing'] }],
+  ]],
+  [{ dept: 'gaming', tree: 'video-games', cat: 'Retro Gaming & Arcade', nodes: ['Retro Gaming & Arcade'], art: '', type: 'console', kw: 'retro gaming arcade classic console atari' }, [
+    ['Atari', '2600+ Console with 10 Games - Black', 'ATR-2600PLUS', 129.99, 149.99, 4.4, 402, 'Included Games: 10 on a cartridge; Output: HDMI 720p; Controller Included: CX40+ joystick'],
+    ['Atari', '7800+ Console with Wireless Joypad - Black', 'ATR-7800PLUS', 129.99, null, 4.3, 188, 'Included Games: Cartridge with 2 games; Output: HDMI 720p; Controller Included: Wireless joypad'],
+  ]],
+  [{ dept: 'tv-home-theater', tree: 'tv-home-theater', cat: 'Outdoor Home Theater', nodes: ['Outdoor Home Theater'], art: '', kw: 'outdoor tv outdoor home theater patio tv weatherproof projector outdoor speaker' }, [
+    ['Samsung', '65" Class The Terrace Partial Sun Series QLED 4K Outdoor Smart Tizen TV (2024)', 'QN65LST7DAFXZA', 2999.99, 3499.99, 4.5, 118, 'Screen Size: 64.5 inches; Display Type: QLED; Resolution: 4K (2160p); Weather Resistance: IP55', { art: 'television' }],
+    ['Anker', 'Nebula Mars 3 Air 1080p Portable Google TV Projector - Gray', 'D2326', 449.99, 599.99, 4.4, 642, 'Brightness: 400 ANSI lumens; Resolution: 1080p; Battery Life: Up to 2.5 hours', { art: 'projector' }],
+    ['Sonos', 'Move 2 Portable Smart Speaker with Wi-Fi and Bluetooth - Black', 'MOVE2US1BLK', 449.00, null, 4.6, 940, 'Battery Life: Up to 24 hours; Water Resistance: IP56; Connectivity: Wi-Fi, Bluetooth', { art: 'speaker', nodes: ['Home Audio'] }],
+  ]],
 ]
