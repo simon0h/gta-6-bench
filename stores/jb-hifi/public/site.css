@@ -184,3 +184,12 @@
 .jb-badge-tag.is-clearance{background:#111;color:#ffe500}
 .jb-badge-tag.is-new{background:#ffe500;color:#111;border-color:#111}
 @media (max-width:800px){.jb-hero-track>.jb-hero{min-height:0}.jb-row-carousel{grid-auto-columns:minmax(160px,170px)}}
+/* JB's product gallery shows thumbnails and arrows only; the view name stays for screen readers. */
+.jb-pdp .pa-gallery-caption{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* "Saved for later" on the cart lines up with the cart instead of floating in a narrower column. */
+.jb-main>.jb-journey{max-width:none;margin:8px 0 0}
+.jb-main>.jb-journey>h2{font-size:24px;text-transform:uppercase;margin:24px 0 14px}
+@media (max-width:480px){.jb-strip .jb-strip-chat{display:none}.jb-strip a.jb-strip-call{display:inline}}
+/* Hero pack shot for the TV deals slide: a TV photo on a white card, like JB's campaign tiles. */
+.jb-hero-photo .product-photo{width:min(400px,100%);height:auto;background-color:#fff!important;border-radius:4px;transform:rotate(3deg);box-shadow:12px 12px 0 #0006}
+@media (max-width:800px){.jb-hero-photo .product-photo{width:min(240px,80%)}}

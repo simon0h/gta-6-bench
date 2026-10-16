@@ -4,7 +4,7 @@ import { productImage, productGallery } from '../../lib/product-assets.js'
 import { orderStatus } from '../../lib/retail-state.js'
 import { DEPARTMENT_DEFS, slugify, selectedProduct, lineKey, stockLimit } from './catalog.js'
 import { catalogHome, catalogListing, collectionFor } from './browsing.js'
-import { siteHeader, siteFooter, siteHome } from './site.js'
+import { siteHeader, siteFooter, siteHome, storeFinderPage } from './site.js'
 import { LISTED } from './data.js'
 import { shelfImage, shelfGallery } from './shelf-art.js'
 import { DEPARTMENTS as SITE_DEPARTMENTS } from './site-data.js'
@@ -168,7 +168,7 @@ export function productPage({ base, p, siblings, availability, stores = [], perk
     ${badges(reference ? { ...p, badges: ['PRE-ORDER'] } : p)}
     ${isGame ? `<div class="jb-platform-logo">${reference ? `<img src="/static/reference/jb-hifi/${p.platform === 'ps5' ? 'ps5' : 'xbox'}-mark.png" alt="${esc(p.platformName)}">` : esc(p.platformName)}</div>` : ''}
     ${reference ? '' : `<a class="jb-brand-label" href="${base}/brands/${slugify(p.brand)}">${esc(p.brand)}</a>`}<h1>${esc(p.title)}</h1>${optionText(p)}${stars(p)}
-    <div class="jb-ids">MODEL: ${esc(p.model ?? p.id)} &nbsp; SKU: ${esc(p.id)}${reference ? '' : ` &nbsp; PLU: ${esc(p.model ?? p.id)}`}</div>
+    <div class="jb-ids">${p.model ? `MODEL: ${esc(p.model)} &nbsp; ` : ''}SKU: ${esc(p.id)}${reference || !p.model ? '' : ` &nbsp; PLU: ${esc(p.model)}`}</div>
     ${reference ? `<div class="jb-tag jb-tag-big"><span><i class="jb-reference-currency">$</i><b class="jb-reference-amount">${esc(tagPrice(p.price).slice(1))}</b></span></div>` : priceTag(p, true)+wasPrice(p)}
     <div class="jb-bnpl"><a href="${informationHref(base, 'afterpay')}" class="jb-bnpl-afterpay">${reference ? '<img src="/static/reference/jb-hifi/bnpl-afterpay.svg" alt="afterpay">' : 'afterpay'}</a><a href="${informationHref(base, 'zip')}" class="jb-bnpl-zip">${reference ? '<img src="/static/reference/jb-hifi/bnpl-zip.svg" alt="zip">' : 'zip'}</a><a href="${informationHref(base, 'PayPal')}" class="jb-bnpl-paypal">${reference ? '<img src="/static/reference/jb-hifi/bnpl-paypal.svg" alt="PayPal">' : 'PayPal'}</a></div>
     <div class="jb-coupon-row">${reference ? '<img class="jb-coupon-smile" src="/static/reference/jb-hifi/coupon-smile.svg" alt="">' : '&#127991;'} <div><a href="${base}/account/login?return_to=${encodeURIComponent(self)}">Log in</a> to see if you have coupons.</div></div>
@@ -289,7 +289,8 @@ export function wishlistPage({ base, p, user }) {
 export function simplePage({ title, html }) { return `<div class="jb-simple"><h1>${esc(title)}</h1>${html}</div>` }
 
 export function storesPage({ base, query, stores }) {
-  if (!fixtureCatalog) return `<div class="jb-simple"><h1>Find a store</h1><p>Store stock information is currently unavailable. Please try again later.</p></div>`
+  // Reference mode has no Click & Collect stores, so this shows the same directory as the Store Finder page.
+  if (!fixtureCatalog) return storeFinderPage(base, query, stores)
   return `<nav class="jb-crumbs" aria-label="Breadcrumb"><a href="${base}/">Home</a> &rsaquo; Stores</nav>
 <div class="jb-simple"><h1>Find a store</h1>
   <form method="get" action="${base}/stores" class="jb-avail-form"><label for="store-q" class="visually-hidden">Enter postcode or suburb</label><input id="store-q" name="q" type="text" placeholder="Enter postcode or suburb" value="${esc(query)}"><button type="submit" class="jb-btn jb-btn-black jb-btn-small">Search</button></form>
