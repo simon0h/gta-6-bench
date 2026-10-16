@@ -7,7 +7,9 @@
 // their structure with an empty state.
 import { esc } from '../../lib/html.js'
 import { CONCEPT_ID } from './data.js'
-import { directListing } from './shelf-pages.js'
+import { directListing, shelfTile } from './shelf-pages.js'
+import { heroIllustration } from './shelf-art.js'
+import { ASSORTMENT } from './data.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 
 const GTA = `/en-us/concept/${CONCEPT_ID}/`
@@ -22,20 +24,20 @@ const PAGES = [
     ['On-demand games with PlayStation Plus', 'Discover hundreds of PS5 and PS4 games in the Game Catalog with PlayStation Plus Extra and Premium.', [['Explore PlayStation Plus', '/en-us/ps-plus']]],
     ['Immersive play with the DualSense® wireless controller', 'Feel your in-game actions through adaptive triggers and haptic feedback.', [['DualSense wireless controller', '/en-us/accessories/dualsense-wireless-controller']]],
     ['PS5 accessories', 'Controllers, gaming audio, PlayStation Portal remote player and more to perfect your setup.', [['Controllers', '/en-us/accessories#controllers'], ['Gaming audio', '/en-us/accessories#headsets'], ['PlayStation Portal™ remote player', '/en-us/accessories/playstation-portal-remote-player'], ['Stay connected with PlayStation™ App', '/en-us/playstation-app']]],
-    ['Which PS5 console is right for you?', 'Compare the PS5 console, PS5 Digital Edition and PS5 Pro. Consoles are sold by PlayStation Direct and participating retailers.', [['PlayStation®5 Pro', '/en-us/ps5/ps5-pro'], ['Buy consoles', '/direct.playstation.com/en-us/hardware/ps5']]],
-  ]],
+    ['Which PS5 console is right for you?', 'Compare the PS5 console, PS5 Digital Edition and PS5 Pro, available from PlayStation Direct and participating retailers.', [['PlayStation®5 Pro', '/en-us/ps5/ps5-pro'], ['Buy consoles', '/direct.playstation.com/en-us/hardware/ps5']]],
+  ], { art: 'console', gamesAfter: 1, games: ['Featured PS5 games', p => p.platforms.includes('PS5') && p.contentType === 'base-game' && p.publisher === 'Sony Interactive Entertainment'] }],
   ['/en-us/ps5/ps5-pro', 'PS5 Pro', 'PlayStation®5 Pro', 'Play the way it was meant to be played: the most powerful PlayStation console with an upgraded GPU, advanced ray tracing and AI-driven upscaling.', [
     ['Stunning visuals at higher frame rates', 'PS5 Pro Enhanced games can run at higher resolution and smoother frame rates.', [['PS5 games', '/en-us/ps5/games']]],
-    ['Where to buy', 'PS5 Pro is sold by PlayStation Direct and participating retailers; it is not sold on PlayStation Store.', [['Buy consoles', '/direct.playstation.com/en-us/hardware/ps5']]],
-  ]],
-  ['/en-us/ps5/games', 'PS5 Games', 'Unmissable PS5 games from PlayStation Studios', 'The best new and upcoming PS5 games. Games are bought on PlayStation Store.', [
+    ['Where to buy', 'PS5 Pro is available from PlayStation Direct and participating retailers.', [['Buy consoles', '/direct.playstation.com/en-us/hardware/ps5']]],
+  ], { art: 'console-pro', games: ['PS5 Pro Enhanced games', p => p.contentType === 'base-game' && p.features?.includes('PS5 Pro Enhanced')] }],
+  ['/en-us/ps5/games', 'PS5 Games', 'Unmissable PS5 games from PlayStation Studios', 'The best new and upcoming PS5 games, from PlayStation Studios blockbusters to indie gems.', [
     ['PS5 Games', 'Discover the latest releases from PlayStation Studios and partners.', [['PlayStation Studios', '/en-us/corporate/playstation-studios'], ['Browse PlayStation Store', '/en-us/pages/browse']]],
     ['Pre-order and wishlist upcoming PS5 games', 'Grand Theft Auto VI is available to pre-order on PlayStation Store.', [['Grand Theft Auto VI', GTA]]],
     ['More upcoming PS5 games', 'See what is coming soon to PlayStation Store.', [['Latest on PlayStation Store', STORE]]],
     ['PlayStation VR2 games', 'Step inside new worlds with PS VR2.', [['PS VR2 games', '/en-us/ps-vr2/games']]],
     ['Great PS4 games come alive on PS5', 'Most PS4 games are playable on PS5.', [['PS4 games', '/en-us/ps4/ps4-games']]],
     ['How innovative PS5 features enhance play', 'Adaptive triggers, haptic feedback, 3D Audio and an ultra-high speed SSD.', [['PS5 features', '/en-us/ps5/ps5-features']]],
-  ]],
+  ], { games: ['Latest PS5 games', p => p.platforms.includes('PS5') && p.contentType === 'base-game' && p.type === 'FULL GAME'] }],
   ['/en-us/ps5/ps5-features', 'PS5', 'PS5 features', 'Ultra-high speed SSD, haptic feedback, adaptive triggers, 3D Audio, Activities and Game Help.', [
     ['Adaptive triggers', 'Feel varying levels of force and tension as you interact with in-game gear and environments.'],
     ['Haptic feedback', 'Feel physically responsive feedback to your in-game actions.'],
@@ -55,40 +57,40 @@ const PAGES = [
     ['Play PS4 games on PS5', 'Most PS4 games are playable on PS5 with backward compatibility.', [['PS5', '/en-us/ps5']]],
   ]],
   ['/en-us/ps4/ps4-games', 'Games', 'PS4 games', 'Discover the best PS4 games, from PlayStation Studios exclusives to indies.', [
-    ['Shop PS4 games', 'Filter PlayStation Store by platform to see PS4 titles.', [['Browse PlayStation Store', '/en-us/pages/browse']]],
-  ]],
+    ['Shop PS4 games', 'Find more PS4 titles on PlayStation Store.', [['Browse PlayStation Store', '/en-us/pages/browse']]],
+  ], { games: ['Popular PS4 games', p => p.platforms.includes('PS4') && p.contentType === 'base-game'] }],
   ['/en-us/ps-vr2', 'PS VR2', 'PlayStation VR2', 'Escape into worlds that feel, look and sound truly real with PS VR2 for PS5.', [
     ['PS VR2 games', 'Explore games built for virtual reality.', [['PS VR2 games', '/en-us/ps-vr2/games']]],
     ['Health and safety', 'Read the health warnings before using VR.', [['Health Warnings', '/en-us/legal/health-warning']]],
-  ]],
+  ], { art: 'vr2' }],
   ['/en-us/ps-vr2/games', 'Games', 'PS VR2 games', 'Discover games that take full advantage of PS VR2 eye tracking, headset feedback and Sense controllers.', [
-    ['Shop VR games', 'VR titles are sold on PlayStation Store.', [['Browse PlayStation Store', '/en-us/pages/browse']]],
-  ]],
-  ['/en-us/games/pc-games', 'Games', 'PlayStation games on PC', 'Play PlayStation Studios games on PC. PC versions are sold through PC storefronts, not PlayStation Store.', [
+    ['Shop VR games', 'Find more VR titles on PlayStation Store.', [['Browse PlayStation Store', '/en-us/pages/browse']]],
+  ], { games: ['Play in PS VR2', p => p.vr && p.vr !== 'No VR' && p.contentType === 'base-game'] }],
+  ['/en-us/games/pc-games', 'Games', 'PlayStation games on PC', 'Play acclaimed PlayStation Studios games on PC, available from leading PC storefronts.', [
     ['PlayStation accessories for PC', 'DualSense and PULSE accessories support PC play.', [['All accessories', '/en-us/accessories']]],
   ]],
-  ['/en-us/accessories', 'Accessories', 'PlayStation® accessories', 'The latest PlayStation accessories: controllers, audio, remote play and console add-ons. Accessories are sold by PlayStation Direct and retailers.', [
+  ['/en-us/accessories', 'Accessories', 'PlayStation® accessories', 'The latest PlayStation accessories: controllers, audio, remote play and console add-ons.', [
     ['Wireless controllers', 'DualSense wireless controller, DualSense Edge wireless controller, Access controller and officially licensed controllers.', [['DualSense wireless controller', '/en-us/accessories/dualsense-wireless-controller']], 'controllers'],
     ['Gaming audio', 'PULSE Elite wireless headset, PULSE Explore wireless earbuds and officially licensed audio headsets.', [], 'headsets'],
     ['PS5 console add-ons', 'Vertical stand, disc drive for PS5 Digital Edition consoles and PS5 console covers.'],
     ['PS Remote Play gaming', 'Play your PS5 over Wi-Fi with PlayStation Portal Remote Player.', [['PlayStation Portal Remote Player', '/en-us/accessories/playstation-portal-remote-player']]],
     ['Extra storage', 'Add internal M.2 SSD storage or compatible external USB drives.'],
     ['Cameras & remotes', 'HD camera and media remote.'],
-    ['Where to buy', 'Accessories are not sold on PlayStation Store.', [['Buy accessories', '/direct.playstation.com/en-us/accessories/ps5']]],
-  ]],
+    ['Where to buy', 'Buy official accessories from PlayStation Direct and participating retailers.', [['Buy accessories', '/direct.playstation.com/en-us/accessories/ps5']]],
+  ], { art: 'controller' }],
   ['/en-us/accessories/playstation-portal-remote-player', 'Accessories', 'PlayStation Portal™ Remote Player', 'Play your PS5 console over Wi-Fi with console-quality controls on an 8" LCD screen.', [
     ['Remote Play your PS5', 'Requires a PS5 console and a broadband internet connection with at least 5 Mbps.'],
     ['Where to buy', 'Sold by PlayStation Direct and participating retailers.', [['Buy accessories', '/direct.playstation.com/en-us/accessories/ps5']]],
-  ]],
+  ], { art: 'portal' }],
   ['/en-us/accessories/dualsense-wireless-controller', 'Accessories', 'DualSense® wireless controller', 'Discover a deeper gaming experience with haptic feedback, adaptive triggers and a built-in microphone.', [
     ['Where to buy', 'Sold by PlayStation Direct and participating retailers.', [['Buy accessories', '/direct.playstation.com/en-us/accessories/ps5']]],
-  ]],
-  ['/en-us/ps-plus', 'PlayStation Plus', 'Get more of what you love with PlayStation Plus', 'Monthly games, online multiplayer, exclusive discounts and more. Membership plans are compared below; memberships are managed from your account.', [
+  ], { art: 'controller' }],
+  ['/en-us/ps-plus', 'PlayStation Plus', 'Get more of what you love with PlayStation Plus', 'Monthly games, online multiplayer, exclusive discounts and more. Choose the plan that’s right for you.', [
     ['Benefits that enhance every way you play', 'Monthly Games, Online Multiplayer, Exclusive Discounts, Exclusive Content, Cloud Storage and Share Play.'],
     ['Discover the Game Catalog', 'Extra and Premium members can download and play hundreds of PS5 and PS4 games.', [['All Games', '/en-us/ps-plus/games']]],
-    ['Compare membership plans', 'Essential: $10.99 / 1 month, $27.99 / 3 months, $79.99 / 12 months. Extra: $16.99 / 1 month, $43.99 / 3 months, $134.99 / 12 months — adds the Game Catalog and Ubisoft+ Classics. Premium: $19.99 / 1 month, $54.99 / 3 months, $159.99 / 12 months — adds the Classics Catalog, Game Trials, PS5 cloud streaming and the Sony Pictures Catalog.', [['Subscriptions on PlayStation Store', '/en-us/pages/subscriptions'], ['Manage membership', '/en-us/membership']]],
+    ['Compare membership plans', 'Pay monthly, every 3 months or every 12 months. Prices and benefits by plan:', [['Subscriptions on PlayStation Store', '/en-us/pages/subscriptions'], ['Manage membership', '/en-us/membership']]],
     ['Frequently asked questions', 'Memberships renew automatically until cancelled. Cancelling stops the next renewal; benefits continue until the end of the current period.', [['Subscription support', '/en-us/support/subscriptions']]],
-  ], { tiers: true }],
+  ], { tiers: true, art: 'plus', games: ['Game Catalog highlights', p => !!p.plusTag && p.contentType === 'base-game'] }],
   ['/en-us/ps-plus/games', 'PlayStation Plus', 'PlayStation Plus games', 'Monthly Games for every member and the Game Catalog for Extra and Premium members.', [
     ['Monthly Games', 'Essential, Extra and Premium members can add new games to their library each month.'],
     ['Game Catalog', 'Download and play a catalog of PS5 and PS4 games while your Extra or Premium membership is active.', [['Browse the store', '/en-us/pages/browse']]],
@@ -106,13 +108,13 @@ const PAGES = [
   ]],
   ['/en-us/playstation-gift-cards', 'Gift cards', 'PlayStation™Store gift cards', 'Pre-paid PlayStation Store gift cards add funds to a PlayStation Network wallet for digital games, add-ons and subscriptions.', [
     ['A great idea for gamers', 'Give the gift of play with a PlayStation Store gift card.'],
-    ['Buy a PlayStation Store gift card', 'Get an emailed code from online retailers or find physical cards at participating retailers. Gift cards are not sold in this store.'],
+    ['Buy a PlayStation Store gift card', 'Get an emailed code from online retailers or find physical cards at participating retailers.'],
     ['Everything you want to play', 'Buy digital games, add-ons and subscriptions on PlayStation Store, which is always open.', [['Latest on PlayStation Store', STORE]]],
     ['Pre-order. Pre-load. Play.', 'Pre-order a game and pre-load it on your console so it is ready at release.', [['Pre-order Grand Theft Auto VI', GTA]]],
     ['Redeem against anything digital on PlayStation Store', 'Use funds on thousands of digital games, add-ons and subscriptions.'],
     ['Find exclusive deals on top games', 'Regular deals and discounts are available on popular games.', [['Deals', '/en-us/pages/deals']]],
     ['PlayStation gift cards FAQ', 'Gift card funds cannot buy physical products or merchandise. Wallet funds are non-refundable. Codes are redeemed in Settings > Users and Accounts > Account > Payment and Subscriptions > Redeem Codes.', [['Redeem a PS Store voucher', '/en-us/support/store']]],
-  ]],
+  ], { art: 'giftcard' }],
   ['/en-us/playstation-credit-card', 'PS Credit Card', 'PlayStation® Visa® Credit Card', 'Earn points on PlayStation purchases. Applications are reviewed and approved by the card issuer.', []],
   ['/en-us/playstation-app', 'PlayStation App', 'PlayStation App', 'Chat with friends, buy games on PlayStation Store and download them to your console from your phone.', []],
   ['/en-us/beta-program-at-playstation', 'Beta', 'Beta Program at PlayStation', 'Register to be considered for beta tests of upcoming games and system software.', []],
@@ -156,10 +158,10 @@ const PAGES = [
     ['Account for PlayStation', 'The PlayStation Terms of Service, PlayStation®Store Cancellation Policy and contact information.', [['PlayStation Terms of Service', '/en-us/legal/psn-terms-of-service'], ['PlayStation®Store Cancellation Policy', '/en-us/legal/playstation-store-cancellation-policy'], ['Do Not Share My Personal Information', '/en-us/legal/third-party-ads']]],
     ['PlayStation®5', 'PlayStation®5 System Software License Agreement and guarantee.'],
   ]],
-  ['/en-us/legal/privacy-policy', 'Legal', 'Privacy Policy', 'How Sony Interactive Entertainment collects, uses and shares personal information, and the choices you have. This store’s profile preferences do not change a real PlayStation account.', [
+  ['/en-us/legal/privacy-policy', 'Legal', 'Privacy Policy', 'How Sony Interactive Entertainment collects, uses and shares personal information, and the choices you have.', [
     ['Your choices', 'Manage privacy settings on your console or in account management.', [['Do Not Share My Personal Information', '/en-us/legal/third-party-ads']]],
   ]],
-  ['/en-us/legal/third-party-ads', 'Legal', 'Do Not Share My Personal Information', 'US residents can opt out of the sharing of personal information for targeted advertising. No privacy request is submitted by visiting this page.', []],
+  ['/en-us/legal/third-party-ads', 'Legal', 'Do Not Share My Personal Information', 'US residents can opt out of the sharing of personal information for targeted advertising. Submit a request from the privacy settings for your account, or contact PlayStation Support.', []],
   ['/en-us/legal/website-terms-of-use', 'Legal', 'Website Terms of Use', 'The terms that apply to PlayStation websites. By using these websites you agree to these terms.', []],
   ['/en-us/legal/psn-terms-of-service', 'Legal', 'PlayStation Terms of Service', 'The terms that govern your account for PlayStation and purchases from PlayStation Store. Digital content is licensed, not sold, subject to the PlayStation End User License Agreement.', [
     ['Cancellations and refunds', 'See the PlayStation Store cancellation policy.', [['PS Store Cancellation Policy', '/en-us/legal/playstation-store-cancellation-policy']]],
@@ -246,10 +248,18 @@ const TIERS = [['Essential', '$10.99', ['Monthly Games', 'Online Multiplayer', '
   ['Premium', '$19.99', ['Everything in Extra', 'Classics Catalog', 'Game Trials', 'PS5 Cloud Streaming', 'Sony Pictures Catalog']]]
 export const tierCards = (base) => `<div class="ps-tier-grid">${TIERS.map(([name, price, perks]) => `<article class="ps-tier ps-tier-${name.toLowerCase()}"><h3>${name}</h3><p class="ps-tier-price">${price}<small>/month</small></p><ul>${perks.map(p => `<li>${esc(p)}</li>`).join('')}</ul><a class="ps-pill ps-pill-blue" href="${base}/en-us/membership">Manage membership</a></article>`).join('')}</div>`
 
+const PLAN_PRICES = { Essential: ['$10.99', '$27.99', '$79.99'], Extra: ['$16.99', '$43.99', '$134.99'], Premium: ['$19.99', '$54.99', '$159.99'] }
+const PLAN_ROWS = [['Monthly Games', 1], ['Online Multiplayer', 1], ['Exclusive Discounts', 1], ['Cloud Storage', 1], ['Game Catalog', 2], ['Ubisoft+ Classics', 2], ['Classics Catalog', 3], ['Game Trials', 3], ['PS5 Cloud Streaming', 3], ['Sony Pictures Catalog', 3]]
+const compareTable = () => `<table class="ps-plan-table"><thead><tr><th scope="col"><span class="visually-hidden">Plan</span></th>${Object.keys(PLAN_PRICES).map(t => `<th scope="col">${t}</th>`).join('')}</tr></thead><tbody>${['1 month', '3 months', '12 months'].map((d, i) => `<tr><th scope="row">${d}</th>${Object.values(PLAN_PRICES).map(v => `<td>${v[i]}</td>`).join('')}</tr>`).join('')}${PLAN_ROWS.map(([f, min]) => `<tr><th scope="row">${f}</th>${[1, 2, 3].map(t => `<td>${t >= min ? '<span class="ps-plan-yes" aria-label="Included">✓</span>' : '<span class="ps-plan-no" aria-label="Not included">–</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table>`
+
 function pdcBody(base, [path, eyebrow, h1, intro, sections, opts = {}]) {
-  const hero = `<section class="ps-pdc-hero"><div><p class="ps-pdc-eyebrow">${esc(eyebrow)}</p><h1>${esc(h1)}</h1><p>${esc(intro)}</p></div></section>`
+  const art = opts.art ? `<div class="ps-pdc-hero-figure">${heroIllustration(opts.art)}</div>` : ''
+  const hero = `<section class="ps-pdc-hero${art ? ' ps-pdc-hero-art' : ''}"><div><div><p class="ps-pdc-eyebrow">${esc(eyebrow)}</p><h1>${esc(h1)}</h1><p>${esc(intro)}</p></div>${art}</div></section>`
   const tiers = opts.tiers ? `<section class="ps-pdc-section"><h2 class="visually-hidden">Membership plans</h2>${tierCards(base)}</section>` : ''
-  const body = sections.map(([h, text, links, id]) => `<section class="ps-pdc-section"${id ? ` id="${id}"` : ''}><h2>${esc(h)}</h2><p>${esc(text)}</p>${linkRow(base, links)}</section>`).join('')
+  // Game rows, like the tiles on playstation.com's console and PS Plus pages (reference assortment only).
+  const picks = opts.games ? ASSORTMENT.filter(p => p.department !== 'hardware' && opts.games[1](p)).sort((a, b) => (a.bestRank || 999) - (b.bestRank || 999)).filter((p, i, all) => all.findIndex(q => q.family === p.family) === i).slice(0, 6) : []
+  const games = picks.length >= 4 ? `<section class="ps-pdc-section ps-pdc-games"><h2>${esc(opts.games[0])}</h2><div class="ps-grid ps-grid-6">${picks.map(p => shelfTile(base, p)).join('')}</div></section>` : ''
+  const body = sections.map(([h, text, links, id], i) => `<section class="ps-pdc-section"${id ? ` id="${id}"` : ''}><h2>${esc(h)}</h2><p>${esc(text)}</p>${opts.tiers && h === 'Compare membership plans' ? compareTable() : ''}${linkRow(base, links)}</section>${i === (opts.gamesAfter ?? 0) ? games : ''}`).join('')
   const empty = !sections.length ? `<section class="ps-pdc-section"><p>Find games, add-ons and subscriptions on PlayStation Store, or get help from PlayStation Support.</p>${linkRow(base, [['PlayStation Store', STORE], ['Support', '/en-us/support']])}</section>` : ''
   return `${hero}<div class="ps-pdc-body">${tiers}${body}${empty}</div>`
 }
