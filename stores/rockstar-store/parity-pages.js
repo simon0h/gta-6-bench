@@ -1,7 +1,7 @@
 // Store chrome, info pages and editorial sections that mirror store.rockstargames.com (research/parity/rockstar-store.json,
 // captured 2026-10-13). Nothing here sells anything: titles that the reference catalog does not stock render the real page
 // structure with a read-only "not available in this store" state and no prices or purchase controls.
-import { esc } from '../../lib/html.js'
+import { esc, publicNotice } from '../../lib/html.js'
 import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { GAME, PRODUCTS, LISTINGS, CATALOG, SHELF_ITEMS } from './data.js'
 import { tile, shelf as carouselShelf } from './depth-pages.js'
@@ -23,7 +23,7 @@ export const NAV = [
 export const FOOTER = [['Rockstar Support', '/support'], ['Privacy Policy', '/privacy'], ['Cookie Policy', '/cookie-policy'], ['Terms of Service', '/legal'], ['Do Not Sell or Share My Personal Information', '/ccpa'], ['Refunds', '/refund-and-return-policy'], ['Cookie Settings', '/cookie-settings']]
 
 // ---------- read-only title pages ----------
-const NOT_SOLD = 'This title is sold on the real Rockstar Store, but this store simulation only stocks the Grand Theft Auto VI code-in-box pre-order, so it has no price or Buy Now button here.'
+const NOT_SOLD = 'This title is currently unavailable to purchase on the Rockstar Store. Check back soon, or pre-order Grand Theft Auto VI today.'
 const PLATFORMS_PC = ['Rockstar Games Launcher']
 const SHARK = ['Megalodon Shark Cash Card (PC)', 'Whale Shark Cash Card (PC)', 'Great White Shark Cash Card (PC)', 'Bull Shark Cash Card (PC)', 'Tiger Shark Cash Card (PC)']
 const GOLD = ['350 Gold Bars', '245 Gold Bars', '150 Gold Bars', '55 Gold Bars', '25 Gold Bars']
@@ -65,12 +65,72 @@ export const TITLES = {
 // /view-all-games order on the real store.
 export const ALL_GAMES = ['buy-gta-v', 'buy-red-dead-redemption-2', 'buy-red-dead-redemption', 'buy-grand-theft-auto-the-trilogy-the-definitive-edition', 'buy-la-noire', 'buy-bully-scholarship-edition', 'buy-max-payne-3', 'buy-grand-theft-auto-iv', 'buy-grand-theft-auto-the-trilogy']
 
+// Short descriptions under each Key Features heading, in the store's own words.
+const FEATURE_COPY = {
+  'Welcome to Los Santos': 'Experience the story of Franklin, Michael and Trevor across the sprawling city of Los Santos and the surrounding Blaine County.',
+  'Stunning Visuals': 'Ray-traced shadows, reflections and ambient occlusion, plus AMD FSR and NVIDIA DLSS support on PC.',
+  'Faster Loading': 'Get into the action faster, with DirectStorage support on compatible PCs.',
+  'Immersive Controls': 'Full controller support with refined driving, aiming and camera controls.',
+  '3D Audio': 'Hear Los Santos all around you with Dolby Atmos and 3D audio support.',
+  'Grand Theft Auto Online': 'Rise through the criminal underworld of Los Santos and Blaine County with up to 30 players.',
+  'Exclusive Content': 'Hao’s Special Works vehicle upgrades, new vehicles and more, exclusive to GTAV Enhanced.',
+  'New Career Builder': 'Jump-start a life of crime in GTA Online: choose a business, get GTA$4,000,000 and a high-end apartment, vehicle and weapons.',
+  'New Menu Design': 'A redesigned menu that gets you into Story Mode or GTA Online in a couple of clicks.',
+  'Access to All Current and Previous Updates': 'Every GTA Online update since launch, from Heists and Nightclubs to The Cayo Perico Heist and beyond.',
+  'Live In A Gang Of Outlaws Fighting To Survive': 'America, 1899. Arthur Morgan and the Van der Linde gang rob, steal and fight their way across the rugged heartland to survive.',
+  'The World of Red Dead Online': 'Hunt, fish, trade and fight your way across a living frontier, alone or with a posse of up to seven players.',
+  'Step into a Frontier Pursuits Role': 'Make a living as a Bounty Hunter, Trader, Collector, Moonshiner or Naturalist, each with its own progression and rewards.',
+}
+
+// PC system requirements as listed on each title's store page.
+const SPEC = (os, cpu, ram, gpu, disk) => [['OS', os], ['Processor', cpu], ['Memory', ram], ['Graphics', gpu], ['Storage', disk]]
+const REQUIREMENTS = {
+  'GTAV Enhanced System Requirements': [SPEC('Windows 10 64-bit (22H2)', 'Intel Core i7-4770 | AMD FX-9590', '8 GB', 'NVIDIA GeForce GTX 1630 (4 GB) | AMD Radeon RX 6400 (4 GB)', '105 GB SSD'), SPEC('Windows 11 64-bit', 'Intel Core i5-9600K | AMD Ryzen 5 3600', '16 GB', 'NVIDIA GeForce RTX 3060 (8 GB) | AMD Radeon RX 6600 XT (8 GB)', '105 GB SSD')],
+  'GTAV Legacy System Requirements': [SPEC('Windows 10 64-bit', 'Intel Core 2 Quad Q6600 @ 2.40 GHz | AMD Phenom 9850 @ 2.5 GHz', '4 GB', 'NVIDIA 9800 GT (1 GB) | AMD HD 4870 (1 GB)', '120 GB'), SPEC('Windows 10 64-bit', 'Intel Core i5 3470 @ 3.2 GHz | AMD X8 FX-8350 @ 4 GHz', '8 GB', 'NVIDIA GTX 660 (2 GB) | AMD HD 7870 (2 GB)', '120 GB')],
+  'buy-red-dead-redemption-2': [SPEC('Windows 10 64-bit', 'Intel Core i5-2500K | AMD FX-6300', '8 GB', 'NVIDIA GeForce GTX 770 (2 GB) | AMD Radeon R9 280 (3 GB)', '150 GB'), SPEC('Windows 10 64-bit', 'Intel Core i7-4770K | AMD Ryzen 5 1500X', '12 GB', 'NVIDIA GeForce GTX 1060 (6 GB) | AMD Radeon RX 480 (4 GB)', '150 GB')],
+  'buy-red-dead-redemption': [SPEC('Windows 10 64-bit', 'Intel Core i7-4770K | AMD Ryzen 5 1500X', '8 GB', 'NVIDIA GeForce GTX 960 (2 GB) | AMD Radeon RX 570 (4 GB)', '12 GB'), SPEC('Windows 11 64-bit', 'Intel Core i5-8600K | AMD Ryzen 5 3600', '16 GB', 'NVIDIA GeForce GTX 1070 (8 GB) | AMD Radeon RX 6600 (8 GB)', '12 GB')],
+  'buy-bully-scholarship-edition': [SPEC('Windows 10 64-bit', 'Intel Pentium 4 3.0 GHz | AMD Athlon 64 3000+', '1 GB', 'NVIDIA GeForce 6800 (128 MB) | ATI Radeon X1300 (128 MB)', '4.7 GB'), SPEC('Windows 10 64-bit', 'Intel Core 2 Duo 2.0 GHz | AMD Athlon 64 X2', '2 GB', 'NVIDIA GeForce 7900 (256 MB) | ATI Radeon X1800 (256 MB)', '4.7 GB')],
+  'buy-grand-theft-auto-the-trilogy-the-definitive-edition': [SPEC('Windows 10 64-bit', 'Intel Core i5-3470 | AMD FX-8350', '8 GB', 'NVIDIA GeForce GTX 760 (2 GB) | AMD Radeon R9 280 (3 GB)', '45 GB'), SPEC('Windows 10 64-bit', 'Intel Core i5-6600K | AMD Ryzen 5 2600', '16 GB', 'NVIDIA GeForce GTX 970 (4 GB) | AMD Radeon R9 390 (8 GB)', '45 GB')],
+  'buy-la-noire': [SPEC('Windows 10 64-bit', 'Intel Dual Core 2.2 GHz | AMD Dual Core 2.4 GHz', '2 GB', 'NVIDIA GeForce 8600 GT (512 MB) | AMD Radeon HD 3000 (512 MB)', '16 GB'), SPEC('Windows 10 64-bit', 'Intel Quad Core 2.66 GHz | AMD Quad Core 3.2 GHz', '4 GB', 'NVIDIA GeForce GTX 280 (1 GB) | AMD Radeon HD 6850 (1 GB)', '16 GB')],
+  'buy-max-payne-3': [SPEC('Windows 10 64-bit', 'Intel Dual Core 2.4 GHz | AMD Dual Core 2.6 GHz', '2 GB', 'NVIDIA GeForce 8600 GT (512 MB) | AMD Radeon HD 3400 (512 MB)', '35 GB'), SPEC('Windows 10 64-bit', 'Intel Core i7 860 2.8 GHz | AMD FX-8150 3.6 GHz', '3 GB', 'NVIDIA GeForce GTX 480 (1.5 GB) | AMD Radeon HD 5870 (1 GB)', '35 GB')],
+  'buy-grand-theft-auto-iv': [SPEC('Windows 10 64-bit', 'Intel Core 2 Quad 2.4 GHz | AMD Phenom X3 2.15 GHz', '1.5 GB', 'NVIDIA GeForce 7900 (256 MB) | ATI Radeon X1900 (256 MB)', '22 GB'), SPEC('Windows 10 64-bit', 'Intel Core i5-2400 | AMD Phenom II X4 940', '4 GB', 'NVIDIA GeForce GTX 480 (1.5 GB) | AMD Radeon HD 5870 (1 GB)', '22 GB')],
+  'buy-grand-theft-auto-the-trilogy': [SPEC('Windows 10 64-bit', 'Intel Pentium 4 1.5 GHz | AMD Athlon XP 1.5 GHz', '512 MB', 'DirectX 9 compatible (64 MB)', '7.2 GB'), SPEC('Windows 10 64-bit', 'Intel Core 2 Duo | AMD Athlon 64 X2', '2 GB', 'NVIDIA GeForce 8600 (256 MB) | ATI Radeon HD 2600 (256 MB)', '7.2 GB')],
+}
+const requirements = (slug, heading) => REQUIREMENTS[heading] || REQUIREMENTS[slug] || REQUIREMENTS['buy-red-dead-redemption-2']
+
+const GTA_PLUS_FAQ = {
+  'How can I become a GTA+ Member?': 'GTA+ is a monthly membership for GTA Online on PlayStation 5, Xbox Series X|S and GTAV Enhanced for PC. Join from the GTA+ page in GTA Online or through your platform store.',
+  'What is included in the GTA+ Membership?': 'A monthly GTA$500,000 deposit, rotating monthly benefits in GTA Online, The Vinewood Club, member discounts and access to the GTA+ Games Library.',
+  'Once I’m a GTA+ Member, how do I claim my Membership benefits for each Member-only GTA Online Event?': 'Sign in to GTA Online during the Event. Most benefits are delivered automatically; vehicles and items are claimed at the location shown in the GTA+ section of the pause menu.',
+  'How can I cancel my GTA+ Membership?': 'Cancel the recurring subscription from the subscription settings of the platform account you joined with. Your membership stays active until the end of the current billing period.',
+  'What happens to my GTA+ Membership benefits if I cancel my GTA+ Membership?': 'Items you already claimed stay in your account. Benefits that need an active membership, such as the GTA+ Games Library and The Vinewood Club, end with your billing period.',
+  'When will I get my monthly GTA$500,000 bonus in GTA Online?': 'The GTA$500,000 bonus is deposited into your Maze Bank account within 72 hours of the start of each billing cycle.',
+  'What are the benefits of GTA+ Shark Cash Cards?': 'GTA+ Members receive 15% bonus GTA$ on Shark Cash Cards bought during their membership.',
+  'Are GTA Online benefits available on PlayStation 4, Xbox One, or for players of the Grand Theft Auto V Legacy version of GTA Online for PC?': 'No. GTA Online membership benefits are available on PlayStation 5, Xbox Series X|S and GTAV Enhanced for PC only.',
+  'What happens if I don’t claim a particular benefit before the end of a Member-only Event?': 'Benefits that must be claimed are only available during their Event. Unclaimed benefits are not carried over to the next month.',
+  'What games can I play with my GTA+ Membership?': 'The GTA+ Games Library includes Grand Theft Auto V, Red Dead Redemption, the Grand Theft Auto Trilogy – The Definitive Edition, Bully, L.A. Noire and more. Titles rotate over time.',
+  'What happens when a game that is included with GTA+ is leaving?': 'Games leaving the library are announced in advance. Purchase the game to keep playing; your save progress is kept.',
+  'How can I use my 20% Member discount to purchase select Rockstar Games titles?': 'Sign in with your Rockstar Games account while your membership is active. The member price is shown at checkout on eligible titles.',
+}
+
+// Video and screenshot tiles on a title page: crops of the title's illustrated scene artwork.
+const VIDEO_TITLES = { 'buy-gta-v': ['Grand Theft Auto V: Expanded & Enhanced Trailer', 'GTA Online: Career Builder', 'GTAV Enhanced PC Trailer'] }
+const CROPS = [['50% 45%', 1.18], ['20% 60%', 1.4], ['80% 35%', 1.65]]
+function mediaTile(slug, t, kind, i) {
+  const game = shelfGame(slug)
+  if (!game) return `<span class="rp-shot" style="--c1:${t.cover[0]};--c2:${t.cover[1]}" aria-hidden="true">${kind === 'Videos' ? '▶' : ''}</span>`
+  const video = kind === 'Videos' || (kind === 'Screenshots and Videos' && i === 0)
+  const caption = video ? (VIDEO_TITLES[slug]?.[i] || `${t.title} Trailer`) : ''
+  const [pos, zoom] = CROPS[i % CROPS.length]
+  return `<figure class="rp-shot rp-shot-art"><img src="/rockstar-store/shelf-art/${encodeURIComponent(game.id)}/2.svg" alt="${esc(caption || `${t.title} screenshot`)}" loading="lazy" style="object-position:${pos};transform:scale(${zoom})">${video ? `<span class="rp-play" aria-hidden="true">▶</span><figcaption>${esc(caption)}</figcaption>` : ''}</figure>`
+}
+
 const cover = (title, [a, b], small = '') => `<span class="rp-cover" style="--c1:${a};--c2:${b}" aria-hidden="true"><b>R<i>*</i></b><span>${esc(title)}</span>${small ? `<small>${esc(small)}</small>` : ''}</span>`
 // A link card for a title or category the reference catalog does not sell: no price, no purchase control.
 export const linkCard = (base, href, title, colors, note = 'View details') => `<article class="rs-tile rp-link-tile"><a class="rs-tile-visual" href="${base}${href}">${cover(title, colors)}</a><h3><a href="${base}${href}">${esc(title)}</a></h3><p class="rs-fine">${esc(note)}</p></article>`
 const titleCard = (base, slug) => shelfGame(slug) ? tile(base, shelfGame(slug)) : linkCard(base, `/game/${slug}`, TITLES[slug].title, TITLES[slug].cover, 'PC · Rockstar Games Launcher')
 const gtaviTile = base => tile(base, GAME)
-const unavailable = (base, text = NOT_SOLD) => `<div class="rp-unavailable" role="note"><b>Not available in this store</b><p>${esc(text)}</p><a class="rs-btn rs-btn-pill rs-btn-sm" href="${base}/game/buy-gta-vi">Shop Grand Theft Auto VI</a></div>`
+const unavailable = (base, text = NOT_SOLD) => `<div class="rp-unavailable" role="note"><b>Currently unavailable</b><p>${esc(text)}</p><a class="rs-btn rs-btn-pill rs-btn-sm" href="${base}/game/buy-gta-vi">Shop Grand Theft Auto VI</a></div>`
 
 export function titlePage(base, slug, buy = '') {
   const t = TITLES[slug]
@@ -81,12 +141,12 @@ export function titlePage(base, slug, buy = '') {
 <nav class="rs-subnav" aria-label="Page sections">${nav.map(([id, l]) => `<a href="#${id}">${l}</a>`).join('')}</nav>
 <div class="rs-game-body">
 <section id="game-details" class="rs-section"><h2>Game Details</h2><p>${esc(t.details)}</p><dl class="rs-meta"><div><dt>Developer</dt><dd>Rockstar Games</dd></div><div><dt>Publisher</dt><dd>Rockstar Games</dd></div><div><dt>Platform</dt><dd>${esc(t.platforms.join(', '))}</dd></div></dl></section>
-${t.editions ? `<section id="compare-editions" class="rs-section"><h2>Compare Editions</h2><div class="rp-cards">${t.editions.map(e => `<article class="rp-card"><p class="rs-kicker">${esc(t.title)}</p><h3>${esc(e)}</h3><p class="rs-fine">${buy ? "PC · Rockstar Games Launcher. Choose an edition at the top of this page." : "Edition contents are listed on the real store page. Not sold in this store."}</p></article>`).join('')}</div></section>` : ''}
-${t.features ? `<section id="key-features" class="rs-section"><h2>Key Features</h2><div class="rp-cards">${t.features.map(f => `<article class="rp-card"><h3>${esc(f)}</h3></article>`).join('')}</div></section>` : ''}
-${t.addons ? `<section class="rs-section"><div class="rs-section-head"><h2>${esc(t.addons[0])}</h2><a href="${base}${t.addons[2]}">View all</a></div>${addonTiles(base, t.addons[2]) || `<ul class="rp-list">${t.addons[1].map(n => `<li>${esc(n)}</li>`).join('')}</ul><p class="rs-fine">Shown for reference only; these PC add-ons are not sold in this store.</p>`}</section>` : ''}
-<section id="media" class="rs-section">${t.media.map(m => `<h2>${esc(m)}</h2><div class="rp-media">${[1, 2, 3].map(i => `<span class="rp-shot" style="--c1:${t.cover[0]};--c2:${t.cover[1]}" aria-hidden="true">${m === 'Videos' ? '▶' : ''}</span>`).join('')}</div>`).join('')}</section>
+${t.editions ? `<section id="compare-editions" class="rs-section"><h2>Compare Editions</h2><div class="rp-cards">${t.editions.map(e => `<article class="rp-card"><p class="rs-kicker">${esc(t.title)}</p><h3>${esc(e)}</h3><p class="rs-fine">${buy ? "PC · Rockstar Games Launcher. Choose an edition at the top of this page." : "Currently unavailable."}</p></article>`).join('')}</div></section>` : ''}
+${t.features ? `<section id="key-features" class="rs-section"><h2>Key Features</h2><div class="rp-cards">${t.features.map(f => `<article class="rp-card"><h3>${esc(f)}</h3>${FEATURE_COPY[f] ? `<p>${esc(FEATURE_COPY[f])}</p>` : ''}</article>`).join('')}</div></section>` : ''}
+${t.addons ? `<section class="rs-section"><div class="rs-section-head"><h2>${esc(t.addons[0])}</h2><a href="${base}${t.addons[2]}">View all</a></div>${addonTiles(base, t.addons[2]) || `<ul class="rp-list">${t.addons[1].map(n => `<li>${esc(n)}</li>`).join('')}</ul><p class="rs-fine">Currently unavailable.</p>`}</section>` : ''}
+<section id="media" class="rs-section">${t.media.map(m => `<h2>${esc(m)}</h2><div class="rp-media">${[0, 1, 2].map(i => mediaTile(slug, t, m, i)).join('')}</div>`).join('')}</section>
 ${t.languages ? `<section class="rs-section"><h2>Supported Languages</h2><p class="rs-fine">${LANGS}</p></section>` : ''}
-<section id="system-requirements" class="rs-section">${t.requirements.map(r => `<h2>${esc(r)}</h2><div class="rp-cards"><article class="rp-card"><h3>Minimum</h3><p class="rs-fine">Windows PC. The exact minimum specification is listed on the real store page and was not captured for this simulation.</p></article><article class="rp-card"><h3>Recommended</h3><p class="rs-fine">See the real store page for the recommended specification.</p></article></div>`).join('')}</section>
+<section id="system-requirements" class="rs-section">${t.requirements.map(r => `<h2>${esc(r)}</h2><div class="rp-cards rp-reqs">${['Minimum', 'Recommended'].map((level, i) => `<article class="rp-card"><h3>${level}</h3><dl class="rp-req-list">${requirements(slug, r)[i].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></article>`).join('')}</div>`).join('')}</section>
 <section id="faq" class="rs-section"><h2>FAQ</h2>${t.faq.map(([q, a]) => `<details class="rs-faq"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</section>
 </div>`
 }
@@ -95,12 +155,12 @@ export function gtaPlusPage(base) {
   const sections = [['Cash Every Month', 'A monthly bonus of GTA$500,000 deposited into your Maze Bank account, plus accelerated GTA$ from select GTA Online missions and modes.'], ['The Vinewood Club', 'Claim a vehicle each month at the Vinewood Car Club showroom, buy member-discounted vehicles from a rotating selection, and store up to 100 Personal Vehicles at The Vinewood Club Garage with its Vehicle Workshop.'], ['New Monthly Benefits', 'Rotating monthly benefits such as GTA$ and RP multipliers, Chameleon Paint schemes, property upgrades and apparel.'], ['And More...', 'CEO/VIP abilities at no cost from the Interaction Menu, shorter cooldowns and waived costs for Downtown Cab Co. taxis, and a Gun Van with special weapons and discounts that always shows on the map.']]
   const library = ['Grand Theft Auto V', 'Red Dead Redemption', 'Grand Theft Auto: Vice City – The Definitive Edition', 'Grand Theft Auto III – The Definitive Edition', 'Grand Theft Auto: San Andreas – The Definitive Edition', 'Bully', 'L.A. Noire', 'Grand Theft Auto: Liberty City Stories', 'Grand Theft Auto: Chinatown Wars']
   const faq = ['How can I become a GTA+ Member?', 'What is included in the GTA+ Membership?', 'Once I’m a GTA+ Member, how do I claim my Membership benefits for each Member-only GTA Online Event?', 'How can I cancel my GTA+ Membership?', 'What happens to my GTA+ Membership benefits if I cancel my GTA+ Membership?', 'When will I get my monthly GTA$500,000 bonus in GTA Online?', 'What are the benefits of GTA+ Shark Cash Cards?', 'Are GTA Online benefits available on PlayStation 4, Xbox One, or for players of the Grand Theft Auto V Legacy version of GTA Online for PC?', 'What happens if I don’t claim a particular benefit before the end of a Member-only Event?', 'What games can I play with my GTA+ Membership?', 'What happens when a game that is included with GTA+ is leaving?', 'How can I use my 20% Member discount to purchase select Rockstar Games titles?']
-  return `<section class="rp-title-hero rp-gtaplus"><div class="rp-title-copy"><p class="rp-gtaplus-logo">GTA<b>+</b></p><h1>Join to claim special GTA Online benefits, access a selection of Rockstar Games titles, and much more</h1>${unavailable(base, 'GTA+ is a monthly membership on the real Rockstar Store. Memberships cannot be started in this store simulation.')}</div></section>
+  return `<section class="rp-title-hero rp-gtaplus"><div class="rp-title-copy"><p class="rp-gtaplus-logo">GTA<b>+</b></p><h1>Join to claim special GTA Online benefits, access a selection of Rockstar Games titles, and much more</h1>${unavailable(base, 'GTA+ memberships are currently unavailable to purchase on the Rockstar Store. Existing members can manage their membership from their platform account.')}</div></section>
 <nav class="rs-subnav" aria-label="Page sections"><a href="#key-features">Key Features</a><a href="#library">GTA+ Games Library</a><a href="#shark-cards">Member-Only Shark Cards</a><a href="#faq">FAQ</a></nav>
 <div class="rs-game-body"><section id="key-features" class="rs-section"><h2>Key Features</h2><div class="rp-cards">${sections.map(([h, p]) => `<article class="rp-card"><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></section>
 <section id="library" class="rs-section"><h2>GTA+ Games Library</h2><ul class="rp-list">${library.map(g => `<li>${esc(g)}</li>`).join('')}</ul></section>
 <section id="shark-cards" class="rs-section"><h2>Member-Only Shark Cards</h2><p>GTA+ Members get Shark Cards with 15% bonus GTA$. <a href="${base}/buy-gta-v-shark-cash-cards">See Shark Cash Cards</a></p></section>
-<section id="faq" class="rs-section"><h2>FAQ</h2>${faq.map(q => `<details class="rs-faq"><summary>${esc(q)}</summary><p>Answered on Rockstar Support for GTA+ members. This store simulation does not sell memberships.</p></details>`).join('')}</section></div>`
+<section id="faq" class="rs-section"><h2>FAQ</h2>${faq.map(q => `<details class="rs-faq"><summary>${esc(q)}</summary><p>${esc(GTA_PLUS_FAQ[q] || 'See Rockstar Support for details about your GTA+ Membership.')}</p></details>`).join('')}</section></div>`
 }
 
 export function currencyPage(base, kind) {
@@ -109,8 +169,8 @@ export function currencyPage(base, kind) {
   const colors = shark ? ['#06303d', '#21a0c6'] : ['#3d2a06', '#e3b23c']
   const href = shark ? '/buy-gta-v-shark-cash-cards' : '/buy-red-dead-online-gold-bars'
   const tiles = addonTiles(base, href)
-  return `<section class="rp-title-hero" style="--c1:${colors[0]};--c2:${colors[1]}"><div class="rp-title-copy"><p class="rs-eyebrow">GAME ADD-ONS</p><h1>${title}</h1><h2>${shark ? 'Shark Cards' : 'Gold Bars'}</h2><p>${shark ? 'Purchase GTA$ for Grand Theft Auto Online on PC. Requires Grand Theft Auto V for PC and a Rockstar Games account.' : 'Purchase Gold Bars for Red Dead Online on PC. Requires Red Dead Redemption 2 or Red Dead Online for PC and a Rockstar Games account.'}</p>${tiles ? `<p class="rs-fine">PC only. Currency is added to the Rockstar Games account you sign in with at checkout.</p><a class="rs-btn rs-btn-pill" href="#buy">${shark ? 'Choose a Shark Card' : 'Choose Gold Bars'}</a>` : unavailable(base, 'In-game currency is sold on the real Rockstar Store for PC only. This store simulation does not sell currency.')}</div>${cover(shark ? 'Shark Cards' : 'Gold Bars', colors)}</section>
-<div class="rs-game-body"><section class="rs-section" id="buy"><h2>${shark ? 'Buy Shark Cash Cards for PC' : 'Buy Gold Bars for PC'}</h2>${tiles || `<div class="rs-grid">${(shark ? SHARK : GOLD).map(n => `<article class="rs-tile rp-link-tile">${cover(n, colors, 'PC')}<h3>${esc(n)}</h3><p class="rs-fine">PC · Not sold in this store</p></article>`).join('')}</div>`}</section></div>`
+  return `<section class="rp-title-hero" style="--c1:${colors[0]};--c2:${colors[1]}"><div class="rp-title-copy"><p class="rs-eyebrow">GAME ADD-ONS</p><h1>${title}</h1><h2>${shark ? 'Shark Cards' : 'Gold Bars'}</h2><p>${shark ? 'Purchase GTA$ for Grand Theft Auto Online on PC. Requires Grand Theft Auto V for PC and a Rockstar Games account.' : 'Purchase Gold Bars for Red Dead Online on PC. Requires Red Dead Redemption 2 or Red Dead Online for PC and a Rockstar Games account.'}</p>${tiles ? `<p class="rs-fine">PC only. Currency is added to the Rockstar Games account you sign in with at checkout.</p><a class="rs-btn rs-btn-pill" href="#buy">${shark ? 'Choose a Shark Card' : 'Choose Gold Bars'}</a>` : unavailable(base, 'In-game currency for PC is currently unavailable to purchase on the Rockstar Store.')}</div>${cover(shark ? 'Shark Cards' : 'Gold Bars', colors)}</section>
+<div class="rs-game-body"><section class="rs-section" id="buy"><h2>${shark ? 'Buy Shark Cash Cards for PC' : 'Buy Gold Bars for PC'}</h2>${tiles || `<div class="rs-grid">${(shark ? SHARK : GOLD).map(n => `<article class="rs-tile rp-link-tile">${cover(n, colors, 'PC')}<h3>${esc(n)}</h3><p class="rs-fine">PC · Currently unavailable</p></article>`).join('')}</div>`}</section></div>`
 }
 
 // ---------- store assortment helpers (shelf.js; empty in fixture mode) ----------
@@ -129,7 +189,7 @@ export function titleBuyBox(base, p, variantId = '', error = '') {
 }
 
 // ---------- listing pages ----------
-const empty = (base, what) => `<div class="rp-empty"><p class="rs-empty">0 results</p><p>${esc(what)} are not stocked in this store simulation.</p><a href="${base}/game/buy-gta-vi">Shop Grand Theft Auto VI</a></div>`
+const empty = (base, what) => `<div class="rp-empty"><p class="rs-empty">0 results</p><p>${esc(what)} are currently out of stock. Check back soon.</p><a href="${base}/game/buy-gta-vi">Shop Grand Theft Auto VI</a></div>`
 const section = (base, heading, body, href) => `<section class="rs-carousel"><div class="rs-section-head"><h2>${esc(heading)}</h2>${href ? `<a href="${base}${href}">See all</a>` : ''}</div>${body}</section>`
 const grid = cards => `<div class="rs-grid rp-grid">${cards.join('')}</div>`
 
@@ -231,7 +291,7 @@ export const DOCS = base => ({
     ['How we use information', P('To provide games, online services and the Store, process purchases through payment partners such as Xsolla, keep services secure, support you, and, with your consent where required, send marketing.')],
     ['Sharing', P('With service providers and payment partners that act on Rockstar’s behalf, with Take-Two Interactive group companies, and where required by law.')],
     ['Your choices and rights', P(`Manage marketing preferences in your Rockstar Games account, change cookie choices in <a href="${base}/cookie-settings">Cookie Settings</a>, and use <a href="${base}/ccpa">Do Not Sell or Share My Personal Information</a> where available.`)]],
-    note: 'This is a summary for the store simulation, not the legal text. No personal data entered here leaves this local environment.' }],
+    note: `Read the full Rockstar Games Privacy Policy at rockstargames.com/privacy.${publicNotice(' This copy is a summary for a demonstration store; no personal data entered here leaves this environment.')}` }],
   '/cookie-policy': ['Cookie Policy', { title: 'Cookie Policy', intro: 'Summary of the Rockstar Games Cookie Policy published at rockstargames.com/cookies.', sections: [
     ['What cookies are', P('Small files that websites store in your browser to remember choices, keep you signed in and measure how pages are used.')],
     ['Types of cookies used', P('Strictly necessary cookies (sign-in, cart and checkout), performance and analytics cookies, functional cookies, and targeting or advertising cookies.')],
@@ -243,7 +303,7 @@ export const DOCS = base => ({
     ['Trademarks', P('Rockstar Games, Grand Theft Auto, Red Dead Redemption and related marks are trademarks of Take-Two Interactive Software, Inc.')]] }],
   '/ccpa': ['Do Not Sell or Share My Personal Information', { eyebrow: 'Take-Two Interactive', title: 'Do Not Sell or Share My Personal Information', intro: 'Summary of the Take-Two Interactive request page at take2games.com/ccpa.', sections: [
     ['Your right to opt out', P('Residents of California and other US states with similar laws may opt out of the “sale” or “sharing” of personal information for cross-context behavioural advertising.')],
-    ['How to opt out', P(`Choose “Reject All” in <a href="${base}/cookie-settings">Cookie Settings</a> for this browser. Take-Two’s request form handles account-level requests; it is not available in this store simulation.`)]] }],
+    ['How to opt out', P(`Choose “Reject All” in <a href="${base}/cookie-settings">Cookie Settings</a> for this browser. For requests tied to your Rockstar Games account, submit Take-Two’s online request form at take2games.com/ccpa.`)]] }],
   '/rockstar-games': ['Rockstar Games', { eyebrow: 'Company', title: 'Rockstar Games', intro: 'Rockstar Games, Inc. is a video game publisher based in New York City and a subsidiary of Take-Two Interactive Software, Inc. It develops and publishes the Grand Theft Auto, Red Dead Redemption, Max Payne, L.A. Noire and Bully series.', sections: [
     ['Rockstar Store', P(`The Rockstar Store sells PC games for the Rockstar Games Launcher, in-game currency, GTA+ memberships and official merchandise. Physical items and the Grand Theft Auto VI code-in-box pre-order are fulfilled by Xsolla. <a href="${base}/view-all-games">Shop games</a> · <a href="${base}/merchandise">Shop merchandise</a>`)],
     ['Support', P(`Help with orders, refunds and accounts: <a href="${base}/support">Rockstar Support</a>.`)]] }],
@@ -260,8 +320,8 @@ export function leavingPage(base, key) {
   const store = PLATFORM_STORE[platform]
   const what = edition === 'upgrade' ? 'The Grand Theft Auto VI Ultimate Edition upgrade' : `Grand Theft Auto VI – ${edition === 'ultimate' ? 'Ultimate' : 'Standard'} Edition (digital)`
   return `<div class="rp-leaving"><span class="rp-leaving-icon" aria-hidden="true">↗</span><p class="rs-eyebrow">${esc(store)}</p><h1>You are leaving the Rockstar Store</h1>
-<p>${esc(what)} for ${platform === 'ps5' ? 'PlayStation 5' : 'Xbox Series X|S'} is sold by the ${esc(store)}, not by the Rockstar Store. On the real store this button opens <b>${esc(REAL_LINK[key])}</b> in a new tab.</p>
-<p>The ${esc(store)} is not part of this store simulation, so a digital pre-order cannot be completed from here.</p>
+<p>${esc(what)} for ${platform === 'ps5' ? 'PlayStation 5' : 'Xbox Series X|S'} is sold by the ${esc(store)}, not by the Rockstar Store. Digital editions are purchased and downloaded through your platform account at <b>${esc(REAL_LINK[key])}</b>.</p>
+<p>A digital pre-order cannot be completed on the Rockstar Store. The Rockstar Store sells the physical Code-in-Box version.</p>${publicNotice(`<p class="rs-fine">The ${esc(store)} is not part of this demonstration store, so this page does not open it.</p>`)}
 <div class="rp-leaving-actions"><a class="rs-btn rs-btn-pill" href="${base}/game/buy-gta-vi?platform=${platform}#code-in-box">Pre-order the Code-in-Box instead</a><a class="rs-btn rs-btn-outline" href="${base}/game/buy-gta-vi?platform=${platform}#compare-editions">Back to Grand Theft Auto VI</a></div></div>`
 }
 // Where a digital edition button points: the sibling store clones in historical fixture mode (tests rely on it), a local

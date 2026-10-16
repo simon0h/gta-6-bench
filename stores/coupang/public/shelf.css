@@ -101,3 +101,55 @@
 @media (max-width:760px){.cs-row,.cs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cs-product{grid-template-columns:1fr;gap:16px}.cs-cart{grid-template-columns:1fr}.cs-cart-line{grid-template-columns:70px minmax(0,1fr)}.cs-cart-thumb{width:70px;height:70px}.cs-cart-price{grid-column:2;text-align:left}.cs-tabs a{font-size:12px;padding:10px 2px}.cs-more{margin-left:0}}
 @media (max-width:760px){.cp-listing>.cp-results{order:-1}.cp-listing>.cp-filters{margin-top:18px}}
 @media (max-width:760px){.cs-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}.cs-row>.cs-card{flex:0 0 42%;scroll-snap-align:start}}
+/* Order sheet (주문/결제) and order complete: Coupang's ruled label/value tables */
+.commerce-page .cp-order-sec{border:0;border-top:2px solid #333;padding:0;margin:0 0 34px}
+.commerce-page .cp-order-sec h2{font-size:17px;border:0;padding:16px 0 10px;margin:0}
+.cp-order-table{display:grid;grid-template-columns:150px minmax(0,1fr);margin:0;border-top:1px solid #ccc;font-size:13px}
+.cp-order-table dt,.cp-order-table dd{padding:12px 16px;border-bottom:1px solid #e4e4e4;margin:0;min-width:0;overflow-wrap:anywhere}
+.cp-order-table dt{background:#f4f4f4;color:#333;font-weight:700}
+.cp-order-table .hint{color:#888;font-size:12px;margin:4px 0 0}
+.cp-order-form{border-top:1px solid #ccc}
+.cp-order-form .field{display:grid;grid-template-columns:150px minmax(0,1fr);margin:0;border-bottom:1px solid #e4e4e4;align-items:stretch}
+.commerce-page .cp-order-form .field label{background:#f4f4f4;margin:0;padding:12px 16px;font-size:13px;font-weight:700;display:flex;align-items:center}
+.commerce-page .cp-order-form .field input{margin:7px 12px;padding:8px 10px;width:auto;max-width:380px;font-size:13px;border:1px solid #ccc}
+.cp-card-form{margin-top:16px}
+.cp-order-sec .checkout-addresses{margin:0 0 12px}
+.cp-ship-when{margin:0;padding:10px 16px;background:#f4f4f4;border-top:1px solid #ccc;font-size:13px;font-weight:700;color:#00891a}
+.cp-order-line{border-bottom:1px solid #e4e4e4;padding:12px 16px!important;align-items:center!important}
+.cp-order-line strong{font-size:13px!important;color:#111}
+.cp-order-line p{color:#666;font-size:12px!important}
+.cp-order-line .checkout-photo{width:60px;height:60px;background:#f5f4f0}
+.cp-pay-total{color:#ae0000;font-size:17px}
+.cp-pay-methods{display:flex;flex-wrap:wrap;gap:6px}
+.cp-pay-method{border:1px solid #ccc;padding:7px 14px;font-size:13px;background:#fff}
+.cp-pay-method.is-on{border-color:#346aff;color:#346aff;font-weight:700;box-shadow:inset 0 0 0 1px #346aff}
+.cp-order-agree{text-align:center;padding:6px 0 10px}
+.cp-order-agree .check{justify-content:center;font-size:14px}
+.cp-order-agree .hint{font-size:12px;color:#888;margin:6px 0 0}
+.cp-order-agree .cp-pay-btn{max-width:320px;background:#346aff;border-color:#346aff;font-size:17px;padding:16px;border-radius:2px}
+.commerce-page .cp-done{background:#fff;border:2px solid #346aff;padding:28px 30px;margin:0 0 30px}
+.cp-done h1{margin:0 0 6px;font-size:26px}
+.cp-done-eta{color:#00891a;font-weight:700;font-size:16px;margin:0 0 12px}
+.cp-done p{margin:6px 0}
+.cp-done .hint{color:#777;font-size:13px}
+.cp-done-actions{justify-content:center;margin-top:24px}
+.cp-done-actions .button{background:#346aff;border-color:#346aff}
+.cp-done-actions .cp-btn-outline{padding:10px 18px}
+.summary .cp-order-line{border-bottom:1px solid #e4e4e4}
+@media (max-width:760px){
+  .cp-order-table,.cp-order-form .field{grid-template-columns:100px minmax(0,1fr)}
+  .cp-order-table dt,.cp-order-table dd,.commerce-page .cp-order-form .field label{padding:10px}
+  .commerce-page .cp-order-form .field input{margin:6px 8px;min-width:0}
+  .cp-order-agree .cp-pay-btn{max-width:none}
+}
+/* Search results: the in-page search box sits on one line */
+.cp-inline-search{max-width:520px}
+.cp-inline-search input{flex:1;min-width:0;height:42px;padding:0 12px;border:1px solid #ccc;margin:0}
+.cp-inline-search button{white-space:nowrap;flex:0 0 auto;height:42px;padding:0 20px;background:#346aff;border-color:#346aff}
+/* Sign-up consent checkbox sits on the text line */
+.auth-page .login input[type=checkbox]{min-height:0}
+.summary .cp-order-line{display:flex!important;gap:12px}
+.cp-done-actions a{display:inline-flex;align-items:center;min-height:46px}
+.cp-order-agree .cp-pay-btn{margin-top:14px}
+.cs-cart-qty button{padding:6px 12px;font-size:12px;font-weight:400}
+.cs-cart-qty .link-button{padding:6px 4px;color:#777}

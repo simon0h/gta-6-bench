@@ -1,5 +1,5 @@
 import { installJourneys, switchUser, saveChoice, deliveryAddress, addressPicker, rememberProduct } from './journeys.js'
-import { DEPARTMENTS, CAMPAIGNS, categorySlug } from './catalog.js'
+import { DEPARTMENTS, CAMPAIGNS, CATEGORY_INTRO, categorySlug } from './catalog.js'
 import { Router } from 'express'
 import { randomBytes, randomInt } from 'node:crypto'
 import { recordOrder, getOrder } from '../../lib/orders.js'
@@ -56,7 +56,7 @@ installSite(router, { render })
 installShelfMedia(router)
 
 // ---- browse ----
-router.get('/information', (req,res) => render(req,res,{ title: 'Shopping information', body: P.supportInformationPage(res.locals.base, typeof req.query.topic === 'string' ? req.query.topic : 'Shopping information') }))
+router.get('/information', (req,res) => render(req,res,{ title: 'Customer Services | GAME', body: P.supportInformationPage(res.locals.base, typeof req.query.topic === 'string' ? req.query.topic : 'Shopping information') }))
 router.get('/', (req, res) => render(req, res, { title: 'GAME | Gaming Specialist For Consoles, Games & Accessories!', body: P.homePage({ base: res.locals.base, products: CATALOG }) }))
 
 // The working search URL on game.co.uk is /searchresults?descriptionfilter=...; /search?q= is a 404 there too (it falls through to the product route below).
@@ -75,7 +75,7 @@ const LANDING_MAP=allLandings()
 const registered=new Set()
 for(const dept of DEPARTMENTS) {
   router.get('/'+dept.id,(req,res)=>listing(req,res,{route:'/'+dept.id,heading:dept.title,intro:dept.intro,scope:{department:dept.id},department:dept}))
-  for(const category of dept.categories) router.get('/'+dept.id+'/'+categorySlug(category),(req,res)=>listing(req,res,{route:'/'+dept.id+'/'+categorySlug(category),heading:category,intro:dept.intro,scope:{department:dept.id,category},department:dept}))
+  for(const category of dept.categories) router.get('/'+dept.id+'/'+categorySlug(category),(req,res)=>listing(req,res,{route:'/'+dept.id+'/'+categorySlug(category),heading:category,intro:CATEGORY_INTRO[category]||dept.intro,scope:{department:dept.id,category},department:dept}))
 }
 for(const campaign of CAMPAIGNS) router.get('/campaign/'+campaign.id,(req,res)=>listing(req,res,{route:'/campaign/'+campaign.id,heading:campaign.title,intro:campaign.intro,scope:{campaign:campaign.id}}))
 for(const brand of new Set(CATALOG.map(p=>p.brand))) router.get('/brands/'+categorySlug(brand),(req,res)=>listing(req,res,{route:'/brands/'+categorySlug(brand),heading:brand,intro:'Explore games, accessories and more from '+brand+'.',scope:{brand}}))
@@ -94,7 +94,7 @@ router.post('/cookies', (req, res) => {
 // ---- bag ----
 router.get('/cart', (req, res) => {
   enterScenarioCart(req.store)
-  render(req, res, { title: 'GAME > Cart', body: P.cartPage({ base: res.locals.base, t: totals(req.store), notice: req.query.notice ? String(req.query.notice) : null }) })
+  render(req, res, { title: 'GAME > Cart', body: P.cartPage({ base: res.locals.base, t: totals(req.store), notice: req.query.notice ? String(req.query.notice) : null, user: req.store.user }) })
 })
 
 router.post('/cart/add', (req, res) => {

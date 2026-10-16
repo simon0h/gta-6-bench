@@ -75,7 +75,7 @@ test('GAME help search, category/article and local case validation/ownership wor
 })
 
 test('GAME town/postcode/area store finder selection prefills an eligible collection order',async()=>{
- const s=await startServer();try{const c=s.client();await login(c);assert.match((await c.get('/game-uk/stores?q=London')).text,/1 stores found/);assert.match((await c.get('/game-uk/stores?q=W1D+1BS')).text,/1 stores found/);assert.match((await c.get('/game-uk/stores?area=Scotland')).text,/1 stores found/);assert.match((await c.get('/game-uk/stores?q=Atlantis')).text,/No stores match/)
+ const s=await startServer();try{const c=s.client();await login(c);assert.match((await c.get('/game-uk/stores?q=London')).text,/1 store found/);assert.match((await c.get('/game-uk/stores?q=W1D+1BS')).text,/1 store found/);assert.match((await c.get('/game-uk/stores?area=Scotland')).text,/1 store found/);assert.match((await c.get('/game-uk/stores?q=Atlantis')).text,/No stores match/)
  assert.equal((await c.post('/game-uk/stores/forged/select')).status,404);assert.match((await c.get('/game-uk/stores/london')).text,/Opening hours/);await c.post('/game-uk/stores/london/select');await c.post('/game-uk/cart/add',{pid:'992019',qty:'1'})
  assert.match((await c.get('/game-uk/checkout/delivery')).text,/value="GAME London[^\"]*" selected/)
  await register(c);assert.doesNotMatch((await c.get('/game-uk/stores')).text,/Your preferred store/)

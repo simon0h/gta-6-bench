@@ -34,7 +34,7 @@ export function sephoraChrome({ req, base, title, body, count }) {
   }
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | Sephora</title><link rel="stylesheet" href="/static/unavailable.css"><link rel="stylesheet" href="${base}/static/depth.css"><script src="${base}/static/catalog.js" defer></script></head><body class="sephora sp-depth${captured ? ' sp-srp-page' : ''}">
   <a class="skip" href="#main">Skip to content</a>
-  <div class="sp-promo">${captured ? `<strong>Get 5X Points†† on Sephora Collection.</strong> Ends 10/7. ††Terms apply. ${link('/beauty-insider', 'JOIN BEAUTY INSIDER ›')}` : `<strong>Beauty for every version of you.</strong> Free standard shipping for signed-in members. ${link('/beauty-insider', 'Explore Beauty Insider →')}`}</div>
+  <div class="sp-promo">${captured ? `<strong>Get 5X Points†† on Sephora Collection.</strong> <span class="sx-promo-terms">Ends 10/27. ††Terms apply.</span> ${link('/beauty-insider', 'JOIN BEAUTY INSIDER ›')}` : `<strong>Beauty for every version of you.</strong> Free standard shipping for signed-in members. ${link('/beauty-insider', 'Explore Beauty Insider →')}`}</div>
   <header class="sp-header">
     <button class="sp-shop-toggle" type="button" aria-controls="sp-shop-nav" aria-expanded="false" aria-label="Open shopping menu">${icon('menu')}</button>
     <a class="sp-logo" href="${base}/" aria-label="Sephora home">SEPHORA</a>

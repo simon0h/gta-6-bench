@@ -1,7 +1,7 @@
 // Routes for the real-site structure: department/category landing pages, membership, credit card,
 // trade-in, gift card, business and app pages, help/policy pages, order lookup, newsletter sign-up
 // and the site map. Product grids list only the active catalog (see site-tree.js for the mapping).
-import { esc } from '../../lib/html.js'
+import { esc, publicNotice } from '../../lib/html.js'
 import { orderStatus } from '../../lib/retail-state.js'
 import { CATALOG, refine } from './data.js'
 import { tile } from './browse-pages.js'
@@ -60,7 +60,7 @@ export function installSite(router, { render, notFound }) {
   for (const [path, info] of Object.entries(INFO)) router.get(path, (req, res) => render(req, res, `${info.title.replace('&amp;', '&')} - Best Buy`, S.infoPage(res.locals.base, path, info)))
   router.get('/sentry/landing', (req, res) => {
     const [title, lead] = SENTRY[req.query.type] || SENTRY.ca_donotsell
-    render(req, res, `${title} - Best Buy`, S.infoPage(res.locals.base, '/sentry/landing', { group: 'Legal &amp; Privacy', title: esc(title), lead: esc(lead), sections: [['Submit a request', '<p>On the real site you confirm your identity and submit the request here. This local store keeps no marketing profile, so there is nothing to opt out of and no request is sent.</p>'], ['Learn more', `<p>See our <a href="${res.locals.base}/site/help-topics/privacy-policy/pcmcat204400050062.c">Privacy Policy</a> and <a href="${res.locals.base}/site/privacy-policy/state-privacy-rights/pcmcat204400050063.c">State Privacy Rights</a>.</p>`]] }))
+    render(req, res, `${title} - Best Buy`, S.infoPage(res.locals.base, '/sentry/landing', { group: 'Legal &amp; Privacy', title: esc(title), lead: esc(lead), sections: [['Submit a request', `<p>Sign in or enter the email address and phone number you use with Best Buy, and we will confirm your identity before processing your request. Requests are usually completed within 15 days.</p>${publicNotice('<p class="bbx-fine">This is not the real Best Buy website: no request is sent.</p>')}`], ['Learn more', `<p>See our <a href="${res.locals.base}/site/help-topics/privacy-policy/pcmcat204400050062.c">Privacy Policy</a> and <a href="${res.locals.base}/site/privacy-policy/state-privacy-rights/pcmcat204400050063.c">State Privacy Rights</a>.</p>`]] }))
   })
   router.get('/gift-card-balance', page('Gift Card Balance', base => S.giftBalancePage(base)))
   router.post('/gift-card-balance', (req, res) => {
@@ -84,7 +84,7 @@ export function installSite(router, { render, notFound }) {
   router.post('/newsletter', (req, res) => {
     const email = String(req.body.deals_email ?? '').trim()
     const ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-    render(req, res, 'Get the latest deals - Best Buy', `<div class="bbx-form-page"><h1>${ok ? 'Thanks for signing up!' : 'Please enter a valid email address.'}</h1><p>${ok ? `We saved your interest for ${esc(email)} in this browser session only. This local store does not send marketing email.` : 'Enter an email address like name@example.com to get the latest deals.'}</p><a class="bbx-btn bbx-btn-blue" href="${res.locals.base}/">Continue shopping</a></div>`, { status: ok ? 200 : 400 })
+    render(req, res, 'Get the latest deals - Best Buy', `<div class="bbx-form-page"><h1>${ok ? 'Thanks for signing up!' : 'Please enter a valid email address.'}</h1><p>${ok ? `You'll start getting the latest deals and offers at ${esc(email)}.${publicNotice(' This is not the real Best Buy website: no email is sent.')}` : 'Enter an email address like name@example.com to get the latest deals.'}</p><a class="bbx-btn bbx-btn-blue" href="${res.locals.base}/">Continue shopping</a></div>`, { status: ok ? 200 : 400 })
   })
   router.get('/sitemap', page('Site Map', S.sitemapPage))
   router.get('/sitemap.xml', (req, res) => res.type('application/xml').send(S.sitemapXml(res.locals.base)))

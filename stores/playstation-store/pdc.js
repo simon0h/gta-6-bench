@@ -113,7 +113,7 @@ const PAGES = [
     ['Find exclusive deals on top games', 'Regular deals and discounts are available on popular games.', [['Deals', '/en-us/pages/deals']]],
     ['PlayStation gift cards FAQ', 'Gift card funds cannot buy physical products or merchandise. Wallet funds are non-refundable. Codes are redeemed in Settings > Users and Accounts > Account > Payment and Subscriptions > Redeem Codes.', [['Redeem a PS Store voucher', '/en-us/support/store']]],
   ]],
-  ['/en-us/playstation-credit-card', 'PS Credit Card', 'PlayStation® Visa® Credit Card', 'Earn points on PlayStation purchases. Card applications are handled by the issuer and are not available in this store.', []],
+  ['/en-us/playstation-credit-card', 'PS Credit Card', 'PlayStation® Visa® Credit Card', 'Earn points on PlayStation purchases. Applications are reviewed and approved by the card issuer.', []],
   ['/en-us/playstation-app', 'PlayStation App', 'PlayStation App', 'Chat with friends, buy games on PlayStation Store and download them to your console from your phone.', []],
   ['/en-us/beta-program-at-playstation', 'Beta', 'Beta Program at PlayStation', 'Register to be considered for beta tests of upcoming games and system software.', []],
   ['/en-us/editorial/this-month-on-playstation', 'News', 'This Month on PlayStation', 'New releases, PlayStation Plus games and events this month.', [
@@ -160,7 +160,7 @@ const PAGES = [
     ['Your choices', 'Manage privacy settings on your console or in account management.', [['Do Not Share My Personal Information', '/en-us/legal/third-party-ads']]],
   ]],
   ['/en-us/legal/third-party-ads', 'Legal', 'Do Not Share My Personal Information', 'US residents can opt out of the sharing of personal information for targeted advertising. No privacy request is submitted by visiting this page.', []],
-  ['/en-us/legal/website-terms-of-use', 'Legal', 'Website Terms of Use', 'The terms that apply to PlayStation websites. This local storefront records simulated shopping actions only.', []],
+  ['/en-us/legal/website-terms-of-use', 'Legal', 'Website Terms of Use', 'The terms that apply to PlayStation websites. By using these websites you agree to these terms.', []],
   ['/en-us/legal/psn-terms-of-service', 'Legal', 'PlayStation Terms of Service', 'The terms that govern your account for PlayStation and purchases from PlayStation Store. Digital content is licensed, not sold, subject to the PlayStation End User License Agreement.', [
     ['Cancellations and refunds', 'See the PlayStation Store cancellation policy.', [['PS Store Cancellation Policy', '/en-us/legal/playstation-store-cancellation-policy']]],
   ]],
@@ -201,7 +201,7 @@ const PAGES = [
     ['Hardware help', 'Troubleshoot first with hardware support articles.', [['Hardware & Repairs', '/en-us/support/hardware']]],
   ]],
   // ---- other hosts ----
-  ['/blog.playstation.com', 'PlayStation.Blog', 'PlayStation.Blog', 'Official news, announcements and previews from PlayStation. Posts are summarized here; the live blog is not mirrored.', [
+  ['/blog.playstation.com', 'PlayStation.Blog', 'PlayStation.Blog', 'Official news, announcements and previews from PlayStation.', [
     ['Latest news', 'Grand Theft Auto VI pre-orders are live on PlayStation Store.', [['Grand Theft Auto VI', GTA]]],
     ['PlayStation Plus', 'Monthly Games and Game Catalog announcements.', [["What's New", '/en-us/ps-plus/whats-new']]],
   ]],
@@ -250,7 +250,7 @@ function pdcBody(base, [path, eyebrow, h1, intro, sections, opts = {}]) {
   const hero = `<section class="ps-pdc-hero"><div><p class="ps-pdc-eyebrow">${esc(eyebrow)}</p><h1>${esc(h1)}</h1><p>${esc(intro)}</p></div></section>`
   const tiers = opts.tiers ? `<section class="ps-pdc-section"><h2 class="visually-hidden">Membership plans</h2>${tierCards(base)}</section>` : ''
   const body = sections.map(([h, text, links, id]) => `<section class="ps-pdc-section"${id ? ` id="${id}"` : ''}><h2>${esc(h)}</h2><p>${esc(text)}</p>${linkRow(base, links)}</section>`).join('')
-  const empty = !sections.length ? `<section class="ps-pdc-section"><p>This page is a short local summary of the official PlayStation page.</p>${linkRow(base, [['PlayStation Store', STORE], ['Support', '/en-us/support']])}</section>` : ''
+  const empty = !sections.length ? `<section class="ps-pdc-section"><p>Find games, add-ons and subscriptions on PlayStation Store, or get help from PlayStation Support.</p>${linkRow(base, [['PlayStation Store', STORE], ['Support', '/en-us/support']])}</section>` : ''
   return `${hero}<div class="ps-pdc-body">${tiers}${body}${empty}</div>`
 }
 
@@ -275,12 +275,12 @@ function directBody(base, [path, h1, intro], query = {}) {
   return `<div class="ps-direct-bar"><b>PlayStation Direct</b><nav aria-label="PlayStation Direct">${nav}</nav></div>
 <section class="ps-pdc-hero ps-direct-hero"><div><p class="ps-pdc-eyebrow">PlayStation Direct</p><h1>${esc(h1)}</h1><p>${esc(intro)}</p></div></section>
 ${(DIRECT_SCOPE[path] && directListing(base, path, query, DIRECT_SCOPE[path])) || `<div class="ps-pdc-body ps-direct-layout"><aside class="ps-direct-filters" aria-label="Filters"><h2>Filter</h2><p><b>Category</b><br>Consoles · Controllers · Audio · Games</p><p><b>Availability</b><br>In stock · Coming soon</p><p><b>Sort by</b><br>Featured</p></aside>
-<section class="ps-direct-results"><p class="ps-direct-count">0 results</p><div class="ps-empty-state"><h2>No products to show</h2><p>${fixtureCatalog ? 'PlayStation Direct items are not available in this store. PlayStation Store sells digital games, add-ons and subscriptions only.' : 'Physical games and merchandise are not stocked right now. Shop consoles and accessories, or buy digital games on PlayStation Store.'}</p>${linkRow(base, [...(fixtureCatalog ? [] : [['Buy consoles', '/direct.playstation.com/en-us/hardware/ps5'], ['Buy accessories', '/direct.playstation.com/en-us/accessories/ps5']]), ['Shop digital games on PlayStation Store', STORE], ['Grand Theft Auto VI pre-order', GTA]])}</div></section></div>`}`
+<section class="ps-direct-results"><p class="ps-direct-count">0 results</p><div class="ps-empty-state"><h2>No products to show</h2><p>${fixtureCatalog ? 'PlayStation Direct items are not sold on PlayStation Store. PlayStation Store sells digital games, add-ons and subscriptions only.' : 'Physical games and merchandise are not stocked right now. Shop consoles and accessories, or buy digital games on PlayStation Store.'}</p>${linkRow(base, [...(fixtureCatalog ? [] : [['Buy consoles', '/direct.playstation.com/en-us/hardware/ps5'], ['Buy accessories', '/direct.playstation.com/en-us/accessories/ps5']]), ['Shop digital games on PlayStation Store', STORE], ['Grand Theft Auto VI pre-order', GTA]])}</div></section></div>`}`
 }
 
 function statusBody(base) {
   const services = ['Account management', 'Gaming and social', 'PlayStation Video', 'PlayStation Store', 'PlayStation Direct']
-  return `<section class="ps-pdc-hero"><div><p class="ps-pdc-eyebrow">PlayStation Network</p><h1>PSN Service Status</h1><p>United States · Local snapshot: this page does not query live service status.</p></div></section>
+  return `<section class="ps-pdc-hero"><div><p class="ps-pdc-eyebrow">PlayStation Network</p><h1>PSN Service Status</h1><p>United States · Status of PlayStation Network services</p></div></section>
 <div class="ps-pdc-body"><section class="ps-pdc-section"><p class="ps-status-ok"><span aria-hidden="true">●</span> All services are up and running.</p><ul class="ps-status-list">${services.map(s => `<li><span>${esc(s)}</span><b>Up and running</b></li>`).join('')}</ul>${linkRow(base, [['Support', '/en-us/support'], ['Connectivity', '/en-us/support/connectivity']])}</section></div>`
 }
 

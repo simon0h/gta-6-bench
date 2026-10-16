@@ -107,7 +107,7 @@ export function layout({ base, title, body, cartCount = 0, user = null, chrome =
     <a class="az-nav-item az-deliver" data-location-open href="${base}${LOCATION}?ret=${encodeURIComponent(here)}"><span class="az-nav-line1">${user ? `Deliver to ${esc(user.first_name || 'you')}` : `Delivering to ${esc(locationLabel(destination))}`}</span><span class="az-nav-line2">&#128205; ${user ? esc(locationLabel(destination)) : 'Update location'}</span></a>
     <form class="az-search" action="${base}/s" method="get" role="search">
       <label for="searchDropdownBox" class="a-offscreen">Search in</label>
-      <select id="searchDropdownBox" name="i" class="az-search-dept">${DEPARTMENTS.map(([v, l]) => `<option value="${v}" ${dept === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>
+      <div class="az-search-facade"><span class="az-search-facade-label" aria-hidden="true">${esc(dept && DEPARTMENTS.find(([v]) => v === dept)?.[1] || 'All')}</span><select id="searchDropdownBox" name="i" class="az-search-dept">${DEPARTMENTS.map(([v, l]) => `<option value="${v}" ${dept === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
       <label for="twotabsearchtextbox" class="a-offscreen">Search Amazon</label>
       <input id="twotabsearchtextbox" type="text" name="k" placeholder="Search Amazon" value="${esc(q)}" autocomplete="off" list="az-search-suggestions"><datalist id="az-search-suggestions">${['gta 6','headphones','kitchen','puzzle','backpack','vinyl','books','controller'].map(x=>`<option value="${x}"></option>`).join('')}</datalist>
       <button type="submit" class="az-search-go" aria-label="Go"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="#0F1111" stroke-width="2.4"/><path d="M15 15l6 6" stroke="#0F1111" stroke-width="2.6" stroke-linecap="round"/></svg></button>
@@ -186,6 +186,12 @@ function tile(base, p, ret, inCart) {
 export function searchPage(options) { return browseResults({...options,tile,gameTile}) }
 
 // ---------------------------------------------------------------- product page
+// Star histogram for a rated listing, shaped like amazon.com's: mostly 5-star, a 1-star bump.
+function starShares(stars) {
+  const off = Math.max(0, 4.9 - Number(stars) || 0)
+  const four = Math.round(10 + off * 10), three = Math.max(3, Math.round(5 + (off - 0.4) * 6)), two = Math.max(1, Math.round(2 + (off - 0.4) * 3)), one = Math.max(2, Math.round(4 + (off - 0.4) * 8))
+  return [100 - four - three - two - one, four, three, two, one]
+}
 export function productPage({ base, p, inCart = {}, listAdded = false, lists = [], destination = null, bundle = [] }) {
   const isGame = p.kind === 'game'
   const preorder = !!p.release
@@ -265,7 +271,7 @@ ${productRow(base,'Customers also considered',recommendations(p),nodePath(base,p
 </section>
 <section class="az-description"><h2 class="az-h2">Product Description</h2><p>${isGame?esc(GAME.description):esc(p.about.join(' '))}</p></section>
 <section class="az-reviews"><h2 class="az-h2">Customer reviews</h2>
-  ${p.rating ? `<div class="az-stars"><span aria-hidden="true">${'★'.repeat(Math.round(p.rating.stars))}${'☆'.repeat(5 - Math.round(p.rating.stars))}</span> ${esc(p.rating.stars)} out of 5 &middot; ${esc(p.rating.count)} global ratings</div>`
+  ${p.rating ? `<div class="az-stars"><span aria-hidden="true">${'★'.repeat(Math.round(p.rating.stars))}${'☆'.repeat(5 - Math.round(p.rating.stars))}</span> ${esc(p.rating.stars)} out of 5 &middot; ${esc(p.rating.count)} global ratings</div><div class="az-review-bars">${starShares(p.rating.stars).map((pct, i) => `<div><span>${5 - i} star</span><span class="az-bar"><i style="width:${pct}%"></i></span><span>${pct}%</span></div>`).join('')}</div>`
     : `<div class="az-review-bars">${[5, 4, 3, 2, 1].map(n => `<div><span>${n} star</span><span class="az-bar"></span><span>0%</span></div>`).join('')}</div><p><a href="${esc(base + signinPath(ret))}">Sign in to see customer reviews.</a></p>`}
 </section><script src="${base}/static/catalog.js" defer></script>`
 }
@@ -273,7 +279,7 @@ ${productRow(base,'Customers also considered',recommendations(p),nodePath(base,p
 // ---------------------------------------------------------------- cart
 export function cartPage({ base, t, saved = [], user }) {
   const unavailable=t.lines.some(l=>scenarioStockFor(l.product,'shipping')===0)
-  const availabilityNotice=t.lines.some(l=>l.product.kind==='game') ? `<p class="benchmark-fulfillment" role="status">This local storefront supports shipping only; pickup checkout is unavailable.</p>${unavailable?'<p class="benchmark-availability" role="alert">Shipping unavailable. This item can no longer be purchased. No order has been placed.</p>':''}` : ''
+  const availabilityNotice=t.lines.some(l=>l.product.kind==='game') ? `<p class="benchmark-fulfillment" role="status">Shipping only: pickup checkout is unavailable for this order.</p>${unavailable?'<p class="benchmark-availability" role="alert">Shipping unavailable. This item can no longer be purchased. No order has been placed.</p>':''}` : ''
   if (!t.lines.length && !saved.length) {
     return `<div class="az-cart-page"><div class="az-cart-box az-cart-empty">
   <div class="az-cart-empty-art" aria-hidden="true">${cartSvg("#3b6570")}</div>
@@ -305,14 +311,14 @@ export function cartPage({ base, t, saved = [], user }) {
       </form>
     </div>
   </div>
-  <div class="az-cart-price">${price(l.product.price * l.qty)}</div>
+  <div class="az-cart-price">${money(l.product.price * l.qty)}</div>
 </div>`
   const savedRows = saved.map(l => `<div class="az-cart-line" data-asin="${esc(l.asin)}">
   <a href="${productPath(base, l.product)}" class="az-cart-img">${productArt(l.product)}</a>
   <div class="az-cart-info"><a class="az-cart-title" href="${productPath(base, l.product)}">${esc(l.product.title)}</a><div class="az-avail">${esc(l.product.availability)}</div>
     <form method="post" action="${base}/cart/update" class="az-cart-actions"><input type="hidden" name="asin" value="${esc(l.asin)}"><button type="submit" name="action" value="move" class="az-btn az-btn-outline az-btn-sm">Move to cart</button><button type="submit" name="action" value="delete-saved" class="az-link-btn">Delete</button></form>
   </div>
-  <div class="az-cart-price">${price(l.product.price)}</div>
+  <div class="az-cart-price">${money(l.product.price)}</div>
 </div>`).join('')
   const subtotalLine = `Subtotal (${plural(t.count)}): <b>${money(t.subtotal)}</b>`
   return `<div class="az-cart-page">
@@ -334,7 +340,6 @@ export function cartPage({ base, t, saved = [], user }) {
     ${t.lines.length ? `<div class="az-free-note"><span class="az-check-green">&#10004;</span> Your order qualifies for FREE delivery. Choose this option at checkout. <a href="${base}/help/delivery">See details</a></div>
     <div class="az-cart-subtotal">${subtotalLine}</div>
     <form method="post" action="${base}/gp/cart/desktop/go-to-checkout.html">
-      <p class="az-fine">Gift wrapping and gift messages are unavailable.</p>
       <button class="az-btn az-btn-block" type="submit" ${unavailable?'disabled':''} name="proceedToRetailCheckout" value="Proceed to checkout">Proceed to checkout (${plural(t.count)})</button>
     </form>` : `<p>Your cart is empty. Items saved for later are listed below your cart.</p>`}
   </aside>
@@ -483,8 +488,8 @@ export function paymentPage({ base, t, address, values = {}, errors = {}, promoE
         <p class="az-fine"><b>Billing address:</b> same as delivery address — ${esc(address.full_name)}, ${esc(address.line1)}, ${esc(address.city)}, ${esc(address.state)} ${esc(address.postal_code)} <a href="${base}/gp/buy/addressselect">Change</a></p>
         <button class="az-btn" type="submit" id="pp-use-this-payment-method">Use this payment method</button>
       </form>
-      <h2>Other payment options</h2>
-      <p class="az-fine">Gift card balances, promotional codes, bank accounts, and credit enrollment are unavailable. <a href="${base}/help/payment">Payment help</a></p>
+      <h2 class="az-co-other">Other payment options</h2>
+      <p class="az-fine"><b>Your Amazon Gift Card balance:</b> $0.00 &nbsp;<a href="${base}/help/payment">Learn more about payment methods</a></p>
       ${promoError ? `<p class="az-field-error" role="alert">${esc(promoError)}</p>` : ''}
     </div>
   </div>
@@ -508,7 +513,7 @@ export function reviewPage({ base, t, address, payment, delivery = 'standard' })
     <section class="az-co-box az-co-step"><div class="az-step-num">2</div><div class="az-step-body"><h2>Payment method</h2>
       <p>Paying with ${esc(payment.brand)} ending in ${esc(payment.last4)}</p>
       <p class="az-fine">Billing address: same as shipping address</p>
-      <p class="az-fine"><a href="${base}/help/payment">Payment methods and promotional-code availability</a></p></div>
+      <p class="az-fine"><a href="${base}/help/payment">Learn more about payment methods</a></p></div>
       <div class="az-step-links"><a href="${base}/gp/buy/payselect">Change</a></div></section>
     <section class="az-co-box az-co-step"><div class="az-step-num">3</div><div class="az-step-body az-step-items"><h2>Review items and shipping</h2>
       <form id="spc-form" method="post" action="${base}/gp/buy/spc">

@@ -197,3 +197,71 @@
 .card-was{color:#6b7280;font-weight:400;font-size:.8em;margin-left:4px}
 .page-gap{padding:0 6px;color:#6b7280}
 @media(max-width:600px){.eb-carousel .browse-grid{grid-auto-columns:minmax(150px,46vw)}}
+/* Grand Theft Auto VI preorder pages: same buy box as the rest of the range */
+.eb-gta-pdp .badge{margin:0 0 10px}
+.eb-gta-pdp h1{margin-bottom:4px}
+.eb-gta-pdp .eb-pdp-platform{font-size:15px;font-weight:400;color:#56606d;margin:0 0 12px}
+.eb-pdp-edition,.eb-pdp-account{font-size:13px;margin:4px 0}
+.eb-pdp-account{color:#6c7480}
+.eb-gta-pdp .price{margin:16px 0 6px}
+.eb-pdp-deposit{font-size:13px;margin:0 0 4px}
+.eb-pdp-deposit span{display:block;color:#56606d;margin-top:2px}
+.eb-gta-fulfil>div>p>span{display:block;color:#6c7480;font-size:11px;margin-top:3px;line-height:1.4}
+.eb-gta-fulfil small{color:#538846}
+.eb-gta-buy .field{margin:0;flex-shrink:0;width:110px}
+.eb-gta-buy .field label{font-size:11px;font-weight:400;display:block}
+.eb-gta-buy .field input{width:82px;margin:5px 0 0;padding:11px}
+.eb-gta-buy .add-cart{flex:1}
+.eb-other-platform{font-size:13px;margin:14px 0 0}
+@media(max-width:600px){.eb-gta-buy .field{width:96px}}
+.eb-gta-fulfil>div+div small{color:#6c7480}
+/* Checkout */
+.eb-steps{list-style:none;display:flex;align-items:center;padding:14px 18px;margin:0 0 18px;background:#fff;border:1px solid #dbe0e8;border-radius:3px}
+.eb-steps li{display:flex;align-items:center;gap:8px;color:#6c7480;font-size:13px;flex:1;white-space:nowrap}
+.eb-steps li:last-child{flex:0 0 auto}
+.eb-steps li span{flex:0 0 26px;height:26px;border-radius:50%;border:2px solid #c2cbd8;display:grid;place-items:center;font-weight:700;font-size:12px;background:#fff;color:#56606d}
+.eb-steps li[aria-current] span{background:var(--eb-blue);border-color:var(--eb-blue);color:#fff}
+.eb-steps li[aria-current]{color:var(--eb-ink)}
+.eb-steps li.done span{background:var(--eb-green);border-color:var(--eb-green);color:#fff}
+.eb-steps li:not(:last-child)::after{content:"";flex:1;height:2px;background:#d3d9e2;margin:0 12px;min-width:12px}
+.eb-confirm-to{font-size:13px;color:#4b5563}
+.eb-ship-to{border-bottom:1px solid #e1e5eb;padding-bottom:14px;margin-bottom:14px}
+.eb-ship-to h2{font-size:16px;margin:0 0 6px}
+.eb-ship-to p{margin:0 0 6px;line-height:1.5}
+.eb-ship-to a{font-size:13px}
+.eb-pay-note{font-size:13px;color:#3f4a59;background:#f4f7fc;border-left:3px solid var(--eb-blue);padding:10px 12px}
+.eb-cart-side{position:sticky;top:20px}
+.eb-cart-side .summary{position:static}
+.eb-cart-checkout{display:block;text-align:center;margin-top:12px;background:var(--eb-green);font-size:15px;padding:14px 18px;text-transform:uppercase}
+.eb-cart-checkout:hover{background:#306523}
+.eb-confirm-head{background:#fff;border:1px solid #dbe0e8;border-top:4px solid var(--eb-green);border-radius:3px;padding:18px 24px;margin-bottom:20px}
+.eb-confirm-head p{margin:6px 0}
+.eb-confirm-details h2{margin-top:0}
+@media(max-width:760px){.eb-cart-side{position:static}}
+@media(max-width:600px){.eb-steps{padding:12px}.eb-steps li{font-size:11px;white-space:normal;gap:6px}.eb-steps li:not(:last-child)::after{margin:0 6px}}
+.eb-sub-icon{width:66px;height:52px;border-radius:8px;background:#f4f5f7;overflow:hidden}
+.eb-sub-icon img{width:100%;height:100%;object-fit:contain;display:block}
+/* Halloween hero: a carved pumpkin rather than a plain disc */
+.eb-slide-main{background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 190'><ellipse cx='100' cy='180' rx='78' ry='8' fill='%23000' opacity='.18'/><path d='M96 40c-2-14 4-26 16-32l6 7c-9 5-12 14-10 25z' fill='%233f6b2a'/><ellipse cx='62' cy='110' rx='46' ry='62' fill='%23e8741c'/><ellipse cx='138' cy='110' rx='46' ry='62' fill='%23e8741c'/><ellipse cx='100' cy='110' rx='44' ry='66' fill='%23f68b2a'/><path d='M100 46c-8 20-8 108 0 128M100 46c8 20 8 108 0 128' stroke='%23d9661a' stroke-width='3' fill='none'/><path d='M58 96l22-4-8 20zM142 96l-22-4 8 20z' fill='%233a1606'/><path d='M60 132c14 14 66 14 80 0l-8 18-10-8-10 10-12-10-10 10-10-10-10 8z' fill='%233a1606'/></svg>") no-repeat 80% 45%/210px auto,linear-gradient(135deg,#2b1055,#6a1b9a 55%,#f57c00)}
+@media(max-width:600px){.eb-slide-main{background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 190'><ellipse cx='100' cy='180' rx='78' ry='8' fill='%23000' opacity='.18'/><path d='M96 40c-2-14 4-26 16-32l6 7c-9 5-12 14-10 25z' fill='%233f6b2a'/><ellipse cx='62' cy='110' rx='46' ry='62' fill='%23e8741c'/><ellipse cx='138' cy='110' rx='46' ry='62' fill='%23e8741c'/><ellipse cx='100' cy='110' rx='44' ry='66' fill='%23f68b2a'/><path d='M100 46c-8 20-8 108 0 128M100 46c8 20 8 108 0 128' stroke='%23d9661a' stroke-width='3' fill='none'/><path d='M58 96l22-4-8 20zM142 96l-22-4 8 20z' fill='%233a1606'/><path d='M60 132c14 14 66 14 80 0l-8 18-10-8-10 10-12-10-10 10-10-10-10 8z' fill='%233a1606'/></svg>") no-repeat 94% 14%/96px auto,linear-gradient(135deg,#2b1055,#6a1b9a 55%,#f57c00)}}
+/* Franchise roundels in each franchise's own colours */
+.eb-franchises span{border:3px solid #fff;box-shadow:0 0 0 2px #dfe6f2;font-family:Georgia,'Times New Roman',serif;letter-spacing:.5px}
+.eb-franchises a:nth-child(1) span{background:radial-gradient(circle at 50% 35%,#ffde38,#f5b700);color:#2a5db0;-webkit-text-stroke:.5px #1d3f7a}
+.eb-franchises a:nth-child(2) span{background:radial-gradient(circle at 50% 35%,#8a1c22,#4d0d10);color:#e8c25a}
+.eb-franchises a:nth-child(3) span{background:#111;color:#ffe81f;font-family:Arial,sans-serif}
+.eb-franchises a:nth-child(4) span{background:#e62429;color:#fff;font-family:Arial,sans-serif}
+.eb-franchises a:nth-child(5) span{background:radial-gradient(circle at 50% 30%,#2f7fd6,#103f8c);color:#fff;font-style:italic}
+.eb-franchises a:nth-child(6) span{background:#0476f2;color:#fff;font-family:Arial,sans-serif}
+.eb-franchises a:nth-child(7) span{background:radial-gradient(circle at 50% 35%,#ff6fa8,#c2185b);color:#fff;font-family:Arial,sans-serif}
+.eb-franchises a:nth-child(8) span{background:linear-gradient(#69b240 0 38%,#8b5a2b 38%);color:#fff;font-family:'Courier New',monospace;text-shadow:1px 1px 0 #3b2412}
+.eb-franchises a:hover span{box-shadow:0 0 0 2px var(--eb-blue)}
+.eb-sub-mark{font-family:Georgia,'Times New Roman',serif;font-size:15px;letter-spacing:-.3px;color:#fff;border:3px solid #fff;box-shadow:0 0 0 2px #dfe6f2}
+.eb-mark-0{background:#2858bb}.eb-mark-1{background:#c62f3a}.eb-mark-2{background:#1f7a5a}.eb-mark-3{background:#6a3fb5}.eb-mark-4{background:#d9822b}.eb-mark-5{background:#24323f}
+.eb-sub-icon{border:0;box-shadow:none}
+.eb-card-brands{display:flex;gap:6px;margin:0 0 12px}
+.eb-card-brands span{border:1px solid #cfd6e0;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;color:#3a4a60;background:#fff}
+.eb-promo{padding:14px 20px}
+.eb-promo .field{margin-bottom:8px}
+.checkout form[action$="/checkout/payment"]>button:last-child,.checkout form[action$="/checkout/delivery"]>button:last-child{background:var(--eb-green);min-width:220px;padding:14px 22px;text-transform:uppercase;font-size:15px}
+.eb-confirm-details p{margin:8px 0}
+@media(max-width:760px){.checkout form .columns{gap:0}}

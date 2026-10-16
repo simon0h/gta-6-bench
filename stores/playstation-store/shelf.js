@@ -38,7 +38,7 @@ const GAMES = [
   ['Ace Combat 8: Wings of Theve', 'Bandai Namco Entertainment', '10/2/2026', 'Shooter', 'T', '5', 69.99, null, 'online', 'Take to the skies in the latest entry of the aerial combat series, with a new story and fully licensed aircraft.'],
   ['Star Wars: Galactic Racer', 'Electronic Arts', '10/6/2026', 'Driving/Racing', 'E10+', '5', 59.99, null, 'online local', 'Race podracers, speeders and starfighters across iconic locations from a galaxy far, far away.'],
   ['Phantom Blade Zero', 'S-GAME', '10/29/2026', 'Action', 'M', '5', 69.99, null, 'pre pro', 'Pre-order now. Master kung-fu action as Soul, an elite assassin framed for murder, in a world of shadow and steel.'],
-  ['Castlevania: Belmont\'s Curse', 'KONAMI', '10/15/2026', 'Action', 'T', '54', 39.99, null, 'pre', 'Pre-order now. A new side-scrolling Castlevania adventure with whip-cracking action across Dracula\'s castle.'],
+  ['Castlevania: Belmont\'s Curse', 'KONAMI', '11/12/2026', 'Action', 'T', '54', 39.99, null, 'pre', 'Pre-order now. A new side-scrolling Castlevania adventure with whip-cracking action across Dracula\'s castle.'],
   ['Attack on Titan 3', 'KOEI TECMO', '12/10/2026', 'Action', 'M', '54', 69.99, null, 'pre online', 'Pre-order now. Swing through the walls with omni-directional mobility gear and take on the Titans.'],
   ['Persona 4 Revival', 'ATLUS', '2/18/2027', 'Role Playing Games', 'M', '5', 69.99, null, 'pre', 'Pre-order now. A full reimagining of Persona 4: a year in Inaba, a TV world and a string of mysterious murders.'],
   ['Until Dawn 2', 'Sony Interactive Entertainment', '1/28/2027', 'Horror', 'M', '5', 69.99, null, 'pre', 'Pre-order now. A new night of choice-driven horror where anyone can die.'],
@@ -367,9 +367,11 @@ const ratingFor = (key, hot, release) => {
   const score = Number((3.9 + (h % 100) / 100).toFixed(2))
   const base = Math.round(Math.min(age, 1500) * (hot ? 220 : 35) * (0.6 + (h % 70) / 100))
   const ratingCount = Math.max(60, base)
-  const five = Math.round((score - 3.9) * 60 + 30)
-  const four = Math.max(8, 38 - Math.round(five / 3)), one = Math.max(1, Math.round((5 - score) * 3))
-  const three = Math.max(2, Math.round((5 - score) * 6)), two = Math.max(1, 100 - five - four - three - one)
+  // Store ratings lean to 5 stars with a small 1-star tail; 5 and 4 stars are solved so the bars average to the score.
+  const gap = 5 - score
+  const one = Math.max(1, Math.round(gap * 12)), two = Math.max(1, Math.round(gap * 4)), three = Math.max(1, Math.round(gap * 9))
+  const top = 100 - one - two - three
+  const five = Math.round(score * 100 - 3 * three - 2 * two - one - 4 * top), four = top - five
   return { score, ratingCount, distribution: [five, four, three, two, one] }
 }
 const genreCopy = { Action: 'action', Adventure: 'adventure', Shooter: 'shooter', 'Driving/Racing': 'racing', 'Role Playing Games': 'role-playing', Sport: 'sports', Fighting: 'fighting', Simulation: 'simulation', Strategy: 'strategy', Horror: 'horror', Family: 'family', Puzzle: 'puzzle', Party: 'party', 'Music/Rhythm': 'rhythm' }

@@ -10,7 +10,7 @@
       const choice = choices[index]
       for (const button of choices) button.setAttribute('aria-pressed', String(button === choice))
       for (const image of [main, expanded]) { image.src = choice.dataset.paSrc; image.alt = choice.dataset.paAlt }
-      for (const caption of gallery.querySelectorAll('[data-pa-caption]')) caption.textContent = `${choice.dataset.paLabel} · ${index + 1} / ${choices.length}`
+      for (const caption of gallery.querySelectorAll('[data-pa-caption]')) caption.textContent = `${index + 1} / ${choices.length}`
     }
     gallery.addEventListener('click', event => {
       const choice = event.target.closest('[data-pa-select]')

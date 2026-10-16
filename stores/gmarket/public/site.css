@@ -97,7 +97,8 @@ body.gm{margin:0;background:var(--gm-bg);color:var(--gm-text);font:14px/1.5 -app
 .gm-band.emart{background:#fffbe8}
 .gm-band.star{background:#eefaf1}
 .gm-exhibits{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:18px}
-.gm-exhibits a{background:#fff;border-radius:12px;min-height:96px;padding:14px;display:flex;align-items:flex-end;font-weight:700;font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.gm-exhibits a{background:#fff;border-radius:12px;min-height:96px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;gap:8px;font-weight:700;font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.gm-exhibits a::before{font-size:26px;line-height:1}.gm-exhibits a:nth-child(1)::before{content:"🍱"}.gm-exhibits a:nth-child(2)::before{content:"📺"}.gm-exhibits a:nth-child(3)::before{content:"📚"}.gm-exhibits a:nth-child(4)::before{content:"📦"}.gm-exhibits a:nth-child(5)::before{content:"⭐"}.gm-exhibits a:nth-child(6)::before{content:"🏷️"}.gm-exhibits a:nth-child(7)::before{content:"🎁"}
 .gm-two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .gm-services{display:grid;grid-template-columns:repeat(12,1fr);gap:8px;text-align:center;font-size:12px}
 .gm-services a{display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -110,6 +111,11 @@ body.gm{margin:0;background:var(--gm-bg);color:var(--gm-text);font:14px/1.5 -app
 .gm-thumb{aspect-ratio:1;border-radius:10px;background:linear-gradient(145deg,#eef0f3,#dfe3e8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#555}
 .gm-thumb span{font-weight:800;font-size:18px}
 .gm-thumb small{font-size:11px;color:var(--gm-muted)}
+.gm-thumb-ps5,.gm-thumb-xbox{background:#f4f3ef;gap:0}
+.gm-thumb-ps5 b,.gm-thumb-xbox b{width:46%;white-space:nowrap;box-sizing:border-box;padding:7px 4px;border-radius:6px 6px 0 0;background:#00439c;color:#fff;font-size:11px;font-weight:800;letter-spacing:.04em;text-align:center}
+.gm-thumb-xbox b{background:#107c10}
+.gm-thumb-ps5 span,.gm-thumb-xbox span{width:46%;height:48%;box-sizing:border-box;display:flex;align-items:flex-end;justify-content:center;padding:0 6px 12px;border-radius:0 0 6px 6px;background:linear-gradient(160deg,#3a3f4a,#16181d);color:rgba(255,255,255,.55);font-size:11px;font-weight:600;box-shadow:0 10px 18px -12px rgba(0,0,0,.6)}
+.gm-thumb-ps5 small,.gm-thumb-xbox small{margin-top:12px}
 .gm-seller{font-size:12px;color:var(--gm-muted);margin:0}
 .gm-price{margin:2px 0;font-size:14px}
 .gm-price strong{font-size:18px;font-weight:800}
@@ -348,3 +354,13 @@ body.gm{margin:0;background:var(--gm-bg);color:var(--gm-text);font:14px/1.5 -app
  .gm-spec th{width:96px}
  .gm-filters{order:2}
 }
+/* summary discount, not-found page, delivery location, card showroom */
+.gm-summary .gm-minus{color:var(--gm-red)}
+.gm-notfound{text-align:center;padding:64px 16px 72px;max-width:640px;margin:0 auto}
+.gm-notfound h1{font-size:24px;margin:10px 0 12px}
+.gm-notfound p{color:var(--gm-sub);font-size:14px;line-height:1.6}
+.gm-notfound .gm-btn{margin:10px 4px 0}
+.gm-location{max-width:520px}
+.gm-location form{display:grid;gap:8px;margin-top:14px}
+.gm-location input{padding:10px;border:1px solid #ccc;border-radius:6px;font:inherit}
+.gm-card-hero{background:linear-gradient(120deg,#1b1d22,#3a3f4a)}

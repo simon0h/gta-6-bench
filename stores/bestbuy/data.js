@@ -192,7 +192,7 @@ export function cartIssue(store) {
   for (const line of store.cart) {
     const p=localProduct(selectedProduct(byId(line.pid),line.variant),store)
     if (!p || !Number.isInteger(line.qty) || line.qty < 1 || line.qty > 3) return 'Choose a valid product option and quantity (1–3).'
-    if (line.fulfillment === 'pickup' && !pickupAvailabilityKnown(p)) return `${p.title}: pickup availability is unverified for this store. Choose shipping or the captured Compton pickup location.`
+    if (line.fulfillment === 'pickup' && !pickupAvailabilityKnown(p)) return `${p.title}: pickup availability is unverified for this store. Choose shipping or pick up at Best Buy Compton.`
     const same=store.cart.filter(l=>l.pid===line.pid && (l.variant||'')===(line.variant||''))
     const offerQty=same.reduce((n,l)=>n+l.qty,0)
     const methodQty=same.filter(l=>l.fulfillment===line.fulfillment).reduce((n,l)=>n+l.qty,0)

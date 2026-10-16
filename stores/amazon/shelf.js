@@ -49,7 +49,25 @@ function asinFor(title, taken) {
 }
 const slugOf = title => title.normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/['’]/g, '').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').split('-').slice(0, 9).join('-')
 const countText = n => n.toLocaleString('en-US')
+// The rating counts in shelf-data.js are round representative figures that repeat across rows;
+// each listing shows its own count, spread deterministically within ±18% of that figure.
+const ratingCount = (title, n) => Math.round(n * (0.82 + (createHash('sha256').update(`ratings:${title}`).digest().readUInt16BE(0) / 65535) * 0.36))
 const DAY = 86400000
+
+// Delivery promises move with the calendar, as on amazon.com: FREE standard delivery four days
+// out, and the fastest paid option tomorrow. Dates are given in Pacific time (the default
+// San Jose delivery location).
+const dayAt = (now, days) => new Date(now.getTime() + days * DAY)
+const dateText = (d, style) => d.toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles', ...style })
+export function arrivalDate(now = new Date(), days = 4) {
+  const d = dayAt(now, days)
+  return { date: dateText(d, { weekday: 'long', month: 'long', day: 'numeric' }), short: dateText(d, { month: 'short', day: 'numeric' }) }
+}
+export function stockDelivery(price, brand, now = new Date()) {
+  const free = dateText(dayAt(now, 4), { weekday: 'short', month: 'short', day: 'numeric' })
+  const fastest = `Tomorrow, ${dateText(dayAt(now, 1), { month: 'short', day: 'numeric' })}`
+  return price >= 35 || /^Amazon/.test(brand) ? [`FREE delivery ${free}`, `Or fastest delivery ${fastest}`] : [`FREE delivery ${free} on $35 of items shipped by Amazon`, `Or fastest delivery ${fastest}`]
+}
 
 function aboutFor(title, brand, specs, deptLabel) {
   const lines = Object.entries(specs).map(([k, v]) => `${k.toUpperCase()}: ${v}.`)
@@ -84,10 +102,10 @@ function build() {
       typeLabel: isGame ? 'Video Game' : isConsole ? 'Console' : sub.label, artShape: shape,
       platformKey, platformLabel: isGame || isConsole || (platformKey && /controller/.test(shape)) ? PLATFORM_LABEL[platformKey] || null : null,
       esrb: specs.ESRB || null, format: isGame ? (specs.Format === 'Game card' ? 'cartridge' : specs.Format === 'Digital code' ? 'download' : 'physical') : 'physical',
-      rating: { stars, count: countText(ratings) }, bought: bought ? `${bought} bought in past month` : null,
+      rating: { stars, count: countText(ratingCount(title, ratings)) }, bought: bought ? `${bought} bought in past month` : null,
       badge: ratings > 150000 && stars >= 4.7 ? '#1 Best Seller' : null,
       release: null, availability: 'In Stock', stock, condition: 'New', seller: 'Amazon.com', shipper: 'Amazon.com',
-      delivery: price >= 35 || /^Amazon/.test(brand) ? ['FREE delivery Fri, Oct 16', 'Or fastest delivery Tomorrow, Oct 14'] : ['FREE delivery Sat, Oct 17 on $35 of items shipped by Amazon', 'Or fastest delivery Wed, Oct 14'],
+      get delivery() { return stockDelivery(price, brand) },
       priceNote: null, specs, about: aboutFor(title, brand, specs, dept.label),
       keywords: [brand, dept.label, sub.label, shape, ...Object.values(specs)].join(' '),
       addedDate, catalogType: isGame ? 'game' : isConsole ? 'console' : 'other', catalogPlatform: platformKey || null,
@@ -118,7 +136,7 @@ const FORM = {
   'sippy cup': ['Sippy cup'], 'trading card box': ['Trading card booster pack'], organizer: ['Hanging organizer basket'],
   detergent: ['Laundry detergent'], wipes: ['Cleaning wipes canister'], 'baby wipes': ['Baby wipes', 'textile'], 'coffee pods': ['Coffee pods'],
   'espresso machine': ['Espresso machine'], 'tool kit': ['Socket set toolbox'], trimmer: ['Hair trimmer', 'appliance'], 'dog toy': ['Dog toy ball'],
-  'pet bed': ['Pet bed'], 'toilet paper': ['Toilet paper', 'textile'], 'pressure cooker': ['Pressure cooker kettle'], grill: ['Grill', 'appliance'],
+  'pet bed': ['Pet bed'], 'toilet paper': ['Rolled toilet paper', 'textile', 'white'], 'pressure cooker': ['Pressure cooker kettle'], grill: ['Grill', 'appliance'],
   'smart plug': ['Smart plug'], 'light bulb': ['Light bulb'], 'led strip': ['LED strip light'], 'power strip': ['Power strip', 'cable'],
   'jump starter': ['Car jump starter power bank'], 'dash cam': ['Dash camera'], 'medicine bottle': ['Medicine bottle'], 'supplement bottle': ['Supplement bottle'],
   'snack jar': ['Mixed nuts jar'], 'oil bottle': ['Olive oil bottle'], 'water case': ['Bottled water'], 'can pack': ['Energy drink cans', 'food'],
@@ -128,7 +146,7 @@ const FORM = {
   'gift card': ['Gift card'], 'label maker': ['Label printer'], 'ink cartridge': ['Ink cartridge box'], markers: ['Pens', 'pencil'], pens: ['Pens', 'pencil'],
   'sticky notes': ['Sticky notes', 'book'], 'cutting machine': ['Cricut cutting machine printer'], 'soil bag': ['Potting soil bag', 'bag'],
   'adhesive strips': ['Adhesive strips box'], 'building set': ['Building set'], 'craft set': ['Craft set'], 'art set': ['Art set kit'],
-  'paper towels': ['Paper towels', 'textile'], 'light switch': ['Light switch'], tracker: ['Tracker smart plug'], 'air fryer': ['Air fryer'],
+  'paper towels': ['Rolled paper towels', 'textile', 'white'], jeans: ['Denim jeans pants', 'apparel', 'navy'], 'light switch': ['Light switch'], tracker: ['Tracker smart plug'], 'air fryer': ['Air fryer'],
   dollhouse: ['Dollhouse playset'], 'dvd box': ['Blu-ray box set'], 'car care bottle': ['Car wash soap'], hangers: ['Hangers'], 'cat litter': ['Cat litter', 'bag'],
   'blood pressure monitor': ['Blood pressure monitor'], 'pet fountain': ['Pet fountain', 'appliance'], paddle: ['Pickleball paddle'],
   'protein tub': ['Protein tub', 'jar'], 'supplement tub': ['Collagen tub', 'jar'], 'pasta box': ['Pasta'], 'oats canister': ['Rolled oats'],
@@ -137,13 +155,49 @@ const FORM = {
 }
 function descriptor(p) {
   const type = p.catalogType === 'game' ? 'game' : p.catalogType === 'console' ? 'console' : 'other'
-  const [form, family] = FORM[p.artShape] || []
+  const [form, family, tint] = FORM[p.artShape] || []
   return {
     store: 'amazon', id: p.asin, title: type === 'other' && form ? form : p.title, type, platform: p.platformKey || null, format: p.format, assetKey: `amazon-shelf-${p.asin}`,
     category: p.subLabel, brand: p.brand, specs: p.specs,
-    raw: { title: type === 'other' && form ? form : p.title, brand: p.brand, shape: family || p.artShape, type: family || p.artShape, category: p.subLabel, catalogType: type, catalogPlatform: p.platformKey || null, specs: p.specs, colorName: p.specs.Color, description: p.about[0] },
+    raw: { title: type === 'other' && form ? form : p.title, brand: p.brand, shape: family || p.artShape, type: family || p.artShape, category: p.subLabel, catalogType: type, catalogPlatform: p.platformKey || null, specs: p.specs, colorName: p.specs.Color || tint, description: p.about[0] },
   }
 }
+// Multi-roll paper packs (paper towels, toilet paper): a wrapped pack of rolls, a single roll,
+// and a sheet close-up, drawn here because the shared renderer has no roll-pack form.
+const ROLL_PACKS = new Set(['paper towels', 'toilet paper'])
+const BRAND_INK = { Bounty: '#0b6fb8', Charmin: '#1f4c9a', Viva: '#2a7d4f', Brawny: '#b2352f', 'Amazon Basics': '#232f3e', Cottonelle: '#2f8fc4', 'Scott': '#d9282f', 'Angel Soft': '#5b86c5' }
+function rollPackSvg(p, view) {
+  const ink = BRAND_INK[p.brand] || '#3a7ca5', towel = p.artShape === 'paper towels'
+  const rh = towel ? 132 : 92, rw = towel ? 96 : 100 // roll body height and width
+  const roll = (x, y, w = rw, h = rh) => {
+    const rx = w / 2, ry = w * 0.22
+    return `<g><rect x="${x - rx}" y="${y}" width="${w}" height="${h}" fill="url(#rollBody)"/><path d="M${x - rx} ${y + h}a${rx} ${ry} 0 0 0 ${w} 0" fill="#e4e2dc"/>`
+      + `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#fbfbf8" stroke="#d6d3cb" stroke-width="1.5"/>`
+      + `<ellipse cx="${x}" cy="${y}" rx="${rx * 0.62}" ry="${ry * 0.62}" fill="none" stroke="#e8e5de" stroke-width="1.2"/>`
+      + `<ellipse cx="${x}" cy="${y}" rx="${rx * 0.26}" ry="${ry * 0.3}" fill="#b98f5e"/><ellipse cx="${x}" cy="${y + 1}" rx="${rx * 0.18}" ry="${ry * 0.2}" fill="#6e5236"/></g>`
+  }
+  const defs = `<defs><linearGradient id="rollBody" x2="1"><stop stop-color="#dcdad3"/><stop offset=".22" stop-color="#ffffff"/><stop offset=".6" stop-color="#f4f3ef"/><stop offset="1" stop-color="#cfccc4"/></linearGradient><linearGradient id="wrap" x2="1"><stop stop-color="#fff" stop-opacity=".55"/><stop offset=".5" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity=".45"/></linearGradient></defs>`
+  const label = (x, y, w) => `<rect x="${x}" y="${y}" width="${w}" height="58" rx="6" fill="${ink}"/><rect x="${x + 10}" y="${y + 10}" width="${w * 0.46}" height="16" rx="3" fill="#fff" opacity=".92"/><rect x="${x + 10}" y="${y + 34}" width="${w * 0.7}" height="8" rx="3" fill="#fff" opacity=".55"/><circle cx="${x + w - 26}" cy="${y + 29}" r="16" fill="#fff" opacity=".9"/><circle cx="${x + w - 26}" cy="${y + 29}" r="9" fill="${ink}" opacity=".7"/>`
+  let art
+  if (view === 1) art = roll(320, 175, rw * 1.9, rh * 1.9)
+  else if (view === 2) {
+    art = roll(250, 160, rw * 1.6, rh * 1.6) + `<path d="M${250 + rw * 0.8} 175 h150 v${towel ? 270 : 220} h-150 z" fill="#fbfbf8" stroke="#d6d3cb" stroke-width="1.5"/>`
+      + Array.from({ length: towel ? 2 : 3 }, (_, i) => `<line x1="${250 + rw * 0.8}" y1="${175 + (i + 1) * (towel ? 90 : 55)}" x2="${400 + rw * 0.8}" y2="${175 + (i + 1) * (towel ? 90 : 55)}" stroke="#c9c6bd" stroke-width="2" stroke-dasharray="3 5"/>`).join('')
+      + Array.from({ length: 40 }, (_, i) => `<circle cx="${250 + rw * 0.8 + 12 + (i % 8) * 18}" cy="${190 + Math.floor(i / 8) * (towel ? 50 : 40)}" r="2.2" fill="#e2dfd7"/>`).join('')
+  } else {
+    // A wrapped pack: two layers of rolls, three across, with the brand panel on the front.
+    const cols = 3, gap = 6, top = towel ? 112 : 150
+    const xs = Array.from({ length: cols }, (_, i) => 320 + (i - 1) * (rw + gap))
+    art = xs.map(x => roll(x, top, rw, rh)).join('') + xs.map(x => roll(x, top + rh + 8, rw, rh)).join('')
+    const w = cols * rw + (cols - 1) * gap + 24, h = 2 * rh + 8 + rw * 0.44 + 26, x0 = 320 - w / 2, y0 = top - rw * 0.22 - 12
+    art += `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" rx="22" fill="url(#wrap)" stroke="#c8c6c0" stroke-width="2"/>` + label(x0 + 22, y0 + h * 0.52, w - 44)
+    if (view === 3) art = `<g transform="translate(320 300) scale(.82) translate(-320 -300)">${art}</g>`
+  }
+  const names = ['Product view', 'Alternate view', 'Close-up', 'Additional view']
+  const title = `${p.brand} ${towel ? 'paper towels' : 'toilet paper'} — ${names[view] || names[0]}`
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="600" viewBox="0 0 640 600" role="img" aria-label="${esc(title)}" data-product-form="roll-pack" data-view="${view}"><title>${esc(title)}</title>${defs}<rect width="640" height="600" fill="#f5f4f0"/><ellipse cx="320" cy="505" rx="214" ry="18" fill="#b9b7b0" opacity=".19"/>${art}</svg>`
+}
+
 const cache = new Map()
 export function shelfImageSvg(asin, view = 0) {
   const p = shelfByAsin.get(asin)
@@ -151,7 +205,7 @@ export function shelfImageSvg(asin, view = 0) {
   const key = `${asin}:${view}`
   if (!cache.has(key)) {
     if (cache.size > 600) cache.delete(cache.keys().next().value)
-    cache.set(key, renderProductAsset(descriptor(p), view))
+    cache.set(key, ROLL_PACKS.has(p.artShape) ? rollPackSvg(p, view) : renderProductAsset(descriptor(p), view))
   }
   return cache.get(key)
 }

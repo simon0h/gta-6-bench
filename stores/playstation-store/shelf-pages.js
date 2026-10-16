@@ -45,7 +45,8 @@ export function shelfHome(base) {
   const gta = PRODUCTS.filter(p => p.family === 'gta-vi')
   const pre = [...gta, ...items.filter(p => p.cta === 'preorder' && p.editionName === 'Standard Edition').sort((a, b) => date(a) - date(b))]
   const free = games.filter(p => p.price === 0)
-  const deals = items.filter(p => pct(p) >= 40 && p.contentType === 'base-game').sort((a, b) => a.bestRank - b.bestRank)
+  // One tile per game in the sale row: the best-selling discounted edition (other editions are on its page).
+  const deals = items.filter(p => pct(p) >= 40 && p.contentType === 'base-game').sort((a, b) => a.bestRank - b.bestRank).filter((p, i, all) => all.findIndex(q => q.family === p.family) === i)
   const best = games.filter(p => p.hot && p.price > 0).sort((a, b) => a.bestRank - b.bestRank)
   const extras = items.filter(p => p.contentType === 'add-on' || p.contentType === 'consumable').sort((a, b) => a.downloadRank - b.downloadRank)
   const vr = items.filter(p => p.vr === 'PS VR2 required')
@@ -67,6 +68,9 @@ ${row(base, 'Shop PS5 consoles and accessories', hw.slice(0, 12), `${base}/direc
 }
 
 // ---- product page for assortment items ----
+// The PlayStation feature glyph shown next to each compatibility line.
+const FEATURE_ICONS = [[/in-game purchases/i, 'in-game-purchases'], [/remote play/i, 'app-remote-play'], [/pro enhanced|vr2/i, 'enhanced-graphics'], [/vibration|trigger|dualsense/i, 'trigger-effect-vibration'], [/online|offline|ps5 and ps4|membership/i, 'online-play'], [/player/i, 'person']]
+const featureIcon = label => { const hit = FEATURE_ICONS.find(([re]) => re.test(label)); return hit ? `<img class="ps-feature-icon" src="/static/reference/playstation-store/feature-${hit[1]}.svg" alt="">` : '' }
 const ESRB = { E: 'Everyone', 'E10+': 'Everyone 10+', T: 'Teen', M: 'Mature 17+', RP: 'Rating Pending' }
 export function shelfProductPage({ base, p, here, toast, owned, cta }) {
   if (p.department === 'hardware') return directProductPage({ base, p })
@@ -82,7 +86,7 @@ export function shelfProductPage({ base, p, here, toast, owned, cta }) {
   const shots = sub ? '' : `<section id="screenshots" class="ps-shelf-media" aria-label="Screenshots">${[1, 2, 3].map(v => shelfImg(p, `${p.title} screenshot ${v}`, v)).join('')}</section>`
   return `<section class="ps-hero ps-shelf-hero"><div class="ps-hero-art" aria-hidden="true">${shelfImg(p, '', sub ? 0 : 1)}</div><div class="ps-hero-card"><span class="ps-shelf-cover">${shelfImg(p)}</span><h1>${esc(p.title)}</h1><p class="ps-publisher">${esc(p.publisher)}</p>${p.cta === 'preorder' ? `<p class="ps-unlock">Release date: ${esc(p.release)}</p>` : ''}<ul class="ps-tags">${p.chips.map(v => `<li>${esc(v)}</li>`).join('')}<li>${esc(p.type)}</li></ul><p class="ps-price">${priceHtml(p)}</p>${pct(p) ? `<p class="ps-promo">Save ${pct(p)}% · Autumn Sale ends 10/22/2026 11:59 PM PT</p>` : ''}${p.plusTag ? `<p class="ps-plus-tag">Included with PlayStation Plus ${esc(p.plusTag)}</p>` : ''}${rating}${toast ? `<p role="status" class="ps-toast">${esc(toast)}</p>` : ''}<div class="ps-cta">${cta(base, p, here, owned)}</div>${sub ? '' : `<div class="ps-esrb"><span class="ps-esrb-badge">${esc(p.rating)}</span><span>${ESRB[p.rating] || ''}${p.price === 0 || p.contentType === 'consumable' ? '<hr>In-Game Purchases' : ''}</span></div>`}</div></section>
 <nav class="ps-product-nav" aria-label="Product sections"><a href="#about">About</a>${editions.length ? '<a href="#editions">Editions</a>' : ''}${addons.length ? '<a href="#addons">Add-Ons</a>' : ''}${p.ratingCount ? '<a href="#ratings">Ratings</a>' : ''}<a href="#info">Game info</a></nav>
-<div class="ps-product-body"><ul class="ps-compat">${compat.map(v => `<li>${esc(v)}</li>`).join('')}</ul>${shots}
+<div class="ps-product-body"><ul class="ps-compat">${compat.map(v => `<li>${featureIcon(v)}${esc(v)}</li>`).join('')}</ul>${shots}
 ${baseGame ? `<section class="ps-requirements"><h2>Base game required</h2><p>This ${p.contentType === 'consumable' ? 'in-game currency' : 'add-on'} requires <a href="${productPath(base, baseGame)}">${esc(baseGame.title)}</a> for ${baseGame.platforms.join(' / ')}. Base game sold separately.</p></section>` : ''}
 ${editions.length ? `<section id="editions" class="ps-editions"><h2>${sub ? 'Membership terms' : 'Editions'}:</h2><div class="ps-edition-cards">${editions.map(e => `<article class="ps-edition-card${e.id === p.id ? ' is-current' : ''}"><a href="${productPath(base, e)}">${shelfImg(e)}</a><div class="ps-edition-body"><h3><a href="${productPath(base, e)}">${esc(sub ? e.editionName : e.editionName)}</a></h3><ul class="ps-bullets">${(sub ? [e.blurb] : e.bullets).map(b => `<li>${esc(b)}</li>`).join('')}</ul><p class="ps-price">${priceHtml(e)}</p><div class="ps-cta">${cta(base, e, here, owned)}</div></div></article>`).join('')}</div></section>` : ''}
 ${addons.length ? `<section id="addons" class="ps-addons"><h2>Add-Ons</h2><div class="ps-shelf-row">${addons.map(a => shelfTile(base, a)).join('')}</div></section>` : ''}

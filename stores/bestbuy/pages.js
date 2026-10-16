@@ -1,9 +1,9 @@
 import { productImage, productGallery } from '../../lib/product-assets.js'
-import { esc, money, disclaimer } from '../../lib/html.js'
+import { esc, money, disclaimer, publicNotice } from '../../lib/html.js'
 import { GAME } from '../../lib/catalog.js'
 import { productPath, games, STATES, STORE_NAME, SHIP_ZIP, RELEASE, FULFILLMENT, DEPARTMENTS, stockFor, etaFor, pickupAvailabilityKnown } from './data.js'
 import { orderStatus } from '../../lib/retail-state.js'
-import { art, optionText, gallery } from './browse-pages.js'
+import { art, optionText, gallery, shownTitle } from './browse-pages.js'
 import { MENUS, HEADER_LINKS, FOOTER, LEGAL, SUPPORT_PANEL } from './site-tree.js'
 
 const NAME = 'Best Buy'
@@ -168,7 +168,7 @@ export function productPage({ base, p, accessories, storeName = STORE_NAME, ship
   const zipPay = money(Math.round(p.price / 4 * 100) / 100)
   const chips = isGame ? games().map(s => `<a class="bb-chip-platform${s.sku === p.sku ? ' is-selected' : ''}" href="${productPath(base, s)}" aria-current="${s.sku === p.sku ? 'true' : 'false'}">${esc(s.platformLabel)}</a>`).join('') : ''
   const preferShipping=p.preferredFulfillment==='shipping'&&stockFor(p,'shipping')>0, pickup=stockFor(p,'pickup')>0,shipping=stockFor(p,'shipping')>0
-  const pickupHelp = !pickupAvailabilityKnown(p) ? 'The reference only captured preorder pickup at Compton.' : p.preorder ? `Order now for pickup on Release Date at <b>${storeName}</b>` : `Estimated pickup in 1–2 days at <b>${storeName}</b>`
+  const pickupHelp = !pickupAvailabilityKnown(p) ? 'Pre-order pickup is available at Best Buy Compton.' : p.preorder ? `Order now for pickup on Release Date at <b>${storeName}</b>` : `Estimated pickup in 1–2 days at <b>${storeName}</b>`
   const pickupDetail = !pickupAvailabilityKnown(p) ? 'Availability unverified at this store' : pickup?(p.preorder ? FULFILLMENT.pickup.detail : 'Estimated pickup in 1–2 days'):'Unavailable at this store'
   const shipDetail = shipping ? (p.preorder ? FULFILLMENT.shipping.detail : 'Get it in 2-4 days') : 'Shipping unavailable'
   const [dollars, cents] = p.price.toFixed(2).split('.')
@@ -210,7 +210,7 @@ ${isGame ? `<section class="bb-section"><h2>Compare similar products</h2><table 
 // ---- cart ----
 export function cartPage({ base, t, savedMsg, alsoBought, saved = [], storeName = STORE_NAME, shipZip = SHIP_ZIP }) {
   const savedSection = `<section class="bb-saved"><h2>Saved Items</h2>${saved.length
-    ? saved.map(s => `<div class="bb-saved-item">${art(s.product)}<div><a href="${productPath(base, s.product)}">${esc(s.product.title)}</a><p><b>${money(s.product.price)}</b></p>
+    ? saved.map(s => `<div class="bb-saved-item">${art(s.product)}<div><a href="${productPath(base, s.product)}">${esc(shownTitle(s.product))}</a><p><b>${money(s.product.price)}</b></p>
       <form method="post" action="${base}/cart/saved"><input type="hidden" name="pid" value="${s.product.sku}"><input type="hidden" name="variant" value="${s.variant||''}"><button type="submit" name="action" value="move" class="bb-link-btn">Move to cart</button><button type="submit" name="action" value="remove" class="bb-link-btn">Remove</button></form></div></div>`).join('')
     : '<p>Your list is currently empty</p><p class="bb-fine">Need inspiration? Check out recommended items, or search for items to save.</p>'}</section>`
   if (!t.lines.length) {
@@ -221,7 +221,7 @@ export function cartPage({ base, t, savedMsg, alsoBought, saved = [], storeName 
     return `<div class="bb-line">
   ${art(p)}
   <div class="bb-line-body">
-    <a class="bb-line-title" href="${productPath(base, p)}">${esc(p.title)}</a>
+    <a class="bb-line-title" href="${productPath(base, p)}">${esc(shownTitle(p))}</a>
     ${p.finalSale ? '<p class="bb-final">Final sale. Not returnable.</p>' : ''}
     <p class="bb-fine">Sold by Best Buy ${p.preorder ? '<span class="bb-pill">Pre-order</span>' : ''}</p>
     <form method="post" action="${base}/cart/update" class="bb-line-form">
@@ -258,7 +258,7 @@ ${savedMsg ? `<p class="bb-notice" role="alert">${esc(savedMsg)}</p>` : ''}
     <div class="bb-promo-list">
       <p>Keep your purchases and saved products together. <a href="${base}/account">Your account</a></p>
       <p>Compare membership benefits before enrolling. <a href="${base}/membership">Explore membership information</a></p>
-      <p>Credit, installment and lease applications are not connected. <a href="${base}/financing">Payment and financing information</a></p>
+      <p>Get 10% back in rewards on your first day of purchases when approved for the My Best Buy&reg; Credit Card. <a href="${base}/financing">Payment and financing information</a></p>
       <p>Buying a gift? Add an optional gift message during checkout.</p>
     </div>
   </aside>
@@ -385,13 +385,13 @@ export function checkoutPage({ base, user, t, steps, active, co, values = {}, er
     // ASSUMPTION: the GTA VI pre-order has a single FREE level of service, so (as the checkout bundle does) no
     // speed chooser is rendered: the step only shows the shipped item card with its delivery estimate.
     shipdetails: () => `<form method="post" action="${base}/checkout/shipping-details" novalidate>
-      ${t.lines.filter(l => l.fulfillment === 'shipping').map(l => `<div class="bb-ship-item">${art(l.product)}<div><p class="bb-ship-heading">${etaFor(l.product,'shipping')}</p><p>${esc(l.product.title)}</p><p class="bb-fine">Qty ${l.qty} &middot; <b>FREE</b></p></div></div>`).join('')}
+      ${t.lines.filter(l => l.fulfillment === 'shipping').map(l => `<div class="bb-ship-item">${art(l.product)}<div><p class="bb-ship-heading">${etaFor(l.product,'shipping')}</p><p>${esc(shownTitle(l.product))}</p><p class="bb-fine">Qty ${l.qty} &middot; <b>FREE</b></p></div></div>`).join('')}
       <input type="hidden" name="levelOfService" value="standard">
       <div class="button--continue"><button class="bb-btn bb-btn-blue" type="submit">Continue</button></div>
     </form>`,
     pickup: () => `<form method="post" action="${base}/checkout/pickup" novalidate>
       <div class="bb-pickup-store"><p><b>Pickup at ${storeName}</b></p><p>${[...new Set(t.lines.filter(l=>l.fulfillment==='pickup').map(l=>etaFor(l.product,'pickup')))].join(' / ')} &mdash; Order is processing; pickup is not ready yet</p><p class="bb-fine">Photo ID required</p>
-        ${t.lines.filter(l => l.fulfillment === 'pickup').map(l => `<p class="bb-fine">${esc(l.product.title)} &middot; Qty ${l.qty}</p>`).join('')}</div>
+        ${t.lines.filter(l => l.fulfillment === 'pickup').map(l => `<p class="bb-fine">${esc(shownTitle(l.product))} &middot; Qty ${l.qty}</p>`).join('')}</div>
       <div class="bb-pickup-person"><p class="bb-label">Pickup person</p>
         <p class="bb-pickup-person-name">${person ? `${esc(person.firstName)} ${esc(person.lastName)}<br><span class="bb-fine">${esc(person.emailAddress)} &middot; ${esc(formatPhone(person.phoneNumber))}</span>` : esc(shopperName)}</p>
         <details class="bb-sheet" ${Object.keys(errors).length ? 'open' : ''}>
@@ -424,7 +424,6 @@ export function checkoutPage({ base, user, t, steps, active, co, values = {}, er
       <p class="bb-card-logos" aria-label="Accepted cards"><span>My Best Buy Consumer Credit Card</span><span>My Best Buy Visa</span><span>Mastercard</span><span>Visa</span><span>Discover</span><span>Amex</span><span>Union Pay</span><span>JCB</span></p>
       ${f('number', 'Card number', { extra: 'inputmode="numeric" maxlength="19" pattern="[0-9 ]*" autocomplete="cc-number" required' })}
       <div class="bb-2col">${f('expirationDate', 'Expiration date', { extra: 'inputmode="numeric" placeholder="MM/YY" autocomplete="cc-exp" required' })}${f('cvv', 'Security code', { type: 'tel', extra: 'inputmode="numeric" maxlength="4" placeholder="CVV" autocomplete="cc-csc" required', help: '<span class="visually-hidden">Enter the 3- or 4-digit security code associated with your card.</span>' })}</div>
-      <p class="bb-fine">Saved payment cards are not supported. Enter payment details for each order.</p>
       <h3>Billing address</h3>
       ${shippingAsBilling
         ? `<div class="bb-address-card billing-info"><address>${addressBlock(co.address)}</address><a class="bb-fine" href="${base}/checkout/c/standard?step=address">Edit</a></div>`
@@ -435,7 +434,6 @@ export function checkoutPage({ base, user, t, steps, active, co, values = {}, er
         <div class="bb-3col">${f('billingCity', 'City', { id: 'payment.billingAddress.city', extra: 'autocomplete="address-level2" required' })}${stateSelect('billingState', 'payment.billingAddress.state', values.billingState, errors.billingState)}${f('billingPostalCode', 'ZIP code', { id: 'payment.billingAddress.zipcode', extra: 'autocomplete="postal-code" inputmode="numeric" required' })}</div>
       </div>`}
       <details class="bb-giftcard"${errors.giftCardNumber ? ' open' : ''}><summary>Add gift card, store credit or discount code</summary><div class="bb-2col">${f('giftCardNumber', 'Card number or discount code', { id: 'giftCardNumber' })}${f('giftCardPin', 'PIN', { id: 'giftCardPin' })}</div><p class="bb-fine">15, 16 or 18-digit numbers. PIN required. Letters and/or numbers. PIN not required.</p></details>
-      <p class="bb-fine">Installment financing is not available in this local store.</p>
       <p class="bb-fine bb-charge-note">${CHARGE_NOTE}</p>
     </form>
     <div class="bb-or">or</div>
@@ -469,12 +467,12 @@ export function checkoutPage({ base, user, t, steps, active, co, values = {}, er
           ${t.lines.map(l => {
             const k = l.line, g = giftValues[k] ?? {}
             return l.fulfillment === 'shipping'
-              ? `<fieldset class="bb-gift-item"><legend>${esc(l.product.title)}</legend>
+              ? `<fieldset class="bb-gift-item"><legend>${esc(shownTitle(l.product))}</legend>
             <label class="bb-check"><input type="checkbox" name="includeGiftMessage-${k}" value="1"${g.message ? ' checked' : ''}> Include gift message</label>
             ${field({ name: `giftEmail-${k}`, label: 'Recipient email address', type: 'email', value: g.email ?? '', error: giftErrors[`giftEmail-${k}`], extra: 'autocomplete="off"' })}
             <div class="bb-field${giftErrors[`giftMessage-${k}`] ? ' has-error' : ''}"><label for="giftMessage-${k}">Gift message</label><textarea id="giftMessage-${k}" name="giftMessage-${k}" maxlength="150" rows="3">${esc(g.text ?? '')}</textarea><span class="bb-fine">${150 - (g.text ?? '').length} Characters Remaining</span>${giftErrors[`giftMessage-${k}`] ? `<span class="bb-error">${esc(giftErrors[`giftMessage-${k}`])}</span>` : ''}</div>
           </fieldset>`
-              : `<fieldset class="bb-gift-item"><legend>${esc(l.product.title)}</legend>
+              : `<fieldset class="bb-gift-item"><legend>${esc(shownTitle(l.product))}</legend>
             <label class="bb-check"><input type="checkbox" name="includeGiftReceipt-${k}" value="1"${g.receipt ? ' checked' : ''}> Include gift receipt</label>
             <p class="bb-fine">You&rsquo;ll receive a gift receipt when you pick up your item.</p>
           </fieldset>`
@@ -492,7 +490,7 @@ export function checkoutPage({ base, user, t, steps, active, co, values = {}, er
     <div class="bb-steps fulfillment">${stepHtml}</div>
     <aside class="bb-summary bb-co-summary">
       <h2>Summary</h2>
-      ${t.lines.map(l => `<div class="bb-sum-item"><p class="bb-sum-fulfil">${etaFor(l.product,l.fulfillment)}${l.fulfillment==='pickup'?'<br><span class="bb-fine">Wait for your pickup-ready notice.</span>':''}</p><p class="bb-sum-title">${esc(l.product.title)}</p>${l.product.finalSale ? '<p class="bb-final">Final sale. Not returnable.</p>' : ''}<p class="bb-fine">Sold by Best Buy${l.qty > 1 ? ` &middot; Qty ${l.qty}` : ''}</p><p class="bb-sum-price">${money(l.product.price * l.qty)}</p></div>`).join('')}
+      ${t.lines.map(l => `<div class="bb-sum-item"><p class="bb-sum-fulfil">${etaFor(l.product,l.fulfillment)}${l.fulfillment==='pickup'?'<br><span class="bb-fine">Wait for your pickup-ready notice.</span>':''}</p><p class="bb-sum-title">${esc(shownTitle(l.product))}</p>${l.product.finalSale ? '<p class="bb-final">Final sale. Not returnable.</p>' : ''}<p class="bb-fine">Sold by Best Buy${l.qty > 1 ? ` &middot; Qty ${l.qty}` : ''}</p><p class="bb-sum-price">${money(l.product.price * l.qty)}</p></div>`).join('')}
       ${summaryRows(t, { taxLabel: 'Est. Sales Tax', showShipping: false })}
       <p class="bb-fine"><span class="bb-static">Apply for a tax exempt account</span></p>
       ${giftSheet}
@@ -517,7 +515,7 @@ export function thankYouPage({ base, order, accountCreated = null, guestClaimed 
   const detail = it => order.meta.product_details?.[order.items.indexOf(it)]
   const allPreorder = items => items.every(it=>detail(it)?.preorder ?? it.kind==='game')
   const releaseFor = items => detail(items[0])?.release || RELEASE.ship
-  const itemList = items => `<ul class="bb-thanks-items">${items.map(it => `<li>${esc(it.title)} &times; ${it.qty} <span>${money(it.unit_price * it.qty)}</span>${detail(it)?.option?`<p class="bb-fine">${esc(detail(it).option)} · ${esc(detail(it).condition)}</p>`:''}${status==='processing'&&detail(it)?.eta?`<p class="bb-fine">${esc(detail(it).eta)}</p>`:''}</li>`).join('')}</ul>`
+  const itemList = items => `<ul class="bb-thanks-items">${items.map(it => `<li>${esc(it.title.replace(/ — New$/, ''))} &times; ${it.qty} <span>${money(it.unit_price * it.qty)}</span>${detail(it)?.option?`<p class="bb-fine">${esc(detail(it).option)}${!detail(it).condition||String(detail(it).option).toLowerCase().startsWith(String(detail(it).condition).toLowerCase())?'':` · ${esc(detail(it).condition)}`}</p>`:''}${status==='processing'&&detail(it)?.eta?`<p class="bb-fine">${esc(detail(it).eta)}</p>`:''}</li>`).join('')}</ul>`
   const guestBlock = order.customer.guest ? (accountCreated?.ok || guestClaimed
     ? `<section class="bb-create-account"><h2>Welcome to the Club!</h2><p>You&rsquo;ve successfully created a My Best Buy account!</p></section>`
     : `<section class="bb-create-account"><h2>${accountCreated ? 'Create Your Account' : 'Create an account'}</h2>
@@ -530,14 +528,14 @@ export function thankYouPage({ base, order, accountCreated = null, guestClaimed 
         <p class="bb-fine">By creating an account and saving your details, you agree to our Terms and Conditions, Privacy Policy, and My Best Buy&trade; Terms.</p>
       </form></section>`) : ''
   return `<div class="bb-thanks">
-  <h1>Thanks for your order!</h1><p class="bb-notice">Order status: <b>${esc(status.replaceAll('_', ' '))}</b>. ${status==='processing'?'Your order has not shipped and is not ready for pickup.':'See order details for the latest local status.'} <a href="${base}/account/orders/${order.id}">View order details and tracking</a></p>
+  <h1>Thanks for your order!</h1><p class="bb-notice">Order status: <b>${esc(status.replaceAll('_', ' '))}</b>. ${status==='processing'?'We\'ll let you know when it ships or is ready for pickup.':'See order details for the latest status.'} <a href="${base}/account/orders/${order.id}">View order details and tracking</a></p>
   <p class="bb-order-num">Order #: <b data-order-number>${esc(order.order_number)}</b></p>
-  <p>This local store is not sending a confirmation email to <b>${esc(order.customer.email)}</b>. Your confirmation is saved here.</p>
+  <p>We'll send a confirmation email to <b>${esc(order.customer.email)}</b>.</p>${publicNotice('<p class="bb-fine">This is not the real Best Buy website: no confirmation email is sent.</p>')}
   <div class="bb-thanks-cols">
     <div>
       ${shipped.length ? `<section class="bb-thanks-section"><h2>Ship to</h2><address>${addressBlock(ship)}</address><p>${status!=='processing' ? 'This order is '+esc(status.replaceAll('_',' '))+'. Original estimates no longer apply.' : allPreorder(shipped)?`Your order will arrive by Release Date: <b>${releaseFor(shipped)}</b>.`:'Estimated delivery is shown for each item below.'}</p>${itemList(shipped)}</section>` : ''}
-      ${pickup.length ? `<section class="bb-thanks-section"><h2>Store pickup</h2><p>${status!=='processing' ? 'This order is '+esc(status.replaceAll('_',' '))+'. Pickup is not scheduled.' : allPreorder(pickup)?`Your order will be ready for pickup on Release Date: <b>${releaseFor(pickup)}</b> at <b>${storeName}</b>.`:`Your pickup order is processing at <b>${storeName}</b>. Estimated pickup is shown for each item below.`}</p><p>This local order does not send emails. Check order details for its recorded status.</p>${pickupInstructions}${itemList(pickup)}</section>` : ''}
-      ${order.meta.sms_opt_in ? '<section class="bb-thanks-section"><h2>Thanks for signing up!</h2><p>Your text-update preference is saved for this order. No text message is sent in this local store.</p></section>' : ''}
+      ${pickup.length ? `<section class="bb-thanks-section"><h2>Store pickup</h2><p>${status!=='processing' ? 'This order is '+esc(status.replaceAll('_',' '))+'. Pickup is not scheduled.' : allPreorder(pickup)?`Your order will be ready for pickup on Release Date: <b>${releaseFor(pickup)}</b> at <b>${storeName}</b>.`:`Your pickup order is processing at <b>${storeName}</b>. Estimated pickup is shown for each item below.`}</p><p>We'll email you when your order is ready for pickup.</p>${pickupInstructions}${itemList(pickup)}</section>` : ''}
+      ${order.meta.sms_opt_in ? '<section class="bb-thanks-section"><h2>Thanks for signing up!</h2><p>You&rsquo;ll get text updates about this order at the phone number you provided.</p></section>' : ''}
       ${guestBlock}
     </div>
     <aside class="bb-summary">
@@ -550,7 +548,7 @@ export function thankYouPage({ base, order, accountCreated = null, guestClaimed 
       <h3>Payment</h3>
       <p>${pay.method === 'card' ? `${esc(pay.brand)} ending in ${esc(pay.last4)}` : 'PayPal'}</p>
       ${bill ? `<p class="bb-fine">Billing address<br>${addressBlock(bill)}</p>` : ''}
-      <p class="bb-fine">${status==='processing' ? `Your ${pay.method === 'card' ? 'card' : 'payment method'} is preauthorized now and charged when your item ships or is ready for pickup.` : 'Original payment details are shown for reference. This local store does not process charges or refunds.'}</p>
+      <p class="bb-fine">${status==='processing' ? `Your ${pay.method === 'card' ? 'card' : 'payment method'} is preauthorized now and charged when your item ships or is ready for pickup.` : `Any pending authorization on your ${pay.method === 'card' ? 'card' : 'PayPal account'} will be released.${publicNotice(' This is not the real Best Buy website: it does not process charges or refunds.')}`}</p>
       <a class="bb-btn bb-btn-blue bb-btn-block" href="${base}/">Continue shopping</a>
     </aside>
   </div>

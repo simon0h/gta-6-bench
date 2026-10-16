@@ -390,4 +390,161 @@ export const SECTIONS = [
     ['Nike Fundamental', 'Training Gloves', 25, 0, 'N1001524', '010 Black/White', { r: 4.5, n: 610 }],
     ['Nike Dri-FIT Swoosh', 'Doublewide Wristbands (2-Pack)', 14, 0, 'N1001586', '010 Black/White|101 White/Black', { sport: 'basketball', r: 4.7, n: 1110 }],
   ]),
+
+  // ---------------- Court (tennis and pickleball apparel) ----------------
+  ...S({ g: 'men', cat: 'clothing', type: 'tops', sport: 'tennis', brand: 'NikeCourt' }, [
+    ['NikeCourt Advantage', "Men's Dri-FIT Tennis Top", 70, 0, 'FD5320', '010 Black/White|100 White/Black|410 Midnight Navy/White', { r: 4.5, n: 412 }],
+    ['NikeCourt Slam', "Men's Dri-FIT Short-Sleeve Tennis Top", 85, 0, 'HF6142', '100 White/Black|402 Game Royal/White', { b: 'Just In', r: 4.4, n: 64 }],
+    ['NikeCourt Heritage', "Men's Dri-FIT Tennis Polo", 75, 52.97, 'FD5404', '100 White/Black|010 Black/White', { r: 4.5, n: 188 }],
+    ['NikeCourt Victory', "Men's Dri-FIT 7\" Tennis Shorts", 50, 0, 'FD5380', '010 Black/White|100 White/Black|410 Midnight Navy/White', { type: 'shorts', r: 4.6, n: 905 }],
+    ['NikeCourt Advantage', "Men's Dri-FIT 9\" Tennis Shorts", 65, 0, 'FD5336', '010 Black/White|100 White/Black', { type: 'shorts', r: 4.5, n: 317 }],
+    ['NikeCourt Heritage', "Men's Full-Zip Tennis Jacket", 110, 0, 'FD5419', '010 Black/White|133 Sail/Black', { type: 'jackets', r: 4.4, n: 96 }],
+    ['NikeCourt Victory', "Women's Dri-FIT Tennis Tank Top", 50, 0, 'FD5466', '010 Black/White|100 White/Black|611 Pink Foam/White', { g: 'women', r: 4.6, n: 540 }],
+    ['NikeCourt Advantage', "Women's Dri-FIT Tennis Skirt", 65, 0, 'FD5473', '010 Black/White|100 White/Black|429 Armory Navy/White', { g: 'women', type: 'shorts', r: 4.6, n: 1180 }],
+    ['NikeCourt Victory', "Women's Dri-FIT Pleated Tennis Skirt", 60, 41.97, 'FD5481', '100 White/Black|010 Black/White', { g: 'women', type: 'shorts', r: 4.5, n: 610 }],
+    ['NikeCourt Slam', "Women's Dri-FIT Tennis Dress", 120, 0, 'HF6198', '100 White/Black|626 Aster Pink/White', { g: 'women', b: 'Just In', r: 4.4, n: 41 }],
+    ['NikeCourt Dri-FIT', "Women's 1/2-Zip Long-Sleeve Tennis Top", 75, 0, 'FD5492', '010 Black/White|100 White/Black', { g: 'women', r: 4.5, n: 203 }],
+  ]),
+  ...S({ g: 'unisex', cat: 'accessories', type: 'hats', sport: 'tennis', brand: 'NikeCourt' }, [
+    ['NikeCourt Dri-FIT Club', 'Unstructured Tennis Cap', 30, 0, 'FB5600', '010 Black/White|100 White/Black', { r: 4.7, n: 760 }],
+    ['NikeCourt Dri-FIT ADV Ace', 'Tennis Visor', 30, 0, 'FB5612', '100 White/Black|010 Black/White', { r: 4.6, n: 320 }],
+  ]),
+
+  // ---------------- Nike By You (custom shoes) ----------------
+  ...S({ g: 'unisex', cat: 'shoes', type: 'sneakers', sport: 'lifestyle', brand: 'Nike Sportswear', t: 'byyou' }, [
+    ['Nike Air Force 1 Low By You', 'Custom Shoes', 150, 0, 'FV6976', '900 Multi-Color/Multi-Color', { r: 4.7, n: 2380 }],
+    ['Nike Dunk Low Unlocked By You', 'Custom Shoes', 145, 0, 'FJ7745', '900 Multi-Color/Multi-Color', { r: 4.7, n: 1430 }],
+    ['Nike Air Max 90 By You', 'Custom Shoes', 170, 0, 'FV7232', '900 Multi-Color/Multi-Color', { r: 4.6, n: 640 }],
+    ['Nike Air Max 1 \'87 By You', 'Custom Shoes', 170, 0, 'FV7224', '900 Multi-Color/Multi-Color', { r: 4.6, n: 380 }],
+    ['Nike Pegasus 41 By You', 'Custom Road Running Shoes', 160, 0, 'HJ1034', '900 Multi-Color/Multi-Color', { sport: 'running', brand: 'Nike', type: 'road', r: 4.5, n: 212 }],
+    ['Air Jordan 1 Low By You', 'Custom Shoes', 150, 0, 'HF7398', '900 Multi-Color/Multi-Color', { brand: 'Jordan', r: 4.7, n: 1010 }],
+    ['Nike Blazer Mid \'77 By You', 'Custom Shoes', 130, 0, 'FV7251', '900 Multi-Color/Multi-Color', { h: 'mid', r: 4.6, n: 290 }],
+  ]),
+
+  // ---------------- Sunglasses ----------------
+  ...S({ g: 'unisex', cat: 'accessories', type: 'sunglasses', sport: 'lifestyle', brand: 'Nike' }, [
+    ['Nike Windshield', 'Mirrored Sunglasses', 199, 0, 'DC2860', '010 Matte Black/Silver Mirror|100 Matte White/Field Tint Mirror', { sport: 'running', r: 4.6, n: 412 }],
+    ['Nike Windtrack Run', 'Sunglasses', 179, 0, 'FV2394', '010 Matte Black/Grey Mirror|410 Midnight Navy/Ice Blue Mirror', { sport: 'running', b: 'Just In', r: 4.5, n: 77 }],
+    ['Nike Maverick Rise', 'Sunglasses', 135, 0, 'DC3294', '010 Matte Black/Dark Grey|200 Tortoise/Brown', { r: 4.6, n: 590 }],
+    ['Nike Lore', 'Polarized Sunglasses', 175, 0, 'DQ0794', '010 Black/Polarized Grey|200 Tortoise/Polarized Brown', { r: 4.5, n: 140 }],
+    ['Nike Echo', 'Sunglasses', 115, 80.97, 'FV2380', '010 Black/Dark Grey|100 Clear/Light Grey', { r: 4.4, n: 230 }],
+    ['Nike Show X3', 'Road Tint Sunglasses', 225, 0, 'DJ2036', '010 Matte Black/Road Tint|100 White/Field Tint', { sport: 'running', r: 4.6, n: 98 }],
+  ]),
+
+  // ---------------- Kids: jackets, football, fan gear, LEGO, gymnastics ----------------
+  ...S({ g: 'kids', age: 'big', cat: 'clothing', type: 'jackets', sport: 'lifestyle', brand: 'Nike Sportswear' }, [
+    ['Nike Sportswear Heavyweight', "Big Kids' Therma-FIT Repel Loose Hooded Puffer Jacket", 150, 0, 'FD2845', '010 Black/White|222 Khaki/Sail', { r: 4.7, n: 860 }],
+    ['Nike Sportswear Lightweight', "Big Kids' Therma-FIT Loose Hooded Jacket", 100, 69.97, 'FD2843', '010 Black/White|410 Midnight Navy/White', { r: 4.6, n: 520 }],
+    ['Nike Sportswear Windrunner', "Big Kids' Loose Hip-Length Hooded Jacket", 80, 0, 'FD2847', '010 Black/White|101 Light Bone/Black', { r: 4.7, n: 1130 }],
+    ['Nike Therma-FIT Repel', "Big Kids' Insulated Vest", 85, 0, 'FD2851', '010 Black/White', { r: 4.6, n: 214 }],
+    ['Nike', "Little Kids' Puffer Jacket", 75, 0, '86L983', '023 Black|695 Gym Red', { age: 'little', r: 4.8, n: 310 }],
+    ['Nike', 'Baby (12-24M) Puffer Snowsuit', 85, 0, '66L987', '023 Black|U90 Light Bone', { age: 'baby', r: 4.7, n: 120 }],
+  ]),
+  ...S({ g: 'kids', age: 'big', cat: 'shoes', type: 'cleats', sport: 'football', brand: 'Nike' }, [
+    ['Nike Vapor Edge Shark 2', "Big Kids' Football Cleats", 55, 0, 'FD0280', '100 White/Black|001 Black/White', { r: 4.6, n: 470 }],
+    ['Nike Alpha Menace 4 Shark', "Big Kids' Football Cleats", 55, 39.97, 'FZ1250', '001 Black/White|100 White/Black', { r: 4.5, n: 260 }],
+    ['Nike Dri-FIT', "Big Kids' (Boys') Football Training Top", 30, 0, 'FV1850', '010 Black/White|100 White/Black', { cat: 'clothing', type: 'tops', r: 4.6, n: 140 }],
+    ['Nike Vapor Jet', "Big Kids' Football Gloves", 35, 0, 'N1004750', '091 Black/White|101 White/Black', { cat: 'accessories', type: 'equipment', r: 4.6, n: 380 }],
+  ]),
+  ...S({ g: 'kids', age: 'big', cat: 'clothing', type: 'jerseys', sport: 'basketball', brand: 'Nike', t: 'team' }, [
+    ['LeBron James Los Angeles Lakers Icon Edition', "Big Kids' Nike Dri-FIT NBA Swingman Jersey", 85, 0, 'EZ2B7', '728 Amarillo/Field Purple', { t: 'team nba', r: 4.8, n: 540 }],
+    ['Stephen Curry Golden State Warriors Icon Edition', "Big Kids' Nike Dri-FIT NBA Swingman Jersey", 85, 0, 'EZ2B8', '400 Rush Blue/Amarillo', { t: 'team nba', r: 4.8, n: 420 }],
+    ['Patrick Mahomes Kansas City Chiefs', "Big Kids' Nike NFL Game Jersey", 100, 0, 'F9NF-KCGY', '600 University Red/White', { sport: 'football', t: 'team nfl', r: 4.7, n: 290 }],
+    ['Caitlin Clark Indiana Fever Explorer Edition', "Big Kids' Nike Dri-FIT WNBA Swingman Jersey", 75, 0, 'FB8825', '419 College Navy/Brave Red', { t: 'team wnba', r: 4.8, n: 610 }],
+  ]),
+  ...S({ g: 'kids', age: 'little', cat: 'shoes', type: 'sneakers', sport: 'lifestyle', brand: 'Nike Sportswear', t: 'lego' }, [
+    ['Nike Air Max Dn x LEGO® Collection', "Little Kids' Shoes", 95, 0, 'HJ7300', '400 Hyper Royal/University Red-Volt', { b: 'Just In', r: 4.8, n: 133 }],
+    ['Nike Dunk Low x LEGO® Collection', "Little Kids' Shoes", 80, 0, 'HJ7310', '100 White/University Red-Volt', { r: 4.8, n: 98 }],
+    ['Nike Sportswear x LEGO® Collection', "Little Kids' T-Shirt", 30, 0, '86M310', '023 Black|001 White', { cat: 'clothing', type: 'tops', r: 4.8, n: 71 }],
+    ['Nike x LEGO® Collection', "Little Kids' Hoodie", 55, 0, '86M312', '023 Black', { cat: 'clothing', type: 'hoodies', r: 4.7, n: 44 }],
+  ]),
+  ...S({ g: 'kids', age: 'big', cat: 'clothing', type: 'leggings', sport: 'training', brand: 'Nike', t: 'dance' }, [
+    ['Nike One', "Big Kids' (Girls') Dri-FIT Leggings", 40, 0, 'FV2290', '010 Black/White|611 Pink Foam/White', { r: 4.7, n: 980 }],
+    ['Nike One', "Big Kids' (Girls') Dri-FIT Bike Shorts", 30, 0, 'FV2294', '010 Black/White|626 Aster Pink/White', { type: 'shorts', r: 4.7, n: 640 }],
+    ['Nike Dri-FIT Indy', "Big Kids' (Girls') Sports Bra", 28, 0, 'FV2298', '010 Black/White|100 White/Black', { type: 'bras', r: 4.6, n: 410 }],
+    ['Nike Pro', "Big Kids' (Girls') Dri-FIT Cropped Tank Top", 25, 17.97, 'FV2306', '010 Black/White|611 Pink Foam/White', { type: 'tops', r: 4.6, n: 230 }],
+  ]),
+
+  // ---------------- Jordan: cleats and Space Jam ----------------
+  ...S({ g: 'men', cat: 'shoes', type: 'cleats', sport: 'football', brand: 'Jordan' }, [
+    ['Jordan 1 Mid TD', "Men's Football Cleats", 120, 0, 'FJ6253', '100 White/Black-Gym Red|001 Black/White', { h: 'mid', r: 4.6, n: 180 }],
+    ['Jordan Vapor Edge Pro 360', "Men's Football Cleats", 180, 0, 'FZ5021', '061 Black/Metallic Silver|100 White/Gym Red', { r: 4.5, n: 90 }],
+    ['Jordan 1 Retro MCS Low', "Men's Baseball Cleats", 110, 79.97, 'FJ6262', '100 White/Black-Gym Red|001 Black/White', { sport: 'baseball', r: 4.6, n: 140 }],
+    ['Jordan 11 Retro Cleat', "Men's Baseball Cleats", 160, 0, 'FV5130', '101 White/Black|010 Black/Gym Red', { sport: 'baseball', r: 4.7, n: 66 }],
+  ]),
+  ...S({ g: 'men', cat: 'shoes', type: 'sneakers', sport: 'lifestyle', brand: 'Jordan', t: 'spacejam' }, [
+    ['Jordan 11 Retro "Space Jam"', "Men's Shoes", 230, 0, 'CT8012', '041 Black/Dark Concord-White', { b: 'Coming Soon', h: 'mid', r: 4.8, n: 1220 }],
+    ['Jordan 11 Retro "Space Jam"', "Big Kids' Shoes", 175, 0, '378038', '041 Black/Dark Concord-White', { g: 'kids', age: 'big', b: 'Coming Soon', h: 'mid', r: 4.8, n: 540 }],
+    ['Jordan x Space Jam', "Men's T-Shirt", 40, 0, 'HV3110', '010 Black|100 White', { cat: 'clothing', type: 'tops', r: 4.6, n: 85 }],
+    ['Jordan x Space Jam', "Men's Fleece Pullover Hoodie", 90, 0, 'HV3114', '010 Black/Dark Concord', { cat: 'clothing', type: 'hoodies', t: 'spacejam fleece', r: 4.6, n: 47 }],
+  ]),
+
+  // ---------------- NikeSKIMS ----------------
+  ...S({ g: 'women', cat: 'clothing', type: 'shorts', sport: 'training', brand: 'NikeSKIMS' }, [
+    ['NikeSKIMS', "Women's High-Waisted 5\" Shorts", 58, 0, 'IH1090', '010 Obsidian|220 Carob Brown|133 Ivory', { b: 'Just In', r: 4.4, n: 130 }],
+    ['NikeSKIMS', "Women's Fold-Over Shorts", 64, 0, 'IH1094', '010 Obsidian|700 Citrine', { b: 'Just In', r: 4.3, n: 58 }],
+    ['NikeSKIMS', "Women's Fitted Tank Top", 48, 0, 'IH1060', '010 Obsidian|220 Carob Brown|133 Ivory', { type: 'tops', b: 'Just In', r: 4.4, n: 160 }],
+    ['NikeSKIMS', "Women's Long-Sleeve Top", 68, 0, 'IH1066', '010 Obsidian|133 Ivory', { type: 'tops', b: 'Just In', r: 4.3, n: 72 }],
+    ['NikeSKIMS', "Women's Cropped T-Shirt", 44, 0, 'IH1070', '010 Obsidian|220 Carob Brown', { type: 'tops', r: 4.4, n: 95 }],
+  ]),
+  ...S({ g: 'women', cat: 'accessories', type: 'socks', sport: 'training', brand: 'NikeSKIMS' }, [
+    ['NikeSKIMS', 'Crew Socks (2 Pairs)', 22, 0, 'IH1150', '010 Obsidian|133 Ivory', { r: 4.5, n: 66 }],
+    ['NikeSKIMS', 'Headband', 18, 0, 'IH1154', '010 Obsidian|220 Carob Brown', { type: 'hats', r: 4.4, n: 31 }],
+    ['NikeSKIMS', 'Mini Tote Bag', 58, 0, 'IH1158', '010 Obsidian', { type: 'bags', r: 4.3, n: 24 }],
+  ]),
+
+  // ---------------- Golf equipment ----------------
+  ...S({ g: 'unisex', cat: 'accessories', type: 'equipment', sport: 'golf', brand: 'Nike' }, [
+    ['Nike Tour Classic IV', "Men's Golf Glove (Left Regular)", 24, 0, 'N1003503', '101 White/Black|010 Black/White', { r: 4.6, n: 880 }],
+    ['Nike Dri-FIT Tour', 'Golf Cap', 35, 0, 'FB5640', '010 Black/White|100 White/Black|410 Midnight Navy/White', { type: 'hats', r: 4.6, n: 420 }],
+    ['Nike Club', 'Golf Bucket Hat', 35, 24.97, 'FB5652', '010 Black/White|222 Khaki/White', { type: 'hats', r: 4.4, n: 110 }],
+    ['Nike Sport Lite', 'Golf Bag', 245, 0, 'N1003475', '010 Black/White|067 Wolf Grey/Black', { type: 'bags', r: 4.6, n: 140 }],
+    ['Nike Golf Shoe', 'Bag', 35, 0, 'N1003481', '010 Black/White', { type: 'bags', r: 4.5, n: 210 }],
+  ]),
+
+  // ---------------- More sports ----------------
+  ...S({ g: 'unisex', cat: 'shoes', type: 'court', sport: 'volleyball', brand: 'Nike' }, [
+    ['Nike HyperSet 2', 'Indoor Court Shoes', 150, 0, 'FQ5810', '001 Black/White|100 White/Black-Hyper Pink', { r: 4.6, n: 260 }],
+    ['Nike Zoom HyperAce 3', "Women's Volleyball Shoes", 100, 69.97, 'FQ7074', '001 Black/White|100 White/Aster Pink', { g: 'women', r: 4.6, n: 940 }],
+    ['Nike Dri-FIT Leg', "Women's Volleyball Shorts", 30, 0, 'FN3210', '010 Black/White|100 White/Black', { g: 'women', cat: 'clothing', type: 'shorts', r: 4.6, n: 1280 }],
+    ['Nike Streak', 'Volleyball Knee Pads', 25, 0, 'N1001700', '010 Black/White|101 White/Black', { cat: 'accessories', type: 'equipment', r: 4.5, n: 640 }],
+  ]),
+  ...S({ g: 'men', cat: 'shoes', type: 'wrestling', sport: 'wrestling', brand: 'Nike' }, [
+    ['Nike Inflict 3', 'Wrestling Shoes', 80, 0, '325256', '005 Black/White|400 Game Royal/White', { g: 'unisex', h: 'high', r: 4.7, n: 1820 }],
+    ['Nike SpeedSweep VII', "Men's Wrestling Shoes", 90, 0, '366683', '001 Black/White|601 Gym Red/White', { h: 'high', r: 4.7, n: 1410 }],
+    ['Nike HyperSweep', 'Wrestling Shoes', 140, 0, '717175', '001 Black/White-Metallic Silver|100 White/Black', { g: 'unisex', h: 'high', r: 4.6, n: 520 }],
+    ['Nike Grappler', "Men's Wrestling Singlet", 65, 0, 'FN3260', '010 Black/White|410 Midnight Navy/White', { cat: 'clothing', type: 'tops', r: 4.4, n: 88 }],
+  ]),
+  ...S({ g: 'men', cat: 'shoes', type: 'cleats', sport: 'lacrosse', brand: 'Nike' }, [
+    ['Nike Alpha Huarache 9 Elite', "Men's Lacrosse Cleats", 140, 0, 'FD0294', '001 Black/White|100 White/Black', { r: 4.6, n: 210 }],
+    ['Nike Alpha Huarache 9 Pro Mid', "Men's Lacrosse Cleats", 95, 66.97, 'FD0293', '100 White/Black|001 Black/White', { h: 'mid', r: 4.5, n: 160 }],
+    ['Nike Vapor Lacrosse', "Men's Dri-FIT Shorts", 40, 0, 'FN3270', '010 Black/White|100 White/Black', { cat: 'clothing', type: 'shorts', r: 4.5, n: 74 }],
+  ]),
+  ...S({ g: 'women', cat: 'clothing', type: 'swim', sport: 'swimming', brand: 'Nike Swim' }, [
+    ['Nike Swim HydraStrong Solid', "Women's Fastback One-Piece Swimsuit", 70, 0, 'NESSA001', '001 Black|440 Midnight Navy', { r: 4.6, n: 1320 }],
+    ['Nike Swim Essential', "Women's Racerback Bikini Set", 64, 44.97, 'NESSC211', '001 Black|612 Light Soft Pink', { r: 4.5, n: 410 }],
+    ['Nike Swim', "Men's 9\" Volley Shorts", 50, 0, 'NESSE506', '001 Black|440 Midnight Navy|060 Wolf Grey', { g: 'men', type: 'shorts', r: 4.5, n: 880 }],
+    ['Nike Swim HydraStrong', "Men's Jammer", 50, 0, 'NESSA009', '001 Black|440 Midnight Navy', { g: 'men', type: 'shorts', r: 4.6, n: 520 }],
+    ['Nike Swim Expanse', 'Swim Goggles', 18, 0, 'NESSA190', '001 Black/Smoke|400 Game Royal/Clear', { g: 'unisex', cat: 'accessories', type: 'sunglasses', r: 4.4, n: 690 }],
+  ]),
+  ...S({ g: 'women', cat: 'clothing', type: 'shorts', sport: 'cheer', brand: 'Nike' }, [
+    ['Nike Pro', "Women's Dri-FIT 3\" Cheer Shorts", 30, 0, 'FN3280', '010 Black/White|100 White/Black', { r: 4.6, n: 540 }],
+    ['Nike Dri-FIT', "Women's Cheer Crop Top", 35, 0, 'FN3284', '010 Black/White|100 White/Black', { type: 'tops', r: 4.5, n: 120 }],
+    ['Nike Zoom Sideline', "Women's Cheer Shoes", 80, 0, 'FQ8810', '100 White/White-Metallic Silver', { cat: 'shoes', type: 'court', r: 4.6, n: 210 }],
+  ]),
+
+  // ---------------- Team and league gear ----------------
+  ...S({ g: 'men', cat: 'clothing', type: 'jerseys', sport: 'basketball', brand: 'Nike', t: 'team ncaa' }, [
+    ['Duke Blue Devils', "Men's Nike Dri-FIT College Limited Basketball Jersey", 110, 0, 'FV3401', '100 White/Game Royal|410 College Navy/White', { r: 4.7, n: 260 }],
+    ['North Carolina Tar Heels', "Men's Nike Dri-FIT College Limited Basketball Jersey", 110, 0, 'FV3403', '412 Valor Blue/White|100 White/Valor Blue', { r: 4.7, n: 240 }],
+    ['UConn Huskies', "Men's Nike Dri-FIT College Limited Basketball Jersey", 110, 0, 'FV3405', '419 College Navy/White', { r: 4.7, n: 180 }],
+    ['Kentucky Wildcats', "Men's Nike Dri-FIT College Replica Basketball Jersey", 85, 59.97, 'FV3407', '480 Game Royal/White', { r: 4.6, n: 150 }],
+    ['Oregon Ducks', "Men's Nike Dri-FIT College Basketball Shorts", 75, 0, 'FV3409', '398 Apple Green/Yellow Strike', { type: 'shorts', r: 4.6, n: 90 }],
+  ]),
+  ...S({ g: 'women', cat: 'clothing', type: 'jerseys', sport: 'soccer', brand: 'Nike', t: 'team nwsl' }, [
+    ['Portland Thorns FC 2026 Stadium Home', "Women's Nike Dri-FIT NWSL Replica Jersey", 95, 0, 'HJ5210', '657 University Red/Black', { r: 4.6, n: 130 }],
+    ['Washington Spirit 2026 Stadium Home', "Women's Nike Dri-FIT NWSL Replica Jersey", 95, 0, 'HJ5214', '010 Black/Metallic Gold', { r: 4.6, n: 90 }],
+    ['San Diego Wave FC 2026 Stadium Home', "Women's Nike Dri-FIT NWSL Replica Jersey", 95, 0, 'HJ5218', '100 White/Coast', { r: 4.5, n: 70 }],
+    ['Kansas City Current 2026 Stadium Home', "Women's Nike Dri-FIT NWSL Replica Jersey", 95, 66.97, 'HJ5222', '600 Team Red/Teal', { r: 4.6, n: 85 }],
+  ]),
 ]

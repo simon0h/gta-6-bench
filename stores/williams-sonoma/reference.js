@@ -19,7 +19,7 @@ const store = referenceRetailStore({ slug: 'williams-sonoma', name: 'Williams So
     site = context
     router.get('/products/:slug', (req, res) => {
       const p = unique.find(p => p.id === req.params.slug)
-      return p ? context.render(req, res, p.title, capturedWilliamsProduct(context.baseOf(res), p)) : context.coverage(req, res, 'Product has not been captured', 404)
+      return p ? context.render(req, res, p.title, capturedWilliamsProduct(context.baseOf(res), p)) : context.coverage(req, res, "Sorry, we couldn't find that page", 404)
     })
     installSite(router, context)
   },

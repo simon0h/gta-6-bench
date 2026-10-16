@@ -458,7 +458,7 @@ const ROWS = {
 // What the item page says, by department: [lead sentence, care/usage line].
 const ABOUT = {
   groceries: ['Fresh groceries and pantry staples for everyday meals.', 'Product packaging and size may vary. Refrigerate perishable items promptly after delivery.'],
-  household: ['Household essentials to keep every room clean and stocked.', 'Use only as directed on the label. Keep out of reach of children.'],
+  household: ['Household essentials to keep every room clean and stocked.', 'Packaging may vary. See the label for full use and safety information.'],
   home: ['Home, furniture and kitchen essentials for everyday living.', 'See the manufacturer instructions for assembly, use and care.'],
   electronics: ['Everyday tech from the brands you know.', 'Includes the manufacturer warranty. Remove personal data before returning devices.'],
   games: ['Games, consoles and accessories for every player.', 'Check platform compatibility before purchase. Digital codes are delivered by email and are non-returnable once redeemed.'],
@@ -502,9 +502,10 @@ const REVIEW_TEXT = {
   games: [['Great purchase', 'Shipped fast and works as expected. My kids love it.'], ['Worth it', 'Good price compared to other retailers. No issues so far.']],
   electronics: [['Works great', 'Easy to set up and works exactly as described.'], ['Good for the price', 'Does what I need. Battery and build quality are fine for the money.']],
 }
-const GENERIC_REVIEWS = [['Exactly as described', 'Arrived quickly and matches the description. Would buy again.'], ['Good value', 'Good quality for the price. Packaging was fine.']]
+const GENERIC_REVIEWS = [['Exactly as described', 'Arrived quickly and matches the description. Would buy again.'], ['Good value', 'Good quality for the price. Packaging was fine.'], ['Will reorder', 'This is my second time buying it. Same quality as last time and it came a day early.'], ['Does the job', 'No complaints. It is exactly what I expected for the price.'], ['Love it', 'Better than I expected. Already recommended it to my sister.'], ['Fast delivery', 'Ordered on Monday and had it Wednesday. Item was well packed and in great shape.'], ['Pretty good', 'Works well overall. The box was a little dented but the item itself was fine.'], ['Great buy', 'Cheaper than the store near me and just as good.']]
 function reviewsFor(title, department, rating, n) {
-  const [a, b] = REVIEW_TEXT[department] ?? GENERIC_REVIEWS
+  const pool = REVIEW_TEXT[department] ?? GENERIC_REVIEWS
+  const [a, b] = pool.length > 2 ? [pool[n % pool.length], pool[(n + 3) % pool.length]] : pool
   return [
     { id: 'r1', stars: 5, name: REVIEWERS[n % 12], title: a[0], body: a[1], date: `2026-09-${String(10 + n % 18).padStart(2, '0')}` },
     { id: 'r2', stars: rating >= 4.5 ? 5 : 4, name: REVIEWERS[(n + 5) % 12], title: b[0], body: b[1], date: `2026-08-${String(5 + n % 22).padStart(2, '0')}` },
@@ -528,7 +529,7 @@ export const SHELF = Object.entries(ROWS).flatMap(([department, rows]) => rows.m
     arrival: grocery ? { short: 'tomorrow', day: 'tomorrow', full: 'tomorrow' } : { short: 'in 2 days', day: 'in 2 days', full: 'in 2 days' },
     shippingText: grocery || price >= 35 ? `Free shipping, arrives ${grocery ? 'tomorrow' : 'in 2 days'}` : 'Shipping, arrives in 2 days',
     fulfillment: ['shipping'], sellerId: 'walmart',
-    specs, features: [`${lead} ${title}.`, ...Object.entries(specs).filter(([k]) => !['Sold and shipped by', 'Category'].includes(k)).map(([k, v]) => `${k}: ${v}`), care],
+    specs, features: [lead, ...Object.entries(specs).filter(([k]) => !['Sold and shipped by', 'Category'].includes(k)).map(([k, v]) => `${k}: ${v}`), care],
     crumbs: [dept.name, category], crumbPaths: [dept.path, nodePath],
     returnPolicy: grocery ? 'Grocery items are not returnable. Contact Customer Care within 7 days if an item arrives damaged.' : extra.type === 'giftcard' ? 'Gift cards and digital codes are not returnable.' : 'Free 90-day returns on most items sold by Walmart.com. Electronics have a 30-day return window.',
     keywords: `${title} ${brand} ${category} ${dept.name} ${extra.platform ?? ''} ${extra.type ?? ''}`,
@@ -553,8 +554,9 @@ export const SHELF = Object.entries(ROWS).flatMap(([department, rows]) => rows.m
 const TONES = { groceries: ['#2a8703', '#eaf6e3'], household: ['#0071dc', '#e6f1fc'], home: ['#a4683a', '#f6ede4'], electronics: ['#1b2a4a', '#e8ecf3'], games: ['#3a1f6b', '#efe9f8'], toys: ['#e4572e', '#fdeee7'], fashion: ['#6b4f9e', '#f0ecf7'], beauty: ['#c2477a', '#fbe9f1'], 'personal-care': ['#00849a', '#e3f4f6'], health: ['#00845a', '#e2f4ec'], baby: ['#5aa4d6', '#eaf4fb'], pets: ['#b5651d', '#f8eee3'], sports: ['#c0392b', '#f9e9e7'], patio: ['#3d7a3a', '#e9f3e8'], 'home-improvement': ['#e67e22', '#fdf0e3'], auto: ['#2c3e50', '#e9edf1'], office: ['#2563a6', '#e7eff8'] }
 const PLATFORM_BAND = { ps5: ['#0070d1', 'PS5'], ps4: ['#003791', 'PS4'], xbox: ['#107c10', 'XBOX SERIES X'], 'switch-2': ['#e60012', 'NINTENDO SWITCH 2'], switch: ['#e60012', 'NINTENDO SWITCH'] }
 const wrap = (s, n) => { const out = []; let line = ''; for (const w of s.split(/\s+/)) { if ((line + ' ' + w).trim().length > n && line) { out.push(line); line = w } else line = (line + ' ' + w).trim() } if (line) out.push(line); return out }
-const label = (p, x, y, width, n, size, color) => wrap(p.title.replace(new RegExp('^' + p.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*'), '').split(',')[0], n).slice(0, 3).map((l, i) => `<text x="${x}" y="${y + i * (size + 4)}" font-family="Arial,Helvetica,sans-serif" font-size="${size}" fill="${color}" text-anchor="middle">${esc(l)}</text>`).join('')
-const brandText = (p, x, y, size, color) => `<text x="${x}" y="${y}" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="700" font-size="${size}" fill="${color}" text-anchor="middle">${esc(p.brand.toUpperCase().slice(0, 18))}</text>`
+const label = (p, x, y, width, n, size, color, lines = 3) => wrap(p.title.replace(new RegExp('^' + p.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*'), '').split(',')[0], n).slice(0, lines).map((l, i) => `<text x="${x}" y="${y + i * (size + 4)}" font-family="Arial,Helvetica,sans-serif" font-weight="600" font-size="${size}" fill="${color}" text-anchor="middle">${esc(l)}</text>`).join('')
+// Brand mark on the pack: as large as the panel allows, shrunk so long names still fit inside it.
+const brandText = (p, x, y, size, color, maxWidth = 150) => { const name = p.brand.toUpperCase().slice(0, 18); const fit = Math.max(9, Math.min(size, Math.floor(maxWidth / (name.length * 0.72)))); return `<text x="${x}" y="${y}" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="700" font-size="${fit}" fill="${color}" text-anchor="middle">${esc(name)}</text>` }
 function shapeSvg(p) {
   const [ink, paper] = TONES[p.department] ?? ['#0071dc', '#eef4fb']
   const s = p.shape
@@ -563,15 +565,15 @@ function shapeSvg(p) {
     const hue = parseInt(createHash('md5').update(p.title).digest('hex').slice(0, 4), 16) % 360
     const ink = `hsl(${hue},48%,32%)`
     const [band, name] = PLATFORM_BAND[p.platform] ?? ['#333', 'GAME']
-    body = `<rect x="95" y="20" width="210" height="260" rx="6" fill="#1d1f24"/><rect x="95" y="20" width="210" height="30" rx="6" fill="${band}"/><text x="200" y="41" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="13" fill="#fff" text-anchor="middle">${name}</text><rect x="107" y="60" width="186" height="180" fill="${ink}"/><circle cx="200" cy="120" r="44" fill="${paper}" opacity=".18"/>${label(p, 200, 168, 186, 16, 15, '#fff')}<rect x="107" y="248" width="24" height="26" fill="#fff"/><text x="119" y="267" font-family="Arial" font-weight="700" font-size="13" fill="#000" text-anchor="middle">${(p.esrb ?? 'E')[0]}</text>${brandText(p, 225, 266, 10, '#fff')}`
+    body = `<rect x="95" y="20" width="210" height="260" rx="6" fill="#1d1f24"/><rect x="95" y="20" width="210" height="30" rx="6" fill="${band}"/><text x="200" y="41" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="13" fill="#fff" text-anchor="middle">${name}</text><rect x="107" y="60" width="186" height="180" fill="${ink}"/><circle cx="200" cy="120" r="44" fill="${paper}" opacity=".18"/>${label(p, 200, 166, 186, 15, 17, '#fff')}<rect x="107" y="248" width="24" height="26" fill="#fff"/><text x="119" y="267" font-family="Arial" font-weight="700" font-size="13" fill="#000" text-anchor="middle">${(p.esrb ?? 'E')[0]}</text>${brandText(p, 225, 266, 10, '#fff', 140)}`
   } else if (s === 'tv') body = `<rect x="40" y="50" width="320" height="190" rx="6" fill="#111"/><rect x="48" y="58" width="304" height="174" fill="#2d4f8b"/><rect x="170" y="240" width="60" height="10" fill="#333"/><rect x="130" y="250" width="140" height="8" rx="4" fill="#333"/>`
-  else if (s === 'bottle') body = `<rect x="170" y="30" width="60" height="30" rx="6" fill="${ink}"/><path d="M150 70 Q150 60 170 60 H230 Q250 60 250 70 V270 Q250 285 235 285 H165 Q150 285 150 270 Z" fill="${paper}" stroke="${ink}" stroke-width="4"/><rect x="152" y="130" width="96" height="100" fill="${ink}"/>${brandText(p, 200, 155, 11, '#fff')}${label(p, 200, 178, 96, 12, 11, '#fff')}`
-  else if (s === 'can') body = `<ellipse cx="200" cy="70" rx="70" ry="16" fill="#c9ccd1"/><rect x="130" y="70" width="140" height="190" fill="${ink}"/><ellipse cx="200" cy="260" rx="70" ry="16" fill="${ink}"/><rect x="130" y="120" width="140" height="80" fill="${paper}"/>${brandText(p, 200, 150, 12, ink)}${label(p, 200, 172, 130, 16, 11, '#333')}`
-  else if (s === 'jar') body = `<rect x="140" y="50" width="120" height="34" rx="6" fill="${ink}"/><rect x="128" y="84" width="144" height="196" rx="20" fill="${paper}" stroke="${ink}" stroke-width="4"/><rect x="128" y="130" width="144" height="96" fill="${ink}"/>${brandText(p, 200, 158, 12, '#fff')}${label(p, 200, 180, 140, 16, 11, '#fff')}`
+  else if (s === 'bottle') body = `<rect x="170" y="30" width="60" height="30" rx="6" fill="${ink}"/><path d="M150 70 Q150 60 170 60 H230 Q250 60 250 70 V270 Q250 285 235 285 H165 Q150 285 150 270 Z" fill="${paper}" stroke="${ink}" stroke-width="4"/><rect x="152" y="130" width="96" height="100" fill="${ink}"/>${brandText(p, 200, 154, 15, '#fff', 90)}${label(p, 200, 176, 96, 11, 13, '#fff')}`
+  else if (s === 'can') body = `<ellipse cx="200" cy="70" rx="70" ry="16" fill="#c9ccd1"/><rect x="130" y="70" width="140" height="190" fill="${ink}"/><ellipse cx="200" cy="260" rx="70" ry="16" fill="${ink}"/><rect x="130" y="120" width="140" height="80" fill="${paper}"/>${brandText(p, 200, 147, 17, ink, 132)}${label(p, 200, 168, 130, 15, 14, '#333', 2)}`
+  else if (s === 'jar') body = `<rect x="140" y="50" width="120" height="34" rx="6" fill="${ink}"/><rect x="128" y="84" width="144" height="196" rx="20" fill="${paper}" stroke="${ink}" stroke-width="4"/><rect x="128" y="130" width="144" height="96" fill="${ink}"/>${brandText(p, 200, 157, 18, '#fff', 136)}${label(p, 200, 182, 140, 15, 15, '#fff', 2)}`
   else if (s === 'bag' || s === 'tray') body = s === 'tray'
-    ? `<rect x="70" y="120" width="260" height="130" rx="14" fill="#eceae4" stroke="#bbb" stroke-width="3"/><rect x="88" y="135" width="224" height="100" rx="10" fill="${paper}"/><rect x="100" y="150" width="200" height="34" fill="${ink}"/>${brandText(p, 200, 172, 12, '#fff')}${label(p, 200, 205, 200, 26, 11, '#333')}`
-    : `<path d="M120 50 H280 L300 280 H100 Z" fill="${ink}"/><rect x="120" y="40" width="160" height="18" fill="${paper}"/><rect x="118" y="110" width="164" height="110" rx="8" fill="${paper}"/>${brandText(p, 200, 140, 13, ink)}${label(p, 200, 166, 160, 20, 11, '#333')}`
-  else if (s === 'card') body = `<rect x="80" y="70" width="240" height="152" rx="14" fill="${ink}"/><rect x="80" y="110" width="240" height="30" fill="#ffffff22"/>${brandText(p, 200, 104, 16, '#fff')}${label(p, 200, 180, 220, 26, 12, '#fff')}`
+    ? `<rect x="70" y="120" width="260" height="130" rx="14" fill="#eceae4" stroke="#bbb" stroke-width="3"/><rect x="88" y="135" width="224" height="100" rx="10" fill="${paper}"/><rect x="100" y="150" width="200" height="34" fill="${ink}"/>${brandText(p, 200, 174, 18, '#fff', 192)}${label(p, 200, 207, 200, 24, 14, '#333', 2)}`
+    : `<path d="M120 50 H280 L300 280 H100 Z" fill="${ink}"/><rect x="120" y="40" width="160" height="18" fill="${paper}"/><rect x="118" y="110" width="164" height="110" rx="8" fill="${paper}"/>${brandText(p, 200, 142, 20, ink, 156)}${label(p, 200, 168, 160, 17, 15, '#333')}`
+  else if (s === 'card') body = `<rect x="80" y="70" width="240" height="152" rx="14" fill="${ink}"/><rect x="80" y="110" width="240" height="30" fill="#ffffff22"/>${brandText(p, 200, 102, 24, '#fff', 220)}${label(p, 200, 176, 220, 22, 16, '#fff', 2)}`
   else if (['appliance', 'heater', 'vacuum', 'drill', 'device', 'battery', 'toolbox', 'grill', 'patio', 'luggage', 'mattress', 'tire', 'ball', 'toybox'].includes(s)) {
     const shapes = {
       appliance: `<rect x="120" y="60" width="160" height="200" rx="40" fill="#2b2d31"/><rect x="140" y="90" width="120" height="70" rx="12" fill="#55585e"/><circle cx="200" cy="205" r="22" fill="${ink}"/>`,
@@ -587,11 +589,13 @@ function shapeSvg(p) {
       mattress: `<path d="M60 170 L200 120 L340 170 L200 220 Z" fill="#f5f5f5" stroke="#bbb" stroke-width="3"/><path d="M60 170 V210 L200 260 V220 Z" fill="#7fb77e"/><path d="M340 170 V210 L200 260 V220 Z" fill="#6aa56a"/>`,
       tire: `<circle cx="200" cy="160" r="110" fill="#222"/><circle cx="200" cy="160" r="60" fill="#bfc4ca"/><circle cx="200" cy="160" r="18" fill="#777"/>`,
       ball: `<ellipse cx="200" cy="160" rx="110" ry="70" fill="${p.title.includes('Golf') ? '#f4f4f4' : '#7b3f1d'}" stroke="#333" stroke-width="3"/><rect x="150" y="155" width="100" height="8" fill="#fff"/>`,
-      toybox: `<rect x="90" y="70" width="220" height="200" rx="8" fill="${ink}"/><rect x="110" y="95" width="180" height="120" rx="6" fill="${paper}"/>${brandText(p, 200, 245, 14, '#fff')}${label(p, 200, 150, 170, 22, 12, '#333')}`,
+      toybox: `<rect x="90" y="70" width="220" height="200" rx="8" fill="${ink}"/><rect x="110" y="95" width="180" height="120" rx="6" fill="${paper}"/>${brandText(p, 200, 250, 20, '#fff', 200)}${label(p, 200, 138, 170, 15, 17, '#333')}`,
     }
     body = shapes[s]
-  } else body = `<rect x="110" y="50" width="180" height="230" rx="8" fill="${ink}"/><rect x="110" y="50" width="180" height="40" rx="8" fill="${paper}"/>${brandText(p, 200, 78, 13, ink)}<rect x="126" y="110" width="148" height="110" rx="6" fill="${paper}"/>${label(p, 200, 140, 140, 18, 12, '#333')}`
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300"><rect width="400" height="300" fill="#fff"/>${body}</svg>`
+  } else body = `<rect x="110" y="50" width="180" height="230" rx="8" fill="${ink}"/><rect x="110" y="50" width="180" height="40" rx="8" fill="${paper}"/>${brandText(p, 200, 79, 21, ink, 170)}<rect x="126" y="110" width="148" height="110" rx="6" fill="${paper}"/>${label(p, 200, 142, 140, 13, 17, '#333')}`
+  // Upright packs are framed close, so the pack (and its label) fills the tile the way a product photo does.
+  const tight = !s || ['box', 'game', 'bag', 'toybox', 'jar', 'can', 'bottle', 'card', 'device', 'heater', 'vacuum', 'appliance', 'luggage'].includes(s)
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${tight ? '75 12 250 278' : '0 0 400 300'}" width="400" height="300"><rect x="-200" y="-200" width="800" height="700" fill="#fff"/>${body}</svg>`
 }
 const svgUri = svg => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
 export function shelfImage(p, { alt = p.title, className = '' } = {}) {

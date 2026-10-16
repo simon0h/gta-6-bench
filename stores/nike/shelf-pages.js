@@ -6,11 +6,11 @@
 // fixture carts, GTA fixture SKUs, unknown ids) falls through to the shared
 // reference guard, which answers 409.
 import { randomInt, randomUUID } from 'node:crypto'
-import { esc } from '../../lib/html.js'
+import { esc, publicNotice } from '../../lib/html.js'
 import { validateCard } from '../../lib/payment.js'
 import { recordOrder, getOrder } from '../../lib/orders.js'
 import { FILTERS } from './site-data.js'
-import { shelf, shelfStyle, isShelfStyle, stylePath, filterShelf, sortShelf, SORTS, shelfArt, artUrl, VIEWS } from './shelf.js'
+import { shelf, shelfStyle, isShelfStyle, stylePath, filterShelf, sortShelf, SORTS, shelfArt, artUrl, VIEWS, relatedItems } from './shelf.js'
 
 const str = v => typeof v === 'string' ? v.trim() : ''
 const money = v => `$${Number.isInteger(v) ? v : v.toFixed(2)}`
@@ -57,8 +57,9 @@ export function grid(base, { action, hidden = {}, heading, crumbs = '', siblings
 
 export function listingGrid(base, slug, info, items, query) {
   const crumbs = info.dept ? `<nav class="nkx-crumbs" aria-label="Breadcrumb">${A(base, info.dept.path, info.dept.label)}<span aria-hidden="true">/</span><span>${esc(info.group)}</span></nav>` : ''
-  return grid(base, { action: `${base}/w/${slug}`, crumbs, siblings: (info.siblings || []).filter(([, p]) => p !== `/w/${slug}`), items, query,
+  const html = grid(base, { action: `${base}/w/${slug}`, crumbs, siblings: (info.siblings || []).filter(([, p]) => p !== `/w/${slug}`), items, query,
     heading: n => `<h1>${esc(info.title)} <span class="nks-count">(${n})</span></h1>` })
+  return items.length < 8 ? html + row(base, 'You Might Also Like', relatedItems(slug, items)) : html
 }
 
 export function searchGrid(base, term, items, query) {
@@ -129,7 +130,7 @@ export function checkoutPage(base, req, values = {}, errors = []) {
   req.store.nikeCheckout.token ||= randomUUID()
   const ship = SHIPPING.map(([v, label, eta], i) => { const cost = v === 'standard' ? t.standard : v === 'expedited' ? 15 : 25; return `<label class="nks-ship" for="ship-${v}"><input id="ship-${v}" type="radio" name="shipping" value="${v}"${(values.shipping || 'standard') === v ? ' checked' : ''}${i ? '' : ' required'}><span><b>${cost ? money2(cost) : 'Free'}</b> ${esc(label)}<small>${esc(eta)}</small></span></label>` }).join('')
   const items = t.lines.map(l => `<li data-product-kind="other"><img src="${artUrl(base, l.style)}" alt="" width="96" height="90"><div><p><b>${esc(l.product.title)}</b></p><p>${esc(l.product.subtitle)}</p><p>Qty ${l.qty} · Size ${esc(l.size)}</p><p>${money2(l.qty * l.product.price)}</p></div></li>`).join('')
-  return `<div class="nks-checkout"><h1>Checkout</h1>${errors.length ? `<div class="nks-error" role="alert"><p>Please correct the following:</p><ul>${errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>` : ''}<div class="nks-checkout-grid"><form action="${base}/checkout/order" method="post" class="nks-checkout-form"><input type="hidden" name="checkout_token" value="${esc(req.store.nikeCheckout.token)}"><section><h2>Delivery</h2>${isMember(req) ? `<p>Signed in as ${esc(req.store.user.email || '')}</p>` : `<p class="nkx-muted">Checking out as a guest. ${A(base, '/register?next=%2Fcheckout', 'Sign in')} for member shipping.</p>`}<fieldset class="nks-fields"><legend>Enter your name and address:</legend>${FIELDS.map(f => field({ email: isMember(req) ? req.store.user.email : '', ...values }, f)).join('')}</fieldset></section><section><h2>Shipping</h2><fieldset class="nks-ships"><legend class="sr-only">Shipping speed</legend>${ship}</fieldset></section><section><h2>Payment</h2><p class="nkx-muted">Simulated card payment. No real charge is made.</p><fieldset class="nks-fields"><legend class="sr-only">Card details</legend><div class="nks-field"><label for="co-card-name">Name on Card</label><input id="co-card-name" name="card_name" autocomplete="cc-name" value="${esc(values.card_name || '')}" required></div><div class="nks-field"><label for="co-card-number">Card Number</label><input id="co-card-number" name="card_number" inputmode="numeric" autocomplete="cc-number" required></div><div class="nks-field"><label for="co-card-expiry">MM/YY</label><input id="co-card-expiry" name="card_expiry" autocomplete="cc-exp" placeholder="MM/YY" value="${esc(values.card_expiry || '')}" required></div><div class="nks-field"><label for="co-card-cvv">CVV</label><input id="co-card-cvv" name="card_cvv" inputmode="numeric" autocomplete="cc-csc" required></div></fieldset></section><p class="nkx-small nkx-muted">By clicking Place Order, you agree to the Nike ${A(base, '/terms-of-sale', 'Terms of Sale')} and ${A(base, '/privacy-policy', 'Privacy Policy')}.</p><button class="nkx-btn nkx-btn-dark nkx-wide">Place Order</button></form><aside class="nkx-summary nks-order-summary" aria-labelledby="nks-sum-h"><h2 id="nks-sum-h">Order Summary</h2>${summaryTable(t, { taxText: 'Calculated after address' })}<h3>Arrives by ${esc(SHIPPING.find(([v]) => v === (values.shipping || 'standard'))[2].replace('Arrives in ', ''))}</h3><ul class="nks-order-items">${items}</ul></aside></div></div>`
+  return `<div class="nks-checkout"><h1>Checkout</h1>${errors.length ? `<div class="nks-error" role="alert"><p>Please correct the following:</p><ul>${errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>` : ''}<div class="nks-checkout-grid"><form action="${base}/checkout/order" method="post" class="nks-checkout-form"><input type="hidden" name="checkout_token" value="${esc(req.store.nikeCheckout.token)}"><section><h2>Delivery</h2>${isMember(req) ? `<p>Signed in as ${esc(req.store.user.email || '')}</p>` : `<p class="nkx-muted">Checking out as a guest. ${A(base, '/register?next=%2Fcheckout', 'Sign in')} for member shipping.</p>`}<fieldset class="nks-fields"><legend>Enter your name and address:</legend>${FIELDS.map(f => field({ email: isMember(req) ? req.store.user.email : '', ...values }, f)).join('')}</fieldset></section><section><h2>Shipping</h2><fieldset class="nks-ships"><legend class="sr-only">Shipping speed</legend>${ship}</fieldset></section><section><h2>Payment</h2>${publicNotice('<p class="nkx-muted">Simulated card payment. No real charge is made.</p>')}<p class="nks-pay-methods">Credit or Debit Card <span>Visa · Mastercard · American Express · Discover</span></p><fieldset class="nks-fields"><legend class="sr-only">Card details</legend><div class="nks-field"><label for="co-card-name">Name on Card</label><input id="co-card-name" name="card_name" autocomplete="cc-name" value="${esc(values.card_name || '')}" required></div><div class="nks-field"><label for="co-card-number">Card Number</label><input id="co-card-number" name="card_number" inputmode="numeric" autocomplete="cc-number" required></div><div class="nks-field"><label for="co-card-expiry">MM/YY</label><input id="co-card-expiry" name="card_expiry" autocomplete="cc-exp" placeholder="MM/YY" value="${esc(values.card_expiry || '')}" required></div><div class="nks-field"><label for="co-card-cvv">CVV</label><input id="co-card-cvv" name="card_cvv" inputmode="numeric" autocomplete="cc-csc" required></div></fieldset></section><p class="nkx-small nkx-muted">By clicking Place Order, you agree to the Nike ${A(base, '/terms-of-sale', 'Terms of Sale')} and ${A(base, '/privacy-policy', 'Privacy Policy')}.</p><button class="nkx-btn nkx-btn-dark nkx-wide">Place Order</button></form><aside class="nkx-summary nks-order-summary" aria-labelledby="nks-sum-h"><h2 id="nks-sum-h">Order Summary</h2>${summaryTable(t, { taxText: 'Calculated after address' })}<h3>Arrives by ${esc(SHIPPING.find(([v]) => v === (values.shipping || 'standard'))[2].replace('Arrives in ', ''))}</h3><ul class="nks-order-items">${items}</ul></aside></div></div>`
 }
 
 const ORDER_TITLE = l => `${l.product.title} ${l.product.subtitle} (${l.color.name}) - Size ${l.size}`
@@ -235,7 +236,7 @@ export function installShelf(router, { render, baseOf }) {
     render(req, res, 'Order Confirmation', confirmationPage(baseOf(res), order))
   })
 
-  // Order status lookup finds orders placed in this simulation.
+  // Order status lookup finds orders placed on this site.
   router.get(['/orders/details', '/orders/details/'], (req, res, next) => {
     const number = str(req.query.orderNumber), email = str(req.query.email).toLowerCase()
     const order = number && getOrder(number)

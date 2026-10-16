@@ -19,23 +19,36 @@ function informationHref(base, label) {
  return base + (routes[text] || '/information?topic=' + encodeURIComponent(text))
 }
 export function supportInformationPage(base, topic = 'Shopping information') {
- const title = String(topic).slice(0,100)
- const q = title.toLowerCase()
+ const raw = String(topic).slice(0,100)
+ const title = ({ Edit: 'Currency', Newsletter: 'Thanks for signing up' })[raw] || raw
+ const q = raw.toLowerCase()
  let content
- if (/password|signing in/.test(q)) content = '<p>To reset your password, use the Forgotten password link on the sign in page. You can also check out as a guest where offered.</p>'
+ if (q === 'newsletter') content = '<p>You\'re on the list. Look out for the latest releases, pre-order news and exclusive offers from GAME in your inbox.</p><p>You can unsubscribe at any time using the link at the bottom of any of our emails.</p>'
+ else if (/password|signing in/.test(q)) content = '<p>To reset your password, use the Forgotten password link on the sign in page. You can also check out as a guest where offered.</p>'
  else if (/afterpay|zip|paypal|frasers|gift cards/.test(q)) content = '<p>The payment methods currently available for an order are listed at checkout. Gift cards and eVouchers can be redeemed at the payment step of checkout.</p>'
- else if (/cookie|privacy/.test(q)) content = '<p>We use cookies to keep your basket, account and checkout together and to improve your shopping experience. You can change your choices at any time from Cookie preferences.</p>'
+ else if (/cookie|privacy/.test(q)) content = '<p>We use cookies to keep your bag, account and checkout together and to improve your shopping experience. You can change your choices at any time from Cookie preferences.</p>'
  else if (/return|refund|cancel/.test(q)) content = '<p>Review the item, format, delivery choice and total before placing your order. Digital redemption codes may have different return conditions from physical products. You can save a support enquiry from your order details. This does not approve a cancellation or refund.</p>'
  else if (/delivery|shipping|collection/.test(q)) content = '<p>Product pages show available fulfilment choices. Confirm your address or collection store at checkout to see the order-specific delivery estimate and charges. Pre-orders are fulfilled when available; wait for collection confirmation before visiting a store.</p>'
  else if (/terms/.test(q)) content = '<p>Check product compatibility, quantity, fulfilment and payment details before confirming.</p>' + publicNotice('<p>This is not the real GAME website: orders record your selected items without charging a real payment method.</p>')
  else if (/read more/.test(q)) content = '<p>PEGI 18 identifies games intended for adults. You must confirm you are 18 or over before adding this age-rated game to your bag.</p>'
- else if (/edit/.test(q)) content = '<p>Prices are displayed in pounds sterling and include VAT. Our UK website sells in pounds sterling only.</p>'
+ else if (/edit/.test(q)) content = '<p>You are shopping on the GAME UK website. Prices are shown in pounds sterling (£ GBP) and include VAT.</p><p>We deliver to addresses in the United Kingdom. International Delivery is available for selected products; the cost and delivery time are shown at checkout.</p>'
  else if (/mobile phones/.test(q)) content = '<p>We don’t currently sell mobile phones online. Browse our technology and gaming departments instead.</p>'
  else if (/contact|chat|call|help/.test(q)) content = '<p>For order details, use your account or the order confirmation. Live chat is currently unavailable; please try again later or send us a message from Contact Us. Product availability and delivery options are shown on the product page and at checkout.</p>'
  else content = '<p>This service is currently unavailable. Please try again later.</p>'
  return `<section><h1>${esc(title)}</h1>${content}<p><a href="${base}/">Continue shopping</a> · <a href="${base}/account">Your account and orders</a></p></section>`
 }
 const gbp = (n) => money(n, 'GBP')
+// Bag and order lines name the variant the way GAME does ("Colour:" for game formats, "Size: One Size").
+const PLATFORM_SWATCHES = new Set(['PS5', 'PS4', 'XBS', 'Xbox', 'NS2', 'NSW', 'Nintendo', 'PC'])
+export function variantLabel(p) {
+  if (!p) return 'Colour'
+  if (p.optionLabel) return p.optionLabel
+  if (p.kind === 'game') return 'Colour'
+  if (/^(One Size|Standard)$/.test(p.swatch)) return 'Size'
+  if (PLATFORM_SWATCHES.has(p.swatch) || p.category === 'Video Games') return 'Platform'
+  if (p.swatch === 'Digital') return 'Format'
+  return 'Colour'
+}
 const PROMOS = [
   'FC27 - Out now! Get in the game',
   'Coming Soon - Shop upcoming releases on games and more',
@@ -65,7 +78,7 @@ function minibag(base, t, closeHref) {
   ${t.lines.map(l => `<div class="gu-mini-line">
     ${artwork(l.product)}
     <div><div class="gu-brand">${esc(l.product.brand)}</div><a href="${productHref(base, l.product)}">${esc(l.product.title)}</a>
-      <div class="gu-fine">${esc(l.product.optionLabel||(l.product.kind==='game'?'Colour':'Selected'))}: ${esc(l.product.swatch)}</div>
+      <div class="gu-fine">${esc(variantLabel(l.product))}: ${esc(l.product.swatch)}</div>
       <form method="post" action="${base}/cart/update" class="gu-line-actions"><input type="hidden" name="line" value="${l.line}">
         <span class="gu-qty gu-qty-sm"><button type="submit" name="action" value="dec" aria-label="Reduce quantity">&minus;</button><span>${l.qty}</span><button type="submit" name="action" value="inc" aria-label="Increase quantity">+</button></span>
         <span>Price: <b>${gbp(l.product.price)}</b></span><span>Total: <b>${gbp(l.product.price * l.qty)}</b></span>
@@ -77,6 +90,18 @@ function minibag(base, t, closeHref) {
   <div class="gu-flyout-btns"><a class="gu-btn gu-btn-black" href="${base}/cart">View Bag</a><form method="post" action="${base}/checkout/start"><button class="gu-btn" type="submit">Checkout</button></form></div>
 </div>`
 }
+
+// Second mega-menu column per department, linking to the real site's landing pages (site-data.js).
+const MEGA_EXTRA = {
+  gaming: ['Shop by Platform', [['PlayStation', '/playstation'], ['Xbox', '/xbox/all-xbox'], ['Nintendo', '/nintendo'], ['PC Gaming', '/pc-gaming'], ['Games by Genre', '/games'], ['PlayStation Games', '/playstation/games'], ['Nintendo Games', '/nintendo/games'], ['Gaming Sale', '/sale/gaming']]],
+  digital: ['Shop by Platform', [['PlayStation Digital', '/playstation/digital-gaming'], ['Xbox Game Pass', '/xbox/digital-downloads/xbox-game-pass'], ['Xbox Gift Cards', '/xbox/digital-downloads/xbox-gift-cards'], ['Nintendo eShop', '/nintendo/eshop'], ['Nintendo Switch Online', '/nintendo/eshop/nintendo-switch-online'], ['All Gift Cards', '/digital/gift-cards']]],
+  'pc-gaming': ['PC Accessories', [['Headsets', '/pc-gaming/accessories/headsets'], ['Keyboards', '/pc-gaming/accessories/keyboards'], ['Mice', '/pc-gaming/accessories/mice'], ['Gaming Monitors', '/pc-gaming/accessories/gaming-monitors'], ['Mouse Pads', '/pc-gaming/accessories/mouse-pads'], ['PC Gaming Deals', '/deals/pc']]],
+  tech: ['Shop Tech', [['Headphones & Earbuds', '/tech/headphones-and-earbuds'], ['Smart Lighting', '/tech/smart-tech/smart-lighting'], ['Handheld Consoles', '/tech/handheld-consoles'], ['VR', '/tech/vr'], ['Tablets', '/tech/tablets'], ['Tech Deals', '/deals/tech']]],
+  lego: ['Shop LEGO', [['All LEGO', '/lego/all-lego'], ['New LEGO', '/lego/new-lego'], ['LEGO Pokémon', '/lego/pokemon'], ['LEGO Deals', '/lego/lego-deals']]],
+  toys: ['Shop Toys', [['All Toys', '/toys/all-toys'], ['Plushies & Soft Toys', '/toys/plushies-and-soft-toys'], ['Pokémon', '/pokemon'], ['Toy Deals', '/deals/toys']]],
+  'toys/trading-cards': ['Shop Trading Cards', [['Booster Packs', '/toys/trading-cards/booster-packs'], ['New Trading Cards', '/toys/trading-cards/new'], ['Pokémon', '/pokemon'], ['Trading Cards Coming Soon', '/coming-soon/trading-cards'], ['Trading Card Deals', '/deals/tcg']]],
+}
+const MEGA_CAMPAIGNS = { gaming: ['coming-soon', 'gifts-for-gamers', 'under-30'], digital: ['gifts-for-gamers', 'under-30'], 'pc-gaming': ['pc-setup', 'coming-soon', 'under-30'], tech: ['pc-setup', 'gifts-for-gamers', 'under-30'], lego: ['gifts-for-gamers', 'under-30'], toys: ['gifts-for-gamers', 'under-30'], 'toys/trading-cards': ['coming-soon', 'gifts-for-gamers', 'under-30'] }
 
 function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
   return `<header class="gu-header">
@@ -97,7 +122,7 @@ function fullHeader({ base, t, user, q, flyoutOpen, closeHref }) {
       </div>
     </nav>
   </div>
-  <details class="gu-navigation" open><summary>Shop departments <span aria-hidden="true">☰</span></summary><nav class="gu-nav" aria-label="Shop by category">${DEPARTMENTS.map(d=>`<div class="gu-mega-item"><a href="${base}/${d.id}">${esc(d.title)}</a><details class="gu-menu-disclosure"><summary aria-label="Explore ${esc(d.title)}"><span aria-hidden="true">⌄</span></summary><div class="gu-mega"><div><h4>${esc(d.title)}</h4><a class="gu-shop-all" href="${base}/${d.id}">Shop all ${esc(d.title)}</a>${d.categories.map(c=>`<a href="${base}/${d.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div><div><h4>Discover</h4>${d.id==='gaming'?`<a href="${searchHref(base,'grand theft auto vi')}">GTA VI Pre-Order</a>`:''}${CAMPAIGNS.map(c=>`<a href="${base}/campaign/${c.id}">${esc(c.title)}</a>`).join('')}</div><a class="gu-menu-photo" href="${base}/${d.id}">${productPhoto(d.photo,d.title)}<b>Explore ${esc(d.title)} →</b></a></div></details></div>`).join('')}</nav></details>
+  <details class="gu-navigation" open><summary>Shop departments <span aria-hidden="true">☰</span></summary><nav class="gu-nav" aria-label="Shop by category">${DEPARTMENTS.map(d=>`<div class="gu-mega-item"><a href="${base}/${d.id}">${esc(d.title)}</a><details class="gu-menu-disclosure"><summary aria-label="Explore ${esc(d.title)}"><span aria-hidden="true">⌄</span></summary><div class="gu-mega"><div><h4>${esc(d.title)}</h4><a class="gu-shop-all" href="${base}/${d.id}">Shop all ${esc(d.title)}</a>${d.categories.map(c=>`<a href="${base}/${d.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div>${MEGA_EXTRA[d.id]?`<div><h4>${esc(MEGA_EXTRA[d.id][0])}</h4>${MEGA_EXTRA[d.id][1].map(([l,u])=>`<a href="${base}${u}">${esc(l)}</a>`).join('')}</div>`:''}<div><h4>Discover</h4>${d.id==='gaming'?`<a href="${searchHref(base,'grand theft auto vi')}">GTA VI Pre-Order</a>`:''}${CAMPAIGNS.filter(c=>(MEGA_CAMPAIGNS[d.id]||MEGA_CAMPAIGNS.gaming).includes(c.id)).map(c=>`<a href="${base}/campaign/${c.id}">${esc(c.title)}</a>`).join('')}</div><a class="gu-menu-photo" href="${base}/${d.id}">${productPhoto(d.photo,d.title)}<b>Explore ${esc(d.title)} →</b></a></div></details></div>`).join('')}</nav></details>
   <div class="gu-promo" id="gu-promo"><a href="${base}/frasersplus">${esc(PROMOS[2])}</a></div>
 </header>`
 }
@@ -116,6 +141,12 @@ function cookieBanner(base, back) {
   </form></div>`
 }
 
+const SOCIAL = {
+  X: '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+  TikTok: '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 3c.5 3 2.5 4.5 5 4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  Instagram: '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="7" r="1.2" fill="currentColor"/></svg>',
+  Facebook: '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M13.5 21v-8h2.8l.4-3.2h-3.2V7.9c0-.9.3-1.6 1.6-1.6h1.7V3.5c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V13h2.8v8z" fill="currentColor"/></svg>',
+}
 function footer(base, mode) {
   // ASSUMPTION: like the minimal auth.game.co.uk page, the sign-in and checkout steps carry
   // only a slim legal footer (no newsletter or link columns).
@@ -125,7 +156,7 @@ function footer(base, mode) {
   <div class="gu-newsletter"><h4>Sign up to our newsletter</h4><form class="gu-news-form" method="get" action="${base}/information"><input type="hidden" name="topic" value="Newsletter"><label class="gu-sr" for="gu-news-email">Email address</label><input id="gu-news-email" type="email" name="email" placeholder="Enter email address" autocomplete="email"><button class="gu-btn gu-btn-black" type="submit">Sign up</button></form></div>
   <div class="gu-footer-cols">
     ${FOOTER_COLUMNS.map(([h, links]) => col(h, links)).join('')}
-    <div><h4>Stay connected</h4><a class="gu-store-badge" href="${base}/mobile-app"><small>Download on the</small> App Store</a><a class="gu-store-badge" href="${base}/mobile-app"><small>Get it on</small> Google Play</a><p class="gu-follow">Follow Us</p><div class="gu-social">${['X', 'TikTok', 'Instagram', 'Facebook'].map(x => `<span class="gu-footer-unavailable" title="${x}">${x}</span>`).join('')}</div></div>
+    <div><h4>Stay connected</h4><a class="gu-store-badge" href="${base}/mobile-app"><small>Download on the</small> App Store</a><a class="gu-store-badge" href="${base}/mobile-app"><small>Get it on</small> Google Play</a><p class="gu-follow">Follow Us</p><div class="gu-social">${Object.entries(SOCIAL).map(([x, svg]) => `<span class="gu-social-icon" role="img" title="${x}" aria-label="${x}">${svg}</span>`).join('')}</div></div>
   </div>
   <div class="gu-ways"><span>Ways to pay</span>${['VISA', 'VISA Debit', 'Mastercard', 'Maestro', 'Apple Pay', 'PayPal', 'Gift Cards', 'Frasers+'].map(w => `<span class="gu-paylogo">${w}</span>`).join('')}</div>
   <div class="gu-currency">Currency &pound; GBP <a href="${informationHref(base, 'Edit')}">Edit</a></div>
@@ -190,6 +221,42 @@ const SHORTCUT_ICON = {
   Toys: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="26" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="15" cy="14" r="5" fill="currentColor"/><circle cx="33" cy="14" r="5" fill="currentColor"/><circle cx="20" cy="25" r="1.8" fill="currentColor"/><circle cx="28" cy="25" r="1.8" fill="currentColor"/></svg>',
   PC: '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="10" width="32" height="21" rx="2" fill="none" stroke="currentColor" stroke-width="3"/><path d="M18 38h12M24 31v7" stroke="currentColor" stroke-width="3"/></svg>',
 }
+// Category tiles carry a line icon for what they sell (the real site uses packshot tiles).
+const TILE_ICON = {
+  controller: '<path d="M14 18h20c5 0 8 4 9 10l1 6c1 4-3 6-6 3l-4-4H14l-4 4c-3 3-7 1-6-3l1-6c1-6 4-10 9-10z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M15 23v8M11 27h8" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="32" cy="25" r="1.8" fill="currentColor"/><circle cx="36" cy="29" r="1.8" fill="currentColor"/>',
+  headset: '<path d="M10 30v-5a14 14 0 0 1 28 0v5" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="8" y="28" width="7" height="11" rx="3" fill="currentColor"/><rect x="33" y="28" width="7" height="11" rx="3" fill="currentColor"/><path d="M15 37c2 3 6 4 9 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+  console: '<rect x="8" y="15" width="32" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M14 38h20" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="33" cy="24" r="2" fill="currentColor"/><path d="M13 24h10" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
+  game: '<rect x="13" y="8" width="22" height="32" rx="2" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M13 14h22" stroke="currentColor" stroke-width="2.6"/><path d="m19 31 5-8 5 8z" fill="currentColor"/>',
+  card: '<rect x="7" y="14" width="34" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M7 21h34" stroke="currentColor" stroke-width="3"/><path d="M12 30h10" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
+  cards: '<rect x="11" y="13" width="18" height="26" rx="2" transform="rotate(-10 20 26)" fill="none" stroke="currentColor" stroke-width="2.4"/><rect x="20" y="10" width="18" height="26" rx="2" fill="currentColor"/>',
+  bricks: '<rect x="9" y="20" width="30" height="16" rx="2" fill="currentColor"/><rect x="13" y="14" width="8" height="7" rx="2" fill="currentColor"/><rect x="27" y="14" width="8" height="7" rx="2" fill="currentColor"/>',
+  toy: '<circle cx="24" cy="26" r="11" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="15" cy="14" r="5" fill="currentColor"/><circle cx="33" cy="14" r="5" fill="currentColor"/><circle cx="20" cy="25" r="1.8" fill="currentColor"/><circle cx="28" cy="25" r="1.8" fill="currentColor"/><path d="M21 30c2 2 4 2 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  ball: '<circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="m24 17 6 4-2 7h-8l-2-7z" fill="currentColor"/><path d="M24 9v8M30 21l8-3M28 28l5 7M20 28l-5 7M18 21l-8-3" stroke="currentColor" stroke-width="2"/>',
+  pc: '<rect x="8" y="10" width="32" height="21" rx="2" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M18 38h12M24 31v7" stroke="currentColor" stroke-width="2.6"/>',
+  vr: '<rect x="7" y="17" width="34" height="16" rx="6" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="17" cy="25" r="3" fill="currentColor"/><circle cx="31" cy="25" r="3" fill="currentColor"/>',
+  tag: '<path d="M8 24V9h15l17 17-15 15z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><circle cx="16" cy="17" r="2.5" fill="currentColor"/>',
+  star: '<path d="m24 8 4.7 10 10.8 1.2-8 7.4 2.2 10.7L24 31.9l-9.7 5.4 2.2-10.7-8-7.4L19.3 18z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>',
+  music: '<path d="M19 34V12l18-4v22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><circle cx="14" cy="34" r="5" fill="currentColor"/><circle cx="32" cy="30" r="5" fill="currentColor"/>',
+}
+function tileIcon(label) {
+  const l = String(label).toLowerCase()
+  const key = /trading|pok[eé]mon|booster|tcg|binder/.test(l) ? 'cards'
+    : /gift card|digital|currency|voucher|credit|subscription|top.?up|wallet/.test(l) ? 'card'
+    : /headset|headphone|audio|speaker|earbud/.test(l) ? 'headset'
+    : /controller|accessor|gamer|pad|wheel|charg|dock/.test(l) ? 'controller'
+    : /console|hardware|switch 2$|bundle/.test(l) ? 'console'
+    : /lego|brick|build/.test(l) ? 'bricks'
+    : /football|sport|fc ?2/.test(l) ? 'ball'
+    : /\bvr\b|virtual/.test(l) ? 'vr'
+    : /\bpc\b|monitor|laptop|keyboard|mouse|mice|tech|webcam|storage|chair/.test(l) ? 'pc'
+    : /vinyl|music|soundtrack/.test(l) ? 'music'
+    : /character|collect|merch/.test(l) ? 'star'
+    : /toy|plush|soft|figure|board/.test(l) ? 'toy'
+    : /deal|sale|offer|under|clearance|price/.test(l) ? 'tag'
+    : /game|release|coming|pre-?order|new|top|chart/.test(l) ? 'game'
+    : 'star'
+  return `<svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true">${TILE_ICON[key]}</svg>`
+}
 const GIFT_SHOP = [['Gifts For Gamers','/gifts/gifts-for-gamers','Headsets, controllers and gaming gear'],['Character Gifts','/gifts/character-gifts','Mario, Sonic, Pokémon and more'],['Toy Gifts','/gifts/toy-gifts','Plush, playsets and action figures'],['Trading Card Gifts','/gifts/trading-card-gifts','Booster packs, tins and binders'],['Football Gifts','/gifts/football-gifts','Football games and fan favourites'],['Digital Gift Cards and Currency','/gifts/digital-gift-cards-and-currency','Instant codes for every platform']]
 
 export function homePage({ base, products }) {
@@ -221,7 +288,7 @@ export function homePage({ base, products }) {
   <section class="gu-gifts-panel"><div><h2>Gifts For Gamers</h2><p>Find their next game, console or favourite accessory.</p></div><div class="gu-campaign-links"><a class="gu-btn" href="${base}/games">Games</a><a class="gu-btn" href="${base}/playstation">PS5</a><a class="gu-btn" href="${base}/xbox/all-xbox">XBOX</a><a class="gu-btn" href="${base}/nintendo">Switch</a></div></section>
   <section class="gu-fplus"><div><b>FRASERS<span>PLUS</span></b><h2>SPREAD THE COST OF GIFTING*</h2><p>Buy now. Pay in 3, interest free.</p><small>Representative APR 29.9% (variable). Credit subject to status. Terms apply.</small></div><a class="gu-btn gu-btn-light" href="${base}/frasersplus">Find out more</a></section>
   <section class="gu-trending" data-home-row="trending"><div class="gu-section-title"><h2>Trending</h2><a href="${base}/coming-soon">Shop all →</a></div><div class="gu-grid gu-shelf">${trending.map(p=>tile(base,p,base+'/')).join('')}</div></section>
-  <section class="gu-gift-shop"><div class="gu-section-title"><h2>Gift Shop</h2><a href="${base}/gifts">Shop all gifts →</a></div><div class="gu-cat-grid">${GIFT_SHOP.map(([l,u,d],i)=>`<a class="gu-cat-tile gu-tone-${i%6}" href="${base}${u}"><span class="gu-cat-mark" aria-hidden="true">${esc(l.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase())}</span><span>${esc(l)}</span><small>${esc(d)}</small></a>`).join('')}</div></section>
+  <section class="gu-gift-shop"><div class="gu-section-title"><h2>Gift Shop</h2><a href="${base}/gifts">Shop all gifts →</a></div><div class="gu-cat-grid">${GIFT_SHOP.map(([l,u,d],i)=>`<a class="gu-cat-tile gu-tone-${i%6}" href="${base}${u}"><span class="gu-cat-mark" aria-hidden="true">${tileIcon(l)}</span><span>${esc(l)}</span><small>${esc(d)}</small></a>`).join('')}</div></section>
   ${shelfRows}
   ${fixtureExtras}`
 }
@@ -233,19 +300,22 @@ export function searchPage({ base, q='', products, facetProducts=products, filte
   const here=url({page:current}), keys=['platform','brand','age','category','style','price','availability']
   const facetLink=(key,val,n)=>`<a class="gu-facet${filters[key]===val?' is-active':''}" ${filters[key]===val?'aria-current="true"':''} href="${esc(url({[key]:filters[key]===val?null:val}))}">${esc(val)} <span>(${n})</span></a>`
   const active=Object.entries(filters).filter(([k,v])=>keys.includes(k)&&v)
+  // Only list filter groups that have options; a Style group that repeats Category word for word is left out.
+  const sameKeys=(a,b)=>JSON.stringify(Object.entries(a||{}).filter(([,n])=>n).sort())===JSON.stringify(Object.entries(b||{}).filter(([,n])=>n).sort())
+  const facetKeys=keys.filter(key=>filters[key]||(key==='price'?f.price.some(b=>b.n):Object.values(f[key]||{}).some(n=>n))&&!(key==='style'&&sameKeys(f.style,f.category)))
   const reset=Object.fromEntries(keys.map(k=>[k,null]))
   const pageLinks=()=>`<nav class="gu-pagination" aria-label="Results pages">${Array.from({length:pages},(_,i)=>`<a href="${esc(url({page:i+1}))}" ${i+1===current?'aria-current="page"':''}>${i+1}</a>`).join('')}</nav>`
-  const crumbs=(landing?.crumbs||[]).map(([l,u])=>`<a href="${base}${u}">${esc(l)}</a> / `).join('')
-  const tiles=landing?.tiles?.length?`<section class="gu-cat-tiles" aria-label="${esc(landing.tilesHeading||'Shop by Category')}">${landing.tilesHeading?`<h2>${esc(landing.tilesHeading)}</h2>`:''}<div class="gu-cat-grid">${landing.tiles.map(([l,u],i)=>`<a class="gu-cat-tile gu-tone-${i%6}" href="${base}${u}"><span class="gu-cat-mark" aria-hidden="true">${esc(l.replace(/[^A-Za-z0-9]/g,'').slice(0,2).toUpperCase())}</span><span>${esc(l)}</span></a>`).join('')}</div></section>`:''
+  const crumbs=(landing?.crumbs||(department&&heading!==department.title?[[department.title,'/'+department.id]]:[])).map(([l,u])=>`<a href="${base}${u}">${esc(l)}</a> / `).join('')
+  const tiles=landing?.tiles?.length?`<section class="gu-cat-tiles" aria-label="${esc(landing.tilesHeading||'Shop by Category')}">${landing.tilesHeading?`<h2>${esc(landing.tilesHeading)}</h2>`:''}<div class="gu-cat-grid">${landing.tiles.map(([l,u],i)=>`<a class="gu-cat-tile gu-tone-${i%6}" href="${base}${u}"><span class="gu-cat-mark" aria-hidden="true">${tileIcon(l)}</span><span>${esc(l)}</span></a>`).join('')}</div></section>`:''
   const section=landing?.section?.length?`<nav class="gu-in-section" aria-label="In This Section"><h3>In This Section</h3>${landing.section.map(([l,u])=>`<a href="${base}${u}">${esc(l)}</a>`).join('')}</nav>`:''
   return `<div class="gu-search-page"><nav class="gu-crumbs" aria-label="Breadcrumb"><a href="${base}/">Home</a> / ${crumbs}<span>${esc(heading)}</span></nav><h1>${esc(heading)}</h1>${landing?.h2?`<h2 class="gu-landing-h2">${esc(landing.h2)}</h2>`:''}${intro?`<p class="gu-intro">${esc(intro)}</p>`:''}
   ${tiles}
-  ${department&&!landing?.tiles?`<div class="gu-chips">${department.categories.map(c=>`<a href="${base}/${department.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div>`:''}
+  ${department&&!landing?.tiles?`<div class="gu-chips">${department.categories.map(c=>`<a href="${base}/${department.id}/${categorySlug(c)}"${c===heading?' class="is-active" aria-current="page"':''}>${esc(c)}</a>`).join('')}</div>`:''}
   <p class="gu-found">We found ${products.length} product${products.length===1?'':'s'}${route==='/searchresults'?` for ${esc(q)}`:''}</p>
   ${active.length?`<p class="gu-active-filters">Filtered by ${active.map(([k,v])=>`${esc(k)}: <b>${esc(v)}</b> <a aria-label="Remove ${esc(k)} filter" href="${esc(url({[k]:null}))}">×</a>`).join(', ')} · <a href="${esc(url(reset))}">Clear filters</a></p>`:''}
   <div class="gu-toolbar"><a class="gu-link-btn" href="${esc(url({hidefilters:hideFilters?null:'1',page:current}))}">${hideFilters?'Show Filters':'Hide Filters'}</a><span>${products.length} Products · Page ${current} of ${pages}</span><details class="gu-sort"><summary>Sort By</summary><ul>${SORTS.map(s=>`<li><a class="gu-sort-opt${s.key===sort?' is-active':''}" href="${esc(url({sort:s.key}))}"${s.key===sort?' aria-current="true"':''}>${esc(s.label)}</a></li>`).join('')}</ul></details></div>
-  <div class="gu-search-body${hideFilters?' gu-no-facets':''}"><aside class="gu-facets"${hideFilters?' hidden':''}>${section}<h3 class="gu-filter-by">Filter By</h3>${!facetProducts.length&&landing?'<p class="gu-fine">No filters available</p>':keys.map(key=>`<details open><summary>${({age:'Age Rating',availability:'Availability'})[key]||key[0].toUpperCase()+key.slice(1)}</summary>${key==='price'?f.price.map(b=>facetLink(key,b.label,b.n)).join(''):Object.entries(f[key]).filter(([,n])=>n).map(([v,n])=>facetLink(key,v,n)).join('')||'<span class="gu-fine">None</span>'}</details>`).join('')}</aside>
-  <div><h2 class="gu-available">Available Products</h2>${products.length?`<div class="gu-grid">${products.slice((current-1)*size,current*size).map(p=>tile(base,p,here)).join('')}</div>${pageLinks()}`:`${landing&&!active.length?`<div class="gu-empty"><h2>0 Products</h2><p>There are currently no products available in ${esc(heading)}.</p><p>Browse <a href="${base}/coming-soon">Coming Soon</a> or <a href="${base}/gaming">Consoles &amp; Video Games</a>.</p></div>`:`<div class="gu-empty"><h2>No matching products</h2><p>Try another search term or <a href="${esc(url(reset))}">clear your filters</a>.</p><p>Popular searches: ${['Nintendo','LEGO','headset','monitor'].map(x=>`<a href="${searchHref(base,x)}">${x}</a>`).join(' · ')}</p><a href="${base}/gaming">Browse gaming</a></div>`}`}</div></div>${landing?.editorial?`<section class="gu-editorial"><h2>${esc(heading)}</h2><p>${esc(landing.editorial)}</p></section>`:''}${department&&landing?.tiles?`<div class="gu-chips" aria-label="More in ${esc(department.title)}">${department.categories.map(c=>`<a href="${base}/${department.id}/${categorySlug(c)}">${esc(c)}</a>`).join('')}</div>`:''}</div>`
+  <div class="gu-search-body${hideFilters?' gu-no-facets':''}"><aside class="gu-facets"${hideFilters?' hidden':''}>${section}<h3 class="gu-filter-by">Filter By</h3>${!facetProducts.length&&landing?'<p class="gu-fine">No filters available</p>':facetKeys.map(key=>`<details open><summary>${({age:'Age Rating',availability:'Availability'})[key]||key[0].toUpperCase()+key.slice(1)}</summary>${key==='price'?f.price.map(b=>facetLink(key,b.label,b.n)).join(''):Object.entries(f[key]).filter(([,n])=>n).map(([v,n])=>facetLink(key,v,n)).join('')||'<span class="gu-fine">None</span>'}</details>`).join('')}</aside>
+  <div><h2 class="gu-available">Available Products</h2>${products.length?`<div class="gu-grid">${products.slice((current-1)*size,current*size).map(p=>tile(base,p,here)).join('')}</div>${pageLinks()}`:`${landing&&!active.length?`<div class="gu-empty"><h2>0 Products</h2><p>There are currently no products available in ${esc(heading)}.</p><p>Browse <a href="${base}/coming-soon">Coming Soon</a> or <a href="${base}/gaming">Consoles &amp; Video Games</a>.</p></div>`:`<div class="gu-empty"><h2>No matching products</h2><p>Try another search term or <a href="${esc(url(reset))}">clear your filters</a>.</p><p>Popular searches: ${['Nintendo','LEGO','headset','monitor'].map(x=>`<a href="${searchHref(base,x)}">${x}</a>`).join(' · ')}</p><a href="${base}/gaming">Browse gaming</a></div>`}`}</div></div>${landing?.editorial?`<section class="gu-editorial"><h2>${esc(heading)}</h2><p>${esc(landing.editorial)}</p></section>`:''}${department&&landing?.tiles?`<div class="gu-chips" aria-label="More in ${esc(department.title)}">${department.categories.map(c=>`<a href="${base}/${department.id}/${categorySlug(c)}"${c===heading?' class="is-active" aria-current="page"':''}>${esc(c)}</a>`).join('')}</div>`:''}</div>`
 }
 
 export function productPage({ base, p, modal = null, qty = 1, wished = false, option = '', error = '' }) {
@@ -296,7 +366,7 @@ export function productPage({ base, p, modal = null, qty = 1, wished = false, op
     ${wished ? '<p class="gu-notice">Added to your wish list for this browser session.</p>' : ''}
     ${error?`<p class="gu-error" role="alert">${esc(error)}</p>`:''}<div class="gu-price">${gbp(p.price)}${p.ticketPrice > p.price ? ` <s>${gbp(p.ticketPrice)}</s>` : ''}</div>
     <form method="${cta.method}" action="${cta.action}" class="gu-buy-form" id="gu-buy-form">
-      <div class="gu-format"><span class="gu-label">${p.kind==='game'||p.category==='Video Games'?'Format:':'Selected:'}</span> <span class="gu-swatch is-selected" aria-current="true">${esc(original.options&&!option?'Choose an option':p.swatch)}</span></div>
+      <div class="gu-format"><span class="gu-label">${p.kind==='game'||p.category==='Video Games'?'Format:':esc(variantLabel(p))+':'}</span> <span class="gu-swatch is-selected" aria-current="true">${esc(original.options&&!option?'Choose an option':p.swatch)}</span></div>
       ${original.options?`<label for="option">${esc(p.optionLabel)} <span aria-hidden="true">*</span></label><select id="option" name="option" required><option value="">Choose ${esc(p.optionLabel.toLowerCase())}</option>${original.options.map(v=>`<option value="${v.id}" ${option===v.id?'selected':''} ${!v.stock?'disabled':''}>${esc(v.label)} — ${gbp(v.price)}${!v.stock?' — Out of stock':''}</option>`).join('')}</select><button id="gu-option-preview" class="gu-link-btn" type="submit" formaction="${path}" formmethod="get">Update selection</button>`:''}
       <p class="gu-stock${p.stock>0&&p.stock<10?' gu-low-stock':''}">${scenarioStockFor(p,'shipping')===0 ? (scenarioStockFor(p,'pickup')>0?'Shipping unavailable. Pickup available at '+esc(BENCHMARK_COLLECT_STORE)+'.':'Unavailable: shipping and pickup are no longer available.') : p.catalogEvidence ? 'Available to pre-order' : p.stock?`${p.preorder?'Available to pre-order':p.stock<10?'Running low':'In stock'} · ${p.stock} available`:'Out of stock'}</p>
       <div class="gu-qty"><button type="button" class="gu-qty-btn" data-step="-1" aria-label="Reduce quantity">&minus;</button><label for="qty" class="visually-hidden">Quantity</label><input id="qty" name="qty" type="number" min="1" max="${Math.min(MAX_QTY,quantityLimit(p))}" value="${qty}" inputmode="numeric"><button type="button" class="gu-qty-btn" data-step="1" aria-label="Increase quantity">+</button></div>
@@ -333,16 +403,16 @@ ${modal ? '' : `<div class="gu-sticky" hidden><div class="gu-sticky-inner"><span
 }
 
 // ---- bag ----
-export function cartPage({ base, t, notice = null }) {
+export function cartPage({ base, t, notice = null, user = null }) {
   if (!t.lines.length) {
-    return `<div class="gu-cart-empty">${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}<h1>Your Bag Is Empty</h1><div class="gu-empty-icon">${ICON.bag}</div><p>We'll hold your bag for 30 days.</p><p>Sign in or register to sync your bag to any device.</p><p><a href="${base}/wishlist">View saved items</a> · <a href="${base}/recently-viewed">Recently viewed</a></p><a class="gu-btn" href="${base}/login?returnurl=cart">Sign In</a></div>`
+    return `<div class="gu-cart-empty">${notice ? `<p class="gu-notice">${esc(notice)}</p>` : ''}<h1>Your Bag Is Empty</h1><div class="gu-empty-icon">${ICON.bag}</div><p>We'll hold your bag for 30 days.</p>${user ? '' : '<p>Sign in or register to sync your bag to any device.</p>'}<p><a href="${base}/wishlist">View saved items</a> · <a href="${base}/recently-viewed">Recently viewed</a></p>${user ? `<a class="gu-btn" href="${base}/">Continue shopping</a>` : `<a class="gu-btn" href="${base}/login?returnurl=cart">Sign In</a>`}</div>`
   }
   const rows = t.lines.map(l => `<div class="gu-line">
   <a href="${productHref(base, l.product)}">${artwork(l.product)}</a>
   <div class="gu-line-info">
     <div class="gu-brand">${esc(l.product.brand)}</div>
     <a class="gu-line-name" href="${productHref(base, l.product)}">${esc(l.product.title)}</a>
-    <div class="gu-fine">${esc(l.product.optionLabel||(l.product.kind==='game'?'Colour':'Selected'))}: ${esc(l.product.swatch)}</div>
+    <div class="gu-fine">${esc(variantLabel(l.product))}: ${esc(l.product.swatch)}</div>
     ${scenarioStockFor(l.product,'shipping')===0?`<p class="gu-cart-availability" role="status">Shipping unavailable. ${scenarioStockFor(l.product,'pickup')>0?'Pickup available at '+esc(BENCHMARK_COLLECT_STORE)+'. Choose Click &amp; Collect during checkout.':'Unavailable: this item cannot be purchased for shipping or pickup.'}</p>`:''}
     <form method="post" action="${base}/cart/update" class="gu-line-actions"><input type="hidden" name="line" value="${l.line}">
       <span class="gu-qty"><button type="submit" name="action" value="dec" aria-label="Reduce quantity">&minus;</button><span>${l.qty}</span><button type="submit" name="action" value="inc" aria-label="Increase quantity">+</button></span>
@@ -423,7 +493,7 @@ const steps = (current) => `<ol class="gu-steps">${['Sign in', 'Delivery', 'Paym
 const errorSummary = (errors) => Object.keys(errors).length ? `<div class="gu-error-summary" role="alert"><b>Please check the following:</b><ul>${Object.values(errors).map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>` : ''
 const fieldFactory = (values, errors) => (name, label, { type = 'text', extra = '', required = false } = {}) =>
   `<div class="gu-field"><label for="${name}">${label}${required ? ' <span class="gu-req" aria-hidden="true">*</span>' : ''}</label><input id="${name}" name="${name}" type="${type}" value="${esc(values[name] ?? '')}" ${extra}${required ? ' required' : ''}${errors[name] ? ` aria-invalid="true" aria-describedby="err-${name}"` : ''}>${errors[name] ? `<span class="gu-error" id="err-${name}">${esc(errors[name])}</span>` : ''}</div>`
-const summaryLines = (t) => t.lines.map(l => `<div class="gu-sum-item">${artwork(l.product)}<div><div class="gu-brand">${esc(l.product.brand)}</div>${esc(l.product.title)}<div class="gu-fine">${esc(l.product.optionLabel||(l.product.kind==='game'?'Colour':'Selected'))}: ${esc(l.product.swatch)} &middot; Qty ${l.qty}</div></div><b>${gbp(l.product.price * l.qty)}</b></div>`).join('')
+const summaryLines = (t) => t.lines.map(l => `<div class="gu-sum-item">${artwork(l.product)}<div><div class="gu-brand">${esc(l.product.brand)}</div>${esc(l.product.title)}<div class="gu-fine">${esc(variantLabel(l.product))}: ${esc(l.product.swatch)} &middot; Qty ${l.qty}</div></div><b>${gbp(l.product.price * l.qty)}</b></div>`).join('')
 
 export function deliveryPage({ base, t, email, guest, preorderInBag, values = {}, errors = {} }) {
   const input = fieldFactory(values, errors)
@@ -497,7 +567,7 @@ export function paymentPage({ base, t, delivery, preorderInBag, values = {}, err
     <section class="gu-co-section"><h2>How would you like to pay?</h2>
       <div class="gu-paytabs">
         <label class="gu-paytab"><input type="radio" name="paymentMethod" value="card" ${pm === 'card' ? 'checked' : ''}><span><b>Credit/Debit card</b><small>VISA, VISA Debit, Mastercard, Maestro</small></span></label>
-        <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="applepay" disabled><span><b>Apple Pay</b><small>Currently unavailable</small></span></label>
+        <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="applepay" disabled><span><b>Apple Pay</b><small>Available in Safari on a supported iPhone, iPad or Mac</small></span></label>
         <label class="gu-paytab is-disabled"><input type="radio" name="paymentMethod" value="frasersplus" disabled><span><b>Frasers Plus</b><small>Buy now, Pay in 3, interest free. Representative APR 29.9% (Variable). Credit subject to status. Not available for this order.</small></span></label>
         <label class="gu-paytab${preorderInBag ? ' is-disabled' : ''}"><input type="radio" name="paymentMethod" value="paypal" ${pm === 'paypal' ? 'checked' : ''} ${preorderInBag ? 'disabled' : ''}><span><b>PayPal</b><small>${preorderInBag ? 'PayPal is not available for pre-orders.' : 'Pay with your PayPal account.'}</small></span></label>
       </div>
@@ -565,7 +635,7 @@ export function completePage({ base, order }) {
         const source = byId(it.sku)
         const chosen = order.meta.options?.[index]
         const p = selectedProduct(source,chosen?.option) || source
-        return `<tr><td>${p ? `<div class="gu-brand">${esc(p.brand)}</div>` : ''}${esc(it.title)}${p ? `<div class="gu-fine">${esc(p.optionLabel||(p.kind==='game'?'Colour':'Selected'))}: ${esc(p.swatch)}${p.kind==='game'?' &middot; Size: One Size':''} &middot; Product code: ${esc(p.id)}</div>` : ''}</td><td>${it.qty}</td><td>${gbp(it.unit_price * it.qty)}</td></tr>`
+        return `<tr><td>${p ? `<div class="gu-brand">${esc(p.brand)}</div>` : ''}${esc(it.title)}${p ? `<div class="gu-fine">${esc(variantLabel(p))}: ${esc(p.swatch)}${p.kind==='game'?' &middot; Size: One Size':''} &middot; Product code: ${esc(p.id)}</div>` : ''}</td><td>${it.qty}</td><td>${gbp(it.unit_price * it.qty)}</td></tr>`
       }).join('')}</tbody></table>
       ${a?`<h2>Delivery address</h2><address>${esc([a.title, a.first_name, a.last_name].filter(Boolean).join(' '))}<br>${esc(a.line1)}${a.line2 ? `<br>${esc(a.line2)}` : ''}<br>${esc(a.city)}${a.state ? `, ${esc(a.state)}` : ''}<br>${esc(a.postal_code)}<br>United Kingdom<br>${esc(a.phone)}</address>`:''}
       ${order.meta.pickup_person?`<h2>Pickup person</h2><p>${esc(order.meta.pickup_person.first_name+' '+order.meta.pickup_person.last_name)}<br>${esc(order.meta.pickup_person.email)}<br>${esc(order.meta.pickup_person.phone)}</p>`:''}

@@ -6,7 +6,7 @@ import { departments, categoryIndex, menuDepartments, rooms, roomCategories, foo
 import { infoPages } from './site-pages.js'
 import { searchImages } from './search-reference.js'
 import { shelf, inCategory, deals, newArrivals } from './shelf.js'
-import { listing, carousel } from './shelf-pages.js'
+import { listing, carousel, imgUrl } from './shelf-pages.js'
 
 // Real-site pages for the IKEA US clone (paths mirror https://www.ikea.com/us/en/...).
 // In the default reference catalog, product grids and carousels show the IKEA shelf
@@ -19,9 +19,26 @@ export const imageFor = cat => imageByTitle[cat.image || cat.title] || null
 const RI = '/static/reference/ikea'
 
 const crumbs = (base, items) => `<nav class="ik-crumbs" aria-label="Breadcrumb"><ol>${items.map(([label, href], i) => `<li>${i < items.length - 1 && href ? `<a href="${base}${P}${href}">${esc(label)}</a>` : `<span aria-current="page">${esc(label)}</span>`}</li>`).join('')}</ol></nav>`
+const GENERIC = new Set(['lighting', 'storage', 'accessories', 'furniture', 'solutions', 'supplies', 'systems', 'organizers', 'organization', 'outdoor', 'kitchen', 'white'])
+// Category tiles: the category photo, else its best-selling product (as on ikea.com),
+// else the department photo.
+const tileImage = cat => {
+  const photo = imageFor(cat)
+  if (photo) return { src: photo, cls: '' }
+  const top = byPopularity(inCategory(cat.slug))[0]
+  if (top) return { src: imgUrl('', top), cls: ' ik-tile-product' }
+  const words = cat.title.toLowerCase().split(/[^a-z]+/).filter(w => w.length > 4 && !GENERIC.has(w))
+  const scenes = inspiration.filter(i => words.some(w => new RegExp(`\\b${w}`, 'i').test(i.alt)))
+  const scene = scenes[[...cat.slug].reduce((h, c) => h + c.charCodeAt(0), 0) % (scenes.length || 1)]
+  if (scene) return { src: scene.src, cls: '' }
+  const parent = cat.parent || categoryIndex.get(cat.slug)?.parent
+  const fallback = parent && imageFor(parent)
+  return fallback ? { src: fallback, cls: '' } : null
+}
 const tile = (base, cat, extra = '') => {
-  const img = imageFor(cat)
-  return `<a class="ik-tile${img ? '' : ' no-img'}" href="${base}${P}/cat/${cat.slug}/"${extra}>${img ? `<img src="${img}" alt="" loading="lazy">` : `<span class="ik-tile-ph" aria-hidden="true">${esc(cat.title.slice(0, 1))}</span>`}<span>${esc(cat.title)}</span></a>`
+  const img = tileImage(cat)
+  const src = img && (img.cls ? base + img.src : img.src)
+  return `<a class="ik-tile${img ? img.cls : ' no-img'}" href="${base}${P}/cat/${cat.slug}/"${extra}>${img ? `<img src="${esc(src)}" alt="" loading="lazy">` : `<span class="ik-tile-ph" aria-hidden="true">${esc(cat.title.slice(0, 1))}</span>`}<span>${esc(cat.title)}</span></a>`
 }
 const serviceBlocks = base => `<section class="ik-service-blocks" aria-label="Services"><a href="${base}${P}/customer-service/services/product-reservation/"><strong>Click and collect</strong><span>Order online and pick up at your local store.</span></a><a href="${base}${P}/customer-service/services/planning-consultation/"><strong>Planning and consultation</strong><span>Get help planning your space.</span></a><a href="${base}${P}/customer-service/services/delivery/"><strong>Delivery</strong><span>Get your purchases delivered to your door.</span></a><a href="${base}${P}/customer-service/services/assembly/"><strong>Taskrabbit Assembly</strong><span>Book a Tasker to assemble your furniture.</span></a><a href="${base}${P}/customer-service/services/finance-options/"><strong>Financing options</strong><span>Pay over time with IKEA financing.</span></a><a href="${base}${P}/planners/"><strong>Planning tools</strong><span>Design your space in 3D.</span></a></section>`
 const emptyResults = (base, what) => `<div class="ik-results-empty" data-reference-state="empty-listing"><h3>No products to show</h3><p>There are currently no products available in ${esc(what)}. Please check back soon or explore our other products.</p><a class="ik-btn ik-btn-secondary" href="${base}${P}/cat/products-products/">Explore all products</a></div>`

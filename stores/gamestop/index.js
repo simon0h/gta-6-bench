@@ -4,6 +4,7 @@ import { randomBytes, randomInt, createHash } from 'node:crypto'
 import { recordOrder } from '../../lib/orders.js'
 import { retailState } from '../../lib/retail-state.js'
 import { validateCard } from '../../lib/payment.js'
+import { publicNotice } from '../../lib/html.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
 import { PRODUCTS, ALL, byId, search, refine, totals, SHIPPING_METHODS, STATES, selectedProduct, cartError, shippingEta, parseFilters, collection, DEPARTMENTS, HUBS, productPath } from './data.js'
 import * as P from './pages.js'
@@ -66,14 +67,14 @@ router.get('/pre-order-online-pick-up-in-store',(req,res)=>browse(req,res,withLa
 router.get('/preowned',(req,res)=>browse(req,res,withLanding(res.locals.base,collection('pre-owned'),'/preowned')))
 router.get('/preowned/:sub',(req,res,next)=>{const l=preownedLanding(req.params.sub);if(!l)return next();landingBrowse(req,res,l)})
 router.get('/gift-cards',(req,res)=>landingBrowse(req,res,{...LANDINGS['/gift-cards'],filter:()=>false}))
-router.get('/gift-cards/:brand',(req,res,next)=>{const b=GIFT_BRANDS[req.params.brand];if(!b)return next();landingBrowse(req,res,{name:`${b} Gift Cards`,crumbs:[['Gift Cards','/gift-cards']],filter:()=>false,top:()=>`<p class="gs-landing-note">${P.escapeText(b)} gift cards and digital codes are delivered by email on GameStop.com. Gift-card purchase and redemption are not offered in this local catalog.</p>`})})
+router.get('/gift-cards/:brand',(req,res,next)=>{const b=GIFT_BRANDS[req.params.brand];if(!b)return next();landingBrowse(req,res,{name:`${b} Gift Cards`,crumbs:[['Gift Cards','/gift-cards']],filter:()=>false,top:()=>`<p class="gs-landing-note">${P.escapeText(b)} gift cards and digital codes are delivered by email on GameStop.com. Gift cards are currently sold in store only.</p>`})})
 for (const [path,c] of Object.entries(EXTRA_COLLECTIONS)) router.get(path,(req,res)=>landingBrowse(req,res,c))
 const SLUG=/^[a-z0-9|-]{2,60}$/
 for (const dept of ['video-games','consoles-hardware','gaming-accessories','collectibles','toys-games','toys-games/trading-cards','deals']) {
   router.get(`/${dept}/:sub`,(req,res,next)=>{if(!SLUG.test(req.params.sub))return next();landingBrowse(req,res,subLanding(dept,req.params.sub))})
 }
 router.get('/consoles-hardware/:sub/:sub2',(req,res,next)=>{if(!SLUG.test(req.params.sub)||!SLUG.test(req.params.sub2))return next();landingBrowse(req,res,subLanding('consoles-hardware',req.params.sub,req.params.sub2))})
-router.get('/digital-store/:sub',(req,res,next)=>{if(!SLUG.test(req.params.sub))return next();const l=subLanding('digital-store',req.params.sub);landingBrowse(req,res,{...l,crumbs:[['Digital Store','/digital-store']],filter:()=>false,top:()=>`<p class="gs-landing-note">Digital codes are emailed and redeemed on the platform's store. Downloadable games and currency are not offered online in this local catalog.</p>`})})
+router.get('/digital-store/:sub',(req,res,next)=>{if(!SLUG.test(req.params.sub))return next();const l=subLanding('digital-store',req.params.sub);landingBrowse(req,res,{...l,crumbs:[['Digital Store','/digital-store']],filter:()=>false,top:()=>`<p class="gs-landing-note">Digital codes are emailed and redeemed on the platform's store. Downloadable games and currency are not offered online right now; shop code-in-box editions instead.</p>`})})
 for (const path of Object.keys(INFO)) router.get(path,(req,res)=>render(req,res,INFO[path].title,infoPage(res.locals.base,path)))
 router.get('/sitemap',(req,res)=>render(req,res,'Site Map',sitemapPage(res.locals.base)))
 router.get('/sitemap.xml',(req,res)=>res.type('application/xml').send(sitemapXml(res.locals.base)))
@@ -81,7 +82,7 @@ router.get('/credit',(req,res)=>render(req,res,'GameStop Pro Credit Card',credit
 router.post('/newsletter',(req,res)=>{
   const email=typeof req.body.email==='string'?req.body.email.trim():''
   const ok=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-  render(req,res,'Sign Up',P.simplePage({title:ok?"You're on the list!":'Sign Up',html:ok?`<p>Thanks for signing up. This local storefront does not send email; your address was not stored.</p><a class="gs-btn" href="${res.locals.base}/">Continue Shopping</a>`:`<p class="gs-error" role="alert">Enter a valid email address.</p><form method="post" action="${res.locals.base}/newsletter" class="gs-inline-form"><label for="gs-signup-retry">Email address</label><input id="gs-signup-retry" name="email" type="email" autocomplete="email" value="${P.escapeText(email)}" required><button class="gs-btn">Join</button></form>`}),ok?200:400)
+  render(req,res,'Sign Up',P.simplePage({title:ok?"You're on the list!":'Sign Up',html:ok?`<p>Thanks for signing up! Keep an eye on your inbox for exclusive promotions, coupons and the latest events.</p>${publicNotice('<p>This local storefront does not send email; your address was not stored.</p>')}<a class="gs-btn" href="${res.locals.base}/">Continue Shopping</a>`:`<p class="gs-error" role="alert">Enter a valid email address.</p><form method="post" action="${res.locals.base}/newsletter" class="gs-inline-form"><label for="gs-signup-retry">Email address</label><input id="gs-signup-retry" name="email" type="email" autocomplete="email" value="${P.escapeText(email)}" required><button class="gs-btn">Join</button></form>`}),ok?200:400)
 })
 router.get('/brands/:brand',(req,res)=>{
   const products=ALL.filter(p=>p.brand.toLowerCase()===req.params.brand.toLowerCase())
