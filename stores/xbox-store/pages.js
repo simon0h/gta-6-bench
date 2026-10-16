@@ -33,7 +33,7 @@ export function layout({ base, title, body, cartCount = 0, user = null, theme = 
 <a class="xb-skip" href="#main-content">Skip to main content</a>
 <header class="xb-header">
   <div class="xb-header-inner">
-    <a class="xb-ms" href="${base}/en-US/all-microsoft" aria-label="Microsoft"><img class="xb-brand-ms" src="/static/reference/xbox-store/microsoft-logo.png" alt="Microsoft"></a>
+    <a class="xb-ms" href="${base}/en-US/all-microsoft" aria-label="Microsoft"><svg class="xb-brand-ms" viewBox="0 0 108 23" role="img" aria-label="Microsoft"><path fill="#f25022" d="M0 1h10v10H0z"/><path fill="#7fba00" d="M11 1h10v10H11z"/><path fill="#00a4ef" d="M0 12h10v10H0z"/><path fill="#ffb900" d="M11 12h10v10H11z"/><text x="27" y="17.5" fill="currentColor" font-family="'Segoe UI',SegoeUI,'Helvetica Neue',Arial,sans-serif" font-size="17" font-weight="600" letter-spacing="-.2">Microsoft</text></svg></a>
     <span class="xb-divider" aria-hidden="true"></span>
     <a class="xb-logo" href="${base}/" aria-label="Xbox home"><img class="xb-brand-xbox" src="/static/reference/xbox-store/xbox-logo.png" alt="Xbox"></a>
     <nav class="xb-nav" aria-label="Primary">${megaNav(base)}</nav>
@@ -175,7 +175,7 @@ export function paymentFields({ values = {}, errors = {}, saved = [] }) {
       ${input('zip', 'ZIP code', 'autocomplete="postal-code" inputmode="numeric"')}
     </div>
     <div class="xb-field"><label for="country">Country/region</label><select id="country" name="country" aria-label="Country/region" autocomplete="country"><option value="US" selected>United States</option></select></div>
-    <p class="xb-fine">Only the card brand and last four digits are saved. This store uses a 7% estimated digital tax; no bank authorization is performed.</p>
+    <p class="xb-fine">We may place a temporary $0 authorization to verify your card. Your card is saved to your Microsoft account for future purchases. Estimated tax is shown in the order summary.</p>${publicNotice('<p class="xb-fine">This copy uses a flat 7% estimated digital tax, keeps only the card brand and last four digits, and performs no bank authorization.</p>')}
     </div>
   </fieldset></div>`
 }
@@ -247,7 +247,7 @@ export function productPage({ base, p, editions, related, inCart, owned = false,
 <div class="xb-esrb-strip"><div class="xb-esrb-left">${esrbMini(base,p)}</div>
   <div class="xb-esrb-right"><p>Publishers of games you launch receive access to your XBOX profile information and associated data while you play. <a href="${base}/en-US/support">Learn more</a></p>${p.iap ? '<p>+Offers in-app purchases.</p>' : ''}<p>Parental control information. <a href="${base}/en-US/support">Learn more</a></p></div></div>
 <nav class="xb-pdp-tabs" aria-label="Product sections"><a href="${path}#details" class="is-active" aria-current="page">DETAILS</a><a href="${path}#reviews">REVIEWS</a><a href="${path}#more">MORE</a></nav>
-${p.family === 'gta-vi' ? '<div id="details"></div>' : `<section class="xb-section" id="details"><h2>Game artwork</h2><details class="xb-art-viewer"><summary role="button" aria-expanded="false" aria-label="View cover art"><span class="xb-art-thumbnail">${artwork(p)}<span>Expand cover art ↗</span></span></summary><div class="xb-art-expanded">${artwork(p)}<p>${esc(p.title)}</p></div></details><p class="xb-fine">Cover art. This image is not a gameplay screenshot.</p></section>`}
+${p.family === 'gta-vi' ? '<div id="details"></div>' : `<section class="xb-section" id="details"><h2>Gallery</h2><div class="xb-gallery-row"><details class="xb-art-viewer"><summary role="button" aria-expanded="false" aria-label="View cover art"><span class="xb-art-thumbnail">${artwork(p)}<span>View larger</span></span></summary><div class="xb-art-expanded">${artwork(p)}<p>${esc(p.title)}</p></div></details>${p.shelf ? [1, 2].map(view => shelfImage(p, { view, className: 'xb-gallery-shot', alt: `${p.title} artwork ${view + 1}` })).join('') : ''}</div>${publicNotice('<p class="xb-fine">Cover art. This image is not a gameplay screenshot.</p>')}</section>`}
 ${p.requires ? `<section class="xb-section xb-required"><h2>Requires a game</h2><p>This ${p.productType==='currency'?'currency pack':'add-on'} requires <a href="${productPath(base,byId(p.requires))}">${esc(byId(p.requires).title)}</a>. The base game is sold separately. You may purchase this item before acquiring the base game.</p>${p.repeatable?'<p>Consumable content may be purchased again; it is not a standalone playable game.</p>':''}</section>` : ''}
 ${rail('In this bundle', related.bundle)}
 ${rail('Included in', related.includedIn)}
@@ -321,7 +321,7 @@ export function thanksCard({ base, order, p }) {
   return `<div class="xb-dialog-head"><span class="xb-ms-mini">Microsoft Store</span>${p ? `<a class="xb-dialog-close" href="${productPath(base,p)}" aria-label="Close">&times;</a>` : ''}</div>
   <h2 id="dlg-title" class="xb-thanks-title">&#10004; Thanks for your purchase</h2><p class="xb-order-number">Order #<span data-order-number>${esc(order.order_number)}</span></p>${content}${shippingReceipt(order)}
   <dl class="xb-pay-summary"><dt>Payment method</dt><dd>${paymentLine(order.payment)}</dd><dt>Total</dt><dd>${money(order.totals.total)} (includes ${money(order.totals.tax)} tax)</dd><dt>Email</dt><dd>${esc(order.customer.email)}</dd></dl>
-  <p class="xb-fine">Confirmation: Microsoft Store - Order Confirmation (Order #${esc(order.order_number)}). This receipt is available in your order history.</p>
+  <p class="xb-fine">We've emailed your receipt to ${esc(order.customer.email)} with the subject “Microsoft Store - Order Confirmation (Order #${esc(order.order_number)})”. You can also find it in your order history.</p>
   ${order.meta.preorder?`<p class="xb-fine">Pre-orders unlock on the release date listed above. ${order.payment.method==='free'?'No charge is due.':order.shipping_address?'Physical items are charged immediately. Digital pre-orders are charged about 10 days before their release date.':'Your payment method will be charged about 10 days before the release date.'} Manage your pre-order from Payment &amp; billing &gt; Order history.</p>`:''}
   <div class="xb-dialog-actions">${order.meta.entitlements?.length?`<a class="xb-btn xb-btn-buy" href="${base}/account/library">My library</a>`:''}<a class="xb-btn xb-btn-grey" href="${base}/account/billing/orders">Order history</a><a class="xb-btn xb-btn-grey" href="${p?productPath(base,p):`${base}/`}">Close</a></div>`
 }
@@ -330,7 +330,7 @@ export function cartPage({ base, t, saved = [], cartId }) {
   if (!t.lines.length && !saved.length) {
     return `<div class="xb-cart-page"><div class="xb-cart-head"><h1>Cart</h1><a href="${base}/en-US/games/all-games/console">Keep shopping</a></div>
     <div class="xb-cart-empty"><p>Your cart is empty.</p><a class="xb-btn xb-btn-buy" href="${base}/en-US/games/all-games/console">Keep shopping</a></div>
-    <p class="xb-fine">Need help? <a href="${base}/en-US/support">Contact support</a> &nbsp;·&nbsp; Cart: ${esc(cartId)}</p></div>`
+    <p class="xb-fine xb-cart-help">Need help? <a href="${base}/en-US/support">Contact support</a> &nbsp;·&nbsp; Cart: ${esc(cartId)}</p></div>`
   }
   const line = (l, savedRow) => `<div class="xb-line">
     ${artwork(l.product)}
@@ -356,10 +356,11 @@ export function cartPage({ base, t, saved = [], cartId }) {
         <p class="xb-fine">Before applicable taxes</p>
         <form method="post" action="${base}/en-US/cart/checkout"><button type="submit" class="xb-btn xb-btn-checkout" ${t.lines.length ? '' : 'disabled'}>Checkout</button></form>
       </aside>
-      <aside class="xb-cart-info"><b>Purchase and delivery</b><p>Physical products ship to your delivery address. Digital licenses appear in your library after checkout. Check each product’s supported devices.</p><a href="${base}/en-US/support/installation">How to find your games and add-ons</a></aside>
+      <aside class="xb-cart-info xb-cart-paylater"><svg class="xb-cal" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="1.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><p>Pay over time options may be available for qualified customers at checkout for eligible purchases when checking out with a Microsoft account.</p></aside>
+      ${t.lines.some(l=>l.product.physical)?`<aside class="xb-cart-info"><b>Free standard shipping</b><p>Physical items ship to the address you enter at checkout. Digital items are added to your Microsoft account.</p></aside>`:''}
     </div>
   </div>
-  <p class="xb-fine">Need help? <a href="${base}/en-US/support">Contact support</a> &nbsp;·&nbsp; Cart: ${esc(cartId)}</p>
+  <p class="xb-fine xb-cart-help">Need help? <a href="${base}/en-US/support">Contact support</a> &nbsp;·&nbsp; <a href="${base}/en-US/support/installation">How to find your games and add-ons</a> &nbsp;·&nbsp; Cart: ${esc(cartId)}</p>
 </div>`
 }
 

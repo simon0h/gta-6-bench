@@ -246,7 +246,7 @@ export const PAGES = {
   ], { crumbs: [['Consoles', '/en-US/consoles']] }),
   '/en-US/where-to-buy': simple('DEVICES', 'FIND AVAILABLE XBOX RETAILERS', 'Find Xbox consoles and accessories at participating retailers.', [
     { h: 'Buy direct from Microsoft', text: 'Microsoft Store sells Xbox consoles and accessories online with free shipping on eligible orders.' },
-    { h: 'Participating retailers', id: 'accessories', list: ['Microsoft Store', 'Amazon', 'Walmart', 'Best Buy', 'GameStop', 'Target', 'Verizon'], text: 'Retailer stock and prices vary. Microsoft Store ships consoles and accessories directly; other retailers are not linked from this store.' },
+    { h: 'Participating retailers', id: 'accessories', list: ['Microsoft Store', 'Amazon', 'Walmart', 'Best Buy', 'GameStop', 'Target', 'Verizon'], text: 'Retailer stock and prices vary. Microsoft Store ships consoles and accessories directly.' },
     { h: '0% APR with Amazon monthly payments', text: 'Eligible customers may be offered monthly payments at checkout with the retailer. Terms apply.' },
   ]),
   '/en-US/accessories': {
@@ -266,7 +266,7 @@ export const PAGES = {
     ],
   },
   '/en-US/xbox-design-lab': simple('ACCESSORIES', 'XBOX Design Lab', 'Design your own Xbox Wireless Controller: choose colors for the body, back case, D-pad, thumbsticks, bumpers and triggers, and add engraving.', [
-    { h: 'How it works', list: ['Pick a controller base.', 'Choose colors and finishes for each part.', 'Add optional engraving and rubberized grips.'], text: 'Design Lab is a separate Xbox site. Custom controllers are not sold in this store.' },
+    { h: 'How it works', list: ['Pick a controller base.', 'Choose colors and finishes for each part.', 'Add optional engraving and rubberized grips.'], text: 'Custom controllers are designed and ordered on Xbox Design Lab.' },
   ], { id: 'design-lab', crumbs: [['Accessories', '/en-US/accessories']], ctas: [['Shop all accessories', '/en-US/accessories']] }),
   ...Object.fromEntries([
     ['xbox-on-pc', 'XBOX ON PC', 'Elevate your PC gaming experience with XBOX. Get the Xbox PC app to discover, download and play hundreds of games with PC Game Pass.', ['Get an instant library on PC', 'Most-played XBOX PC games', 'Maximize PC gameplay with Game Bar', 'PC gaming accessories']],
@@ -309,7 +309,7 @@ export const PAGES = {
     { h: 'Reporting', text: 'Block, mute and report players or content from the console, PC app or mobile app; you can appeal enforcement decisions.' },
   ]),
   '/en-US/gear': simple('MORE', 'XBOX Gear', 'The official Xbox Gear Shop sells Xbox-branded apparel, collectibles and lifestyle merchandise. It is a separate store; Xbox Gear is not sold here.', [{ h: 'Shop here instead', ctas: [['Games home', '/en-US/games'], ['Shop all accessories', '/en-US/accessories']] }]),
-  '/en-US/xbox-game-studios': simple('MORE', 'XBOX Game Studios', 'Xbox Game Studios develops and publishes games such as Halo, Forza, Gears of War and Minecraft. Its merchandise shop is a separate site and is not part of this store.', [{ h: 'Explore games', ctas: [['Games home', '/en-US/games']] }]),
+  '/en-US/xbox-game-studios': simple('MORE', 'XBOX Game Studios', 'Xbox Game Studios develops and publishes games such as Halo, Forza, Gears of War and Minecraft. Find official merchandise at the Xbox Gear Shop.', [{ h: 'Explore games', ctas: [['Games home', '/en-US/games']] }]),
   '/en-US/support/xbox-live-status': supportTopic('XBOX status', 'All services are up and running. Check here for the current status of Xbox services, games and apps.', [['Account and profile', 'Up and running'], ['Store and subscriptions', 'Up and running'], ['Games and gaming', 'Up and running'], ['Social and activity', 'Up and running']].map(([h, t]) => [h, t, '/en-US/support/xbox-live-status'])),
   '/en-US/support/help/account-profile/browse': supportTopic('Account & profile', 'Sign in, recover your account, manage your gamertag and profile, and keep your account secure.', [['Sign in to Xbox', 'Fix sign-in problems on console, PC and mobile.'], ['Change your gamertag', 'Choose a new gamertag.'], ['Account security', 'Protect your Microsoft account with two-step verification.', '/en-US/support/account']]),
   '/en-US/support/help/subscriptions-billing/browse': supportTopic('Subscriptions & billing', 'Manage Game Pass and other subscriptions, payment options, order history, refunds and redeeming codes.', [['Manage subscriptions', 'Turn recurring billing on or off.', '/en-US/support/subscriptions'], ['Request a refund for digital games', 'Check refund eligibility for digital purchases.', '/en-US/returns'], ['Pre-order FAQ', 'When you are charged and how to cancel a pre-order.', '/en-US/support/purchases'], ['Redeem a code or gift card', 'Add a code to your Microsoft account.', '/en-US/redeem']]),
@@ -371,7 +371,7 @@ export const PAGES = {
 
 // ---------- dynamic pages ----------
 export function allMicrosoft(base) {
-  return infoPage(base, { eyebrow: 'MICROSOFT', h1: 'All Microsoft', intro: 'Microsoft makes products and services across software, devices, gaming, business and developer tools. These are the Microsoft sites listed in the All Microsoft menu; they are separate from this store.', ctas: [['Xbox home', '/']], sections: [
+  return infoPage(base, { eyebrow: 'MICROSOFT', h1: 'All Microsoft', intro: 'Microsoft makes products and services across software, devices, gaming, business and developer tools. Explore Microsoft products and services from the All Microsoft menu.', ctas: [['Xbox home', '/']], sections: [
     { html: () => `<div class="xs-allms">${ALL_MICROSOFT.map(([h, items]) => `<div><h2>${esc(h)}</h2><ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`).join('')}</div>` },
     { h: 'From Microsoft', ctas: [['Gift cards', '/en-US/store/b/gift-cards'], ['Shop XBOX', '/en-US/games'], ['XBOX Game Pass Ultimate', '/en-US/xbox-game-pass']] },
   ] }, {})
@@ -447,7 +447,7 @@ export function homeHero(base) {
     { id: 'consoles', cls: 'xs-slide-hw', eyebrow: 'XBOX SERIES X|S', h: 'Power your dreams', text: 'The fastest, most powerful Xbox consoles.', ctas: [['SHOP CONSOLES', '/en-US/consoles'], ['COMPARE CONSOLES', '/en-US/consoles/compare']] },
   ]
   return `<section class="xs-carousel" aria-roledescription="carousel" aria-label="Featured">
-  <div class="xs-slides">${slides.map((s, i) => `<article class="xs-slide ${s.cls}" id="slide-${s.id}" aria-roledescription="slide" aria-label="${i + 1} of ${slides.length}"><div class="xs-slide-copy"><p class="xs-eyebrow">${esc(s.eyebrow)}</p><h2>${esc(s.h)}</h2><p>${esc(s.text)}</p><div class="xs-ctas">${s.ctas.map((c, j) => `<a class="xs-btn${j ? ' xs-btn-ghost' : ''}" href="${base}${c[1]}">${esc(c[0])}</a>`).join('')}</div></div>${s.id === 'gta' && gta ? `<a class="xs-slide-cover" href="${base}${productPath('', gta)}" aria-label="View Grand Theft Auto VI"><img src="/static/reference/xbox-store/gta-vi-cover.png" alt="Grand Theft Auto VI cover art"></a>` : ''}</article>`).join('')}</div>
+  <div class="xs-slides">${slides.map((s, i) => `<article class="xs-slide ${s.cls}" id="slide-${s.id}" aria-roledescription="slide" aria-label="${i + 1} of ${slides.length}"><div class="xs-slide-copy"><p class="xs-eyebrow">${esc(s.eyebrow)}</p><h2>${esc(s.h)}</h2><p>${esc(s.text)}</p><div class="xs-ctas">${s.ctas.map((c, j) => `<a class="xs-btn${j ? ' xs-btn-ghost' : ''}" href="${base}${c[1]}">${esc(c[0])}</a>`).join('')}</div></div>${s.id === 'gta' && gta ? `<a class="xs-slide-cover" href="${base}${productPath('', gta)}" aria-label="View Grand Theft Auto VI"><img src="/static/reference/xbox-store/gta-vi-cover.png" alt="Grand Theft Auto VI cover art"></a>` : ''}${s.id === 'outer-worlds' && outer ? `<a class="xs-slide-cover" href="${base}${productPath('', outer)}" aria-label="View The Outer Worlds 2"><img src="/xbox-store/shelf-art/${outer.id}/0.svg" alt="The Outer Worlds 2 cover art"></a>` : ''}</article>`).join('')}</div>
   <nav class="xs-dots" aria-label="Choose slide">${slides.map((s, i) => `<a href="#slide-${s.id}" aria-label="Go to slide ${i + 1}: ${esc(s.h)}"></a>`).join('')}</nav></section>`
 }
 const ICON_USER = 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21a8 8 0 0 1 16 0'
@@ -457,7 +457,7 @@ export function shopStrip(base, user) {
 }
 export function followXbox(base) {
   const nets = ['Email', 'Facebook', 'X', 'Instagram', 'WhatsApp', 'TikTok', 'YouTube', 'LinkedIn']
-  return `<section class="xs-follow"><h2>Follow XBOX</h2><ul aria-label="Xbox social channels">${nets.map(n => `<li><span class="xs-social" aria-hidden="true">${esc(n[0])}</span><span>${esc(n)}</span></li>`).join('')}</ul><p class="xs-fine">Social channels are on other sites and are not linked from this store. <a href="${base}/en-US/news">Read XBOX News</a>.</p></section>`
+  return `<section class="xs-follow"><h2>Follow XBOX</h2><ul aria-label="Xbox social channels">${nets.map(n => `<li><span class="xs-social" aria-hidden="true">${esc(n[0])}</span><span>${esc(n)}</span></li>`).join('')}</ul><p class="xs-fine">Get the latest announcements on <a href="${base}/en-US/news">XBOX News</a>.</p></section>`
 }
 
 // ---------- routes ----------
