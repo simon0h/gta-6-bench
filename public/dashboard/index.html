@@ -24,28 +24,31 @@
     <header class="topbar">
       <button class="icon-button menu-toggle" type="button" data-action="toggle-menu" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <a class="brand" href="#/" aria-label="GTA 6 Bench home"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">GTA 6 Bench</span></a>
-      <div class="breadcrumb"><span class="breadcrumb-slash" aria-hidden="true">/</span><span id="breadcrumb-current">Runs</span></div>
       <div class="goto" role="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="goto-input" type="search" placeholder="Go to a run or task…" aria-label="Go to a run or task" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="goto-results" aria-autocomplete="list">
-        <kbd class="goto-key" aria-hidden="true">Ctrl K</kbd>
         <ul id="goto-results" class="goto-results" role="listbox" aria-label="Matches" hidden></ul>
       </div>
       <div class="topbar-right">
-        <button class="icon-button" type="button" data-action="toggle-theme" aria-label="Switch between light and dark" title="Switch between light and dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
         <button class="mobile-new icon-button" data-action="new-run" aria-label="New run" title="New run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
       </div>
     </header>
     <aside class="sidebar" id="sidebar" aria-label="Dashboard navigation">
-      <nav><a class="nav-link" id="overview-link" href="#/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>All runs<span id="run-count" class="nav-count">0</span></a><a class="nav-link" id="tasks-link" href="#/tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 8 1 1 2-2M14 8h2M8 13h8M8 17h5"/></svg>My tasks<span id="task-count" class="nav-count">0</span></a></nav>
+      <nav><a class="nav-link" id="overview-link" href="#/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>All<span id="run-count" class="nav-count">0</span></a><a class="nav-link" id="tasks-link" href="#/tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 8 1 1 2-2M14 8h2M8 13h8M8 17h5"/></svg>My tasks<span id="task-count" class="nav-count">0</span></a></nav>
       <div class="sidebar-section"><span class="eyebrow">Recent runs</span><button class="icon-button small" data-action="new-run" aria-label="New run" title="New run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
       <nav id="recent-runs" class="recent-runs" aria-label="Recent runs"></nav>
-      <div class="sidebar-footer"><button id="logout" class="nav-link" data-action="logout" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>Sign out</button></div>
+      <div class="sidebar-footer settings">
+        <div class="settings-menu" id="settings-menu" role="group" aria-label="Settings" hidden>
+          <div class="settings-label" id="theme-label">Theme</div>
+          <div class="theme-choice" role="radiogroup" aria-labelledby="theme-label"><button type="button" role="radio" data-action="set-theme" data-theme-choice="light" aria-checked="false">Light</button><button type="button" role="radio" data-action="set-theme" data-theme-choice="dark" aria-checked="false">Dark</button><button type="button" role="radio" data-action="set-theme" data-theme-choice="system" aria-checked="false">Auto</button></div>
+          <button id="logout" class="nav-link" type="button" data-action="logout" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>Sign out</button>
+        </div>
+        <button class="nav-link" id="settings-toggle" type="button" data-action="toggle-settings" aria-expanded="false" aria-controls="settings-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+      </div>
     </aside>
     <div class="sidebar-scrim" data-action="toggle-menu" hidden></div>
     <div class="main-column">
       <main id="main" tabindex="-1"></main>
-      <footer class="page-footer"><span>GTA 6 Bench</span><span>Simulated purchases</span></footer>
     </div>
   </div>
   <dialog id="create-dialog" aria-labelledby="dialog-title"></dialog>

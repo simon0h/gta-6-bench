@@ -136,7 +136,6 @@
     $('#overview-link').classList.toggle('active', view === 'overview')
     $('#tasks-link').classList.toggle('active', view === 'tasks' || view === 'task')
     $('#recent-runs').innerHTML = state.runs.length ? state.runs.slice(0, 12).map(run => `<a class="recent-run${state.selected?.id === run.id ? ' selected' : ''}" href="#/runs/${encodeURIComponent(run.id)}"${state.selected?.id === run.id ? ' aria-current="page"' : ''}>${icon('run')}<span>${escape(runName(run))}</span></a>`).join('') : '<p class="sidebar-empty">No runs yet.</p>'
-    $('#breadcrumb-current').textContent = state.selected ? runName(state.selected) : view === 'tasks' ? 'My tasks' : view === 'task' ? 'Task' : 'Runs'
   }
 
   function renderOverview() {
@@ -145,9 +144,8 @@
     const links = state.runs.reduce((sum, run) => sum + attemptCount(run), 0)
     const complete = state.runs.reduce((sum, run) => sum + attempts(run).filter(entry => ['completed', 'complete', 'finished'].includes(entry.status)).length, 0)
     $('#main').innerHTML = `
-      <div class="page-heading"><div><h1>All runs</h1><p>Each run gives every agent the same shopping tasks.</p></div><div class="page-actions"><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div></div>
       <div class="stats-grid" role="group" aria-label="Run summary"><div class="stat"><div class="stat-label">${icon('run')}Total runs</div><div class="stat-value">${state.runs.length}</div></div><div class="stat"><div class="stat-label">${icon('link')}Agent URLs</div><div class="stat-value">${links}</div></div><div class="stat"><div class="stat-label">${icon('check')}Completed attempts</div><div class="stat-value">${complete}</div></div></div>
-      ${state.runs.length ? `<section class="panel"><div class="panel-head"><h2>Run history</h2><span class="panel-sub">${state.runs.length} run${state.runs.length === 1 ? '' : 's'}</span><div class="panel-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh runs" title="Refresh runs">${icon('refresh')}</button></div></div><div class="run-list" role="region" aria-label="Run history" tabindex="0"><table class="run-table"><thead><tr><th scope="col">Run</th><th scope="col">Task set</th><th scope="col">Agents</th><th scope="col">Progress</th><th scope="col">Created</th></tr></thead><tbody>${state.runs.map(run => {
+      ${state.runs.length ? `<section class="panel"><div class="panel-head"><h2>Run history</h2><span class="panel-sub">${state.runs.length} run${state.runs.length === 1 ? '' : 's'}</span><div class="panel-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh runs" title="Refresh runs">${icon('refresh')}</button><button class="button primary small" data-action="new-run">${icon('plus')}New run</button></div></div><div class="run-list" role="region" aria-label="Run history" tabindex="0"><table class="run-table"><thead><tr><th scope="col">Run</th><th scope="col">Task set</th><th scope="col">Agents</th><th scope="col">Progress</th><th scope="col">Created</th></tr></thead><tbody>${state.runs.map(run => {
         const entries = attempts(run)
         const completed = entries.reduce((sum, entry) => sum + progress(entry, run).completed, 0)
         const total = entries.reduce((sum, entry) => sum + progress(entry, run).total, 0)
@@ -235,7 +233,7 @@
     return `<article class="agent-card" data-attempt="${id}"><form class="attempt-form" data-attempt="${id}">
       <div class="agent-card-top"><div class="agent-identity"><img class="agent-logo" src="${agent.icon}" alt=""><div class="agent-select-wrap"><label for="agent-${id}">Agent</label><select name="agent" id="agent-${id}">${options(draft.agent)}</select></div></div><div class="agent-card-actions"><span class="entry-number">URL ${String(index + 1).padStart(2, '0')}</span>${statusBadge(attempt)}</div></div>
       <div class="agent-body"><div class="url-bar">${icon('link')}<input type="text" aria-label="Agent URL ${index + 1}" readonly value="${escape(url)}" autocomplete="off" spellcheck="false"><button class="button" type="button" data-action="copy-url" data-attempt="${id}">${icon('copy')}Copy URL</button></div><div class="link-utilities"><button class="copy-prompt" type="button" data-action="copy-prompt" data-attempt="${id}">${icon('prompt')}Copy prompt</button><a class="open-agent" href="${escape(url)}" target="_blank" rel="noopener">Open task${icon('external')}</a></div>
-      <div class="entry-fields"><div><label for="tags-${id}">Tags</label><input name="tags" id="tags-${id}" value="${escape(draft.tags)}" placeholder="baseline, v2" maxlength="500" autocomplete="off"><p class="field-help">Comma-separated.</p></div><div><label for="comments-${id}">Comments</label><textarea name="comments" id="comments-${id}" placeholder="Model, settings, notes" maxlength="5000" rows="2">${escape(draft.comments)}</textarea></div></div></div>
+      <div class="entry-fields"><div><label for="tags-${id}">Tags</label><input name="tags" id="tags-${id}" value="${escape(draft.tags)}" placeholder="Use comma to separate" maxlength="500" autocomplete="off"></div><div><label for="comments-${id}">Comments</label><textarea name="comments" id="comments-${id}" placeholder="Model, settings, notes" maxlength="5000" rows="2">${escape(draft.comments)}</textarea></div></div></div>
       <div class="agent-card-footer"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="Task results submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><div class="progress-fill" style="width:${p.percentage}%"></div></div><span>${p.completed} / ${p.total} results</span></div><div class="save-group"><span class="save-feedback${draft.dirty ? ' dirty' : ''}" role="status">${draft.dirty ? 'Unsaved changes' : 'Saved'}</span><button class="button secondary small" type="submit"${draft.dirty && !state.saving.has(attempt.id) ? '' : ' disabled'}>${state.saving.has(attempt.id) ? 'Saving…' : 'Save'}</button></div></div>
       </form><div class="attempt-traversal"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${id}">${icon('tasks')}View traversal</button>${attemptResults(attempt)}</div></article>`
   }
@@ -277,7 +275,7 @@
         <p class="ai-summary-meta">${writing ? 'Updating…' : `Written ${escape(date(data.written_at, true))} from ${data.written_from} result${data.written_from === 1 ? '' : 's'}${stale}`}</p>`
       if (data.stale) action = button('Update summary')
     }
-    return `<section class="panel ai-summary" aria-label="AI summary" aria-busy="${writing}"><div class="panel-head ai-summary-top"><div><h2>AI summary</h2><p>Written by Claude from this run’s results. It doesn’t change any grades.</p></div>${action}</div><div class="panel-body">${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</div></section>`
+    return `<section class="panel ai-summary" aria-label="AI summary" aria-busy="${writing}"><div class="panel-head ai-summary-top"><h2><svg class="sparkle" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 2.5c.4 3.9 2.6 6.1 6.5 6.5-3.9.4-6.1 2.6-6.5 6.5-.4-3.9-2.6-6.1-6.5-6.5 3.9-.4 6.1-2.6 6.5-6.5zM18 13c.2 2 1.3 3.1 3.3 3.3-2 .2-3.1 1.3-3.3 3.3-.2-2-1.3-3.1-3.3-3.3 2-.2 3.1-1.3 3.3-3.3zM6.5 16.5c.15 1.3.85 2 2.15 2.15-1.3.15-2 .85-2.15 2.15-.15-1.3-.85-2-2.15-2.15 1.3-.15 2-.85 2.15-2.15z"/></svg>AI summary</h2>${action}</div><div class="panel-body">${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</div></section>`
   }
   function refreshSummary() {
     const node = $('.ai-summary')
@@ -490,7 +488,7 @@
     let body
     if (tab === 'results') body = renderResultsTab(run)
     else if (tab === 'agents') body = renderAgentsTab(run)
-    else body = `${renderTiles(run, rows)}<div class="overview-grid"><div class="overview-column"><section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderStoreBars(rows)}${renderAgentTable(run)}</div><div class="overview-column">${renderSummary(run)}</div></div>`
+    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
     $('#main').innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/">All runs</a><span aria-hidden="true">/</span><span>${escape(runName(run))}</span></nav>
       <div class="page-heading run-detail-heading"><div><div class="title-row"><h1>${escape(runName(run))}</h1>${runStatus(run)}</div><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><div class="page-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div></div>
       <div class="run-tabs" role="tablist" aria-label="Run sections">${tabs}</div>
@@ -565,7 +563,7 @@
       $('#auth').hidden = true
       $('#workspace').hidden = false
       $('#logout').hidden = state.local
-      $('#logout').parentElement.hidden = state.local
+      showTheme()
       await load({ initial: true })
     } catch (error) {
       $('#boot').hidden = true
@@ -627,11 +625,12 @@
       state.resultsView = { filter: 'all', agent: control.dataset.attempt, query: '' }
       render(); window.scrollTo(0, 0)
     }
-    if (action === 'toggle-theme') {
-      const root = document.documentElement
-      const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
-      root.dataset.theme = dark ? 'light' : 'dark'
-      try { localStorage.setItem('dashboard-theme', root.dataset.theme) } catch { /* storage blocked */ }
+    if (action === 'toggle-settings') setSettings($('#settings-menu').hidden)
+    if (action === 'set-theme') {
+      const root = document.documentElement, choice = control.dataset.themeChoice
+      if (choice === 'system') delete root.dataset.theme; else root.dataset.theme = choice
+      try { if (choice === 'system') localStorage.removeItem('dashboard-theme'); else localStorage.setItem('dashboard-theme', choice) } catch { /* storage blocked */ }
+      showTheme()
     }
     if (action === 'toggle-menu') setMenu(!$('#workspace').classList.contains('menu-open'))
     if (action === 'view-traversal') {
@@ -639,6 +638,7 @@
       if (attempt) traversal.open({ runId: state.selected.id, attemptId: attempt.id, label: agentData(attempt.agent).name })
     }
     if (action === 'logout') {
+      setSettings(false)
       control.disabled = true
       try { await api('/logout', { method: 'POST' }); state.drafts.clear(); state.runs = []; state.selected = null; showAuth() } catch (error) { toast(error.message, true) } finally { control.disabled = false }
     }
@@ -681,6 +681,7 @@
     if ((event.key === 'Enter' || event.key === ' ') && event.target.matches?.('.result-row')) { event.preventDefault(); toggleResult(event.target.closest('.result-group')); return }
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k' && state.authenticated) { event.preventDefault(); $('#goto-input').focus(); $('#goto-input').select(); return }
     if (event.target.id === 'goto-input') { gotoKey(event); return }
+    if (event.key === 'Escape' && !$('#settings-menu').hidden) { setSettings(false); $('#settings-toggle').focus(); return }
     if (event.key === 'Escape' && state.chatOpen && event.target.closest?.('.chat-dock')) { setChatOpen(false); $('.chat-launcher')?.focus(); return }
     if (event.key !== 'Enter' || event.shiftKey || event.isComposing || !event.target.matches?.('.chat-form textarea')) return
     event.preventDefault()
@@ -808,7 +809,18 @@
   document.addEventListener('click', event => {
     if (event.target.closest?.('#goto-results a')) { $('#goto-input').value = ''; closeGoto(); return }
     if (!event.target.closest?.('.goto') && !$('#goto-results').hidden) closeGoto()
+    if (!event.target.closest?.('.settings') && !$('#settings-menu').hidden) setSettings(false)
   })
+  // Settings, at the bottom of the sidebar: theme and sign out.
+  function setSettings(open) {
+    $('#settings-menu').hidden = !open
+    $('#settings-toggle').setAttribute('aria-expanded', String(open))
+    if (open) showTheme()
+  }
+  function showTheme() {
+    const current = document.documentElement.dataset.theme || 'system'
+    for (const option of document.querySelectorAll('[data-theme-choice]')) option.setAttribute('aria-checked', String(option.dataset.themeChoice === current))
+  }
   // On narrow screens the sidebar slides in over the page.
   function setMenu(open) {
     $('#workspace').classList.toggle('menu-open', open)
