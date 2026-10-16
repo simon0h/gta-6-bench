@@ -283,18 +283,14 @@ main:focus { outline: none; }
 .store-bar { display: grid; grid-template-columns: 130px minmax(0, 1fr) 96px; align-items: center; gap: 12px; font-size: 13px; }
 .store-bar-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .store-bar-count { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-/* Top issues and Buy vs refuse */
+/* Top issues */
 .issues-table th[scope="row"] { min-width: 230px; height: auto; border-bottom: 0; border-top: 1px solid var(--line); background: none; color: var(--ink); font-size: 14px; font-weight: 400; white-space: normal; }
 .issues-table tbody tr:first-child th[scope="row"] { border-top: 0; }
 .issues-table th[scope="row"] .badge { margin-left: 8px; vertical-align: 1px; }
-.issues-table thead .agent-cell, .buy-refuse-table .agent-cell { justify-content: flex-end; }
-.buy-refuse-table td:first-child .agent-cell { justify-content: flex-start; }
+.issues-table thead .agent-cell { justify-content: flex-end; }
 .issue-count { min-width: 28px; padding: 1px 8px; border-radius: 4px; background: var(--red-soft); color: var(--red); font-weight: 600; font-variant-numeric: tabular-nums; }
 .issue-count:hover { text-decoration: underline; }
 .issues-table .zero { color: var(--muted); }
-.data-table td.num small { color: var(--muted); }
-.data-table td.negative { color: var(--red); font-weight: 600; }
-.data-table td.warning { color: var(--amber); font-weight: 600; }
 .issue-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 6px 2px 10px; border-radius: var(--radius); background: var(--red-soft); color: var(--red); font-size: 12.5px; font-weight: 500; }
 .issue-chip svg { width: 14px; height: 14px; }
 /* Per-task checks */
