@@ -116,7 +116,8 @@ label { display: block; margin-bottom: 5px; color: var(--ink); font-size: 13px; 
 .workspace { display: grid; grid-template-columns: 240px minmax(0, 1fr); grid-template-rows: var(--topbar) auto; grid-template-areas: "top top" "side main"; min-height: 100dvh; }
 .topbar { grid-area: top; position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; height: var(--topbar); padding: 0 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
 .brand { display: flex; align-items: center; gap: 9px; flex: none; font-size: 15px; font-weight: 600; white-space: nowrap; }
-.brand-mark { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: var(--radius); background: var(--brand); color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: .02em; }
+/* The GTA VI numeral in the logo's sunset colors; the same file is the favicon. */
+.brand-mark { display: inline-block; flex: none; width: 26px; height: 26px; border-radius: 6px; background: url("assets/vi-mark.svg") center / contain no-repeat; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); }
 .breadcrumb { display: flex; align-items: center; gap: 10px; min-width: 0; color: var(--muted); font-size: 14px; }
 .breadcrumb-slash { color: var(--line-strong); font-size: 18px; font-weight: 300; }
 #breadcrumb-current { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -402,7 +403,7 @@ main:focus { outline: none; }
 /* Sign-in, dialogs and feedback. */
 .auth-screen { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: var(--margin); background: var(--bg); }
 .auth-card { width: 380px; max-width: 100%; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper); box-shadow: var(--shadow); }
-.auth-card .brand-mark { width: 36px; height: 36px; margin-bottom: 20px; font-size: 15px; }
+.auth-card .brand-mark { width: 36px; height: 36px; margin-bottom: 20px; }
 .auth-card .eyebrow { margin-bottom: 4px; }
 .auth-card h1 { margin-bottom: 20px; font-size: 22px; }
 .auth-card > p { color: var(--muted); margin-bottom: 18px; overflow-wrap: anywhere; }
