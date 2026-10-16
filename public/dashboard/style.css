@@ -283,14 +283,6 @@ main:focus { outline: none; }
 .store-bar { display: grid; grid-template-columns: 130px minmax(0, 1fr) 96px; align-items: center; gap: 12px; font-size: 13px; }
 .store-bar-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .store-bar-count { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.store-bars .store-bar { grid-template-columns: 130px minmax(0, 1fr) 96px 92px; }
-.store-bar-range { text-align: right; white-space: nowrap; }
-.store-bar.few .bar { opacity: .45; }
-.store-bar.few .store-bar-count { opacity: .7; }
-/* The likely range of a pass rate, shown next to it. */
-.pass-range { display: inline-block; color: var(--muted); font-size: 12px; font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; cursor: help; }
-td.num .pass-range { display: block; font-size: 11.5px; }
-.link-result-range { margin-top: -2px; }
 /* Top issues and Buy vs refuse */
 .issues-table th[scope="row"] { min-width: 230px; height: auto; border-bottom: 0; border-top: 1px solid var(--line); background: none; color: var(--ink); font-size: 14px; font-weight: 400; white-space: normal; }
 .issues-table tbody tr:first-child th[scope="row"] { border-top: 0; }
@@ -853,8 +845,6 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
   .save-group { margin-left: auto; }
   .entry-number { display: none; }
   .store-bar { grid-template-columns: 96px minmax(0, 1fr) auto; }
-  .store-bars .store-bar { grid-template-columns: 96px minmax(0, 1fr) auto; }
-  .store-bar-range { display: none; }
   .store-bar-count { font-size: 12px; }
   .hide-narrow { display: none; }
   .results-search { max-width: none; }

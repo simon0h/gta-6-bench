@@ -97,11 +97,8 @@ not by AI:
   copies, exact budget, 1 cent short, edition not sold, apartment address, and the
   scenario types in the 240-task set. Tasks written in the dashboard are typed by
   their answer.
-- **Ranges**: pass rates show a "likely" range, the span the agent's real pass
-  rate probably sits in given how few tasks there are (a 95% Wilson interval; 30
-  tasks at 70% is about 52 to 83%). Gaps between agents smaller than the range are
-  probably luck. Bars built on fewer than 5 graded tasks are greyed out and say
-  "few tasks". Environment errors are left out of every rate.
+
+Environment errors are left out of every pass rate.
 
 ## Run page layout
 
