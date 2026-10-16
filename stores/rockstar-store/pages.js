@@ -4,7 +4,7 @@ import * as D from './depth-pages.js'
 import { NAV, FOOTER, referenceHome, digitalHref } from './parity-pages.js'
 import { orderStatus } from '../../lib/retail-state.js'
 import { itemDelivery } from './journeys.js'
-import { esc, money, disclaimer } from '../../lib/html.js'
+import { esc, money, disclaimer, publicNotice } from '../../lib/html.js'
 import { GAME, PLATFORM_OPTIONS, listing, SHIPPING_METHODS, COUNTRIES, MAX_QTY, FREE_SHIPPING_OVER, SORTS, shippingCost, deliveryEta } from './data.js'
 
 const NAME = 'Rockstar Store'
@@ -206,7 +206,7 @@ export function gtaviPage({ base, platform = null, error = null, modal = '' }) {
   <p>Jason and Lucia have always known the deck is stacked against them. But when an easy score goes wrong, they find themselves on the darkest side of the sunniest place in America, in the middle of a criminal conspiracy stretching across the state of Leonida &mdash; forced to rely on each other more than ever if they want to make it out alive.</p>
   <dl class="rs-meta"><div><dt>Release Date</dt><dd>November 19, 2026</dd></div><div><dt>Developer</dt><dd>Rockstar Games</dd></div><div><dt>Publisher</dt><dd>Rockstar Games</dd></div></dl>
 </section>
-<section id="trailers" class="rs-section"><h2>Trailers</h2><div class="rs-thumbs">${['Trailer 2', 'Trailer 1'].map(t => `<div class="rs-thumb rs-thumb-video"><span>${ICON.play}</span><b>${t}</b></div>`).join('')}</div></section>
+<section id="trailers" class="rs-section"><h2>Trailers</h2><div class="rs-thumbs">${[['Trailer 2', '02_-_Jason_Duval_01.jpg'], ['Trailer 1', '01_-_Vice_City_01.jpg']].map(([t, poster]) => `<div class="rs-thumb rs-thumb-video rs-thumb-poster" style="background-image:url(${referenceRoot}${poster})"><span>${ICON.play}</span><b>${t}</b></div>`).join('')}</div></section>
 <section id="screenshots" class="rs-section"><div class="rs-section-head"><h2>Screenshots</h2><a href="#screenshots">View All</a></div><div class="rs-thumbs rs-thumbs-8">${screenshotFiles.map(([file,alt],i)=>`<a class="rs-thumb rs-thumb-shot" href="#rs-shot-${i}"><img src="${referenceRoot}${file}" alt="${esc(alt)}" loading="lazy"></a><div class="rs-shot-lightbox" id="rs-shot-${i}" role="dialog" aria-modal="true" aria-label="${esc(alt)}"><a href="#screenshots" aria-label="Close screenshot">×</a><img src="${referenceRoot}${file}" alt="${esc(alt)}" loading="lazy"></div>`).join('')}</div></section>
 <section id="compare-editions" class="rs-section"><h2>Compare Editions</h2>
   ${platform ? '' : '<p class="rs-fine">Select a platform above to pre-order a digital edition on its platform store.</p>'}
@@ -244,7 +244,7 @@ export function cartPage({ base, t, modal = '' }) {
     ${D.art(l.item)}
     <div class="rs-line-info">
       <a href="${base}${l.item.product.path}">${esc(l.item.title)}</a>
-      <div class="rs-price">${money(l.item.price)}</div><p class="rs-fine">${esc(Object.values(l.item.options||{}).join(" · "))}${l.item.product.delivery==='digital'?' · PC digital delivery':''}</p>
+      <div class="rs-price">${money(l.item.price)}</div><p class="rs-fine">${esc(Object.entries(l.item.options||{}).map(([k,v])=>`${k}: ${v}`).join(" · "))}${l.item.product.delivery==='digital'?' · PC digital delivery':''}</p>
       <form method="post" action="${base}/cart/update" class="rs-line-actions">
         <input type="hidden" name="sku" value="${esc(l.sku)}">
         <label>Qty: <select name="qty" aria-label="Quantity" onchange="this.form.submit()">${Array.from({ length: Math.min(MAX_QTY,l.item.stock??MAX_QTY) }, (_, i) => i + 1).map(n => `<option value="${n}" ${n === l.qty ? 'selected' : ''}>${n}</option>`).join('')}</select></label><noscript><button type="submit" name="action" value="update" class="rs-link-btn">Update</button></noscript>
@@ -378,7 +378,7 @@ export function paymentStep({ base, t, address, method, values = {}, errors = {}
   const inner = `<div class="xs-pay">
   <aside class="xs-order">
     <h2>Order information</h2>
-    ${t.lines.map(l => `<div class="xs-order-item">${D.art(l.item)}<div><b>${esc(l.item.title)}</b><span class="xs-fine">Qty ${l.qty} ${esc(Object.values(l.item.options||{}).join(" · "))}${l.item.product.delivery==='digital'?' · PC digital':''}</span></div><span>${money(l.item.price * l.qty)}</span></div>`).join('')}
+    ${t.lines.map(l => `<div class="xs-order-item">${D.art(l.item.kind==="game"?l.item.product:l.item)}<div><b>${esc(l.item.title)}</b><span class="xs-fine">Qty ${l.qty}${Object.keys(l.item.options||{}).length?` · ${esc(Object.entries(l.item.options).map(([k,v])=>`${k}: ${v}`).join(" · "))}`:''}${l.item.product.delivery==='digital'?' · PC digital':''}</span></div><span>${money(l.item.price * l.qty)}</span></div>`).join('')}
     <div class="xs-row"><span>Subtotal</span><span>${money(t.subtotal)}</span></div>
     <div class="xs-row"><span>${t.digitalOnly?'Digital delivery':method === 'pickup' ? 'Pickup' : `Shipping (${esc(m.name)})`}</span><span>${t.shipping ? money(t.shipping) : 'FREE'}</span></div>
     <div class="xs-row"><span>Tax</span><span>${money(t.tax)}</span></div>
@@ -396,9 +396,9 @@ export function paymentStep({ base, t, address, method, values = {}, errors = {}
       ${field('card_number', 'Card number', 'autocomplete="cc-number" inputmode="numeric"', '')}
       <div class="xs-2col">${field('expiry', 'MM/YY', 'autocomplete="cc-exp" placeholder="MM/YY"')}${field('cvc', 'CVC', 'autocomplete="cc-csc" inputmode="numeric" maxlength="4"', '')}</div>
       ${field('cardholder_name', 'Cardholder name', 'autocomplete="cc-name"')}
-      <p class="xs-fine">Payment details are used for this order only.</p>
+      <p class="xs-fine">Your card details are encrypted and used for this purchase only.</p>
     </div>
-    <div class="xs-method-panel" data-panel="paypal"><p class="xs-fine">Continue with PayPal for this local order. No external account is charged.</p></div>
+    <div class="xs-method-panel" data-panel="paypal"><p class="xs-fine">Pay with your PayPal account. Your PayPal balance or linked payment method is used for this order.</p>${publicNotice('<p class="xs-fine">No external PayPal account is charged in this demonstration store.</p>')}</div>
     <div class="xs-actions"><button class="xs-btn xs-btn-pay" type="submit">Pay ${money(t.total)}</button></div>
     ${preorder ? '<p class="xs-fine">Your payment method will not be charged until the physical pre-order is ready to be shipped. You will receive a notification email about two weeks before your payment method is charged.</p>' : ''}
   </form></div>
@@ -414,7 +414,7 @@ export function statusPage({ base, order }) {
   const inner = `<div class="xs-status">
   <div class="xs-status-icon" aria-hidden="true">${ICON.check}</div>
   <h1 class="xs-title">${cancelled?'Order cancelled':'Thank you for your purchase!'}</h1>
-  <p>${cancelled?'Your order has been cancelled. No bank refund is confirmed.':`Your ${preorder ? 'pre-order' : 'order'} has been placed. Your receipt is saved here for`} ${cancelled?'':`<b>${esc(order.customer.email)}</b>.`}</p>
+  <p>${cancelled?'Your order has been cancelled. No bank refund is confirmed.':`Your ${preorder ? 'pre-order' : 'order'} has been placed. A receipt has been sent to`} ${cancelled?'':`<b>${esc(order.customer.email)}</b>.`}</p>
   <p class="xs-txn">Transaction ID: <b data-order-number>${esc(order.order_number)}</b></p>
   <div class="xs-receipt">
     ${order.items.map(it => `<div class="xs-row"><span>${esc(it.title)} &times; ${it.qty}${Object.values(order.meta.options?.find(v=>v.sku===it.sku)?.options||{}).length?` · ${esc(Object.values(order.meta.options.find(v=>v.sku===it.sku).options).join(" · "))}`:''}<small class="xs-fine">${esc(itemDelivery(order,it))}</small></span><span>${money(it.unit_price * it.qty)}</span></div>`).join('')}
@@ -424,7 +424,7 @@ export function statusPage({ base, order }) {
     <div class="xs-row"><span>Payment</span><span>${order.payment.method === 'card' ? `${esc(order.payment.brand)} ending in ${esc(order.payment.last4)}` : 'PayPal'}</span></div>
   </div>
   ${order.fulfillment.method==='digital'?`<p>PC digital delivery · ${cancelled?'Cancelled · access unavailable':'Assigned'} to ${esc(order.customer.email)}</p><a href="${base}/library">Open PC library</a>`:order.fulfillment.method === 'pickup' ? `<div class="xs-pickup-review"><h3>Pickup at ${esc(order.fulfillment.store_location)}</h3><p>${esc(order.meta.pickup_person.first_name)} ${esc(order.meta.pickup_person.last_name)}<br>${esc(order.meta.pickup_person.email)}<br>${esc(order.meta.pickup_person.phone)}</p></div>`:`<div class="xs-locked"><div class="xs-locked-head"><b>Ship to</b></div>${addressBlock({ ...a, email: order.customer.email })}</div>`}
-  <p class="xs-fine">${cancelled?'This order will not dispatch. Its original receipt totals remain for your records.':order.fulfillment.method==='digital'?'Your purchase is recorded in your PC library. No physical shipment is required.':order.fulfillment.method === 'pickup' ? 'Bring photo ID matching the named pickup person when the order is ready for collection.' : 'Your order has not dispatched. Tracking becomes available after shipment. No confirmation or tracking email is sent by this local store.'}</p>
+  <p class="xs-fine">${cancelled?'This order will not dispatch. Its original receipt totals remain for your records.':order.fulfillment.method==='digital'?'Your purchase is recorded in your PC library. No physical shipment is required.':order.fulfillment.method === 'pickup' ? 'Bring photo ID matching the named pickup person when the order is ready for collection.' : `Your order has not shipped yet. We’ll email you a tracking link as soon as it ships.${publicNotice(' No emails are sent by this demonstration store.')}`}</p>
   <p><a href="${base}/orders/${order.id}">Order details and support</a></p><div class="xs-actions xs-actions-center"><a class="xs-btn" href="${base}/">Back to Store</a></div>
 </div>`
   return checkoutShell({ closeHref: `${base}/`, inner })
@@ -442,7 +442,7 @@ export function coverSvg(p) {
     else lines.push(w)
   }
   const y0 = 128 - (lines.length - 1) * 14
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="208" height="257" viewBox="0 0 208 257" role="img" aria-label="${esc(p.title)} cover art placeholder"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="208" height="257" fill="url(#g)"/>${lines.map((l, i) => `<text x="104" y="${y0 + i * 28}" font-family="Impact,Arial Black,sans-serif" font-size="24" fill="#fff" text-anchor="middle">${esc(l)}</text>`).join('')}<text x="104" y="240" font-family="Arial,sans-serif" font-size="10" fill="#fff" text-anchor="middle" opacity=".8">ROCKSTAR GAMES</text></svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="208" height="257" viewBox="0 0 208 257" role="img" aria-label="${esc(p.title)} cover art"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="208" height="257" fill="url(#g)"/>${lines.map((l, i) => `<text x="104" y="${y0 + i * 28}" font-family="Impact,Arial Black,sans-serif" font-size="24" fill="#fff" text-anchor="middle">${esc(l)}</text>`).join('')}<text x="104" y="240" font-family="Arial,sans-serif" font-size="10" fill="#fff" text-anchor="middle" opacity=".8">ROCKSTAR GAMES</text></svg>`
 }
 
 export function simplePage({ title, html }) {

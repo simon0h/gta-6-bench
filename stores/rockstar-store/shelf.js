@@ -20,7 +20,7 @@ const colorOf = title => COLORS[Object.keys(COLORS).find(c => new RegExp(`\\b${c
 // Sizes: a deterministic stock pattern so a few sizes read as sold out, like the real size pickers.
 function sizes(title, price, labels = SIZES) {
   const h = hash(title)
-  return labels.map((label, i) => ({ id: slug(label), label, price, stock: (h >> i) % 7 === 0 && i > 2 ? 0 : 4 + ((h >> (i * 2)) % 9) }))
+  return labels.map((label, i) => ({ id: slug(label), label, price, stock: (h >> i) % 7 === 0 && i > 2 ? 0 : 4 + ((h >>> (i * 2)) % 9) }))
 }
 
 const items = []
