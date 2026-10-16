@@ -98,18 +98,22 @@ export function apparelPrint(p, garment) {
 }
 
 // Where the chest sits in the renderer's 640x600 garment drawing (inside its own transform group).
-const CHEST = { tee: [320, 262, 0.62], crewneck: [320, 270, 0.6], hoodie: [320, 236, 0.5], cap: [318, 238, 0.42] }
+const CHEST = { tee: [320, 262, 0.62], crewneck: [320, 270, 0.6], hoodie: [320, 238, 0.6], cap: [318, 238, 0.42] }
+// The shared garment drawing has no hood; draw one over the neckline, with drawstrings, in the garment's color.
+const hood = garment => `<g data-hood="1"><path d="M250 134Q236 66 320 54Q404 66 390 134Q352 150 320 174Q288 150 250 134Z" fill="${garment}" stroke="#26313c" stroke-width="3" stroke-linejoin="round"/><path d="M268 132Q268 90 320 82Q372 90 372 132Q346 142 320 162Q294 142 268 132Z" fill="#000" fill-opacity=".38"/><path d="M306 166L302 214M334 166L338 214" stroke="#f6f5f1" stroke-width="3" stroke-linecap="round"/></g>`
 export function withPrint(svg, p, shape, garment) {
   if (!CHEST[shape] || !svg.includes('data-asset-object="apparel"')) return svg
   const print = apparelPrint(p, garment)
   let out = svg
   // The hoodie's kangaroo pocket is drawn in a random accent color; make it read as the same fabric.
   if (shape === 'hoodie') out = out.replace(/(<rect [^>]*rx="12" )fill="hsl\([^"]*\)"/, '$1fill="#000" fill-opacity=".16" stroke="#000" stroke-opacity=".25" stroke-width="2"')
-  if (!print) return out
+  const hooded = shape === 'hoodie' && !/Jacket/.test(p.title) ? hood(garment) : ''
+  if (!print && !hooded) return out
   let [cx, cy, s] = CHEST[shape]
-  if (print.small && shape !== 'cap') { cx += 52; cy -= 26; s *= 0.42 }
-  const group = `<g data-print="chest" transform="translate(${cx} ${cy}) scale(${s})">${print.svg}</g>`
-  const at = out.lastIndexOf('</g></g></g><text')
+  if (print?.small && shape !== 'cap') { cx += 52; cy -= 26; s *= 0.42 }
+  const group = `${hooded}${print ? `<g data-print="chest" transform="translate(${cx} ${cy}) scale(${s})">${print.svg}</g>` : ''}`
+  // Draw the print inside the garment group, just before it closes (the shared drawing may or may not end with a caption).
+  const at = out.lastIndexOf('</g></g></g>')
   return at < 0 ? out : out.slice(0, at) + group + out.slice(at)
 }
 
