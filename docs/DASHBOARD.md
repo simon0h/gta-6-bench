@@ -69,10 +69,25 @@ These are worked out from the task when the page loads (`benchmark/outcome.js`),
 so results saved earlier show them too. They are never shown to the agent.
 
 Passed results are marked green, failed results red and environment errors
-amber, on the run page, in the live tracker and in **View traversal**. When you
-open an agent's **View N task results**, three tabs filter the list: **All**,
-**Failed** (failed tasks and environment errors) and **Passed**. Each tab shows
-its count, and the open list and chosen tab stay put when the page refreshes.
+amber, on the run page, in the live tracker and in **View traversal**.
+
+## Run page layout
+
+The run page has four tabs, and the chosen tab stays put when the page refreshes:
+
+- **Overview**: totals, the live tracker, results by store, a table of agents,
+  the AI summary and the chat.
+- **Results**: every task result in one table. **All**, **Failed** (failed
+  tasks and environment errors) and **Passed** filter it, with counts; a text box
+  and an agent picker narrow it further. Click a row to see Expected output,
+  Actual output and Failure reason.
+- **Agents**: one card per agent URL, with its link, prompt, comments and
+  **View traversal**. **See results** jumps to that agent's rows in Results.
+- **Chat**: the chat about this run, with more room.
+
+The top bar has a **Go to** search (Ctrl+K or ⌘K) for runs, pages and saved tasks,
+and a light/dark switch that is remembered in the browser. On phones the sidebar
+opens from the menu button.
 
 ## Comparability and persistence
 
@@ -117,7 +132,7 @@ can be saved and up to 100 used in one run.
 
 ## Live tracker
 
-The top of a run page shows where each agent is right now: its current task and
+The Overview tab of a run page shows where each agent is right now: its current task and
 store, how long it has been running, the page it is on (home, search results, product, cart,
 checkout, order placed, sign-in or other browsing), which of those steps it has
 reached, its last click or form action, and its most recent pages. It refreshes

@@ -77,13 +77,13 @@
     function render() {
       if (!container?.isConnected) return
       const running = data?.agents.filter(entry => entry.current).length || 0
-      const heading = `<div class="section-heading"><div><h2>Live tracker${data ? `<span class="section-count">${running} shopping</span>` : ''}</h2><p>Where each agent is right now. Updates every ${running ? FAST / 1000 : SLOW / 1000} seconds while this page is open.</p></div></div>`
+      const heading = `<div class="panel-head"><h2>Live tracker</h2><span class="panel-sub">${data ? `${running} shopping · ` : ''}updates every ${running ? FAST / 1000 : SLOW / 1000} seconds while this page is open</span></div>`
       let content
       if (error && !data) content = `<p class="live-error" role="alert">${escape(error)}</p>`
       else if (!data) content = '<p class="live-quiet" role="status">Loading live positions…</p>'
       else if (!data.agents.length) content = '<p class="live-quiet">Add an agent URL to track it here.</p>'
       else content = `${error ? `<p class="live-error" role="alert">Couldn’t refresh: ${escape(error)}</p>` : ''}<div class="live-grid">${data.agents.map(card).join('')}</div>`
-      const html = heading + content
+      const html = `${heading}<div class="panel-body">${content}</div>`
       // Skip identical redraws so focus and hover stay put between updates.
       if (html !== lastHtml || !container.firstChild) { container.innerHTML = html; lastHtml = html }
       tick()
@@ -132,5 +132,5 @@
     return { mount, stop, refresh: load }
   }
 
-  window.DashboardLive = { create }
+  window.DashboardLive = { create, storeName }
 })()

@@ -19,12 +19,20 @@
     prompt: '<path d="m5 6 6 6-6 6M13 18h6"/>',
     send: '<path d="M12 19V5M6 11l6-6 6 6"/>',
     spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   }
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const $ = selector => document.querySelector(selector)
-  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, resultTabs: new Map(), resultsOpen: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
+  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '' }, openResults: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
   let toastTimer
+  // The run page is split into tabs, as on Cloudflare's dashboard. The open tab is remembered on this device.
+  const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Agents'], ['chat', 'Chat']]
+  try { const saved = localStorage.getItem('dashboard-run-tab'); if (runTabs.some(([key]) => key === saved)) state.runTab = saved } catch { /* storage blocked */ }
+  function setRunTab(tab) {
+    state.runTab = tab
+    try { localStorage.setItem('dashboard-run-tab', tab) } catch { /* storage blocked */ }
+  }
   const live = window.DashboardLive.create({ api, agents })
 
   async function api(path, options = {}) {
@@ -72,6 +80,7 @@
   function attemptCount(run) { return run.attempt_count ?? attempts(run).length }
   function runName(run) { return run.name || `Run ${date(run.created_at)}` }
   function agentData(key) { return agents[key] || agents.grokbot }
+  function storeName(slug) { return window.DashboardLive.storeName(slug) || '—' }
   function entryUrl(attempt) { return new URL(attempt.url || `/agent/${encodeURIComponent(attempt.token || attempt.id)}`, location.origin).href }
   function resultList(attempt) {
     if (Array.isArray(attempt.results)) return attempt.results
@@ -123,16 +132,15 @@
     const links = state.runs.reduce((sum, run) => sum + attemptCount(run), 0)
     const complete = state.runs.reduce((sum, run) => sum + attempts(run).filter(entry => ['completed', 'complete', 'finished'].includes(entry.status)).length, 0)
     $('#main').innerHTML = `
-      <div class="page-heading"><div><h1>Benchmark runs</h1></div><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div>
+      <div class="page-heading"><div><h1>All runs</h1><p>Each run gives every agent the same shopping tasks.</p></div><div class="page-actions"><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div></div>
       <div class="stats-grid" role="group" aria-label="Run summary"><div class="stat"><div class="stat-label">${icon('run')}Total runs</div><div class="stat-value">${state.runs.length}</div></div><div class="stat"><div class="stat-label">${icon('link')}Agent URLs</div><div class="stat-value">${links}</div></div><div class="stat"><div class="stat-label">${icon('check')}Completed attempts</div><div class="stat-value">${complete}</div></div></div>
-      <div class="section-heading"><h2>Run history<span class="section-count">${state.runs.length}</span></h2><button class="icon-button" data-action="refresh" aria-label="Refresh runs" title="Refresh runs">${icon('refresh')}</button></div>
-      ${state.runs.length ? `<div class="run-list" role="region" aria-label="Run history" tabindex="0"><table class="run-table"><thead><tr><th scope="col">Run</th><th scope="col">Task set</th><th scope="col">Agents</th><th scope="col">Progress</th><th scope="col">Created</th></tr></thead><tbody>${state.runs.map(run => {
+      ${state.runs.length ? `<section class="panel"><div class="panel-head"><h2>Run history</h2><span class="panel-sub">${state.runs.length} run${state.runs.length === 1 ? '' : 's'}</span><div class="panel-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh runs" title="Refresh runs">${icon('refresh')}</button></div></div><div class="run-list" role="region" aria-label="Run history" tabindex="0"><table class="run-table"><thead><tr><th scope="col">Run</th><th scope="col">Task set</th><th scope="col">Agents</th><th scope="col">Progress</th><th scope="col">Created</th></tr></thead><tbody>${state.runs.map(run => {
         const entries = attempts(run)
         const completed = entries.reduce((sum, entry) => sum + progress(entry, run).completed, 0)
         const total = entries.reduce((sum, entry) => sum + progress(entry, run).total, 0)
         const percentage = total > 0 ? Math.min(100, completed / total * 100) : 0
         return `<tr class="run-row"><td class="run-name-cell"><a class="run-name" href="#/runs/${encodeURIComponent(run.id)}"><span class="run-symbol">${icon('run')}</span><span class="run-row-text"><span class="run-title">${escape(runName(run))}</span><small class="run-id">${escape(String(run.id).slice(0, 8))}</small></span>${icon('arrow')}</a></td><td class="run-suite-cell">${suiteName(run)}</td><td class="run-agents-cell"><div class="run-agents">${entries.length ? `<span class="agent-stack" aria-hidden="true">${entries.slice(0, 5).map(attempt => `<img src="${agentData(attempt.agent).icon}" alt="">`).join('')}</span>` : ''}<span class="attempt-count">${attemptCount(run)} / 5</span></div></td><td class="run-progress-cell"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="${escape(runName(run))} task progress" aria-valuenow="${completed}" aria-valuemin="0" aria-valuemax="${total || 1}"><div class="progress-fill" style="width:${percentage}%"></div></div><span>${completed} / ${total}</span></div></td><td class="run-date-cell">${escape(date(run.created_at, true))}</td></tr>`
-      }).join('')}</tbody></table></div>` : `<section class="empty-state"><h2>No runs yet</h2><button class="button primary" data-action="new-run">${icon('plus')}New run</button></section>`}`
+      }).join('')}</tbody></table></div></section>` : `<section class="empty-state"><h2>No runs yet</h2><button class="button primary" data-action="new-run">${icon('plus')}New run</button></section>`}`
     renderSidebar()
   }
 
@@ -145,44 +153,55 @@
     const status = result.grade?.status || result.outcome || result.status || 'Submitted'
     return `<span class="badge result-badge ${resultTone(result)}"><span class="status-dot"></span>${escape(status.replace(/_/g, ' ').replace(/^./, char => char.toUpperCase()))}</span>`
   }
-  // The All / Failed / Passed tabs. "Failed" holds every graded task that did not pass.
+  // Every task result in the run, newest agent URL last, each with a stable key.
+  function runResults(run) {
+    return attempts(run).flatMap((attempt, index) => resultList(attempt).map((result, n) => ({ attempt, index, result, key: `${attempt.id}:${result.task_id || n}` })))
+  }
+  // The All / Failed / Passed filter. "Failed" holds every graded task that did not pass.
   const resultFilters = [['all', 'All'], ['failed', 'Failed'], ['passed', 'Passed']]
-  function matchesFilter(result, filter) {
-    const tone = resultTone(result)
-    return filter === 'all' || (filter === 'passed' ? tone === 'passed' : tone === 'failed' || tone === 'error')
-  }
-  function applyResultFilter(details, filter) {
-    let shown = 0
-    for (const tab of details.querySelectorAll('[data-filter]')) tab.setAttribute('aria-selected', String(tab.dataset.filter === filter))
-    for (const group of details.querySelectorAll('.result-group')) {
-      const match = filter === 'all' || group.dataset.tone === filter || (filter === 'failed' && group.dataset.tone === 'error')
-      group.hidden = !match
-      if (match) shown++
-    }
-    const empty = details.querySelector('.result-empty')
-    if (empty) {
-      empty.hidden = shown > 0
-      empty.textContent = filter === 'passed' ? 'No passed tasks yet.' : 'No failed tasks.'
-    }
-  }
-
-  function renderResults(attempt, run) {
-    const results = resultList(attempt)
-    if (!results.length) return ''
-    // Tasks have no time limit; each result records how long the agent took.
-    const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite)
-    const total = timed.length ? ` · ${duration(timed.reduce((sum, ms) => sum + ms, 0))} total` : ''
-    const count = filter => results.filter(result => matchesFilter(result, filter)).length
-    const passed = count('passed'), failed = count('failed')
-    const filter = state.resultTabs.get(attempt.id) || 'all'
-    const id = escape(attempt.id)
-    const tabs = `<div class="result-tabs" role="tablist" aria-label="Filter task results">${resultFilters.map(([key, name]) => `<button class="result-tab ${key}" type="button" role="tab" data-action="result-tab" data-attempt="${id}" data-filter="${key}" aria-selected="${key === filter}">${name}<span>${key === 'all' ? results.length : count(key)}</span></button>`).join('')}</div>`
-    const rows = results.map((result, index) => {
-      const tone = resultTone(result)
-      return `<tbody class="result-group ${tone}" data-tone="${tone}" data-task="${escape(result.task_id || '')}"${matchesFilter(result, filter) ? '' : ' hidden'}><tr><td>${escape(taskLabel(run, result.task_id) || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(duration(result.elapsed_ms))}</td></tr><tr class="result-outputs"><td colspan="3">${resultOutputs(result)}</td></tr></tbody>`
+  function renderResultsTab(run) {
+    const rows = runResults(run), view = state.resultsView, entries = attempts(run)
+    if (!rows.length) return `<section class="empty-state"><h2>No results yet</h2><p class="empty-help">Each task shows up here once an agent submits it.</p></section>`
+    if (view.agent !== 'all' && !entries.some(attempt => attempt.id === view.agent)) view.agent = 'all'
+    const segments = resultFilters.map(([key, name]) => `<button class="segment ${key}" type="button" role="tab" data-action="result-filter" data-filter="${key}" aria-selected="${key === view.filter}">${name}<span class="segment-count"></span></button>`).join('')
+    const agentPicker = entries.length > 1 ? `<select id="results-agent" aria-label="Agent"><option value="all">All agents</option>${entries.map((attempt, index) => `<option value="${escape(attempt.id)}"${view.agent === attempt.id ? ' selected' : ''}>${escape(agentData(attempt.agent).name)} · URL ${String(index + 1).padStart(2, '0')}</option>`).join('')}</select>` : ''
+    const groups = rows.map(({ attempt, result, key }, n) => {
+      const tone = resultTone(result), open = state.openResults.has(key), agent = agentData(attempt.agent)
+      const label = taskLabel(run, result.task_id) || result.task?.id || result.id || `Task ${n + 1}`, store = result.store ? storeName(result.store) : '—'
+      return `<tbody class="result-group ${tone}${open ? ' open' : ''}" data-tone="${tone}" data-task="${escape(result.task_id || '')}" data-attempt="${escape(attempt.id)}" data-key="${escape(key)}" data-ms="${Number.isFinite(result.elapsed_ms) ? result.elapsed_ms : ''}" data-search="${escape(`${label} ${result.task_id || ''} ${store} ${agent.name}`.toLowerCase())}">
+        <tr class="result-row" data-action="toggle-result" tabindex="0" aria-expanded="${open}"><td class="result-task"><span class="chevron">${icon('arrow')}</span><span>${escape(label)}</span></td><td class="result-store">${escape(store)}</td><td class="result-agent"><span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}</span></td><td>${resultBadge(result)}</td><td class="result-time">${escape(duration(result.elapsed_ms))}</td></tr>
+        <tr class="result-outputs"${open ? '' : ' hidden'}><td colspan="5">${resultOutputs(result)}<div class="result-links"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${escape(attempt.id)}">${icon('tasks')}View traversal</button></div></td></tr></tbody>`
     }).join('')
-    const empty = results.some(result => matchesFilter(result, filter))
-    return `<details class="result-details" data-attempt="${id}"${state.resultsOpen.has(attempt.id) ? ' open' : ''}><summary>View ${results.length} task result${results.length === 1 ? '' : 's'} · <span class="result-count passed">${passed} passed</span> · <span class="result-count failed">${failed} failed</span>${total}</summary>${tabs}<table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Time taken</th></tr></thead>${rows}</table><p class="result-empty"${empty ? ' hidden' : ''}>${filter === 'passed' ? 'No passed tasks yet.' : 'No failed tasks.'}</p></details>`
+    return `<section class="panel results-panel" id="results-panel" aria-label="Task results"><div class="results-toolbar"><div class="segmented" role="tablist" aria-label="Filter task results">${segments}</div><label class="results-search">${icon('search')}<input id="results-query" type="search" placeholder="Filter by task, store or agent" aria-label="Filter by task, store or agent" value="${escape(view.query)}" autocomplete="off"></label>${agentPicker}<span class="results-total" id="results-total" role="status"></span></div>
+      <div class="table-scroll"><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Store</th><th scope="col">Agent</th><th scope="col">Result</th><th scope="col">Time taken</th></tr></thead>${groups}</table></div><p class="result-empty" hidden>No tasks match.</p></section>`
+  }
+  // Filtering happens in place, so typing in the filter box keeps its focus.
+  function applyResults() {
+    const panel = $('#results-panel')
+    if (!panel) return
+    const view = state.resultsView, query = view.query.trim().toLowerCase(), counts = { all: 0, failed: 0, passed: 0 }
+    let shown = 0, time = 0
+    for (const group of panel.querySelectorAll('.result-group')) {
+      const tone = group.dataset.tone, failed = tone === 'failed' || tone === 'error'
+      const visible = (view.agent === 'all' || group.dataset.attempt === view.agent) && (!query || group.dataset.search.includes(query))
+      if (visible) { counts.all++; if (tone === 'passed') counts.passed++; if (failed) counts.failed++ }
+      const match = visible && (view.filter === 'all' || (view.filter === 'passed' ? tone === 'passed' : failed))
+      group.hidden = !match
+      if (match) { shown++; time += Number(group.dataset.ms) || 0 }
+    }
+    for (const tab of panel.querySelectorAll('[data-action="result-filter"]')) {
+      tab.setAttribute('aria-selected', String(tab.dataset.filter === view.filter))
+      tab.querySelector('.segment-count').textContent = counts[tab.dataset.filter]
+    }
+    panel.querySelector('.result-empty').hidden = shown > 0
+    $('#results-total').textContent = `${shown} task${shown === 1 ? '' : 's'}${time ? ` · ${duration(time)} total` : ''}`
+  }
+  function toggleResult(group) {
+    const open = !group.classList.contains('open')
+    if (open) state.openResults.add(group.dataset.key); else state.openResults.delete(group.dataset.key)
+    group.classList.toggle('open', open)
+    group.querySelector('.result-outputs').hidden = !open
+    group.querySelector('.result-row').setAttribute('aria-expanded', String(open))
   }
 
   // Expected output, actual output and (for tasks that did not pass) one
@@ -205,7 +224,19 @@
       <div class="agent-body"><div class="url-bar">${icon('link')}<input type="text" aria-label="Agent URL ${index + 1}" readonly value="${escape(url)}" autocomplete="off" spellcheck="false"><button class="button" type="button" data-action="copy-url" data-attempt="${id}">${icon('copy')}Copy URL</button></div><div class="link-utilities"><button class="copy-prompt" type="button" data-action="copy-prompt" data-attempt="${id}">${icon('prompt')}Copy prompt</button><a class="open-agent" href="${escape(url)}" target="_blank" rel="noopener">Open task${icon('external')}</a></div>
       <div class="entry-fields"><div><label for="tags-${id}">Tags</label><input name="tags" id="tags-${id}" value="${escape(draft.tags)}" placeholder="baseline, v2" maxlength="500" autocomplete="off"><p class="field-help">Comma-separated.</p></div><div><label for="comments-${id}">Comments</label><textarea name="comments" id="comments-${id}" placeholder="Model, settings, notes" maxlength="5000" rows="2">${escape(draft.comments)}</textarea></div></div></div>
       <div class="agent-card-footer"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="Task results submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><div class="progress-fill" style="width:${p.percentage}%"></div></div><span>${p.completed} / ${p.total} results</span></div><div class="save-group"><span class="save-feedback${draft.dirty ? ' dirty' : ''}" role="status">${draft.dirty ? 'Unsaved changes' : 'Saved'}</span><button class="button secondary small" type="submit"${draft.dirty && !state.saving.has(attempt.id) ? '' : ' disabled'}>${state.saving.has(attempt.id) ? 'Saving…' : 'Save'}</button></div></div>
-      </form><div class="attempt-traversal"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${id}">${icon('tasks')}View traversal</button></div>${renderResults(attempt, run)}</article>`
+      </form><div class="attempt-traversal"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${id}">${icon('tasks')}View traversal</button>${attemptResults(attempt)}</div></article>`
+  }
+
+  function toneCounts(results) {
+    const counts = { passed: 0, failed: 0, error: 0 }
+    for (const result of results) { const tone = resultTone(result); if (tone in counts) counts[tone]++ }
+    return counts
+  }
+  function attemptResults(attempt) {
+    const results = resultList(attempt)
+    if (!results.length) return ''
+    const counts = toneCounts(results)
+    return `<span class="attempt-results"><span class="result-count passed">${counts.passed} passed</span> · <span class="result-count failed">${counts.failed + counts.error} failed</span></span><button class="button quiet small" type="button" data-action="agent-results" data-attempt="${escape(attempt.id)}">See results${icon('arrow')}</button>`
   }
 
   // AI summary, written by Claude from the graded results on request and kept
@@ -233,7 +264,7 @@
         <p class="ai-summary-meta">${writing ? 'Updating…' : `Written ${escape(date(data.written_at, true))} from ${data.written_from} result${data.written_from === 1 ? '' : 's'}${stale}`}</p>`
       if (data.stale) action = button('Update summary')
     }
-    return `<section class="ai-summary" aria-label="AI summary" aria-busy="${writing}"><div class="ai-summary-top"><div><h2>AI summary</h2><p>Written by Claude from this run’s results. It doesn’t change any grades.</p></div>${action}</div>${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</section>`
+    return `<section class="panel ai-summary" aria-label="AI summary" aria-busy="${writing}"><div class="panel-head ai-summary-top"><div><h2>AI summary</h2><p>Written by Claude from this run’s results. It doesn’t change any grades.</p></div>${action}</div><div class="panel-body">${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</div></section>`
   }
   function refreshSummary() {
     const node = $('.ai-summary')
@@ -309,7 +340,7 @@
         <form class="chat-form" data-run="${escape(run.id)}"><textarea name="question" rows="1" maxlength="2000" placeholder="Ask about this run" aria-label="Ask about this run"${data.full ? ' disabled' : ''}>${escape(state.chatDrafts.get(run.id) || '')}</textarea><button class="chat-send" type="submit" aria-label="Send" title="Send"${locked ? ' disabled' : ''}>${icon('send')}</button></form>`
     }
     const clear = messages.length && !answer ? '<button class="button quiet small" type="button" data-action="clear-chat">Clear chat</button>' : ''
-    return `<section class="run-chat" aria-label="Chat about this run"><div class="ai-summary-top"><div><h2>Chat about this run</h2><p>Ask Claude about these results. It can look up what an agent clicked on any task.</p></div>${clear}</div>${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</section>`
+    return `<section class="panel run-chat" aria-label="Chat about this run"><div class="panel-head ai-summary-top"><div><h2>Chat about this run</h2><p>Ask Claude about these results. It can look up what an agent clicked on any task.</p></div>${clear}</div><div class="panel-body">${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</div></section>`
   }
   function scrollChat() { const log = $('.chat-log'); if (log) log.scrollTop = log.scrollHeight }
   function refreshChat({ focus = false } = {}) {
@@ -364,28 +395,90 @@
   function showTask(taskId) {
     const run = state.selected
     if (!run) return
-    const owners = attempts(run).filter(attempt => resultList(attempt).some(result => result.task_id === taskId))
-    for (const attempt of owners) { state.resultsOpen.add(attempt.id); state.resultTabs.set(attempt.id, 'all') }
+    setRunTab('results')
+    state.resultsView = { filter: 'all', agent: 'all', query: '' }
+    for (const row of runResults(run)) if (row.result.task_id === taskId) state.openResults.add(row.key)
     render()
     const rows = [...document.querySelectorAll('.result-group')].filter(row => row.dataset.task === taskId)
     rows[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     for (const row of rows) { row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash') }
   }
 
-  function renderDetail() {
-    const run = state.selected, entries = attempts(run)
-    const results = entries.flatMap(resultList)
-    const counts = { completed: entries.reduce((sum, entry) => sum + progress(entry, run).completed, 0), passed: 0, failed: 0, environment_error: 0 }
-    for (const result of results) if (['passed', 'failed', 'environment_error'].includes(result.grade?.status)) counts[result.grade.status]++
-    document.title = `${runName(run)} · GTA 6 Bench`
-    $('#main').innerHTML = `<div class="page-heading run-detail-heading"><div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><button class="button secondary" data-action="new-run">${icon('plus')}New run</button></div>
-      <div class="stats-grid run-summary" role="group" aria-label="Run results"><div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${counts.completed}</div></div><div class="stat"><div class="stat-label">Passed</div><div class="stat-value positive">${counts.passed}</div></div><div class="stat"><div class="stat-label">Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div></div><div class="stat"><div class="stat-label">Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div></div></div>
-      ${renderSummary(run)}
-      ${renderChat(run)}
-      <section class="live-panel" id="live-panel" aria-label="Live tracker"></section>
-      <div class="section-heading"><div><h2>Agent URLs<span class="section-count">${entries.length} / 5</span></h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five agent URLs"' : ''}>${icon('plus')}Add agent URL</button></div></div>
+  function runStatus(run) {
+    const statuses = attempts(run).map(attempt => String(attempt.status || '').toLowerCase())
+    if (statuses.some(status => ['running', 'active', 'in_progress', 'started'].includes(status))) return '<span class="badge orange"><span class="status-dot"></span>Running</span>'
+    if (statuses.length && statuses.every(status => ['completed', 'complete', 'finished'].includes(status))) return '<span class="badge green"><span class="status-dot"></span>Completed</span>'
+    return '<span class="badge gray"><span class="status-dot"></span>Ready</span>'
+  }
+  function renderTiles(run, rows) {
+    const entries = attempts(run), results = rows.map(row => row.result)
+    const completed = entries.reduce((sum, entry) => sum + progress(entry, run).completed, 0), total = entries.reduce((sum, entry) => sum + progress(entry, run).total, 0)
+    const counts = { passed: 0, failed: 0, environment_error: 0 }
+    for (const result of results) if (result.grade?.status in counts) counts[result.grade.status]++
+    const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite), time = timed.reduce((sum, ms) => sum + ms, 0)
+    const share = count => results.length ? `${Math.round(count / results.length * 100)}% of finished tasks` : 'No results yet'
+    return `<div class="stats-grid run-summary" role="group" aria-label="Run results">
+      <div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${completed}</div><div class="stat-note">of ${total} across ${entries.length} agent URL${entries.length === 1 ? '' : 's'}</div></div>
+      <div class="stat"><div class="stat-label"><span class="swatch passed"></span>Passed</div><div class="stat-value positive">${counts.passed}</div><div class="stat-note">${share(counts.passed)}</div></div>
+      <div class="stat"><div class="stat-label"><span class="swatch failed"></span>Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div><div class="stat-note">${share(counts.failed)}</div></div>
+      <div class="stat"><div class="stat-label"><span class="swatch error"></span>Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div><div class="stat-note">A store or setup problem, not the agent</div></div>
+      <div class="stat"><div class="stat-label">Time taken</div><div class="stat-value">${timed.length ? duration(time) : '—'}</div><div class="stat-note">${timed.length ? `${duration(time / timed.length)} per task on average` : 'No results yet'}</div></div></div>`
+  }
+  // One bar per store: green passed, red failed, amber environment errors.
+  function renderStoreBars(rows) {
+    if (!rows.length) return ''
+    const stores = new Map()
+    for (const { result } of rows) {
+      const slug = result.store || ''
+      const entry = stores.get(slug) || { passed: 0, failed: 0, error: 0, total: 0 }
+      const tone = resultTone(result)
+      if (tone in entry) entry[tone]++
+      entry.total++
+      stores.set(slug, entry)
+    }
+    const width = (count, total) => `${(count / total * 100).toFixed(2)}%`
+    return `<section class="panel" aria-label="Results by store"><div class="panel-head"><h2>Results by store</h2><div class="panel-actions legend"><span><span class="swatch passed"></span>Passed</span><span><span class="swatch failed"></span>Failed</span><span><span class="swatch error"></span>Environment error</span></div></div>
+      <div class="panel-body store-bars">${[...stores].sort((a, b) => b[1].total - a[1].total).map(([slug, entry]) => `<div class="store-bar"><span class="store-bar-name">${escape(slug ? storeName(slug) : 'Other')}</span><div class="bar" role="img" aria-label="${entry.passed} passed, ${entry.failed} failed, ${entry.error} environment errors"><span class="passed" style="width:${width(entry.passed, entry.total)}"></span><span class="failed" style="width:${width(entry.failed, entry.total)}"></span><span class="error" style="width:${width(entry.error, entry.total)}"></span></div><span class="store-bar-count">${entry.passed} / ${entry.total} passed</span></div>`).join('')}</div></section>`
+  }
+  function renderAgentTable(run) {
+    const entries = attempts(run)
+    const head = `<div class="panel-head"><h2>Agents</h2><span class="panel-sub">${entries.length} / 5 URLs</span><div class="panel-actions"><button class="button quiet small" type="button" data-action="run-tab" data-tab="agents">Manage agent URLs</button></div></div>`
+    if (!entries.length) return `<section class="panel" aria-label="Agents">${head}<div class="panel-body panel-empty"><p>No agent URLs yet.</p><button class="button primary" data-action="new-attempt">${icon('plus')}Add agent URL</button></div></section>`
+    const rows = entries.map((attempt, index) => {
+      const results = resultList(attempt), counts = toneCounts(results), p = progress(attempt, run), agent = agentData(attempt.agent)
+      const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite)
+      const width = count => `${p.total ? (count / p.total * 100).toFixed(2) : 0}%`
+      const name = `<span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}<small>URL ${String(index + 1).padStart(2, '0')}</small></span>`
+      return `<tr><td>${results.length ? `<button class="agent-link" type="button" data-action="agent-results" data-attempt="${escape(attempt.id)}" title="See ${escape(agent.name)}’s results">${name}</button>` : name}</td>
+        <td><div class="progress-group"><div class="progress-track split" role="progressbar" aria-label="${escape(agent.name)} tasks submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><span class="passed" style="width:${width(counts.passed)}"></span><span class="failed" style="width:${width(counts.failed)}"></span><span class="error" style="width:${width(counts.error)}"></span><span class="pending" style="width:${width(Math.max(0, p.completed - counts.passed - counts.failed - counts.error))}"></span></div><span>${p.completed} / ${p.total}</span></div></td>
+        <td class="num">${counts.passed}</td><td class="num">${counts.failed + counts.error}</td><td class="num hide-narrow">${timed.length ? duration(timed.reduce((sum, ms) => sum + ms, 0)) : '—'}</td><td>${statusBadge(attempt)}</td></tr>`
+    }).join('')
+    return `<section class="panel" aria-label="Agents">${head}<div class="table-scroll"><table class="data-table"><thead><tr><th scope="col">Agent</th><th scope="col">Progress</th><th scope="col" class="num">Passed</th><th scope="col" class="num">Failed</th><th scope="col" class="num hide-narrow">Time</th><th scope="col">Status</th></tr></thead><tbody>${rows}</tbody></table></div></section>`
+  }
+  function renderAgentsTab(run) {
+    const entries = attempts(run)
+    return `<div class="section-heading"><div><h2>Agent URLs<span class="section-count">${entries.length} / 5</span></h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="button primary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five agent URLs"' : ''}>${icon('plus')}Add agent URL</button></div></div>
       ${entries.length ? `<div class="agent-grid">${entries.map((attempt, index) => renderAttempt(attempt, index, run)).join('')}</div>${entries.length >= 5 ? '<p class="capacity-note">Five-URL limit reached.</p>' : ''}` : `<section class="empty-state"><h2>No agent URLs yet</h2><button class="button primary" data-action="new-attempt">${icon('plus')}Add agent URL</button></section>`}`
-    live.mount($('#live-panel'), run.id)
+  }
+
+  function renderDetail() {
+    const run = state.selected, entries = attempts(run), rows = runResults(run), tab = state.runTab
+    document.title = `${runName(run)} · GTA 6 Bench`
+    const tabs = runTabs.map(([key, name]) => {
+      const count = key === 'results' ? rows.length : key === 'agents' ? entries.length : null
+      return `<button class="run-tab" type="button" role="tab" id="run-tab-${key}" data-action="run-tab" data-tab="${key}" aria-selected="${key === tab}" aria-controls="run-tab-panel">${name}${count === null ? '' : `<span class="tab-count">${count}</span>`}</button>`
+    }).join('')
+    let body
+    if (tab === 'results') body = renderResultsTab(run)
+    else if (tab === 'agents') body = renderAgentsTab(run)
+    else if (tab === 'chat') body = renderChat(run)
+    else body = `${renderTiles(run, rows)}<div class="overview-grid"><div class="overview-column"><section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderStoreBars(rows)}${renderAgentTable(run)}</div><div class="overview-column">${renderSummary(run)}${renderChat(run)}</div></div>`
+    $('#main').innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/">All runs</a><span aria-hidden="true">/</span><span>${escape(runName(run))}</span></nav>
+      <div class="page-heading run-detail-heading"><div><div class="title-row"><h1>${escape(runName(run))}</h1>${runStatus(run)}</div><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><div class="page-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div></div>
+      <div class="run-tabs" role="tablist" aria-label="Run sections">${tabs}</div>
+      <div id="run-tab-panel" class="run-tab-panel" role="tabpanel" aria-labelledby="run-tab-${tab}">${body}</div>`
+    if (tab === 'overview') live.mount($('#live-panel'), run.id); else live.stop()
+    if (tab === 'results') applyResults()
     scrollChat()
     renderSidebar()
   }
@@ -507,10 +600,21 @@
       catch (error) { state.chatErrors.set(runId, error.message) }
       if (state.selected?.id === runId) refreshChat()
     }
-    if (action === 'result-tab') {
-      state.resultTabs.set(control.dataset.attempt, control.dataset.filter)
-      applyResultFilter(control.closest('.result-details'), control.dataset.filter)
+    if (action === 'run-tab' && state.selected) { setRunTab(control.dataset.tab); render(); $('#run-tab-' + control.dataset.tab)?.focus() }
+    if (action === 'result-filter') { state.resultsView.filter = control.dataset.filter; applyResults() }
+    if (action === 'toggle-result') toggleResult(control.closest('.result-group'))
+    if (action === 'agent-results' && state.selected) {
+      setRunTab('results')
+      state.resultsView = { filter: 'all', agent: control.dataset.attempt, query: '' }
+      render(); window.scrollTo(0, 0)
     }
+    if (action === 'toggle-theme') {
+      const root = document.documentElement
+      const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+      root.dataset.theme = dark ? 'light' : 'dark'
+      try { localStorage.setItem('dashboard-theme', root.dataset.theme) } catch { /* storage blocked */ }
+    }
+    if (action === 'toggle-menu') setMenu(!$('#workspace').classList.contains('menu-open'))
     if (action === 'view-traversal') {
       const attempt = attempts(state.selected).find(item => item.id === control.dataset.attempt)
       if (attempt) traversal.open({ runId: state.selected.id, attemptId: attempt.id, label: agentData(attempt.agent).name })
@@ -530,8 +634,11 @@
 
   document.addEventListener('change', event => {
     if (event.target.id === 'run-suite') $('#run-task-picker').hidden = event.target.value !== 'custom'
+    if (event.target.id === 'results-agent') { state.resultsView.agent = event.target.value; applyResults() }
   })
   document.addEventListener('input', event => {
+    if (event.target.id === 'results-query') { state.resultsView.query = event.target.value; applyResults(); return }
+    if (event.target.id === 'goto-input') { gotoIndex = 0; renderGoto(); return }
     const chatForm = event.target.closest('.chat-form')
     if (chatForm && event.target.name === 'question') {
       state.chatDrafts.set(chatForm.dataset.run, event.target.value)
@@ -552,6 +659,9 @@
   })
 
   document.addEventListener('keydown', event => {
+    if ((event.key === 'Enter' || event.key === ' ') && event.target.matches?.('.result-row')) { event.preventDefault(); toggleResult(event.target.closest('.result-group')); return }
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k' && state.authenticated) { event.preventDefault(); $('#goto-input').focus(); $('#goto-input').select(); return }
+    if (event.target.id === 'goto-input') { gotoKey(event); return }
     if (event.key !== 'Enter' || event.shiftKey || event.isComposing || !event.target.matches?.('.chat-form textarea')) return
     event.preventDefault()
     event.target.form.requestSubmit()
@@ -641,13 +751,51 @@
       }
     }
   })
-  // Keep each agent's results open (and on the same tab) when the page refreshes.
-  document.addEventListener('toggle', event => {
-    const details = event.target
-    if (!details.matches?.('.result-details')) return
-    if (details.open) state.resultsOpen.add(details.dataset.attempt); else state.resultsOpen.delete(details.dataset.attempt)
-  }, true)
-  window.addEventListener('hashchange', () => { traversal.close(); if (state.authenticated) load({ initial: true }) })
+  // "Go to": jump to a page, a run or one of your tasks by name. Ctrl K (⌘K) focuses it.
+  let gotoIndex = 0
+  function gotoItems(query) {
+    const text = query.trim().toLowerCase()
+    const items = [{ label: 'All runs', kind: 'Page', href: '#/' }, { label: 'My tasks', kind: 'Page', href: '#/tasks' }, { label: 'New task', kind: 'Page', href: '#/tasks/new' },
+      ...state.runs.map(run => ({ label: runName(run), kind: 'Run', href: `#/runs/${encodeURIComponent(run.id)}` })),
+      ...tasks.list().map(task => ({ label: task.name, kind: 'Task', href: `#/tasks/${encodeURIComponent(task.id)}` }))]
+    return (text ? items.filter(item => item.label.toLowerCase().includes(text)) : items).slice(0, 8)
+  }
+  function renderGoto() {
+    const input = $('#goto-input'), list = $('#goto-results'), items = gotoItems(input.value)
+    gotoIndex = Math.min(gotoIndex, Math.max(0, items.length - 1))
+    list.innerHTML = items.length ? items.map((item, index) => `<li role="option" id="goto-${index}" aria-selected="${index === gotoIndex}"><a href="${escape(item.href)}" tabindex="-1"><span>${escape(item.label)}</span><small>${item.kind}</small></a></li>`).join('') : '<li class="goto-empty">No matches</li>'
+    list.hidden = false
+    input.setAttribute('aria-expanded', 'true')
+    if (items.length) input.setAttribute('aria-activedescendant', `goto-${gotoIndex}`); else input.removeAttribute('aria-activedescendant')
+    return items
+  }
+  function closeGoto() {
+    $('#goto-results').hidden = true
+    $('#goto-input').setAttribute('aria-expanded', 'false')
+    $('#goto-input').removeAttribute('aria-activedescendant')
+  }
+  function gotoKey(event) {
+    if (event.key === 'Escape') { closeGoto(); event.target.blur(); return }
+    if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) return
+    event.preventDefault()
+    const items = gotoItems(event.target.value)
+    if (!items.length) return
+    if (event.key === 'Enter') { location.hash = items[gotoIndex].href.slice(1); event.target.value = ''; closeGoto(); event.target.blur(); return }
+    gotoIndex = (gotoIndex + (event.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length
+    renderGoto()
+  }
+  document.addEventListener('focusin', event => { if (event.target.id === 'goto-input') renderGoto() })
+  document.addEventListener('click', event => {
+    if (event.target.closest?.('#goto-results a')) { $('#goto-input').value = ''; closeGoto(); return }
+    if (!event.target.closest?.('.goto') && !$('#goto-results').hidden) closeGoto()
+  })
+  // On narrow screens the sidebar slides in over the page.
+  function setMenu(open) {
+    $('#workspace').classList.toggle('menu-open', open)
+    $('.sidebar-scrim').hidden = !open
+    $('.menu-toggle').setAttribute('aria-expanded', String(open))
+  }
+  window.addEventListener('hashchange', () => { traversal.close(); closeGoto(); setMenu(false); if (state.authenticated) load({ initial: true }) })
   window.addEventListener('beforeunload', event => { if (tasks.dirty || [...state.drafts.values()].some(draft => draft.dirty)) { event.preventDefault(); event.returnValue = '' } })
   initialize()
 })()
