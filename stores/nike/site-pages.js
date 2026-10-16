@@ -4,6 +4,7 @@ import { MENUS, FOOTER, LEGAL, HELP_MENU, FILTERS } from './site-data.js'
 import { HELP_TOPICS, HELP_ARTICLES, INFO_PAGES, HUB_COPY, STORES } from './site-content.js'
 import { capturedSearchProducts } from './search-reference.js'
 import { jordanMark, swoosh } from './official-marks.js'
+import { shelf, listingItems, HUB_ITEMS, artUrl } from './shelf.js'
 
 // Site pages for reference mode. They reproduce nike.com's navigation, layout
 // and service pages without adding products: category listings show their
@@ -60,7 +61,21 @@ LISTINGS.get('mens-shoes-nik1zy7ok').siblings = shoeSubcats
 // ---------- small building blocks ----------
 const A = (base, path, label, cls = '') => `<a${cls ? ` class="${cls}"` : ''} href="${base}${path}">${esc(label)}</a>`
 const pills = (base, links) => `<div class="nkx-pills">${links.map(([l, p]) => A(base, p, l)).join('')}</div>`
-const tile = (base, path, label, opts = {}) => `<a class="nkx-tile${opts.tone ? ` nkx-tone-${opts.tone}` : ''}" href="${base}${path}">${opts.image ? `<img src="${opts.image}" alt="">` : `<span class="nkx-tile-art" aria-hidden="true">${esc(opts.mark || label)}</span>`}<span class="nkx-tile-label">${esc(label)}</span>${opts.cta ? `<span class="nkx-tile-cta">${esc(opts.cta)}</span>` : ''}</a>`
+const tile = (base, path, label, opts = {}) => `<a class="nkx-tile${opts.tone ? ` nkx-tone-${opts.tone}` : ''}" href="${base}${path}">${opts.image ? `<img${opts.product || opts.image.endsWith('.svg') ? ' class="nkx-tile-product"' : ''} src="${opts.image}" alt="">` : `<span class="nkx-tile-art" aria-hidden="true">${esc(opts.mark || label)}</span>`}<span class="nkx-tile-label">${esc(label)}</span>${opts.cta ? `<span class="nkx-tile-cta">${esc(opts.cta)}</span>` : ''}</a>`
+// Tile pictures come from the shelf: the best-reviewed style in the tile's own
+// listing or hub, skipping styles another tile on the page already shows.
+function tileArt(base, path, used, prefer = () => true) {
+  const items = path.startsWith('/w/') ? listingItems(path.slice(3)) : HUB_ITEMS[path] ? shelf.filter(HUB_ITEMS[path]) : []
+  const ranked = [...items].sort((a, b) => b.reviews - a.reviews)
+  const p = ranked.find(x => !used.has(x.id) && prefer(x)) || ranked.find(x => !used.has(x.id))
+  if (!p) return undefined
+  used.add(p.id)
+  // Category tiles show a colourway other than plain black where one exists,
+  // so a row of tiles does not read as the same black shoe four times.
+  const bright = p.colorways.filter(c => !/^(Black|Anthracite|Dark Smoke)/i.test(c.color || c.name || ''))
+  const pick = bright.length ? bright[used.size % bright.length] : p.colorways[0]
+  return artUrl(base, pick.style)
+}
 const sectionHead = (title, extra = '') => `<div class="nkx-section-head"><h2>${esc(title)}</h2>${extra}</div>`
 
 // shots: product photos (search-product-N.jpg) lined up on a studio backdrop,
@@ -118,10 +133,10 @@ export function departmentPage(base, menu) {
   return `<div class="nkx-dept-page"><div class="nkx-dept-bar"><h1>${esc(menu.label)}</h1><nav aria-label="${esc(menu.label)}">${sub.map(([l, path]) => A(base, path, l)).join('')}</nav></div>
 ${hero(base, { eyebrow: `${p} New Arrivals`, title: DEPT_FEATURES[menu.label].trending, text: 'New styles for the season, on and off the field.', shots: DEPT_FEATURES[menu.label].shots, tall: true, links: [['Shop New Arrivals', newF.path], ['Shop Best Sellers', newF.links[1][1]]] })}
 <section class="nkx-section">${sectionHead('Featured')}<div class="nkx-tiles nkx-tiles-3">${newF.links.slice(0, 3).map(([l, path], i) => tile(base, path, l, { image: img([8, 15, 32][i]), cta: 'Shop' })).join('')}</div></section>
-<section class="nkx-section">${sectionHead('Featured Footwear')}${pills(base, shoeLinks)}<div class="nkx-tiles nkx-tiles-4">${tile(base, shoes.links[1][1], 'Basketball', { image: img(3) })}${tile(base, shoes.links[3][1], 'Running', { image: img(26) })}${tile(base, shoes.links[2][1], 'Jordan', { tone: 'royal', mark: 'Jordan' })}${tile(base, shoes.links[4][1], 'Lifestyle', { image: img(19) })}</div></section>
+<section class="nkx-section">${sectionHead('Featured Footwear')}${pills(base, shoeLinks)}<div class="nkx-tiles nkx-tiles-4">${tile(base, shoes.links[1][1], 'Basketball', { image: img(3) })}${tile(base, shoes.links[3][1], 'Running', { image: img(26) })}${tile(base, shoes.links[2][1], 'Jordan', { image: tileArt(base, shoes.links[2][1], new Set(), x => /Jordan 1/.test(x.title)) })}${tile(base, shoes.links[4][1], 'Lifestyle', { image: img(19) })}</div></section>
 <section class="nkx-section">${sectionHead('Latest in Clothing')}${pills(base, clothing.links)}</section>
-<section class="nkx-section">${sectionHead('Shop by Sport')}<div class="nkx-tiles nkx-tiles-4">${tile(base, '/running', 'Running', { image: img(28) })}${tile(base, '/basketball', 'Basketball', { image: img(4) })}${tile(base, '/soccer', 'Soccer', { image: img(7) })}${tile(base, '/training', 'Training', { tone: 'stone', mark: 'Train' })}</div></section>
-<section class="nkx-section">${sectionHead('Shop By Category')}<div class="nkx-tiles nkx-tiles-3">${tile(base, clothing.path, 'Clothing', { tone: 'sand', mark: 'Clothing' })}${tile(base, shoes.path, 'Shoes', { image: img(21) })}${tile(base, acc.path, 'Accessories', { tone: 'clay', mark: 'Gear' })}</div></section>
+<section class="nkx-section">${sectionHead('Shop by Sport')}<div class="nkx-tiles nkx-tiles-4">${tile(base, '/running', 'Running', { image: img(28) })}${tile(base, '/basketball', 'Basketball', { image: img(4) })}${tile(base, '/soccer', 'Soccer', { image: img(7) })}${tile(base, '/training', 'Training', { image: tileArt(base, '/training', new Set(), x => /Metcon/.test(x.title)) })}</div></section>
+<section class="nkx-section">${sectionHead('Shop By Category')}<div class="nkx-tiles nkx-tiles-3">${tile(base, clothing.path, 'Clothing', { image: tileArt(base, clothing.path, new Set(), x => x.type === 'hoodies') })}${tile(base, shoes.path, 'Shoes', { image: img(21) })}${tile(base, acc.path, 'Accessories', { image: tileArt(base, acc.path, new Set(), x => x.type === 'bags') })}</div></section>
 <section class="nkx-section nkx-linkcols">${[[`${p} Shoes`, shoes], [`${p} Clothing`, clothing], [`${p} Gear`, acc], ['Featured', newF]].map(([h, gr]) => `<div><h2>${esc(h)}</h2>${gr.links.map(([l, path]) => A(base, path, l)).join('')}</div>`).join('')}</section></div>`
 }
 
@@ -130,8 +145,8 @@ const HUB_SHOTS = { '/basketball': [3, 10, 17], '/kobe': [4, 9], '/running': [28
 export function hubPage(base, path, title, groups) {
   const tones = ['night', 'royal', 'stone', 'clay', 'sky', 'berry', 'sand', 'volt']
   return `<div class="nkx-dept-page"><div class="nkx-dept-bar"><h1>${esc(title)}</h1>${groups.length ? `<nav aria-label="${esc(title)}">${groups.slice(0, 6).map(g => A(base, g.path, g.label)).join('')}</nav>` : ''}</div>
-${hero(base, { eyebrow: title, title: title.toUpperCase(), text: HUB_COPY[path] || '', tone: tones[title.length % tones.length], tall: !!HUB_SHOTS[path], shots: HUB_SHOTS[path], mark: HUB_SHOTS[path] ? '' : path === '/jordan' ? jordanMark : swoosh, links: groups.slice(0, 2).map(g => [`Shop ${g.label}`, g.path]) })}
-${groups.length ? `<section class="nkx-section">${sectionHead('Shop by Category')}<div class="nkx-tiles nkx-tiles-4">${groups.slice(0, 8).map((g, i) => tile(base, g.path, g.label, { tone: tones[i % tones.length], mark: g.label })).join('')}</div></section>
+${hero(base, { eyebrow: path === '/jordan' ? 'Jordan Brand' : /^(Nike|ACG)/.test(title) ? 'Nike' : `Nike ${title}`, title: title.toUpperCase(), text: HUB_COPY[path] || '', tone: tones[title.length % tones.length], tall: !!HUB_SHOTS[path], shots: HUB_SHOTS[path], mark: HUB_SHOTS[path] ? '' : path === '/jordan' ? jordanMark : swoosh, links: groups.slice(0, 2).map(g => [`Shop ${g.label}`, g.path]) })}
+${groups.length ? `<section class="nkx-section">${sectionHead('Shop by Category')}<div class="nkx-tiles nkx-tiles-4">${(used => (groups.length > 1 ? groups.map(g => [g.label, g.path]) : groups[0].links.filter(([, p]) => p.startsWith('/w/'))).slice(0, 8).map(([label, path], i) => { const image = tileArt(base, path, used, x => x.cat === 'shoes'); return tile(base, path, label, image ? { image, product: true } : { tone: tones[i % tones.length], mark: label }) }).join(''))(new Set())}</div></section>
 <section class="nkx-section nkx-linkcols">${groups.map(g => `<div><h2>${A(base, g.path, g.label)}</h2>${g.links.map(([l, p]) => A(base, p, l)).join('')}</div>`).join('')}</section>` : ''}</div>`
 }
 
@@ -161,7 +176,7 @@ export function helpArticle(base, slug) {
   const topicOf = HELP_TOPICS.find(t => t.articles.includes(slug))
   const related = (topicOf ? topicOf.articles.filter(s => s !== slug) : ['returns-policy', 'shipping-delivery', 'payment-options']).map(s => [HELP_ARTICLES[s].q, `/help/a/${s}`])
   const table = a.table ? `<div class="nk-table-scroll"><table><caption class="sr-only">Shipping costs</caption><thead><tr><th scope="col">Shipping Option</th><th scope="col">Nike Members</th><th scope="col">Guests</th></tr></thead><tbody><tr><td>Standard Shipping</td><td>Free on orders of $50+; $5 under $50</td><td>Free on orders of $75+; $8 under $75</td></tr><tr><td>Faster Shipping</td><td>$15</td><td>$20</td></tr><tr><td>Fastest Shipping</td><td>$25</td><td>$30</td></tr><tr><td>Nike Store Pickup</td><td>Free</td><td>Free</td></tr><tr><td>Ship to a Pickup Location</td><td>Standard fees apply</td><td>Standard fees apply</td></tr></tbody></table></div>` : ''
-  return { title: a.q, html: `<div class="nkx-help-page"><h1 class="nkx-display nkx-center nkx-display-sm">GET HELP</h1>${helpSearch(base)}<article class="nkx-article"><h2 class="nkx-article-q">${esc(a.q)}</h2>${a.sections.map(([h, ps], i) => `${h ? `<h3>${esc(h)}</h3>` : ''}${ps.map(p => `<p>${esc(p)}</p>`).join('')}${i === 0 ? table : ''}`).join('')}${a.summary ? '<p class="nkx-muted nkx-small">Summary of Nike\'s published help article.</p>' : ''}<h2>FAQs</h2><ul class="nkx-list">${related.map(([l, p]) => `<li>${A(base, p, l)}</li>`).join('')}</ul><h3>Related</h3><ul class="nkx-list">${A(base, '/help', 'Get Help')} · ${A(base, '/orders/details', 'Order Status')} · ${A(base, '/help/a/returns-policy', 'Returns')}</ul><p class="nkx-helpful">Was this answer helpful? ${A(base, '/site-feedback', 'Yes')} ${A(base, '/site-feedback', 'No')}</p></article><h2 class="nkx-center">Need more help? Contact us.</h2>${contactBlock(base)}</div>` }
+  return { title: a.q, html: `<div class="nkx-help-page"><h1 class="nkx-display nkx-center nkx-display-sm">GET HELP</h1>${helpSearch(base)}<article class="nkx-article"><h2 class="nkx-article-q">${esc(a.q)}</h2>${a.sections.map(([h, ps], i) => `${h ? `<h3>${esc(h)}</h3>` : ''}${ps.map(p => `<p>${esc(p)}</p>`).join('')}${i === 0 ? table : ''}`).join('')}<h2>FAQs</h2><ul class="nkx-list">${related.map(([l, p]) => `<li>${A(base, p, l)}</li>`).join('')}</ul><h3>Related</h3><ul class="nkx-list">${A(base, '/help', 'Get Help')} · ${A(base, '/orders/details', 'Order Status')} · ${A(base, '/help/a/returns-policy', 'Returns')}</ul><p class="nkx-helpful">Was this answer helpful? ${A(base, '/site-feedback', 'Yes')} ${A(base, '/site-feedback', 'No')}</p></article><h2 class="nkx-center">Need more help? Contact us.</h2>${contactBlock(base)}</div>` }
 }
 
 // ---------- info pages ----------
@@ -183,8 +198,8 @@ export function membershipPage(base) {
 
 export function giftCardsPage(base) {
   const designs = ['Swoosh', 'Just Do It', 'Air Max', 'Jordan', 'Celebrate']
-  return `<div class="nkx-giftcards"><section class="nkx-gc-hero"><div><p class="nkx-eyebrow">Gift Card</p><h1 class="nkx-display">Nike Gift Cards</h1><h2>GIFT THE GAME</h2><p>A Nike gift card is the perfect gift for every athlete. Send one by email, or mail a physical card in a mini shoebox.</p><div class="nkx-hero-ctas">${A(base, '/gift-cards/email', 'Email a Gift Card', 'nkx-btn nkx-btn-dark')}${A(base, '/gift-cards/mail', 'Mail a Gift Card', 'nkx-btn nkx-btn-outline')}</div><p>${A(base, '/orders/gift-card-lookup', 'Check Your Balance')} · ${A(base, '/gift-cards/terms', 'Terms and Conditions')}</p></div><div class="nkx-gc-card" aria-hidden="true">${'<span>NIKE</span>'}</div></section>
-<section class="nkx-section">${sectionHead('Card Designs')}<p class="nkx-muted">A design for every occasion, from birthdays to game day.</p><div class="nkx-tiles nkx-tiles-5">${designs.map((d, i) => `<div class="nkx-gc-design nkx-tone-${['night', 'volt', 'sky', 'royal', 'berry'][i]}"><span>${esc(d)}</span></div>`).join('')}</div></section>
+  return `<div class="nkx-giftcards"><section class="nkx-gc-hero"><div><p class="nkx-eyebrow">Gift Card</p><h1 class="nkx-display">Nike Gift Cards</h1><h2>GIFT THE GAME</h2><p>A Nike gift card is the perfect gift for every athlete. Send one by email, or mail a physical card in a mini shoebox.</p><div class="nkx-hero-ctas">${A(base, '/gift-cards/email', 'Email a Gift Card', 'nkx-btn nkx-btn-dark')}${A(base, '/gift-cards/mail', 'Mail a Gift Card', 'nkx-btn nkx-btn-outline')}</div><p>${A(base, '/orders/gift-card-lookup', 'Check Your Balance')} · ${A(base, '/gift-cards/terms', 'Terms and Conditions')}</p></div><div class="nkx-gc-card" aria-hidden="true"><span class="nkx-gc-mark">${swoosh}</span><span class="nkx-gc-value">$100</span></div></section>
+<section class="nkx-section">${sectionHead('Card Designs')}<p class="nkx-muted">A design for every occasion, from birthdays to game day.</p><div class="nkx-tiles nkx-tiles-5">${designs.map((d, i) => `<div class="nkx-gc-design nkx-tone-${['night', 'volt', 'sky', 'royal', 'berry'][i]}"><span class="nkx-gc-mark" aria-hidden="true">${d === 'Jordan' ? jordanMark : d === 'Just Do It' ? '<b>JUST DO IT.</b>' : d === 'Air Max' ? '<b>AIR MAX</b>' : swoosh}</span><span>${esc(d)}</span></div>`).join('')}</div></section>
 <section class="nkx-section nkx-center"><h2>LOOKING FOR A CORPORATE GIFT CARD OPTION?</h2><p>For bulk or business orders, email giftcards@nike.com or visit ${A(base, '/corporate-sales', 'Corporate Sales')}.</p></section></div>`
 }
 
@@ -196,10 +211,17 @@ export function giftCardOptionPage(base, kind) {
   return { title, html: `<article class="nkx-info"><p class="nkx-eyebrow">${A(base, '/gift-cards', 'Nike Gift Cards')}</p><h1>${esc(title)}</h1><p>${esc(copy)}</p>${kind === 'terms' ? '' : '<p class="nkx-notice">Gift cards can’t be purchased online right now. Please check back soon, or pick one up at a Nike store.</p>'}${A(base, '/orders/gift-card-lookup', 'Check Your Balance', 'nkx-btn nkx-btn-outline')}</article>` }
 }
 
+const STATE_NAMES = { NY: 'new york', NJ: 'new jersey', OR: 'oregon', CA: 'california', IL: 'illinois', MA: 'massachusetts', FL: 'florida', NV: 'nevada', TX: 'texas', WA: 'washington', GA: 'georgia' }
+const PIN_SPOTS = [[178, 214], [214, 150], [196, 188], [246, 92], [292, 262], [262, 70], [120, 330], [96, 262], [150, 96], [338, 214], [372, 250], [210, 30], [60, 200], [320, 140]]
 export function storesPage(base, q = '') {
   const term = q.trim().toLowerCase()
-  const list = term ? STORES.filter(s => s.join(' ').toLowerCase().includes(term)) : STORES
-  return `<div class="nkx-stores"><div class="nkx-stores-side"><h1>Find a Nike Store</h1><form action="${base}/retail" method="get" role="search"><label for="nkx-store-q">Search Location</label><div class="nkx-inline"><input id="nkx-store-q" name="q" type="search" value="${esc(q)}" placeholder="Search Location" autocomplete="postal-code"><button class="nkx-btn nkx-btn-dark">Search</button></div></form><div class="nkx-store-filter"><details><summary>Filter</summary><p>Nike Store · Nike Factory Store · Nike Clearance Store</p></details></div><h2>${list.length} Stores Near You</h2><ol class="nkx-store-list">${list.map(([n, l1, l2]) => `<li><h3>${esc(n)}</h3><p>${esc(l1)}<br>${esc(l2)}</p></li>`).join('') || `<li><p>No stores matched “${esc(q)}”. Try a city, state or ZIP code.</p></li>`}</ol></div><div class="nkx-map" aria-hidden="true"><svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice"><rect width="400" height="400" fill="#e8eef0"/><path d="M0 260 C80 220 160 300 240 240 S360 200 400 220 V400 H0z" fill="#cfe0e8"/><path d="M40 0 L120 400 M0 120 L400 160 M260 0 L220 400 M0 330 L400 300" stroke="#fff" stroke-width="8"/>${list.slice(0, 12).map((_, i) => `<circle cx="${60 + (i * 53) % 300}" cy="${70 + (i * 37) % 260}" r="4" fill="#111"/>`).join('')}</svg></div></div>`
+  const hay = ([n, street, city, st, zip]) => `${n} ${street} ${city} ${st} ${zip} ${STATE_NAMES[st] || ''}`.toLowerCase()
+  const list = term ? STORES.filter(s => hay(s).includes(term)) : STORES.filter(s => s[6] > 0).sort((a, b) => a[6] - b[6])
+  const pins = list.slice(0, PIN_SPOTS.length).map((_, i) => { const [x, y] = PIN_SPOTS[i]; return `<g transform="translate(${x} ${y}) scale(.55)"><path d="M0 0c-9-12-14-19-14-26a14 14 0 0 1 28 0c0 7-5 14-14 26z" fill="#111" stroke="#fff" stroke-width="2"/><text x="0" y="-22" text-anchor="middle" font-size="12" font-family="Helvetica, Arial, sans-serif" font-weight="700" fill="#fff">${i + 1}</text></g>` }).join('')
+  const streets = Array.from({ length: 32 }, (_, i) => `<path d="M${-200 + i * 20} -40 L${-40 + i * 20} 460" stroke="#fff" stroke-width="${i % 4 === 0 ? 3 : 1.4}"/>`).join('') + Array.from({ length: 28 }, (_, i) => `<path d="M-40 ${i * 17} L460 ${i * 17 - 120}" stroke="#fff" stroke-width="${i % 3 === 0 ? 3 : 1.4}"/>`).join('')
+  const map = `<svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice"><rect width="400" height="400" fill="#ecebe7"/>${streets}<path d="M200 120l40-62 28 16-40 62z" fill="#cfe3c4"/><path d="M0 0h70c-10 80 10 160-20 240-14 40-16 100-30 160H0z" fill="#c5dbe6"/><path d="M330 0h70v400h-110c20-60 60-90 50-160-8-60 10-150-10-240z" fill="#c5dbe6"/><path d="M60 400c40-40 120-50 180-40l-10 40z" fill="#c5dbe6"/>${pins}</svg>`
+  const item = ([n, street, city, st, zip, closes, mi], i) => `<li><span class="nkx-store-num" aria-hidden="true">${i + 1}</span><div><h3>${esc(n)}</h3><p>${esc(street)}<br>${esc(city)}, ${esc(st)}, ${esc(zip)}, US</p><p class="nkx-store-open"><strong>Open</strong> · Closes ${esc(closes)}</p>${mi ? `<p class="nkx-muted">${mi.toFixed(1)} mi</p>` : ''}</div></li>`
+  return `<div class="nkx-stores"><div class="nkx-stores-side"><h1>Find a Nike Store</h1><form action="${base}/retail" method="get" role="search"><label for="nkx-store-q">Search Location</label><div class="nkx-inline"><input id="nkx-store-q" name="q" type="search" value="${esc(q)}" placeholder="City, state or ZIP code" autocomplete="postal-code"><button class="nkx-btn nkx-btn-dark">Search</button></div></form><div class="nkx-store-filter"><details><summary>Filter</summary><p>Nike Store · Nike Factory Store · Nike Unite · Nike Well Collective</p></details></div><h2>${term ? `${list.length} ${list.length === 1 ? 'Store' : 'Stores'} near “${esc(q)}”` : 'Stores Near You'}</h2>${term ? '' : '<p class="nkx-store-near">Based on New York, NY 10001</p>'}<ol class="nkx-store-list">${list.map(item).join('') || `<li><p>We couldn’t find any Nike stores near “${esc(q)}”. Try a city, state or ZIP code.</p></li>`}</ol></div><div class="nkx-map" aria-hidden="true">${map}</div></div>`
 }
 
 // ---------- bag, favorites, account ----------
@@ -255,7 +277,7 @@ export function giftCardLookupPage(base, q) {
 // ---------- SNKRS launch ----------
 export function launchPage(base) {
   const items = capturedSearchProducts.slice(0, 6)
-  return `<div class="nkx-launch"><div class="nkx-dept-bar"><h1>SNKRS Launch Calendar</h1><nav aria-label="SNKRS">${A(base, '/launch', 'Feed')}${A(base, '/launch?s=in-stock', 'In Stock')}${A(base, '/launch?s=upcoming', 'Upcoming')}</nav></div><p class="nkx-muted">The latest drops and what’s coming next. Turn on notifications in the SNKRS app so you never miss a launch.</p><div class="nkx-tiles nkx-tiles-3">${items.map(p => `<a class="nkx-product" href="${base}${esc(p.path)}"><img src="${p.image}" alt="${esc(p.alt)}" loading="lazy"><span class="nkx-product-title">${esc(p.title)}</span></a>`).join('')}</div></div>`
+  return `<div class="nkx-launch"><div class="nkx-dept-bar"><h1>SNKRS Launch Calendar</h1><nav aria-label="SNKRS">${A(base, '/launch', 'Feed')}${A(base, '/launch?s=in-stock', 'In Stock')}${A(base, '/launch?s=upcoming', 'Upcoming')}</nav></div><p class="nkx-muted">The latest drops and what’s coming next. Turn on notifications in the SNKRS app so you never miss a launch.</p><div class="nkx-tiles nkx-tiles-3">${items.map((p, i) => `<a class="nkx-product" href="${base}${esc(p.path)}"><img src="${p.image}" alt="${esc(p.alt)}" loading="lazy"><span class="nkx-launch-meta"><span class="nkx-launch-date"><small>Oct</small>${[17, 18, 21, 23, 24, 30][i]}</span><span><span class="nkx-muted">${i < 2 ? 'Available 10:00 AM' : 'Launching'}</span><span class="nkx-product-title">${esc(p.title)}</span></span></span></a>`).join('')}</div></div>`
 }
 
 // ---------- sitemap ----------
