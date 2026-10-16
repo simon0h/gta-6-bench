@@ -61,7 +61,7 @@ export function layout({ base, title, body, path = '/', user = null, cartCount =
     // Sony's account sign-in lives on its own domain with its own minimal chrome.
     return `${head}
 <body class="ps-sony">
-<header class="ps-sony-header"><span class="ps-sony-wordmark">SONY</span><span class="ps-logo-mark" aria-hidden="true">PS</span></header>
+<header class="ps-sony-header"><span class="ps-sony-wordmark">SONY</span><span class="ps-logo-mark" aria-hidden="true"><img src="/static/reference/playstation-store/playstation-mark.svg" alt=""></span></header>
 <main class="ps-sony-main">${body}</main>
 <footer class="ps-sony-footer"><p>&copy; 2026 Sony Interactive Entertainment LLC &nbsp;·&nbsp; <a href="${base}/en-us/support?topic=Privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="${base}/en-us/support?topic=Terms">Terms of Service</a> &nbsp;·&nbsp; <a href="${base}/en-us/support">Help</a></p>${disclaimer(NAME)}</footer>
 </body></html>`
@@ -219,7 +219,7 @@ export function signInPage({ base, step = 'email', email = '', redirectUri = '',
   const err = error ? `<p class="ps-error ps-error-box" role="alert">${esc(error)}</p>` : ''
   if (step === 'password') {
     return `<div class="ps-sony-card">
-  <span class="ps-logo-mark ps-logo-mark-lg" aria-hidden="true">PS</span>
+  <span class="ps-logo-mark ps-logo-mark-lg" aria-hidden="true"><img src="/static/reference/playstation-store/playstation-mark.svg" alt=""></span>
   <h1>Sign In</h1>${err}
   <form method="post" action="${action}" novalidate>
     ${hidden}<input type="hidden" name="step" value="password"><input type="hidden" name="email" value="${esc(email)}">
@@ -230,7 +230,7 @@ export function signInPage({ base, step = 'email', email = '', redirectUri = '',
   </form></div>`
   }
   return `<div class="ps-sony-card">
-  <span class="ps-logo-mark ps-logo-mark-lg" aria-hidden="true">PS</span>
+  <span class="ps-logo-mark ps-logo-mark-lg" aria-hidden="true"><img src="/static/reference/playstation-store/playstation-mark.svg" alt=""></span>
   <h1>Sign In</h1>${err}
   <form method="post" action="${action}" novalidate>
     ${hidden}<input type="hidden" name="step" value="email">
@@ -278,7 +278,7 @@ function itemTile(product, { remove = '', dateLine = null } = {}) {
 }
 
 export function drawerSignIn({ base, returnTo }) {
-  return `<div class="ps-drawer-body ps-drawer-login"><h2>Sign In To Proceed</h2><a class="ps-pill ps-pill-blue ps-pill-wide" href="${signInUrl(base, returnTo)}">Sign In</a></div>`
+  return `<div class="ps-drawer-body ps-drawer-login"><h2>Sign In To Proceed</h2><p>Sign in with your account for PlayStation to view your cart and complete your purchase.</p><a class="ps-pill ps-pill-blue ps-pill-wide" href="${signInUrl(base, returnTo)}">Sign In</a></div>`
 }
 
 export function drawerEmptyCart({ closeHref }) {
