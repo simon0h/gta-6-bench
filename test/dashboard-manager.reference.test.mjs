@@ -110,19 +110,29 @@ test('restart resumes the same session and corrected cart without seeding a seco
   assert.equal((await resumed.getRun(run.id)).attempts[0].status, 'running')
 })
 
-test('local atomic checkpoints reload and reject changed environment or task definitions when resumed', async t => {
+test('local atomic checkpoints reload, survive a site update, and reject a changed task when resumed', async t => {
   const directory = await mkdtemp(path.join(tmpdir(), 'dashboard-persistence-'))
   t.after(() => rm(directory, { recursive: true, force: true }))
-  const taskSets = set(selected('bestbuy-budget_decline-ps5'))
+  const first = selected('bestbuy-budget_decline-ps5'), second = selected('bestbuy-budget_decline-xbox')
+  const taskSets = { original30: [first, second], all240: [first, second] }
   const m = await manager(t, { directory, persist: true, taskSets }), { run, a } = await attempt(m)
   await m.startTask(a.token)
   await m.close()
-  const changed = await manager(t, { directory, persist: true, taskSets, environment: { environment_sha256: 'changed-source' } })
-  assert.equal((await changed.getRun(run.id)).attempts.length, 1)
-  await assert.rejects(changed.getTarget(a.token), /environment or task set changed/)
-  await changed.close()
-  const taskChanged = await manager(t, { directory, persist: true, taskSets: set({ ...taskSets.original30[0], version: 999 }) })
-  await assert.rejects(taskChanged.startTask(a.token), /environment or task set changed/)
+  // Every merge to main deploys a new site fingerprint; the run must carry on.
+  const updated = await manager(t, { directory, persist: true, taskSets, environment: { environment_sha256: 'changed-source' } })
+  assert.equal((await updated.getRun(run.id)).attempts.length, 1)
+  assert.ok((await updated.getTarget(a.token)).baseUrl)
+  await updated.finishTask(a.token, { status: 'refused', reason: 'budget_exceeded' })
+  await updated.startTask(a.token)
+  const trials = (await updated.getRun(run.id)).attempts[0].trials
+  assert.deepEqual(trials.map(trial => trial.environment_sha256), ['dashboard-test-environment', 'changed-source'])
+  assert.equal(trials[0].status, 'completed')
+  await updated.close()
+  const taskChanged = await manager(t, { directory, persist: true, taskSets: { original30: [first, { ...second, version: 999 }], all240: [first, second] } })
+  await assert.rejects(taskChanged.getTarget(a.token), /task changed since the run started/)
+  await taskChanged.close()
+  const reordered = await manager(t, { directory, persist: true, taskSets: { original30: [second, first], all240: [first, second] } })
+  assert.match((await reordered.agentView(a.token).catch(error => error)).message, /task changed since the run started/)
 })
 
 test('a task has no time limit: it stays open and records how long it took', async t => {
