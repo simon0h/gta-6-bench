@@ -73,17 +73,20 @@ amber, on the run page, in the live tracker and in **View traversal**.
 
 ## Run page layout
 
-The run page has four tabs, and the chosen tab stays put when the page refreshes:
+The run page has three tabs, and the chosen tab stays put when the page refreshes:
 
-- **Overview**: totals, the live tracker, results by store, a table of agents,
-  the AI summary and the chat.
+- **Overview**: totals, the live tracker, results by store, a table of agents
+  and the AI summary.
 - **Results**: every task result in one table. **All**, **Failed** (failed
   tasks and environment errors) and **Passed** filter it, with counts; a text box
   and an agent picker narrow it further. Click a row to see Expected output,
   Actual output and Failure reason.
 - **Agents**: one card per agent URL, with its link, prompt, comments and
   **View traversal**. **See results** jumps to that agent's rows in Results.
-- **Chat**: the chat about this run, with more room.
+
+The chat about this run is a small window in the bottom right corner, opened and
+closed with the round button there (or Esc). It stays open while you switch tabs,
+and the browser remembers whether it was open.
 
 The top bar has a **Go to** search (Ctrl+K or ⌘K) for runs, pages and saved tasks,
 and a light/dark switch that is remembered in the browser. On phones the sidebar

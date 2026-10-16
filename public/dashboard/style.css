@@ -622,7 +622,42 @@ dialog::backdrop { background: var(--scrim); }
 .chat-send { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border-radius: var(--radius); background: var(--accent); color: var(--on-accent); }
 .chat-send:hover:not(:disabled) { background: var(--accent-hover); }
 .chat-send svg { width: 16px; height: 16px; }
-.run-tab-panel > .run-chat .chat-log { max-height: min(640px, 62dvh); }
+
+/* The run chat lives in a small window in the bottom right corner, opened from a round button. */
+.chat-dock { position: fixed; right: 20px; bottom: 20px; z-index: 35; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; pointer-events: none; }
+.chat-dock > * { pointer-events: auto; }
+.chat-launcher { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: var(--on-accent); box-shadow: var(--pop); transition: background-color .12s, transform .12s; }
+.chat-launcher:hover { background: var(--accent-hover); }
+.chat-launcher:active { transform: scale(.96); }
+.chat-launcher svg { width: 22px; height: 22px; }
+.chat-dock .run-chat { display: flex; flex-direction: column; width: 380px; max-height: min(560px, calc(100dvh - var(--topbar) - 100px)); overflow: hidden; box-shadow: var(--pop); transform-origin: bottom right; }
+.chat-dock .run-chat.opening { animation: chat-open .16s ease-out; }
+.chat-dock .run-chat[hidden] { display: none; }
+/* Once Claude is set up the window keeps its full height, so it doesn't jump as messages arrive. */
+.chat-dock .run-chat:has(.chat-form) { height: min(560px, calc(100dvh - var(--topbar) - 100px)); }
+@keyframes chat-open { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+.chat-head { flex: none; flex-wrap: nowrap; justify-content: space-between; gap: 8px; min-height: 0; padding: 10px 8px 10px 14px; }
+.chat-head > div:first-child { min-width: 0; }
+.chat-head h2 { font-size: 14px; }
+.chat-head p { font-size: 12px; }
+.chat-head-actions { display: flex; flex: none; align-items: center; gap: 4px; }
+.chat-head-actions .icon-button svg { width: 16px; height: 16px; }
+.chat-dock .panel-body { display: flex; flex: 1; flex-direction: column; gap: 10px; min-height: 0; padding: 12px; }
+.chat-dock .panel-body > * { margin-top: 0; }
+.chat-dock .chat-log { flex: 1; min-height: 0; max-height: none; }
+.chat-dock .chat-form { margin-top: auto; }
+/* Before the first question the suggestions sit just above the question box. */
+.chat-dock .panel-body > .chat-suggestions { margin-top: auto; }
+.chat-dock .chat-suggestions ~ .chat-form { margin-top: 0; }
+.chat-dock .chat-form textarea { max-height: 120px; }
+.chat-dock .chat-bubble { max-width: 92%; font-size: 13.5px; }
+/* Keep the footer text clear of the chat button. */
+.main-column:has(.chat-dock) .page-footer { padding-right: 84px; }
+@media (max-width: 480px) {
+  .chat-dock { right: 12px; bottom: 12px; }
+  .chat-dock .run-chat { width: calc(100vw - 24px); max-height: calc(100dvh - var(--topbar) - 84px); }
+  .chat-dock .run-chat:has(.chat-form) { height: calc(100dvh - var(--topbar) - 84px); }
+}
 
 /* My tasks: the saved task list, the task form and its live right answer. */
 .task-table th:nth-child(1) { width: 30%; }
@@ -768,4 +803,5 @@ dialog::backdrop { background: var(--scrim); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
   .badge.orange .status-dot { animation: none; }
+  .chat-dock .run-chat.opening { animation: none; }
 }
