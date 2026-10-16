@@ -140,7 +140,7 @@ export const INFO_PAGES = [
   ['T&C\'s apply. See staff for details. Available instore only.',['EB Protect cannot be purchased online.']]]],
  ['/events','Events','Get ready Planeswalker, MAGIC MONDAYS are here!',[
   ['Bring your favourite deck or buy a new one and meet some awesome new people',['Free to play Magic: The Gathering events at select stores.']],
-  ['Upcoming Magic Monday Nights! Commander Format',['21 September from 5:30PM · 5 October from 5:30PM · 19 October from 5:30PM · 2 November from 5:30PM. Events running fortnightly unless there is a Public Holiday in your relevant area.']],
+  ['Upcoming Magic Monday Nights! Commander Format',['19 October from 5:30PM · 2 November from 5:30PM · 16 November from 5:30PM · 30 November from 5:30PM. Events running fortnightly unless there is a Public Holiday in your relevant area.']],
   ['NSW/ACT',['Bankstown, Batemans Bay, Bathurst, Burwood, Chatswood, Glendale, Greenhills, Gungahlin, Lake Haven, Liverpool, Mt Druitt, Narellan, Parramatta, Penrith, Rouse Hill, Settlement, Shellharbour, Sydney Central, Warriewood, Wetherill Park, Zing Blacktown']],
   ['QLD',['Australia Fair, Browns Plains, Capalaba Central, Carindale, Chermside, Coomera, Garden City, Hervey Bay, Ipswich, Kippa Ring, Morayfield, North Lakes, Robina, Rockhampton Fair, Sunshine Plaza, Toowoomba, Willows Townsville']],
   ['VIC/TAS/SA/WA',['Arndale, Bendigo Marketplace, Bunbury East, Craigieburn, Devonport, Doncaster, Fountain Gate, Gateway, Highpoint, Knox City, Karingal, Launceston, Melton, Midland, Mildura, Mirrabooka, Munno Para, Plenty Valley, Point Cook, Watergardens, Waurn Ponds, Whyalla']],
