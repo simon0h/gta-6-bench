@@ -246,7 +246,7 @@ form[action$="/checkout/payment"]{margin-top:18px}
 .ar-side-cats ul ul{padding-left:12px;border-left:2px solid #eee;margin:0 0 4px 2px}
 .ar-side-cats ul ul a{padding:4px 0;font-size:13px;color:var(--muted)}
 .ar-promo-row+.ar-section-title{margin-top:28px}
-@media(max-width:760px){.ar-side-cats{display:none}}
+@media(max-width:760px){.ar-side-cats{display:none}.ar-results.catalog-layout{grid-template-columns:minmax(0,1fr)}}
 /* form pages (track order, create account): form card with a help column */
 .ar-form-layout{display:grid;grid-template-columns:minmax(0,560px) minmax(0,360px);gap:28px;align-items:start;margin-top:8px}
 .ar-form-card{border:1px solid var(--line);border-radius:6px;padding:24px 26px;background:#fff}
@@ -275,6 +275,9 @@ form[action$="/checkout/payment"]{margin-top:18px}
 .ar-store-card p{margin:6px 0;font-size:14px}
 .ar-store-open strong{color:#1d7a3e}
 .ar-locate:disabled{background:#fff!important;color:var(--ink)!important;border:1px solid #bbb!important;opacity:1;cursor:default}
+/* mega menu columns: heading lines up with its links */
+.ar-mega .ar-sub-cols p{padding:0 0 8px!important;margin:0 0 4px!important;border-bottom:1px solid var(--line);font-size:14px;text-transform:none;letter-spacing:0}
+.ar-mega .ar-sub-cols a{border:0!important;display:block}
 /* delivery strip: current offer after the standard charge */
 .ar-promo-now{margin-left:10px;padding-left:10px;border-left:1px solid #bdbdbd;color:var(--red);font-weight:700}
 @media(max-width:760px){.ar-promo-strip>span{text-align:center}.ar-promo-now{display:block;margin:2px 0 0;padding:0;border:0}}
