@@ -20,6 +20,9 @@
     send: '<path d="M12 19V5M6 11l6-6 6 6"/>',
     spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    chat: '<path d="M5 18.5V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8.5z"/><path d="M8.5 9h7M8.5 12h4.5"/>',
+    down: '<path d="m6 9 6 6 6-6"/>',
+    close: '<path d="M6 6l12 12M18 6 6 18"/>',
   }
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
@@ -27,11 +30,21 @@
   const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '' }, openResults: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
   let toastTimer
   // The run page is split into tabs, as on Cloudflare's dashboard. The open tab is remembered on this device.
-  const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Agents'], ['chat', 'Chat']]
+  const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Agents']]
   try { const saved = localStorage.getItem('dashboard-run-tab'); if (runTabs.some(([key]) => key === saved)) state.runTab = saved } catch { /* storage blocked */ }
   function setRunTab(tab) {
     state.runTab = tab
     try { localStorage.setItem('dashboard-run-tab', tab) } catch { /* storage blocked */ }
+  }
+  // The run chat is a small window in the bottom right corner. Whether it is open is remembered on this device.
+  try { state.chatOpen = localStorage.getItem('dashboard-chat-open') === 'true' } catch { state.chatOpen = false }
+  function setChatOpen(open) {
+    state.chatOpen = open
+    try { localStorage.setItem('dashboard-chat-open', String(open)) } catch { /* storage blocked */ }
+    const panel = $('.run-chat'), launcher = $('.chat-launcher'), label = open ? 'Close chat' : 'Chat about this run'
+    if (panel) { panel.hidden = !open; panel.classList.toggle('opening', open) }
+    if (launcher) { launcher.setAttribute('aria-expanded', String(open)); launcher.setAttribute('aria-label', label); launcher.title = label; launcher.innerHTML = launcherIcon(open) }
+    if (open) { scrollChat(); $('.chat-form textarea')?.focus() }
   }
   const live = window.DashboardLive.create({ api, agents })
 
@@ -340,7 +353,13 @@
         <form class="chat-form" data-run="${escape(run.id)}"><textarea name="question" rows="1" maxlength="2000" placeholder="Ask about this run" aria-label="Ask about this run"${data.full ? ' disabled' : ''}>${escape(state.chatDrafts.get(run.id) || '')}</textarea><button class="chat-send" type="submit" aria-label="Send" title="Send"${locked ? ' disabled' : ''}>${icon('send')}</button></form>`
     }
     const clear = messages.length && !answer ? '<button class="button quiet small" type="button" data-action="clear-chat">Clear chat</button>' : ''
-    return `<section class="panel run-chat" aria-label="Chat about this run"><div class="panel-head ai-summary-top"><div><h2>Chat about this run</h2><p>Ask Claude about these results. It can look up what an agent clicked on any task.</p></div>${clear}</div><div class="panel-body">${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</div></section>`
+    const close = `<button class="icon-button small" type="button" data-action="toggle-chat" aria-label="Close chat" title="Close chat">${icon('close')}</button>`
+    return `<section class="panel run-chat" id="run-chat" role="dialog" aria-label="Chat about this run"${state.chatOpen ? '' : ' hidden'}><div class="panel-head chat-head"><div><h2>Chat about this run</h2><p>Claude can see every result and what an agent clicked.</p></div><div class="chat-head-actions">${clear}${close}</div></div><div class="panel-body">${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</div></section>`
+  }
+  const launcherIcon = open => icon(open ? 'down' : 'chat')
+  function renderChatDock(run) {
+    const open = state.chatOpen
+    return `<div class="chat-dock">${renderChat(run)}<button class="chat-launcher" type="button" data-action="toggle-chat" aria-controls="run-chat" aria-expanded="${open}" aria-label="${open ? 'Close chat' : 'Chat about this run'}" title="${open ? 'Close chat' : 'Chat about this run'}">${launcherIcon(open)}</button></div>`
   }
   function scrollChat() { const log = $('.chat-log'); if (log) log.scrollTop = log.scrollHeight }
   function refreshChat({ focus = false } = {}) {
@@ -471,12 +490,11 @@
     let body
     if (tab === 'results') body = renderResultsTab(run)
     else if (tab === 'agents') body = renderAgentsTab(run)
-    else if (tab === 'chat') body = renderChat(run)
-    else body = `${renderTiles(run, rows)}<div class="overview-grid"><div class="overview-column"><section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderStoreBars(rows)}${renderAgentTable(run)}</div><div class="overview-column">${renderSummary(run)}${renderChat(run)}</div></div>`
+    else body = `${renderTiles(run, rows)}<div class="overview-grid"><div class="overview-column"><section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderStoreBars(rows)}${renderAgentTable(run)}</div><div class="overview-column">${renderSummary(run)}</div></div>`
     $('#main').innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/">All runs</a><span aria-hidden="true">/</span><span>${escape(runName(run))}</span></nav>
       <div class="page-heading run-detail-heading"><div><div class="title-row"><h1>${escape(runName(run))}</h1>${runStatus(run)}</div><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><div class="page-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div></div>
       <div class="run-tabs" role="tablist" aria-label="Run sections">${tabs}</div>
-      <div id="run-tab-panel" class="run-tab-panel" role="tabpanel" aria-labelledby="run-tab-${tab}">${body}</div>`
+      <div id="run-tab-panel" class="run-tab-panel" role="tabpanel" aria-labelledby="run-tab-${tab}">${body}</div>${renderChatDock(run)}`
     if (tab === 'overview') live.mount($('#live-panel'), run.id); else live.stop()
     if (tab === 'results') applyResults()
     scrollChat()
@@ -592,7 +610,8 @@
     if (action === 'retry-session') { control.disabled = true; await initialize() }
     if (action === 'write-summary' && state.selected) await writeSummary(state.selected.id)
     if (action === 'chat-suggest' && state.selected) await askChat(state.selected.id, control.dataset.question)
-    if (action === 'show-task') { event.preventDefault(); showTask(control.dataset.task) }
+    if (action === 'show-task') { event.preventDefault(); if (matchMedia('(max-width: 760px)').matches) setChatOpen(false); showTask(control.dataset.task) }
+    if (action === 'toggle-chat' && state.selected) { setChatOpen(!state.chatOpen); if (!state.chatOpen) $('.chat-launcher')?.focus() }
     if (action === 'clear-chat' && state.selected) {
       const runId = state.selected.id
       control.disabled = true
@@ -662,6 +681,7 @@
     if ((event.key === 'Enter' || event.key === ' ') && event.target.matches?.('.result-row')) { event.preventDefault(); toggleResult(event.target.closest('.result-group')); return }
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k' && state.authenticated) { event.preventDefault(); $('#goto-input').focus(); $('#goto-input').select(); return }
     if (event.target.id === 'goto-input') { gotoKey(event); return }
+    if (event.key === 'Escape' && state.chatOpen && event.target.closest?.('.chat-dock')) { setChatOpen(false); $('.chat-launcher')?.focus(); return }
     if (event.key !== 'Enter' || event.shiftKey || event.isComposing || !event.target.matches?.('.chat-form textarea')) return
     event.preventDefault()
     event.target.form.requestSubmit()
