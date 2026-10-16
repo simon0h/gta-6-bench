@@ -18,7 +18,7 @@ export const ROOT = path.dirname(fileURLToPath(import.meta.url))
 /**
  * Build the Express app. Every directory under stores/ that has an index.js
  * exporting { slug, name, country, currency, router } is mounted at /<slug>.
- * @param {{ persist?: boolean, ordersFile?: string, captcha?: { mode?: string, stores?: string[]|string, now?: Function }, benchmark?: { runId: string, stores: string[], metadata?: object, scenario?: object } }} opts
+ * @param {{ persist?: boolean, ordersFile?: string, orderLimit?: number, captcha?: { mode?: string, stores?: string[]|string, now?: Function }, benchmark?: { runId: string, stores: string[], metadata?: object, scenario?: object } }} opts
  */
 export async function createApp(opts = {}) {
   const benchmark = opts.benchmark
@@ -30,7 +30,7 @@ export async function createApp(opts = {}) {
   configureBenchmarkScenario({ store: benchmark?.stores[0], scenario: benchmark?.scenario })
   const captcha = createCaptcha({ mode: process.env.CAPTCHA_MODE ?? 'off', stores: process.env.CAPTCHA_STORES, ...opts.captcha })
   const persist = opts.persist ?? process.env.NODE_ENV !== 'test'
-  configureOrders({ file: persist ? (opts.ordersFile ?? process.env.ORDERS_FILE ?? path.join(ROOT, 'data', 'orders.json')) : null, metadata: benchmark?.metadata })
+  configureOrders({ file: persist ? (opts.ordersFile ?? process.env.ORDERS_FILE ?? path.join(ROOT, 'data', 'orders.json')) : null, metadata: benchmark?.metadata, limit: opts.orderLimit })
 
   const app = express()
   app.disable('x-powered-by')

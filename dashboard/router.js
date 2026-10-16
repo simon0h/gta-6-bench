@@ -18,6 +18,7 @@ const vendor = {
   'rrweb-player.css': path.join(path.dirname(require.resolve('rrweb-player')), 'style.min.css'),
 }
 const ADMIN_COOKIE = 'bench_operator'
+const LOGIN_ATTEMPTS = 10, LOGIN_WINDOW_MS = 15 * 60 * 1000
 const AGENT_COOKIE = 'bench_attempt'
 const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character])
 const equal = (a, b) => {
@@ -87,8 +88,21 @@ export function createDashboardRouter({ manager, apiToken, local = false, anthro
   router.use(['/dashboard', '/agent'], (req, res, next) => { res.set('Cache-Control', 'no-store'); next() })
   router.use('/dashboard/api', sameOrigin, express.json({ limit: '32kb' }))
   router.get('/dashboard/api/session', (req, res) => res.json({ authenticated: authenticated(req), local }))
+  // Wrong tokens are counted per address (Cloudflare's, when hosted) to slow guessing.
+  const failedLogins = new Map()
   router.post('/dashboard/api/login', (req, res) => {
-    if (!local && !equal(req.body?.token, apiToken)) return res.status(401).json({ error: 'The operator token is incorrect.' })
+    const address = req.get('cf-connecting-ip') || req.ip || 'unknown', now = Date.now()
+    for (const [key, entry] of failedLogins) if (entry.reset <= now) failedLogins.delete(key)
+    const failed = failedLogins.get(address)
+    if (!local && failed?.count >= LOGIN_ATTEMPTS) {
+      res.set('Retry-After', String(Math.ceil((failed.reset - now) / 1000)))
+      return res.status(429).json({ error: 'Too many wrong tokens. Try again in 15 minutes.' })
+    }
+    if (!local && !equal(req.body?.token, apiToken)) {
+      failedLogins.set(address, { count: (failed?.count ?? 0) + 1, reset: failed?.reset ?? now + LOGIN_WINDOW_MS })
+      return res.status(401).json({ error: 'The operator token is incorrect.' })
+    }
+    failedLogins.delete(address)
     const expiry = String(Date.now() + 86400_000)
     setCookie(res, ADMIN_COOKIE, `${expiry}.${sign(expiry)}`, { local })
     res.json({ authenticated: true, local })

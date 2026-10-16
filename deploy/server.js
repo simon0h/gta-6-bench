@@ -108,7 +108,7 @@ export async function createHostedApp({
     next()
   })
 
-  const storefront = await createApp({ persist: false, captcha: { mode: 'off', stores: [] } })
+  const storefront = await createApp({ persist: false, orderLimit: 1000, captcha: { mode: 'off', stores: [] } })
   storefront.set('trust proxy', 1)
   storefront.set('hosted session cookies', true)
   app.get('/api/health', (req, res) => res.json({
