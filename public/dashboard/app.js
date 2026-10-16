@@ -27,7 +27,7 @@
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const $ = selector => document.querySelector(selector)
-  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '' }, openResults: new Set(), openConfigs: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
+  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '', issue: null }, openResults: new Set(), openConfigs: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
   let toastTimer
   // The run page is split into tabs, as on Cloudflare's dashboard. The open tab is remembered on this device.
   const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Config']]
@@ -180,7 +180,7 @@
       const rate = finished ? `${Math.round(counts.passed / finished * 100)}%` : '—'
       return `<button class="link-result" type="button" data-action="pick-agent" data-attempt="${escape(attempt.id)}" aria-pressed="${view.agent === attempt.id}">
         <span class="link-result-top"><img src="${agent.icon}" alt=""><strong>${escape(agent.name)}</strong><small>URL ${String(index + 1).padStart(2, '0')}</small></span>
-        <span class="link-result-rate">${rate}<small>passed</small></span>
+        <span class="link-result-rate">${rate}<small>passed</small></span>${counts.passed + counts.failed ? `<span class="link-result-range">${rangeTag(counts.passed, counts.passed + counts.failed)}</span>` : ''}
         <span class="link-result-counts"><span class="passed">${counts.passed} passed</span><span class="failed">${counts.failed} failed</span>${counts.error ? `<span class="error">${counts.error} environment error${counts.error === 1 ? '' : 's'}</span>` : ''}</span>
         <span class="link-result-meta">${p.completed} / ${p.total} tasks${timed.length ? ` · ${escape(duration(timed.reduce((sum, ms) => sum + ms, 0)))}` : ''}</span></button>`
     }).join('')
@@ -202,12 +202,13 @@
     const agentPicker = entries.length > 1 ? `<select id="results-agent" aria-label="Agent"><option value="all">All agents</option>${entries.map((attempt, index) => `<option value="${escape(attempt.id)}"${view.agent === attempt.id ? ' selected' : ''}>${escape(agentData(attempt.agent).name)} · URL ${String(index + 1).padStart(2, '0')}</option>`).join('')}</select>` : ''
     const groups = rows.map(({ attempt, result, key }, n) => {
       const tone = resultTone(result), open = state.openResults.has(key), agent = agentData(attempt.agent)
+      const issues = (Array.isArray(result.issues) ? result.issues : []).map(issue => issue.key).join(' ')
       const label = taskLabel(run, result.task_id) || result.task?.id || result.id || `Task ${n + 1}`, store = result.store ? storeName(result.store) : '—'
-      return `<tbody class="result-group ${tone}${open ? ' open' : ''}" data-tone="${tone}" data-task="${escape(result.task_id || '')}" data-attempt="${escape(attempt.id)}" data-key="${escape(key)}" data-ms="${Number.isFinite(result.elapsed_ms) ? result.elapsed_ms : ''}" data-search="${escape(`${label} ${result.task_id || ''} ${store} ${agent.name}`.toLowerCase())}">
+      return `<tbody class="result-group ${tone}${open ? ' open' : ''}" data-tone="${tone}" data-task="${escape(result.task_id || '')}" data-attempt="${escape(attempt.id)}" data-key="${escape(key)}" data-ms="${Number.isFinite(result.elapsed_ms) ? result.elapsed_ms : ''}" data-issues="${escape(issues)}" data-search="${escape(`${label} ${result.task_id || ''} ${store} ${agent.name}`.toLowerCase())}">
         <tr class="result-row" data-action="toggle-result" tabindex="0" aria-expanded="${open}"><td class="result-task"><span class="chevron">${icon('arrow')}</span><span>${escape(label)}</span></td><td class="result-store">${escape(store)}</td><td class="result-agent"><span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}</span></td><td>${resultBadge(result)}</td><td class="result-time">${escape(duration(result.elapsed_ms))}</td></tr>
         <tr class="result-outputs"${open ? '' : ' hidden'}><td colspan="5">${resultOutputs(result)}<div class="result-links"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${escape(attempt.id)}">${icon('tasks')}View traversal</button></div></td></tr></tbody>`
     }).join('')
-    return `${renderLinkResults(run)}<section class="panel results-panel" id="results-panel" aria-label="Task results"><div class="results-toolbar"><div class="segmented" role="tablist" aria-label="Filter task results">${segments}</div><label class="results-search">${icon('search')}<input id="results-query" type="search" placeholder="Filter by task, store or agent" aria-label="Filter by task, store or agent" value="${escape(view.query)}" autocomplete="off"></label>${agentPicker}<span class="results-total" id="results-total" role="status"></span></div>
+    return `${renderLinkResults(run)}<section class="panel results-panel" id="results-panel" aria-label="Task results"><div class="results-toolbar"><div class="segmented" role="tablist" aria-label="Filter task results">${segments}</div><label class="results-search">${icon('search')}<input id="results-query" type="search" placeholder="Filter by task, store or agent" aria-label="Filter by task, store or agent" value="${escape(view.query)}" autocomplete="off"></label>${agentPicker}${view.issue ? `<button class="issue-chip" type="button" data-action="clear-issue" title="Show every task">${escape(view.issue.label)}${icon('close')}</button>` : ''}<span class="results-total" id="results-total" role="status"></span></div>
       <div class="table-scroll"><table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Store</th><th scope="col">Agent</th><th scope="col">Result</th><th scope="col">Time taken</th></tr></thead>${groups}</table></div><p class="result-empty" hidden>No tasks match.</p></section>`
   }
   // Filtering happens in place, so typing in the filter box keeps its focus.
@@ -219,6 +220,7 @@
     for (const group of panel.querySelectorAll('.result-group')) {
       const tone = group.dataset.tone, failed = tone === 'failed' || tone === 'error'
       const visible = (view.agent === 'all' || group.dataset.attempt === view.agent) && (!query || group.dataset.search.includes(query))
+        && (!view.issue || group.dataset.issues.split(' ').includes(view.issue.key))
       if (visible) { counts.all++; if (tone === 'passed') counts.passed++; if (failed) counts.failed++ }
       const match = visible && (view.filter === 'all' || (view.filter === 'passed' ? tone === 'passed' : failed))
       group.hidden = !match
@@ -261,7 +263,13 @@
     const status = result.grade?.status
     const reasons = Array.isArray(result.failure_reasons) && result.failure_reasons.length ? result.failure_reasons : (result.grade?.reasons || []).map(reason => reason.message).filter(Boolean)
     const actual = Array.isArray(result.actual_output) ? result.actual_output : result.final_response?.message ? [`Agent’s message: “${result.final_response.message}”`] : []
-    return `<div class="result-compare"><section><h4>Expected output</h4>${bullets(result.expected_output)}</section><section><h4>Actual output</h4>${bullets(actual)}</section></div>${status && status !== 'passed' ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(reasons)}</section>` : ''}`
+    const checks = Array.isArray(result.checks) && result.checks.length ? `<ul class="result-checks" aria-label="Checks">${result.checks.map(check => {
+      const tone = check.passed === true ? 'passed' : check.passed === false ? 'failed' : 'skipped'
+      const mark = check.passed === true ? icon('check') : check.passed === false ? icon('close') : '<span class="dash" aria-hidden="true">–</span>'
+      const said = check.passed === true ? 'passed' : check.passed === false ? 'failed' : 'not reached'
+      return `<li class="${tone}" title="${escape(`${check.label}: ${said}`)}">${mark}<span>${escape(check.label)}</span><span class="visually-hidden">: ${said}</span></li>`
+    }).join('')}</ul>` : ''
+    return `${checks}<div class="result-compare"><section><h4>Expected output</h4>${bullets(result.expected_output)}</section><section><h4>Actual output</h4>${bullets(actual)}</section></div>${status && status !== 'passed' ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(reasons)}</section>` : ''}`
   }
 
   function renderAttempt(attempt, index, run) {
@@ -282,6 +290,22 @@
     for (const result of results) { const tone = resultTone(result); if (tone in counts) counts[tone]++ }
     return counts
   }
+  // With only a few tasks, a pass rate could easily be some way off the agent's
+  // real rate. This is the range it likely sits in (a 95% Wilson interval).
+  const rangeHelp = 'With this many tasks, the real pass rate is likely somewhere in this range. Smaller gaps between agents are probably luck.'
+  function passRange(passed, graded) {
+    if (!graded) return ''
+    const z = 1.96, rate = passed / graded, scale = 1 + z * z / graded
+    const middle = (rate + z * z / (2 * graded)) / scale, half = z * Math.sqrt(rate * (1 - rate) / graded + z * z / (4 * graded * graded)) / scale
+    return `${Math.max(0, Math.round((middle - half) * 100))}–${Math.min(100, Math.round((middle + half) * 100))}%`
+  }
+  function rangeTag(passed, graded) {
+    return graded ? `<span class="pass-range" title="${escape(rangeHelp)}">likely ${passRange(passed, graded)}</span>` : ''
+  }
+  function money(spend) {
+    return [...spend].map(([currency, cents]) => `${currency ? `${currency} ` : ''}${(cents / 100).toFixed(2)}`).join(' + ')
+  }
+  const hasIssue = (result, key) => Array.isArray(result.issues) && result.issues.some(issue => issue.key === key)
 
 
   // AI summary, written by Claude from the graded results on request and kept
@@ -447,7 +471,7 @@
     const run = state.selected
     if (!run) return
     setRunTab('results')
-    state.resultsView = { filter: 'all', agent: 'all', query: '' }
+    state.resultsView = { filter: 'all', agent: 'all', query: '', issue: null }
     for (const row of runResults(run)) if (row.result.task_id === taskId) state.openResults.add(row.key)
     render()
     const rows = [...document.querySelectorAll('.result-group')].filter(row => row.dataset.task === taskId)
@@ -470,26 +494,88 @@
     const share = count => results.length ? `${Math.round(count / results.length * 100)}% of finished tasks` : 'No results yet'
     return `<div class="stats-grid run-summary" role="group" aria-label="Run results">
       <div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${completed}</div><div class="stat-note">of ${total} across ${entries.length} session URL${entries.length === 1 ? '' : 's'}</div></div>
-      <div class="stat"><div class="stat-label"><span class="swatch passed"></span>Passed</div><div class="stat-value positive">${counts.passed}</div><div class="stat-note">${share(counts.passed)}</div></div>
+      <div class="stat"><div class="stat-label"><span class="swatch passed"></span>Passed</div><div class="stat-value positive">${counts.passed}</div><div class="stat-note">${share(counts.passed)}${counts.passed + counts.failed ? ` · ${rangeTag(counts.passed, counts.passed + counts.failed)}` : ''}</div></div>
       <div class="stat"><div class="stat-label"><span class="swatch failed"></span>Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div><div class="stat-note">${share(counts.failed)}</div></div>
       <div class="stat"><div class="stat-label"><span class="swatch error"></span>Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div><div class="stat-note">A store or setup problem, not the agent</div></div>
       <div class="stat"><div class="stat-label">Time taken</div><div class="stat-value">${timed.length ? duration(time) : '—'}</div><div class="stat-note">${timed.length ? `${duration(time / timed.length)} per task on average` : 'No results yet'}</div></div></div>`
   }
-  // One bar per store: green passed, red failed, amber environment errors.
-  function renderStoreBars(rows) {
+  // One bar per store or task type: green passed, red failed, amber
+  // environment errors. Bars built on only a few tasks are greyed out.
+  function renderBars(rows, { title, group, name, sort }) {
     if (!rows.length) return ''
-    const stores = new Map()
+    const groups = new Map()
     for (const { result } of rows) {
-      const slug = result.store || ''
-      const entry = stores.get(slug) || { passed: 0, failed: 0, error: 0, total: 0 }
+      const key = group(result) || ''
+      const entry = groups.get(key) || { passed: 0, failed: 0, error: 0, total: 0 }
       const tone = resultTone(result)
       if (tone in entry) entry[tone]++
       entry.total++
-      stores.set(slug, entry)
+      groups.set(key, entry)
     }
     const width = (count, total) => `${(count / total * 100).toFixed(2)}%`
-    return `<section class="panel" aria-label="Results by store"><div class="panel-head"><h2>Results by store</h2><div class="panel-actions legend"><span><span class="swatch passed"></span>Passed</span><span><span class="swatch failed"></span>Failed</span><span><span class="swatch error"></span>Environment error</span></div></div>
-      <div class="panel-body store-bars">${[...stores].sort((a, b) => b[1].total - a[1].total).map(([slug, entry]) => `<div class="store-bar"><span class="store-bar-name">${escape(slug ? storeName(slug) : 'Other')}</span><div class="bar" role="img" aria-label="${entry.passed} passed, ${entry.failed} failed, ${entry.error} environment errors"><span class="passed" style="width:${width(entry.passed, entry.total)}"></span><span class="failed" style="width:${width(entry.failed, entry.total)}"></span><span class="error" style="width:${width(entry.error, entry.total)}"></span></div><span class="store-bar-count">${entry.passed} / ${entry.total} passed</span></div>`).join('')}</div></section>`
+    const list = sort ? [...groups].sort(sort) : [...groups]
+    return `<section class="panel" aria-label="${escape(title)}"><div class="panel-head"><h2>${escape(title)}</h2><div class="panel-actions legend"><span><span class="swatch passed"></span>Passed</span><span><span class="swatch failed"></span>Failed</span><span><span class="swatch error"></span>Environment error</span></div></div>
+      <div class="panel-body store-bars">${list.map(([key, entry]) => {
+        const graded = entry.passed + entry.failed, few = graded < 5
+        return `<div class="store-bar${few ? ' few' : ''}"><span class="store-bar-name">${escape(name(key))}</span><div class="bar" role="img" aria-label="${entry.passed} passed, ${entry.failed} failed, ${entry.error} environment errors"><span class="passed" style="width:${width(entry.passed, entry.total)}"></span><span class="failed" style="width:${width(entry.failed, entry.total)}"></span><span class="error" style="width:${width(entry.error, entry.total)}"></span></div><span class="store-bar-count">${entry.passed} / ${entry.total} passed</span><span class="store-bar-range">${few ? `<span class="pass-range" title="Too few tasks to say much on their own">few tasks</span>` : rangeTag(entry.passed, graded)}</span></div>`
+      }).join('')}</div></section>`
+  }
+  const renderStoreBars = rows => renderBars(rows, { title: 'Results by store', group: result => result.store, name: slug => slug ? storeName(slug) : 'Other', sort: (a, b) => b[1].total - a[1].total })
+  const renderTypeBars = rows => renderBars(rows, { title: 'Results by task type', group: result => result.task_type, name: type => type || 'Other' })
+
+  // The fix list: every failed task's issues, counted per agent, most common first.
+  // Issues where an order went out are marked, since they cost real money.
+  function renderIssues(run, rows) {
+    const graded = rows.filter(({ result }) => ['passed', 'failed'].includes(resultTone(result)))
+    if (!graded.length) return ''
+    const entries = attempts(run).filter(attempt => resultList(attempt).length), issues = new Map()
+    for (const { attempt, result } of graded) {
+      for (const issue of Array.isArray(result.issues) ? result.issues : []) {
+        const entry = issues.get(issue.key) || { key: issue.key, label: issue.label, total: 0, costly: false, counts: new Map() }
+        entry.total++
+        entry.counts.set(attempt.id, (entry.counts.get(attempt.id) || 0) + 1)
+        if (result.wrong_spend) entry.costly = true
+        issues.set(issue.key, entry)
+      }
+    }
+    const list = [...issues.values()].sort((a, b) => b.total - a.total || Number(b.costly) - Number(a.costly))
+    const head = `<div class="panel-head"><h2>Top issues</h2><span class="panel-sub">What went wrong on failed tasks</span></div>`
+    if (!list.length) return `<section class="panel issues-panel" aria-label="Top issues">${head}<div class="panel-body panel-empty"><p>No issues. Every graded task passed.</p></div></section>`
+    const columns = entries.map((attempt, index) => `<th scope="col" class="num"><span class="agent-cell"><img src="${agentData(attempt.agent).icon}" alt="">${escape(agentData(attempt.agent).name)}${entries.length > 1 ? `<small>URL ${String(attempts(run).indexOf(attempt) + 1).padStart(2, '0')}</small>` : ''}</span></th>`).join('')
+    const body = list.map(issue => `<tr><th scope="row"><span class="issue-name">${escape(issue.label)}</span>${issue.costly ? '<span class="badge red">Money spent</span>' : ''}</th>${entries.map(attempt => {
+      const count = issue.counts.get(attempt.id) || 0
+      return `<td class="num">${count ? `<button class="issue-count" type="button" data-action="show-issue" data-issue="${escape(issue.key)}" data-label="${escape(issue.label)}" data-attempt="${escape(attempt.id)}" title="See these ${count} task${count === 1 ? '' : 's'}">${count}</button>` : '<span class="zero">0</span>'}</td>`
+    }).join('')}</tr>`).join('')
+    return `<section class="panel issues-panel" aria-label="Top issues">${head}<div class="table-scroll"><table class="data-table issues-table"><thead><tr><th scope="col">Issue</th>${columns}</tr></thead><tbody>${body}</tbody></table></div></section>`
+  }
+  function showIssue(key, label, attemptId) {
+    setRunTab('results')
+    state.resultsView = { filter: 'failed', agent: attemptId || 'all', query: '', issue: { key, label } }
+    render()
+    $('#results-panel')?.scrollIntoView({ block: 'start' })
+  }
+
+  // Buy tasks and refuse tasks scored separately: an agent can lean towards
+  // buying too readily (the costly mistake) or towards giving up.
+  function renderBuyRefuse(run) {
+    const entries = attempts(run).filter(attempt => resultList(attempt).some(result => ['passed', 'failed'].includes(resultTone(result))))
+    if (!entries.length) return ''
+    const rows = entries.map(attempt => {
+      const results = resultList(attempt).filter(result => ['passed', 'failed'].includes(resultTone(result))), agent = agentData(attempt.agent)
+      const buy = results.filter(result => result.expected_outcome === 'purchased'), refuse = results.filter(result => result.expected_outcome === 'not_purchased')
+      const passed = list => list.filter(result => resultTone(result) === 'passed').length
+      const all = passed(results), bought = refuse.filter(result => hasIssue(result, 'wrongly_bought')).length, refused = buy.filter(result => hasIssue(result, 'wrongly_refused')).length
+      const spend = new Map()
+      for (const result of results) if (result.wrong_spend) spend.set(result.wrong_spend.currency, (spend.get(result.wrong_spend.currency) || 0) + Math.round(result.wrong_spend.amount * 100))
+      const index = attempts(run).indexOf(attempt)
+      const share = (count, list) => list.length ? `${count}<small> / ${list.length}</small>` : '—'
+      return `<tr><td><span class="agent-cell"><img src="${agent.icon}" alt="">${escape(agent.name)}<small>URL ${String(index + 1).padStart(2, '0')}</small></span></td>
+        <td class="num">${Math.round(all / results.length * 100)}%${rangeTag(all, results.length)}</td>
+        <td class="num">${share(passed(buy), buy)}</td><td class="num">${share(passed(refuse), refuse)}</td>
+        <td class="num${bought ? ' negative' : ''}">${share(bought, refuse)}</td><td class="num${refused ? ' warning' : ''}">${share(refused, buy)}</td>
+        <td class="num${spend.size ? ' negative' : ''}">${spend.size ? escape(money(spend)) : '—'}</td></tr>`
+    }).join('')
+    return `<section class="panel" aria-label="Buy and refuse tasks"><div class="panel-head"><h2>Buy vs refuse</h2></div><div class="table-scroll"><table class="data-table buy-refuse-table"><thead><tr><th scope="col">Agent</th><th scope="col" class="num">Pass rate</th><th scope="col" class="num" title="Tasks where the right answer was to buy">Buy tasks passed</th><th scope="col" class="num" title="Tasks where the right answer was not to buy">Refuse tasks passed</th><th scope="col" class="num" title="Placed an order on a task that needed a refusal">Wrongly bought</th><th scope="col" class="num" title="Placed no order on a task that needed a purchase">Wrongly refused</th><th scope="col" class="num" title="Total of every order placed on a failed task">Spent on failed tasks</th></tr></thead><tbody>${rows}</tbody></table></div></section>`
   }
   // Success rate over the run: one line per agent, its pass rate after each
   // finished task. Colors follow the agent's URL slot, so they never shift.
@@ -584,7 +670,7 @@
     let body
     if (tab === 'results') body = renderResultsTab(run)
     else if (tab === 'agents') body = renderAgentsTab(run)
-    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderRateChart(run)}${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
+    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderIssues(run, rows)}${renderBuyRefuse(run)}${renderRateChart(run)}${renderTypeBars(rows)}${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
     $('#main').innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/">All runs</a><span aria-hidden="true">/</span><span>${escape(runName(run))}</span></nav>
       <div class="page-heading run-detail-heading"><div><div class="run-status-row">${runStatus(run)}</div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div></div>
       <div class="run-tabs" role="tablist" aria-label="Run sections">${tabs}</div>
@@ -720,9 +806,11 @@
     if (action === 'toggle-config') toggleConfig(control.closest('.agent-card'))
     if (action === 'agent-results' && state.selected) {
       setRunTab('results')
-      state.resultsView = { filter: 'all', agent: control.dataset.attempt, query: '' }
+      state.resultsView = { filter: 'all', agent: control.dataset.attempt, query: '', issue: null }
       render(); window.scrollTo(0, 0)
     }
+    if (action === 'show-issue' && state.selected) showIssue(control.dataset.issue, control.dataset.label, control.dataset.attempt)
+    if (action === 'clear-issue') { state.resultsView.issue = null; control.remove(); applyResults() }
     if (action === 'toggle-settings') setSettings($('#settings-menu').hidden)
     if (action === 'set-theme') {
       const root = document.documentElement, choice = control.dataset.themeChoice

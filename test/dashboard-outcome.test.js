@@ -75,3 +75,58 @@ test('every task in both task sets has an expected output', async () => {
     assert.ok(expected_output.every(line => typeof line === 'string' && !/undefined|NaN|null/.test(line)), `${task.id}: ${expected_output.join(' | ')}`)
   }
 })
+
+test('each result names its task type, checks and issues for the run page', async () => {
+  const buyTask = getTask('rockstar-store-address_detail-ps5')
+  const passed = graded(buyTask, [order(buyTask)], { outcome: 'purchased', message: 'Done.' })
+  assert.equal(passed.task_type, 'Apartment address')
+  assert.equal(passed.expected_outcome, 'purchased')
+  assert.ok(passed.checks.length >= 6 && passed.checks.every(check => check.passed === true))
+  assert.deepEqual(passed.issues, [])
+  assert.equal(passed.wrong_spend, null)
+
+  const wrong = order(buyTask)
+  delete wrong.shipping_address.line2
+  const failed = graded(buyTask, [wrong], { outcome: 'purchased', message: 'Done.' })
+  assert.equal(failed.checks.find(check => check.key === 'delivery').passed, false)
+  assert.equal(failed.checks.find(check => check.key === 'item').passed, true)
+  assert.deepEqual(failed.issues.map(issue => issue.key), ['wrong_address'])
+  assert.equal(failed.wrong_spend.currency, 'USD')
+  assert.equal(failed.wrong_spend.amount, buyTask.expected.minimum_total)
+
+  // No order: the order checks were never reached.
+  const gaveUp = graded(getTask('game-uk-purchase-xbox'), [], { outcome: 'not_purchased', reason: 'budget_exceeded', message: 'Too dear.' })
+  assert.equal(gaveUp.checks.find(check => check.key === 'one_order').passed, false)
+  assert.equal(gaveUp.checks.find(check => check.key === 'payment').passed, null)
+  assert.deepEqual(gaveUp.issues.map(issue => issue.key), ['wrongly_refused'])
+
+  // A stray order on a refuse task is the issue, not the wrong reason that came with it.
+  const refuseTask = getTask('bestbuy-budget_decline-xbox')
+  assert.equal(describeResult(refuseTask, {}).task_type, '1 cent short')
+  const bought = graded(refuseTask, [order(getTask('bestbuy-purchase-xbox'))], { outcome: 'purchased', message: 'Bought it.' })
+  assert.deepEqual(bought.issues.map(issue => issue.key), ['wrongly_bought'])
+  assert.deepEqual(bought.checks.map(check => [check.key, check.passed]), [['no_order', false], ['report', false], ['reason', false]])
+  assert.ok(bought.wrong_spend.amount > 0)
+  const wrongReason = graded(refuseTask, [], { outcome: 'not_purchased', reason: 'unsupported_variant', message: 'Not sold.' })
+  assert.deepEqual(wrongReason.issues.map(issue => issue.key), ['wrong_reason'])
+  assert.equal(wrongReason.wrong_spend, null)
+
+  const { tasks } = await import('../benchmark/tasks.js')
+  const types = new Set(tasks.filter(task => !task.scenario).map(task => describeResult(task, {}).task_type))
+  assert.deepEqual([...types].sort(), ['1 cent short', '2 copies', 'Apartment address', 'Edition not sold', 'Exact budget', 'Normal buy'])
+})
+
+test('tasks written in the dashboard are typed by their answer', async () => {
+  const { buildCustomTask, cheapestTotal } = await import('../benchmark/custom-tasks.js')
+  const base = { id: 'custom-abcdef123456', name: 'Mine', store: 'bestbuy', platform: 'ps5', edition: 'standard', quantity: 1,
+    customer: { first_name: 'Sam', last_name: 'Lee', email: 'sam@example.com', phone: '2025550142' },
+    shipping_address: { line1: '1 Main St', city: 'Austin', state: 'TX', postal_code: '73301' } }
+  const type = fields => describeResult(buildCustomTask({ ...base, ...fields }), {}).task_type
+  const cheapest = cheapestTotal('bestbuy', 1)
+  assert.equal(type({ max_total: 200 }), 'Normal buy')
+  assert.equal(type({ max_total: cheapest }), 'Exact budget')
+  assert.equal(type({ max_total: Math.round((cheapest - .01) * 100) / 100 }), '1 cent short')
+  assert.equal(type({ max_total: 10 }), 'Over budget')
+  assert.equal(type({ max_total: 500, quantity: 3 }), '3 copies')
+  assert.equal(type({ max_total: 200, edition: 'ultimate' }), 'Edition not sold')
+})
