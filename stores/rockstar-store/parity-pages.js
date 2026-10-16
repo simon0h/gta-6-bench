@@ -115,15 +115,25 @@ const GTA_PLUS_FAQ = {
 
 // Video and screenshot tiles on a title page: crops of the title's illustrated scene artwork.
 const VIDEO_TITLES = { 'buy-gta-v': ['Grand Theft Auto V: Expanded & Enhanced Trailer', 'GTA Online: Career Builder', 'GTAV Enhanced PC Trailer'] }
-const CROPS = [['50% 45%', 1.18], ['20% 60%', 1.4], ['80% 35%', 1.65]]
+const VIDEO_TITLES_MORE = { 'buy-red-dead-redemption-2': ['Red Dead Redemption 2: Launch Trailer', 'Red Dead Redemption 2: PC Trailer', 'Red Dead Online: Frontier Pursuits'] }
+// Each title has three in-game scenes (shelf-art views 1-3); video tiles start one scene later so the Videos and
+// Screenshots rows of a page do not open on the same picture.
 function mediaTile(slug, t, kind, i) {
   const game = shelfGame(slug)
   if (!game) return `<span class="rp-shot" style="--c1:${t.cover[0]};--c2:${t.cover[1]}" aria-hidden="true">${kind === 'Videos' ? '▶' : ''}</span>`
   const video = kind === 'Videos' || (kind === 'Screenshots and Videos' && i === 0)
-  const caption = video ? (VIDEO_TITLES[slug]?.[i] || `${t.title} Trailer`) : ''
-  const [pos, zoom] = CROPS[i % CROPS.length]
-  return `<figure class="rp-shot rp-shot-art"><img src="/rockstar-store/shelf-art/${encodeURIComponent(game.id)}/2.svg" alt="${esc(caption || `${t.title} screenshot`)}" loading="lazy" style="object-position:${pos};transform:scale(${zoom})">${video ? `<span class="rp-play" aria-hidden="true">▶</span><figcaption>${esc(caption)}</figcaption>` : ''}</figure>`
+  const caption = video ? (VIDEO_TITLES[slug]?.[i] || VIDEO_TITLES_MORE[slug]?.[i] || `${t.title} Trailer`) : ''
+  const view = 1 + ((i + (kind === 'Videos' ? 1 : 0)) % 3)
+  return `<figure class="rp-shot rp-shot-art"><img src="/rockstar-store/shelf-art/${encodeURIComponent(game.id)}/${view}.svg" alt="${esc(caption || `${t.title} screenshot`)}" loading="lazy">${video ? `<span class="rp-play" aria-hidden="true">▶</span><figcaption>${esc(caption)}</figcaption>` : ''}</figure>`
 }
+// What each edition includes, as listed on the real Compare Editions cards.
+const EDITION_CONTENTS = {
+  'Red Dead Redemption 2: Ultimate Edition': ['Red Dead Redemption 2: Story Mode', 'Red Dead Online', 'Bank Robbery Mission & Gang Hideout', 'Dappled Black Thoroughbred', 'Talisman & Medallion', 'Gameplay Boosts, Cash Bonuses & Discounts', 'Exclusive Outfits, Weapons and Horses', 'Red Dead Online Rank Bonuses'],
+  'Red Dead Redemption 2': ['Red Dead Redemption 2: Story Mode', 'Red Dead Online'],
+  'Red Dead Online': ['Red Dead Online', 'Frontier Pursuits: Bounty Hunter, Trader, Collector, Moonshiner and Naturalist Roles', 'Requires a Rockstar Games account'],
+}
+// Box art beside the title on a title page.
+const heroCover = (slug, t) => shelfGame(slug) ? `<img class="rp-cover rp-cover-art" src="/rockstar-store/shelf-art/${encodeURIComponent(shelfGame(slug).id)}/0.svg" alt="${esc(t.title)}" width="416" height="514">` : cover(t.title, t.cover)
 
 const cover = (title, [a, b], small = '') => `<span class="rp-cover" style="--c1:${a};--c2:${b}" aria-hidden="true"><b>R<i>*</i></b><span>${esc(title)}</span>${small ? `<small>${esc(small)}</small>` : ''}</span>`
 // A link card for a title or category the reference catalog does not sell: no price, no purchase control.
@@ -135,13 +145,14 @@ const unavailable = (base, text = NOT_SOLD) => `<div class="rp-unavailable" role
 export function titlePage(base, slug, buy = '') {
   const t = TITLES[slug]
   const nav = [['game-details', 'Game Details'], t.editions && ['compare-editions', 'Compare Editions'], t.features && ['key-features', 'Key Features'], t.media && ['media', t.media[0]], t.requirements && ['system-requirements', 'System Requirements'], ['faq', 'FAQ']].filter(Boolean)
-  return `<section class="rp-title-hero" style="--c1:${t.cover[0]};--c2:${t.cover[1]}"><div class="rp-title-copy"><h1>${esc(t.h1)}</h1>
+  const game = shelfGame(slug), keyArt = game ? `;--key-art:url(/rockstar-store/shelf-art/${encodeURIComponent(game.id)}/1.svg)` : ''
+  return `<section class="rp-title-hero" style="--c1:${t.cover[0]};--c2:${t.cover[1]}${keyArt}"><div class="rp-title-copy"><h1>${esc(t.h1)}</h1>
   <div class="rp-platforms"><span class="rs-platform-label">Platform</span>${t.platforms.map((p, i) => `<span class="rp-chip${i === 0 ? ' is-selected' : ''}">${esc(p)}</span>`).join('')}</div>
-  ${buy || unavailable(base)}</div>${cover(t.title, t.cover)}</section>
+  ${buy || unavailable(base)}</div>${heroCover(slug, t)}</section>
 <nav class="rs-subnav" aria-label="Page sections">${nav.map(([id, l]) => `<a href="#${id}">${l}</a>`).join('')}</nav>
 <div class="rs-game-body">
 <section id="game-details" class="rs-section"><h2>Game Details</h2><p>${esc(t.details)}</p><dl class="rs-meta"><div><dt>Developer</dt><dd>Rockstar Games</dd></div><div><dt>Publisher</dt><dd>Rockstar Games</dd></div><div><dt>Platform</dt><dd>${esc(t.platforms.join(', '))}</dd></div></dl></section>
-${t.editions ? `<section id="compare-editions" class="rs-section"><h2>Compare Editions</h2><div class="rp-cards">${t.editions.map(e => `<article class="rp-card"><p class="rs-kicker">${esc(t.title)}</p><h3>${esc(e)}</h3><p class="rs-fine">${buy ? "PC · Rockstar Games Launcher. Choose an edition at the top of this page." : "Currently unavailable."}</p></article>`).join('')}</div></section>` : ''}
+${t.editions ? `<section id="compare-editions" class="rs-section"><h2>Compare Editions</h2><div class="rp-cards">${t.editions.map(e => `<article class="rp-card"><p class="rs-kicker">${esc(t.title)}</p><h3>${esc(e)}</h3>${EDITION_CONTENTS[e] ? `<ul class="rp-edition-list">${EDITION_CONTENTS[e].map(i => `<li>${esc(i)}</li>`).join('')}</ul>` : ''}<p class="rs-fine">${buy ? 'PC · Rockstar Games Launcher' : 'Currently unavailable.'}</p></article>`).join('')}</div></section>` : ''}
 ${t.features ? `<section id="key-features" class="rs-section"><h2>Key Features</h2><div class="rp-cards">${t.features.map(f => `<article class="rp-card"><h3>${esc(f)}</h3>${FEATURE_COPY[f] ? `<p>${esc(FEATURE_COPY[f])}</p>` : ''}</article>`).join('')}</div></section>` : ''}
 ${t.addons ? `<section class="rs-section"><div class="rs-section-head"><h2>${esc(t.addons[0])}</h2><a href="${base}${t.addons[2]}">View all</a></div>${addonTiles(base, t.addons[2]) || `<ul class="rp-list">${t.addons[1].map(n => `<li>${esc(n)}</li>`).join('')}</ul><p class="rs-fine">Currently unavailable.</p>`}</section>` : ''}
 <section id="media" class="rs-section">${t.media.map(m => `<h2>${esc(m)}</h2><div class="rp-media">${[0, 1, 2].map(i => mediaTile(slug, t, m, i)).join('')}</div>`).join('')}</section>
@@ -169,7 +180,7 @@ export function currencyPage(base, kind) {
   const colors = shark ? ['#06303d', '#21a0c6'] : ['#3d2a06', '#e3b23c']
   const href = shark ? '/buy-gta-v-shark-cash-cards' : '/buy-red-dead-online-gold-bars'
   const tiles = addonTiles(base, href)
-  return `<section class="rp-title-hero" style="--c1:${colors[0]};--c2:${colors[1]}"><div class="rp-title-copy"><p class="rs-eyebrow">GAME ADD-ONS</p><h1>${title}</h1><h2>${shark ? 'Shark Cards' : 'Gold Bars'}</h2><p>${shark ? 'Purchase GTA$ for Grand Theft Auto Online on PC. Requires Grand Theft Auto V for PC and a Rockstar Games account.' : 'Purchase Gold Bars for Red Dead Online on PC. Requires Red Dead Redemption 2 or Red Dead Online for PC and a Rockstar Games account.'}</p>${tiles ? `<p class="rs-fine">PC only. Currency is added to the Rockstar Games account you sign in with at checkout.</p><a class="rs-btn rs-btn-pill" href="#buy">${shark ? 'Choose a Shark Card' : 'Choose Gold Bars'}</a>` : unavailable(base, 'In-game currency for PC is currently unavailable to purchase on the Rockstar Store.')}</div>${cover(shark ? 'Shark Cards' : 'Gold Bars', colors)}</section>
+  return `<section class="rp-title-hero" style="--c1:${colors[0]};--c2:${colors[1]}"><div class="rp-title-copy"><p class="rs-eyebrow">GAME ADD-ONS</p><h1>${title}</h1><h2>${shark ? 'Shark Cards' : 'Gold Bars'}</h2><p>${shark ? 'Purchase GTA$ for Grand Theft Auto Online on PC. Requires Grand Theft Auto V for PC and a Rockstar Games account.' : 'Purchase Gold Bars for Red Dead Online on PC. Requires Red Dead Redemption 2 or Red Dead Online for PC and a Rockstar Games account.'}</p>${tiles ? `<p class="rs-fine">PC only. Currency is added to the Rockstar Games account you sign in with at checkout.</p><a class="rs-btn rs-btn-pill" href="#buy">${shark ? 'Choose a Shark Card' : 'Choose Gold Bars'}</a>` : unavailable(base, 'In-game currency for PC is currently unavailable to purchase on the Rockstar Store.')}</div>${tiles ? `<img class="rp-cover rp-cover-art rp-cover-card" src="/rockstar-store/shelf-art/${encodeURIComponent(shelfOf(shark ? 'shark-cards' : 'gold-bars')[0].id)}/0.svg" alt="${shark ? 'Shark Cash Card' : 'Gold Bars'}">` : cover(shark ? 'Shark Cards' : 'Gold Bars', colors)}</section>
 <div class="rs-game-body"><section class="rs-section" id="buy"><h2>${shark ? 'Buy Shark Cash Cards for PC' : 'Buy Gold Bars for PC'}</h2>${tiles || `<div class="rs-grid">${(shark ? SHARK : GOLD).map(n => `<article class="rs-tile rp-link-tile">${cover(n, colors, 'PC')}<h3>${esc(n)}</h3><p class="rs-fine">PC · Currently unavailable</p></article>`).join('')}</div>`}</section></div>`
 }
 
@@ -286,22 +297,22 @@ export const DOCS = base => ({
     ['Who is Xsolla and where can I find the full refund policy?', P('Xsolla is Rockstar’s authorized reseller and merchant of record for some purchases, including physical items. Its refund policy governs those orders and Xsolla issues any refunds or exchanges, with Rockstar Games Support helping to facilitate requests.')],
     ['Who is the merchant of record for my transaction?', P('The merchant of record is shown during checkout and on your receipt.')],
     ['Additional Details:', `<ul class="rp-list"><li><a href="${base}/support">Customer Support</a></li><li><a href="${base}/legal">Terms of Service</a></li><li><a href="${base}/privacy">Privacy Policy</a></li><li><a href="${base}/rockstar-games">Company Details</a></li></ul>`]] }],
-  '/privacy': ['Privacy Policy', { title: 'Privacy Policy', intro: 'Summary of the Rockstar Games Privacy Policy published at rockstargames.com/privacy.', sections: [
+  '/privacy': ['Privacy Policy', { title: 'Privacy Policy', intro: 'This Privacy Policy explains how Rockstar Games collects, uses and shares information about you when you use our websites, games, online services and the Rockstar Store.', sections: [
     ['Information we collect', P('Account details you provide (such as email address, nickname and date of birth), purchase and transaction records, and technical data from your devices and gameplay.')],
     ['How we use information', P('To provide games, online services and the Store, process purchases through payment partners such as Xsolla, keep services secure, support you, and, with your consent where required, send marketing.')],
     ['Sharing', P('With service providers and payment partners that act on Rockstar’s behalf, with Take-Two Interactive group companies, and where required by law.')],
     ['Your choices and rights', P(`Manage marketing preferences in your Rockstar Games account, change cookie choices in <a href="${base}/cookie-settings">Cookie Settings</a>, and use <a href="${base}/ccpa">Do Not Sell or Share My Personal Information</a> where available.`)]],
-    note: `Read the full Rockstar Games Privacy Policy at rockstargames.com/privacy.${publicNotice(' This copy is a summary for a demonstration store; no personal data entered here leaves this environment.')}` }],
-  '/cookie-policy': ['Cookie Policy', { title: 'Cookie Policy', intro: 'Summary of the Rockstar Games Cookie Policy published at rockstargames.com/cookies.', sections: [
+    note: `Questions about this policy? Contact our Privacy team through Rockstar Support.${publicNotice(' This copy is a summary for a demonstration store; no personal data entered here leaves this environment.')}` }],
+  '/cookie-policy': ['Cookie Policy', { title: 'Cookie Policy', intro: 'This Cookie Policy explains how Rockstar Games and our partners use cookies and similar technologies on the Rockstar Store, and the choices you have.', sections: [
     ['What cookies are', P('Small files that websites store in your browser to remember choices, keep you signed in and measure how pages are used.')],
     ['Types of cookies used', P('Strictly necessary cookies (sign-in, cart and checkout), performance and analytics cookies, functional cookies, and targeting or advertising cookies.')],
     ['Managing cookies', P(`Accept or reject optional cookies from the banner or at any time in <a href="${base}/cookie-settings">Cookie Settings</a>. Strictly necessary cookies cannot be switched off.`)]] }],
-  '/legal': ['Terms of Service', { title: 'Terms of Service', intro: 'Summary of the Rockstar Games Terms of Service and legal notices published at rockstargames.com/legal.', sections: [
+  '/legal': ['Terms of Service', { title: 'Terms of Service', intro: 'Please read these Terms of Service carefully. They govern your use of Rockstar Games websites, online services and the Rockstar Store.', sections: [
     ['Agreement', P('Using Rockstar Games websites, online services and the Store means you accept the Terms of Service and the applicable End User License Agreement for each game.')],
     ['Purchases', P(`Store purchases are licences to digital content or sales of physical goods. Some physical and pre-order purchases are fulfilled by Xsolla as merchant of record. See <a href="${base}/refund-and-return-policy">Refunds</a>.`)],
     ['Accounts and conduct', P('Keep your Rockstar Games account secure and follow the online conduct rules; Rockstar may suspend accounts that break them.')],
     ['Trademarks', P('Rockstar Games, Grand Theft Auto, Red Dead Redemption and related marks are trademarks of Take-Two Interactive Software, Inc.')]] }],
-  '/ccpa': ['Do Not Sell or Share My Personal Information', { eyebrow: 'Take-Two Interactive', title: 'Do Not Sell or Share My Personal Information', intro: 'Summary of the Take-Two Interactive request page at take2games.com/ccpa.', sections: [
+  '/ccpa': ['Do Not Sell or Share My Personal Information', { eyebrow: 'Take-Two Interactive', title: 'Do Not Sell or Share My Personal Information', intro: 'Rockstar Games is a subsidiary of Take-Two Interactive Software, Inc. You can ask us not to sell or share your personal information.', sections: [
     ['Your right to opt out', P('Residents of California and other US states with similar laws may opt out of the “sale” or “sharing” of personal information for cross-context behavioural advertising.')],
     ['How to opt out', P(`Choose “Reject All” in <a href="${base}/cookie-settings">Cookie Settings</a> for this browser. For requests tied to your Rockstar Games account, submit Take-Two’s online request form at take2games.com/ccpa.`)]] }],
   '/rockstar-games': ['Rockstar Games', { eyebrow: 'Company', title: 'Rockstar Games', intro: 'Rockstar Games, Inc. is a video game publisher based in New York City and a subsidiary of Take-Two Interactive Software, Inc. It develops and publishes the Grand Theft Auto, Red Dead Redemption, Max Payne, L.A. Noire and Bully series.', sections: [

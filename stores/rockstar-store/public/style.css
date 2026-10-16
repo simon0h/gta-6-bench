@@ -279,3 +279,28 @@ button,a,input,select,summary{touch-action:manipulation}a:focus-visible,button:f
 .rp-card p{color:rgba(255,255,255,.72);font-size:14px;line-height:1.5}
 .rs-thumb-poster{background-size:cover;background-position:center;overflow:hidden}.rs-thumb-poster::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.55))}.rs-thumb-poster>*{position:relative}
 @media (max-width:700px){.rp-reqs{grid-template-columns:1fr}.rp-req-list{grid-template-columns:1fr;gap:2px}.rp-req-list dd{margin-bottom:8px}}
+/* Round 2: drawn box art, title-page buy box, edition lists */
+.rp-cover.rp-cover-art{padding:0;background:#111;object-fit:cover;height:auto;aspect-ratio:416/514}
+.rp-title-hero[style*="--key-art"]{background-image:linear-gradient(90deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.72) 45%,rgba(0,0,0,.35) 100%),var(--key-art);background-size:cover;background-position:center}
+@media(max-width:760px){.rp-title-hero[style*="--key-art"]{background-image:linear-gradient(180deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,.85) 40%,rgba(0,0,0,.94) 100%),var(--key-art);background-position:center top;background-size:auto 420px;background-repeat:no-repeat;background-color:#0b0b0b}}
+.rp-title-hero .rp-cover.rp-cover-card{aspect-ratio:640/600;width:340px;background:#f5f4f0}@media(max-width:760px){.rp-title-hero .rp-cover.rp-cover-card{width:220px}}
+.rp-buy .rs-wishlist-action{width:auto;min-height:0;padding:14px 0 6px;display:inline-flex;justify-content:flex-start}
+/* Checkout window: the dimmed backdrop runs straight into the footer (no light strip between them) */
+.rs-main:has(.xs-backdrop)+.rs-footer{margin-top:0}
+/* Help pages */
+.rs-service-grid a.rs-service-card{text-decoration:none;transition:border-color .15s}.rs-service-grid a.rs-service-card:hover{border-color:#8a8a8a}
+.rs-service-help .rs-service-grid a.rs-service-card h2{font-size:18px;margin:6px 0 0}.rs-service-help .rs-service-grid a.rs-service-card p{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#9a9a9a}
+.rs-help-search{margin-bottom:30px}.rs-help-search button{white-space:nowrap;flex:none;padding-inline:26px}.rs-help-topics a{text-decoration:none}
+/* Sign in / create account: a centered Rockstar Games account card */
+.rs-auth{max-width:460px!important;margin:48px auto 24px!important;background:#1d1d1d;border:1px solid #333;border-radius:12px;padding:40px 36px 32px!important}
+.rs-auth h1{font-size:30px;margin:2px 0 8px}.rs-auth>.rs-fine{font-size:13px;line-height:1.55;color:#a8a8a8}.rs-auth>.rs-fine:last-child{margin-top:18px;text-align:center}
+@media(max-width:520px){.rs-auth{margin:20px 16px!important;padding:28px 20px!important}}
+/* Privacy Preference Center */
+.rs-cookie-center{max-width:760px}.rs-cookie-center>p{color:#c5c5c5;line-height:1.6}.rs-cookie-center h2{font-size:20px;margin:28px 0 8px}
+.rs-cookie-group summary{display:flex;justify-content:space-between;gap:16px;font-weight:700;list-style:none}.rs-cookie-group summary::-webkit-details-marker{display:none}.rs-cookie-group summary::before{content:"+";width:18px;color:#fcaf17}.rs-cookie-group summary span{flex:1}.rs-cookie-group em{font-style:normal;font-size:12px;color:#fcaf17}.rs-cookie-group p{color:#bdbdbd;line-height:1.6;margin:10px 0 0 18px}
+.rs-cookie-center form{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+/* 404 */
+.rs-simple:has(.rs-404){text-align:center;padding-top:96px;padding-bottom:96px}.rs-simple:has(.rs-404) h1{font-size:44px;letter-spacing:-1px}
+.rs-404>p{color:#bdbdbd;margin:12px auto 24px;max-width:480px;line-height:1.6}.rs-404-search input{width:min(420px,100%);height:46px;border-radius:24px;border:1px solid #555;background:#111;color:#fff;padding:0 18px;font:inherit;margin-bottom:20px}
+.rs-404 .rs-404-links{display:flex;justify-content:center;gap:24px;margin-top:28px}.rs-404-links a{text-underline-offset:4px}
+.rp-edition-list{list-style:none;margin:12px 0 14px;padding:0;font-size:13px;color:rgba(255,255,255,.82)}.rp-edition-list li{padding:6px 0 6px 20px;border-bottom:1px solid rgba(255,255,255,.08);position:relative}.rp-edition-list li::before{content:"✓";position:absolute;left:0;color:#fcaf17}

@@ -5,6 +5,7 @@ import { esc } from '../../lib/html.js'
 import { productGallery } from '../../lib/product-assets.js'
 import { renderProductAsset } from '../../lib/product-asset-art.js'
 import { withPrint, currencySvg } from './shelf-prints.js'
+import { gameArtSvg } from './game-covers.js'
 
 const MOUNT = '/rockstar-store'
 export const isShelf = p => !!(p?.shelf || p?.product?.shelf)
@@ -25,7 +26,7 @@ const cache = new Map()
 export function shelfSvg(p, view = 0) {
   const key = `${p.id}:${view}`
   if (!cache.has(key)) {
-    const svg = ['currency', 'pack'].includes(p.shape) ? currencySvg(p, view) : renderProductAsset(descriptor(p), view)
+    const svg = ['currency', 'pack'].includes(p.shape) ? currencySvg(p, view) : gameArtSvg(p, view) || renderProductAsset(descriptor(p), view)
     cache.set(key, view === 0 ? withPrint(svg, p, p.shape, p.color || '#1d1d1f') : svg)
   }
   return cache.get(key)
