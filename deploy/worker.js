@@ -4,7 +4,7 @@ import { CheckpointCoordinator, isStaticRequest, readBounded, STATE_LIMIT } from
 import { SUMMARY_HEADER, summaryView, writeRunSummary } from '../benchmark/ai-summary.js'
 
 const IDLE_MS = 10 * 60 * 1000
-const STORE_KEYS = ['sessions', 'orders', 'accounts', 'dashboard_runs', 'dashboard_trials']
+const STORE_KEYS = ['sessions', 'orders', 'accounts', 'dashboard_runs', 'dashboard_trials', 'dashboard_tasks']
 const TRACE_HEADER = 'x-benchmark-trace-trial'
 const TRACE_PAGE_SIZE = 500
 const REPLAY_HEADER = 'x-benchmark-replay-trial'
@@ -42,7 +42,7 @@ export class Storefront extends DurableObject {
   }
 
   async save(state) {
-    state = { dashboard_runs: [], dashboard_trials: [], ...state }
+    state = { dashboard_runs: [], dashboard_trials: [], dashboard_tasks: [], ...state }
     if (state.version !== 1 || STORE_KEYS.some(key => !Array.isArray(state[key]))) throw new Error('Unsupported hosting checkpoint')
     const events = state.dashboard_trace_events ?? [], chunks = state.dashboard_replay_chunks ?? []
     if (!Array.isArray(events)) throw new Error('Invalid traversal event batch')

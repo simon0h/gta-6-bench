@@ -286,3 +286,23 @@ test('hosted checkpoint restores dashboard metadata and an active isolated task 
   assert.equal(archivedView.event_count, watermark)
   assert.equal((await restore({ version: 1, sessions: [], orders: [], accounts: [], dashboard_runs: [], dashboard_trials: [] })).status, 200)
 })
+
+test('hosted checkpoint keeps tasks written in the dashboard across a restart', async () => {
+  const task = {
+    name: 'Hosted custom task', store: 'game-uk', platform: 'ps5', edition: 'standard', quantity: 2, max_total: 160,
+    customer: { first_name: 'Sam', last_name: 'Lee', email: 'sam.lee@example.com', phone: '07700900142' },
+    shipping_address: { line1: '7 Market Street', line2: 'Flat 3B', city: 'Manchester', state: '', postal_code: 'M1 1AE' },
+  }
+  const created = await fetch(`${base}/dashboard/api/tasks`, { method: 'POST', headers: { ...operatorHeaders, 'content-type': 'application/json' }, body: JSON.stringify(task) })
+  assert.equal(created.status, 201)
+  const saved = await state()
+  assert.equal(saved.dashboard_tasks.length, 1)
+  await stop(); await start()
+  assert.equal((await restore(saved)).status, 200)
+  const listed = await (await fetch(`${base}/dashboard/api/tasks`, { headers: operatorHeaders })).json()
+  assert.deepEqual(listed.tasks.map(item => [item.name, item.preview.answer.outcome]), [['Hosted custom task', 'purchased']])
+  const broken = structuredClone(saved)
+  broken.dashboard_tasks[0].quantity = 50
+  assert.equal((await restore(broken)).status, 400)
+  assert.equal((await restore({ version: 1, sessions: [], orders: [], accounts: [] })).status, 200)
+})

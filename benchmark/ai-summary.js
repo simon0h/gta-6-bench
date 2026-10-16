@@ -10,7 +10,7 @@ const AGENT_NAMES = { grokbot: 'Grokbot', dots: 'Dots', muse: 'Muse' }
 const FAMILY_NAMES = {
   purchase: 'normal buy', quantity: 'buy 2 copies', address_detail: 'apartment address',
   budget_boundary: 'exact-budget buy', budget_decline: 'budget 1 cent short (should refuse)',
-  unsupported_variant: 'edition not sold (should refuse)',
+  unsupported_variant: 'edition not sold (should refuse)', custom: 'task written in the dashboard',
 }
 const MAX_TEXT = 300
 const clean = (value, limit = MAX_TEXT) => typeof value === 'string'
@@ -35,7 +35,7 @@ export function summaryInput(run) {
   const attempts = Array.isArray(run?.attempts) ? run.attempts : []
   const names = labels(attempts)
   return {
-    run: { name: clean(run?.name, 120), task_set: run?.suite === 'all240' ? 'All 240 tasks' : 'Original 30 tasks', tasks_per_agent: run?.task_ids?.length ?? null },
+    run: { name: clean(run?.name, 120), task_set: run?.suite === 'all240' ? 'All 240 tasks' : run?.suite === 'custom' ? 'Tasks written in the dashboard' : 'Original 30 tasks', tasks_per_agent: run?.task_ids?.length ?? null },
     agents: attempts.map((attempt, index) => {
       const results = (attempt.trials || []).filter(trial => trial.status === 'completed' && trial.result)
       const count = status => results.filter(trial => trial.result.grade?.status === status).length
@@ -48,7 +48,8 @@ export function summaryInput(run) {
         total_seconds: timed.length ? seconds(timed.reduce((sum, ms) => sum + ms, 0)) : null,
         tasks: results.map(trial => {
           const result = trial.result, status = result.grade?.status ?? 'unknown'
-          const task = { task: trial.task_id, store: result.store, type: FAMILY_NAMES[result.family] || result.family, result: status, seconds: seconds(result.elapsed_ms) }
+          const name = run?.tasks?.find(item => item.id === trial.task_id)?.name
+          const task = { task: name ? clean(name, 80) : trial.task_id, store: result.store, type: FAMILY_NAMES[result.family] || result.family, result: status, seconds: seconds(result.elapsed_ms) }
           if (status === 'passed') return task
           return { ...task, expected: lines(result.expected_output), actual: lines(result.actual_output),
             failure_reasons: lines(result.failure_reasons?.length ? result.failure_reasons : (result.grade?.reasons || []).map(reason => reason.message)) }

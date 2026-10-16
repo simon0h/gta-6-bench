@@ -267,6 +267,7 @@ main:focus { outline: none; }
 .badge.orange { background: var(--accent-soft); color: var(--accent); }
 .badge.red { background: var(--red-soft); color: var(--red); }
 .badge.gray { background: var(--fill); color: var(--muted); }
+.badge.amber { background: var(--amber-soft); color: var(--amber); }
 /* Task results: green for passed, red for failed, amber for environment errors. */
 .badge.result-badge.passed { background: var(--green-soft); color: var(--green); }
 .badge.result-badge.failed { background: var(--red-soft); color: var(--red); }
@@ -645,4 +646,64 @@ dialog::backdrop { background: var(--scrim); }
   .ai-summary-top { flex-direction: column; gap: 10px; }
   .live-facts { grid-template-columns: 1fr 1fr; }
   .live-facts div:first-child { grid-column: 1 / -1; }
+}
+
+/* My tasks: the saved task list, the task form and its live right answer. */
+.task-table th:nth-child(1) { width: 30%; }
+.task-table th:nth-child(2) { width: 14%; }
+.task-table th:nth-child(3) { width: 26%; }
+.task-table th:nth-child(4) { width: 15%; }
+.task-table th:nth-child(5) { width: 15%; }
+.task-asks { color: var(--muted); font-size: 13px; }
+.empty-help { max-width: 440px; margin-top: 8px; color: var(--muted); font-size: 14px; }
+.task-editor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 380px); align-items: start; gap: 20px; }
+.task-form-column, .task-fields { display: grid; gap: 16px; min-width: 0; }
+.form-card { display: grid; gap: 16px; min-width: 0; padding: 22px 24px 24px; border-radius: var(--radius-card); background: var(--paper); }
+.form-card h2 { font-size: 17px; }
+.form-card .field-help { margin-top: -6px; }
+.form-card .field .field-help { margin-top: 6px; }
+.form-card select { width: 100%; }
+.field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.field-grid.three { grid-template-columns: 2fr 1.2fr 1fr; }
+.optional { color: var(--muted); font-weight: 400; }
+.limit-row { display: flex; align-items: center; gap: 6px; }
+.limit-row input { flex: 1; }
+.task-form-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
+.task-form-actions .danger { margin-right: auto; }
+.button.danger { color: var(--red); }
+.button.danger:hover:not(:disabled) { background: var(--red-soft); }
+.task-preview { position: sticky; top: 16px; display: grid; gap: 16px; min-width: 0; }
+.answer-card { padding: 20px 22px; border-radius: var(--radius-card); background: var(--paper); box-shadow: inset 0 0 0 2px transparent; }
+.answer-card.buy { box-shadow: inset 0 0 0 2px var(--green-soft); }
+.answer-card.refuse { box-shadow: inset 0 0 0 2px var(--amber-soft); }
+.answer-title { margin-top: 4px; font-size: 26px; font-weight: 600; letter-spacing: -.3px; }
+.answer-card.buy .answer-title { color: var(--green); }
+.answer-card.refuse .answer-title { color: var(--amber); }
+.answer-reason { margin-top: 4px; }
+.answer-reason code { font: 12px/1.4 var(--mono); padding: 1px 6px; border-radius: 6px; background: var(--fill); }
+.answer-card ul { margin: 12px 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+.answer-card li + li { margin-top: 4px; }
+.answer-wait { margin-top: 6px; color: var(--muted); }
+.answer-problem { margin-top: 6px; color: var(--red); }
+.agent-view { padding: 16px 22px; border-radius: var(--radius-card); background: var(--paper); }
+.agent-view summary { cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 600; }
+.agent-view p { margin-top: 10px; font-size: 13px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.task-picker { margin: 0; padding: 0; border: 0; min-width: 0; }
+.task-picker legend { margin-bottom: 6px; padding: 0; color: var(--muted); font-size: 13px; font-weight: 600; }
+.task-picker-list { display: grid; gap: 2px; max-height: 260px; overflow: auto; padding: 4px; border-radius: var(--radius); background: var(--fill); }
+.task-pick { display: flex; align-items: flex-start; gap: 10px; margin: 0; padding: 8px 10px; border-radius: 10px; color: var(--ink); font-weight: 400; cursor: pointer; }
+.task-pick:hover { background: var(--hover); }
+.task-pick input { width: 18px; min-height: 0; height: 18px; margin-top: 2px; padding: 0; flex: none; }
+.task-pick strong { display: block; font-size: 14px; font-weight: 600; }
+.task-pick small { display: block; color: var(--muted); font-size: 12px; }
+.text-link { color: var(--accent); font-weight: 600; }
+@media (max-width: 1050px) {
+  .task-editor { grid-template-columns: minmax(0, 1fr); }
+  .task-preview { position: static; grid-row: 1; }
+}
+@media (max-width: 640px) {
+  .form-card { padding: 18px 16px 20px; }
+  .field-grid, .field-grid.three { grid-template-columns: minmax(0, 1fr); }
+  .limit-row { flex-wrap: wrap; }
+  .limit-row input { flex-basis: 100%; }
 }
