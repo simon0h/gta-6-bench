@@ -113,7 +113,7 @@ export function shelfArt(p, view = 0) {
   const sub = p.subtitle
   const stage = view === 1 ? '#f7f8fa' : '#fff'
   let body = draw({ c, brand: p.brand, sub, pet: p.petLabel, h })
-  if (view === 1) body = `<g transform="translate(300 0) scale(-1 1)" opacity=".9">${body.replace(/<text[\s\S]*?<\/text>/g, '')}</g><rect x="72" y="104" width="156" height="120" rx="6" fill="#fff" stroke="#d0d6dc"/><text x="150" y="126" text-anchor="middle" font-family="Arial" font-weight="700" font-size="11" fill="#222">${esc(p.brand)}</text>${[0, 1, 2, 3, 4, 5].map(i => `<rect x="84" y="${138 + i * 13}" width="${132 - (i % 3) * 22}" height="5" rx="2" fill="#c9cfd4"/>`).join('')}`
+  if (view === 1) body = `<g transform="translate(300 0) scale(-1 1)" opacity=".9">${body.replace(/<text[\s\S]*?<\/text>/g, '')}</g><rect x="100" y="112" width="100" height="104" rx="5" fill="#fff" stroke="#d0d6dc"/><text x="150" y="128" text-anchor="middle" font-family="Arial" font-weight="700" font-size="8.5" fill="#222">${esc(['bag', 'sack', 'can', 'tray', 'pouch', 'tub'].includes(p.art) && !/litter/i.test(p.title) ? 'Guaranteed Analysis' : fit(lines(p.brand, 20), 1)[0])}</text><path d="M108 133h84" stroke="#222" stroke-width="1.5"/>${[0, 1, 2, 3, 4, 5].map(i => `<rect x="108" y="${140 + i * 11}" width="${46 - (i % 3) * 8}" height="4" rx="2" fill="#c9cfd4"/><rect x="${176 - (i % 2) * 4}" y="${140 + i * 11}" width="${16 + (i % 2) * 4}" height="4" rx="2" fill="#c9cfd4"/>`).join('')}`
   if (view === 2) body = `<g transform="translate(-60 -40) scale(1.4)">${body}</g>`
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="600" height="600" role="img" aria-label="${esc(p.title)}"><rect width="300" height="300" fill="${stage}"/>${body}</svg>`
 }
