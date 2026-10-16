@@ -7,7 +7,8 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
 ## Operator workflow
 
 1. Click **New run**, choose a name, and select **Original 30 tasks**
-   (the default) or **All 240 tasks**.
+   (the default), **All 240 tasks** or **My tasks** (tick the saved tasks to include;
+   see [My tasks](#my-tasks)).
 2. Click **Add agent URL**. Select Grokbot, Dots or Muse and add optional tags and
    comments. You can generate up to five URLs per run, including repeated agents.
 3. Use **Copy prompt** or **Copy URL** and give the link to that agent.
@@ -90,6 +91,30 @@ SQLite before releasing dynamic responses. A resumed task retains its original
 start time and state. Traversal events are appended to a separate SQLite archive,
 with paginated operator reads, so historical traces do not grow the active checkpoint.
 
+## My tasks
+
+**My tasks** in the sidebar lists tasks written in the dashboard. **New task** asks for
+a name, the store (Best Buy, GAME or Rockstar Store), console, edition, number of
+copies, spending limit, the shopper's name, email and phone, and the shipping address.
+Instructions for the agent are optional; left blank, the task uses the same wording as
+the built-in tasks.
+
+The right answer is never typed in. The dashboard works it out from the store's own
+prices, tax and delivery charge (`benchmark/custom-tasks.js`) and shows it as you
+type: buy, or don't buy and report `budget_exceeded` (the cheapest total is over the
+limit) or `unsupported_variant` (none of these stores sells the Ultimate Edition as a
+code-in-box). **Exact total** and **1 cent short** fill the limit for the two budget
+edge cases. The form only accepts what the store's checkout accepts: a valid state and
+ZIP or UK postcode, the store's phone format, and up to 3 copies at Best Buy, 5 at GAME
+and 1 at Rockstar (its code-in-box pre-order sells one copy per order).
+
+Custom tasks are graded exactly like built-in ones, so the run page shows Expected
+output, Actual output and Failure reason for them too. A run keeps its own copy of
+each task, so editing or deleting a saved task only affects runs created afterwards.
+Saved tasks live with the run records (`dashboard_tasks` in the local state file and
+in the Cloudflare checkpoint), so they survive restarts and deploys. Up to 200 tasks
+can be saved and up to 100 used in one run.
+
 ## Live tracker
 
 The top of a run page shows where each agent is right now: its current task and
@@ -148,3 +173,44 @@ npm run hosting:check
 RUN_BROWSER_TESTS=1 node --test test/dashboard-traversal-browser.reference.test.mjs
 RUN_BROWSER_TESTS=1 node --test test/dashboard-replay-browser.reference.test.mjs
 ```
+
+## AI summary
+
+The run page has an **AI summary** card. Click **Write summary** and Claude
+(`claude-opus-5-5`) reads the run's graded results and writes a short overview,
+one line per agent on how it did and its biggest weak spot, and up to four
+patterns across the run. Passed tasks are sent as one line each; tasks that did
+not pass also send their expected output, actual output and failure reasons.
+Card numbers in agent messages are hidden first. Nothing from the store pages,
+traversal or replays is sent.
+
+The summary is kept with the run. When more results arrive the card says how many
+are new and offers **Update summary**; it is never rewritten on its own, so each
+summary is one Claude request. It never changes a grade, and agents never see it:
+the endpoints need operator sign-in.
+
+It needs a Claude API key. On Cloudflare, add a Worker secret named
+`ANTHROPIC_API_KEY` (see [Cloudflare hosting](CLOUDFLARE.md#ai-summary-key)).
+For a local dashboard, start it with `ANTHROPIC_API_KEY` set; local summaries are
+kept in memory until the dashboard stops. Without a key the card says how to turn
+it on.
+
+## Chat about a run
+
+Under the AI summary, **Chat about this run** lets you ask Claude questions about
+that run, such as "Why did Muse fail the Rockstar tasks?". Each question sends the
+same results the summary reads (the whole run, so counts are exact), and the first
+question or any question after new results arrive includes a fresh copy. Claude also
+has one tool, a click path lookup: when a question needs to know what an agent did
+on a task, it asks for that agent and task and gets back the pages opened, buttons
+clicked and forms sent, with seconds since the task started (from the traversal
+recording; typed values are never recorded). Replays are not sent.
+
+Answers stream in as they are written. Task ids in an answer are links that open
+and highlight that task's rows on the page. The chat is kept with the run, one chat
+per run shared by everyone signed in, until **Clear chat**. A chat holds up to 30
+questions. Earlier turns are sent back unchanged with each question, so Claude's
+earlier reasoning stays valid and repeat reading is billed at the cheaper cached
+rate. The chat only reads results; it cannot change grades, runs or tasks, and
+agents never see it. It uses the same `ANTHROPIC_API_KEY` as the summary; locally
+the chat is kept in memory.

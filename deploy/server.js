@@ -57,12 +57,12 @@ export async function createHostedApp({
   app.get('/__hosting/health', (req, res) => res.json({ ok: true }))
   app.get('/__hosting/state', async (req, res) => {
     const dashboard = await manager.exportState()
-    res.json({ ...exportHostingState(), ...(dashboard.dashboard_runs.length || dashboard.dashboard_trials.length ? dashboard : {}) })
+    res.json({ ...exportHostingState(), ...(dashboard.dashboard_runs.length || dashboard.dashboard_trials.length || dashboard.dashboard_tasks.length ? dashboard : {}) })
   })
   app.put('/__hosting/state', express.json({ limit: '64mb' }), async (req, res) => {
     try {
       const commit = prepareHostingImport(req.body)
-      const dashboard = manager.validateState({ dashboard_runs: [], dashboard_trials: [], ...req.body })
+      const dashboard = manager.validateState({ dashboard_runs: [], dashboard_trials: [], dashboard_tasks: [], ...req.body })
       await manager.importState(dashboard)
       commit()
       res.json({ ok: true })

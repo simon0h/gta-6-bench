@@ -267,6 +267,7 @@ main:focus { outline: none; }
 .badge.orange { background: var(--accent-soft); color: var(--accent); }
 .badge.red { background: var(--red-soft); color: var(--red); }
 .badge.gray { background: var(--fill); color: var(--muted); }
+.badge.amber { background: var(--amber-soft); color: var(--amber); }
 /* Task results: green for passed, red for failed, amber for environment errors. */
 .badge.result-badge.passed { background: var(--green-soft); color: var(--green); }
 .badge.result-badge.failed { background: var(--red-soft); color: var(--red); }
@@ -593,6 +594,56 @@ dialog::backdrop { background: var(--scrim); }
 
 /* Live tracker on the run page. */
 .live-panel { margin-bottom: 32px; }
+/* AI summary card, above the live tracker on the run page. */
+.ai-summary { margin-bottom: 32px; padding: 20px 24px; border-radius: var(--radius-card); background: var(--paper); }
+.ai-summary-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.ai-summary-top h2 { font-size: 19px; line-height: 1.35; }
+.ai-summary-top p { margin-top: 2px; color: var(--muted); font-size: 13px; }
+.ai-summary-overview { margin-top: 14px; font-size: 15px; line-height: 1.6; }
+.ai-summary-agents { display: grid; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+.ai-summary-agents li { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: var(--radius-inner); background: var(--bg); }
+.ai-summary-agents img { width: 32px; height: 32px; padding: 6px; flex: none; border-radius: 10px; background: #ffffff; object-fit: contain; }
+.ai-summary-agents div { min-width: 0; }
+.ai-summary-agents strong { display: block; font-size: 14px; font-weight: 600; }
+.ai-summary-agents span { display: block; font-size: 14px; line-height: 1.5; }
+.ai-summary-patterns { margin: 14px 0 0; padding-left: 20px; font-size: 14px; line-height: 1.55; }
+.ai-summary-patterns li + li { margin-top: 4px; }
+.ai-summary-meta { margin-top: 14px; color: var(--muted); font-size: 12px; }
+.ai-summary-meta .stale { color: var(--amber); font-weight: 600; }
+.ai-summary-note { margin-top: 12px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+.ai-summary-error { margin-top: 12px; color: var(--red); font-size: 14px; }
+/* Chat about this run, under the AI summary. */
+.run-chat { margin-bottom: 32px; padding: 20px 24px; border-radius: var(--radius-card); background: var(--paper); }
+.chat-log { display: flex; flex-direction: column; gap: 10px; max-height: 560px; margin: 16px 0 0; padding: 0 2px; list-style: none; overflow-y: auto; overscroll-behavior: contain; }
+.chat-message { display: flex; }
+.chat-message.user { justify-content: flex-end; }
+.chat-bubble { max-width: min(700px, 88%); padding: 10px 15px; border-radius: 20px; font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+.chat-message.user .chat-bubble { border-bottom-right-radius: 6px; background: var(--accent); color: var(--on-accent); }
+.chat-message.assistant .chat-bubble { border-bottom-left-radius: 6px; background: var(--bg); }
+.chat-bubble p, .chat-bubble ul { margin: 0; }
+.chat-bubble > :not(:first-child) { margin-top: 8px; }
+.chat-bubble ul { padding-left: 18px; list-style: disc; }
+.chat-bubble li + li { margin-top: 3px; }
+.task-link { color: var(--accent); font-weight: 600; overflow-wrap: anywhere; }
+.task-link:hover { text-decoration: underline; }
+.chat-thinking { color: var(--muted); }
+.chat-thinking span { animation: chat-dot 1.2s infinite both; }
+.chat-thinking span:nth-child(2) { animation-delay: .2s; }
+.chat-thinking span:nth-child(3) { animation-delay: .4s; }
+@keyframes chat-dot { 0%, 80%, 100% { opacity: .2; } 40% { opacity: 1; } }
+.chat-suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.chat-suggestion { min-height: 34px; padding: 6px 14px; border-radius: var(--pill); background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; text-align: left; }
+.chat-suggestion:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
+.chat-form { display: flex; align-items: flex-end; gap: 8px; margin-top: 14px; padding: 5px 5px 5px 16px; border: 1.5px solid transparent; border-radius: 24px; background: var(--bg); }
+.chat-form:focus-within { border-color: var(--accent); background: var(--paper); }
+.chat-form textarea { flex: 1; min-height: 36px; max-height: 160px; padding: 8px 0; border: 0; border-radius: 0; background: transparent; resize: none; font-size: 14px; line-height: 1.4; }
+.chat-form textarea:hover, .chat-form textarea:focus { border: 0; background: transparent; }
+.chat-send { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; flex: none; border-radius: 50%; background: var(--accent); color: var(--on-accent); }
+.chat-send:hover:not(:disabled) { background: var(--accent-hover); }
+.chat-send svg { width: 18px; height: 18px; }
+.result-group.flash td { animation: task-flash 2.4s ease-out; }
+@keyframes task-flash { 0%, 30% { background: var(--accent-soft); } 100% { background: transparent; } }
+.ai-summary code { padding: 1px 6px; border-radius: 6px; background: var(--fill); font-family: var(--mono); font-size: 12.5px; }
 .live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 16px; }
 .live-card { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 18px 20px 8px; border-radius: var(--radius-card); background: var(--paper); }
 .live-card.active { box-shadow: inset 0 0 0 2px var(--accent-soft); }
@@ -622,6 +673,69 @@ dialog::backdrop { background: var(--scrim); }
 .live-quiet { color: var(--muted); font-size: 14px; }
 .live-error { margin-bottom: 10px; color: var(--red); font-size: 13px; }
 @media (max-width: 640px) {
+  .ai-summary, .run-chat { padding: 16px 18px; }
+  .chat-bubble { max-width: 94%; }
+  .ai-summary-top { flex-direction: column; gap: 10px; }
   .live-facts { grid-template-columns: 1fr 1fr; }
   .live-facts div:first-child { grid-column: 1 / -1; }
+}
+
+/* My tasks: the saved task list, the task form and its live right answer. */
+.task-table th:nth-child(1) { width: 30%; }
+.task-table th:nth-child(2) { width: 14%; }
+.task-table th:nth-child(3) { width: 26%; }
+.task-table th:nth-child(4) { width: 15%; }
+.task-table th:nth-child(5) { width: 15%; }
+.task-asks { color: var(--muted); font-size: 13px; }
+.empty-help { max-width: 440px; margin-top: 8px; color: var(--muted); font-size: 14px; }
+.task-editor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 380px); align-items: start; gap: 20px; }
+.task-form-column, .task-fields { display: grid; gap: 16px; min-width: 0; }
+.form-card { display: grid; gap: 16px; min-width: 0; padding: 22px 24px 24px; border-radius: var(--radius-card); background: var(--paper); }
+.form-card h2 { font-size: 17px; }
+.form-card .field-help { margin-top: -6px; }
+.form-card .field .field-help { margin-top: 6px; }
+.form-card select { width: 100%; }
+.field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.field-grid.three { grid-template-columns: 2fr 1.2fr 1fr; }
+.optional { color: var(--muted); font-weight: 400; }
+.limit-row { display: flex; align-items: center; gap: 6px; }
+.limit-row input { flex: 1; }
+.task-form-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
+.task-form-actions .danger { margin-right: auto; }
+.button.danger { color: var(--red); }
+.button.danger:hover:not(:disabled) { background: var(--red-soft); }
+.task-preview { position: sticky; top: 16px; display: grid; gap: 16px; min-width: 0; }
+.answer-card { padding: 20px 22px; border-radius: var(--radius-card); background: var(--paper); box-shadow: inset 0 0 0 2px transparent; }
+.answer-card.buy { box-shadow: inset 0 0 0 2px var(--green-soft); }
+.answer-card.refuse { box-shadow: inset 0 0 0 2px var(--amber-soft); }
+.answer-title { margin-top: 4px; font-size: 26px; font-weight: 600; letter-spacing: -.3px; }
+.answer-card.buy .answer-title { color: var(--green); }
+.answer-card.refuse .answer-title { color: var(--amber); }
+.answer-reason { margin-top: 4px; }
+.answer-reason code { font: 12px/1.4 var(--mono); padding: 1px 6px; border-radius: 6px; background: var(--fill); }
+.answer-card ul { margin: 12px 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+.answer-card li + li { margin-top: 4px; }
+.answer-wait { margin-top: 6px; color: var(--muted); }
+.answer-problem { margin-top: 6px; color: var(--red); }
+.agent-view { padding: 16px 22px; border-radius: var(--radius-card); background: var(--paper); }
+.agent-view summary { cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 600; }
+.agent-view p { margin-top: 10px; font-size: 13px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.task-picker { margin: 0; padding: 0; border: 0; min-width: 0; }
+.task-picker legend { margin-bottom: 6px; padding: 0; color: var(--muted); font-size: 13px; font-weight: 600; }
+.task-picker-list { display: grid; gap: 2px; max-height: 260px; overflow: auto; padding: 4px; border-radius: var(--radius); background: var(--fill); }
+.task-pick { display: flex; align-items: flex-start; gap: 10px; margin: 0; padding: 8px 10px; border-radius: 10px; color: var(--ink); font-weight: 400; cursor: pointer; }
+.task-pick:hover { background: var(--hover); }
+.task-pick input { width: 18px; min-height: 0; height: 18px; margin-top: 2px; padding: 0; flex: none; }
+.task-pick strong { display: block; font-size: 14px; font-weight: 600; }
+.task-pick small { display: block; color: var(--muted); font-size: 12px; }
+.text-link { color: var(--accent); font-weight: 600; }
+@media (max-width: 1050px) {
+  .task-editor { grid-template-columns: minmax(0, 1fr); }
+  .task-preview { position: static; grid-row: 1; }
+}
+@media (max-width: 640px) {
+  .form-card { padding: 18px 16px 20px; }
+  .field-grid, .field-grid.three { grid-template-columns: minmax(0, 1fr); }
+  .limit-row { flex-wrap: wrap; }
+  .limit-row input { flex-basis: 100%; }
 }

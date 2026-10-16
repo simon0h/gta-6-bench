@@ -14,6 +14,7 @@
   <script src="/dashboard/live.js" defer></script>
   <script src="/dashboard/traversal.js" defer></script>
   <script src="/dashboard/replay.js" defer></script>
+  <script src="/dashboard/tasks.js" defer></script>
   <script src="/dashboard/app.js" defer></script>
 </head>
 <body>
@@ -22,7 +23,7 @@
   <div id="workspace" class="workspace" hidden>
     <aside class="sidebar" aria-label="Dashboard navigation">
       <a class="brand" href="#/" aria-label="GTA 6 Bench home"><span class="brand-mark" aria-hidden="true">VI</span><span>GTA 6 <strong>Bench</strong></span></a>
-      <nav><a class="nav-link" id="overview-link" href="#/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>All runs<span id="run-count" class="nav-count">0</span></a></nav>
+      <nav><a class="nav-link" id="overview-link" href="#/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>All runs<span id="run-count" class="nav-count">0</span></a><a class="nav-link" id="tasks-link" href="#/tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 8 1 1 2-2M14 8h2M8 13h8M8 17h5"/></svg>My tasks<span id="task-count" class="nav-count">0</span></a></nav>
       <div class="sidebar-section"><span class="eyebrow">Recent runs</span><button class="icon-button" data-action="new-run" aria-label="New run" title="New run">+</button></div>
       <nav id="recent-runs" class="recent-runs" aria-label="Recent runs"></nav>
       <div class="sidebar-footer"><button id="logout" class="text-button" data-action="logout" hidden>Sign out</button></div>

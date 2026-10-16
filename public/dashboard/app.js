@@ -17,11 +17,13 @@
     refresh: '<path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/>',
     tasks: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 8 1 1 2-2M14 8h2M8 13h8M8 17h5"/>',
     prompt: '<path d="m5 6 6 6-6 6M13 18h6"/>',
+    send: '<path d="M12 19V5M6 11l6-6 6 6"/>',
+    spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
   }
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
   const $ = selector => document.querySelector(selector)
-  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, resultTabs: new Map(), resultsOpen: new Set() }
+  const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, resultTabs: new Map(), resultsOpen: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
   let toastTimer
   const live = window.DashboardLive.create({ api, agents })
 
@@ -40,6 +42,7 @@
     return body
   }
   const traversal = window.DashboardTraversal.create({ api, replay: window.DashboardReplay?.create({ api }) })
+  const tasks = window.DashboardTasks.create({ api, toast, icon })
 
   function toast(message, error = false) {
     clearTimeout(toastTimer)
@@ -63,7 +66,9 @@
   }
   function taskCount(run) { return Number(run.task_count ?? run.tasks?.length ?? (run.suite === 'all240' ? 240 : 30)) }
   function attempts(run) { return Array.isArray(run?.attempts) ? run.attempts : [] }
-  function suiteName(run) { return run.suite === 'all240' ? 'All 240 tasks' : 'Original 30 tasks' }
+  function suiteName(run) { return run.suite === 'all240' ? 'All 240 tasks' : run.suite === 'custom' ? `My tasks (${taskCount(run)})` : 'Original 30 tasks' }
+  // Tasks written in the dashboard show their name; built-in tasks their id.
+  function taskLabel(run, id) { return run?.tasks?.find(task => task.id === id)?.name || id }
   function attemptCount(run) { return run.attempt_count ?? attempts(run).length }
   function runName(run) { return run.name || `Run ${date(run.created_at)}` }
   function agentData(key) { return agents[key] || agents.grokbot }
@@ -103,10 +108,13 @@
   }
 
   function renderSidebar() {
+    const view = route().view
     $('#run-count').textContent = state.runs.length
-    $('#overview-link').classList.toggle('active', !state.selected)
+    $('#task-count').textContent = tasks.count()
+    $('#overview-link').classList.toggle('active', view === 'overview')
+    $('#tasks-link').classList.toggle('active', view === 'tasks' || view === 'task')
     $('#recent-runs').innerHTML = state.runs.length ? state.runs.slice(0, 12).map(run => `<a class="recent-run${state.selected?.id === run.id ? ' selected' : ''}" href="#/runs/${encodeURIComponent(run.id)}"${state.selected?.id === run.id ? ' aria-current="page"' : ''}>${icon('run')}<span>${escape(runName(run))}</span></a>`).join('') : '<p class="sidebar-empty">No runs yet.</p>'
-    $('#breadcrumb-current').textContent = state.selected ? runName(state.selected) : 'Runs'
+    $('#breadcrumb-current').textContent = state.selected ? runName(state.selected) : view === 'tasks' ? 'My tasks' : view === 'task' ? 'Task' : 'Runs'
   }
 
   function renderOverview() {
@@ -158,7 +166,7 @@
     }
   }
 
-  function renderResults(attempt) {
+  function renderResults(attempt, run) {
     const results = resultList(attempt)
     if (!results.length) return ''
     // Tasks have no time limit; each result records how long the agent took.
@@ -171,7 +179,7 @@
     const tabs = `<div class="result-tabs" role="tablist" aria-label="Filter task results">${resultFilters.map(([key, name]) => `<button class="result-tab ${key}" type="button" role="tab" data-action="result-tab" data-attempt="${id}" data-filter="${key}" aria-selected="${key === filter}">${name}<span>${key === 'all' ? results.length : count(key)}</span></button>`).join('')}</div>`
     const rows = results.map((result, index) => {
       const tone = resultTone(result)
-      return `<tbody class="result-group ${tone}" data-tone="${tone}"${matchesFilter(result, filter) ? '' : ' hidden'}><tr><td>${escape(result.task_id || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(duration(result.elapsed_ms))}</td></tr><tr class="result-outputs"><td colspan="3">${resultOutputs(result)}</td></tr></tbody>`
+      return `<tbody class="result-group ${tone}" data-tone="${tone}" data-task="${escape(result.task_id || '')}"${matchesFilter(result, filter) ? '' : ' hidden'}><tr><td>${escape(taskLabel(run, result.task_id) || result.task?.id || result.id || `Task ${index + 1}`)}</td><td>${resultBadge(result)}</td><td>${escape(duration(result.elapsed_ms))}</td></tr><tr class="result-outputs"><td colspan="3">${resultOutputs(result)}</td></tr></tbody>`
     }).join('')
     const empty = results.some(result => matchesFilter(result, filter))
     return `<details class="result-details" data-attempt="${id}"${state.resultsOpen.has(attempt.id) ? ' open' : ''}><summary>View ${results.length} task result${results.length === 1 ? '' : 's'} · <span class="result-count passed">${passed} passed</span> · <span class="result-count failed">${failed} failed</span>${total}</summary>${tabs}<table class="result-table"><thead><tr><th scope="col">Task</th><th scope="col">Result</th><th scope="col">Time taken</th></tr></thead>${rows}</table><p class="result-empty"${empty ? ' hidden' : ''}>${filter === 'passed' ? 'No passed tasks yet.' : 'No failed tasks.'}</p></details>`
@@ -197,7 +205,171 @@
       <div class="agent-body"><div class="url-bar">${icon('link')}<input type="text" aria-label="Agent URL ${index + 1}" readonly value="${escape(url)}" autocomplete="off" spellcheck="false"><button class="button" type="button" data-action="copy-url" data-attempt="${id}">${icon('copy')}Copy URL</button></div><div class="link-utilities"><button class="copy-prompt" type="button" data-action="copy-prompt" data-attempt="${id}">${icon('prompt')}Copy prompt</button><a class="open-agent" href="${escape(url)}" target="_blank" rel="noopener">Open task${icon('external')}</a></div>
       <div class="entry-fields"><div><label for="tags-${id}">Tags</label><input name="tags" id="tags-${id}" value="${escape(draft.tags)}" placeholder="baseline, v2" maxlength="500" autocomplete="off"><p class="field-help">Comma-separated.</p></div><div><label for="comments-${id}">Comments</label><textarea name="comments" id="comments-${id}" placeholder="Model, settings, notes" maxlength="5000" rows="2">${escape(draft.comments)}</textarea></div></div></div>
       <div class="agent-card-footer"><div class="progress-group"><div class="progress-track" role="progressbar" aria-label="Task results submitted" aria-valuenow="${p.completed}" aria-valuemin="0" aria-valuemax="${p.total}"><div class="progress-fill" style="width:${p.percentage}%"></div></div><span>${p.completed} / ${p.total} results</span></div><div class="save-group"><span class="save-feedback${draft.dirty ? ' dirty' : ''}" role="status">${draft.dirty ? 'Unsaved changes' : 'Saved'}</span><button class="button secondary small" type="submit"${draft.dirty && !state.saving.has(attempt.id) ? '' : ' disabled'}>${state.saving.has(attempt.id) ? 'Saving…' : 'Save'}</button></div></div>
-      </form><div class="attempt-traversal"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${id}">${icon('tasks')}View traversal</button></div>${renderResults(attempt)}</article>`
+      </form><div class="attempt-traversal"><button class="button quiet small" type="button" data-action="view-traversal" data-attempt="${id}">${icon('tasks')}View traversal</button></div>${renderResults(attempt, run)}</article>`
+  }
+
+  // AI summary, written by Claude from the graded results on request and kept
+  // by the server. It never changes a grade.
+  function renderSummary(run) {
+    const data = state.summaries.get(run.id), writing = state.writingSummary.has(run.id)
+    const error = state.summaryErrors.get(run.id)
+    const button = label => `<button class="button secondary small" type="button" data-action="write-summary"${writing ? ' disabled' : ''}>${icon('spark')}${writing ? 'Writing…' : label}</button>`
+    let body = '', action = ''
+    if (!data) body = '<p class="ai-summary-note">Loading…</p>'
+    else if (data.error) body = `<p class="ai-summary-error">Couldn’t load the summary. ${escape(data.error)}</p>`
+    else if (!data.configured) body = state.local
+      ? '<p class="ai-summary-note">To turn this on, start the dashboard with <code>ANTHROPIC_API_KEY</code> set to a Claude API key.</p>'
+      : '<p class="ai-summary-note">To turn this on, add a Claude API key in Cloudflare: open the gta-6-bench Worker, go to Settings, then Variables and Secrets, and add a secret named <code>ANTHROPIC_API_KEY</code>.</p>'
+    else if (!data.summary) {
+      body = data.finished ? `<p class="ai-summary-note">${writing ? `Claude is reading ${data.finished} result${data.finished === 1 ? '' : 's'}. This can take up to a minute.` : 'Get a short write-up of how each agent did and where it went wrong.'}</p>` : '<p class="ai-summary-note">You can write a summary once agents have finished some tasks.</p>'
+      if (data.finished) action = button('Write summary')
+    } else {
+      const summary = data.summary
+      const added = data.finished - data.written_from
+      const stale = data.stale ? ` · <span class="stale">${added > 0 ? `${added} new result${added === 1 ? '' : 's'} since then` : 'Results changed since then'}</span>` : ''
+      body = `<p class="ai-summary-overview">${escape(summary.overview)}</p>
+        ${summary.agents?.length ? `<ul class="ai-summary-agents">${summary.agents.map(item => `<li>${item.agent ? `<img src="${agentData(item.agent).icon}" alt="">` : ''}<div><strong>${escape(item.label)}</strong><span>${escape(item.summary)}</span></div></li>`).join('')}</ul>` : ''}
+        ${summary.patterns?.length ? `<ul class="ai-summary-patterns">${summary.patterns.map(line => `<li>${escape(line)}</li>`).join('')}</ul>` : ''}
+        <p class="ai-summary-meta">${writing ? 'Updating…' : `Written ${escape(date(data.written_at, true))} from ${data.written_from} result${data.written_from === 1 ? '' : 's'}${stale}`}</p>`
+      if (data.stale) action = button('Update summary')
+    }
+    return `<section class="ai-summary" aria-label="AI summary" aria-busy="${writing}"><div class="ai-summary-top"><div><h2>AI summary</h2><p>Written by Claude from this run’s results. It doesn’t change any grades.</p></div>${action}</div>${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</section>`
+  }
+  function refreshSummary() {
+    const node = $('.ai-summary')
+    if (node && state.selected) node.outerHTML = renderSummary(state.selected)
+  }
+  async function writeSummary(runId) {
+    if (state.writingSummary.has(runId)) return
+    state.writingSummary.add(runId); state.summaryErrors.delete(runId)
+    refreshSummary()
+    try {
+      state.summaries.set(runId, await api(`/runs/${encodeURIComponent(runId)}/summary`, { method: 'POST' }))
+    } catch (error) {
+      state.summaryErrors.set(runId, error.message)
+    } finally {
+      state.writingSummary.delete(runId)
+      if (state.selected?.id === runId) refreshSummary()
+    }
+  }
+
+  // Chat about this run. Claude reads the run's results and can look up one
+  // task's click path; answers stream in and the chat is kept with the run.
+  const chatSuggestions = ['Which agent did best, and why?', 'What went wrong on the failed tasks?', 'Which tasks took the longest?']
+  // Claude names tasks by id, or by name for tasks written in the dashboard.
+  function runTaskNames(run) {
+    const names = new Map()
+    for (const id of attempts(run).flatMap(resultList).map(result => result.task_id).filter(Boolean)) {
+      names.set(escape(id), id)
+      names.set(escape(taskLabel(run, id).replace(/\s+/g, ' ').trim()), id)
+    }
+    return names
+  }
+  function formatAnswer(text, run) {
+    const names = runTaskNames(run)
+    const pattern = [...names.keys()].sort((a, b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    const links = pattern.length ? new RegExp(`(?<![\\w-])(${pattern.join('|')})(?![\\w-])`, 'g') : null
+    const inline = line => {
+      let html = escape(line).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      if (links) html = html.replace(links, name => `<a class="task-link" href="#" role="button" data-action="show-task" data-task="${escape(names.get(name))}">${name}</a>`)
+      return html
+    }
+    // Short paragraphs and "- " bullets are all the chat asks Claude to use.
+    const parts = []
+    for (const block of String(text || '').split(/\n{2,}/)) {
+      for (const line of block.split('\n').filter(item => item.trim())) {
+        const bullet = /^\s*[-•*]\s+/.test(line), last = parts.at(-1)
+        const content = inline(line.replace(/^\s*[-•*]\s+/, ''))
+        if (last && last.bullet === bullet && (bullet || !last.closed)) last.lines.push(content)
+        else parts.push({ bullet, lines: [content] })
+      }
+      if (parts.length) parts.at(-1).closed = true
+    }
+    return parts.map(part => part.bullet ? `<ul>${part.lines.map(line => `<li>${line}</li>`).join('')}</ul>` : `<p>${part.lines.join('<br>')}</p>`).join('')
+  }
+  function renderChat(run) {
+    const data = state.chats.get(run.id), answer = state.chatAnswers.get(run.id), error = state.chatErrors.get(run.id)
+    const finished = attempts(run).flatMap(resultList).length
+    const messages = data?.messages || []
+    const bubble = (role, html, extra = '') => `<li class="chat-message ${role}${extra}"><div class="chat-bubble">${html}</div></li>`
+    let body = ''
+    if (!data) body = '<p class="ai-summary-note">Loading…</p>'
+    else if (data.error) body = `<p class="ai-summary-error">Couldn’t load the chat. ${escape(data.error)}</p>`
+    else if (!data.configured) body = state.local
+      ? '<p class="ai-summary-note">To turn this on, start the dashboard with <code>ANTHROPIC_API_KEY</code> set to a Claude API key.</p>'
+      : '<p class="ai-summary-note">To turn this on, add a Claude API key in Cloudflare: open the gta-6-bench Worker, go to Settings, then Variables and Secrets, and add a secret named <code>ANTHROPIC_API_KEY</code>.</p>'
+    else if (!finished) body = '<p class="ai-summary-note">You can chat about this run once agents have finished some tasks.</p>'
+    else {
+      const log = messages.map(item => item.role === 'user' ? bubble('user', escape(item.text).replace(/\n/g, '<br>')) : bubble('assistant', formatAnswer(item.text, run))).join('')
+      const live = answer ? bubble('user', escape(answer.question).replace(/\n/g, '<br>')) + bubble('assistant', answer.text ? formatAnswer(answer.text, run) : '<span class="chat-thinking">Thinking<span>.</span><span>.</span><span>.</span></span>', ' chat-live') : ''
+      const suggestions = !messages.length && !answer ? `<div class="chat-suggestions">${chatSuggestions.map(text => `<button class="chat-suggestion" type="button" data-action="chat-suggest" data-question="${escape(text)}">${escape(text)}</button>`).join('')}</div>` : ''
+      const locked = Boolean(answer) || data.full
+      body = `${log || live ? `<ol class="chat-log" aria-live="polite">${log}${live}</ol>` : ''}${suggestions}
+        ${data.full ? '<p class="ai-summary-note">This chat is full. Clear it to start a new one.</p>' : ''}
+        <form class="chat-form" data-run="${escape(run.id)}"><textarea name="question" rows="1" maxlength="2000" placeholder="Ask about this run" aria-label="Ask about this run"${data.full ? ' disabled' : ''}>${escape(state.chatDrafts.get(run.id) || '')}</textarea><button class="chat-send" type="submit" aria-label="Send" title="Send"${locked ? ' disabled' : ''}>${icon('send')}</button></form>`
+    }
+    const clear = messages.length && !answer ? '<button class="button quiet small" type="button" data-action="clear-chat">Clear chat</button>' : ''
+    return `<section class="run-chat" aria-label="Chat about this run"><div class="ai-summary-top"><div><h2>Chat about this run</h2><p>Ask Claude about these results. It can look up what an agent clicked on any task.</p></div>${clear}</div>${body}${error ? `<p class="ai-summary-error" role="alert">${escape(error)}</p>` : ''}</section>`
+  }
+  function scrollChat() { const log = $('.chat-log'); if (log) log.scrollTop = log.scrollHeight }
+  function refreshChat({ focus = false } = {}) {
+    const node = $('.run-chat')
+    if (!node || !state.selected) return
+    node.outerHTML = renderChat(state.selected)
+    scrollChat()
+    if (focus) $('.chat-form textarea')?.focus()
+  }
+  async function askChat(runId, question) {
+    if (state.chatAnswers.has(runId) || !question.trim()) return
+    const answer = { question: question.trim(), text: '' }
+    state.chatAnswers.set(runId, answer); state.chatErrors.delete(runId); state.chatDrafts.delete(runId)
+    refreshChat()
+    let saved = false
+    try {
+      const response = await fetch(`/dashboard/api/runs/${encodeURIComponent(runId)}/chat`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: answer.question }) })
+      if (!response.ok) {
+        let body = {}
+        try { body = await response.json() } catch { /* not JSON */ }
+        if (response.status === 401) showAuth()
+        throw new Error(typeof body.error === 'string' ? body.error : `Request failed (${response.status}). Please try again.`)
+      }
+      const reader = response.body.getReader(), decoder = new TextDecoder()
+      let buffer = ''
+      for (;;) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+        for (let index; (index = buffer.indexOf('\n')) >= 0;) {
+          const line = buffer.slice(0, index).trim()
+          buffer = buffer.slice(index + 1)
+          if (!line) continue
+          const event = JSON.parse(line)
+          if (event.type === 'text') {
+            answer.text += event.text
+            const live = document.querySelector('.chat-live .chat-bubble')
+            if (live && state.selected?.id === runId) { live.innerHTML = formatAnswer(answer.text, state.selected); scrollChat() }
+          } else if (event.type === 'done') { state.chats.set(runId, { configured: true, messages: event.messages, full: event.full }); saved = true }
+          else if (event.type === 'error') throw new Error(event.error)
+        }
+      }
+      if (!saved) throw new Error('The answer was cut off. Please try again.')
+    } catch (error) {
+      state.chatErrors.set(runId, error.message)
+      if (!state.chatDrafts.get(runId)) state.chatDrafts.set(runId, answer.question)
+    } finally {
+      state.chatAnswers.delete(runId)
+      if (state.selected?.id === runId) refreshChat({ focus: true })
+    }
+  }
+  function showTask(taskId) {
+    const run = state.selected
+    if (!run) return
+    const owners = attempts(run).filter(attempt => resultList(attempt).some(result => result.task_id === taskId))
+    for (const attempt of owners) { state.resultsOpen.add(attempt.id); state.resultTabs.set(attempt.id, 'all') }
+    render()
+    const rows = [...document.querySelectorAll('.result-group')].filter(row => row.dataset.task === taskId)
+    rows[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    for (const row of rows) { row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash') }
   }
 
   function renderDetail() {
@@ -208,26 +380,46 @@
     document.title = `${runName(run)} · GTA 6 Bench`
     $('#main').innerHTML = `<div class="page-heading run-detail-heading"><div><h1>${escape(runName(run))}</h1><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><button class="button secondary" data-action="new-run">${icon('plus')}New run</button></div>
       <div class="stats-grid run-summary" role="group" aria-label="Run results"><div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${counts.completed}</div></div><div class="stat"><div class="stat-label">Passed</div><div class="stat-value positive">${counts.passed}</div></div><div class="stat"><div class="stat-label">Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div></div><div class="stat"><div class="stat-label">Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div></div></div>
+      ${renderSummary(run)}
+      ${renderChat(run)}
       <section class="live-panel" id="live-panel" aria-label="Live tracker"></section>
       <div class="section-heading"><div><h2>Agent URLs<span class="section-count">${entries.length} / 5</span></h2><p>Use a separate browser session for each URL.</p></div><div class="section-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-attempt"${entries.length >= 5 ? ' disabled title="This run has five agent URLs"' : ''}>${icon('plus')}Add agent URL</button></div></div>
       ${entries.length ? `<div class="agent-grid">${entries.map((attempt, index) => renderAttempt(attempt, index, run)).join('')}</div>${entries.length >= 5 ? '<p class="capacity-note">Five-URL limit reached.</p>' : ''}` : `<section class="empty-state"><h2>No agent URLs yet</h2><button class="button primary" data-action="new-attempt">${icon('plus')}Add agent URL</button></section>`}`
     live.mount($('#live-panel'), run.id)
+    scrollChat()
     renderSidebar()
   }
 
-  function render() { if (state.selected) renderDetail(); else renderOverview() }
-  function selectedId() {
-    const match = location.hash.match(/^#\/runs\/([^/]+)/)
-    try { return match ? decodeURIComponent(match[1]) : null } catch { return null }
+  function render() {
+    const { view, id } = route()
+    if (view === 'tasks' || view === 'task') {
+      live.stop()
+      if (view === 'tasks') tasks.renderList($('#main')); else tasks.renderEditor($('#main'), id)
+      renderSidebar()
+    } else if (state.selected) renderDetail(); else renderOverview()
   }
+  function route() {
+    const decode = value => { try { return decodeURIComponent(value) } catch { return null } }
+    const run = location.hash.match(/^#\/runs\/([^/]+)/)
+    if (run) return { view: 'run', id: decode(run[1]) }
+    const task = location.hash.match(/^#\/tasks\/([^/]+)/)
+    if (task) return { view: 'task', id: task[1] === 'new' ? null : decode(task[1]) }
+    return { view: /^#\/tasks\/?$/.test(location.hash) ? 'tasks' : 'overview', id: null }
+  }
+  function selectedId() { const { view, id } = route(); return view === 'run' ? id : null }
   async function load({ initial = false } = {}) {
     if (!state.authenticated) return
     const number = ++state.loadNumber
     if (initial) $('#main').innerHTML = '<div role="status" aria-label="Loading runs"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row"></div></div>'
     const id = selectedId()
     try {
-      const [list, detail] = await Promise.all([api('/runs'), id ? api(`/runs/${encodeURIComponent(id)}`) : Promise.resolve(null)])
+      const taskView = ['tasks', 'task'].includes(route().view)
+      const [list, detail, summary, , chat] = await Promise.all([api('/runs'), id ? api(`/runs/${encodeURIComponent(id)}`) : Promise.resolve(null),
+        id ? api(`/runs/${encodeURIComponent(id)}/summary`).catch(error => ({ error: error.message })) : Promise.resolve(null), tasks.load(taskView),
+        id && !state.chatAnswers.has(id) ? api(`/runs/${encodeURIComponent(id)}/chat`).catch(error => ({ error: error.message })) : Promise.resolve(null)])
       if (number !== state.loadNumber || !state.authenticated) return
+      if (id && summary) state.summaries.set(id, summary)
+      if (id && chat && !state.chatAnswers.has(id)) state.chats.set(id, chat)
       state.runs = (list.runs || []).sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       state.selected = detail ? (detail.run || detail) : null
       if (state.selected) setRun(state.selected)
@@ -275,7 +467,7 @@
     if (type === 'attempt' && (!state.selected || attempts(state.selected).length >= 5)) return
     const dialog = $('#create-dialog')
     const isRun = type === 'run'
-    dialog.innerHTML = `<form id="${isRun ? 'create-run-form' : 'create-attempt-form'}"><div class="dialog-content"><div class="dialog-header"><h2 id="dialog-title">${isRun ? 'New run' : 'Add agent URL'}</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="Close dialog">×</button></div>${isRun ? `<div class="field"><label for="run-name">Run name</label><input id="run-name" name="name" required maxlength="120" value="${escape(`Run · ${new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`)}" autocomplete="off"></div><div class="field"><label for="run-suite">Task set</label><select id="run-suite" name="suite"><option value="original30">Original 30 tasks</option><option value="all240">All 240 tasks</option></select></div>` : `<div class="field"><label for="new-agent">Agent</label><select id="new-agent" name="agent">${options('grokbot')}</select></div><div class="field"><label for="new-tags">Tags <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input name="tags" id="new-tags" placeholder="baseline, v2" maxlength="500"><p class="field-help">Comma-separated.</p></div>`}<p class="form-error" role="alert"></p></div><div class="dialog-footer"><button class="button quiet" type="button" data-action="close-dialog">Cancel</button><button class="button primary" type="submit">${icon(isRun ? 'plus' : 'link')}${isRun ? 'Create run' : 'Create URL'}</button></div></form>`
+    dialog.innerHTML = `<form id="${isRun ? 'create-run-form' : 'create-attempt-form'}"><div class="dialog-content"><div class="dialog-header"><h2 id="dialog-title">${isRun ? 'New run' : 'Add agent URL'}</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="Close dialog">×</button></div>${isRun ? `<div class="field"><label for="run-name">Run name</label><input id="run-name" name="name" required maxlength="120" value="${escape(`Run · ${new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`)}" autocomplete="off"></div><div class="field"><label for="run-suite">Task set</label><select id="run-suite" name="suite"><option value="original30">Original 30 tasks</option><option value="all240">All 240 tasks</option><option value="custom">My tasks (${tasks.count()})</option></select></div><div class="field" id="run-task-picker" hidden>${tasks.runPicker()}</div>` : `<div class="field"><label for="new-agent">Agent</label><select id="new-agent" name="agent">${options('grokbot')}</select></div><div class="field"><label for="new-tags">Tags <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input name="tags" id="new-tags" placeholder="baseline, v2" maxlength="500"><p class="field-help">Comma-separated.</p></div>`}<p class="form-error" role="alert"></p></div><div class="dialog-footer"><button class="button quiet" type="button" data-action="close-dialog">Cancel</button><button class="button primary" type="submit">${icon(isRun ? 'plus' : 'link')}${isRun ? 'Create run' : 'Create URL'}</button></div></form>`
     dialog.showModal()
     const first = dialog.querySelector('input, select')
     first?.focus()
@@ -305,6 +497,16 @@
     if (action === 'close-dialog') $('#create-dialog').close()
     if (action === 'refresh') { control.disabled = true; await load(); if (control.isConnected) control.disabled = false }
     if (action === 'retry-session') { control.disabled = true; await initialize() }
+    if (action === 'write-summary' && state.selected) await writeSummary(state.selected.id)
+    if (action === 'chat-suggest' && state.selected) await askChat(state.selected.id, control.dataset.question)
+    if (action === 'show-task') { event.preventDefault(); showTask(control.dataset.task) }
+    if (action === 'clear-chat' && state.selected) {
+      const runId = state.selected.id
+      control.disabled = true
+      try { state.chats.set(runId, await api(`/runs/${encodeURIComponent(runId)}/chat`, { method: 'DELETE' })); state.chatErrors.delete(runId) }
+      catch (error) { state.chatErrors.set(runId, error.message) }
+      if (state.selected?.id === runId) refreshChat()
+    }
     if (action === 'result-tab') {
       state.resultTabs.set(control.dataset.attempt, control.dataset.filter)
       applyResultFilter(control.closest('.result-details'), control.dataset.filter)
@@ -326,7 +528,16 @@
     }
   })
 
+  document.addEventListener('change', event => {
+    if (event.target.id === 'run-suite') $('#run-task-picker').hidden = event.target.value !== 'custom'
+  })
   document.addEventListener('input', event => {
+    const chatForm = event.target.closest('.chat-form')
+    if (chatForm && event.target.name === 'question') {
+      state.chatDrafts.set(chatForm.dataset.run, event.target.value)
+      event.target.style.height = 'auto'; event.target.style.height = `${Math.min(event.target.scrollHeight, 160)}px`
+      return
+    }
     const form = event.target.closest('.attempt-form')
     if (!form || !['agent', 'tags', 'comments'].includes(event.target.name)) return
     const attempt = attempts(state.selected).find(item => item.id === form.dataset.attempt)
@@ -340,8 +551,19 @@
     if (event.target.name === 'agent') form.querySelector('.agent-logo').src = agentData(draft.agent).icon
   })
 
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' || event.shiftKey || event.isComposing || !event.target.matches?.('.chat-form textarea')) return
+    event.preventDefault()
+    event.target.form.requestSubmit()
+  })
   document.addEventListener('submit', async event => {
     const form = event.target
+    if (form.matches('.chat-form')) {
+      event.preventDefault()
+      const question = String(new FormData(form).get('question') || '')
+      if (question.trim()) await askChat(form.dataset.run, question)
+      return
+    }
     if (!['login-form', 'create-run-form', 'create-attempt-form'].includes(form.id) && !form.matches('.attempt-form')) return
     event.preventDefault()
     if (form.matches('.attempt-form')) {
@@ -363,7 +585,9 @@
       } else if (form.id === 'create-run-form') {
         const name = String(data.get('name') || '').trim()
         if (!name) throw new Error('Give this run a name.')
-        const result = await api('/runs', { method: 'POST', body: { name, suite: data.get('suite') } })
+        const suite = data.get('suite'), taskIds = data.getAll('task_ids')
+        if (suite === 'custom' && !taskIds.length) throw new Error('Choose at least one of your tasks.')
+        const result = await api('/runs', { method: 'POST', body: { name, suite, ...(suite === 'custom' ? { task_ids: taskIds } : {}) } })
         const run = result.run || result
         if (!run.id) throw new Error('The server did not return a run ID. Refresh the run history before trying again.')
         $('#create-dialog').close()
@@ -424,6 +648,6 @@
     if (details.open) state.resultsOpen.add(details.dataset.attempt); else state.resultsOpen.delete(details.dataset.attempt)
   }, true)
   window.addEventListener('hashchange', () => { traversal.close(); if (state.authenticated) load({ initial: true }) })
-  window.addEventListener('beforeunload', event => { if ([...state.drafts.values()].some(draft => draft.dirty)) { event.preventDefault(); event.returnValue = '' } })
+  window.addEventListener('beforeunload', event => { if (tasks.dirty || [...state.drafts.values()].some(draft => draft.dirty)) { event.preventDefault(); event.returnValue = '' } })
   initialize()
 })()
