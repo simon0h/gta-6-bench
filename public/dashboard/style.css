@@ -321,9 +321,12 @@ main:focus { outline: none; }
 .agent-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
 .agent-identity { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .agent-logo { width: 32px; height: 32px; padding: 6px; flex: none; border: 1px solid var(--line); border-radius: var(--radius); background: #ffffff; object-fit: contain; }
-.agent-select-wrap { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.agent-select-wrap label { margin: 0; color: var(--muted); font-size: 13px; font-weight: 400; }
-.agent-select-wrap select { min-height: 30px; max-width: 170px; padding: 3px 30px 3px 10px; font-weight: 600; }
+.agent-identity select { min-height: 30px; max-width: 170px; padding: 3px 30px 3px 10px; font-weight: 600; }
+.agent-name { overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.agent-card:not(.open) .agent-card-top { border-bottom: 0; }
+.card-toggle { margin-right: -6px; }
+.card-toggle .chevron { margin: 0; transform: rotate(90deg); }
+.agent-card.open .card-toggle .chevron { transform: rotate(-90deg); }
 .agent-card-actions { display: flex; align-items: center; gap: 10px; flex: none; }
 .entry-number { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
 .agent-body { padding: 14px 16px 16px; }
@@ -861,7 +864,7 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
 @media (max-width: 480px) {
   .brand-name { display: none; }
   .page-heading h1 { font-size: 21px; }
-  .agent-select-wrap select { max-width: 130px; }
+  .agent-identity select { max-width: 130px; }
   .agent-card-top { padding: 10px 12px; }
   .agent-body { padding: 12px; }
   .url-bar > svg, .url-bar .button svg { display: none; }

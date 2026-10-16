@@ -56,6 +56,7 @@ test('browser traversal captures page lineage and actions without field values; 
   operator.on('pageerror', error => errors.push(error.message))
   await operator.goto(`${origin}/dashboard#/runs/${run.id}`)
   await operator.locator('#run-tab-agents').click()
+  await operator.locator('.card-toggle').first().click()
   await operator.getByLabel('Comments').fill('Draft retained while inspecting traversal')
   await operator.locator('#run-tab-results').click()
   await operator.locator('.result-row').first().click()
