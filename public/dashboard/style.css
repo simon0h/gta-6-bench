@@ -706,20 +706,22 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
 .live-error { margin-bottom: 10px; color: var(--red); font-size: 13px; }
 
 /* AI summary and chat panels. */
-/* The AI summary sits on a dark grey and navy gradient with a light grey glow in
-   the corner, in both themes, so its colors are set here rather than inherited. */
+/* The AI summary uses the GTA 6 logo colors, the same pink, orange and purple
+   as the VI mark: deep purple where the text sits, warming to magenta and a
+   sunset orange glow in the top corner. It looks the same in both themes, so
+   its colors are set here rather than inherited. */
 .ai-summary {
-  --ink: #f2f4f8; --muted: #b8bfcc; --line: rgba(255, 255, 255, .14); --line-strong: rgba(255, 255, 255, .28);
-  --bg: rgba(255, 255, 255, .07); --paper: rgba(255, 255, 255, .08); --fill: rgba(255, 255, 255, .14);
-  --accent: #8ab8ff; --accent-hover: #a8c9ff; --accent-soft: rgba(138, 184, 255, .16); --on-accent: #0b1626;
-  --amber: #f2aa45; --red: #ff8a7e;
-  border-color: #2b3550;
-  background: radial-gradient(120% 140% at 100% 0%, rgba(206, 211, 220, .42) 0%, rgba(206, 211, 220, 0) 42%), linear-gradient(135deg, #2a2c31 0%, #1f2737 45%, #1a2a52 100%);
+  --ink: #fbf3f8; --muted: #e2c4d8; --line: rgba(255, 255, 255, .16); --line-strong: rgba(255, 255, 255, .3);
+  --bg: rgba(20, 6, 30, .32); --paper: rgba(255, 255, 255, .08); --fill: rgba(255, 255, 255, .14);
+  --accent: #ffb070; --accent-hover: #ffc48f; --accent-soft: rgba(255, 176, 112, .18); --on-accent: #2a0d1f;
+  --amber: #ffc05c; --red: #ffb3c4;
+  border-color: #4a1d5e;
+  background: radial-gradient(70% 130% at 100% 0%, rgba(255, 192, 92, .55) 0%, rgba(255, 125, 85, .32) 32%, rgba(255, 77, 157, 0) 68%), linear-gradient(120deg, #22123a 0%, #36154f 38%, #6a1c5e 72%, #a8295f 100%);
   color: var(--ink);
 }
 .ai-summary-top { justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 12px; }
 .ai-summary-top h2 { display: flex; align-items: center; gap: 8px; }
-.sparkle { width: 18px; height: 18px; flex: none; color: #c9d6ff; }
+.sparkle { width: 18px; height: 18px; flex: none; color: #ffb3d4; }
 .ai-summary-top > div { min-width: 0; }
 .ai-summary-top .button { flex: none; }
 .ai-summary .panel-body > :first-child, .run-chat .panel-body > :first-child { margin-top: 0; }
