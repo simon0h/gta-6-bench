@@ -164,13 +164,29 @@ const gameProducts = node => node === '468642' || ['20972781011', '20972814011',
 const FASHION_NODES = ['7147440011', '7147441011', '7147442011', '7147443011']
 const nodeProducts = node => [...gameProducts(node), ...ASSORTMENT.filter(p => p.stock > 0 && (p.nodes.includes(node) || (node === '7141123011' && FASHION_NODES.includes(p.deptNode))))]
 
+// A category page is never empty on amazon.com. When this catalog has nothing filed under a
+// subcategory, its page shows the department's items; departments without stock of their own
+// show the closest department (Kindle -> Books, Industrial -> Tools, Handmade -> Home & Kitchen).
+// Thin pages (fewer than 8 items) are topped up the same way, so a row never shows a lone product.
+const DEPT_FALLBACK = { '154606011': '283155', '16310091': '228013', '11260432011': '1055398', '7147443011': '7141123011', '7147442011': '7141123011' }
+const stockedProducts = (node, deptNode = node) => {
+  const list = []
+  // Video Games subpages keep only their own titles when they have any; an empty one shows
+  // Gaming Accessories rather than the department's game listings.
+  const chain = deptNode === '468642' ? [node, '19201981011'] : [node, deptNode, DEPT_FALLBACK[deptNode]]
+  for (const n of chain) {
+    if (list.length >= 8 || (list.length && deptNode === '468642')) break
+    if (n) for (const p of nodeProducts(n)) if (!list.includes(p)) list.push(p)
+  }
+  return list
+}
 export function departmentLanding(base, req, node) {
   const dept = node === FASHION.node ? FASHION : departmentByNode(node)
-  return landing({ base, req, dept, current: dept, action: `/${dept.slug}/b`, hidden: { node: dept.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path]], sideLinks: dept.subs, tiles: dept.subs, products: nodeProducts(dept.node) })
+  return landing({ base, req, dept, current: dept, action: `/${dept.slug}/b`, hidden: { node: dept.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path]], sideLinks: dept.subs, tiles: dept.subs, products: stockedProducts(dept.node) })
 }
 export function subcategoryLanding(base, req, node) {
   const { dept, sub: current } = subcategoryByNode(node)
-  return landing({ base, req, dept, current, action: '/b', hidden: { node: current.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path], [current.label, current.path]], sideTitle: `<a href="${base}${dept.path}">&lsaquo; ${esc(dept.label)}</a>`, sideLinks: dept.subs, tiles: dept.subs.filter(s => s.node !== current.node), products: nodeProducts(current.node) })
+  return landing({ base, req, dept, current, action: '/b', hidden: { node: current.node }, trail: [['Amazon.com', '/'], [dept.label, dept.path], [current.label, current.path]], sideTitle: `<a href="${base}${dept.path}">&lsaquo; ${esc(dept.label)}</a>`, sideLinks: dept.subs, tiles: dept.subs.filter(s => s.node !== current.node), products: stockedProducts(current.node, dept.node) })
 }
 // "Shop by category" row on the existing Video Games / catalog department pages.
 export function shopByCategory(base, nodeId) {
