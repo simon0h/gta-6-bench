@@ -44,7 +44,7 @@ function productPage(req, res, p, values = {}, messages = [], status = 200) {
   render(req, res, (selectedProduct(p, values.variant) || p).title, P.product(res.locals.base, p, { values: { postcode: req.store.postcode ?? '', ...values, wishlisted:retailState(req).favorites.includes(lineKey(selectedProduct(p,values.variant)||selectedProduct(p))) }, checked: POSTCODE_RE.test(req.store.postcode || ''), messages }), status)
 }
 function notFound(req, res) {
-  render(req, res, 'Page not found', `<h1>We couldn't find that page</h1><a href="${res.locals.base}/">Continue shopping</a>`, 404)
+  render(req, res, 'Page not found', S.notFoundPage(res.locals.base), 404)
 }
 function guard(req, res, needDetails = false) {
   const base = res.locals.base

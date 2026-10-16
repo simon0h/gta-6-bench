@@ -53,7 +53,7 @@ function infoLayout(base, page, extra = '') {
   const nav = page.nav === 'cs' ? `<aside class="wsx-sidenav" aria-label="Customer Service"><h2>${a(base, '/customer-service/', 'Customer Service')}</h2><ul>${customerServiceNav.map(([label, path]) => `<li>${a(base, path, label)}</li>`).join('')}</ul><p class="wsx-call">${icon('phone')}<a href="tel:18778126235">Call Us 877.812.6235</a></p></aside>` : ''
   const sections = (page.sections || []).map(([h, p, id]) => `<section class="wsx-info-section"${id ? ` id="${id}"` : ''}><h2>${esc(h)}</h2><p>${esc(p)}</p></section>`).join('')
   const cta = page.cta ? `<p class="wsx-cta">${page.cta.map(([label, path]) => a(base, path, label, ' class="wsx-btn wsx-btn-light"')).join(' ')}</p>` : ''
-  return `${crumbs(base, page.nav === 'cs' ? [['Customer Service', '/customer-service/'], [page.h1]] : [[page.h1]])}<div class="wsx-info${nav ? ' wsx-info-nav' : ''}">${nav}<article>${page.eyebrow ? `<p class="wsx-eyebrow">${esc(page.eyebrow)}</p>` : ''}<h1>${esc(page.h1)}</h1>${page.lead ? `<p class="wsx-lead">${esc(page.lead)}</p>` : ''}${extra}${sections}${cta}</article></div>`
+  return `${crumbs(base, page.nav === 'cs' && page.h1 !== 'Customer Service' ? [['Customer Service', '/customer-service/'], [page.h1]] : [[page.h1]])}<div class="wsx-info${nav ? ' wsx-info-nav' : ''}">${nav}<article>${page.eyebrow ? `<p class="wsx-eyebrow">${esc(page.eyebrow)}</p>` : ''}<h1>${esc(page.h1)}</h1>${page.lead ? `<p class="wsx-lead">${esc(page.lead)}</p>` : ''}${extra}${sections}${cta}</article></div>`
 }
 
 const field = (id, label, name, value = '', type = 'text', extra = '') => `<div class="wsx-field"><label for="${id}">${label}</label><input id="${id}" name="${name}" type="${type}" value="${esc(value)}"${extra}></div>`

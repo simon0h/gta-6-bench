@@ -93,7 +93,7 @@
 .ik-form button{align-self:flex-start;margin-top:8px}
 .ik-form.inline{flex-direction:row;align-items:center;flex-wrap:wrap;max-width:none}.ik-form.inline button{margin:0}
 .ik-stores{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.ik-stores li{border:1px solid var(--line);padding:16px}.ik-stores h3{margin:0 0 4px}.ik-stores p{margin:0;font-size:12px;color:var(--muted)}
+.ik-stores li{border:1px solid var(--line);padding:16px}.ik-stores h3,.ik-stores h4{margin:0 0 4px;font-size:16px}.ik-state{font-size:18px;margin:28px 0 12px}.ik-state:first-of-type{margin-top:8px}.ik-stores p{margin:0;font-size:12px;color:var(--muted)}
 .ik-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;padding:0;list-style:none;counter-reset:s}
 .ik-steps li{background:var(--soft);padding:16px}.ik-steps h3{margin:0 0 6px;font-size:15px}
 .ik-empty-bag{padding:24px 0}
@@ -132,3 +132,5 @@
 .ik-real-footer .ik-footer-bottom nav{display:flex;gap:16px}
 @media(max-width:420px){.ik-grid4,.ik-sitemap-cols,.ik-footer-cols{grid-template-columns:1fr}}
 .ik-promo>div{padding-top:72px;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.45) 35%,rgba(0,0,0,.72))}.ik-promo h2,.ik-promo p{text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.ik-lost{margin-top:32px}.ik-lost h2{font-size:20px;margin:24px 0 8px}
+main>form[action$="/location"]{max-width:420px}main>form[action$="/location"] input{width:100%}

@@ -693,4 +693,612 @@ VINTERFINT|Plate|white/green, 7 3/4 "|2.99|4.6|210|N|
 # paper-shop-25227
 @ basket
 VINTERFINT|Gift wrap roll|Christmas tree pattern/red, 9 '|4.99|4.5|302|N|
+VINTERFINT|Gift bag|red/white, 13 3/4x4 3/4x15 "|1.99|4.6|418|N|
+VINTERFINT|Gift box|set of 3, gold color|5.99|4.5|236|N|
+VINTERFINT|Ribbon|red, 33 '|1.99|4.4|151|N|
+# winter-lights-49150
+@ lamp
+STRÅLA|Table lamp|star/brass color, 13 3/4 "|24.99|4.6|507|N|
+VINTERFINT|LED string light with 40 lights|battery-operated/white, 13 '|12.99|4.5|388|N|
+STRÅLA|LED decorative light|battery-operated/star, 14 1/2 "|14.99|4.6|902||
+VINTERFINT|LED decorative lighting|battery-operated/Christmas tree, 9 "|9.99|4.4|214|N|
+# winter-textiles-49152
+@ textile
+VINTERFINT|Table runner|white/red, 14x51 "|9.99|4.5|188|N|
+VINTERFINT|Throw|red/white, 47x67 "|19.99|4.7|261|N|
+VINTERFINT|Dish towel|red/white, 20x26 ", 2 pack|3.99|4.6|143|N|
+# winter-tableware-49153
+@ plate
+VINTERFINT|Mug|white/red, 10 oz|3.99|4.6|322|N|
+VINTERFINT|Serving plate|white/red, 12 1/2 "|9.99|4.5|117|N|
+VINTERFINT|Napkin|red, 13x13 ", 30 pack|1.99|4.4|408|N|
+# winter-pots-plants-49151
+@ vase
+EUPHORBIA PULCHERRIMA|Potted plant|poinsettia, red, 4 3/4 "|9.99|4.3|612|N|
+PICEA GLAUCA|Potted plant|white spruce, 6 "|14.99|4.4|286|N|
+VINTERFINT|Plant pot|in/outdoor/red, 4 3/4 "|5.99|4.5|197|N|
+SMYCKA|Artificial plant|in/outdoor/Christmas tree, 59 "|79.99|4.4|724|L99.99|
+FEJKA|Artificial potted plant|in/outdoor/amaryllis, 4 3/4 "|12.99|4.5|318||
+# holiday-foods-49227
+@ food
+PEPPARKAKOR|Ginger thins|5.3 oz|2.49|4.8|3104||
+GLÖGG|Non-alcoholic mulled wine|25.4 oz|6.99|4.7|1402||
+SAFFRANSBULLAR|Saffron buns, frozen|7.1 oz|4.99|4.5|206|N|
+JULSKUM|Christmas marshmallows|3.5 oz|1.99|4.6|318|N|
+SILL MATJES|Matjes herring|8 oz|4.49|4.5|402||
+KNÄCK|Swedish toffee|5.3 oz|3.99|4.6|151|N|
+# winter-cooking-baking-49154
+@ utensil
+VINTERFINT|Cookie cutter|set of 4, stainless steel|4.99|4.6|402|N|
+VARDAGEN|Rolling pin|beech|7.99|4.7|1602||
+VINTERFINT|Baking mat|silicone/red, 11 3/4x15 3/4 "|5.99|4.4|188|N|
+UPPFYLLD|Baking spatula|silicone, 2 pack|3.99|4.6|1007||
+# storage-solution-systems-46052
+@ shelf
+BOAXEL|4 sections|white, 65 3/4x15 3/4x79 1/2 "|169.00|4.7|1206|L199.00|
+PLATSA|Wardrobe with 2 doors|white/Fonnes white, 31 1/2x22 3/4x47 1/4 "|175.00|4.5|402||
+ELVARLI|2 sections|white, 49 1/4x20x87 3/4-137 3/4 "|274.00|4.7|611||
+JONAXEL|Storage combination|white, 39 3/4x20x41 3/4 "|59.99|4.5|1103||
+PAX / FORSAND|Wardrobe combination|white/white, 59x23 5/8x79 1/4 "|540.00|4.6|1984||
+# garage-storage-700440
+@ shelf
+BROR|Shelving unit with cabinets|black, 33 1/4x15 3/4x74 3/4 "|334.00|4.7|318||
+BROR|Workbench|black/pine plywood, 43 1/4x21 5/8 "|169.00|4.7|402||
+BROR|Cabinet|black, 33 1/4x15 3/4 "|149.00|4.6|207||
+HEJNE|1 section|softwood, 30 3/4x19 5/8x67 3/8 "|50.00|4.6|1802|F45.00|
+SKÅDIS|Pegboard combination|white, 30x22 "|42.99|4.7|904|F37.99|
+# outdoor-organizing-21958
+@ shelf
+TOSTERÖ|Storage box, outdoor|black, 50 3/8x31 1/2x37 3/4 "|229.00|4.3|412||
+TJUSIG|Shoe rack|in/outdoor/white, 31 1/8x23 5/8 "|29.99|4.6|1102||
+HYLLIS|Shelving unit with cover|transparent, 23 5/8x10 5/8x55 1/2 "|24.99|4.3|703||
+TOSTERÖ|Cover for outdoor furniture|black, 48 3/8x46 1/2 "|49.99|4.4|206||
+# room-dividers-46080
+@ shelf
+RISÖR|Room divider|white, 35 7/8x63 "|49.99|4.3|306||
+TYSSEDAL|Room divider|white/glass, 35 7/8x63 "|249.00|4.6|88||
+KALLAX|Shelf unit with 4 inserts|white, 57 7/8x57 7/8 "|229.00|4.7|612||
+VITTSJÖ|Shelf unit|white/glass, 39 3/8x68 7/8 "|99.99|4.5|902||
+# hallway-furniture-sets-700411
+@ shelf
+HEMNES|Coat rack with 4 hooks|white stain, 33 1/2 "|59.99|4.6|1103||
+TJUSIG|Bench with shoe storage|black, 31 7/8x19 5/8 "|79.99|4.6|1402||
+STÄLL|Shoe cabinet with 4 compartments|white, 37 3/8x11 3/4x50 3/8 "|159.00|4.4|3002|L179.00|
+BISSA|Shoe cabinet with 2 compartments|white, 19 1/4x11x36 5/8 "|29.99|4.3|4206||
+MACKAPÄR|Coat rack with shoe storage unit|white, 30 3/4x13 3/4x76 3/8 "|99.99|4.5|1802||
+# storage-cabinets-10385
+@ shelf
+ALEX|Drawer unit on casters|white, 26 3/8x18 7/8 "|119.00|4.6|1802|L139.00|
+ERIK|File cabinet|white, 16 1/8x25 5/8 "|149.00|4.5|402||
+GALANT|Drawer unit|white, 17 3/4x31 1/2 "|249.00|4.4|103||
+HELMER|Drawer unit on casters|white, 11x27 1/8 "|69.99|4.6|2701||
+IDÅSEN|Cabinet with doors and drawers|beige, 16 1/2x46 1/2 "|299.00|4.6|306||
+# chaise-lounges-57527
+@ chair
+EKTORP|Chaise|Hallarp gray|499.00|4.4|206||
+FRIHETEN|Sleeper sectional, 3 seat w/storage|Hyllie dark gray|899.00|4.4|3102|L999.00|
+VIMLE|Chaise|Hallarp beige|449.00|4.5|402||
+KIVIK|Chaise|Tresund light beige|649.00|4.6|318|L699.00|
+LIDHULT|Chaise|Gassebol light beige|1099.00|4.5|112||
+# sofa-cushions-57536
+@ textile
+SÖDERHAMN|Back cushion|Tonerud gray, 39 3/8x6 1/4 "|50.00|4.5|186||
+VIMLE|Headrest|Hallarp beige|40.00|4.4|206||
+KIVIK|Back cushion|Tresund light beige|45.00|4.4|98||
+LANDSKRONA|Seat cushion|Gunnared dark gray|75.00|4.3|64||
+# sofa-legs-31785
+@ table
+NOLMYRA|Leg|birch veneer, 4 pack|25.00|4.5|113||
+BJÖRKBACKA|Leg|birch, 4 3/8 ", 4 pack|20.00|4.6|412||
+STOCKSUND|Leg|black/wood, 4 pack|30.00|4.4|87||
+VIMLE|Leg|light brown, 4 pack|25.00|4.5|208||
+# sofa-covers-10664
+@ textile
+EKTORP|Cover for sofa|Hallarp gray|149.00|4.4|1903|F129.00|
+KLIPPAN|Cover for loveseat|Vissle gray|59.99|4.3|1206||
+KIVIK|Cover for sofa|Tibbleby beige/gray|199.00|4.5|402||
+VIMLE|Cover for 3-seat sofa|Gunnared beige|199.00|4.4|318||
+POÄNG|Armchair cushion|Knisa light beige|49.99|4.5|2307|L59.99|
+# sofa-modules-31786
+@ chair
+VIMLE|Seat section|Hallarp beige|299.00|4.5|402||
+SÖDERHAMN|Seat section|Tonerud gray|250.00|4.4|706||
+JÄTTEBO|1-seat module with armrest|Samsala dark yellow-green|399.00|4.6|138|N|
+KIVIK|Corner section|Tresund light beige|449.00|4.5|206||
+FRIHETEN|Corner sofa-bed with storage|Skiftebo dark gray|999.00|4.4|1803||
+# bedroom-furniture-sets-54992
+@ bed
+HEMNES|Bedroom furniture, set of 4|white stain, Full|1124.00|4.6|106||
+MALM|Bedroom furniture, set of 3|white, Queen|588.99|4.5|212||
+BRIMNES|Bedroom furniture, set of 3|white, Full|478.00|4.4|88||
+SONGESAND|Bedroom furniture, set of 4|white, Queen|826.00|4.4|76||
+# beds-with-mattresses-included-700513
+@ bed
+MALM|Bed frame with mattress|white/Åbygda firm, Queen|478.00|4.4|412|L528.00|
+NEIDEN|Bed frame with mattress|pine/Åbygda firm, Twin|188.00|4.5|604||
+TARVA|Bed frame with mattress|pine/Valevåg firm, Full|478.00|4.5|208||
+SLATTUM|Upholstered bed frame with mattress|Vissle dark gray/Åbygda firm, Queen|328.00|4.4|302||
+# headboards-19064
+@ bed
+GLADSTAD|Headboard|Kabusa gray, Queen|99.00|4.4|204||
+SAGESUND|Headboard|black, Queen|99.00|4.5|112||
+TUFJORD|Headboard|Tallmyra white/black, Queen|149.00|4.5|76|N|
+VADHEIM|Headboard|dark gray, Queen|79.99|4.3|188||
+# bed-slats-24827
+@ bed
+LURÖY|Slatted bed base|Queen|44.99|4.4|3803||
+LÖNSET|Slatted bed base|Queen|99.00|4.5|1206||
+LINDBÅDEN|Slatted bed base|Full|69.99|4.4|302||
+# mattress-bases-24825
+@ bed
+LYNGÖR|Slatted mattress base with legs|Queen|299.00|4.5|604||
+ESPEVÄR|Slatted mattress base|white, Queen|249.00|4.5|402||
+LÖNSET|Slatted bed base|Twin|79.99|4.5|406||
+# bed-headboard-covers-57280
+@ textile
+SLATTUM|Cover for headboard|Vissle dark gray, Queen|49.99|4.4|112||
+GLADSTAD|Cover for upholstered bed frame|Kabusa gray, Queen|79.99|4.2|64||
+HAUGA|Cover for upholstered bed frame|Vissle gray, Queen|69.99|4.3|86||
+# bed-legs-24822
+@ table
+SULTAN|Legs|birch, 7 7/8 "|20.00|4.6|602||
+BURFJORD|Leg|black, 7 7/8 ", 4 pack|25.00|4.5|208||
+FLOKENES|Legs|birch, 7 7/8 "|15.00|4.4|117||
+# integrated-lighting-16280
+@ lamp
+MITTLED|LED kitchen countertop lighting strip|dimmable white, 15 3/4 "|14.99|4.4|1803|F12.99|
+SKYDRAG|LED kitchen countertop/cabinet light strip|smart dimmable/white spectrum, 15 3/4 "|24.99|4.5|902||
+STÖTTA|LED cabinet lighting strip with sensor|battery-operated white, 12 1/2 "|12.99|4.2|2103||
+OMLOPP|LED countertop light|aluminum color, 15 3/4 "|29.99|4.4|204||
+# bathroom-lighting-10736
+@ lamp
+STORJORM|Mirror with integrated lighting|white, 23 5/8x31 1/2 "|179.00|4.4|302||
+TÄLLBYN|Wall lamp with outlet|bronze color/opal white glass|59.99|4.6|408|L69.99|
+VARNEBY|Wall lamp|smoked glass|69.99|4.7|102||
+SVALLIS|Ceiling lamp|white|19.99|4.4|604||
+# ceiling-fans-700600
+@ lamp
+SÅRLI|Ceiling fan with lights|white, 50 "|119.00|4.3|206|L139.00|
+SKAFTVIND|Ceiling fan with light|white, 50 "|99.99|4.2|318||
+# kitchen-cabinets-700292
+@ shelf
+METOD|Base cabinet frame|white, 24x24x30 "|64.00|4.6|1206||
+METOD|Wall cabinet frame|white, 30x15x30 "|55.00|4.6|1103||
+SEKTION|High cabinet frame|white, 24x24x90 "|175.00|4.6|604||
+ENHET|Base cabinet with shelf|white, 23 5/8x24 3/4x29 1/2 "|80.00|4.4|318||
+KNOXHULT|Base cabinet with doors and drawer|white, 47 1/4 "|199.00|4.2|1603||
+# kitchen-doors-drawer-fronts-700293
+@ shelf
+VOXTORP|Door|matte white, 15x30 "|35.00|4.6|412||
+AXSTAD|Door|matte white, 18x30 "|30.00|4.5|604||
+UPPLÖV|Door|matte anthracite, 18x30 "|45.00|4.6|206||
+BODARP|Door|gray-green, 15x30 "|35.00|4.6|318||
+STENSUND|Drawer front|beige, 30x10 "|35.00|4.5|112||
+# interior-fittings-24255
+@ basket
+MAXIMERA|Drawer divider for drawer|transparent|5.00|4.4|604||
+VARIERA|Shelf insert|white, 12 5/8x5 7/8 "|4.99|4.6|3102||
+UPPDATERA|Utensil tray|bamboo light, 12 5/8x19 3/4 "|14.99|4.6|402||
+AVSKILJA|Drawer divider|bamboo, 12 5/8 "|9.99|4.5|188||
+# kitchen-pantry-storage-16200
+@ shelf
+HEJNE|2 sections/shelves|softwood, 30 3/4x19 5/8x67 3/8 "|80.00|4.6|904||
+OMAR|1 section shelving unit|galvanized, 36 1/4x18 1/8x71 1/4 "|69.99|4.7|502||
+JOSTEIN|Shelving unit|in/outdoor/wire white, 24x16 1/8x35 3/8 "|44.99|4.4|206||
+BROR|Shelving unit|black, 33 1/4x21 5/8x74 3/4 "|149.00|4.7|318||
+# modular-kitchens-22957
+@ shelf
+KNOXHULT|Kitchen|white, 72x24 3/4x86 5/8 "|654.00|4.1|318|L704.00|
+SUNNERSTA|Mini-kitchen|42 1/2x22 7/8x54 3/4 "|229.00|4.3|604||
+ENHET|Kitchen|white, 76 3/8x24 3/4x87 "|1155.00|4.4|112||
+# kitchen-lighting-16282
+@ lamp
+MITTLED|LED kitchen countertop lighting strip|dimmable white, 23 5/8 "|19.99|4.4|908||
+NYMÅNE|Pendant lamp|anthracite, 15 "|39.99|4.5|1203||
+RANARP|Pendant lamp|black, 9 "|49.99|4.6|1802||
+# sektion-cabinet-shelves-and-drawers-49117
+@ basket
+MAXIMERA|Drawer, low|white, 24x24 "|30.00|4.6|1206||
+MAXIMERA|Drawer, high|white, 30x24 "|50.00|4.6|904||
+UTRUSTA|Shelf|white, 15x24 "|10.00|4.6|1603||
+UTRUSTA|Pull-out interior fittings|24 "|80.00|4.4|118||
+# table-linen-20538
+@ textile
+TISTELBLOMMA|Tablecloth|light beige, 57x94 "|19.99|4.5|302||
+ÄNGSKLOCKA|Table runner|white/beige, 14x51 "|9.99|4.4|186||
+VÅRELD|Tablecloth|white, 57x94 "|24.99|4.6|204||
+FULLTALIG|Placemat|black, 14 1/8x14 1/8 "|1.99|4.4|604||
+TOLKNING|Place mat|handmade palm leaf, 14 1/8 "|4.99|4.6|1802||
+# kids-textiles-18730
+@ textile
+BARNDRÖM|Duvet cover and pillowcase|green/white, Twin|19.99|4.6|402||
+VÄNKRETS|Duvet cover and pillowcase|animal pattern/multicolor, Twin|19.99|4.7|318||
+BUSENKEL|Rug|cat pattern/multicolor, 39x59 "|29.99|4.6|112||
+LURVIG|Throw|blue/white, 47x63 "|9.99|4.5|206||
+# outdoor-cushions-17893
+@ textile
+FRÖSÖN/DUVHOLMEN|Seat/back cushion, outdoor|beige, 24 3/8x46 1/8 "|50.00|4.4|1203||
+FRÖSÖN|Cover for seat/back cushion|outdoor beige, 24 3/8x46 1/8 "|20.00|4.4|408||
+KUDDARNA|Chair cushion, outdoor|gray, 17 3/8 "|12.99|4.3|904||
+HÅLLÖ|Outdoor storage bag|black, 31 1/2x22 7/8x34 5/8 "|29.99|4.5|302||
+# chair-pads-20542
+@ textile
+JUSTINA|Chair pad|natural, 17/13x15x3 "|7.99|4.4|3802|F5.99|
+ORRHAGE|Chair pad|light gray, 15x15 "|5.99|4.4|1203||
+MALINDA|Chair cushion|light gray, 15 3/4/13 3/4x15 1/4x2 3/4 "|11.99|4.5|1102||
+HEDVIG|Chair pad|black/white, 15 "|4.99|4.3|604||
+# clothing-accessories-42925
+@ textile
+BLÅHAJ|Socks, 2 pairs|blue/white, S/M|9.99|4.7|402||
+OBEGRÄNSAD|Tote bag|black/white, 13x16 "|9.99|4.6|206||
+DRÖMSÄCK|Cap|black|9.99|4.4|88|N|
+EFTERTRÄDA|T-shirt|white/print, M|9.99|4.5|146|N|
+# baby-textiles-18690
+@ textile
+LEN|Fitted sheet for crib|white, 28x52 "|7.99|4.6|1802||
+VÄNKRETS|Baby blanket|light gray, 31x39 "|14.99|4.7|402||
+LENAST|Crib bumper|white, 23 5/8x66 7/8 "|19.99|4.4|302||
+PLUTTIG|Muslin cloth|white, 3 pack|5.99|4.6|1206||
+# fabrics-sewing-10655
+@ textile
+TOVAHANNA|Fabric by the yard|beige, 59 "|7.99|4.4|206||
+SÅNGLÄRKA|Fabric by the yard|white/flower, 59 "|8.99|4.6|102||
+SY|Sewing thread|10 pack|4.99|4.5|604||
+SY|Pins and pincushion|multicolor|2.99|4.4|302||
+# lumbar-support-700528
+@ textile
+SKÖNSTA|Lumbar cushion|dark gray|19.99|4.5|208||
+GURLI|Cushion cover|beige, 26x16 "|7.99|4.6|1603||
+ROSENSKÄRM|Lumbar pillow|ergonomic/gray|29.99|4.3|86||
+# tables-700675
+@ table
+LISABO|Table|ash veneer, 55 1/8x30 3/4 "|219.00|4.6|1206||
+MÖRBYLÅNGA|Table|oak veneer brown stained, 86 5/8x39 3/8 "|1199.00|4.6|302||
+INGATORP|Extendable table|white, 59/84 5/8x31 1/2 "|349.00|4.6|904|L399.00|
+EKEDALEN|Extendable table|white, 47 1/4/70 7/8x31 1/2 "|279.00|4.6|1802||
+LACK|Side table|black-brown, 21 5/8x21 5/8 "|12.99|4.4|9604||
+# benches-700319
+@ table
+TÄRENDÖ|Bench|black, 43 1/4 "|39.99|4.4|604||
+MELLTORP|Bench|white, 43 1/4 "|59.99|4.5|302||
+INGOLF|Bench|white, 42 1/2 "|149.00|4.6|204||
+NORRÅKER|Bench|white birch, 40 1/8 "|99.00|4.7|302||
+# bar-furniture-16244
+@ chair
+INGOLF|Bar stool with backrest|white, 24 3/4 "|99.99|4.5|1206|F89.99|
+FRANKLIN|Bar stool with backrest, foldable|black/black, 24 3/4 "|44.99|4.3|1802||
+STIG|Bar stool with backrest|black/black, 24 "|29.99|4.2|2303||
+NORRÅKER|Bar table|white birch, 29 1/8 "|179.00|4.6|102||
+JANINGE|Bar stool|white, 29 7/8 "|69.99|4.5|604||
+# cafe-furniture-19141
+@ chair
+JANINGE|Chair|white|79.99|4.6|402||
+TOMMARYD|Table|white, 51 1/8x27 1/2 "|179.00|4.5|112||
+BERNHARD|Chair|chrome plated/Kavat white|129.00|4.4|302||
+NORRARYD|Chair|black|79.99|4.4|206||
+# step-stools-step-ladders-20611
+@ chair
+BOLMEN|Step stool|white|9.99|4.5|3804||
+MÄSTERBY|Step stool|white|19.99|4.6|2802||
+FORSEBY|Step stool|white|29.99|4.6|402||
+TJUSIG|Step ladder, 3 steps|white|69.99|4.5|302||
+BEKVÄM|Step stool|birch|39.99|4.7|2303||
+# dressing-table-chairs-stools-59250
+@ chair
+TOSSBERG|Chair|metal black/gray|59.99|4.4|112||
+DALFRED|Bar stool|black, 24-32 "|39.99|4.4|1802||
+SKOGSTA|Stool|acacia, 17 3/4 "|59.99|4.6|402||
+# childrens-chairs-bc004
+@ chair
+MAMMUT|Children's chair|in/outdoor/blue|19.99|4.6|1803||
+FLISAT|Children's stool|white|19.99|4.6|1203||
+STRANDMON|Children's armchair|Vibberbo black/beige|99.99|4.7|604||
+SANDSBERG|Children's chair|black|14.99|4.4|206||
+# mittzon-conference-meeting-tables-54173
+@ table
+MITTZON|Conference table|birch veneer/black, 55 1/8x42 1/8x29 1/2 "|499.00|4.6|46||
+MITTZON|Conference table|walnut veneer/white, 94 1/2x47 1/4 "|899.00|4.5|22||
+MITTZON|Table, round|oak veneer/white, 47 1/4 "|369.00|4.6|31||
+# conference-table-chair-sets-700424
+@ table
+MITTZON / MÅNHULT|Table and 4 chairs|birch veneer/black, 55 1/8 "|1015.00|4.5|18||
+TOMMARYD / KRYLBO|Table and 4 chairs|white/Tonerud gray, 51 1/8 "|779.00|4.4|26||
+# desk-chair-sets-53249
+@ table
+MICKE / MILLBERGET|Desk and chair|white/Murum black|248.98|4.4|402|L278.98|
+LINNMON / ADILS|Table and swivel chair|white/black|128.98|4.3|318||
+LAGKAPTEN / FLINTAN|Desk and chair|white/black|229.98|4.4|206||
+ALEX / ALEFJÄLL|Desk and chair|white/Glose black|418.99|4.5|112||
+# conference-chairs-47068
+@ chair
+MÅNHULT|Conference chair|Hakebo dark gray|149.00|4.5|86||
+TOSSBERG|Conference chair|metal black/gray|99.99|4.4|112||
+FLINTAN|Conference chair|black|79.99|4.4|302||
+# serveware-16043
+@ plate
+UPPLAGA|Serving platter|light gray, 12 1/4 "|9.99|4.6|402||
+VARDAGEN|Serving bowl|off-white, 9 1/2 "|12.99|4.7|604|F9.99|
+PROPPMÄTT|Chopping board|beech, 17 3/4x11 3/4 "|14.99|4.7|2303||
+OMBONAD|Serving dish|white, 10 5/8 "|7.99|4.5|188||
+BLANDA BLANK|Serving bowl|stainless steel, 8 1/4 "|5.99|4.7|3104||
+# dishwashing-accessories-15938
+@ brush
+RINNIG|Dish drainer|white|9.99|4.4|2103||
+VÄLVÅRDAD|Dish-washing brush|black|1.99|4.4|1402||
+PLASTIS|Ice cube tray|turquoise|0.99|4.6|2702||
+SKÄMTSAM|Sponge|gray, 6 pack|2.99|4.3|604||
+ÄLMAREN|Kitchen faucet|stainless steel color|79.99|4.4|1802||
+# napkins-napkin-holders-20560
+@ plate
+FANTASTISK|Paper napkin|white, 15 3/4x15 3/4 ", 50 pack|1.99|4.6|2302||
+FANTASTISK|Paper napkin|dark gray, 50 pack|1.99|4.6|1206||
+GLAD|Paper napkin|multicolor, 50 pack|2.99|4.5|302||
+ENFALDIG|Napkin holder|black|4.99|4.4|206||
+# picnic-outdoor-recreation-42924
+@ basket
+FRAKTA|Cooler bag|blue, 6 gallon|9.99|4.5|1206||
+SOMMARLIV|Thermos|black, 17 oz|9.99|4.4|302||
+STAMBORRE|Picnic blanket|white/green, 57x87 "|19.99|4.4|118|N|
+BLÅHAJ|Water bottle|blue, 17 oz|4.99|4.6|402||
+# nursing-feeding-eating-31772
+@ bowl
+SMÅGLI|Plate/bowl|mixed colors, 4 pack|3.99|4.6|1802||
+KALAS|Mug|mixed colors, 6 pack|3.99|4.7|3104||
+MATA|Bib|multicolor, 2 pack|5.99|4.5|604||
+SMASKA|Bowl|mixed colors, 6 pack|4.99|4.6|1206||
+# noticeboards-10574
+@ mirror
+SKÅDIS|Pegboard|white, 22x22 "|17.99|4.7|2804||
+SVENSÅS|Memo board with pins|light gray, 17 3/4x19 3/4 "|14.99|4.5|602||
+LOMMARP|Bulletin board|dark blue-green, 23 5/8x31 1/2 "|29.99|4.6|204||
+DIALOG|Whiteboard/notice board|white, 15x23 5/8 "|19.99|4.4|302||
+# decorative-accessories-24924
+@ vase
+SOMMARFLOX|Decoration|natural/shell, 4 3/4 "|5.99|4.4|112||
+VILLKORLIG|Plant pot|silver color, 4 3/4 "|4.99|4.5|302||
+BERÄKNA|Vase|clear glass, 6 1/4 "|5.99|4.7|902||
+SKURAR|Lantern for tealight|white, 12 1/4 "|9.99|4.6|1204||
+HOLMSJÖ|Decoration|gold color, 9 "|12.99|4.4|86||
+# paper-media-organizers-10551
+@ basket
+DRÖNJÖNS|Desk organizer|white|7.99|4.5|1802||
+KVISSLE|Letter tray|white|12.99|4.6|1404||
+MAGNARP|Paper box|white, 9 3/4x12 5/8x4 "|7.99|4.4|402||
+TJENA|Box with compartments|white, 9 3/4x13 3/4x3 7/8 "|7.99|4.6|1206||
+# recycling-bins-34470
+@ basket
+SORTERA|Waste sorting bin with lid|white, 10 gallon|17.99|4.6|1802||
+HÅLLBAR|Bin with lid|light gray, 5 gallon|9.99|4.6|402||
+FÖRSAMLA|Bin|white, 2 gallon|4.99|4.4|302||
+DIMPA|Waste sorting bag|transparent|4.99|4.4|2304||
+# wall-shelves-hooks-st006
+@ shelf
+BERGSHULT / PERSHULT|Wall shelf|brown-black/white, 31 1/2x11 3/4 "|24.99|4.6|402||
+MOSSLANDA|Picture ledge|white, 21 5/8 "|9.99|4.7|4604||
+ÖVERSÄTT|Wall shelf|black, 31 1/2x7 7/8 "|19.99|4.4|206||
+BILLY|Wall cabinet|white, 31 1/2x11x23 1/2 "|139.00|4.6|112||
+KUBBIS|Rack with 7 hooks|white, 41 3/8 "|9.99|4.5|1206||
+# bags-16248
+@ basket
+FRAKTA|Carrier bag|blue/yellow, 14 1/2 gallon|1.99|4.7|2302||
+DRÖMSÄCK|Backpack|black, 4 gallon|24.99|4.5|206||
+VÄRLDENS|Weekend bag|black, 8 gallon|19.99|4.4|302||
+KNALLA|Shopping bag|blue/white|2.99|4.5|604||
+# bathroom-systems-700450
+@ shelf
+ÄNGSJÖN|Wash-stand with drawers|oak effect, 32 1/4x19 1/4x31 1/2 "|459.00|4.6|112||
+TÄNNFORSEN|Sink cabinet with doors|light gray-green, 32 1/4x16 7/8x24 3/4 "|469.00|4.5|86||
+GODMORGON|High cabinet|white, 15 3/4x12 1/4x75 5/8 "|209.00|4.6|302||
+HEMNES|High cabinet with mirror door|white, 19 1/4x12 1/4x78 3/8 "|299.00|4.7|402||
+# bathroom-shelving-units-20804
+@ shelf
+RÅGRUND|Shelving unit|bamboo, 13 3/8x11 3/4x39 3/4 "|49.99|4.7|2403||
+HEMNES|Shelf unit|white, 16 1/2x67 3/8 "|149.00|4.7|402||
+BAGGEBO|Shelf unit|metal/white, 13 3/4x9 7/8x45 5/8 "|24.99|4.5|1206||
+FRIHULT|Shelving unit|black, 13 3/8x11 3/4x46 1/2 "|39.99|4.4|302||
+# bathroom-wall-cabinets-20808
+@ mirror
+HEMNES|Mirror cabinet with 1 door|white, 24 3/4x6 1/4x38 5/8 "|149.00|4.6|604|L169.00|
+GODMORGON|Mirror cabinet with 2 doors|31 1/2x5 1/2x37 3/4 "|229.00|4.5|302||
+FAXÄLVEN|Wall cabinet with door|white, 15 3/4x7 1/2x25 5/8 "|79.99|4.4|86||
+HEMNES|Wall cabinet with glass door|white, 16 1/2x7 1/2x35 3/8 "|119.00|4.7|204||
+# bathroom-faucets-20724
+@ appliance
+BROGRUND|Bath faucet with strainer|chrome plated|99.99|4.5|604||
+DALSKÄR|Bath faucet with strainer|chrome plated|79.99|4.4|1203||
+PILKÅN|Bath faucet with strainer|chrome plated|29.99|4.2|1802||
+GLYPEN|Bath faucet with strainer|chrome plated|129.00|4.6|112||
+# bathroom-boxes-baskets-16233
+@ basket
+BILLINGEN|Basket|bamboo, 13 3/4x9 7/8 "|9.99|4.6|302||
+GODMORGON|Box with lid|smoked, 12 1/4x5 1/2 "|12.99|4.5|604||
+NORDRANA|Basket|gray, set of 2|9.99|4.4|302||
+SKUBB|Box with compartments|white|7.99|4.5|1803||
+# bathroom-carts-20858
+@ shelf
+RÅSKOG|Utility cart|white, 13 3/4x17 3/4x30 3/4 "|39.99|4.6|9204||
+BROR|Utility cart|black, 33 1/2x21 5/8 "|149.00|4.6|302||
+NISSAFORS|Utility cart|black, 19 3/4x11 3/4x32 5/8 "|29.99|4.5|2102||
+# bathroom-stools-benches-20859
+@ chair
+RÅGRUND|Chair|bamboo|39.99|4.6|402||
+ASKHOLMEN|Stool, outdoor|dark brown|24.99|4.4|204||
+BOLMEN|Step stool|black|9.99|4.5|1206||
+# bathroom-laundry-ba003
+@ basket
+SLIBB|Laundry bag|white, 18 1/2 gallon|1.99|4.4|3802||
+FLÄCKIG|Laundry basket with lid|gray, 21 gallon|29.99|4.5|302||
+MULIG|Clothes rack|white, 39 3/8x18 1/8 "|9.99|4.4|7202||
+# bathroom-sinks-20723
+@ bowl
+TÖRNVIKEN|Countertop wash-basin|white, 17 3/4 "|99.99|4.5|302||
+TOLKEN|Countertop|white marble effect, 32 3/8x19 1/4 "|159.00|4.5|604||
+ORRSJÖN|Single wash-basin|white, 24 3/8x19 1/4 "|149.00|4.6|112||
+# bathroom-shelves-20615
+@ shelf
+BROGRUND|Wall shelf|stainless steel, 23 5/8x4 3/4 "|29.99|4.5|302||
+BÄLINGEN|Wall shelf|white, 23 5/8x6 "|19.99|4.4|112||
+LILLÅNGEN|Wall shelf|white, 11 3/8x10 1/4 "|29.99|4.3|86||
+TISKEN|Corner shelf with suction cup|white|7.99|4.2|1402||
+# bathroom-countertops-30565
+@ table
+TOLKEN|Countertop|bamboo, 40 1/8x19 1/4 "|149.00|4.6|302||
+KASKER|Custom made countertop|white marble effect/quartz, per sq. ft|39.00|4.4|88||
+# showers-40690
+@ appliance
+VOXNAN|Shower set with thermostatic mixer|chrome plated|249.00|4.5|402||
+BROGRUND|Shower set with thermostatic mixer|chrome plated|349.00|4.6|112||
+DALSKÄR|Shower head|chrome plated|19.99|4.3|604||
+GLYPEN|Shower set|chrome plated|149.00|4.4|86||
+# outdoor-kitchens-700349
+@ shelf
+GRILLSKÄR|Charcoal grill, outdoor|stainless steel|249.00|4.4|204||
+GRILLSKÄR|Kitchen sink unit, outdoor|stainless steel, 33 7/8x24 "|349.00|4.5|86||
+GRILLSKÄR|Side unit, outdoor|stainless steel, 33 7/8x24 "|149.00|4.5|112||
+# outdoor-accessories-34203
+@ textile
+UTANÖ|Cushion, in/outdoor|light gray, 17 3/4 "|14.99|4.5|302||
+HÄMÖ|Tablecloth, outdoor|white, 57 "|14.99|4.3|86||
+TOSTERÖ|Cover for outdoor furniture|black, 57 1/8x36 5/8 "|39.99|4.4|302||
+SOLVINDEN|LED solar-powered pendant lamp|outdoor/globe white, 8 "|12.99|4.4|1802||
+# outdoor-pots-plants-31787
+@ vase
+SKURUSUNDET|Plant pot, outdoor|black, 11 3/4 "|24.99|4.5|204||
+BOYSENBÄR|Plant pot|in/outdoor/light gray, 9 "|9.99|4.5|604||
+SOCKER|Greenhouse|white, 17 3/4x8 5/8x13 3/4 "|29.99|4.6|1802||
+TAGGSIMPA|Plant pot, outdoor|5 3/4 "|4.99|4.4|302||
+# outdoor-rugs-34204
+@ textile
+ÖRSTED|Rug flatwoven, in/outdoor|dark gray, 6 '7"x9 '10"|99.99|4.4|302|L119.00|
+FÖRSLEV|Rug flatwoven, in/outdoor|beige, 5 '3"x7 '7"|79.99|4.5|204|F69.99|
+HYLLEHOLT|Rug, low pile|in/outdoor/black-beige, 6 '7"x9 '10"|119.00|4.3|112||
+# sewing-accessories-14350
+@ utensil
+SY|Sewing kit|multicolor|4.99|4.5|1206||
+TILLFÄLLE|Sewing machine|white|99.99|4.3|602||
+SY|Scissors|white|3.99|4.6|402||
+# window-films-accessories-700628
+@ curtain
+LILLEGERD|Window film|white, 18 1/8x39 3/8 "|6.99|4.3|302||
+RIKTIG|Curtain hook with clip|white, 10 pack|2.99|4.5|3804||
+SINGLAR|Curtain ring with clip and hook|white, 10 pack|3.99|4.5|1206||
+FÄLTMAL|Curtain weight tape|white|3.99|4.4|112||
+# plant-supplies-accessories-24887
+@ jar
+GRÖNSKA|Plant soil|8.8 lb|5.99|4.4|302||
+CHIAFRÖN|Plant saucer|white, 4 3/4 "|1.99|4.4|604||
+HIMALAYAMOS|Plant mister|transparent|4.99|4.3|402||
+OLIVBLAD|Plant stand|in/outdoor/black, 13 3/4 "|24.99|4.5|402||
+# spray-bottles-misters-700778
+@ jar
+HIMALAYAMOS|Plant mister|transparent|4.99|4.3|402||
+TOMAT|Spray bottle|white, 17 oz|0.99|4.4|6204||
+SKURNA|Plant mister|gray-blue, 10 oz|5.99|4.5|118||
+# laundry-cabinets-shelving-48925
+@ shelf
+BOAXEL|3 sections laundry combination|white, 74 3/8x15 3/4x79 1/2 "|219.00|4.6|302||
+ENHET|Wall storage combination|white, 31 1/2x11 3/4x29 1/2 "|134.00|4.5|206||
+BROR|Shelving unit|black, 33 1/4x21 5/8x74 3/4 "|149.00|4.7|318||
+# laundry-accessories-55004
+@ stand
+MULIG|Drying rack|in/outdoor/white|12.99|4.4|3302||
+PRESSA|Hanging dryer with 16 clothes pegs|turquoise|3.99|4.5|5204||
+JÄLL|Laundry bag|white, 13 gallon|4.99|4.4|902||
+SLIBB|Laundry bag|white, 18 1/2 gallon|1.99|4.4|3802||
+# side-dishes-sauces-49147
+@ food
+SÅS GRÄDDSÅS|Cream sauce mix|1 oz|1.49|4.7|2902||
+POTATISMOS|Potato mash mix|7 oz|2.49|4.5|904||
+SYLT LINGON|Lingonberry jam, organic|14 oz|5.49|4.8|3602||
+SENAP|Mustard, sweet|organic, 8.8 oz|2.99|4.6|302||
+# pastries-desserts-cookies-25215
+@ food
+KAKA CHOKLADKROKANT|Chocolate cake with almond caramel, frozen|14 oz|7.99|4.8|1802||
+KANELBULLE|Cinnamon bun, frozen|8 pack|6.99|4.6|904||
+KAFFEBRÖD|Swedish coffee bread, frozen|17.6 oz|5.99|4.4|302||
+HAVREFLARN|Oat crisps|5.3 oz|2.49|4.7|1206||
+# vegetarian-plant-based-25213
+@ food
+HUVUDROLL|Plant balls, frozen|plant-based, 1 lb|5.99|4.4|2402||
+GRÖNSAKSBULLAR|Vegetable balls, frozen|35 oz|8.99|4.3|604||
+HUVUDROLL|Plant-based hot dog|frozen, 5 pack|4.99|4.2|302||
+# summer-food-53254
+@ food
+SILL ÖRTER|Herring in herbs and spices|8 oz|4.49|4.4|302||
+DRYCK JORDGUBB|Strawberry drink|syrup, 16.9 oz|4.99|4.6|402||
+LÅNGTRÄSKET|Elderflower sparkling drink|11.2 oz|1.49|4.5|204||
+# mobile-tablet-accessories-40843
+@ cable
+UPPFRISKA|Tablet stand|birch|9.99|4.6|302||
+MÖRKGRÅ|Laptop bag|dark gray, 15 "|19.99|4.4|118||
+BERGENES|Holder for mobile phone/tablet|bamboo|2.99|4.5|4604||
+VIVALLA|Laptop stand|in/outdoor, 13 7/8x10 3/8 "|14.99|4.4|206||
+# skytta-sliding-door-system-55984
+@ shelf
+SKYTTA|Sliding door frame|white, 59x25 1/4 "|250.00|4.4|86||
+SKYTTA / HOKKSUND|Sliding door combination|white/high-gloss light gray, 59x95 1/4 "|880.00|4.5|42||
+SKYTTA / MEHAMN|Sliding door combination|white/double sided white stained oak effect, 77 1/2x92 1/8 "|1030.00|4.6|28||
+# taps-700718
+@ appliance
+LUNDSKÄR|Kitchen faucet|chrome plated|79.99|4.4|604||
+GLITTRAN|Kitchen faucet with pull-out spout|stainless steel color|119.00|4.5|402|L139.00|
+ÄLMAREN|Kitchen faucet|stainless steel color|79.99|4.4|1802||
+DALSKÄR|Bath faucet with strainer|chrome plated|79.99|4.4|1203||
+# oils-stains-product-care-42948
+@ jar
+BEHANDLA|Wood treatment oil, indoor use|1/6 gallon|9.99|4.5|1802||
+VÅRDA|Wood stain|brown|11.99|4.3|204||
+FÖRBÄTTRA|Wood glue|2 pack|3.99|4.5|302||
+# acoustic-panels-46077
+@ mirror
+BETSAGEN|Sound absorbing panel|felt/gray, 23 5/8x23 5/8 "|29.99|4.5|118|N|
+TYTTVÄDER|Sound absorbing panel|dark gray, 15 3/4x31 1/2 "|39.99|4.4|86||
+SOLBLEKT|Sound absorbing panel|beige, 23 5/8 "|24.99|4.3|46||
+# outdoor-lighting-17897
+@ lamp
+SOLVINDEN|LED solar-powered decorative lighting chain|outdoor/globe multicolor, 24 lights|19.99|4.4|1206||
+SOLVINDEN|LED solar-powered table lamp|outdoor/white, 9 "|14.99|4.5|402||
+STRÅLA|LED string light with 12 lights|battery-operated/outdoor black|9.99|4.3|604||
+# umbrellas-gazebos-17887
+@ lamp
+SVARTÖ|Umbrella|dark gray, 9 3/4 '|149.00|4.4|302||
+HÖGÖN|Umbrella base|dark gray|29.99|4.4|604||
+LINDÖJA|Umbrella canopy|beige, 70 7/8 "|39.99|4.3|112||
+# outdoor-flooring-21957
+@ textile
+RUNNEN|Floor decking, outdoor|gray, 9 pack/9.9 sq feet|29.99|4.4|1102||
+RUNNEN|Floor decking, outdoor|artificial grass, 9 pack/9.9 sq feet|34.99|4.3|604||
+# plant-stands-movers-20494
+@ stand
+SATSUMAS|Plant stand with 5 plant pots|bamboo/white, 49 1/4 "|39.99|4.5|1603||
+LÅNGPELARGON|Plant stand|white, 30 3/4 "|29.99|4.4|302||
+ACEROLA|Plant stand|bamboo, 13 3/4 "|14.99|4.5|208||
+# watering-cans-20493
+@ jar
+PS 2002|Watering can|white, 1/2 gallon|7.99|4.5|2804||
+FÖRENLIG|Watering can|in/outdoor/green, 1/2 gallon|9.99|4.4|402||
+# fish-seafood-25214
+@ food
+SJÖRAPPORT|Salmon fillet, frozen|ASC certified, 1 lb|11.99|4.5|604||
+SILL MATJES|Matjes herring|8 oz|4.49|4.5|402||
+# bread-dairy-25212
+@ food
+KNÄCKEBRÖD FLERKORN|Crispbread, multigrain|7 oz|2.99|4.6|802||
+OST GRÄDDOST|Cream cheese, aged|ca 9 oz|7.99|4.6|302||
+# ironing-boards-20608
+@ table
+SVÄNGA|Ironing board|white|29.99|4.4|604||
+SVINNGE|Ironing board cover|gray|9.99|4.3|402||
+# home-fragrance-42926
+@ jar
+LUGNARE|Scented candle in glass|jasmine/pink, 50 hr|7.99|4.6|1206||
+SINNLIG|Scented candle in glass|sweet vanilla/natural, 50 hr|4.99|4.6|3102||
+ADLAD|Scented candle in glass|Scandinavian woods/white, 25 hr|2.99|4.5|2304||
+# kitchen-sinks-24263
+@ bowl
+NORRSJÖN|Inset sink, 1 bowl|stainless steel, 21 5/8x18 1/2 "|99.99|4.5|302||
+BOHOLMEN|Inset sink, 1 bowl with drainboard|stainless steel, 30 3/4x19 1/4 "|69.99|4.4|604||
+# smart-air-purifiers-56472
+@ appliance
+STARKVIND|Air purifier|white/smart|149.00|4.4|1202||
 `

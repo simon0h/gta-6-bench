@@ -21,17 +21,33 @@ const PAGE = 40
 // category-appropriate drawing; games and consoles use the platform renderer. Drinks and
 // milk are drawn as bottles rather than the generic food pouch.
 const artTitle = { loafers: 'leather shoes', toothpaste: 'compact powder', brushes: 'tooth brush set', vitamin: 'vitamin bottle', 'lego set': 'building blocks toy', drill: '드릴', appliance: 'kettle', 'coffee machine': 'espresso machine', desktop: 'mini pc', media: 'vinyl record', tire: '공구 세트', pens: 'eyeliner pencil', 'cushion compact': 'blush', 'hair dryer': 'hair dryer', 'bottled water': 'water bottle', beverages: 'soda bottle', milk: 'plastic bottle' }
+// Groceries and paper goods share a few broad hints in shelf.js; pick the packaging a
+// shopper expects from the title (fruit as fruit, milk in cartons, tissue as rolls, cans,
+// boxed coffee and soups) instead of drawing every food as the same pouch.
+const titleArt = [
+  [/사과/, 'fresh red apples'], [/감귤|귤 /, 'fresh mandarins'], [/대봉감|단감|홍시/, 'fresh oranges'], [/키위/, 'fresh potatoes'], [/토마토/, 'fresh tomatoes'],
+  [/화장지|휴지/, 'toilet paper'], [/핸드타올|키친타올/, 'paper towels'],
+  [/^(?!.*분유).*우유/, 'milk'], [/곰탕|미역국|전복죽/, 'soup'], [/스팸|참치/, 'canned meat', 'pantry'],
+  [/커피믹스|모카골드|화이트골드|캡슐/, 'coffee tea'], [/햇반/, 'cooked rice cereal'], [/고추장|쌈장/, 'chili sauce jar'],
+]
+function artHint(p) {
+  const hit = ['pantry', 'jar', 'rice', 'towel', 'milk', 'coffee'].includes(p.art) && titleArt.find(([re]) => re.test(p.title))
+  if (hit) return { title: hit[1], type: hit[2] }
+  const hint = artTitle[p.art] || p.art
+  return { title: hint, type: p.art === 'pantry' ? p.art : p.art === 'hair dryer' ? 'hair dryer' : undefined, category: p.art === 'hair dryer' ? 'Beauty' : undefined }
+}
 const artCache = new Map()
 export function shelfArt(p, view = 0) {
   const key = `${p.code}:${view}`
   if (artCache.has(key)) return artCache.get(key)
   const g = p.game
-  const hint = artTitle[p.art] || p.art
+  const hint = artHint(p)
   const descriptor = g && (g.type === 'game' || g.type === 'console')
     ? { type: g.type, platform: g.platform, title: g.name || p.title, raw: { title: g.name || p.title, catalogType: g.type, platform: g.platform }, assetKey: `gmarket-shelf-${p.code}` }
-    : { title: hint, raw: { title: hint, type: p.art === 'pantry' ? p.art : p.art === 'hair dryer' ? 'hair dryer' : undefined, category: p.art === 'hair dryer' ? 'Beauty' : undefined }, assetKey: `gmarket-shelf-${p.code}` }
+    : { title: hint.title, raw: { title: hint.title, type: hint.type, category: hint.category }, assetKey: `gmarket-shelf-${p.code}` }
   // Drop the English view caption; the page labels views in Korean.
   const svg = renderProductAsset(descriptor, view).replace(/<text[^>]*>(?:Product view|Reverse or interior view|Construction and material detail|Component and alternate views|Cover artwork|Rear packaging and illustrated scenes|Illustrated game world|Case and media)<\/text>/g, '')
+    .replace(/<title>[^<]*<\/title>/, `<title>${esc(p.title)}</title>`)
   if (artCache.size > 600) artCache.delete(artCache.keys().next().value)
   artCache.set(key, svg)
   return svg
@@ -45,7 +61,7 @@ function arrival(offset) {
   return `${d.getUTCMonth() + 1}/${d.getUTCDate()}(${DAYS[d.getUTCDay()]})`
 }
 const shipFee = p => p.free ? 0 : 3000
-const deliveryLine = p => p.star ? `<span class="gm-star-badge">스타배송</span> 내일(${arrival(1).replace(/^.*\(/, '').replace(')', '')}) 도착보장` : `${p.free ? '무료배송' : '배송비 3,000원'}${p.today ? ' · 오늘출발' : ''}`
+const deliveryLine = p => p.mobile ? '모바일 교환권 · 문자/카카오톡 발송' : p.star ? `<span class="gm-star-badge">스타배송</span> 내일(${arrival(1).replace(/^.*\(/, '').replace(')', '')}) 도착보장` : `${p.free ? '무료배송' : '배송비 3,000원'}${p.today ? ' · 오늘출발' : ''}`
 
 // --- cards -----------------------------------------------------------------
 export function shelfCard(base, p, { rank } = {}) {
@@ -115,7 +131,9 @@ ${items.length ? `<div class="gm-cards">${cards}</div>${pager}` : `<div class="g
 
 // --- search ----------------------------------------------------------------
 const compact = s => String(s).toLowerCase().normalize('NFKC').replace(/[\s()\[\]/|·,._:-]+/g, '')
-const deptNames = Object.fromEntries(departments.map(d => [d.code, `${d.name} ${d.subs.join(' ')}`]))
+// Category words match the item's own department and sub-category only, so a search for
+// 라면 finds noodles rather than every processed-food item.
+const deptNames = Object.fromEntries(departments.map(d => [d.code, d.name]))
 export const isGtaQuery = q => /gta|grand\s*theft|그랜드\s*테프트|그랜드\s*세프트|지티에이/i.test(q)
 export function searchShelf(query, observations = []) {
   const q = compact(query), tokens = String(query).toLowerCase().normalize('NFKC').split(/\s+/).map(compact).filter(Boolean)
@@ -145,7 +163,9 @@ export function searchShelf(query, observations = []) {
 const viewLabels = ['상품 전체', '다른 각도', '확대 보기', '추가 이미지']
 export function shelfProduct(base, p, { view = 0, values = {}, messages = [] } = {}) {
   const d = departmentByCode(p.dept), sub = d.subs[p.sub - 1]
-  const related = best(shelf.filter(x => x.dept === p.dept && x.sub === p.sub && x.code !== p.code)).slice(0, 5)
+  // Same sub-category first, topped up from the department so the row is always full.
+  const sameSub = best(shelf.filter(x => x.dept === p.dept && x.sub === p.sub && x.code !== p.code))
+  const related = [...sameSub, ...best(shelf.filter(x => x.dept === p.dept && x.sub !== p.sub))].slice(0, 5)
   const v = Math.min(3, Math.max(0, view))
   const bars = p.reviews ? [5, 4, 3, 2, 1].map((star, i) => { const pct = [p.sat - 8, 10, 4, 2, 1][i]; return [star, Math.max(1, Math.min(96, pct))] }) : []
   const opt = p.options
@@ -154,17 +174,17 @@ export function shelfProduct(base, p, { view = 0, values = {}, messages = [] } =
 <div class="gm-item-info"><p class="gm-seller-line"><a href="${base}/n/search?keyword=${encodeURIComponent(p.brand || p.seller)}">${esc(p.seller)}</a></p><h1>${esc(p.title)}</h1>
 ${p.reviews ? `<p class="gm-score big"><span class="gm-stars" aria-hidden="true">★★★★★</span> 만족도 <strong>${p.sat}%</strong> · <a href="#review">상품평 ${p.reviews.toLocaleString('en-US')}건</a>${p.sold ? ` · 구매 ${p.sold.toLocaleString('en-US')}건` : ''}</p>` : p.sold ? `<p class="gm-score big">구매 ${p.sold.toLocaleString('en-US')}건</p>` : ''}
 <div class="gm-price-box">${p.discount ? `<p class="gm-list-price"><del>${won(p.list)}</del></p>` : ''}<p class="gm-price big">${p.discount ? `<em class="gm-rate">${p.discount}%</em> ` : ''}<strong>${digits(p.price)}</strong>원</p><p class="gm-muted">스마일캐시 최대 ${digits(Math.floor(p.price * 0.01))}원 적립 · 카드 무이자 할부 가능</p></div>
-<dl class="gm-dl gm-ship"><dt>배송</dt><dd>${p.star ? `<span class="gm-star-badge">스타배송</span> <strong>내일 ${arrival(1)} 도착보장</strong><br><span class="gm-muted">오늘 20시 전 주문 시 · 꼭 멤버십 무료반품</span>` : `${p.free ? '무료배송' : '배송비 3,000원'} · 택배<br><span class="gm-muted">${p.today ? '오늘출발 · ' : ''}${p.preorder ? '예약판매 상품은 출시일에 맞춰 순차 발송됩니다.' : `${arrival(2)}~${arrival(3)} 도착 예정`}</span>`}</dd><dt>판매자</dt><dd>${esc(p.seller)}</dd><dt>상품번호</dt><dd>${p.code}</dd></dl>
+<dl class="gm-dl gm-ship"><dt>배송</dt><dd>${p.star ? `<span class="gm-star-badge">스타배송</span> <strong>내일 ${arrival(1)} 도착보장</strong><br><span class="gm-muted">오늘 20시 전 주문 시 · 꼭 멤버십 무료반품</span>` : p.mobile ? '모바일 교환권 · 결제 후 문자/카카오톡으로 바로 발송<br><span class="gm-muted">유효기간과 사용처는 상품 상세 안내를 확인해 주세요.</span>' : `${p.free ? '무료배송' : '배송비 3,000원'} · 택배<br><span class="gm-muted">${p.today ? '오늘출발 · ' : ''}${p.preorder ? '예약판매 상품은 출시일에 맞춰 순차 발송됩니다.' : `${arrival(2)}~${arrival(3)} 도착 예정`}</span>`}</dd><dt>판매자</dt><dd>${esc(p.seller)}</dd><dt>상품번호</dt><dd>${p.code}</dd></dl>
 ${messages.length ? `<div class="gm-alert" role="alert">${messages.map(m => `<p>${esc(m)}</p>`).join('')}</div>` : ''}
 <form method="post" action="${base}/cart/add" class="gm-buy"><input type="hidden" name="sku" value="${p.code}">
 ${opt ? `<label for="opt">${esc(opt[0])} 선택</label><select id="opt" name="option" required><option value="">${esc(opt[0])}을(를) 선택해 주세요</option>${opt[1].map(o => `<option${values.option === o ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select>` : ''}
 <label for="qty">수량</label><input id="qty" name="qty" type="number" min="1" max="10" value="${esc(values.qty || '1')}" inputmode="numeric">
 <div class="gm-buy-btns"><button class="gm-btn outline" name="action" value="cart">장바구니</button><button class="gm-btn" name="action" value="buy">구매하기</button></div></form></div></section>
 <nav class="gm-item-tabs" aria-label="상품 상세"><a href="#info">상품정보</a><a href="#review">상품평 ${p.reviews ? p.reviews.toLocaleString('en-US') : 0}</a><a href="#qna">상품문의</a><a href="#policy">배송/교환/반품 안내</a></nav>
-<section class="gm-panel gm-left" id="info"><h2>상품정보</h2><table class="gm-spec"><tbody><tr><th scope="row">상품번호</th><td>${p.code}</td></tr><tr><th scope="row">상품명</th><td>${esc(p.title)}</td></tr>${p.brand ? `<tr><th scope="row">브랜드</th><td>${esc(p.brand)}</td></tr>` : ''}<tr><th scope="row">카테고리</th><td>${esc(d.name)} &gt; ${esc(sub)}</td></tr>${opt ? `<tr><th scope="row">옵션</th><td>${esc(opt[0])}: ${opt[1].map(esc).join(', ')}</td></tr>` : ''}<tr><th scope="row">배송방법</th><td>${p.star ? '스타배송 (도착보장)' : '택배'}</td></tr><tr><th scope="row">배송비</th><td>${p.free ? '무료' : '3,000원'}</td></tr><tr><th scope="row">A/S 안내</th><td>판매자 문의</td></tr></tbody></table><p class="gm-muted">상품정보제공고시 상세 항목(제조자, 원산지, 품질보증기준 등)은 판매자가 등록한 상세설명을 따릅니다.</p></section>
+<section class="gm-panel gm-left" id="info"><h2>상품정보</h2><table class="gm-spec"><tbody><tr><th scope="row">상품번호</th><td>${p.code}</td></tr><tr><th scope="row">상품명</th><td>${esc(p.title)}</td></tr>${p.brand ? `<tr><th scope="row">브랜드</th><td>${esc(p.brand)}</td></tr>` : ''}<tr><th scope="row">카테고리</th><td>${esc(d.name)} &gt; ${esc(sub)}</td></tr>${opt ? `<tr><th scope="row">옵션</th><td>${esc(opt[0])}: ${opt[1].map(esc).join(', ')}</td></tr>` : ''}<tr><th scope="row">배송방법</th><td>${p.star ? '스타배송 (도착보장)' : p.mobile ? '모바일 발송 (문자/카카오톡)' : '택배'}</td></tr><tr><th scope="row">배송비</th><td>${p.mobile ? '없음' : p.free ? '무료' : '3,000원'}</td></tr><tr><th scope="row">A/S 안내</th><td>판매자 문의</td></tr></tbody></table><p class="gm-muted">상품정보제공고시 상세 항목(제조자, 원산지, 품질보증기준 등)은 판매자가 등록한 상세설명을 따릅니다.</p></section>
 <section class="gm-panel gm-left" id="review"><h2>상품평</h2>${p.reviews ? `<div class="gm-review-sum"><p class="gm-review-score"><strong>${p.sat}%</strong><span>구매자 만족도</span></p><ul class="gm-bars">${bars.map(([s, pct]) => `<li><span>${s}점</span><span class="bar"><i style="width:${pct}%"></i></span><span>${pct}%</span></li>`).join('')}</ul><p class="gm-muted">일반 상품평 ${p.reviews.toLocaleString('en-US')}건</p></div>` : '<p class="gm-muted">아직 작성된 상품평이 없습니다.</p>'}</section>
 <section class="gm-panel gm-left" id="qna"><h2>상품문의</h2><p class="gm-muted">상품에 대해 궁금한 점은 판매자에게 문의해 주세요. 문의는 로그인 후 작성할 수 있습니다.</p><a class="gm-btn outline small" href="${base}/help/inquiry">문의하기</a></section>
-<section class="gm-panel gm-left" id="policy"><h2>배송/교환/반품 안내</h2><p>${p.star ? '스타배송 상품은 오늘 주문 시 내일 도착을 보장합니다.' : '결제 완료 후 평균 2~3일 이내에 발송됩니다.'} 단순 변심에 의한 반품은 수령 후 7일 이내 신청할 수 있으며 왕복 배송비가 부과될 수 있습니다.</p><p><a href="${base}/help/faq/delivery">배송 자주 묻는 질문</a> · <a href="${base}/help/faq/returns">취소/반품/교환 자주 묻는 질문</a></p></section>
+<section class="gm-panel gm-left" id="policy"><h2>배송/교환/반품 안내</h2><p>${p.mobile ? 'e쿠폰은 결제 완료 후 입력하신 휴대폰 번호로 문자 또는 카카오톡으로 발송됩니다. 사용하지 않은 e쿠폰은 유효기간 내 결제 취소를 요청할 수 있습니다.' : `${p.star ? '스타배송 상품은 오늘 주문 시 내일 도착을 보장합니다.' : '결제 완료 후 평균 2~3일 이내에 발송됩니다.'} 단순 변심에 의한 반품은 수령 후 7일 이내 신청할 수 있으며 왕복 배송비가 부과될 수 있습니다.`}</p><p><a href="${base}/help/faq/delivery">배송 자주 묻는 질문</a> · <a href="${base}/help/faq/returns">취소/반품/교환 자주 묻는 질문</a></p></section>
 ${related.length ? `<section class="gm-home-sec"><div class="gm-sec-head"><h2>이 카테고리 인기 상품</h2><a href="${base}/n/list?category=${d.code}&amp;sub=${p.sub}">더보기 ›</a></div>${shelfRow(base, related)}</section>` : ''}`
 }
 

@@ -7,7 +7,7 @@
 //
 // Columns: ref | title | price | was | rating | category URL path | category codes | brand
 // The first category code is the primary one (department is derived from it).
-export const SHELF_ROWS = `
+const CAPTURED_ROWS = `
 189784|PJ Masks Playset 2-in-1 Transforming Mobile HQ|64.99|69.99|4.4|toys/action-figures-and-playsets/pj-masks|SM060101,top-toys|PJ Masks
 225620|Missy Kissy Talking Baby Doll 38cm|24.99|29.99|4.8|toys/fashion-and-dolls/baby-dolls|SM060104,top-toys|Missy Kissy
 259321|Battat Light-Up Vanity Beauty Playset|24.99|29.99||toys/pre-school-and-electronic-learning/battat|SM060103,top-toys|Battat
@@ -314,7 +314,281 @@ export const SHELF_ROWS = `
 201305|Colors Live Nintendo Switch|29.99||4.5|gaming-and-tech/nintendo-switch/nintendo-switch-games|nintendo-gaming,SM060452|Colors
 193047|Mario + Rabbids Kingdom Battle Nintendo Switch (Code in Box)|12.99||4.5|gaming-and-tech/nintendo-switch/nintendo-switch-games|nintendo-gaming,SM060452,gaming-offers|Ubisoft
 265092|Stage Tour Game & Kramer Guitar Controller Bundle - Nintendo Switch 2|119.99|||gaming-and-tech/nintendo-switch-2/nintendo-switch-2-accessories|gaming-accessories,nintendo-gaming|Stage Tour
-`.trim().split('\n').map(line => {
+`
+
+// Further aisles of the Smyths range (ride ons, nursery, gaming accessories, gift cards and more) so every
+// department and category page carries a full shelf. Names follow the ranges Smyths stocks; prices are
+// typical UK shelf prices. Same columns as above.
+const RANGE_ROWS = `
+257031|Hot Wheels Ultimate Garage Playset|129.99|149.99|4.7|toys/construction-and-cars/car-toys/hot-wheels|SM06010210,SM060110|Hot Wheels
+256118|Hot Wheels Monster Trucks Bone Shaker 1:24 Scale Vehicle|14.99||4.8|toys/construction-and-cars/car-toys/hot-wheels|SM06010210|Hot Wheels
+249802|Hot Wheels Track Builder Unlimited Fuel Can Stunt Box|24.99|29.99||toys/construction-and-cars/car-toys/hot-wheels|SM06010210|Hot Wheels
+231774|Hot Wheels 20 Car Gift Pack|24.99||4.9|toys/construction-and-cars/car-toys/hot-wheels|SM06010210|Hot Wheels
+253360|Hot Wheels City Super Twist Tyre Shop Playset|34.99|||toys/construction-and-cars/car-toys/hot-wheels|SM06010210|Hot Wheels
+121558|Hot Wheels Basic Car Assortment|2.00||4.6|toys/construction-and-cars/car-toys/hot-wheels|SM06010210|Hot Wheels
+244310|Barbie Dreamhouse Playset with 75+ Pieces|199.99|249.99|4.8|toys/fashion-and-dolls/barbie|SM06010403,SM060110,top-toys|Barbie
+236902|Barbie Fashionistas Doll Assortment|9.99||4.7|toys/fashion-and-dolls/barbie|SM06010403|Barbie
+251877|Barbie Dream Closet Playset|39.99|49.99|4.6|toys/fashion-and-dolls/barbie|SM06010403|Barbie
+248116|Barbie Careers Vet Doll and Playset|14.99|||toys/fashion-and-dolls/barbie|SM06010403|Barbie
+252940|Barbie Dream Camper Vehicle Playset|64.99|74.99|4.8|toys/fashion-and-dolls/barbie|SM06010403|Barbie
+247215|5 Surprise Mini Brands Series 5 Capsule|7.99||4.5|toys/fashion-and-dolls/blind-boxes|SM06010416|Zuru
+255503|MGA's Miniverse Make It Mini Lifestyle Series 1 Blind Box|9.99||4.4|toys/fashion-and-dolls/blind-boxes|SM06010416|MGA's Miniverse
+258014|L.O.L. Surprise! Loves Mini Sweets Doll Blind Box|12.99|||toys/fashion-and-dolls/blind-boxes|SM06010416|L.O.L. Surprise!
+250791|Squishmallows Squooshems Blind Bag 5cm|4.99||4.8|toys/fashion-and-dolls/blind-boxes|SM06010416|Squishmallows
+259962|Stumble Guys Mystery Figure Blind Box|4.99|||toys/fashion-and-dolls/blind-boxes|SM06010416|Stumble Guys
+254477|PAW Patrol Big Truck Pups HQ Playset|79.99|99.99|4.7|toys/pre-school-and-electronic-learning/paw-patrol|SM06010350,SM060110|PAW Patrol
+243608|PAW Patrol Marshall's Fire Engine Vehicle with Figure|14.99||4.8|toys/pre-school-and-electronic-learning/paw-patrol|SM06010350|PAW Patrol
+243605|PAW Patrol Chase's Police Cruiser Vehicle with Figure|14.99||4.8|toys/pre-school-and-electronic-learning/paw-patrol|SM06010350|PAW Patrol
+252318|PAW Patrol Aqua Pups Skye Deluxe Vehicle|17.99|||toys/pre-school-and-electronic-learning/paw-patrol|SM06010350|PAW Patrol
+238844|PAW Patrol Chase Plush 20cm|9.99||4.9|toys/pre-school-and-electronic-learning/paw-patrol|SM06010350|PAW Patrol
+226871|Toniebox Starter Set Grey|79.99||4.8|toys/pre-school-and-electronic-learning/tonies/toniebox-audio|SM0601039702|Tonies
+198733|Tonies Peppa Pig Audio Character|14.99||4.9|toys/pre-school-and-electronic-learning/tonies/toniebox-audio|SM0601039702|Tonies
+207460|Tonies Disney Frozen Elsa Audio Character|14.99||4.9|toys/pre-school-and-electronic-learning/tonies/toniebox-audio|SM0601039702|Tonies
+196215|Tonies The Gruffalo Audio Character|14.99||4.8|toys/pre-school-and-electronic-learning/tonies/toniebox-audio|SM0601039702|Tonies
+199468|Tonies Creative Tonie Unicorn|14.99|||toys/pre-school-and-electronic-learning/tonies/toniebox-audio|SM0601039702|Tonies
+262705|Guinness World Records 2027 Hardback Book|12.99||4.8|toys/books|SM060119|Guinness World Records
+256934|Pokémon Super Extra Deluxe Essential Handbook|12.99||4.9|toys/books|SM060119|Pokémon
+262711|Minecraft Annual 2027|7.99|||toys/books|SM060119|Minecraft
+249125|Bluey: The Beach Hardback Book|6.99||4.9|toys/books|SM060119|Bluey
+262738|The Official Roblox Annual 2027|7.99|||toys/books|SM060119|Roblox
+261590|Pokémon Pikachu Backpack|19.99||4.7|toys/back-to-school|SM060112|Pokémon
+261594|Bluey Insulated Lunch Bag|9.99|||toys/back-to-school|SM060112|Bluey
+261602|Disney Stitch Filled Pencil Case|7.99||4.6|toys/back-to-school|SM060112|Disney Stitch
+261611|Minecraft Stainless Steel Water Bottle 500ml|9.99|||toys/back-to-school|SM060112|Minecraft
+261617|Casio FX-83GTCW Scientific Calculator|12.99||4.9|toys/back-to-school|SM060112|Casio
+263120|Joie Mimzy Recline Highchair|79.99||4.6|baby/highchairs-and-booster-seats|SM060201|Joie
+240377|Ingenuity Trio 3-in-1 SmartClean Highchair|99.99|119.99|4.5|baby/highchairs-and-booster-seats|SM060201|Ingenuity
+229014|Chicco Polly Magic Relax Highchair Graphite|149.99||4.7|baby/highchairs-and-booster-seats|SM060201|Chicco
+218893|Munchkin Portable Booster Seat|24.99|||baby/highchairs-and-booster-seats|SM060201|Munchkin
+236411|Clair de Lune Honeycomb Cot Bed Blanket Grey|14.99||4.7|baby/baby-bedding|SM060206|Clair de Lune
+233505|The Gro Company Grobag Sleeping Bag 2.5 Tog 6-18 Months|34.99||4.8|baby/baby-bedding|SM060206|The Gro Company
+227846|Silentnight Safe Nights Cot Bed Fitted Sheets 2 Pack|14.99|||baby/baby-bedding|SM060206|Silentnight
+241973|Clair de Lune Marshmallow Moses Basket Bedding Set|19.99||4.6|baby/baby-bedding|SM060206|Clair de Lune
+225580|Purflo Breathable Cot Bed Mattress 140 x 70cm|79.99|89.99|4.8|baby/baby-bedding|SM060206,SM060203|Purflo
+252711|Motorola PIP1610 Connect Wi-Fi Video Baby Monitor|129.99|149.99|4.4|baby/baby-monitors-and-safety/baby-monitors|SM060208|Motorola
+238420|VTech BM3254 Audio Baby Monitor with Night Light|34.99||4.6|baby/baby-monitors-and-safety/baby-monitors|SM060208|VTech
+213317|Safety 1st Easy Close Extra Tall Stair Gate|34.99||4.5|baby/baby-monitors-and-safety/safety-gates|SM060208|Safety 1st
+230962|Dreambaby Liberty Pressure Fit Stair Gate White|39.99|||baby/baby-monitors-and-safety/safety-gates|SM060208|Dreambaby
+219651|Fisher-Price Deluxe Bouncer Calming Clouds|44.99||4.7|baby/bouncers-swings-and-rockers|SM060211|Fisher-Price
+243771|Ingenuity Keep Cozy 3-in-1 Grow with Me Bouncer & Rocker|49.99|59.99|4.6|baby/bouncers-swings-and-rockers|SM060211|Ingenuity
+204190|BabyBjörn Bouncer Bliss Mesh Anthracite|189.99||4.9|baby/bouncers-swings-and-rockers|SM060211|BabyBjörn
+236187|4moms MamaRoo 5 Baby Swing Grey|249.99|299.99|4.5|baby/bouncers-swings-and-rockers|SM060211|4moms
+205528|VTech First Steps Baby Walker|29.99||4.8|baby/baby-walkers-and-jumpers|SM060213|VTech
+231140|Fisher-Price 3-in-1 Sit-to-Stand Activity Centre|79.99||4.7|baby/baby-walkers-and-jumpers|SM060213|Fisher-Price
+224658|Chicco 123 Baby Walker Grey|69.99|||baby/baby-walkers-and-jumpers|SM060213|Chicco
+244932|Bright Starts Bounce Bounce Baby Activity Jumper|99.99|119.99|4.6|baby/baby-walkers-and-jumpers|SM060213|Bright Starts
+214470|Shnuggle Baby Bath with Plug White & Grey|29.99||4.8|baby/bathing-changing-and-potty-training|SM060214|Shnuggle
+198327|Summer Infant Lil' Loo Potty|19.99|||baby/bathing-changing-and-potty-training|SM060214|Summer Infant
+226002|Tommee Tippee Twist & Click Advanced Nappy Bin|24.99||4.7|baby/bathing-changing-and-potty-training|SM060214|Tommee Tippee
+211736|Angelcare Baby Bath Support Grey|19.99||4.8|baby/bathing-changing-and-potty-training|SM060214|Angelcare
+233719|My Carry Potty Dinosaur|29.99||4.9|baby/bathing-changing-and-potty-training|SM060214|My Carry Potty
+247790|Disney Frozen Toddler Bed with Storage|89.99|||baby/toddler-bedroom|SM060229|Disney Frozen
+251628|Bluey Toddler Bed with Shelf|99.99||4.8|baby/toddler-bedroom|SM060229|Bluey
+239914|Marvel Spider-Man Toddler Bed|109.99||4.6|baby/toddler-bedroom|SM060229,SM060613|Marvel Spider-Man
+228650|Liberty House Toys Kids Table and Two Chairs White|49.99|59.99|4.5|baby/toddler-bedroom|SM060229|Liberty House Toys
+216958|Nested Toddler Bedroom Storage Unit White|64.99|||baby/toddler-bedroom|SM060229|Nested
+218402|BabyBjörn Baby Carrier Mini Black|89.99||4.8|baby/baby-carriers-and-slings|SM060230|BabyBjörn
+240058|Ergobaby Omni Breeze Baby Carrier Graphite Grey|179.99||4.9|baby/baby-carriers-and-slings|SM060230|Ergobaby
+230176|Chicco Easyfit Baby Carrier Black|49.99|||baby/baby-carriers-and-slings|SM060230|Chicco
+222809|Hippychick Hipseat Black|44.99||4.7|baby/baby-carriers-and-slings|SM060230|Hippychick
+234581|Skip Hop Moonlight & Melodies Hatch Night Light Owl|34.99||4.7|baby/baby-bedroom-accessories|baby-bedroom-accessories|Skip Hop
+238015|The Gro Company Groegg2 Colour Changing Room Thermometer|24.99||4.8|baby/baby-bedroom-accessories|baby-bedroom-accessories,SM060208|The Gro Company
+229763|Clair de Lune Nursery Storage Baskets Set of 3|19.99|||baby/baby-bedroom-accessories|baby-bedroom-accessories|Clair de Lune
+245236|Tommee Tippee Sleeptime Light and Sound Projector|29.99||4.5|baby/baby-bedroom-accessories|baby-bedroom-accessories|Tommee Tippee
+206384|Tommee Tippee Closer to Nature Baby Bottles 260ml 3 Pack|14.99||4.7|baby/baby-essentials|baby-essentials|Tommee Tippee
+210751|MAM Original Soothers 0-6 Months 2 Pack|6.99||4.8|baby/baby-essentials|baby-essentials|MAM
+217205|Philips Avent Natural Response Baby Bottle 260ml 2 Pack|15.99||4.8|baby/baby-essentials|baby-essentials|Philips Avent
+226417|WaterWipes Baby Wipes 4 x 60 Pack|9.99|||baby/baby-essentials|baby-essentials|WaterWipes
+230388|Tommee Tippee Advanced Steri-Dry Electric Steriliser|79.99|89.99|4.6|baby/baby-essentials|baby-essentials|Tommee Tippee
+218874|Little Tikes Cape Cottage Playhouse|159.99|179.99|4.7|outdoor/play-houses-and-tents|SM060302|Little Tikes
+244003|Smoby Friends House Playhouse|249.99||4.6|outdoor/play-houses-and-tents|SM060302|Smoby
+255919|Bluey Pop Up Play Tent|24.99||4.8|outdoor/play-houses-and-tents|SM060302|Bluey
+232176|Pink Pop Up Princess Castle Play Tent|19.99|||outdoor/play-houses-and-tents|SM060302|Smyths Toys
+246677|Bestway Steel Pro Frame Pool 10ft|79.99|99.99|4.4|outdoor/pools-and-sand-pits|SM060303|Bestway
+237109|Intex Rainbow Ring Play Centre Paddling Pool|29.99||4.6|outdoor/pools-and-sand-pits|SM060303|Intex
+212836|Little Tikes Turtle Sand Pit|49.99||4.7|outdoor/pools-and-sand-pits|SM060303|Little Tikes
+240526|Intex Easy Set Pool 8ft|49.99|||outdoor/pools-and-sand-pits|SM060303|Intex
+226913|Little Tikes Cozy Coupe Ride On Car|64.99||4.9|outdoor/ride-ons|SM060304|Little Tikes
+236108|Little Tikes Cozy Truck Ride On|79.99|||outdoor/ride-ons|SM060304|Little Tikes
+240761|Smoby Baby Balade Ride On Blue|29.99||4.5|outdoor/ride-ons|SM060304|Smoby
+251130|PAW Patrol Marshall Fire Truck Ride On|39.99||4.7|outdoor/ride-ons|SM060304,SM06010350|PAW Patrol
+255771|SFR Vision Adjustable Quad Skates Pink|39.99||4.6|outdoor/rollerskates|SM060305|SFR
+255768|SFR Vision Adjustable Quad Skates Blue|39.99|||outdoor/rollerskates|SM060305|SFR
+248390|Rio Roller Script Quad Skates Black|54.99||4.7|outdoor/rollerskates|SM060305|Rio Roller
+231405|Skids Control Adjustable Inline Skates Black|29.99|34.99||outdoor/rollerskates|SM060305|Skids Control
+239302|Ridge Retro 22 Inch Mini Cruiser Skateboard Blue|34.99||4.7|outdoor/skateboards|SM060306|Ridge
+258227|Disney Stitch 28 Inch Skateboard|24.99|||outdoor/skateboards|SM060306|Disney Stitch
+246014|Osprey 31 Inch Double Kick Skateboard Tie Dye|39.99||4.5|outdoor/skateboards|SM060306|Osprey
+233987|Ridge 27 Inch Big Brother Cruiser Skateboard Black|44.99|||outdoor/skateboards|SM060306|Ridge
+229420|smarTrike STR3 6-in-1 Folding Baby Trike Black|149.99|179.99|4.7|outdoor/trikes|SM060310|smarTrike
+217755|Radio Flyer 4-in-1 Stroll 'N Trike Red|89.99||4.8|outdoor/trikes|SM060310|Radio Flyer
+244118|Little Tikes 4-in-1 Perfect Fit Trike Pink|79.99||4.6|outdoor/trikes|SM060310|Little Tikes
+253046|PAW Patrol My First Trike|29.99|||outdoor/trikes|SM060310|PAW Patrol
+222516|Swingball All Surface Pro Swingball|34.99||4.6|outdoor/garden-games-and-accessories|SM060312|Swingball
+240694|Giant Tumbling Timbers Garden Game|29.99||4.7|outdoor/garden-games-and-accessories|SM060312|Smyths Toys
+240702|Giant Garden 4 in a Row Game|39.99|49.99|4.8|outdoor/garden-games-and-accessories|SM060312|Smyths Toys
+221883|Wooden Garden Croquet Set|24.99|||outdoor/garden-games-and-accessories|SM060312|Smyths Toys
+253814|12V Licensed Range Rover Evoque Electric Ride On White|249.99|299.99|4.6|outdoor/electric-ride-ons/12v-ride-ons|SM060313,SM060110|Range Rover
+247106|6V Licensed Mercedes-AMG G63 Electric Ride On Black|149.99||4.5|outdoor/electric-ride-ons/6v-ride-ons|SM060313|Mercedes-Benz
+256470|12V Licensed Lamborghini Revuelto Electric Ride On Green|299.99||4.7|outdoor/electric-ride-ons/12v-ride-ons|SM060313|Lamborghini
+244639|24V Electric Quad Bike Ride On Blue|199.99|229.99|4.4|outdoor/electric-ride-ons/24v-ride-ons|SM060313|Smyths Toys
+251127|6V PAW Patrol Chase Police Car Electric Ride On|129.99||4.8|outdoor/electric-ride-ons/6v-ride-ons|SM060313,SM06010350|PAW Patrol
+238361|12V Licensed JCB Digger Electric Ride On|199.99|||outdoor/electric-ride-ons/12v-ride-ons|SM060313|JCB
+225948|Kickmaster Premier Football Goal 6ft x 4ft|39.99||4.6|outdoor/goals|SM060314|Kickmaster
+225951|Kickmaster Quick Up Football Goals Twin Pack|24.99||4.5|outdoor/goals|SM060314|Kickmaster
+237744|Mitre Multi Purpose Football Rebounder|49.99|||outdoor/goals|SM060314|Mitre
+241216|Kickmaster Target Football Goal 8ft x 5ft|69.99|79.99|4.4|outdoor/goals|SM060314|Kickmaster
+247318|Mitre Impel Training Football Size 5 White|9.99||4.7|outdoor/sports-and-equipment/football|SM06030701|Mitre
+226055|Kickmaster Neon Football Size 5|4.99|||outdoor/sports-and-equipment/football|SM06030701|Kickmaster
+252404|Puma Orbita Football Size 5|12.99||4.6|outdoor/sports-and-equipment/football|SM06030701|Puma
+230615|Spalding NBA Varsity Basketball Size 7|14.99||4.7|outdoor/basketball|SM060315|Spalding
+232809|Sure Shot Junior Adjustable Basketball Hoop Set|39.99|||outdoor/basketball|SM060315|Sure Shot
+246872|Lifetime Adjustable Portable Basketball Hoop|199.99|229.99|4.6|outdoor/basketball|SM060315|Lifetime
+249553|Kids Boxing Set with Gloves and Punch Bag|29.99||4.5|outdoor/sports-and-equipment|SM060307|Smyths Toys
+219962|Little Tikes First Slide|39.99||4.8|outdoor/swings-and-slides|SM060308|Little Tikes
+238876|Hedstrom Double Swing and Glide Set|119.99|139.99|4.5|outdoor/swings-and-slides|SM060308|Hedstrom
+244257|Plum Wooden Climbing Pyramid|149.99|||outdoor/swings-and-slides|SM060308|Plum
+227630|Little Tikes 2-in-1 Snug 'n Secure Swing|29.99||4.7|outdoor/swings-and-slides|SM060308|Little Tikes
+239185|Plum 12ft Trampoline with Enclosure|299.99|349.99|4.6|outdoor/trampolines-and-accessories/trampolines|SM060309|Plum
+226361|Plum Junior 3ft Trampoline with Handle|44.99||4.8|outdoor/trampolines-and-accessories/trampolines|SM060309|Plum
+234418|Sure Shot 4-in-1 Multi Games Table|129.99||4.4|outdoor/games-tables|SM060316|Sure Shot
+241703|Hy-Pro 4ft Football Table|99.99|119.99|4.5|outdoor/games-tables|SM060316|Hy-Pro
+231972|Hy-Pro 6ft Folding Pool Table|199.99|||outdoor/games-tables|SM060316|Hy-Pro
+232904|Bestway Up In & Over Lil' Champ Bouncy Castle|99.99||4.5|outdoor/bouncy-castles|SM060317|Bestway
+243146|Little Tikes Jump 'n Slide Bouncy Castle|249.99|279.99|4.7|outdoor/bouncy-castles|SM060317|Little Tikes
+250087|Happy Hop Princess Bouncy Castle|149.99|||outdoor/bouncy-castles|SM060317|Happy Hop
+228714|Lil' Rider Plush Rocking Horse Brown|39.99||4.7|outdoor/rocking-horses|SM060318|Lil' Rider
+241895|Happy Trails Plush Rocking Pony with Sounds|49.99|||outdoor/rocking-horses|SM060318|Happy Trails
+236533|Wooden Rocking Horse Natural|59.99||4.6|outdoor/rocking-horses|SM060318|Smyths Toys
+244460|BERG Reppy Rider Pedal Go Kart|299.99||4.8|outdoor/go-karts|SM060319|BERG
+233171|BERG Buzzy Nitro Pedal Go Kart|199.99||4.7|outdoor/go-karts|SM060319|BERG
+249867|Kettler Kettcar Barcelona Air Pedal Go Kart|249.99|||outdoor/go-karts|SM060319|Kettler
+253990|24V Electric Go Kart Red|249.99|279.99|4.3|outdoor/go-karts|SM060319,SM060313|Smyths Toys
+227389|Rolly Toys John Deere Pedal Tractor with Trailer|129.99||4.8|outdoor/ride-on-tractors|SM060322|Rolly Toys
+240841|Peg Perego John Deere Ground Force 12V Tractor with Trailer|399.99|||outdoor/ride-on-tractors|SM060322,SM060313|Peg Perego
+236716|Rolly Toys Farmtrac Premium Pedal Tractor|99.99||4.6|outdoor/ride-on-tractors|SM060322|Rolly Toys
+238517|Raleigh Kids Cycle Helmet Blue 48-54cm|14.99||4.6|outdoor/helmets-and-safety-gear|SM060323|Raleigh
+252183|Bluey Kids Safety Helmet|16.99||4.8|outdoor/helmets-and-safety-gear|SM060323|Bluey
+244774|Micro Kids Helmet Neon Pink Small|34.99|||outdoor/helmets-and-safety-gear|SM060323|Micro
+249206|SFR Kids Protective Pad Set Black|14.99||4.5|outdoor/helmets-and-safety-gear|SM060323|SFR
+257712|Disney Stitch Protective Pad Set|14.99|||outdoor/helmets-and-safety-gear|SM060323|Disney Stitch
+239840|Heelys Pro 20 Black and White|54.99||4.6|outdoor/heelys|SM060324|Heelys
+248931|Heelys Split Light Pink|54.99|||outdoor/heelys|SM060324|Heelys
+245577|Heelys Classic Galaxy Print|49.99|59.99|4.5|outdoor/heelys|SM060324|Heelys
+213760|Little Tikes Easy Store Picnic Table|74.99||4.8|outdoor/outdoor-furniture|SM060325|Little Tikes
+242398|Kids Wooden Picnic Bench Natural|59.99|||outdoor/outdoor-furniture|SM060325|Smyths Toys
+236044|Step2 Naturally Playful Picnic Table|129.99||4.7|outdoor/outdoor-furniture|SM060325|Step2
+250638|Kids Folding Camping Chair Blue|9.99|||outdoor/outdoor-furniture|SM060325|Smyths Toys
+217931|Little Tikes Fountain Factory Water Table|59.99||4.7|outdoor/sand-and-water-tables|SM060326|Little Tikes
+236350|Step2 Rain Showers Splash Pond Water Table|79.99|89.99|4.8|outdoor/sand-and-water-tables|SM060326|Step2
+255624|Bluey Sand and Water Table|39.99|||outdoor/sand-and-water-tables|SM060326|Bluey
+241079|Plum Wooden Sand and Water Table|99.99||4.6|outdoor/sand-and-water-tables|SM060326|Plum
+248710|Hover-1 Superfly Hoverboard Black|129.99|149.99|4.4|outdoor/hoverboards|SM060327|Hover-1
+251495|Hover-1 Ranger Hoverboard Blue|149.99||4.5|outdoor/hoverboards|SM060327|Hover-1
+243922|Hover-1 Helix Hoverboard Red|99.99|||outdoor/hoverboards|SM060327|Hover-1
+241668|Fujifilm Instax Mini 12 Instant Camera Blossom Pink|79.99||4.8|gaming-and-tech/digital-and-instant-cameras|SM060401|Fujifilm
+223197|Fujifilm Instax Mini Instant Film 20 Shots|17.99||4.9|gaming-and-tech/digital-and-instant-cameras|SM060401|Fujifilm
+251902|Polaroid Now Generation 3 Instant Camera White|119.99|||gaming-and-tech/digital-and-instant-cameras|SM060401|Polaroid
+234665|VTech KidiZoom Duo DX Camera Blue|39.99|49.99|4.6|gaming-and-tech/digital-and-instant-cameras|SM060401|VTech
+256851|ROG Xbox Ally Handheld Console|499.99||4.6|gaming-and-tech/rog-xbox-ally|SM060404,xbox-gaming|ASUS ROG
+256852|ROG Xbox Ally X Handheld Console|799.99||4.7|gaming-and-tech/rog-xbox-ally|SM060404,xbox-gaming|ASUS ROG
+257410|ROG Xbox Ally Travel Case|39.99|||gaming-and-tech/rog-xbox-ally|SM060404,gaming-accessories|ASUS ROG
+249317|Samsung Odyssey G3 24 Inch FHD 180Hz Gaming Monitor|149.99|179.99|4.6|gaming-and-tech/gaming-monitors|SM060405,SM060406|Samsung
+252630|MSI G255F 25 Inch FHD 180Hz Gaming Monitor|119.99||4.5|gaming-and-tech/gaming-monitors|SM060405,SM060406|MSI
+247784|Acer Nitro 27 Inch QHD 180Hz Gaming Monitor|229.99|||gaming-and-tech/gaming-monitors|SM060405,SM060406|Acer
+240910|Logitech G502 X Gaming Mouse Black|79.99||4.7|gaming-and-tech/pc-gaming|SM060406|Logitech G
+244525|Razer BlackWidow V4 X Mechanical Gaming Keyboard|129.99|149.99|4.6|gaming-and-tech/pc-gaming|SM060406|Razer
+226339|SteelSeries Rival 3 Gaming Mouse|29.99||4.6|gaming-and-tech/pc-gaming|SM060406|SteelSeries
+233512|Corsair K55 Core RGB Gaming Keyboard|44.99|||gaming-and-tech/pc-gaming|SM060406|Corsair
+252751|Turtle Beach Stealth 600 Gen 3 Wireless Gaming Headset PS5|99.99|119.99|4.5|gaming-and-tech/gaming-headsets|SM060407,playstation-gaming|Turtle Beach
+239611|SteelSeries Arctis Nova 1 Wired Gaming Headset|49.99||4.6|gaming-and-tech/gaming-headsets|SM060407|SteelSeries
+236790|Razer BlackShark V2 X Wired Gaming Headset|49.99|||gaming-and-tech/gaming-headsets|SM060407|Razer
+192244|Duracell Plus AA Batteries 12 Pack|9.99||4.8|gaming-and-tech/batteries|SM060413|Duracell
+192249|Duracell Plus AAA Batteries 12 Pack|9.99||4.8|gaming-and-tech/batteries|SM060413|Duracell
+205877|Energizer Max AA Batteries 8 Pack|6.99|||gaming-and-tech/batteries|SM060413|Energizer
+199306|Duracell CR2032 Lithium Coin Batteries 2 Pack|4.99||4.7|gaming-and-tech/batteries|SM060413|Duracell
+248205|Amazon Fire HD 8 Kids Edition Tablet 32GB Blue|149.99|||gaming-and-tech/tablets|SM060417|Amazon
+248201|Amazon Fire 7 Kids Edition Tablet 16GB Purple|109.99||4.6|gaming-and-tech/tablets|SM060417|Amazon
+244082|Lenovo Tab M9 9 Inch 32GB Tablet Grey|129.99|149.99|4.4|gaming-and-tech/tablets|SM060417|Lenovo
+230719|LeapFrog LeapPad Academy Kids Learning Tablet|99.99||4.5|gaming-and-tech/tablets|SM060417|LeapFrog
+173412|Minecraft PS4|19.99||4.8|gaming-and-tech/playstation-4/playstation-4-games|SM060422,playstation-gaming|Mojang
+205103|Gran Turismo 7 PS4|29.99||4.7|gaming-and-tech/playstation-4/playstation-4-games|SM060422,playstation-gaming|PlayStation Studios
+194622|Marvel's Spider-Man: Miles Morales PS4|19.99|||gaming-and-tech/playstation-4/playstation-4-games|SM060422,playstation-gaming|PlayStation Studios
+165830|Crash Bandicoot N. Sane Trilogy PS4|19.99||4.8|gaming-and-tech/playstation-4/playstation-4-games|SM060422,playstation-gaming|Activision
+158511|Sony DualShock 4 Wireless Controller Black|49.99||4.7|gaming-and-tech/playstation-4/playstation-4-accessories|SM060422,playstation-gaming|PlayStation
+173418|Minecraft Xbox One|19.99||4.8|gaming-and-tech/xbox-one/xbox-one-games|SM060423,xbox-gaming|Mojang
+185290|Sea of Thieves Xbox One|19.99|||gaming-and-tech/xbox-one/xbox-one-games|SM060423,xbox-gaming|Xbox Game Studios
+213985|LEGO Star Wars: The Skywalker Saga Xbox One|24.99||4.7|gaming-and-tech/xbox-one/xbox-one-games|SM060423,xbox-gaming|Warner Bros. Games
+210664|Xbox Wireless Controller Carbon Black|49.99||4.8|gaming-and-tech/xbox-one/xbox-one-accessories|SM060423,xbox-gaming,gaming-controllers|Xbox
+229508|PlayStation Store £20 Gift Card|20.00||4.9|gaming-and-tech/gaming-egift-cards|SM060424,playstation-gaming|PlayStation
+229512|PlayStation Store £50 Gift Card|50.00||4.9|gaming-and-tech/gaming-egift-cards|SM060424,playstation-gaming|PlayStation
+229530|Xbox £25 Gift Card|25.00|||gaming-and-tech/gaming-egift-cards|SM060424,xbox-gaming|Xbox
+229545|Nintendo eShop £25 Gift Card|25.00||4.9|gaming-and-tech/gaming-egift-cards|SM060424,nintendo-gaming|Nintendo
+233860|Roblox £20 Gift Card|20.00||4.8|gaming-and-tech/gaming-egift-cards|SM060424|Roblox
+241337|Fortnite 2,800 V-Bucks Gift Card|19.99||4.8|gaming-and-tech/gaming-egift-cards|SM060424,SM060634|Fortnite
+236620|JBL Tune 520BT Wireless On-Ear Headphones Black|39.99|49.99|4.6|gaming-and-tech/headphones-earphones-and-earbuds|SM060428|JBL
+241784|Sony WH-CH520 Wireless Headphones Blue|44.99||4.6|gaming-and-tech/headphones-earphones-and-earbuds|SM060428|Sony
+232205|JLab JBuddies Kids Wireless Headphones Pink|24.99||4.5|gaming-and-tech/headphones-earphones-and-earbuds|SM060428|JLab
+247563|JBL Wave Buds 2 True Wireless Earbuds Black|39.99|||gaming-and-tech/headphones-earphones-and-earbuds|SM060428|JBL
+230142|Sonic the Hedgehog 4 Inch Articulated Figure Assortment|9.99||4.7|gaming-and-tech/gaming-figures|SM060434|Sonic the Hedgehog
+253219|Fortnite Legendary Series 6 Inch Figure Assortment|19.99|||gaming-and-tech/gaming-figures|SM060434,SM060634|Fortnite
+244865|Roblox Mystery Figures Series 13|7.99||4.6|gaming-and-tech/gaming-figures|SM060434|Roblox
+255040|Minecraft Diamond Level Steve Collector Figure|24.99||4.8|gaming-and-tech/gaming-figures|SM060434|Minecraft
+219775|Nintendo Switch Online 12 Month Individual Membership|17.99||4.8|gaming-and-tech/digital-downloads|SM060440,nintendo-gaming|Nintendo
+219781|PlayStation Plus Essential 12 Month Membership|71.99|||gaming-and-tech/digital-downloads|SM060440,playstation-gaming|PlayStation
+228417|Minecraft Minecoins 3,500 Coins Digital Code|19.99||4.7|gaming-and-tech/digital-downloads|SM060440|Mojang
+249974|Roblox £10 Digital Code|10.00|||gaming-and-tech/digital-downloads|SM060440|Roblox
+249610|Nintendo Switch 2 Console with Mario Kart World Bundle|429.99||4.9|gaming-and-tech/console-bundle-deals|SM060441,nintendo-gaming|Nintendo
+258312|PlayStation 5 Digital Edition Slim with EA SPORTS FC 27 Bundle|399.99|429.99|4.8|gaming-and-tech/console-bundle-deals|SM060441,playstation-gaming|PlayStation
+252476|Xbox Series S 1TB Console with Forza Horizon 5 Bundle|319.99|349.99|4.6|gaming-and-tech/console-bundle-deals|SM060441,xbox-gaming|Xbox
+246380|Meta Quest 3S 128GB VR Headset|289.99||4.7|gaming-and-tech/virtual-reality|SM060443|Meta
+246382|Meta Quest 3 512GB VR Headset|469.99||4.8|gaming-and-tech/virtual-reality|SM060443|Meta
+228006|PlayStation VR2 Headset|399.99|529.99|4.6|gaming-and-tech/virtual-reality|SM060443,playstation-gaming|PlayStation
+238212|Atari 2600+ Console|99.99||4.5|gaming-and-tech/retro-gaming|SM060447|Atari
+244407|Evercade EXP-R Handheld Console|99.99|||gaming-and-tech/retro-gaming|SM060447|Evercade
+236901|SEGA Mega Drive Mini 2 Console|79.99|89.99|4.7|gaming-and-tech/retro-gaming|SM060447|SEGA
+241450|Funko Pop! Marvel Spider-Man Figure|12.99||4.8|gaming-and-tech/funko-pop-culture|SM060453,SM060613|Funko
+247688|Funko Pop! Disney Lilo & Stitch Stitch Figure|12.99||4.9|gaming-and-tech/funko-pop-culture|SM060453|Funko
+233016|Funko Pop! Games Minecraft Creeper Figure|12.99|||gaming-and-tech/funko-pop-culture|SM060453|Funko
+222431|Funko Pop! Pokémon Pikachu Figure|14.99||4.9|gaming-and-tech/funko-pop-culture|SM060453,pokemon-gaming|Funko
+261907|Funko Pop! Netflix KPop Demon Hunters Rumi Figure|12.99||4.8|gaming-and-tech/funko-pop-culture|SM060453,SM060639|Funko
+205662|Logitech G29 Driving Force Racing Wheel PS5 and PC|199.99|299.99|4.7|gaming-and-tech/steering-wheels|SM060454,playstation-gaming,SM060110|Logitech G
+238775|Thrustmaster T128 Racing Wheel PS5 and PC|149.99||4.4|gaming-and-tech/steering-wheels|SM060454,playstation-gaming|Thrustmaster
+205668|Logitech G920 Driving Force Racing Wheel Xbox and PC|199.99|299.99|4.6|gaming-and-tech/steering-wheels|SM060454,xbox-gaming|Logitech G
+246140|Paladone PlayStation Icons Light|24.99||4.7|gaming-and-tech/gaming-merchandise|SM060455|Paladone
+242217|Paladone Super Mario Mushroom Lamp|24.99|||gaming-and-tech/gaming-merchandise|SM060455|Paladone
+229381|Xbox Series X Mini Fridge|99.99|119.99|4.8|gaming-and-tech/gaming-merchandise|SM060455|Ukonic
+248823|Minecraft Creeper Plush 30cm|16.99||4.7|gaming-and-tech/gaming-merchandise|SM060455|Minecraft
+240317|VTech KidiZoom Smartwatch Max Blue|59.99||4.5|gaming-and-tech/smart-watches-and-fitness-trackers|SM060459|VTech
+251810|Xplora X6 Play Kids 4G Smartwatch Blue|129.99|||gaming-and-tech/smart-watches-and-fitness-trackers|SM060459|Xplora
+229964|Fitbit Inspire 3 Fitness Tracker Black|69.99|79.99|4.4|gaming-and-tech/smart-watches-and-fitness-trackers|SM060459|Fitbit
+256608|Moochies Odyssey 4G Kids Smartwatch Pink|99.99||4.3|gaming-and-tech/smart-watches-and-fitness-trackers|SM060459|Moochies
+251356|JBL Go 4 Portable Bluetooth Speaker Blue|39.99||4.8|gaming-and-tech/speakers|SM060465|JBL
+247941|Sony ULT Field 1 Portable Bluetooth Speaker Black|99.99|129.99|4.6|gaming-and-tech/speakers|SM060465|Sony
+244153|Ultimate Ears Wonderboom 4 Portable Speaker Blue|89.99|||gaming-and-tech/speakers|SM060465|Ultimate Ears
+262931|Marvel's Wolverine PS5|64.99|||gaming-and-tech/pre-order-games/playstation-5-pre-order-games|SM06040301,playstation-gaming|PlayStation Studios
+261418|Marvel 1943: Rise of Hydra PS5|59.99|||gaming-and-tech/pre-order-games/playstation-5-pre-order-games|SM06040301,playstation-gaming|Plaion
+260357|Onimusha: Way of the Sword PS5|59.99|||gaming-and-tech/pre-order-games/playstation-5-pre-order-games|SM06040301,playstation-gaming|Capcom
+261803|Fable Xbox Series X|59.99|||gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games|SM06040302,xbox-gaming|Xbox Game Studios
+261806|Gears of War: E-Day Xbox Series X|59.99|||gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games|SM06040302,xbox-gaming|Xbox Game Studios
+261419|Marvel 1943: Rise of Hydra Xbox Series X|59.99|||gaming-and-tech/pre-order-games/xbox-series-x-pre-order-games|SM06040302,xbox-gaming|Plaion
+260004|Smyths Toys £10 Gift Card|10.00||4.9|gift-cards/physical-gift-cards|SM060502|Smyths Toys
+260005|Smyths Toys £20 Gift Card|20.00||4.9|gift-cards/physical-gift-cards|SM060502|Smyths Toys
+260006|Smyths Toys £25 Gift Card|25.00||4.9|gift-cards/physical-gift-cards|SM060502|Smyths Toys
+260007|Smyths Toys £50 Gift Card|50.00||4.9|gift-cards/physical-gift-cards|SM060502|Smyths Toys
+260008|Smyths Toys £100 Gift Card|100.00||4.9|gift-cards/physical-gift-cards|SM060502|Smyths Toys
+260014|Smyths Toys £10 e-Gift Card|10.00||4.9|gift-cards/egift-cards|SM060501|Smyths Toys
+260015|Smyths Toys £25 e-Gift Card|25.00||4.9|gift-cards/egift-cards|SM060501|Smyths Toys
+260016|Smyths Toys £50 e-Gift Card|50.00||4.9|gift-cards/egift-cards|SM060501|Smyths Toys
+260021|Smyths Toys Happy Birthday £20 e-Gift Card|20.00||4.9|gift-cards/egift-cards|SM060501|Smyths Toys
+263540|Mirror Mi Interactive Talking Mirror Pink|39.99||4.7|brand/mirror-mi|SM060104,SM060643,top-toys|Mirror Mi
+263541|Mirror Mi Interactive Talking Mirror Lilac|39.99||4.6|brand/mirror-mi|SM060104,SM060643|Mirror Mi
+263547|Mirror Mi Beauty Studio Playset|29.99|||brand/mirror-mi|SM060104,SM060643|Mirror Mi
+248774|Fortnite Llama Plush 30cm|19.99||4.6|toys/action-figures-and-playsets/fortnite|SM060101,SM060634|Fortnite
+252050|Marvel Spider-Man Web Slinger Glove Blaster|19.99||4.5|toys/action-figures-and-playsets/marvel|SM060101,SM060613|Marvel Spider-Man
+`
+
+export const SHELF_ROWS = `${CAPTURED_ROWS.trim()}\n${RANGE_ROWS.trim()}`.split('\n').map(line => {
   const [sku, title, price, was, rating, catPath, codes, brand] = line.split('|')
   return { sku, title: title.replaceAll('¦', '|'), price: Number(price), was: was ? Number(was) : null, rating: rating ? Number(rating) : null, catPath, codes: codes.split(','), brand }
 })

@@ -215,3 +215,15 @@
 .wsx-recipe-more{margin-top:32px}
 @media(max-width:1180px){.wsx-recipe-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.wsx-recipe-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}.wsx-recipe-card h3{font-size:16px}}
+/* Page not found (shared coverage markup) */
+.wsx .reference-coverage{max-width:760px;margin:40px auto 56px;padding:0 24px;text-align:center}
+.wsx .reference-coverage h1{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:34px;margin:0 0 14px}
+.wsx .reference-coverage>p{color:var(--muted);margin:0 0 18px}
+.wsx .reference-coverage>a{display:inline-block;margin-top:8px;text-decoration:underline}
+.wsx-404-search{display:flex;max-width:520px;margin:0 auto 28px}
+.wsx-404-search input{flex:1;min-width:0;height:44px;border:1px solid #222;padding:0 12px;font:inherit}
+.wsx-404-search button{height:46px;padding:0 22px;border:0;background:#222;color:#fff;font:inherit;text-transform:uppercase;letter-spacing:.06em;cursor:pointer}
+.wsx-404-depts{list-style:none;padding:24px 0;margin:0 0 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 18px}
+.wsx-404-depts a{font-size:15px}
+.wsx-404-depts a:hover,.wsx-404-help a{text-decoration:underline}
+@media(max-width:760px){.wsx-404-depts{grid-template-columns:repeat(2,minmax(0,1fr))}.wsx .reference-coverage h1{font-size:26px}}

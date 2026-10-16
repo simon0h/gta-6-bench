@@ -27,8 +27,9 @@ const GLYPHS = {
 }
 const glyphFor = label => {
   const l = label.toLowerCase()
+  if (/gift|egift|\bcards?\b/.test(l)) return /card/.test(l) ? 'card' : 'gift'
   if (/lego|brick|construction|wooden/.test(l)) return 'bricks'
-  if (/car|wheels|ride|kart|tractor/.test(l)) return 'car'
+  if (/\bcars?\b|wheels|ride|kart|tractor/.test(l)) return 'car'
   if (/doll|barbie|fashion|blind|kpop|mirror|figure|spider/.test(l)) return 'doll'
   if (/bike|scooter|trike|skate|heel|hover/.test(l)) return 'bike'
   if (/gaming|playstation|xbox|nintendo|game|console|pc|controller|headset|vr|virtual|switch|funko|retro|pok/.test(l)) return 'pad'
@@ -39,6 +40,23 @@ const glyphFor = label => {
   return 'star'
 }
 const hash = s => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7)
+// Help Centre topic icons (line drawings in the tile colour).
+const HELP_ICONS = {
+  ship: '<path d="M8 22h28v18H8ZM36 28h10l8 8v4H36Z"/><circle cx="18" cy="44" r="5"/><circle cx="44" cy="44" r="5"/>',
+  click: '<path d="M12 26 32 14l20 12v24H12Z"/><path d="M26 50V36h12v14"/>',
+  returns: '<path d="M20 22h20a10 10 0 0 1 0 20H22"/><path d="m26 14-8 8 8 8"/>',
+  card: '<rect x="12" y="20" width="40" height="26" rx="4"/><path d="M12 28h40M18 38h10"/>',
+  doc: '<path d="M18 12h20l8 8v32H18Z"/><path d="M24 28h16M24 36h16M24 44h10"/>',
+  stock: '<path d="M14 24 32 14l18 10v20L32 54 14 44Z"/><path d="m14 24 18 10 18-10M32 34v20"/>',
+  clock: '<circle cx="32" cy="32" r="18"/><path d="M32 22v11l7 5"/>',
+  people: '<circle cx="24" cy="24" r="6"/><circle cx="42" cy="26" r="5"/><path d="M12 48c0-8 5-13 12-13s12 5 12 13M36 48c0-6 2-11 7-11s8 4 8 11"/>',
+  shield: '<path d="M32 12 48 18v12c0 11-7 19-16 23-9-4-16-12-16-23V18Z"/><path d="m25 32 5 5 9-10"/>',
+  pound: '<path d="M40 20a8 8 0 0 0-14 4v24M20 34h16M20 48h24"/>',
+  info: '<circle cx="32" cy="32" r="18"/><path d="M32 29v12M32 22v1"/>',
+  chat: '<path d="M12 16h40v24H28l-10 9v-9h-6Z"/><path d="M22 26h20M22 32h12"/>',
+}
+const HELP_ICON_FOR = { 'Shipping and delivery': 'ship', 'Click & Collect': 'click', Returns: 'returns', 'Gift cards': 'card', 'Terms and policies': 'doc', 'Stock availability': 'stock', 'Pre-order': 'clock', Careers: 'people', 'Product Advisory Information': 'shield', 'Payment Information': 'pound', 'About us': 'info', 'Contact us': 'chat' }
+const helpArt = label => `<span class="st-help-art" aria-hidden="true"><svg viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">${HELP_ICONS[HELP_ICON_FOR[label]] || HELP_ICONS.info}</g></svg></span>`
 export const tileArt = (label, cls = 'st-tile-art') => { const c = PALETTE[hash(label) % PALETTE.length]; return `<span class="${cls}" style="--tile:${c}" aria-hidden="true"><svg viewBox="0 0 64 64"><g fill="#fff" fill-opacity=".92" stroke="#fff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">${GLYPHS[glyphFor(label)]}</g></svg></span>` }
 const tile = (base, label, path) => `<a class="st-cat-tile" href="${base}${path}">${tileArt(label)}<span>${esc(label)}</span></a>`
 const crumbs = (base, trail) => `<nav class="st-crumbs" aria-label="Breadcrumb"><ol><li><a href="${base}">Home</a></li>${trail.map(([t, u], i) => `<li>${u && i < trail.length - 1 ? `<a href="${base}${u}">${esc(t)}</a>` : `<span aria-current="page">${esc(t)}</span>`}</li>`).join('')}</ol></nav>`
@@ -145,11 +163,12 @@ const helpSide = (base, current) => `<aside class="st-side" aria-label="Help top
 export function infoPage(base, path) {
   const page = PAGES[path]
   const fill = s => s.replaceAll('{base}', base)
-  const article = `<article class="st-article"><h1>${esc(page.h1)}</h1>${fill(page.intro || '')}${page.sections.map(([h, html]) => `<h2>${esc(h)}</h2>${fill(html)}`).join('')}</article>`
-  return `${crumbs(base, [[page.h1, path]])}<div class="st-info">${page.help ? helpSide(base, path) : ''}${article}</div>`
+  const body = page.cards ? `<div class="st-event-grid">${page.sections.map(([h, html]) => `<section class="st-event-card"><h2>${esc(h)}</h2>${fill(html)}</section>`).join('')}</div>` : page.sections.map(([h, html]) => `<h2>${esc(h)}</h2>${fill(html)}`).join('')
+  const article = `<article class="st-article${page.cards ? ' st-article-wide' : ''}"><h1>${esc(page.h1)}</h1>${fill(page.intro || '')}${body}</article>`
+  return `${crumbs(base, [[page.h1, path]])}<div class="st-info${page.help ? '' : ' st-info-full'}">${page.help ? helpSide(base, path) : ''}${article}</div>`
 }
 export function helpCentre(base, extra = '') {
-  return `${crumbs(base, [['Help Centre', '/help']])}<section class="st-help-hero"><h1>Help Centre</h1><p>Find answers about delivery, Click &amp; Collect, returns, pre-orders and more.</p></section><div class="st-help-grid">${HELP_TOPICS.map(([t, u, d]) => `<a class="st-help-card" href="${base}${u}">${tileArt(t, 'st-help-art')}<b>${esc(t)}</b><span>${esc(d)}</span></a>`).join('')}</div>${extra}`
+  return `${crumbs(base, [['Help Centre', '/help']])}<section class="st-help-hero"><h1>Help Centre</h1><p>Find answers about delivery, Click &amp; Collect, returns, pre-orders and more.</p></section><div class="st-help-grid">${HELP_TOPICS.map(([t, u, d]) => `<a class="st-help-card" href="${base}${u}">${helpArt(t)}<b>${esc(t)}</b><span>${esc(d)}</span></a>`).join('')}</div>${extra}`
 }
 
 // ---------------------------------------------------------------- routes
@@ -165,7 +184,7 @@ export function installSite(router, { ROOT, url, render, field, catalog }) {
     const tree = d => `<section class="st-sm-dept"><h2><a href="${base}${d.path}">${esc(d.label)}</a></h2><ul>${childrenOf(d).map(k => `<li><a href="${base}${k.path}">${esc(k.label)}</a>${childrenOf(k).length ? `<ul>${childrenOf(k).map(g => `<li><a href="${base}${g.path}">${esc(g.label)}</a>${childrenOf(g).length ? `<ul>${childrenOf(g).map(h => `<li><a href="${base}${h.path}">${esc(h.label)}</a></li>`).join('')}</ul>` : ''}</li>`).join('')}</ul>` : ''}</li>`).join('')}</ul></section>`
     const other = CATEGORY_ROWS.filter(c => !c.department && !c.code.startsWith('gift-finder-'))
     const list = (h, items) => `<section class="st-sm-dept"><h2>${h}</h2><ul>${items.map(([t, u]) => `<li><a href="${base}${u}">${esc(t)}</a></li>`).join('')}</ul></section>`
-    render(req, res, 'Site map', `${crumbs(base, [['Site map', '/sitemap']])}<h1>Site map</h1><p>Every department, category and service page in this store.</p><div class="st-sitemap">${topDepartments.map(tree).join('')}${list('Gift ideas by age', AGE_TILES.map(a => [a.label, a.path]))}${list('Brands', other.map(c => [c.label, c.path]))}${list('Shopping with us', [['Help centre', '/help'], ['Store finder', '/storefinder'], ['Gift Finder', '/gift-finder-hub'], ['Gift cards', '/giftcardtype'], ['Video Games', '/video-games'], ['Toys', '/toys'], ['In-store events', '/in-store-events'], ['Buying guides', '/buying-guides'], ['Request a catalogue', '/request-a-catalogue'], ['Manage my order', '/guest-lookup'], ['Sign in', '/login'], ['Wishlist', '/wishlist'], ['Basket', '/cart']])}${list('Help &amp; policies', [...HELP_NAV.filter(([, u]) => u !== '/help'), ['Payment Information', '/payment-information'], ['Product Information', '/product-information'], ['Privacy policy', '/privacy-policy'], ['Cookie policy', '/cookies-policy'], ['Terms & Conditions', '/terms-and-conditions'], ['Accessibility', '/accessibility'], ['Transparency statement', '/transparency-statement'], ['Tax Strategy', '/tax-strategy'], ['Gender Pay Gap', '/gender-pay-gap'], ['Charity partners', '/charity-partners'], ['Careers', '/careers']])}</div>`)
+    render(req, res, 'Site map', `${crumbs(base, [['Site map', '/sitemap']])}<h1>Site map</h1><p>Find your way around Smyths Toys – every department, category and customer service page.</p><div class="st-sitemap">${topDepartments.map(tree).join('')}${list('Gift ideas by age', AGE_TILES.map(a => [a.label, a.path]))}${list('Brands', other.map(c => [c.label, c.path]))}${list('Shopping with us', [['Help centre', '/help'], ['Store finder', '/storefinder'], ['Gift Finder', '/gift-finder-hub'], ['Gift cards', '/giftcardtype'], ['Video Games', '/video-games'], ['Toys', '/toys'], ['In-store events', '/in-store-events'], ['Buying guides', '/buying-guides'], ['Request a catalogue', '/request-a-catalogue'], ['Manage my order', '/guest-lookup'], ['Sign in', '/login'], ['Wishlist', '/wishlist'], ['Basket', '/cart']])}${list('Help &amp; policies', [...HELP_NAV.filter(([, u]) => u !== '/help'), ['Payment Information', '/payment-information'], ['Product Information', '/product-information'], ['Privacy policy', '/privacy-policy'], ['Cookie policy', '/cookies-policy'], ['Terms & Conditions', '/terms-and-conditions'], ['Accessibility', '/accessibility'], ['Transparency statement', '/transparency-statement'], ['Tax Strategy', '/tax-strategy'], ['Gender Pay Gap', '/gender-pay-gap'], ['Charity partners', '/charity-partners'], ['Careers', '/careers']])}</div>`)
   })
   for (const path of Object.keys(PAGES)) {
     router.get(R(path), (req, res, next) => {
@@ -178,9 +197,12 @@ export function installSite(router, { ROOT, url, render, field, catalog }) {
   // Store finder (real path /storefinder; the legacy /store-finder journey stays as is).
   router.get(R('/storefinder'), (req, res) => {
     const base = url(res), q = str(req.query.q).toLowerCase()
-    const regions = REGIONS.map(r => [r, (STORES[r] || []).filter(s => !q || s.toLowerCase().includes(q) || r.toLowerCase().includes(q))]).filter(([r, list]) => !q || list.length || r.toLowerCase().includes(q))
-    const storeLink = s => ['Beckton', 'Salford'].includes(s) ? `<a href="${base}/stores/${s.toLowerCase()}">${s}</a>` : esc(s)
-    render(req, res, 'Store Finder & Opening Hours', `${crumbs(base, [['Store finder', '/storefinder']])}<section class="st-finder-hero"><h1>Store finder</h1><p>Find your nearest Smyths Toys Superstore. Our stores are open seven days a week.</p><form method="get" action="${base}/storefinder" class="st-finder-form"><label for="sf-q">Town, city or store name</label><div><input id="sf-q" name="q" value="${esc(req.query.q)}" placeholder="Enter town or store name"><button>Search</button></div></form><button type="button" class="secondary st-locate" disabled title="Location services are currently unavailable">Use my current location</button></section><h2>All stores</h2>${regions.length ? `<div class="st-regions">${regions.map(([r, list]) => `<section class="st-region-card"><h3>${esc(r)}</h3>${list.length ? `<ul>${list.map(s => `<li>${storeLink(s)}</li>`).join('')}</ul>` : '<p class="st-muted">Search by town or store name to find stores in this region.</p>'}</section>`).join('')}</div>` : `<p>No stores match “${esc(req.query.q)}”.</p>`}<p class="st-muted">Most stores open Monday–Saturday 9am–8pm and Sunday 11am–5pm (10am–4pm in Scotland and Northern Ireland). <a href="${base}/click-and-collect">How Click &amp; Collect works</a>.</p>`)
+    const regions = REGIONS.map(r => [r, (STORES[r] || []).filter(s => !q || s.toLowerCase().includes(q) || r.toLowerCase().includes(q))]).filter(([r, list]) => !q || list.length)
+    const found = q ? regions.flatMap(([r, list]) => list.map(s => [r, s])) : []
+    const storeLink = s => `<a href="${base}/storefinder?q=${encodeURIComponent(s)}">${esc(s)}</a>`
+    const sunday = r => r === 'Scotland' ? '10am – 6pm' : r === 'Northern Ireland' ? '1pm – 6pm' : '11am – 5pm'
+    const storeCard = ([r, s]) => `<section class="st-store-card"><h3>Smyths Toys ${esc(s)}</h3><p class="st-muted">${esc(r)}</p><h4>Opening hours</h4><dl class="st-hours"><dt>Monday – Friday</dt><dd>9am – 8pm</dd><dt>Saturday</dt><dd>9am – 8pm</dd><dt>Sunday</dt><dd>${sunday(r)}</dd></dl><ul class="st-store-services"><li>FREE Click &amp; Collect</li><li>Returns &amp; exchanges</li><li>Car seat fitting</li></ul></section>`
+    render(req, res, 'Store Finder & Opening Hours', `${crumbs(base, [['Store finder', '/storefinder']])}<section class="st-finder-hero"><h1>Store finder</h1><p>Find your nearest Smyths Toys Superstore. Our stores are open seven days a week.</p><form method="get" action="${base}/storefinder" class="st-finder-form"><label for="sf-q">Town, city or store name</label><div><input id="sf-q" name="q" value="${esc(req.query.q)}" placeholder="Enter town or store name"><button>Search</button></div></form><button type="button" class="secondary st-locate" disabled title="Location services are currently unavailable">Use my current location</button></section>${q && found.length && found.length <= 12 ? `<h2>${found.length} store${found.length === 1 ? '' : 's'} near “${esc(req.query.q)}”</h2><div class="st-store-cards">${found.map(storeCard).join('')}</div><p><a href="${base}/storefinder">View all stores</a></p>` : `<h2>${q ? `Stores matching “${esc(req.query.q)}”` : 'All stores'}</h2>${regions.length ? `<div class="st-regions">${regions.map(([r, list]) => `<section class="st-region-card"><h3>${esc(r)}</h3><ul>${list.map(s => `<li>${storeLink(s)}</li>`).join('')}</ul></section>`).join('')}</div>` : `<p>Sorry, we couldn’t find a store matching “${esc(req.query.q)}”. Try a nearby town or city.</p><p><a href="${base}/storefinder">View all stores</a></p>`}`}<p class="st-muted">Most stores open Monday–Saturday 9am–8pm and Sunday 11am–5pm (10am–6pm in Scotland, 1pm–6pm in Northern Ireland). Bank holiday hours may vary. <a href="${base}/click-and-collect">How Click &amp; Collect works</a>.</p>`)
   })
 
   // Gift cards

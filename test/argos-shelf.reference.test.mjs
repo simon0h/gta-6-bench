@@ -33,8 +33,8 @@ test('argos homepage shows products from several departments, with GTA VI as one
     assert.match(home.text, /Grand Theft Auto VI PS5 Game Pre-Order/)
     assert.ok(main(home).indexOf('Top deals') < main(home).indexOf('Grand Theft Auto VI'))
     const tv = await c.get('/argos/browse/technology/televisions-and-accessories/televisions/c:30106/?brand=LG&sort=price-low')
-    assert.match(tv.text, /<strong>2 products<\/strong>/)
-    assert.ok(main(tv).indexOf('LG 43 Inch') < main(tv).indexOf('LG 65 Inch'))
+    assert.match(tv.text, /<strong>3 products<\/strong>/)
+    assert.ok(main(tv).indexOf('LG 43 Inch') < main(tv).indexOf('LG 55 Inch') && main(tv).indexOf('LG 55 Inch') < main(tv).indexOf('LG 65 Inch'))
   } finally { await srv.close() }
 })
 

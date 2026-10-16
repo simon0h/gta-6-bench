@@ -5,14 +5,16 @@ import { esc, disclaimer, publicNotice } from '../../lib/html.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
 import { capturedSearchProducts } from './search-reference.js'
 import { isCapturedQuery } from './search-capture.js'
-import { products as shelfProducts, shelfBrands, categoryProducts, COLLECTIONS } from './shelf.js'
+import { products as shelfProducts, shelfBrands, categoryProducts, COLLECTIONS, saleProducts as saleItems } from './shelf.js'
 import { shelfCard, shelfRow, listing, basketCount, sessionOrders } from './shelf-pages.js'
 import { CATEGORIES, DEPARTMENTS, NAV, FOOTER, LEGAL, HELP_TOPICS, INFO, QUICK_LINKS, FILTERS } from './site-data.js'
 
 import { brandSlug } from './shelf.js'
 import { renderArt } from './shelf-art.js'
+import { storesNear } from './store-locations.js'
 export { brandSlug }
-const BRANDS = [...new Set([...capturedSearchProducts.map(p => p.brand), ...shelfBrands])].sort((a, b) => a.localeCompare(b)).map(name => ({ name, slug: brandSlug(name) }))
+// One entry per brand: the assortment's spelling wins over an all-caps search-card spelling (NATASHA DENONA).
+const BRANDS = [...new Map([...capturedSearchProducts.map(p => p.brand), ...shelfBrands].map(name => [brandSlug(name), name])).entries()].map(([slug, name]) => ({ name, slug })).sort((a, b) => a.name.localeCompare(b.name))
 const EXTRA_BRANDS = { 'sephora-collection': 'SEPHORA COLLECTION', kayali: 'KAYALI' }
 
 const icon = name => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">${{
@@ -30,6 +32,14 @@ const icon = name => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="fal
 
 const a = (base, path, label, cls = '') => `<a${cls ? ` class="${cls}"` : ''} href="${esc(base + path)}">${esc(label)}</a>`
 
+// The shared "page not found" body is a single line; sephora.com follows it with ways back into the store.
+const MISSING = "Sorry, we couldn't find that page"
+function missingPageExtras(base, title, body) {
+  if (title !== MISSING || !body.includes('data-reference-state="uncaptured"')) return ''
+  const popular = [['Makeup', '/shop/makeup-cosmetics'], ['Skincare', '/shop/skincare'], ['Fragrance', '/shop/fragrance'], ['Hair', '/shop/hair-products'], ['New', '/beauty/new-beauty-products'], ['Sale', '/sale']]
+  return `<section class="sx-missing"><p>The page you're looking for may have moved or is no longer available. Try searching, or start with one of these.</p><div class="sx-pills">${popular.map(([l, p]) => a(base, p, l)).join('')}</div></section>${shelfRow(base, 'Bestsellers', shelfProducts.toSorted((x, y) => y.reviews - x.reviews).slice(0, 12), ['Shop all', '/beauty/best-selling-beauty'])}`
+}
+
 export function siteChrome({ req, base, title, body }) {
   const user = req.store?.user
   const accountName = user ? `Hi, ${user.first_name || 'Beautiful'}` : 'Sign In'
@@ -37,7 +47,7 @@ export function siteChrome({ req, base, title, body }) {
   const mega = (label, path, slug) => {
     const dept = slug && DEPARTMENTS[slug]
     if (!dept) return `<div class="sx-dept">${a(base, path, label)}</div>`
-    return `<div class="sx-dept">${a(base, path, label)}<div class="sx-mega"><section><h2>${esc(dept.title)}</h2>${a(base, path, `Shop All ${dept.title}`, 'sx-strong')}${dept.subs.map(([l, s]) => a(base, `/shop/${s}`, l)).join('')}</section><section><h3>Discover</h3>${dept.quick.map(qk => a(base, QUICK_LINKS[qk] || path, qk)).join('')}</section><section class="sx-mega-promo"><p>Only at Sephora</p><strong>${esc(dept.title)} favorites</strong>${a(base, path, 'SHOP NOW ▸')}</section></div></div>`
+    return `<div class="sx-dept">${a(base, path, label)}<div class="sx-mega"><section><h2>${esc(dept.title)}</h2>${a(base, path, `Shop All ${dept.title}`, 'sx-strong')}${dept.subs.map(([l, s]) => a(base, `/shop/${s}`, l)).join('')}</section><section><h3>Discover</h3>${dept.quick.map(qk => a(base, QUICK_LINKS[qk] || path, qk)).join('')}</section><section class="sx-mega-promo"><span class="sx-mega-art" aria-hidden="true">${topReviewed(categoryProducts(slug)).slice(0, 3).map(p => `<img src="${esc(base + p.image)}" alt="" loading="lazy" width="120" height="120">`).join('')}</span><p>Bestsellers</p><strong>${esc(dept.title)} favorites</strong>${a(base, path, 'SHOP NOW ▸')}</section></div></div>`
   }
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | Sephora</title><link rel="stylesheet" href="/static/unavailable.css"><link rel="stylesheet" href="${base}/static/depth.css"><link rel="stylesheet" href="${base}/static/site.css"><script src="${base}/static/catalog.js" defer></script></head><body class="sephora sp-depth sp-srp-page sx">
   <a class="skip" href="#main">Skip to content</a>
@@ -52,7 +62,7 @@ export function siteChrome({ req, base, title, body }) {
   </header>
   <nav id="sp-shop-nav" class="sx-nav" aria-label="Shop">${NAV.map(([l, p, s]) => mega(l, p, s)).join('')}</nav>
   <nav class="sx-utility" aria-label="Quick links">${a(base, '/', 'Home')}${a(base, '/beauty/beauty-offers', 'Offers')}${a(base, '/happening/stores/sephora-near-me', 'My Store')}${a(base, '/beauty/new-beauty-products', 'New')}${a(base, '/beauty/ai-beauty-chat', 'AI Beauty')}</nav>
-  <main id="main">${body}</main>
+  <main id="main">${body}${missingPageExtras(base, title, body)}</main>
   <footer class="sx-footer">
     <div class="sx-footer-features">
       <a href="${base}/happening/stores/sephora-near-me">${icon('store')}<span><strong>Find a Store</strong>Choose Your Store</span></a>
@@ -124,7 +134,7 @@ export function homePage(base, req) {
   <section class="sx-row"><div class="sx-row-head"><h2>Beauty Offers</h2>${a(base, '/beauty/beauty-offers', 'See all')}</div><div class="sx-offers">
     <a href="${base}/beauty/beauty-offers"><small>BEAUTY INSIDER</small><strong>Get 5X Points on Sephora Collection</strong><span>Ends 10/27. Terms apply.</span><em>SHOP NOW ▸</em></a>
     <a href="${base}/rewards"><small>REWARDS BAZAAR</small><strong>Redeem your points</strong><span>Deluxe samples, minis and experiences.</span><em>REDEEM NOW ▸</em></a>
-    <a href="${base}/beauty/free-beauty-samples"><small>SAMPLES</small><strong>Free samples with every order</strong><span>Choose two free samples at checkout.</span><em>LEARN MORE ▸</em></a>
+    <a href="${base}/beauty/free-beauty-samples"><small>SAMPLES</small><strong>Free samples with every order</strong><span>Deluxe samples in every shipped order.</span><em>LEARN MORE ▸</em></a>
     <a href="${base}/sale"><small>SALE</small><strong>Sale</strong><span>Shop limited-time markdowns.</span><em>SHOP NOW ▸</em></a></div></section>
   ${shelfRow(base, 'Selling Fast', shelf.toSorted((x, y) => y.reviews - x.reviews).filter((p, i, all) => all.findIndex(q => q.brand === p.brand) === i).slice(0, 12), ['Show more', '/beauty/best-selling-beauty'])}
   ${shelfRow(base, 'Skincare Must-Haves', pick('skincare'), ['Show more', '/shop/skincare'])}
@@ -184,23 +194,37 @@ export function giftCardsPage(base, notice) {
 }
 
 export function offersPage(base) {
-  const soft = [['Sale', '/sale'], ['Rewards Bazaar', '/rewards'], ['Samples', '/beauty/free-beauty-samples'], ['Value Sets', '/shop/value-sets'], ['Mini Size', '/shop/travel-size-toiletries'], ['Jumbo Size', '/beauty/supersized-beauty-products'], ['Sephora Collection', '/brand/sephora-collection']]
+  const soft = [['Sale', '/sale', 'Up to 30% off select products.'], ['Rewards Bazaar', '/rewards', 'Redeem points for deluxe samples.'], ['Samples', '/beauty/free-beauty-samples', 'Two free samples with every order.'], ['Value Sets', '/shop/value-sets', 'More product, more savings.'], ['Mini Size', '/shop/travel-size-toiletries', 'Try it before you go full size.'], ['Jumbo Size', '/beauty/supersized-beauty-products', 'Stock up on your favorites.'], ['Sephora Collection', '/brand/sephora-collection', 'Quality beauty at great prices.']]
   return `${crumbs(base, [['Home', '/'], ['Beauty Offers']])}<h1>Beauty Offers</h1><div class="sx-pills">${soft.map(([l, p]) => a(base, p, l)).join('')}</div>
   <section class="sx-panel sx-bi-panel"><h2>Get Your Beauty Insider Exclusive Offers 👋</h2><p>Sign in or join Beauty Insider to see offers picked for you, including birthday gifts and point multipliers.</p>${a(base, '/login', 'Sign In', 'sx-btn')} ${a(base, '/registration', 'Create Account', 'sx-btn sx-btn-outline')}</section>
-  <section><h2>Explore Value</h2><div class="sx-tiles">${soft.map(([l, p]) => `<a href="${esc(base + p)}"><strong>${esc(l)}</strong></a>`).join('')}</div></section>
+  <section><h2>Explore Value</h2><div class="sx-tiles">${soft.map(([l, p, d]) => `<a href="${esc(base + p)}"><strong>${esc(l)}</strong><span>${esc(d)}</span></a>`).join('')}</div></section>
+  ${shelfRow(base, 'On Sale Now', saleItems(), ['Shop all', '/sale'])}
+  ${shelfRow(base, 'Value Sets', categoryProducts('value-sets').slice(0, 12), ['Shop all', '/shop/value-sets'])}
   <section class="sx-related"><h2>Related Content:</h2>${a(base, '/beauty/affiliates', 'Beauty Affiliate Program')}${a(base, '/sale', 'Sephora Sale 2026')}${a(base, '/beauty/free-beauty-samples', 'Sephora Promo 2026')}</section>`
 }
 
 export function storeLocatorPage(base, zip) {
+  const near = storesNear(zip)
+  const storeCard = (st, i) => `<article class="sx-store" data-store-name="${esc(st.name)}"><div class="sx-store-head"><span class="sx-store-n" aria-hidden="true">${i + 1}</span><h3>${esc(st.name)}</h3><span class="sx-store-mi">${st.miles.toFixed(1)} mi</span></div><p>${esc(st.street)}<br>${esc(st.city)}, ${esc(st.state)} ${esc(st.zip)}</p><dl class="sx-store-hours">${st.hours.map(([d, h]) => `<dt>${d}</dt><dd>${h}</dd>`).join('')}</dl><ul class="sx-store-feat"><li>Buy Online &amp; Pick Up</li><li>Same-Day Delivery</li><li>Beauty Services</li></ul><p class="sx-store-links">${a(base, '/happening/reservations', 'Book a Service')}${a(base, '/happening/events', 'Events')}</p></article>`
   return `${crumbs(base, [['Home', '/'], ['Stores']])}<h1>Find a Sephora</h1><form class="sx-form sx-inline" action="${base}/happening/stores/sephora-near-me" method="get"><label for="store-q">City, state or ZIP code</label><input id="store-q" name="location" value="${esc(zip || '')}" autocomplete="postal-code" required><button class="sx-btn">Search</button></form>
-  ${zip ? `<div class="sx-empty"><p class="sx-count">Stores near ${esc(zip)}</p><p>We're having trouble loading stores right now. Please try again later.</p></div>` : '<p class="sx-intro">Enter a location to find Sephora stores, store hours and Buy Online &amp; Pick Up availability.</p>'}
+  <section class="sx-store-results"><p class="sx-count">${near.stores.length} stores near ${esc(zip || near.label)}</p><div class="sx-store-list">${near.stores.map(storeCard).join('')}</div></section>
   <section class="sx-panel"><h2>Services and Events at Sephora</h2><p>Book complimentary and paid makeup, skincare and brow services, and join in-store events.</p>${a(base, '/happening/home', 'Explore Services and Events', 'sx-btn')}</section>
   <section><h2>Delivery location</h2><p>Set a ZIP code to see delivery options. ${a(base, '/location', 'Set delivery ZIP code')}</p></section>`
 }
 
+const SERVICES = [
+  ['Makeup Services', [['Custom Makeup Application', '45 min', '$75'], ['Mini Makeover', '15 min', 'Complimentary'], ['Lash Application', '15 min', '$20'], ['Bridal Makeup Consultation', '60 min', '$100']]],
+  ['Skincare Services', [['Skincare Consultation', '15 min', 'Complimentary'], ['Custom Facial', '45 min', '$95'], ['Skin Analysis with Skincare iQ', '15 min', 'Complimentary']]],
+  ['Brow Services', [['Brow Shaping', '20 min', '$26'], ['Brow Tint', '15 min', '$20'], ['Brow Lamination', '45 min', '$65']]],
+]
+const EVENTS = [['Beauty Insider Holiday Kickoff', 'Sat, Nov 7 · 10:00 AM–12:00 PM', 'Free'], ['Fall Glow Skincare Class', 'Sun, Oct 25 · 11:00 AM–12:00 PM', 'Free'], ['Fragrance Discovery Night', 'Thu, Oct 29 · 6:00 PM–7:30 PM', 'Free'], ['Brow Masterclass', 'Sat, Oct 31 · 1:00 PM–2:00 PM', 'Free']]
 export function servicesPage(base, h1, intro) {
-  return `${crumbs(base, [['Home', '/'], ['Services & Events', '/happening/home'], [h1]])}<h1>${esc(h1)}</h1><p class="sx-intro">${esc(intro)}</p><div class="sx-tiles">${[['Makeup Services', 'Makeup applications and lessons with a Beauty Advisor.'], ['Skincare Services', 'Skincare consultations and facials.'], ['Brow Services', 'Brow shaping and tinting.'], ['Events', 'Free in-store classes and brand events.']].map(([t, d]) => `<a href="${base}/happening/reservations"><strong>${esc(t)}</strong><span>${esc(d)}</span></a>`).join('')}</div>
-  <section class="sx-panel"><h2>Book a Reservation</h2><p>Online reservations are temporarily unavailable. ${a(base, '/happening/stores/sephora-near-me', 'Find a store')} or see the ${a(base, '/beauty/beauty-services-faq', 'Beauty Services FAQ')}.</p></section>`
+  const trail = [['Home', '/'], ...(h1 === 'Services & Events' ? [] : [['Services & Events', '/happening/home']]), [h1]]
+  const services = h1 === 'Sephora Events' ? '' : SERVICES.map(([group, list]) => `<section class="sx-svc-group"><h2>${esc(group)}</h2><div class="sx-svc-list">${list.map(([name, time, price]) => `<a class="sx-svc" href="${base}/happening/stores/sephora-near-me"><strong>${esc(name)}</strong><span>${esc(time)} · ${esc(price)}</span><em>Book ▸</em></a>`).join('')}</div></section>`).join('')
+  const events = h1 === 'Book a Reservation' ? '' : `<section class="sx-svc-group"><h2>Upcoming Events</h2><div class="sx-svc-list">${EVENTS.map(([name, when, price]) => `<a class="sx-svc" href="${base}/happening/stores/sephora-near-me"><strong>${esc(name)}</strong><span>${esc(when)} · ${esc(price)}</span><em>RSVP ▸</em></a>`).join('')}</div></section>`
+  return `${crumbs(base, trail)}<h1>${esc(h1)}</h1><p class="sx-intro">${esc(intro)}</p>
+  ${services}${events}
+  <section class="sx-panel"><h2>Book a Reservation</h2><p>Choose a store near you to see available times. Paid services can be redeemed toward products purchased the same day. ${a(base, '/happening/stores/sephora-near-me', 'Find a store')} or see the ${a(base, '/beauty/beauty-services-faq', 'Beauty Services FAQ')}.</p></section>`
 }
 
 export function basketPage(base, user) {
@@ -247,10 +271,48 @@ export function brandPage(base, slug, query = {}) {
   const brand = BRANDS.find(b => b.slug === slug)
   const name = brand?.name || EXTRA_BRANDS[slug]
   if (!name) return null
-  const items = brand ? capturedSearchProducts.filter(p => p.brand === brand.name) : []
+  const items = brand ? capturedSearchProducts.filter(p => brandSlug(p.brand) === brand.slug) : []
   const shelf = shelfProducts.filter(p => p.brand.toLowerCase() === name.toLowerCase())
   const view = shelf.length ? listing(base, `/brand/${slug}`, shelf, query, { showBrandFacet: false }) : null
   return `${crumbs(base, [['Home', '/'], ['Brands', '/brands-list'], [name]])}${view ? `<div class="sx-cat-layout"><aside class="sx-side"><h2>${esc(name)}</h2>${[...new Set(shelf.map(p => p.dept))].map(d => a(base, `/shop/${d}`, CATEGORIES[d]?.title || d)).join('')}<h3>Filters</h3>${view.filters}</aside><div class="sx-cat-main"><h1>${esc(name)}</h1>${view.html}${items.length ? row(base, `More ${name} on Sephora`, items, null) : ''}</div></div>` : `<h1>${esc(name)}</h1>${items.length ? `<p class="sx-count">${items.length} Results</p><div class="sx-grid">${items.map(p => card(base, p)).join('')}</div>` : notCaptured(base, name)}`}`
+}
+
+// Rewards Bazaar: deluxe samples and minis of bestsellers, priced in Beauty Insider points.
+const POINT_TIERS = [100, 250, 500, 750, 1000]
+const rewardItems = () => {
+  const seen = new Set()
+  return shelfProducts.filter(p => !p.flags.has('set') && p.price < 120 && !/tools|brushes|device/.test(p.sub) && ['skincare', 'makeup-cosmetics', 'fragrance', 'hair-products', 'bath-body'].includes(p.dept))
+    .toSorted((x, y) => y.reviews - x.reviews)
+    .filter(p => !seen.has(p.brand) && seen.add(p.brand))
+    .slice(0, 20)
+    .map((p, i) => ({ p, points: POINT_TIERS[(i * 3 + p.name.length) % POINT_TIERS.length], kind: p.dept === 'fragrance' ? 'Deluxe Sample' : i % 3 ? 'Deluxe Sample' : 'Mini' }))
+}
+const rewardCard = (base, { p, points, kind }) => `<article class="sx-card sx-reward"><a href="${esc(base + p.path)}"><span class="sx-card-img"><img src="${esc(base + p.image)}" alt="${esc(p.alt)}" loading="lazy" width="400" height="400"></span><span class="sx-badge">${esc(kind.toUpperCase())}</span><strong>${esc(p.brand)}</strong><span class="sx-card-title">${esc(kind === 'Mini' ? `Mini ${p.name}` : p.name)}</span></a><span class="sx-card-price">${points.toLocaleString('en-US')} Points</span></article>`
+export function rewardsPage(base, user) {
+  const items = rewardItems()
+  return `${crumbs(base, [['Home', '/'], ['Beauty Insider', '/profile/BeautyInsider'], ['Rewards Bazaar']])}<h1>Rewards Bazaar</h1><p class="sx-intro">Redeem your Beauty Insider points for deluxe samples, minis and experiences. New rewards drop every Tuesday and Thursday.</p>
+  <section class="sx-panel sx-bi-panel">${user ? `<h2>Hi, ${esc(user.first_name || 'Beautiful')}</h2><p>You have <strong>0 points</strong>. Earn 1 point for every $1 you spend, then redeem rewards at checkout.</p>` : `<h2>Sign in to see your points</h2><p>Beauty Insiders redeem points for rewards at checkout. It's free to join.</p>${a(base, '/login', 'Sign In', 'sx-btn')} ${a(base, '/registration', 'Create Account', 'sx-btn sx-btn-outline')}`}</section>
+  <div class="sx-pills">${POINT_TIERS.map(n => `<a href="#pts-${n}">${n.toLocaleString('en-US')} Points</a>`).join('')}</div>
+  ${POINT_TIERS.map(n => { const list = items.filter(r => r.points === n); return list.length ? `<section class="sx-row" id="pts-${n}"><div class="sx-row-head"><h2>${n.toLocaleString('en-US')} Points</h2></div><div class="sx-carousel">${list.map(r => rewardCard(base, r)).join('')}</div></section>` : '' }).join('')}
+  <p class="sx-note">Rewards are available while supplies last and are limited to one of each per order. ${a(base, '/beauty/loyalty-program', 'Beauty Insider FAQs')}</p>`
+}
+export function samplesPage(base) {
+  const top = dept => topReviewed(categoryProducts(dept)).filter(p => !p.flags.has('set')).slice(0, 12)
+  return `${crumbs(base, [['Home', '/'], ['Beauty Offers', '/beauty/beauty-offers'], ['Free Samples']])}<h1>Free Beauty Samples</h1><p class="sx-intro">Every online order comes with two free samples, so you can try something new before you commit.</p>
+  <div class="sx-tiles sx-steps"><a href="${base}/beauty/best-selling-beauty"><strong>1. Shop your favorites</strong><span>Add anything to your basket, no minimum required.</span></a><a href="${base}/basket"><strong>2. Get two free samples</strong><span>Deluxe samples are added to every shipped order.</span></a><a href="${base}/rewards"><strong>3. Want more?</strong><span>Redeem Beauty Insider points for deluxe samples in the Rewards Bazaar.</span></a></div>
+  ${shelfRow(base, 'Sample-Worthy Skincare', top('skincare'), ['Shop all', '/shop/skincare'])}
+  ${shelfRow(base, 'Fragrance to Discover', top('fragrance'), ['Shop all', '/shop/fragrance'])}
+  ${shelfRow(base, 'Makeup Bestsellers', top('makeup-cosmetics'), ['Shop all', '/shop/makeup-cosmetics'])}`
+}
+
+// AI Beauty Chat landing: the assistant's opener and starter questions, each answered with a search.
+const CHAT_STARTERS = [['Find a lip oil that isn’t sticky', 'lip oil'], ['Build a simple routine for dry skin', 'moisturizer'], ['What’s a good everyday mascara?', 'mascara'], ['Suggest a warm vanilla perfume', 'vanilla'], ['Best dry shampoo for oily hair', 'dry shampoo'], ['A sunscreen that works under makeup', 'sunscreen']]
+export function aiChatPage(base) {
+  return `${crumbs(base, [['Home', '/'], ['AI Beauty Chat']])}<section class="sx-chat"><div class="sx-chat-head"><h1>AI Beauty Chat <small>NEW</small></h1><p class="sx-intro">Get personalized product picks, routines and shade matches from across Sephora’s assortment.</p></div>
+  <div class="sx-chat-window" aria-label="Conversation"><p class="sx-bubble">Hi! I’m your Sephora beauty assistant. Tell me about your skin, hair or the look you’re going for, and I’ll find products to match. Not sure where to start? Try one of these:</p>
+  <div class="sx-chat-starters">${CHAT_STARTERS.map(([q, k]) => a(base, `/search?keyword=${encodeURIComponent(k)}`, q)).join('')}</div></div>
+  <form class="sx-chat-form" action="${base}/search" method="get" role="search"><label class="sr-only" for="sx-chat-q">Ask about products, routines or shades</label><input id="sx-chat-q" name="keyword" type="search" autocomplete="off" placeholder="Ask about products, routines or shades" required><button class="sx-btn">Send</button></form>
+  <p class="sx-note">AI Beauty Chat can make mistakes. Check product details and ingredients before you buy.</p></section>`
 }
 
 export function collectionPage(base, h1, intro, items) {
@@ -291,6 +353,7 @@ export function installSite(router, { render, baseOf }) {
     if (!cat) return next()
     render(req, res, cat.title, categoryPage(baseOf(res), cat, req.query))
   })
+  page('/beauty/ai-beauty-chat', 'AI Beauty Chat', aiChatPage)
   router.get('/beauty/:slug', (req, res, next) => {
     if (!INFO[req.params.slug]) return next()
     render(req, res, INFO[req.params.slug][0], infoPage(baseOf(res), req.params.slug))
@@ -298,8 +361,8 @@ export function installSite(router, { render, baseOf }) {
   page('/beauty/customer-service', 'Customer Service', customerServicePage)
   router.get('/beauty/giftcards', (req, res) => render(req, res, 'Gift Cards', giftCardsPage(baseOf(res), req.query.check ? "We're unable to check gift card balances right now. Please try again later or call 1-888-860-7897." : '')))
   page('/beauty/beauty-offers', 'Beauty Offers', offersPage)
-  page('/beauty/free-beauty-samples', 'Free Beauty Samples', base => collectionPage(base, 'Free Beauty Samples', 'Choose two free samples with every order, plus more in the Rewards Bazaar.', []))
-  page('/rewards', 'Rewards Bazaar', base => collectionPage(base, 'Rewards Bazaar', 'Redeem Beauty Insider points for deluxe samples, minis and experiences.', []))
+  page('/beauty/free-beauty-samples', 'Free Beauty Samples', samplesPage)
+  page('/rewards', 'Rewards Bazaar', (base, req) => rewardsPage(base, req.store.user))
   router.get('/happening/stores/sephora-near-me', (req, res) => render(req, res, 'Find a Sephora', storeLocatorPage(baseOf(res), typeof req.query.location === 'string' ? req.query.location.trim().slice(0, 60) : '')))
   page('/happening/home', 'Services & Events', base => servicesPage(base, 'Services & Events', 'Book makeup, skincare and brow services, and join free in-store events.'))
   page('/happening/events', 'Sephora Events', base => servicesPage(base, 'Sephora Events', 'Free classes, launches and community events at Sephora stores.'))

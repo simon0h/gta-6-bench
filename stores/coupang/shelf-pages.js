@@ -91,14 +91,41 @@ ${brands.length ? `<fieldset><legend>브랜드</legend>${brands.map(([b, n]) => 
 // mean of that distribution, so the bars and the number always agree.
 function reviewWeights(p) {
   const h = [...p.id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7)
-  const top = p.rating >= 5 ? 82 + h % 9 : p.rating >= 4.5 ? 66 + h % 9 : 50 + h % 9
-  const second = p.rating >= 5 ? 9 + (h >> 4) % 5 : p.rating >= 4.5 ? 19 + (h >> 4) % 6 : 26 + (h >> 4) % 6
+  const top = p.rating >= 5 ? 77 + h % 8 : p.rating >= 4.5 ? 66 + h % 9 : 50 + h % 9
+  const second = p.rating >= 5 ? 11 + (h >> 4) % 5 : p.rating >= 4.5 ? 19 + (h >> 4) % 6 : 26 + (h >> 4) % 6
   const rest = 100 - top - second, third = Math.ceil(rest * 0.5), fourth = Math.ceil((rest - third) * 0.55)
   return [top, second, third, fourth, rest - third - fourth]
 }
 function reviewSummary(p) {
   const weights = reviewWeights(p), mean = weights.reduce((s, w, i) => s + w * (5 - i), 0) / 100
-  return `<div class="cs-review-summary"><div class="cs-review-score"><strong>${mean.toFixed(1)}</strong>${stars(Math.round(mean * 2) / 2)}<p>${p.reviews.toLocaleString('ko-KR')}개 상품평</p></div><dl>${weights.map((w, i) => `<dt>${['최고', '좋음', '보통', '별로', '나쁨'][i]}</dt><dd><meter min="0" max="100" value="${w}">${w}%</meter> ${w}%</dd>`).join('')}</dl></div><p class="hint">구매 고객이 남긴 별점을 기준으로 집계한 상품평 분포입니다.</p>`
+  return `<div class="cs-review-summary"><div class="cs-review-score"><strong>${mean.toFixed(1)}</strong>${stars(Math.round(mean * 2) / 2)}<p>${p.reviews.toLocaleString('ko-KR')}개 상품평</p></div><dl>${weights.map((w, i) => `<dt>${['최고', '좋음', '보통', '별로', '나쁨'][i]}</dt><dd><meter min="0" max="100" value="${w}">${w}%</meter> ${w}%</dd>`).join('')}</dl></div><p class="hint">동일한 상품에 대해 작성된 상품평으로, 판매자는 다르지만 같은 상품을 구매한 고객의 상품평입니다.</p>`
+}
+// A few written reviews per item, chosen by product id from department-appropriate lines.
+const REVIEW_LINES = {
+  '194276': ['로켓배송으로 다음날 바로 받았어요. 유통기한도 넉넉하고 포장도 꼼꼼했습니다.', '항상 먹는 제품이라 재구매했어요. 마트보다 저렴해서 쿠팡에서 삽니다.', '대용량이라 쟁여두기 좋아요. 가족들이 다 좋아해요.', '맛은 늘 먹던 그 맛이에요. 할인할 때 사두면 이득입니다.', '박스 찌그러짐 없이 잘 왔어요. 다음에도 구매할게요.'],
+  '393760': ['새벽에 문 앞에 와 있어서 아침에 바로 먹었어요. 신선도 좋습니다.', '프레시백에 아이스팩까지 잘 들어 있어서 시원하게 받았어요.', '상태 좋고 양도 넉넉해요. 재구매 의사 있습니다.', '소비기한 넉넉하게 왔고 맛도 좋아요.'],
+  '115673': ['쓰던 제품이라 믿고 샀어요. 다음날 바로 와서 편하네요.', '대용량이라 한동안 걱정 없겠어요. 가격도 괜찮습니다.', '향이 은은하고 좋아요. 가족들도 만족합니다.', '부피가 큰데 문 앞까지 배송해줘서 너무 편해요.', '할인할 때 넉넉하게 쟁였어요.'],
+  '178255': ['배송 빠르고 정품 맞습니다. 설정도 어렵지 않았어요.', '생각보다 크기가 적당하고 디자인이 깔끔해요.', '한 달 정도 사용했는데 문제없이 잘 쓰고 있습니다.', '가격 대비 성능 좋아요. 부모님 댁에도 하나 더 샀어요.', '포장이 튼튼하게 와서 안심했어요.'],
+  '176422': ['순하고 자극 없어서 민감한 피부에도 잘 맞아요.', '흡수가 빠르고 끈적임이 없어요. 벌써 두 번째 구매입니다.', '용량 대비 가격이 착해요. 유통기한도 넉넉합니다.', '향이 강하지 않아서 좋아요. 꾸준히 쓰려고요.'],
+  '219079': ['아기 피부에 순해서 계속 이것만 써요.', '두께감 있고 촉촉해요. 대용량이라 든든합니다.', '로켓배송이라 급할 때 바로 받을 수 있어서 좋아요.', '사이즈 잘 맞고 새는 것 없이 잘 쓰고 있어요.'],
+  '115674': ['우리 아이가 너무 잘 먹어요. 기호성 좋습니다.', '무거운 걸 집 앞까지 가져다줘서 편해요.', '냄새 잡는 것도 괜찮고 만족합니다.', '정기적으로 구매하는 제품이에요. 배송 늘 빨라요.'],
+  '305798': ['꾸준히 먹고 있어요. 알약 크기가 적당해서 삼키기 편해요.', '부모님 드리려고 샀는데 좋아하세요.', '유통기한 넉넉하고 포장도 꼼꼼해요.', '개별 포장이라 들고 다니기 좋아요.'],
+  '185669': ['튼튼하고 마감이 좋아요. 세척도 쉬워요.', '사이즈가 딱 적당해서 매일 쓰고 있어요.', '가격 대비 품질이 좋습니다.', '디자인이 깔끔해서 주방이 정돈돼 보여요.'],
+  default: ['배송 빠르고 상품 상태 좋습니다.', '가격 대비 만족스러워요. 재구매 의사 있어요.', '사진이랑 똑같고 품질도 괜찮아요.', '포장 꼼꼼하게 잘 왔어요. 잘 쓸게요.', '생각했던 것보다 더 좋아요. 추천합니다.'],
+}
+const SURNAMES = '김이박최정강조윤장임한오서신권황안송류홍', GIVEN = '민진현수영희준우은아호연지서'
+function reviewList(p) {
+  const lines = REVIEW_LINES[p.dept] || REVIEW_LINES.default
+  let h = [...p.id].reduce((a, c) => (a * 33 + c.charCodeAt(0)) >>> 0, 11)
+  const next = n => { h = (h * 1103515245 + 12345) >>> 0; return (h >>> 8) % n }
+  const start = next(lines.length), stars4 = next(4)
+  let day = Date.UTC(2026, 9, 15) - next(3) * 86400000
+  const items = Array.from({ length: 4 }, (_, i) => {
+    const r = i === stars4 ? 4 : 5, d = new Date(day)
+    day -= (1 + next(9)) * 86400000
+    return `<li class="cs-review"><p class="cs-reviewer"><b>${SURNAMES[next(SURNAMES.length)]}*${GIVEN[next(GIVEN.length)]}</b></p><p class="cs-review-meta">${stars(r)} <span>${d.getUTCFullYear()}.${String(d.getUTCMonth() + 1).padStart(2, '0')}.${String(d.getUTCDate()).padStart(2, '0')}</span></p><p class="cs-review-option">${esc(p.title)}</p><p class="cs-review-text">${esc(lines[(start + i) % lines.length])}</p><p class="cs-review-help">${3 + next(58)}명에게 도움 됨</p></li>`
+  })
+  return `<div class="cs-review-sort"><b>베스트순</b><span>최신순</span></div><ul class="cs-review-list">${items.join('')}</ul>`
 }
 function specs(p) {
   const d = deptById(p.dept)
@@ -123,7 +150,7 @@ export function productBody(base, p, query = {}, errors = []) {
 ${publicNotice('<p class="hint">모의 쇼핑 환경의 예시 상품입니다. 가격·재고·도착 예정일은 실제 쿠팡과 다를 수 있습니다.</p>')}</section></div>
 <nav class="cs-tabs" aria-label="상품 정보"><a href="#cs-detail">상품상세</a><a href="#cs-reviews">상품평 (${p.reviews.toLocaleString('ko-KR')})</a><a href="#cs-qna">상품문의</a><a href="#cs-policy">배송/교환/반품 안내</a></nav>
 <section id="cs-detail" class="cs-section"><h2>상품상세</h2><div class="cs-detail-art">${shelfImg(base, p, '', 2)}</div><h3>필수 표기정보</h3><dl class="spec-table">${Object.entries(specs(p)).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></section>
-<section id="cs-reviews" class="cs-section"><h2>상품평</h2>${reviewSummary(p)}</section>
+<section id="cs-reviews" class="cs-section"><h2>상품평</h2>${reviewSummary(p)}${reviewList(p)}</section>
 <section id="cs-qna" class="cs-section"><h2>상품문의</h2><p>구매한 상품의 취소/반품은 마이쿠팡 구매내역에서 신청 가능합니다. 상품문의 및 상품평을 통해 취소나 환불, 반품 등은 처리되지 않습니다.</p><a class="cp-btn-outline" href="${base}/ssr/desktop/contact/inquiry">문의하기</a></section>
 <section id="cs-policy" class="cs-section"><h2>배송/교환/반품 안내</h2><dl class="spec-table"><dt>배송방법</dt><dd>${esc(DELIVERY_LABEL[p.delivery])}</dd><dt>배송비</dt><dd>${esc(shipping)}</dd><dt>교환/반품 기간</dt><dd>상품 수령 후 7일 이내 (단순 변심)</dd><dt>교환/반품 안내</dt><dd><a href="${base}/returnPolicy.pang">취소 / 반품 / 교환 안내</a></dd></dl></section>
 ${related.length ? `<section class="cs-section"><h2>다른 고객이 함께 본 상품</h2>${row(base, related)}</section>` : ''}`

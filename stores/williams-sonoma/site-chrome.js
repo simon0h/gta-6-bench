@@ -63,7 +63,15 @@ export function siteFooter(req, base) {
 <div class="wsx-legal"><nav aria-label="Legal">${legalLinks.map(l => link(base, l)).join('')}</nav><p>© 2026 Williams-Sonoma Inc., All Rights Reserved</p></div>${disclaimer('Williams Sonoma').replace('pre-order flow', 'shopping experience')}</footer>`
 }
 
+// The shared "page not found" body is a bare heading and link; give it the help a
+// Williams Sonoma 404 offers (search plus the main departments).
+function notFoundHelp(base) {
+  const depts = mainDepartments.filter(d => !['new', 'sale-special-offer'].includes(d.slug)).map(d => `<li>${link(base, [d.label, d.path])}</li>`).join('')
+  return `<p class="wsx-404-lead">The page you requested may have moved or is no longer available. Try a search, or start with one of our departments.</p><form class="wsx-404-search" action="${base}/search/results.html" method="get" role="search"><label class="wsx-sr" for="wsx-404-query">Search</label><input id="wsx-404-query" name="words" type="search" placeholder="What can we help you find?"><button type="submit">Search</button></form><ul class="wsx-404-depts">${depts}</ul><p class="wsx-404-help">Need help? ${link(base, ['Contact Customer Service', '/customer-service/'])} or call 877.812.6235.</p>`
+}
+
 export function siteChrome({ req, base, title, body, count }) {
+  if (title === "Sorry, we couldn't find that page" && body.includes('data-reference-state="uncaptured"')) body = body.replace(/<a href="[^"]*">Continue shopping<\/a><\/section>$/, m => notFoundHelp(base) + m)
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | Williams Sonoma</title><link rel="stylesheet" href="${base}/static/depth.css"><link rel="stylesheet" href="${base}/static/site.css"><link rel="stylesheet" href="${base}/static/shelf.css"></head><body class="williams-sonoma wsx ws-reference-page"><a class="wsx-skip" href="#main">Skip to content</a>
 ${siteHeader(req, base, count)}
 <main id="main">${body}</main>

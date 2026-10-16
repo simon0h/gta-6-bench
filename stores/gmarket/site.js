@@ -185,7 +185,7 @@ function helpMain(base) {
 <section class="gm-home-sec"><h2>간편하게 해결하세요</h2><div class="gm-quick">${[['나의 문의내역', '/myg/inquiries'], ['내 회원정보수정', '/myg/info'], ['아이디/비밀번호찾기', '/help/faq/member'], ['주문/배송조회', '/myg/orders'], ['취소/반품/교환', '/help/faq/returns'], ['[리콜ㆍ상품안전 정보]', '/help/notice/3']].map(([l, p]) => `<a class="gm-panel" href="${base}${p}">${l}</a>`).join('')}</div></section>
 <div class="gm-two"><section class="gm-panel"><h2>상담이 필요하신가요?</h2><p class="gm-cs-phone">${company.phone}</p><p>${company.hours}</p><p><a class="gm-btn" href="${base}/help/inquiry">문의글 작성</a></p><h3>고객센터 이용안내</h3><p class="gm-muted">고객센터 통화 요금은 발신 고객에게 과금됩니다. 회원 확인 후 1번 주문/배송, 2번 반품/교환, 3번 이벤트/기타 문의를 선택할 수 있습니다. 꼭 멤버십 회원은 전용 상담(${company.membershipPhone}, 365일 09:00 ~ 18:00)을 이용할 수 있습니다.</p></section>
 <section class="gm-panel"><h2>판매 상담이 필요하신가요?</h2><p><a href="${base}/seller-center">판매자 전용 상담(ESM PLUS)</a></p><p><a href="${base}/seller-center">판매자 고객센터</a></p><h3>원격지원</h3><p class="gm-muted">상담원이 고객님의 화면을 함께 보며 문제를 해결해 드립니다.</p><h3>웹접근성 신고센터</h3><p><a href="${base}/help/accessibility">웹접근성 신고센터</a></p></section></div>
-<section class="gm-home-sec">${sectionHead('공지사항', '/help/notice', base)}<ul class="gm-notice-list">${notices.map(([id, t, d]) => `<li><a href="${base}/help/notice/${id}">${esc(t)}</a><span>${d}</span></li>`).join('')}</ul></section>`
+<section class="gm-home-sec">${sectionHead('공지사항', '/help/notice', base)}<ul class="gm-notice-list">${notices.slice(0, 5).map(([id, t, d]) => `<li><a href="${base}/help/notice/${id}">${esc(t)}</a><span>${d}</span></li>`).join('')}</ul></section>`
 }
 const helpNav = [['고객센터 홈', '/help'], ...faqTopics.map(([id, l]) => [l, `/help/faq/${id}`]), ['공지사항', '/help/notice'], ['1:1 문의하기', '/help/inquiry']]
 
@@ -264,9 +264,10 @@ ${[['지금 잘 나가는 신선식품 베스트는?', '/n/emartmall/best', () =
   page('/n/smilehome', '쿠폰/출첵', base => {
     const days = ['일', '월', '화', '수', '목', '금', '토'], now = new Date(Date.now() + 9 * 3600e3)
     const week = Array.from({ length: 7 }, (_, i) => new Date(now.getTime() + (i - 1) * 864e5))
+    const last = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0)), until = `${last.getUTCMonth() + 1}/${last.getUTCDate()}(${days[last.getUTCDay()]})`
     return `${crumbs(base, [['쿠폰/출첵']])}<h1 class="gm-page-title">스마일홈</h1><div class="gm-two"><section class="gm-panel"><h2>출석체크</h2><a class="gm-link-small" href="${base}/n/smilehome#calendar">달력보기</a><ol class="gm-week" id="calendar">${week.map((d, i) => `<li${i === 1 ? ' aria-current="date"' : ''}><span>${d.getUTCMonth() + 1}/${d.getUTCDate()}</span>${days[d.getUTCDay()]}</li>`).join('')}</ol><form method="get" action="${base}/LogIn/LogIn"><button class="gm-btn wide">출첵하고캐시받기</button></form></section>
 <section class="gm-panel"><h2>나의 캐시</h2><p class="gm-muted">로그인하고 더 많은 혜택 받아가세요!</p><p><a class="gm-btn outline" href="${base}/myg/coupons">내 쿠폰함</a> <a class="gm-btn outline" href="${base}/myg/cash">스마일캐시</a></p></section></div>
-<section class="gm-home-sec">${sectionHead('쿠폰팩 모음', '/myg/coupons', base, '쿠폰 더보기')}<div class="gm-coupons">${['디지털/가전 할인 쿠폰', '신선마켓 장보기 쿠폰', '맞춤별 건강식품 쿠폰'].map(t => `<div class="gm-coupon"><strong>${t}</strong><span>할인 조건은 쿠폰 받기 화면에서 확인</span><a href="${base}/LogIn/LogIn">쿠폰 받기</a></div>`).join('')}</div><p class="gm-more"><a href="${base}/myg/coupons">쿠폰 더보기 ›</a></p></section>`
+<section class="gm-home-sec">${sectionHead('쿠폰팩 모음', '/myg/coupons', base, '쿠폰 더보기')}<div class="gm-coupons">${[['디지털/가전 할인 쿠폰', '12% 최대 20,000원 할인', '50,000원 이상 구매 시'], ['신선마켓 장보기 쿠폰', '5,000원 할인', '40,000원 이상 구매 시'], ['맞춤별 건강식품 쿠폰', '10% 최대 10,000원 할인', '30,000원 이상 구매 시']].map(([t, off, min]) => `<div class="gm-coupon"><strong>${t}</strong><span>${off} · ${min} · ${until}까지</span><a href="${base}/LogIn/LogIn">쿠폰 받기</a></div>`).join('')}</div><p class="gm-more"><a href="${base}/myg/coupons">쿠폰 더보기 ›</a></p></section>`
   })
   page('/n/showroom/membership', '꼭 멤버십', base => simple(base, [['꼭 멤버십']], '꼭 멤버십', `<section class="gm-member-hero"><p class="gm-hero-title">도착보장! 꼭 멤버십은 무료반품</p><p>스타배송 도착보장 상품을 부담 없이 주문하세요.</p></section><div class="gm-quick">${[['무료반품', '스타배송 상품 무료반품'], ['전용 쿠폰', '멤버십 회원 전용 할인 쿠폰'], ['전용 상담', `멤버십 전용 고객센터 ${company.membershipPhone}`]].map(([t, d]) => `<div class="gm-panel"><h2>${t}</h2><p class="gm-muted">${d}</p></div>`).join('')}</div><p class="gm-muted">멤버십 가입 여부와 이번 달 혜택은 로그인 후 나의 G마켓에서 확인할 수 있습니다. <a href="${base}/LogIn/LogIn">로그인</a></p>`))
   page('/n/showroom/ggokcard', '꼭 현대카드', base => simple(base, [['꼭 현대카드']], '꼭 현대카드', `<section class="gm-member-hero gm-card-hero"><p class="gm-hero-title">G마켓에서 쓸수록 쌓이는 꼭 현대카드</p><p>결제할 때마다 스마일캐시 적립, 꼭 멤버십 혜택까지 한 장으로</p></section><div class="gm-quick">${[['스마일캐시 적립', 'G마켓·옥션 결제 금액에 따라 스마일캐시 적립'], ['꼭 멤버십 혜택', '스타배송 무료반품, 멤버십 전용 쿠폰'], ['일상 적립', '국내외 가맹점 이용 금액도 스마일캐시로 적립']].map(([t, d]) => `<div class="gm-panel"><h2>${t}</h2><p class="gm-muted">${d}</p></div>`).join('')}</div><p class="gm-muted">카드별 적립률, 연회비 및 이벤트 유의사항은 카드 신청 화면에서 꼭 확인해 주세요.</p>`))
@@ -276,7 +277,17 @@ ${[['지금 잘 나가는 신선식품 베스트는?', '/n/emartmall/best', () =
     return simple(base, [['e쿠폰']], 'e쿠폰', `<p class="gm-muted">커피, 외식, 편의점, 영화, 상품권 등 모바일 교환권을 카카오톡·문자로 받아 바로 사용할 수 있습니다.</p><div class="gm-subcats">${d.subs.map((s, i) => `<a href="${base}/n/list?category=${d.code}&amp;sub=${i + 1}">${esc(s)}</a>`).join('')}</div>${shelfRow(base, best(inDept(EC)), { ranked: true })}`)
   })
   page('/travel', '여행/항공', base => simple(base, [['여행/항공']], '여행/항공', `<div class="gm-quick">${['항공권', '해외숙소', '국내숙소', '해외여행', '레저/티켓'].map((l, i) => `<a class="gm-panel" href="${base}/n/list?category=100001005&amp;sub=${[3, 2, 1, 4, 5][i]}">${l}</a>`).join('')}</div><h2 class="gm-sub-title">레저/티켓 인기상품</h2>${shelfRow(base, best(inDept(TR)))}`))
-  page('/homeshopping', '홈쇼핑 모아보기', base => simple(base, [['홈쇼핑 모아보기']], '홈쇼핑 모아보기', `${homeShopping.map(([id, l]) => `<section class="gm-panel" id="${id}"><h2>${l}</h2><p class="gm-muted">방송 편성표와 방송 상품은 각 홈쇼핑 채널에서 확인할 수 있습니다.</p></section>`).join('')}<h2 class="gm-sub-title">홈쇼핑 인기상품</h2>${shelfRow(base, best(shelf.filter(p => /홈쇼핑/.test(p.title) || p.homeshopping)))}`))
+  // Each channel shows its current broadcast slot and the goods on air, the way the real
+  // 홈쇼핑 모아보기 lists one row per channel. Slots follow the current hour in KST.
+  page('/homeshopping', '홈쇼핑 모아보기', base => {
+    const tv = best(shelf.filter(p => /홈쇼핑/.test(p.title) || p.homeshopping)), pool = best(shelf.filter(p => [FA, B, HO, L, F, H].includes(p.dept) && !tv.includes(p)))
+    const hour = new Date(Date.now() + 9 * 3600e3).getUTCHours(), hh = n => String(n % 24).padStart(2, '0'), mins = ['00', '20', '35', '10', '40']
+    const channels = homeShopping.map(([id, l], i) => {
+      const own = tv.filter(p => p.title.includes(`(${l})`)), list = [...own, ...pool.filter((p, j) => j % homeShopping.length === i)].slice(0, 5)
+      return `<section class="gm-home-sec gm-tv" id="${id}"><div class="gm-sec-head"><h2>${l} <em class="gm-onair">LIVE</em></h2><span class="gm-muted">${hh(hour)}:${mins[i]} ~ ${hh(hour + 1)}:${mins[i]} 방송중</span></div>${shelfRow(base, list)}</section>`
+    }).join('')
+    return simple(base, [['홈쇼핑 모아보기']], '홈쇼핑 모아보기', `<nav class="gm-pill-tabs" aria-label="홈쇼핑 채널">${homeShopping.map(([id, l]) => `<a href="${base}/homeshopping#${id}">${l}</a>`).join('')}</nav><p class="gm-muted">TV홈쇼핑에서 방송 중인 상품을 G마켓에서 같은 혜택으로 만나보세요.</p>${channels}<h2 class="gm-sub-title">홈쇼핑 인기상품</h2>${shelfRow(base, [...tv, ...pool.slice(25)].slice(0, 10), { ranked: true })}`)
+  })
   router.get('/rpp', (req, res) => {
     const title = exhibitions[req.query.exhib]
     if (!title) return coverage(req, res, 'Page not captured', 404)

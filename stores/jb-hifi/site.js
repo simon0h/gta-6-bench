@@ -7,16 +7,19 @@ import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { productPhoto, photoStyle } from '../../lib/product-photos.js'
 import { PRODUCTS, LISTED, ASSORTMENT, productPath } from './data.js'
 import { DEPARTMENT_DEFS, CAMPAIGNS, slugify } from './catalog.js'
-import { DEPARTMENTS, UTILITIES, NEW_MENU, DEALS_MENU, SERVICES_MENU, POPULAR_BRANDS, FOOTER, LEGAL, HELP_TOPICS, HELP_ARTICLES, INFO_PAGES, BLOGS } from './site-data.js'
+import { compactPages } from './expansion.js'
+import { DEPARTMENTS, UTILITIES, NEW_MENU, DEALS_MENU, SERVICES_MENU, POPULAR_BRANDS, FOOTER, LEGAL, HELP_TOPICS, HELP_ARTICLES, INFO_PAGES, BLOGS, BLOG_POSTS } from './site-data.js'
 
 const DEPT_PHOTO = Object.fromEntries(DEPARTMENT_DEFS.map(d => [d.slug, d.photo]))
 Object.assign(DEPT_PHOTO, { 'health-beauty': 'hairdryer', 'electric-transportation': 'bicycle', software: 'keyboard', 'car-audio-gps': 'smartphone', 'movies-tv': 'television' })
 const SUBS = DEPARTMENTS.flatMap(d => d.subs.map(s => ({ ...s, dept: d })))
 const OWN_DEPTS = new Set(DEPARTMENT_DEFS.map(d => d.slug).concat(CAMPAIGNS.map(c => c.slug)))
 export const departmentBySlug = slug => DEPARTMENTS.find(d => d.slug === slug)
-const haystack = p => [p.type, ...(p.crumbs || []), p.title, p.subtitle, ...(p.badges || [])].filter(Boolean).join(' ')
 const deptProducts = d => LISTED.filter(p => p.crumbs?.[0] === d.title)
-const subProducts = s => deptProducts(s.dept).filter(p => s.match.test(haystack(p)))
+// Sub-categories match on the product's own type, title and badges, not its department name
+// (otherwise "Headphones & Audio" would put every speaker under Headphones).
+const subHaystack = p => [p.type, ...(p.crumbs || []).slice(1), p.title, p.subtitle, ...(p.badges || [])].filter(Boolean).join(' ')
+const subProducts = s => deptProducts(s.dept).filter(p => s.match.test(subHaystack(p)))
 const crumbs = (base, trail) => `<nav class="jb-crumbs" aria-label="Breadcrumb"><a href="${base}/">Home</a>${trail.map(([label, href]) => ` &rsaquo; ${href ? `<a href="${base}${href}">${esc(label)}</a>` : `<span aria-current="page">${esc(label)}</span>`}`).join('')}</nav>`
 const deptIcon = (slug, title) => DEPT_PHOTO[slug] ? productPhoto(DEPT_PHOTO[slug], title) : `<span class="jb-dept-mono" aria-hidden="true">${esc(title.split(/\s+/).map(w => w[0]).join('').slice(0, 3))}</span>`
 
@@ -132,14 +135,20 @@ export function landingPage({ base, dept, sub, query, tile }) {
   const route = `${base}/collections/${(sub || dept).slug}`
   const items = sortItems(applyFilters(sub ? subProducts(sub) : deptProducts(dept), q), q.sort)
   const title = (sub || dept).title
+  const perPage = [12, 24, 36].includes(Number(query.per_page)) ? Number(query.per_page) : 24
+  const pageCount = Math.max(1, Math.ceil(items.length / perPage))
+  const page = Math.max(1, Math.min(pageCount, Math.floor(Number(query.page)) || 1))
+  const shown = items.slice((page - 1) * perPage, page * perPage)
+  const pageHref = n => `${route}?${new URLSearchParams(Object.entries({ ...q, per_page: perPage === 24 ? '' : perPage, page: n === 1 ? '' : n }).filter(([, v]) => v !== '' && v != null))}`.replace(/\?$/, '')
+  const pager = pageCount > 1 ? `<nav class="jb-pagination" aria-label="Pagination">${page > 1 ? `<a rel="prev" href="${pageHref(page - 1)}">Previous</a>` : ''}${compactPages(page, pageCount).map(n => `<a href="${pageHref(n)}" ${page === n ? 'aria-current="page"' : ''}>${n}</a>`).join('')}<span>Page ${page} of ${pageCount}</span>${page < pageCount ? `<a rel="next" href="${pageHref(page + 1)}">Next</a>` : ''}</nav>` : ''
   const siblings = dept.subs.map(s => `<a href="${base}/collections/${s.slug}" ${sub?.slug === s.slug ? 'aria-current="page"' : ''}>${esc(s.title)}</a>`).join('')
   const sortForm = `<form method="get" action="${route}">${['availability', 'price', 'deal'].filter(k => q[k]).map(k => `<input type="hidden" name="${k}" value="${esc(q[k])}">`).join('')}<label for="sort-by">Sort by: <select id="sort-by" name="sort">${[['best', 'Best Match'], ['price-asc', 'Price: Low - High'], ['price-desc', 'Price: High - Low'], ['name-asc', 'Title: A - Z'], ['name-desc', 'Title: Z - A']].map(([v, l]) => `<option value="${v}" ${q.sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><button class="jb-btn jb-btn-small" type="submit">Sort</button></form>`
-  const results = items.length ? `<div class="jb-grid">${items.map(p => tile(base, p, route)).join('')}</div>` : `<div class="jb-empty"><h2>0 results</h2><p>Sorry, there are no products in ${esc(title)} to show right now.</p><p>Try another category, clear your filters or search for a product or brand.</p><p><a class="jb-btn jb-btn-black jb-btn-small" href="${base}/collections/${dept.slug}">Back to ${esc(dept.title)}</a> <a class="jb-btn jb-btn-grey jb-btn-small" href="${base}/collections/all">All products</a></p></div>`
+  const results = items.length ? `<div class="jb-grid">${shown.map(p => tile(base, p, route)).join('')}</div>` : `<div class="jb-empty"><h2>0 results</h2><p>Sorry, there are no products in ${esc(title)} to show right now.</p><p>Try another category, clear your filters or search for a product or brand.</p><p><a class="jb-btn jb-btn-black jb-btn-small" href="${base}/collections/${dept.slug}">Back to ${esc(dept.title)}</a> <a class="jb-btn jb-btn-grey jb-btn-small" href="${base}/collections/all">All products</a></p></div>`
   return `${crumbs(base, sub ? [[dept.title, '/collections/' + dept.slug], [sub.title]] : [[dept.title]])}
 <section class="jb-collection-heading jb-dept-banner"><div><h1>${esc(title)}</h1><p>${esc(sub ? `Shop ${sub.title} at JB Hi-Fi. ${dept.blurb}` : dept.blurb)}</p></div><span class="jb-dept-banner-art">${deptIcon(dept.slug, dept.title)}</span></section>
 <nav class="jb-subcat-tiles" aria-label="${esc(dept.title)} categories">${siblings}</nav>
 <div class="jb-search-head"><h2>${items.length} result${items.length === 1 ? '' : 's'}</h2><div class="jb-toolbar">${sortForm}</div></div>
-<div class="jb-search-body">${filterRail(route, q)}<div>${results}<p class="jb-fine jb-center">Showing ${items.length} of ${items.length} results</p></div></div>
+<div class="jb-search-body">${filterRail(route, q)}<div>${results}<p class="jb-fine jb-center">Showing ${items.length ? `${(page - 1) * perPage + 1}–${(page - 1) * perPage + shown.length}` : 0} of ${items.length} results</p>${pager}</div></div>
 <section class="jb-dept-copy"><h2>${esc(title)} at JB Hi-Fi</h2><p>${esc(dept.blurb)} Every purchase is backed by our everyday low prices and friendly expert advice in store and online. Seen it cheaper? Ask for a JB Deal!</p></section>`
 }
 // Sub-category strip used on the store's existing department listing pages.
@@ -157,7 +166,7 @@ const page = (base, trail, title, lead, body) => `${crumbs(base, trail)}<div cla
 const linkList = (base, rows) => rows.length ? `<ul class="jb-link-cards">${rows.map(([l, h]) => `<li><a href="${base}${h}">${esc(l)} &rsaquo;</a></li>`).join('')}</ul>` : ''
 function infoPage(base, path) {
   const [title, lead, sections, related] = INFO_PAGES[path]
-  return page(base, [[title]], title, lead, `${sections.map(([h, html]) => `<section class="jb-info-section"><h2>${esc(h)}</h2>${html}</section>`).join('')}${path === '/pages/privacy-policy' ? publicNotice('<section class="jb-info-section"><h2>This website</h2><p>This is not the real JB Hi-Fi website. Information stays in your browser session and is not sent to JB Hi-Fi.</p></section>') : ''}${related.length ? `<section class="jb-info-section"><h2>${path === '/pages/services' ? 'Our services' : 'Related'}</h2>${linkList(base, related)}</section>` : ''}`)
+  return page(base, [[title]], title, lead, `${sections.map(([h, html]) => `<section class="jb-info-section"><h2>${esc(h)}</h2>${html.replaceAll('href="BASE/', `href="${base}/`)}</section>`).join('')}${path === '/pages/privacy-policy' ? publicNotice('<section class="jb-info-section"><h2>This website</h2><p>This is not the real JB Hi-Fi website. Information stays in your browser session and is not sent to JB Hi-Fi.</p></section>') : ''}${related.length ? `<section class="jb-info-section"><h2>${path === '/pages/services' ? 'Our services' : 'Related'}</h2>${linkList(base, related)}</section>` : ''}`)
 }
 function helpHub(base) {
   return page(base, [['Help & Support']], 'Help & Support', 'How can we help you today?', `<form class="jb-help-search" method="get" action="${base}/help"><label for="help-search">Search help articles</label><div><input id="help-search" name="q" type="search" placeholder="e.g. pre-orders, Click & Collect, returns"><button class="jb-btn jb-btn-black" type="submit">Search</button></div></form>
@@ -173,10 +182,15 @@ function helpArticle(base, id) {
   const topic = HELP_TOPICS.find(t => t[2].includes(id))
   return page(base, [['Help & Support', '/pages/help-and-support'], ...(topic ? [[topic[0], `/pages/help-and-support/${topic[1]}`]] : []), [title]], 'Help & Support', '', `<article class="jb-help-article"><h2>${esc(title)}</h2>${html}</article><section class="jb-info-section"><h2>Was this helpful?</h2>${linkList(base, [['Back to Help & Support', '/pages/help-and-support'], ['Contact us', '/pages/contact-us']])}</section>`)
 }
+function blogPosts(base, slug) {
+  const posts = BLOG_POSTS.filter(p => slug === 'news-and-reviews' ? p[0] !== 'competitions' : p[0] === slug)
+  const name = s => BLOGS.find(b => b[0] === s)?.[1] || ''
+  return posts.length ? `<h2 class="jb-display">${slug === 'news-and-reviews' ? 'Latest articles' : `Latest in ${esc(name(slug))}`}</h2><div class="jb-post-grid">${posts.map(([s, t, d, href, x, photo]) => `<a class="jb-post" href="${base}${href}"><span class="jb-post-art">${productPhoto(photo, t)}</span><span class="jb-news-kicker">${esc(name(s))}</span><b>${esc(t)}</b><span class="jb-post-excerpt">${esc(x)}</span><span class="jb-post-date">${esc(d)}</span></a>`).join('')}</div>` : ''
+}
 function blogPage(base, slug) {
   const [, title, blurb] = BLOGS.find(b => b[0] === slug)
   const trail = slug === 'news-and-reviews' ? [[title]] : [['News & Reviews', '/blogs/news-and-reviews'], [title]]
-  return page(base, trail, title, blurb, `<nav class="jb-subcat-tiles" aria-label="News & Reviews sections">${BLOGS.map(([s, t]) => `<a href="${base}/blogs/${s}" ${s === slug ? 'aria-current="page"' : ''}>${esc(t)}</a>`).join('')}</nav><div class="jb-news-grid">${BLOGS.filter(b => b[0] !== slug && b[0] !== 'news-and-reviews').map(([s, t, b]) => `<a href="${base}/blogs/${s}"><span class="jb-news-kicker">${esc(t)}</span><b>${esc(b)}</b><span>Explore &rsaquo;</span></a>`).join('')}</div><p class="jb-fine">New articles from the JB Hi-Fi team are published every week.</p>`)
+  return page(base, trail, title, blurb, `<nav class="jb-subcat-tiles" aria-label="News & Reviews sections">${BLOGS.map(([s, t]) => `<a href="${base}/blogs/${s}" ${s === slug ? 'aria-current="page"' : ''}>${esc(t)}</a>`).join('')}</nav>${blogPosts(base, slug)}<h2 class="jb-display">More from News &amp; Reviews</h2><div class="jb-news-grid">${BLOGS.filter(b => b[0] !== slug && b[0] !== 'news-and-reviews').map(([s, t, b]) => `<a href="${base}/blogs/${s}"><span class="jb-news-kicker">${esc(t)}</span><b>${esc(b)}</b><span>Explore &rsaquo;</span></a>`).join('')}</div>`)
 }
 function brandsPage(base) {
   const own = [...new Set(LISTED.map(p => p.brand).filter(Boolean))].sort()
@@ -193,11 +207,13 @@ const STORE_DIRECTORY = [
   ['TAS', ['Hobart', 'Launceston']],
   ['NT', ['Casuarina']],
 ]
+// Typical trading hours for Friday: CBD stores open later than shopping centre stores.
+const storeHours = name => /^City |Melbourne Central|Forrest Chase|Broadway|Bondi/.test(name) ? '9:00am – 7:00pm' : /Westfield|Chadstone|Highpoint|Southland|Pacific Fair|Carindale|Chermside|Doncaster|Karrinyup|Booragoon|Marion/.test(name) ? '9:00am – 9:00pm' : '9:00am – 5:30pm'
 export function storeFinderPage(base, query, stores) {
   const q = String(query || '').toLowerCase()
   const groups = STORE_DIRECTORY.map(([st, names]) => [st, names.filter(n => !q || n.toLowerCase().includes(q) || st.toLowerCase() === q)]).filter(([, n]) => n.length)
   const pickup = stores.length ? `<section class="jb-info-section"><h2>Click &amp; Collect stores</h2><ul class="jb-store-list">${stores.map(s => `<li><a href="${base}/stores/${s.id}"><b>${esc(s.name)}</b></a><br><span class="jb-fine">${esc(s.address)}</span></li>`).join('')}</ul></section>` : `<p class="jb-notice">Store pickup availability for online orders is confirmed at checkout.</p>`
-  return page(base, [['Store Finder']], 'Store Finder', 'Find your nearest JB Hi-Fi store.', `<form class="jb-help-search" method="get" action="${base}/pages/store-finder"><label for="store-search">Enter postcode, suburb or state</label><div><input id="store-search" name="q" type="search" value="${esc(query || '')}" placeholder="e.g. Melbourne or VIC"><button class="jb-btn jb-btn-black" type="submit">Find stores</button></div></form>${pickup}<section class="jb-info-section"><h2>All stores${q ? ` matching “${esc(query)}”` : ''}</h2>${groups.length ? `<div class="jb-store-dir">${groups.map(([st, names]) => `<section><h3>${st}</h3><ul>${names.map(n => `<li>JB Hi-Fi ${esc(n)}</li>`).join('')}</ul></section>`).join('')}</div>` : '<p>No stores match your search. Try a suburb or state such as NSW.</p>'}<p class="jb-fine">Opening hours vary by store and on public holidays. Contact your local store for today's hours.</p></section>`)
+  return page(base, [['Store Finder']], 'Store Finder', 'Find your nearest JB Hi-Fi store.', `<form class="jb-help-search" method="get" action="${base}/pages/store-finder"><label for="store-search">Enter postcode, suburb or state</label><div><input id="store-search" name="q" type="search" value="${esc(query || '')}" placeholder="e.g. Melbourne or VIC"><button class="jb-btn jb-btn-black" type="submit">Find stores</button></div></form>${pickup}<section class="jb-info-section"><h2>All stores${q ? ` matching “${esc(query)}”` : ''}</h2>${groups.length ? `<div class="jb-store-dir">${groups.map(([st, names]) => `<section><h3>${st}</h3><ul>${names.map(n => `<li><b>JB Hi-Fi ${esc(n)}</b><span class="jb-store-hours">Open today ${storeHours(n)}</span></li>`).join('')}</ul></section>`).join('')}</div>` : '<p>No stores match your search. Try a suburb or state such as NSW.</p>'}<p class="jb-fine">Trading hours may vary on public holidays. Click &amp; Collect is available at all stores for eligible items.</p></section>`)
 }
 function perksPage(base, user) {
   return page(base, [['JB Perks']], 'JB Perks', 'Join JB Perks for FREE member benefits.', `<section class="jb-perks-band"><div class="jb-perks-badge" aria-hidden="true">JB<br>PERKS</div><div><h2>Want a $10 welcome coupon*?</h2><p>Become a member today and enjoy a welcome coupon, member discounts and early sales notifications.</p><p class="jb-fine">*Valid for 28 days from issue. T&amp;Cs apply.</p></div><a class="jb-btn" href="${base}${user ? '/account/profile' : '/account/register'}">${user ? 'Manage my preferences' : 'Join &amp; get my $10'}</a></section>

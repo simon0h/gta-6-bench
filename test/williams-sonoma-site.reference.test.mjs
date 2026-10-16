@@ -20,7 +20,8 @@ test('Williams Sonoma reference site reproduces the real chrome and key pages; c
     const prices = [...espresso.text.matchAll(/data-product-kind="other"[\s\S]*?class="wsx-price[^"]*">(?:<span class="wss-now">)?\$([\d,.]+)/g)].map(m => Number(m[1].replace(/,/g, '')))
     assert.ok(prices.length >= 5)
     assert.deepEqual(prices, prices.toSorted((x, y) => x - y))
-    const empty = await client.get('/williams-sonoma/shop/sale-special-offer/open-box-deals/')
+    // Every menu category now has products; filtering to nothing still shows the empty state.
+    const empty = await client.get('/williams-sonoma/shop/sale-special-offer/open-box-deals/?price=0-25')
     assert.match(empty.text, /0 Results/)
     assert.equal((await client.get('/williams-sonoma/shop/cookware/not-a-category/')).status, 404)
 

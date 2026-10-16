@@ -153,3 +153,15 @@
 .cp-order-agree .cp-pay-btn{margin-top:14px}
 .cs-cart-qty button{padding:6px 12px;font-size:12px;font-weight:400}
 .cs-cart-qty .link-button{padding:6px 4px;color:#777}
+
+/* Written reviews */
+.cs-review-sort{display:flex;gap:14px;margin:18px 0 0;padding-bottom:10px;border-bottom:1px solid #ddd;font-size:13px;color:#888}
+.cs-review-sort b{color:#111}
+.cs-review-list{list-style:none;margin:0;padding:0}
+.cs-review{padding:16px 0;border-bottom:1px solid #eee}
+.cs-review p{margin:0 0 5px;font-size:13px}
+.cs-reviewer b{font-size:14px;color:#111}
+.cs-review-meta{display:flex;align-items:center;gap:8px;color:#888}
+.cs-review-option{color:#888;font-size:12px!important}
+.cs-review-text{color:#222;line-height:1.6;margin-top:8px!important}
+.cs-review-help{color:#999;font-size:12px!important}
