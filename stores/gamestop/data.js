@@ -177,6 +177,9 @@ export function cartError(cart) {
   }
   return null
 }
+// Shopper-facing wording for the in-stock delivery estimate; recorded orders keep shippingEta's text.
+const ETA_NOTE = { 'Ships after order processing': 'Arrives in 3-5 business days', 'Expedited handling after order processing': 'Arrives in 1-2 business days' }
+export const shippingNote = eta => String(eta ?? '').replace(/Expedited handling after order processing|Ships after order processing/, m => ETA_NOTE[m]).replace('; preorders follow their release date', '; pre-orders arrive on or shortly after release day')
 export const shippingEta = (p, method='premium') => p.preorder ? SHIPPING_METHODS[method]?.eta || SHIPPING_METHODS.premium.eta : method==='rush' ? 'Expedited handling after order processing' : 'Ships after order processing'
 const multi = v => (Array.isArray(v) ? v : v ? [v] : []).map(String)
 const valuesFor = (p,name) => {

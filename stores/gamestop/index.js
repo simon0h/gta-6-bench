@@ -9,7 +9,7 @@ import { authenticate, createAccount, publicAccount } from '../../lib/accounts.j
 import { PRODUCTS, ALL, byId, search, refine, totals, SHIPPING_METHODS, STATES, selectedProduct, cartError, shippingEta, parseFilters, collection, DEPARTMENTS, HUBS, productPath } from './data.js'
 import * as P from './pages.js'
 import { shelfAssetSvg } from './shelf-art.js'
-import { LANDINGS, FACETS, EXTRA_COLLECTIONS, GIFT_BRANDS, INFO, landingHeader, subLanding, preownedLanding, infoPage, sitemapPage, sitemapXml } from './site.js'
+import { LANDINGS, FACETS, EXTRA_COLLECTIONS, GIFT_BRANDS, INFO, giftCardShowcase, landingHeader, subLanding, preownedLanding, infoPage, sitemapPage, sitemapXml } from './site.js'
 import { proPage, tradePage, creditPage, gradingPage, digitalPage } from './marketing.js'
 import { capturedRecommendations } from './recommendation-reference.js'
 import { contactPage } from './checkout-reference.js'
@@ -58,23 +58,23 @@ function withLanding(base,hub,path,extra={}) {
   const name=landing.name||hub.name
   return {...hub,name,facets:FACETS[landing.facets]||FACETS.default,landingHtml:landingHeader(base,{name,crumbs:landing.crumbs||[],top:landing.top})}
 }
-function landingBrowse(req,res,{name,crumbs=[],top,filter,facets}) {
-  browse(req,res,{name,description:'',products:ALL.filter(filter),facets:FACETS[facets]||FACETS.default,landingHtml:landingHeader(res.locals.base,{name,crumbs,top})})
+function landingBrowse(req,res,{name,crumbs=[],top,filter,facets,emptyHtml,fallback,fallbackTitle,fallbackUrl}) {
+  browse(req,res,{name,description:'',products:ALL.filter(filter),facets:FACETS[facets]||FACETS.default,landingHtml:landingHeader(res.locals.base,{name,crumbs,top}),...(emptyHtml?{emptyHtml:emptyHtml(res.locals.base)}:{}),...(fallback?{fallback:ALL.filter(fallback),fallbackTitle,fallbackUrl}:{})})
 }
 router.get('/search',(req,res)=>browse(req,res))
 for (const slug of [...DEPARTMENTS.map(d=>d.id),...Object.keys(HUBS),'gaming-accessories/controllers']) router.get('/'+slug,(req,res)=>browse(req,res,withLanding(res.locals.base,collection(slug),'/'+slug,slug==='gaming-accessories/controllers'?{crumbs:[['Gaming Accessories','/gaming-accessories']]}:{})))
 router.get('/pre-order-online-pick-up-in-store',(req,res)=>browse(req,res,withLanding(res.locals.base,collection('pre-order'),'/pre-order-online-pick-up-in-store')))
 router.get('/preowned',(req,res)=>browse(req,res,withLanding(res.locals.base,collection('pre-owned'),'/preowned')))
 router.get('/preowned/:sub',(req,res,next)=>{const l=preownedLanding(req.params.sub);if(!l)return next();landingBrowse(req,res,l)})
-router.get('/gift-cards',(req,res)=>landingBrowse(req,res,{...LANDINGS['/gift-cards'],filter:()=>false}))
-router.get('/gift-cards/:brand',(req,res,next)=>{const b=GIFT_BRANDS[req.params.brand];if(!b)return next();landingBrowse(req,res,{name:`${b} Gift Cards`,crumbs:[['Gift Cards','/gift-cards']],filter:()=>false,top:()=>`<p class="gs-landing-note">${P.escapeText(b)} gift cards and digital codes are delivered by email on GameStop.com. Gift cards are currently sold in store only.</p>`})})
+router.get('/gift-cards',(req,res)=>landingBrowse(req,res,{...LANDINGS['/gift-cards'],filter:()=>false,emptyHtml:giftCardShowcase('all')}))
+router.get('/gift-cards/:brand',(req,res,next)=>{const b=GIFT_BRANDS[req.params.brand];if(!b)return next();landingBrowse(req,res,{name:`${b} Gift Cards`,crumbs:[['Gift Cards','/gift-cards']],filter:()=>false,emptyHtml:giftCardShowcase(req.params.brand)})})
 for (const [path,c] of Object.entries(EXTRA_COLLECTIONS)) router.get(path,(req,res)=>landingBrowse(req,res,c))
 const SLUG=/^[a-z0-9|-]{2,60}$/
 for (const dept of ['video-games','consoles-hardware','gaming-accessories','collectibles','toys-games','toys-games/trading-cards','deals']) {
   router.get(`/${dept}/:sub`,(req,res,next)=>{if(!SLUG.test(req.params.sub))return next();landingBrowse(req,res,subLanding(dept,req.params.sub))})
 }
 router.get('/consoles-hardware/:sub/:sub2',(req,res,next)=>{if(!SLUG.test(req.params.sub)||!SLUG.test(req.params.sub2))return next();landingBrowse(req,res,subLanding('consoles-hardware',req.params.sub,req.params.sub2))})
-router.get('/digital-store/:sub',(req,res,next)=>{if(!SLUG.test(req.params.sub))return next();const l=subLanding('digital-store',req.params.sub);landingBrowse(req,res,{...l,crumbs:[['Digital Store','/digital-store']],filter:()=>false,top:()=>`<p class="gs-landing-note">Digital codes are emailed and redeemed on the platform's store. Downloadable games and currency are not offered online right now; shop code-in-box editions instead.</p>`})})
+router.get('/digital-store/:sub',(req,res,next)=>{if(!SLUG.test(req.params.sub))return next();const l=subLanding('digital-store',req.params.sub);landingBrowse(req,res,{...l,crumbs:[['Digital Store','/digital-store']],filter:()=>false,emptyHtml:giftCardShowcase(req.params.sub)})})
 for (const path of Object.keys(INFO)) router.get(path,(req,res)=>render(req,res,INFO[path].title,infoPage(res.locals.base,path)))
 router.get('/sitemap',(req,res)=>render(req,res,'Site Map',sitemapPage(res.locals.base)))
 router.get('/sitemap.xml',(req,res)=>res.type('application/xml').send(sitemapXml(res.locals.base)))
