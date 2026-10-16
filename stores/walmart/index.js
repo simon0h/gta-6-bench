@@ -499,6 +499,8 @@ router.get('/thankyou', (req, res) => {
   render(req, res, { title: 'Thanks for your order - Walmart.com', body: P.thankyouPage({ base, order, status: orderStatus(order) }) })
 })
 
+router.use(notFound)
+
 
 export default {
   slug: 'walmart',

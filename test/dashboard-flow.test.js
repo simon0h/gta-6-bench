@@ -115,7 +115,9 @@ test('HTTP dashboard creates and edits attempts; agent portal starts, proxies, a
   const detail = (await operator.request(`/dashboard/api/runs/${run.id}`, { headers: operatorHeaders })).body.run
   assert.equal(detail.attempts[0].trials[0].result.grade.status, 'passed')
   assert.equal(detail.attempts[0].summary.passed, 1)
-  assert.equal((await agent.request('/bestbuy')).status, 409)
+  const ended = await agent.request('/bestbuy')
+  assert.equal(ended.status, 409)
+  assert.match(ended.text, /<link rel="stylesheet" href="\/dashboard\/portal\.css">/, 'The task-ended page keeps the task page styling')
 })
 
 test('HTTP backend caps a run at five links and protects browser assignment and cross-origin actions', async t => {

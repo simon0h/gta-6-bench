@@ -1,6 +1,7 @@
 // One worker per run: legacy module-level stores/accounts never cross trials.
 import { createServer } from 'node:http'
 import { createApp } from '../app.js'
+import { storeErrorPage } from '../lib/store-error-page.js'
 import { listOrders, finalizeOrders } from '../lib/orders.js'
 import { benchmarkDate } from '../lib/payment.js'
 import { scenarioEvents, finalizeScenario } from '../lib/benchmark-scenarios.js'
@@ -22,7 +23,7 @@ process.on('message', async message => {
       })
       app.use((error, req, res, next) => {
         app.locals.benchmarkErrors.push({ method: req.method, path: req.path, error: error.message })
-        res.status(500).send('Benchmark environment error')
+        res.status(500).type('html').send(storeErrorPage({ slug: req.path.split('/')[1] }))
       })
       server = createServer(app)
       await new Promise((resolve, reject) => {
