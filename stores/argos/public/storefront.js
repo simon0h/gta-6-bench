@@ -28,3 +28,7 @@ for (const link of document.querySelectorAll('.product-sections a, .purchase-pan
 }
 const departmentDirectory = document.querySelector('.department-directory')
 if (departmentDirectory) departmentDirectory.open = window.matchMedia('(min-width: 761px)').matches
+// On phones the filter panel starts collapsed behind its "Filter" button unless a filter is applied.
+if (window.matchMedia('(max-width: 760px)').matches) for (const panel of document.querySelectorAll('.ar-results .filter-panel[open]')) {
+  if (!panel.querySelector('input[type=checkbox]:checked')) panel.open = false
+}
