@@ -205,6 +205,14 @@ export const SHELF_ROWS = [
   ['Omron Platinum Blood Pressure Monitor, Upper Arm, Bluetooth (BP5450)', 'OMRON', 79.99, 99.99, '3775161', 4.4, 41206, '5K+', 'Cuff size:9-17 inches|Memory:200 readings|Connectivity:Bluetooth|Display:Backlit', 'blood pressure monitor'],
   ['Etekcity Digital Bathroom Scale for Body Weight, 400 lb – Black', 'Etekcity', 15.99, 21.99, '3775161', 4.6, 241087, '20K+', 'Capacity:400 lb|Display:Backlit LCD|Platform:Tempered glass|Color:Black', 'scale'],
   ['Philips Sonicare 4100 Rechargeable Electric Power Toothbrush – White', 'Philips Sonicare', 49.96, 59.99, '10079992011', 4.6, 61208, '10K+', 'Brushing modes:1 with 2 intensities|Battery life:14 days|Pressure sensor:Yes|Color:White', 'electric toothbrush'],
+  ['Bounty Select-A-Size Paper Towels, White, 12 Double Plus Rolls = 30 Regular Rolls', 'Bounty', 31.49, 0, '15342811', 4.8, 52406, '20K+', 'Count:12 double plus rolls|Sheets:Select-A-Size|Ply:2|Color:White', 'paper towels'],
+  ['Viva Signature Cloth Choose-A-Sheet Paper Towels, 6 Big Rolls', 'Viva', 12.49, 14.99, '15342811', 4.7, 23817, '10K+', 'Count:6 big rolls|Sheets:Choose-A-Sheet|Ply:1|Color:White', 'paper towels'],
+  ['Brawny Tear-A-Square Paper Towels, 12 Double Rolls = 24 Regular Rolls', 'Brawny', 27.99, 0, '15342811', 4.8, 31492, '10K+', 'Count:12 double rolls|Sheets:Tear-A-Square|Ply:2|Color:White', 'paper towels'],
+  ['Amazon Basics 2-Ply Paper Towels, Flex-Sheets, 12 Value Rolls', 'Amazon Basics', 24.62, 0, '15342811', 4.6, 47318, '20K+', 'Count:12 value rolls|Sheets:Flex-Sheets|Ply:2|Color:White', 'paper towels'],
+  ['Cottonelle Ultra Comfort Toilet Paper, 24 Family Mega Rolls = 108 Regular Rolls', 'Cottonelle', 32.99, 36.49, '15342811', 4.7, 68210, '30K+', 'Count:24 family mega rolls|Ply:2|Sheets per roll:325|Septic safe:Yes', 'toilet paper'],
+  ['Angel Soft Toilet Paper, 48 Double Rolls = 96 Regular Rolls', 'Angel Soft', 28.99, 0, '15342811', 4.8, 59133, '30K+', 'Count:48 double rolls|Ply:2|Sheets per roll:214|Septic safe:Yes', 'toilet paper'],
+  ['Scott 1000 Toilet Paper, 32 Rolls, Septic-Safe, 1-Ply', 'Scott', 31.99, 0, '15342811', 4.7, 44620, '10K+', 'Count:32 rolls|Ply:1|Sheets per roll:1,000|Septic safe:Yes', 'toilet paper'],
+  ['Amazon Basics 2-Ply Toilet Paper, 30 Rolls (5 Packs of 6)', 'Amazon Basics', 25.49, 0, '15342811', 4.5, 38904, '20K+', 'Count:30 rolls|Ply:2|Sheets per roll:300|Septic safe:Yes', 'toilet paper'],
 
   // ---------------------------------------------------------------- Beauty & Personal Care
   ['CeraVe Moisturizing Cream, Body and Face Moisturizer for Dry Skin, 19 oz', 'CeraVe', 17.78, 0, '11060451', 4.8, 128406, '100K+', 'Size:19 oz|Skin type:Dry|Key ingredients:Ceramides, hyaluronic acid|Fragrance:Fragrance-free', 'moisturizer jar'],

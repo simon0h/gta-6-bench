@@ -3,7 +3,7 @@ import { applyCatalogPolicy, fixtureCatalog } from '../../lib/catalog-policy.js'
 import { catalogEvidence } from './catalog-evidence.js'
 import { expandCatalog } from './expand500.js'
 import { EXTRA_PRODUCTS, enrichProduct, DEPARTMENTS as FIXTURE_DEPARTMENTS, nodeById, values } from './catalog.js'
-import { SHELF, SEARCH_DEPARTMENTS } from './shelf.js'
+import { SHELF, SEARCH_DEPARTMENTS, arrivalDate } from './shelf.js'
 // The search box's department list: amazon.com's search aliases in reference mode, the
 // historical fixture departments otherwise.
 export const DEPARTMENTS = fixtureCatalog ? FIXTURE_DEPARTMENTS : SEARCH_DEPARTMENTS
@@ -300,7 +300,9 @@ export function recommendations(p, count=6) {
 export function deliveryOptions(lines) {
   const releases = lines.map(l=>l.product.release).filter(Boolean).sort((a,b)=>Date.parse(b)-Date.parse(a))
   if (lines.some(l=>l.product.kind==='game') && (!releases[0] || Date.parse(releases[0])<=Date.parse(RELEASE_DATE_TEXT))) return DELIVERY
-  return {standard:{id:'standard',name:'FREE delivery',date:releases[0] || 'Monday, October 5',short:releases[0] || 'Oct 5',price:0,detail:releases.length?'Ships when the pre-order is released.':'Standard shipping'}}
+  // Fixture mode keeps its historical fixed date; the everyday assortment arrives four days out.
+  const arrival = fixtureCatalog ? { date: 'Monday, October 5', short: 'Oct 5' } : arrivalDate()
+  return {standard:{id:'standard',name:'FREE delivery',date:releases[0] || arrival.date,short:releases[0] || arrival.short,price:0,detail:releases.length?'Ships when the pre-order is released.':'Standard shipping'}}
 }
 export const STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
 

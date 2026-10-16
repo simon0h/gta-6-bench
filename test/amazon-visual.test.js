@@ -82,6 +82,6 @@ test('amazon merchandising: all campaigns are populated and cart/support contain
     assert.match(cart.text, /Subtotal \(1 item\): <b>\$32\.99<\/b>/)
     assert.doesNotMatch(cart.text, /Cost After Savings|name="gift"|Gift options available/)
     for(const article of ['location','product-support','price-feedback','services']) assert.equal((await c.get(`/amazon/help/${article}`)).status, 200)
-    assert.match((await c.get('/amazon/tradein')).text, /not available in this storefront/)
+    assert.match((await c.get('/amazon/tradein')).text, /Trade-in appraisals for video games are not available for your account right now/)
   } finally { await srv.close() }
 })
