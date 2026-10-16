@@ -204,3 +204,14 @@
 .wsx-footer{padding:28px 16px 18px}.wsx-footer-cols{grid-template-columns:repeat(2,minmax(0,1fr))}
 .wsx-section-title{font-size:23px}
 }
+/* Recipe collections */
+.wsx-recipe-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 22px}
+.wsx-recipe-card h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:18px;line-height:1.3;margin:12px 0 4px}
+.wsx-recipe-card p{margin:0 0 8px;font-size:14px;line-height:1.5;color:#444}
+.wsx-recipe-card .wsx-recipe-meta{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.wsx-recipe-card .wsx-recipe-shop{font-size:13px}
+.wsx-recipe-card .wsx-recipe-shop a{text-decoration:underline}
+.wsx-recipe-card>span{display:block}
+.wsx-recipe-more{margin-top:32px}
+@media(max-width:1180px){.wsx-recipe-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.wsx-recipe-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}.wsx-recipe-card h3{font-size:16px}}
