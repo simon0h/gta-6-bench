@@ -42,6 +42,10 @@ function mix(items, n, key = p => p.tree) {
 }
 const saving = p => (p.listPrice - p.price) / p.listPrice
 
+// The Deal of the Day band: on the homepage it links to the daily deals page; on that page it leads.
+const dotdBand = (base, daily, onPage = false) => daily ? `<section class="bbs-dotd${onPage ? ' bbs-dotd-page' : ''}" aria-labelledby="dotd-h"><div class="bbs-dotd-copy"><p class="bbs-eyebrow">Deal of the Day</p><h2 id="dotd-h">Today only. While supplies last.</h2><p>Ends tonight at 11:59 p.m. CT.</p>${onPage ? '<p class="bbs-dotd-note">Limit 3 per customer. Price valid online and in stores.</p>' : `<a class="bbs-link" href="${base}${PATHS.dotd}">See all daily deals ›</a>`}</div><div class="bbs-dotd-card">${card(base, daily, { badge: 'Deal of the Day' })}</div></section>` : ''
+export const dealOfTheDay = (base, catalog) => dotdBand(base, catalog.find(p => p.daily && (stockFor(p, 'pickup') > 0 || stockFor(p, 'shipping') > 0)) || catalog.find(p => p.daily), true)
+
 export function shelfHome({ base, catalog, trending = 'tvs' }) {
   const shelf = catalog.filter(p => p.shelf && (p.stock > 0))
   const gta = catalog.filter(p => p.kind === 'game')
@@ -58,7 +62,7 @@ export function shelfHome({ base, catalog, trending = 'tvs' }) {
   const under100 = mix(shelf.filter(p => p.price < 100 && p.deal).sort((a, b) => b.rating.count - a.rating.count), 12)
   return `<div class="bbs-home">
 ${row(base, { id: 'top-deals', title: 'Top Deals', href: `${base}/top-deals`, linkText: 'Shop all Top Deals', items: topDeals })}
-${daily ? `<section class="bbs-dotd" aria-labelledby="dotd-h"><div class="bbs-dotd-copy"><p class="bbs-eyebrow">Deal of the Day</p><h2 id="dotd-h">Today only. While supplies last.</h2><p>Ends tonight at 11:59 p.m. CT.</p><a class="bbs-link" href="${base}${PATHS.dotd}">See all daily deals ›</a></div><div class="bbs-dotd-card">${card(base, daily, { badge: 'Deal of the Day' })}</div></section>` : ''}
+${dotdBand(base, daily)}
 <section class="bbs-row" id="trending" aria-labelledby="trending-h"><div class="bbs-row-head"><h2 id="trending-h">Trending deals</h2><a href="${base}${TAB_LINKS[tab[0]]}">Shop all ${esc(tab[1])} ›</a></div><nav class="bbs-tabs" aria-label="Trending deal categories">${TABS.map(([id, label]) => `<a href="${base}/?trending=${id}#trending"${id === tab[0] ? ' aria-current="page"' : ''}>${esc(label)}</a>`).join('')}</nav><div class="bbs-scroller" role="list">${trendingItems.map(p => `<div role="listitem">${card(base, p)}</div>`).join('')}</div></section>
 ${row(base, { id: 'new-games', title: 'New and upcoming video games', href: `${base}/site/video-games/all-video-games/pcmcat1487698928729.c`, linkText: 'Shop all video games', items: games })}
 ${row(base, { id: 'customer-favorites', title: 'Customer favorites', note: 'Top-rated products with thousands of reviews.', items: favorites })}

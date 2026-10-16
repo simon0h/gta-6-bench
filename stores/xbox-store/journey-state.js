@@ -12,7 +12,7 @@ export function ownedOrder(req,id) {
   return order && ownedOrders(req).includes(order) ? order : null
 }
 export const lifecycle = order => order.meta.lifecycle?.at(-1)?.status || (order.meta.preorder ? 'preordered' : order.shipping_address?'processing':'acquired')
-export const statusLabel = order => ({cancelled:'Pre-order cancelled',return_requested:'Refund requested — pending review',preordered:'Pre-ordered',acquired:'License acquired',processing:'Preparing physical delivery'})[lifecycle(order)]
+export const statusLabel = order => ({cancelled:'Pre-order cancelled',return_requested:'Refund requested — pending review',preordered:'Pre-ordered',acquired:'License acquired',processing:'Preparing for shipment'})[lifecycle(order)]
 export function library(req) {
   return ownedOrders(req).filter(o=>lifecycle(o)!=='cancelled').flatMap(order=>(order.meta.entitlements||[]).map(entitlement=>({...entitlement,order,title:order.items.find(i=>i.sku===entitlement.sku)?.title||entitlement.sku})))
 }

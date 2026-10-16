@@ -75,7 +75,7 @@ export function categoryIntro({base,department,campaign,weekly=false}) {
   return ''
 }
 export function categoryDirectory({base}) {return `<section class="tg-section"><h1>Shop all categories</h1><p>Find your favorites, from everyday essentials to something new.</p>${departmentTiles(base)}</section>`}
-export function listingPage({base,q='',products,pool=PRODUCTS,filters={},backPath,drawer='',heading='',intro='',outro='',crumbs=true,emptyCategory=false,page=1,perPage=12}) {
+export function listingPage({base,q='',products,pool=PRODUCTS,filters={},backPath,drawer='',heading='',subheading='',intro='',outro='',crumbs=true,emptyCategory=false,page=1,perPage=12}) {
   const total=products.length, pages=Math.max(1,Math.ceil(total/perPage)); page=Math.min(pages,Math.max(1,page))
   const shown=products.slice((page-1)*perPage,page*perPage), baseUrl=url(backPath,{page:'',added:'',notadded:''})
   const fields=[
@@ -95,7 +95,7 @@ export function listingPage({base,q='',products,pool=PRODUCTS,filters={},backPat
   const active=Object.entries(filters).filter(([,v])=>v), pathname=new URL(backPath,'http://local').pathname
   const clear=url(baseUrl,Object.fromEntries(Object.keys(filters).map(k=>[k,''])))
   const suggestions=DEPARTMENTS.filter(d=>pool.some(p=>p.department===d.id)).slice(0,6)
-  return `${drawer}${intro}<div class="tg-search-page" id="products">${crumbs?`<nav class="tg-crumbs"><a href="${base}/">Target</a> › <a href="${base}/c">Categories</a>${heading?' › '+esc(heading):''}</nav>`:''}<${intro?'h2':'h1'}>${esc(intro?'Shop '+heading:heading||q.toLowerCase()||'Shop all products')}</${intro?'h2':'h1'}>
+  return `${drawer}${intro}<div class="tg-search-page" id="products">${crumbs?`<nav class="tg-crumbs"><a href="${base}/">Target</a> › <a href="${base}/c">Categories</a>${heading?' › '+esc(heading):''}</nav>`:''}<${intro?'h2':'h1'}>${esc(intro?subheading||'Shop '+heading:heading||q.toLowerCase()||'Shop all products')}</${intro?'h2':'h1'}>
     ${suggestions.length>1?`<nav class="tg-suggestion-links" aria-label="Related categories">${suggestions.map(d=>`<a href="${link(baseUrl,{category:d.id,page:''})}">${esc(d.name)}</a>`).join('')}</nav>`:''}
     ${heading&&pool.length?`<nav class="tg-suggestion-links" aria-label="Shop by type">${unique(pool.map(p=>p.type)).map(type=>`<a href="${link(baseUrl,{type,page:''})}">${esc(type)}</a>`).join('')}</nav>`:''}
     <details class="tg-filter-drawer"><summary class="tg-chip tg-chip-strong">Filter &amp; Sort${active.length?` (${active.length} applied)`:''}</summary><form action="${pathname}" method="get">${pathname.endsWith('/s')?`<input type="hidden" name="searchTerm" value="${esc(q)}">`:''}<div class="tg-filter-fields">${fields.map(([name,label,values])=>`<label>${label}<select name="${name}" aria-label="${label}"><option value="">${name==='sort'?'Relevance':'All'}</option>${values.map(([value,text])=>`<option value="${esc(value)}" ${filters[name]===value?'selected':''}>${esc(text)}</option>`).join('')}</select></label>`).join('')}</div><button class="tg-btn">Show results</button><a href="${esc(clear)}">Clear all</a></form></details>

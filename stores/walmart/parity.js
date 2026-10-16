@@ -30,6 +30,35 @@ const deptByPath = path => ALL_DEPARTMENTS.find(d => d[1] === path)
 const PHOTO = { 'Grocery': 'apples', 'Home, Furniture & Appliances': 'armchair', 'Patio & Garden': 'camping-chair-khaki', 'Home Improvement': 'floor-mop', 'Clothing, Shoes & Accessories': 'hoodie', 'Toys': 'building-bricks', 'Baby & Kids': 'stroller-gray', 'Video Games': 'controller', 'Electronics': 'television', 'Pharmacy, Health & Wellness': 'sunscreen', 'Personal Care': 'citrus-bodywash', 'Beauty': 'lipstick', 'Household Essentials': 'laundry-detergent', 'Sports & Outdoors': 'basketball-orange', 'Pets': 'dog-food', 'School & Office Supplies': 'notebooks', 'Arts, Crafts, Sewing & Party Supplies': 'crayons', 'Movies & TV': 'streaming-player', 'Music & Vinyl': 'vinyl-blue-hour', 'Books': 'book-orchard-house', 'Seasonal & Celebrations': 'cookies' }
 const initials = name => name.replace(/[^A-Za-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('')
 export const roundThumb = name => PHOTO[name] ? productPhoto(PHOTO[name], name) : `<span class="wm-mono" aria-hidden="true">${esc(initials(name))}</span>`
+// Round category pictures: the best-rated item on that shelf, as walmart.com shows a product cut-out in each circle.
+const NODE_PHOTO = {
+  'Savings': 'headphones', 'Cell phone cases': 'smartphone', 'Delivery Subscriptions': 'paper-towels', 'Air Fresheners': 'cleaning-wipes', 'Paper & Plastic': 'paper-towels', 'Clearance': 'lamp', 'Flash Deals': 'earbuds', 'New & Trending': 'smartwatch-black', 'Tailgating': 'camping-chair-khaki', 'Brand Shop Directory': 'tote', 'Pride Always': 'tshirt',
+  'Savings & Featured Shops': 'headphones', 'Shop All Savings': 'headphones', 'EBT/SNAP eligible food': 'apples', 'Exclusively online': 'tote', 'Everyday meals': 'pasta', 'Recipes': 'recipe-tomato-orzo',
+  'Patio Sets': 'camping-chair-khaki', 'Conversation Sets': 'sofa-gray-two-seat', 'Outdoor Cooking': 'grill-pan-black', 'Fasteners': 'storage-bins', 'Building Materials': 'utility-cart-white',
+  'Premium Fashion': 'crossbody-black', 'New Arrivals': 'windbreaker-blue', "Editors' Picks": 'canvas-sneakers', 'Now Trending': 'retro-sneaker-navy', "Women's Plus": 'leggings-black', 'Baby Days': 'stroller-gray', 'Baby Registry': 'crib-wood', 'Baby Clothing': 'kids-tracksuit-blue', 'Toddler Clothing': 'kids-trainers-blue',
+  'All Health & Wellness': 'sunscreen', 'Pharmacy': 'sunscreen', 'Caregiver Hub': 'hand-cream-white', "Women's Wellness": 'body-lotion-cream', 'Multipacks': 'toilet-paper', 'Feminine Care': 'mini-moisturizer-white', 'Incontinence': 'diaper-pants', 'Sexual Wellness': 'body-mist-pink', 'Premium Beauty': 'perfume-woody-amber',
+  'Auto Care Center': 'action-camera', 'Replacement Auto Parts': 'hdmi-cable', 'Exterior Car Parts & Accessories': 'cleaning-wipes', 'Sports': 'basketball-orange',
+  'Pet Profiles': 'pet-bed', 'The Pet Event': 'dog-treats', 'Pet Prescriptions': 'pet-shampoo-blue', "Teacher's Classroom Shop": 'notebooks', 'Bulk Teaching Supplies': 'gel-pens', 'School Arts and Crafts': 'crayons', 'Shipping & Moving': 'storage-bins', 'Safes & Lockboxes': 'chest-drawers-white', 'Walmart for Business': 'office-chair-black',
+}
+function shelfFor(name, path) {
+  const node = TREE.get(path)
+  let items = node ? nodeProducts(node) : []
+  if (!items.length && path.startsWith('/search?q=')) { const q = decodeURIComponent(path.slice(10)).replace(/\+/g, ' ').toLowerCase(); items = CATALOG.filter(p => String(p.keywords ?? p.title).toLowerCase().includes(q)) }
+  return items.filter(p => p.shelf).sort((a, b) => (b.photo ? 1 : 0) - (a.photo ? 1 : 0) || b.ratings - a.ratings)
+}
+// A category circle shows a product from that shelf, as walmart.com shows a product cut-out in each circle.
+const itemArt = (p, name) => p.photo ? productPhoto(p.photo, name) : p.shelf ? `<span class="wm-round-art">${shelfImage(p, { alt: name })}</span>` : `<span class="wm-round-art">${productImage('walmart', p, { alt: name })}</span>`
+export function categoryThumb(name, path) {
+  if (/gift cards?$/i.test(name)) return giftCardThumb(name, [...name].reduce((h, c) => h + c.charCodeAt(0), 0))
+  const q = /[?&]q=([^&]+)/.exec(path)?.[1]
+  if (q && /grand\+theft/.test(q)) { const g = PRODUCTS.find(p => p.kind === 'game'); if (g) return itemArt(g, name) }
+  if (NODE_PHOTO[name] || PHOTO[name]) return productPhoto(NODE_PHOTO[name] ?? PHOTO[name], name)
+  const featured = FEATURED[path]?.()
+  const p = featured?.length ? [...featured].sort((a, b) => (b.photo ? 1 : 0) - (a.photo ? 1 : 0) || (b.ratings ?? 0) - (a.ratings ?? 0))[0] : shelfFor(name, path)[0]
+  if (p) return itemArt(p, name)
+  const dept = TREE.get(path)?.dept?.name
+  return dept && PHOTO[dept] ? roundThumb(dept) : `<span class="wm-mono" aria-hidden="true">${esc(initials(name))}</span>`
+}
 
 // "Shop by category" tiles as walmart.com shows them on its department pages.
 const SHOP_BY = {
@@ -42,17 +71,6 @@ export function shopByCategory(base, path) {
   return `<section class="wm-shop-by"><h2>Shop by category</h2><nav class="wm-cat-tiles" aria-label="Shop by category">${list.map(([name, p, photo]) => `<a href="${base}${p}">${photo ? productPhoto(photo, name) : categoryThumb(name, p)}<span>${esc(name)}</span></a>`).join('')}</nav></section>`
 }
 
-// A category tile without its own photo shows the top item sold in that category, like walmart.com's tiles.
-const itemArt = p => p.shelf ? shelfImage(p, { alt: '' }) : productImage('walmart', p, { alt: '' })
-function categoryThumb(name, path) {
-  const q = /[?&]q=([^&]+)/.exec(path)?.[1]
-  const items = q && /grand\+theft/.test(q) ? PRODUCTS.filter(p => p.kind === 'game') : FEATURED[path]?.() ?? (TREE.get(path) ? nodeProducts(TREE.get(path)) : [])
-  const pick = [...items].sort((a, b) => (b.ratings ?? 0) - (a.ratings ?? 0))[0]
-  if (q && /grand\+theft/.test(q) && items[0]) return itemArt(items[0])
-  if (pick) return itemArt(pick)
-  const dept = TREE.get(path)?.dept?.name
-  return PHOTO[name] || !dept ? roundThumb(name) : roundThumb(dept)
-}
 // Gift card category tiles: a small card in the category's color, as the real page shows card art.
 const GC_COLORS = ['#0053e2', '#c2477a', '#2a8703', '#6b4f9e', '#e4572e', '#00849a', '#b5651d']
 const giftCardThumb = (name, i) => { const word = name.replace(/ Gift Cards?$/i, '').toUpperCase(); return `<svg class="wm-gc-thumb" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="50" fill="#f2f8fd"/><g transform="rotate(-8 50 50)"><rect x="17" y="30" width="66" height="42" rx="6" fill="${GC_COLORS[i % GC_COLORS.length]}"/><rect x="17" y="40" width="66" height="7" fill="#ffffff33"/><text x="50" y="64" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="${Math.min(9, +(56 / (word.length * 0.64)).toFixed(1))}" fill="#fff" text-anchor="middle">${esc(word)}</text><circle cx="73" cy="37" r="3" fill="#FFC220"/></g></svg>` }
@@ -99,7 +117,7 @@ export function landingPage({ base, node, query, tile }) {
   if (d) return B.departmentPage({ base, department: d, filters, page: query.page, tile, crumbs: crumbs(base, [[node.name]]), shopBy: shop, heading: node.name, route: `${base}${node.path}`, empty: emptyCategory(base, node.name) })
   const source = nodeProducts(node)
   const intro = isDept ? `Shop ${node.name.toLowerCase()} at Walmart.com. Explore popular categories below and use filters to narrow your results.` : `Explore ${node.name} in ${dept.name}. Use the filters and sort to narrow your results.`
-  return `<div class="wm-landing">${crumbs(base, isDept ? [[node.name]] : [[dept.name, dept.path], [node.name]])}<section class="wm-landing-hero"><div><h1>${esc(node.name)}</h1><p>${esc(intro)}</p></div>${isDept ? roundThumb(node.name) : ''}</section>${shop}${B.listingPage({ base, source, filters, page: query.page, route: `${base}${node.path}`, title: `Shop all ${node.name}`, level: 2, empty: emptyCategory(base, node.name), tile })}</div>`
+  return `<div class="wm-landing">${crumbs(base, isDept ? [[node.name]] : [[dept.name, dept.path], [node.name]])}<section class="wm-landing-hero"><div><h1>${esc(node.name)}</h1><p>${esc(intro)}</p></div>${isDept ? categoryThumb(node.name, node.path) : ''}</section>${shop}${B.listingPage({ base, source, filters, page: query.page, route: `${base}${node.path}`, title: `Shop all ${node.name}`, level: 2, empty: emptyCategory(base, node.name), tile })}</div>`
 }
 
 // ---- All Departments ----
@@ -209,30 +227,38 @@ export function giftCardsPage(base) {
   <section class="wm-gc-ways"><h2>Gift cards your way</h2><div><article><h3>Send by email</h3><p>eGift cards arrive by email, often within minutes.</p></article><article><h3>Deliver to their door</h3><p>Plastic gift cards ship free to the recipient.</p></article><article><h3>Get 'em from the store</h3><p>Pick up gift cards at the register in any Walmart store.</p></article></div></section>
   <section class="wm-faq"><h2>Using Walmart gift cards</h2>${faq.map(([q, a]) => `<details><summary><h3>${esc(q)}</h3></summary><p>${esc(a)}</p></details>`).join('')}</section>
   <section><h2>Gift card help &amp; info</h2><nav class="wm-help-related"><a href="${base}/account/giftcards/balance">Check card balance</a><a href="${base}/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0">Terms &amp; conditions</a><a href="${base}/privacy-notice">Fraud protection</a><a href="${base}/plus">Walmart+ member rewards</a></nav></section>
-  <section class="wm-about"><h2>About Shop Walmart Gift Cards: Physical &amp; eGift Options - Walmart.com</h2><p>Walmart gift cards and eGift cards can be used on Walmart.com, in the Walmart app and in Walmart and Sam's Club stores. Third-party brand gift cards for restaurants, travel, gaming and entertainment are also sold. Gift cards are currently unavailable to buy online.</p></section></div>`
+  <section class="wm-about"><h2>About Shop Walmart Gift Cards: Physical &amp; eGift Options - Walmart.com</h2><p>Walmart gift cards and eGift cards can be used on Walmart.com, in the Walmart app and in Walmart and Sam's Club stores. Third-party brand gift cards for restaurants, travel, gaming and entertainment are also sold.</p></section></div>`
 }
 export function balancePage(base, { values = {}, error = '', result = '' } = {}) {
   return `<section class="wm-simple wm-balance">${crumbs(base, [['Gift Cards', '/cp/gift-cards/96894'], ['Check balance']])}<h1>Check your gift card balance</h1>${error ? `<p class="wm-error-summary" role="alert">${esc(error)}</p>` : ''}${result ? `<p class="wm-card" role="status">${esc(result)}</p>` : ''}<form class="wm-card" method="post" action="${base}/account/giftcards/balance"><div class="wm-field"><label for="gc-number">Gift card number</label><input id="gc-number" name="number" inputmode="numeric" autocomplete="off" maxlength="19" value="${esc(values.number ?? '')}" required></div><div class="wm-field"><label for="gc-pin">PIN</label><input id="gc-pin" name="pin" inputmode="numeric" autocomplete="off" maxlength="8" required></div><button class="wm-pill" type="submit">Check balance</button></form><p class="wm-fine">Find the PIN by scratching off the coating on the back of a plastic card. eGift card numbers and PINs are in the email you received.</p></section>`
 }
 
 // ---- deals ----
-export function dealsPage(base) {
+export function dealsPage(base, tile) {
+  const deals = CATALOG.filter(p => p.shelf && p.wasPrice && p.stock !== 0)
+  const pick = (list, n = 6) => { const seen = new Set(); return list.filter(p => !seen.has(p.category) && seen.add(p.category)).slice(0, n) }
+  const row = (title, sub, path, items) => items.length && tile ? `<section class="wm-depth-shelf wm-home-row"><div class="wm-section-head"><div><h2>${title}</h2><h3>${sub}</h3></div><a href="${base}${path}">View all</a></div><div class="wm-grid wm-home-products">${items.map(p => tile(base, p, { from: 'home' })).join('')}</div></section>` : ''
+  const rows = row('Flash Deals', 'Up to 65% off', '/shop/deals/flash-deals', pick([...deals].sort((a, b) => discountOf(b) - discountOf(a))))
+    + row('Rollbacks on everyday essentials', 'Groceries, household &amp; personal care', '/shop/savings', pick(deals.filter(p => ['groceries', 'household', 'personal-care', 'baby', 'pets'].includes(p.department)).sort((a, b) => b.ratings - a.ratings)))
+    + row('Tech deals', 'TVs, headphones, laptops &amp; more', '/cp/electronics/3944', pick(deals.filter(p => p.department === 'electronics').sort((a, b) => b.ratings - a.ratings)))
+    + row('Home deals', 'Kitchen, furniture &amp; decor', '/cp/home/4044', pick(deals.filter(p => p.department === 'home').sort((a, b) => b.ratings - a.ratings)))
   const chips = [['Rollbacks & More', '/shop/savings'], ['Clearance', '/shop/deals/clearance'], ['Flash Deals', '/shop/deals/flash-deals'], ['Grocery', '/cp/food/976759'], ['Electronics', '/cp/electronics/3944'], ['Beauty', '/cp/beauty/1085666'], ['Home', '/cp/home/4044'], ['Fashion', '/cp/clothing/5438'], ['Patio & Garden', '/cp/patio-garden/5428'], ['Household Essentials', '/cp/household-essentials/1115193'], ['Toys', '/cp/toys/4171'], ['Sports & Outdoors', '/cp/sports-and-outdoors/4125'], ['Baby', '/cp/baby-products/5427'], ['Pets', '/cp/pet-supplies/5440'], ['Home Improvement', '/cp/home-improvement/1072864'], ['Health & Wellness', '/cp/health/976760'], ['Auto & Tires', '/cp/auto-tires/91083'], ['Video Games', '/shop/deals/video-games-and-media']]
   const tiles = [['Flash Deals', '/shop/deals/flash-deals', 'Up to 65% off'], ['Rollbacks & More', '/shop/savings', 'Lower prices on everyday favorites'], ['Clearance', '/shop/deals/clearance', 'Final markdowns'], ['Best Sellers', '/shop/best-sellers', 'What everyone is buying']]
   return `<div class="wm-deals">${crumbs(base, [['Deals']])}<section class="wm-deals-hero"><p class="wm-eyebrow">Shop Deals &amp; More</p><h1>Deals</h1><p>Rollbacks, clearance and Flash Deals across every department.</p></section><nav class="wm-chip-row wm-deal-chips" aria-label="Deal categories">${chips.map(([l, p]) => `<a class="wm-chip" href="${base}${p}">${esc(l)}</a>`).join('')}</nav>
   <section><div class="wm-section-head"><h2>Must-haves for less</h2></div><div class="wm-deal-tiles">${tiles.map(([l, p, s]) => `<a href="${base}${p}"><span class="wm-deal-flag">Deal</span><h3>${esc(l)}</h3><p>${esc(s)}</p><span class="wm-text-cta">Shop now</span></a>`).join('')}</div></section>
+  ${rows}
   <section class="wm-deals-split"><article><h2>Shopping, simplified</h2><p>Save items to a list, set your pickup or shipping preference and check Purchase History for order updates.</p><a href="${base}/lists">Lists</a> · <a href="${base}/orders">Purchase History</a></article><article><h2>Get inspired</h2><p>Browse departments for seasonal ideas and everyday low prices.</p><a href="${base}/all-departments">All Departments</a></article></section>
   <section class="wm-about"><h2>How to plan your Fall Deals shopping</h2><p>Make a list of what you need, compare prices across Rollbacks and Clearance, and check Flash Deals often because they are limited-time offers while supplies last.</p><h2>Choosing between online, in-store, and app-exclusive options</h2><p>Some deals are online only, some are in stores only, and some are available in the Walmart app. Each item page shows how you can get it. Rollback prices are shown on each item.</p></section></div>`
 }
 
 // ---- registry ----
-export function registryPage(base) {
+export function registryPage(base, name = '') {
   return `<div class="wm-registry">${crumbs(base, [['Registry']])}<section class="wm-reg-hero"><div><p class="wm-eyebrow">Walmart Registry</p><h1>Gift Registry | Walmart.com</h1><h2>Gifts for life’s big moments</h2><p>Ready, set, celebrate! Create a registry for a wedding, baby, birthday or any occasion.</p></div></section>
-  <section class="wm-gc-grid"><article><h2>Create your registry</h2><p>Sign in, choose an event type and add items you love.</p><a class="wm-pill" href="${base}/account/login?state=%2Fregistries">Create registry</a></article><article><h2>Manage your registry</h2><p>Update items, see what was purchased and share your registry.</p><a class="wm-pill wm-pill-white" href="${base}/my-registries">Manage registry</a></article><article><h2>Find a registry</h2><form action="${base}/registry" method="get"><label for="reg-name">Registrant name</label><input id="reg-name" name="name" autocomplete="name"><button class="wm-pill wm-pill-sm">Find</button></form></article></section>
+  <section class="wm-gc-grid"><article><h2>Create your registry</h2><p>Sign in, choose an event type and add items you love.</p><a class="wm-pill" href="${base}/account/login?state=%2Fregistries">Create registry</a></article><article><h2>Manage your registry</h2><p>Update items, see what was purchased and share your registry.</p><a class="wm-pill wm-pill-white" href="${base}/my-registries">Manage registry</a></article><article><h2>Find a registry</h2><form action="${base}/registry" method="get"><label for="reg-name">Registrant name</label><input id="reg-name" name="name" autocomplete="name" value="${esc(name)}"><button class="wm-pill wm-pill-sm">Find</button></form>${name ? `<p class="wm-error-text" role="status">We couldn&rsquo;t find a registry for &ldquo;${esc(name)}&rdquo;. Check the spelling, or try the registrant&rsquo;s full name.</p>` : ''}</article></section>
   <section><h2>Your registry benefits</h2><ul class="wm-benefits"><li>Universal registry: add items from other stores</li><li>Free shipping on eligible registry items</li><li>Easy returns on gifts</li><li>Completion discount on remaining items</li></ul></section>
   <section><h2>Spark Good when you shop</h2><p>Two ways to support favorite causes: add a charity to your registry, or round up purchases for a local nonprofit. <a href="${base}/cp/spark-good">Learn about Spark Good</a></p></section>
   <section class="wm-faq"><h2>Registry FAQs</h2><details><summary><h3>How do I know a gift has been purchased?</h3></summary><p>Purchased items are marked on your registry and listed in your registry activity.</p></details><details><summary><h3>I purchased the gift from another retailer, how do I change the item to purchased on the registry?</h3></summary><p>Open the item on the registry and mark it as purchased.</p></details><details><summary><h3>I am purchasing items in-store, how do I checkout so my gift is marked as purchased on the registry?</h3></summary><p>Print or show the registry item list at the register so the items are scanned against the registry.</p></details></section>
-  <p class="wm-fine">Registry search is temporarily unavailable. Use a private list to collect gift ideas.</p></div>`
+  </div>`
 }
 
 // ---- site map ----
@@ -264,8 +290,8 @@ export function installParity(router, { render, tile }) {
     const result = error ? '' : `Gift card ending in ${number.slice(-4)}: we can't show your balance right now. Please try again later.`
     render(req, res, { title: 'Check gift card balance - Walmart.com', status: error ? 400 : 200, body: balancePage(res.locals.base, { values: error ? { number: '' } : {}, error, result }) })
   })
-  router.get('/shop/deals', (req, res) => page(req, res, 'Shop Deals & More', dealsPage(res.locals.base)))
-  router.get('/registry', (req, res) => page(req, res, 'Gift Registry', registryPage(res.locals.base)))
+  router.get('/shop/deals', (req, res) => page(req, res, 'Shop Deals & More', dealsPage(res.locals.base, tile)))
+  router.get('/registry', (req, res) => page(req, res, 'Gift Registry', registryPage(res.locals.base, typeof req.query.name === 'string' ? req.query.name.trim().slice(0, 80) : '')))
   router.get('/my-registries', (req, res) => res.redirect(`${res.locals.base}/registries`))
   router.get('/help/article/:slug/:id', (req, res, next) => { const key = `${req.params.slug}/${req.params.id}`; if (!Object.hasOwn(HELP_ARTICLES, key)) return next(); page(req, res, HELP_ARTICLES[key][0], helpArticlePage(res.locals.base, key)) })
   for (const path of Object.keys(INFO)) router.get(path, (req, res) => page(req, res, INFO[path][0], infoPage(res.locals.base, path)))

@@ -184,9 +184,13 @@ function splitTitle(p) {
       return { main: m[0].includes(',') || m[0].length < 4 ? m[0] : Number(m[0]).toLocaleString('en-US'), sub: after || before, kicker: after ? before : '' }
     }
   }
-  const m = /^(.*?)(?::\s+|\s+[–-]\s+)(.+)$/.exec(p.title)
+  // Box art never carries the store's platform suffix; other bracketed qualifiers become the subtitle.
+  const t = p.title.replace(/\s*\((?:Xbox[^)]*|PC|Windows[^)]*|Xbox One[^)]*)\)\s*$/i, '')
+  const paren = /^(.{3,}?)\s+\(([^)]+)\)$/.exec(t)
+  if (paren) return { main: paren[1], sub: paren[2] }
+  const m = /^(.*?)(?::\s+|\s+[–-]\s+)(.+)$/.exec(t)
   if (m && m[1].length >= 3) return { main: m[1], sub: m[2] }
-  return { main: p.title, sub: '' }
+  return { main: t, sub: '' }
 }
 const FONT = `'Bahnschrift','Segoe UI','Inter Display','Helvetica Neue',Arial,sans-serif`
 function titleBlock(p, pal, atTop, bright) {
