@@ -20,8 +20,10 @@ export const colorOf = text => {
   return COLORS.find(c => new RegExp(`\\b${c}\\b`).test(t)) || null
 }
 
+// A product listed under several categories (as on the real site) is written once per
+// category; later rows add the category to the first row instead of a second product.
 function parse() {
-  const rows = []
+  const rows = [], seen = new Map()
   let cat = null, shape = 'object'
   for (const raw of SHELF_SOURCE.split('\n')) {
     const line = raw.trim()
@@ -29,7 +31,11 @@ function parse() {
     if (line.startsWith('# ')) { cat = line.slice(2).trim(); continue }
     if (line.startsWith('@ ')) { shape = line.slice(2).trim(); continue }
     const [name, type, variant, price, rating, reviews, deal = '', art = ''] = line.split('|')
-    rows.push({ cat, shape, name, type, variant, price: Number(price), rating: Number(rating), reviews: Number(reviews), deal, art })
+    const key = `${name}|${type}|${variant}`
+    if (seen.has(key)) { const first = seen.get(key); if (first.cat !== cat && !first.also.includes(cat)) first.also.push(cat); continue }
+    const row = { cat, also: [], shape, name, type, variant, price: Number(price), rating: Number(rating), reviews: Number(reviews), deal, art }
+    seen.set(key, row)
+    rows.push(row)
   }
   return rows
 }
@@ -39,7 +45,7 @@ const deptsFor = slug => departments.filter(d => d.slug === slug || d.subs.some(
 
 function build(r, index) {
   const category = categoryIndex.get(r.cat)
-  if (!category) throw new Error(`Unknown IKEA shelf category ${r.cat}`)
+  for (const c of [r.cat, ...r.also]) if (!categoryIndex.get(c)) throw new Error(`Unknown IKEA shelf category ${c}`)
   const seed = `ikea-shelf:${r.name}:${r.type}:${r.variant}`
   const id = r.art ? r.art.replace(/\D/g, '') : digits(seed, 8).replace(/^0/, '3')
   const artNo = `${id.slice(0, 3)}.${id.slice(3, 6)}.${id.slice(6)}`
@@ -55,7 +61,7 @@ function build(r, index) {
     name: r.name, type: r.type, variant: r.variant, title: `${r.name} ${r.type}, ${r.variant}`,
     price: r.price, prevPrice, familyPrice, isNew: 'N' in deals,
     rating: r.rating, reviews: r.reviews, shape: r.shape, color,
-    cat: category.slug, catTitle: category.title, dept: category.parent?.slug || category.slug, depts: deptsFor(category.slug),
+    cat: category.slug, cats: [category.slug, ...r.also], catTitle: category.title, dept: category.parent?.slug || category.slug, depts: [...new Set([category.slug, ...r.also].flatMap(deptsFor))],
     order: index, popularity: Math.round(r.reviews * (0.7 + (h % 60) / 100)), newness: ('N' in deals ? 1000 : 0) + h % 997,
     path: `/us/en/p/${slugify([r.name, r.type, urlVariant].join(' '))}-${id}/`,
   })
@@ -67,7 +73,7 @@ if (byId.size !== shelf.length) throw new Error('Duplicate IKEA shelf article nu
 export const shelfById = id => byId.get(String(id))
 export const shelfBySku = sku => byId.get(String(sku))
 export const isShelfSku = sku => typeof sku === 'string' && byId.has(sku)
-export const inCategory = slug => shelf.filter(p => p.cat === slug || p.depts.includes(slug))
+export const inCategory = slug => shelf.filter(p => p.cats.includes(slug) || p.depts.includes(slug))
 export const deals = () => shelf.filter(p => p.prevPrice || p.familyPrice)
 export const newArrivals = () => shelf.filter(p => p.isNew)
 
@@ -132,8 +138,8 @@ export function sortShelf(items, sort, keepOrder = false) {
 // Lighting items the shared lamp drawing does not fit (bulbs, remotes, string lights,
 // pendants and star shades) are drawn here: view 0 is the whole product, view 1 a close-up.
 const LIGHT_FORMS = [
-  ['remote', /\bremote control\b/i], ['string', /\bstring light\b/i], ['bulb', /\bLED bulb\b/i],
-  ['star', /\blamp shade\b/i, /\bstar\b/i], ['pendant', /\bpendant lamp\b/i], ['floor', /^floor lamp/i],
+  ['remote', /\bremote control\b/i], ['string', /\bstring light\b|\blighting chain\b/i], ['bulb', /\bLED bulb\b/i],
+  ['star', /\blamp shade\b|\bdecorative light\b/i, /\bstar\b/i], ['pendant', /\bpendant lamp\b/i], ['floor', /^floor lamp/i],
 ]
 const lightForm = p => p.shape === 'lamp' || /lamp shade/i.test(p.type)
   ? LIGHT_FORMS.find(([, type, variant]) => type.test(p.type) && (!variant || variant.test(p.variant)))?.[0] : null
@@ -231,6 +237,76 @@ function caseArt(p, form, view) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="600" viewBox="0 0 640 600" role="img" aria-label="${label}" data-product-form="shelf" data-view="${view}"><title>${label}</title><rect width="640" height="600" fill="#f5f4f0"/><ellipse cx="320" cy="484" rx="${Math.min(260, W / 2 + 60)}" ry="16" fill="#b9b7b0" opacity="0.25"/><g${zoom}>${body}</g></svg>`
 }
 
+// Small parts and fittings the shared renderer has no drawing for (it would draw a
+// sofa leg as a table, a faucet as an oven, a table runner as a table): simple line
+// drawings in the same style. View 0 is the whole item, view 1 a close-up.
+const PART_FORMS = [
+  ['legs', /^legs?$/i], ['strip', /lighting strip|light strip|countertop light$|cabinet light/i], ['fan', /ceiling fan/i],
+  ['shower', /^shower (set|head)/i], ['faucet', /faucet/i], ['plant', /potted plant|^artificial (potted )?plant/i], ['pot', /^plant pot\b/i], ['plantstand', /^plant stand/i], ['can', /^watering can/i], ['mister', /mister$|^spray bottle/i],
+  ['runner', /^(table runner|tablecloth|tablecloth, outdoor|napkin|dish towel|muslin cloth|fabric by the yard)$/i],
+  ['bench', /^bench$/i], ['panel', /sound absorbing panel/i],
+]
+const partForm = p => PART_FORMS.find(([, re]) => re.test(p.type))?.[0] || null
+function partArt(p, form, view) {
+  if (view > 1) return null
+  const ink = '#26313c', metal = '#a9b3b9', chrome = '#c3cbd0'
+  const fill = COLOR_HEX[p.color] && !['clear', 'multicolor', 'stainless steel'].includes(p.color) ? COLOR_HEX[p.color] : p.color === 'multicolor' ? '#8f7fae' : '#d9c29b'
+  const line = (d, w, c) => `<path d="${d}" fill="none" stroke="${ink}" stroke-width="${w + 7}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`
+  let body
+  if (form === 'legs') {
+    const h = /7 7\/8/.test(p.variant) ? 230 : 150, n = /\bpack\b/.test(p.variant) ? 4 : 2, top = 478 - h
+    body = Array.from({ length: n }, (_, i) => { const x = 320 + (i - (n - 1) / 2) * 110; return `<path d="M${x - 24} ${top}h48l-10 ${h}h-28Z" fill="${fill}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/><rect x="${x - 28}" y="${top - 14}" width="56" height="14" rx="3" fill="${metal}" stroke="${ink}" stroke-width="2.5"/>` }).join('')
+  } else if (form === 'strip') {
+    body = `<path d="M110 294L60 430H580L530 294Z" fill="#fff6d8" opacity=".6"/><rect x="90" y="250" width="460" height="34" rx="6" fill="${chrome}" stroke="${ink}" stroke-width="3"/><rect x="104" y="284" width="432" height="10" fill="#fff6d8" stroke="${ink}" stroke-opacity=".4" stroke-width="2"/><path d="M550 267C600 267 600 340 590 380" fill="none" stroke="${ink}" stroke-width="3"/><rect x="572" y="380" width="36" height="22" rx="4" fill="#f6f3ea" stroke="${ink}" stroke-width="3"/>`
+  } else if (form === 'fan') {
+    const blade = p.color === 'white' ? '#ecebe6' : fill
+    body = `<rect x="296" y="60" width="48" height="18" rx="4" fill="#f6f3ea" stroke="${ink}" stroke-width="3"/><path d="M320 78V190" stroke="${ink}" stroke-width="6"/>${[[-1, 0], [1, 0]].map(([d]) => `<path d="M${320 + d * 40} 205L${320 + d * 270} ${190}Q${320 + d * 285} 212 ${320 + d * 270} 232L${320 + d * 40} 230Z" fill="${blade}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`).join('')}<path d="M300 222L250 262Q262 276 282 272L330 230Z" fill="${blade}" stroke="${ink}" stroke-width="3"/><rect x="270" y="186" width="100" height="52" rx="18" fill="#f6f3ea" stroke="${ink}" stroke-width="3"/><path d="M272 238h96c0 44-20 70-48 70s-48-26-48-70Z" fill="#fbfaf5" stroke="${ink}" stroke-width="3"/>`
+  } else if (form === 'faucet') {
+    body = /bath faucet/i.test(p.type)
+      ? `<rect x="230" y="446" width="180" height="30" rx="6" fill="${chrome}" stroke="${ink}" stroke-width="3"/><path d="M296 446V300h48v146Z" fill="${chrome}" stroke="${ink}" stroke-width="3"/>${line('M320 312H430V350', 22, chrome)}<path d="M302 300V250h36v50" fill="${metal}" stroke="${ink}" stroke-width="3"/><rect x="290" y="232" width="60" height="22" rx="8" fill="${chrome}" stroke="${ink}" stroke-width="3"/>`
+      : `<rect x="230" y="452" width="180" height="26" rx="6" fill="${chrome}" stroke="${ink}" stroke-width="3"/>${line('M296 452V200C296 110 440 110 440 200V250', 26, chrome)}${line('M296 360L224 326', 14, chrome)}`
+  } else if (form === 'shower') {
+    const holes = (cx, cy, r) => Array.from({ length: 8 }, (_, i) => `<circle cx="${(cx + r * Math.cos(i * Math.PI / 4)).toFixed(1)}" cy="${(cy + r * Math.sin(i * Math.PI / 4)).toFixed(1)}" r="5" fill="${ink}" opacity=".45"/>`).join('')
+    body = /head/i.test(p.type)
+      ? `${line('M300 470C300 380 240 320 270 220', 10, metal)}${line('M250 260L330 150', 22, chrome)}<circle cx="380" cy="120" r="78" fill="${chrome}" stroke="${ink}" stroke-width="3"/>${holes(380, 120, 40)}`
+      : `${line('M260 470V120H400', 16, chrome)}<ellipse cx="400" cy="130" rx="86" ry="22" fill="${chrome}" stroke="${ink}" stroke-width="3"/><rect x="190" y="396" width="140" height="44" rx="20" fill="${chrome}" stroke="${ink}" stroke-width="3"/><circle cx="196" cy="418" r="18" fill="${metal}" stroke="${ink}" stroke-width="3"/><circle cx="324" cy="418" r="18" fill="${metal}" stroke="${ink}" stroke-width="3"/>`
+  } else if (form === 'plant' || form === 'pot') {
+    const potFill = /\bred\b/i.test(p.variant) && !/poinsettia/i.test(p.variant) ? COLOR_HEX.red : /dark gray|black/i.test(p.variant) ? '#4d4f52' : /light gray/i.test(p.variant) ? '#c4c6c6' : /silver/i.test(p.variant) ? '#b8bec2' : /^\d/.test(p.variant) ? '#b5806a' : '#ecebe6'
+    const pot = form === 'pot'
+      ? `<path d="M210 250h220l-26 226h-168Z" fill="${potFill}" stroke="${ink}" stroke-width="3"/><rect x="198" y="226" width="244" height="32" rx="5" fill="${potFill}" stroke="${ink}" stroke-width="3"/><ellipse cx="320" cy="242" rx="104" ry="8" fill="${ink}" opacity=".18"/>`
+      : `<path d="M250 360h140l-16 116h-108Z" fill="${potFill}" stroke="${ink}" stroke-width="3"/><rect x="242" y="346" width="156" height="22" rx="4" fill="${potFill}" stroke="${ink}" stroke-width="3"/>`
+    let leaves
+    if (form === 'pot') leaves = ''
+    else if (/poinsettia/i.test(p.variant)) leaves = `<path d="M280 346Q300 300 320 250M360 346Q340 300 320 250" stroke="#4f6b45" stroke-width="6" fill="none"/>${[0, 45, 90, 135, 180, 225, 270, 315].map(a => `<path d="M320 250Q352 200 320 140Q288 200 320 250Z" fill="#b5352d" stroke="${ink}" stroke-width="2.5" transform="rotate(${a} 320 250)"/>`).join('')}<circle cx="320" cy="250" r="12" fill="#e2c046" stroke="${ink}" stroke-width="2"/>`
+    else if (/spruce|christmas tree/i.test(p.variant)) { const big = /christmas tree/i.test(p.variant); leaves = [0, 1, 2, 3].map(i => `<path d="M320 ${big ? 50 + i * 62 : 130 + i * 46}L${big ? 222 - i * 22 : 256 - i * 14} ${big ? 166 + i * 62 : 212 + i * 46}H${big ? 418 + i * 22 : 384 + i * 14}Z" fill="#4f6b45" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`).join('') }
+    else if (/amaryllis/i.test(p.variant)) leaves = `${line('M320 346V160', 5, '#4f6b45')}${line('M300 346Q262 270 282 210', 7, '#5d7d55')}${line('M340 346Q378 270 358 218', 7, '#5d7d55')}${[-1, 1].map(d => `<path d="M320 160L${320 + d * 66} 112L${320 + d * 30} 176Z" fill="#b5352d" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>`).join('')}<circle cx="320" cy="160" r="15" fill="#b5352d" stroke="${ink}" stroke-width="2.5"/>`
+    else leaves = [0, 1, 2, 3, 4].map(i => `<ellipse cx="${250 + i * 35}" cy="${270 - (i % 2) * 40}" rx="34" ry="64" fill="#5d7d55" stroke="${ink}" stroke-width="2.5" transform="rotate(${-40 + i * 20} ${250 + i * 35} 340)"/>`).join('')
+    body = leaves + pot
+  } else if (form === 'runner') {
+    const w = /runner|fabric/i.test(p.type) ? 420 : 300, x = 320 - w / 2, tone = p.color === 'white' || !COLOR_HEX[p.color] ? '#f6f3ea' : fill
+    const dots = /red\/white|white\/red|flower|pattern/i.test(p.variant) ? Array.from({ length: 6 }, (_, i) => `<circle cx="${x + 40 + i * (w - 80) / 5}" cy="405" r="10" fill="${/red/i.test(p.variant) ? COLOR_HEX.red : '#8a9f7e'}" opacity=".85"/>`).join('') : ''
+    body = [2, 1, 0].map(i => `<path d="M${x + 12 - i * 6} ${330 - i * 34}h${w - 24 + i * 12}l12 30H${x}Z" fill="${tone}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`).join('') + `<rect x="${x}" y="360" width="${w}" height="90" fill="${tone}" stroke="${ink}" stroke-width="3"/><path d="M${x} 372h${w}" stroke="${ink}" stroke-opacity=".25" stroke-width="2"/>${dots}`
+  } else if (form === 'plantstand') {
+    const wood = /bamboo/i.test(p.variant) ? COLOR_HEX.bamboo : /black/i.test(p.variant) ? '#2b2b2b' : '#ecebe6', pots = /(\d) plant pots/.exec(p.type)?.[1]
+    if (pots) body = `${line('M230 478L300 120M410 478L340 120', 8, wood)}${[0, 1, 2].map(i => `<rect x="${225 + i * 22}" y="${190 + i * 100}" width="${190 - i * 44 + 88}" height="12" fill="${wood}" stroke="${ink}" stroke-width="2.5" transform="translate(${-i * 22} 0)"/><path d="M${280 - i * 10} ${190 + i * 100}h${50}l-6 -44h-38Z" fill="#ecebe6" stroke="${ink}" stroke-width="2.5"/>`).join('')}`
+    else body = `<rect x="220" y="300" width="200" height="16" rx="3" fill="${wood}" stroke="${ink}" stroke-width="3"/>${line('M240 316L222 478M400 316L418 478M262 316L276 478M378 316L364 478', 7, wood)}<path d="M262 300h116l-12-110h-92Z" fill="#ecebe6" stroke="${ink}" stroke-width="3"/>${[0, 1, 2].map(i => `<ellipse cx="${290 + i * 30}" cy="${150 - (i % 2) * 20}" rx="22" ry="44" fill="#5d7d55" stroke="${ink}" stroke-width="2.5" transform="rotate(${-25 + i * 25} ${290 + i * 30} 190)"/>`).join('')}`
+  } else if (form === 'can') {
+    const c = /green/i.test(p.variant) ? '#6f8b6b' : /galvanized/i.test(p.variant) ? chrome : '#ecebe6'
+    body = `<path d="M210 250h190l-14 226H224Z" fill="${c}" stroke="${ink}" stroke-width="3"/>${line('M400 300L520 190', 14, c)}<path d="M506 178l34-14 10 26-30 10Z" fill="${c}" stroke="${ink}" stroke-width="3"/>${line('M240 250C240 160 370 160 370 250', 8, c)}`
+  } else if (form === 'mister') {
+    const c = /gray-blue/i.test(p.variant) ? '#8ca0b3' : /transparent|clear/i.test(p.variant) ? '#dfeaee' : '#ecebe6'
+    body = `<path d="M262 250h116v210c0 14-10 20-22 20h-72c-12 0-22-6-22-20Z" fill="${c}" stroke="${ink}" stroke-width="3"/><rect x="290" y="210" width="60" height="42" fill="${chrome}" stroke="${ink}" stroke-width="3"/><path d="M286 140h96l-14 34h-26v36h-44Z" fill="#f6f3ea" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>${line('M300 176l-18 50', 8, '#f6f3ea')}`
+  } else if (form === 'bench') {
+    const wood = COLOR_HEX[p.color] || '#d9c29b'
+    body = `<rect x="130" y="300" width="380" height="30" rx="4" fill="${wood}" stroke="${ink}" stroke-width="3"/>${[150, 466].map(x => `<rect x="${x}" y="330" width="24" height="148" fill="${wood}" stroke="${ink}" stroke-width="3"/>`).join('')}<path d="M174 420h292" stroke="${ink}" stroke-width="3"/>`
+  } else {
+    body = [0, 1, 2, 3].map(i => { const x = 160 + (i % 2) * 170, y = 110 + Math.floor(i / 2) * 170; return `<rect x="${x}" y="${y}" width="150" height="150" rx="10" fill="${fill}" stroke="${ink}" stroke-width="3"/>${Array.from({ length: 5 }, (_, j) => `<path d="M${x + 12} ${y + 22 + j * 25}h126" stroke="${ink}" stroke-opacity=".12" stroke-width="2"/>`).join('')}` }).join('')
+  }
+  const label = svgEsc(`${p.name} ${p.type}`)
+  const zoom = view === 1 ? ' transform="translate(320 300) scale(1.5) translate(-320 -300)"' : ''
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="600" viewBox="0 0 640 600" role="img" aria-label="${label}" data-product-form="${form}" data-view="${view}"><title>${label}</title><rect width="640" height="600" fill="#f5f4f0"/><ellipse cx="320" cy="490" rx="220" ry="18" fill="#b9b7b0" opacity="0.22"/><g${zoom}>${body}</g></svg>`
+}
+
 // Product artwork via the shared renderer, in IKEA's muted palette.
 export const SHELF_VIEWS = 3
 const cache = new Map()
@@ -241,6 +317,8 @@ export function shelfArt(p, view = 0) {
   if (form) { const svg = lightArt(p, form, view); cache.set(key, svg); return svg }
   const cases = caseForm(p)
   if (cases) { const svg = caseArt(p, cases, view); cache.set(key, svg); return svg }
+  const part = partForm(p)
+  if (part) { const svg = partArt(p, part, view); cache.set(key, svg); return svg }
   const base = COLOR_HEX[p.color] || '#c9b89a'
   const accent = p.color === 'white' ? '#cdbfa5' : p.color === 'black' ? '#5a5650' : base
   // "TV unit" is furniture: keep the renderer from drawing a television.

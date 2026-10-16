@@ -50,3 +50,4 @@
 .ik-no-results,.ik-no-results input,.ik-no-results button,.ik-no-results select{font-family:'Noto IKEA',Arial,Helvetica,sans-serif}.ik-no-results .ik-search-empty h1,.ik-no-results .ik-search-empty h2,.ik-no-results .ik-search-empty h3{letter-spacing:normal}
 .ik-search-categories{position:relative}.ik-search-categories .ik-category-rail>a{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;border-radius:0;white-space:normal;text-align:left;font-weight:400}.ik-search-categories .ik-category-rail h3{font-weight:700}
 @media(min-width:1101px){.ik-no-results .ik-header{grid-template-columns:98px auto minmax(180px,1fr) auto}}
+@media(max-width:760px){.ikea-depth .ik-header>.ik-nav>a{flex:1 1 100%;font-size:20px;font-weight:700;border-bottom:1px solid #ddd;padding:12px 0}}

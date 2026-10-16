@@ -154,13 +154,26 @@ function customerServicePage(base) {
   <section class="ik-sec"><h2>Find an IKEA near you</h2><a class="ik-btn ik-btn-secondary" href="${base}${P}/stores/">Find your IKEA</a></section>`
 }
 
-const storeList = [['Huntsville', 'AL'], ['Phoenix', 'AZ'], ['Tempe', 'AZ'], ['Scottsdale', 'AZ'], ['Colma', 'CA'], ['East Palo Alto', 'CA'], ['Emeryville', 'CA'], ['Manteca', 'CA'], ['Pleasanton', 'CA'], ['San Francisco', 'CA'], ['West Sacramento', 'CA'], ['Arcadia', 'CA'], ['Burbank', 'CA'], ['Carson', 'CA'], ['Covina', 'CA'], ['Costa Mesa', 'CA'], ['Culver City', 'CA'], ['Ontario', 'CA'], ['Thousand Oaks', 'CA'], ['Escondido', 'CA'], ['San Diego', 'CA'], ['South Bay', 'CA'], ['Centennial', 'CO'], ['Colorado Springs', 'CO'], ['New Haven', 'CT'], ['in Best Buy, Boynton Beach', 'FL'], ['Miami', 'FL'], ['Sunrise', 'FL'], ['Orlando', 'FL'], ['Tampa', 'FL']]
+// Store list: IKEA US stores and the IKEA in Best Buy planning studio, by state.
+// [city, state, closing hour on weekdays (24h, Sunday closes an hour earlier), opening hour]
+const storeList = [['Huntsville', 'AL', 21], ['Phoenix', 'AZ', 21], ['Tempe', 'AZ', 21], ['Scottsdale', 'AZ', 20], ['Arcadia', 'CA', 21], ['Burbank', 'CA', 21], ['Carson', 'CA', 21], ['Colma', 'CA', 20], ['Costa Mesa', 'CA', 21], ['Covina', 'CA', 21], ['Culver City', 'CA', 20], ['East Palo Alto', 'CA', 21], ['Emeryville', 'CA', 21], ['Escondido', 'CA', 20], ['Manteca', 'CA', 20], ['Ontario', 'CA', 21], ['Pleasanton', 'CA', 20], ['San Diego', 'CA', 21], ['San Francisco', 'CA', 20, 11], ['South Bay', 'CA', 20], ['Thousand Oaks', 'CA', 20], ['West Sacramento', 'CA', 21],
+  ['Centennial', 'CO', 21], ['Colorado Springs', 'CO', 20], ['New Haven', 'CT', 21], ['in Best Buy, Boynton Beach', 'FL', 20], ['Jacksonville', 'FL', 21], ['Miami', 'FL', 21], ['Orlando', 'FL', 21], ['Sunrise', 'FL', 21], ['Tampa', 'FL', 21], ['Atlanta', 'GA', 21], ['Bolingbrook', 'IL', 21], ['Schaumburg', 'IL', 21], ['Fishers', 'IN', 21], ['Merriam', 'KS', 20],
+  ['Baltimore', 'MD', 21], ['College Park', 'MD', 21], ['Stoughton', 'MA', 21], ['Canton', 'MI', 21], ['Twin Cities', 'MN', 21], ['St. Louis', 'MO', 21], ['Las Vegas', 'NV', 21], ['Elizabeth', 'NJ', 21], ['Paramus', 'NJ', 21], ['Brooklyn', 'NY', 21], ['Long Island', 'NY', 21], ['Charlotte', 'NC', 21], ['Columbus', 'OH', 21], ['West Chester', 'OH', 21],
+  ['Portland', 'OR', 21], ['Conshohocken', 'PA', 21], ['Philadelphia', 'PA', 21], ['Pittsburgh', 'PA', 21], ['Memphis', 'TN', 20], ['Frisco', 'TX', 21], ['Grand Prairie', 'TX', 21], ['Houston', 'TX', 21], ['Live Oak', 'TX', 21], ['Round Rock', 'TX', 21], ['Draper', 'UT', 21], ['Norfolk', 'VA', 21], ['Woodbridge', 'VA', 21], ['Seattle', 'WA', 21], ['Oak Creek', 'WI', 21]]
+const stateNames = { AL: 'Alabama', AZ: 'Arizona', CA: 'California', CO: 'Colorado', CT: 'Connecticut', FL: 'Florida', GA: 'Georgia', IL: 'Illinois', IN: 'Indiana', KS: 'Kansas', MA: 'Massachusetts', MD: 'Maryland', MI: 'Michigan', MN: 'Minnesota', MO: 'Missouri', NC: 'North Carolina', NJ: 'New Jersey', NV: 'Nevada', NY: 'New York', OH: 'Ohio', OR: 'Oregon', PA: 'Pennsylvania', TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VA: 'Virginia', WA: 'Washington', WI: 'Wisconsin' }
+const clock = h => `${h > 12 ? h - 12 : h} ${h >= 12 ? 'p.m.' : 'a.m.'}`
+function storeHours([, , close, open = 10]) {
+  const day = new Date().getDay()
+  const shut = day === 0 ? close - 1 : close
+  return `Open today ${clock(open)}–${clock(shut)}`
+}
 function storesPage(base, req) {
   const st = typeof req.query.state === 'string' ? req.query.state.trim().toUpperCase() : ''
   const list = st ? storeList.filter(s => s[1] === st) : storeList
-  const states = [...new Set(storeList.map(s => s[1]))]
-  return `${head(base, [], 'Find an IKEA location near you')}<form class="ik-form inline" action="${base}${P}/stores/" method="get"><label for="store-state">Filter by state</label><select id="store-state" name="state"><option value="">All states</option>${states.map(s => `<option${s === st ? ' selected' : ''}>${s}</option>`).join('')}</select><button class="ik-btn">Search</button></form>
-  <section class="ik-sec"><h2>IKEA locations</h2>${list.length ? `<ul class="ik-stores">${list.map(([c, s]) => `<li><h3>IKEA ${esc(c)}, ${s}</h3><p>Open today 10 a.m.–9 p.m.</p></li>`).join('')}</ul>` : `<p>There are no IKEA stores in ${esc(st)}.</p>`}</section>
+  const states = [...new Set(storeList.map(s => s[1]))].sort((a, b) => stateNames[a].localeCompare(stateNames[b]))
+  const groups = states.filter(s => list.some(x => x[1] === s))
+  return `${head(base, [], 'Find an IKEA location near you')}<form class="ik-form inline" action="${base}${P}/stores/" method="get"><label for="store-state">Filter by state</label><select id="store-state" name="state"><option value="">All states</option>${states.map(s => `<option value="${s}"${s === st ? ' selected' : ''}>${stateNames[s]}</option>`).join('')}</select><button class="ik-btn">Search</button></form>
+  <section class="ik-sec"><h2>IKEA locations</h2>${list.length ? groups.map(g => `<h3 class="ik-state">${stateNames[g]}</h3><ul class="ik-stores">${list.filter(s => s[1] === g).map(s => `<li><h4>IKEA ${esc(s[0])}</h4><p>${storeHours(s)}</p></li>`).join('')}</ul>`).join('') : `<p>There are no IKEA stores in ${esc(st)}.</p>`}</section>
   <section class="ik-sec"><h2>IKEA in Best Buy: A new way to plan and order</h2><p>Plan and order IKEA kitchens and more with an IKEA co-worker at selected Best Buy stores.</p></section>
   <section class="ik-sec"><h2>Pick-up locations (furniture/large orders)</h2><p>Collect your order at a pick-up location near you.</p><a class="ik-link" href="${base}${P}/customer-service/services/pickup-locations-pub71efcf80/">Pick-up locations</a></section>`
 }
