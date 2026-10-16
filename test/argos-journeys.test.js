@@ -210,7 +210,7 @@ test('argos journeys: contextual store choice and account preference prefill che
     let r=await c.get('/argos/stores?q=Manchester&sku=9901005')
     assert.match(main(r.text),/manchester-city-centre/);assert.doesNotMatch(main(r.text),/london-central/)
     assert.match(main((await c.get('/argos/stores?q=SW1A%201AA')).text),/london-central/)
-    assert.match(main((await c.get('/argos/stores?q=no-such-town')).text),/No collection points/)
+    assert.match(main((await c.get('/argos/stores?q=no-such-town')).text),/No stores match/)
     assert.match(main((await c.get('/argos/stores?sku=9901004')).text),/home delivery only/)
     await signIn(c)
     await c.post('/argos/account/preferences',{shopping_method:'pickup'})

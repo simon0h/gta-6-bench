@@ -34,7 +34,7 @@ export function referenceHome(base, cardsFn) {
   return `<h1 class="visually-hidden">Argos — order online for fast home delivery or Click &amp; Collect</h1>${row(base, cardsFn, rows[0])}${promo}${rows.slice(1).map(r => row(base, cardsFn, r)).join('')}`
 }
 
-const reviewBars = p => { const five = Math.round((p.rating - 3) / 2 * 70 + 10); const dist = [five, Math.max(4, 85 - five - 8), 6, 3, 100 - five - Math.max(4, 85 - five - 8) - 9].map(n => Math.max(1, n)); return `<ul class="ar-review-bars">${[5, 4, 3, 2, 1].map((s, i) => `<li><span>${s} stars</span><span class="ar-bar"><i style="width:${dist[i]}%"></i></span><span>${Math.round(p.reviews * dist[i] / 100)}</span></li>`).join('')}</ul>` }
+const reviewBars = p => { const five = Math.round((p.rating - 3) / 2 * 70 + 10); const dist = [five, Math.max(4, 85 - five - 8), 6, 3, 100 - five - Math.max(4, 85 - five - 8) - 9].map(n => Math.max(1, n)); return `<ul class="ar-review-bars">${[5, 4, 3, 2, 1].map((s, i) => `<li><span>${s} ${s === 1 ? 'star' : 'stars'}</span><span class="ar-bar"><i style="width:${dist[i]}%"></i></span><span>${Math.round(p.reviews * dist[i] / 100)}</span></li>`).join('')}</ul>` }
 
 export function shelfProduct(base, p, { values = {}, checked = false, messages = [] } = {}, cardsFn) {
   const cat = SHELF_CATEGORIES[p.shelfCat], dept = MENU.find(m => m.id === p.menu)

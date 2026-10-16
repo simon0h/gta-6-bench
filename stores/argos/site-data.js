@@ -60,9 +60,9 @@ export const MENU = [
     { title: 'Laundry', links: [['Washing Machines', '/browse/appliances/laundry/washing-machines/c:29612/']] },
     { title: 'Cooking', links: [['Freestanding Cookers', '/browse/appliances/cookers-ovens-and-hobs/freestanding-cookers/c:29623/']] },
     { title: 'Dishwashers', links: [['Dishwashers', '/browse/appliances/dishwashers/c:29615/']] },
-    { title: 'Kettles, Microwaves & Toasters', links: [['Kettles', '/browse/appliances/kettles/c:29560/']] },
+    { title: 'Kettles, Microwaves & Toasters', links: [['Kettles', '/browse/appliances/kettles/c:29560/'], ['Toasters', '/browse/appliances/toasters/c:29562/'], ['Microwaves', '/browse/appliances/microwaves/c:29561/']] },
     { title: 'Heating & Cooling', links: [['Heaters', '/browse/appliances/fans-heaters-and-dehumidifiers/heaters-and-radiators/c:29444/']] },
-    { title: 'Small Cooking Appliances', links: [['Air Fryers & Fryers', '/browse/appliances/small-cooking-appliances/air-fryers-and-fryers/c:29575/']] }] },
+    { title: 'Small Cooking Appliances', links: [['Air Fryers & Fryers', '/browse/appliances/small-cooking-appliances/air-fryers-and-fryers/c:29575/'], ['Coffee Machines', '/browse/appliances/coffee-machines/c:29555/']] }] },
   { label: 'Sports & Leisure', path: '/browse/sports-and-leisure/c:30468/', id: 'sports-and-leisure', dept: 'sports-and-outdoors', groups: [
     { title: 'Weight Training', links: [['Dumbbells', '/browse/sports-and-leisure/weights/dumbbells/c:30630/']] },
     { title: 'Exercise Machines', links: [['Treadmills', '/browse/sports-and-leisure/exercise-machines/treadmills/c:30612/']] },
