@@ -231,6 +231,7 @@ export function refine(products, filters = {}) {
     if (filters.fulfillment === 'delivery') return false
     if (filters.offer === 'deals' && !p.deal) return false
     if (filters.offer === 'daily' && !p.daily) return false
+    if (filters.offer === 'bonus' && !(p.bonus ?? (p.deal && !p.daily))) return false
     if (filters.offer === 'gifts' && !p.gift) return false
     if (filters.offer === 'outlet' && !p.variants?.some(v=>v.condition==='Open-box')) return false
     return true

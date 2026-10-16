@@ -23,6 +23,7 @@ export const EXTRA_DEPARTMENTS = [
   ['toys-games', 'Toys, Games & Crafts', 'LEGO sets, trading cards and collectibles.'],
   ['electric-transportation', 'Electric Transportation', 'Electric scooters and e-bikes for getting around.'],
   ['movies-music', 'Movies & Music', 'Vinyl records, 4K Ultra HD movies and more.'],
+  ['outdoor-living', 'Outdoor Living', 'Grills, pizza ovens, patio furniture and outdoor heat and light.'],
 ].map(([id, name, description]) => ({ id, name, description }))
 
 function build() {
@@ -50,7 +51,7 @@ function build() {
       const p = {
         id, sku, kind: 'other', shelf: true,
         slug: slugify(title), title, pageTitle: title.replace(' - ', ' '),
-        brand, model: isGame ? '' : model, price, listPrice: deal ? was : price, deal, daily: !!extra.daily, gift: !!extra.gift,
+        brand, model: isGame ? '' : model, price, listPrice: deal ? was : price, deal, daily: !!extra.daily, bonus: deal && !extra.daily && h[24] % 12 === 0, gift: !!extra.gift,
         department: meta.dept, tree: meta.tree, alsoTree: meta.alsoTree || null, category: meta.cat, nodes,
         aliases: PLATFORM_WORDS[extra.platform] || '',
         artHint: extra.art ?? meta.art ?? '', artType: extra.type || meta.type || 'other',

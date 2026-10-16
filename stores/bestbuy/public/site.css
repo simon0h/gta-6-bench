@@ -349,3 +349,28 @@ a.bbx-chip:hover{border-color:var(--bb-blue);color:var(--bb-blue);text-decoratio
   .bbs-dotd-card .bbs-card{grid-template-columns:110px minmax(0,1fr);column-gap:12px}
   .bb-rating-summary{grid-template-columns:1fr}
 }
+/* Gift card faces on the Gift Cards page */
+.bbx-gc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.bbx-gc-item{background:#fff;border:1px solid var(--bb-line,#e0e6ef);border-radius:8px;padding:14px}
+.bbx-gc-item h3{font-size:14px;font-weight:600;margin:12px 0 4px;line-height:1.35}
+.bbx-gc-item a{font-size:13px;font-weight:600}
+.bbx-gc-price{font-size:18px;font-weight:700;margin:0 0 6px}
+.bbx-gc{position:relative;aspect-ratio:1.586;border-radius:10px;overflow:hidden;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.18);background:#0046be}
+.bbx-gc-yellow{background:#ffe000;color:#001e73}.bbx-gc-navy{background:#001e73}.bbx-gc-teal{background:#00807a}.bbx-gc-red{background:#bb0628}.bbx-gc-black{background:#1d252c}
+.bbx-gc-logo{position:absolute;left:12px;top:12px;display:inline-block;background:#0046be;color:#fff;font:900 15px/0.95 Arial,sans-serif;letter-spacing:-.5px;padding:6px 18px 6px 7px;border-radius:2px}
+.bbx-gc-logo i{position:absolute;right:5px;bottom:6px;width:10px;height:7px;background:#ffe000;clip-path:polygon(30% 0,100% 0,100% 100%,30% 100%,0 50%)}
+.bbx-gc-blue .bbx-gc-logo{background:#ffe000;color:#0046be}.bbx-gc-blue .bbx-gc-logo i{background:#0046be}
+.bbx-gc-line{position:absolute;left:14px;bottom:12px;right:12px;font:700 18px/1.15 inherit}
+/* Page not found */
+.bbx-404{max-width:1100px;margin:0 auto;padding:24px 0 8px}
+.bbx-404-head{display:flex;gap:20px;align-items:center;margin-bottom:20px}
+.bbx-404-head h1{font-size:28px;margin:0 0 6px;letter-spacing:-.3px}.bbx-404-head p{margin:0;color:var(--bb-muted);max-width:640px}
+.bbx-404-ico{flex:none;width:72px;height:72px;padding:14px;border-radius:50%;background:var(--bb-soft);color:var(--bb-blue)}
+.bbx-404-search{display:flex;gap:8px;max-width:640px;margin:0 0 28px}
+.bbx-404-search input{flex:1;min-width:0;height:44px;border:1px solid #c5cbd5;border-radius:4px;padding:0 12px;font:inherit}
+@media(max-width:700px){.bbx-404-head{align-items:flex-start}.bbx-404-ico{width:52px;height:52px;padding:10px}.bbx-404-head h1{font-size:22px}}
+/* Account empty states */
+.bb-journey-lead{margin:-4px 0 16px;color:var(--bb-muted)}
+.bb-journey-empty{border:1px solid var(--bb-line);border-radius:8px;background:#fff;padding:28px 24px;max-width:720px}
+.bb-journey-empty h2{font-size:20px;margin:0 0 8px}.bb-journey-empty p{margin:0 0 16px;color:var(--bb-muted)}
+@media(max-width:700px){.bbx-gc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.bbx-gc-item{padding:10px}.bbx-gc-logo{font-size:12px;padding:4px 14px 4px 5px}.bbx-gc-line{font-size:14px}}
