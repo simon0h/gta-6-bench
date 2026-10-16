@@ -76,8 +76,7 @@
 
     function render() {
       if (!container?.isConnected) return
-      const running = data?.agents.filter(entry => entry.current).length || 0
-      const heading = `<div class="panel-head"><h2>Live tracker</h2><span class="panel-sub">${data ? `${running} shopping · ` : ''}updates every ${running ? FAST / 1000 : SLOW / 1000} seconds while this page is open</span></div>`
+      const heading = '<div class="panel-head"><h2>Live tracker</h2></div>'
       let content
       if (error && !data) content = `<p class="live-error" role="alert">${escape(error)}</p>`
       else if (!data) content = '<p class="live-quiet" role="status">Loading live positions…</p>'
