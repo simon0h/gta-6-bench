@@ -78,8 +78,9 @@ gta-6-bench > Settings > Variables and Secrets and add it as a Secret, or run
 `npx wrangler secret put ANTHROPIC_API_KEY`, or add an `ANTHROPIC_API_KEY=` line to
 `.dev.vars` before `npm run deploy -- --secrets-file .dev.vars`. Never commit it.
 Adding or changing it does not restart the container or sign anyone out. Without
-it, everything else works and the summary card says it is not set up. Summaries
-are kept in a `run_summaries` table in the Durable Object's SQLite database.
+it, everything else works and the summary card says it is not set up. The same key
+turns on the [run chat](DASHBOARD.md#chat-about-a-run). Summaries and chats are kept in
+`run_summaries` and `run_chats` tables in the Durable Object's SQLite database.
 
 ## Deploy from GitHub
 
