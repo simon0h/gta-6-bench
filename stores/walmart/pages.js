@@ -36,7 +36,8 @@ const SHOW_HIDE_JS = `<script>document.querySelectorAll('[data-toggle]').forEach
 // ---- layout ----
 export function layout({ base, title, body, t, user = null, variant = 'store', q = '', location = LOCATION }) {
   const header = variant === 'store' ? storeHeader({ base, t, user, q, location }) : variant === 'checkout' ? checkoutHeader({ base }) : identityHeader({ base })
-  const footer = variant === 'identity' ? identityFooter(base) : storeFooter(base)
+  // Checkout, like the sign-in pages, ends with the short legal footer instead of the full site footer.
+  const footer = variant === 'store' ? storeFooter(base) : identityFooter(base)
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
@@ -176,10 +177,27 @@ function errorSummary(errors = {}) {
 export function homePage(args) {return Browse.homePage({...args,tile})}
 export function searchPage(args) {return Browse.listingPage({...args,source:args.products,tile})}
 
+// Star histogram for the rating summary: counts per star level that add up to the rating count and
+// average to the item's rating (an exponential tilt over 1-5 stars, so higher ratings lean to 5 stars).
+function ratingBreakdown(rating, count) {
+  if (!rating || !count) return []
+  const mean = t => { const w = [1,2,3,4,5].map(k => Math.exp(t * k)), s = w.reduce((a, b) => a + b, 0); return w.reduce((a, x, i) => a + x * (i + 1), 0) / s }
+  let lo = -6, hi = 6
+  for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (mean(mid) < rating) lo = mid; else hi = mid }
+  const w = [1,2,3,4,5].map(k => Math.exp(lo * k)), s = w.reduce((a, b) => a + b, 0)
+  const counts = w.map(x => Math.floor(x / s * count))
+  counts[4] += count - counts.reduce((a, b) => a + b, 0)
+  return [5,4,3,2,1].map(k => [k, counts[k - 1]])
+}
+const reviewDate = d => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d)); return m ? `${+m[2]}/${+m[3]}/${m[1]}` : d }
+
 export function reviewsSection(p, {base='/walmart',rating='',sort='relevant'}={}) {
   const all=p.reviewEntries ?? []
   const shown=all.filter(r=>!rating || String(r.stars)===rating).sort((a,b)=>sort==='newest'?b.date.localeCompare(a.date):sort==='highest'?b.stars-a.stars:sort==='lowest'?a.stars-b.stars:0)
-  return `<section class="wm-reviews" id="reviews"><h2>Customer ratings &amp; reviews</h2><div class="wm-reviews-sum"><div class="wm-rev-score"><b>${p.rating ?? 'No ratings yet'}</b>${p.rating ? ` out of 5<br>${starGlyphs(p.rating)}<br><small>(${p.ratings} ratings | ${p.reviews} reviews)</small>`:''}</div><p>Explore the ratings and review details for this item.</p></div><form action="${base}/reviews/product/${p.id}" class="wm-review-filters"><label for="review-rating">Star rating</label><select id="review-rating" name="rating"><option value="">All ratings</option>${[5,4,3,2,1].map(n=>`<option value="${n}" ${String(n)===rating?'selected':''}>${n} stars</option>`).join('')}</select><label for="review-sort">Sort reviews</label><select id="review-sort" name="sort">${[['relevant','Most relevant'],['newest','Newest'],['highest','Highest rated'],['lowest','Lowest rated']].map(([v,l])=>`<option value="${v}" ${v===sort?'selected':''}>${l}</option>`).join('')}</select><button class="wm-pill wm-pill-sm">Apply</button></form>${shown.length?shown.map(r=>`<article class="wm-review">${starGlyphs(r.stars)}<b>${esc(r.title)}</b><p>${esc(r.body)}</p><small>${esc(r.name)} · ${esc(r.date)}</small></article>`).join(''):`<p>No reviews match this selection.</p><a href="${base}/reviews/product/${p.id}">Show all reviews</a>`}</section>`
+  const bars=ratingBreakdown(p.rating,p.ratings)
+  const histogram=bars.length?`<ul class="wm-rev-bars" aria-label="Rating breakdown">${bars.map(([k,n])=>`<li><span>${k} star${k===1?'':'s'}</span><span class="wm-rev-bar"><span style="width:${Math.round(n/p.ratings*100)}%"></span></span><span>${n}</span></li>`).join('')}</ul>`:''
+  const empty=rating?`<p>No reviews match this selection.</p><a href="${base}/reviews/product/${p.id}">Show all reviews</a>`:''
+  return `<section class="wm-reviews" id="reviews"><h2>Customer ratings &amp; reviews</h2><div class="wm-reviews-sum"><div class="wm-rev-score"><b>${p.rating ?? 'No ratings yet'}</b>${p.rating ? ` out of 5<br>${starGlyphs(p.rating)}<br><small>(${p.ratings} ratings | ${p.reviews} reviews)</small>`:''}</div>${histogram}</div><form action="${base}/reviews/product/${p.id}" class="wm-review-filters"><label for="review-rating">Star rating</label><select id="review-rating" name="rating"><option value="">All ratings</option>${[5,4,3,2,1].map(n=>`<option value="${n}" ${String(n)===rating?'selected':''}>${n} stars</option>`).join('')}</select><label for="review-sort">Sort reviews</label><select id="review-sort" name="sort">${[['relevant','Most relevant'],['newest','Newest'],['highest','Highest rated'],['lowest','Lowest rated']].map(([v,l])=>`<option value="${v}" ${v===sort?'selected':''}>${l}</option>`).join('')}</select><button class="wm-pill wm-pill-sm">Apply</button></form>${shown.length?shown.map(r=>`<article class="wm-review">${starGlyphs(r.stars)}<b>${esc(r.title)}</b><p>${esc(r.body)}</p><small>${esc(r.name)} · ${esc(reviewDate(r.date))}</small></article>`).join(''):empty}</section>`
 }
 
 function buyBox({ base, p, sponsored, location }) {
@@ -287,11 +305,11 @@ export function cartPage({ base, t, saved, user, flags, location=LOCATION }) {
     <details class="wm-acc" id="pickup-delivery"><summary>Pickup and delivery options</summary><div class="wm-acc-body"><p>Shipping to ${esc(location.city)}, ${esc(location.zip)} is the available option for these items. Each item shows its delivery estimate. ${fixtureCatalog?'Pickup and same-day delivery: Not available.':'Pickup and same-day delivery availability varies by location.'} <a href="${base}/store-finder">Change location</a>. Confirm your full delivery address at checkout.</p></div></details>
     <div class="wm-group">
       <div class="wm-group-head"><b>Free shipping, ${esc(arrivalPhrase(arrivalSummary(t.lines)).replace(/^Arrives/,'arrives'))}</b><span class="wm-fine">${esc(location.zip)}</span></div>
-      <div class="wm-fine">Shipping estimates and sellers appear with each item &nbsp;&middot;&nbsp; Free shipping</div>
+      <div class="wm-fine">${(()=>{const sellers=[...new Set(t.lines.map(l=>l.product.sellerId))];return sellers.length===1?`Sold and shipped by ${esc(SELLERS[sellers[0]].name)}`:`Sold and shipped by ${sellers.length} sellers`})()}</div>
       ${lines}
     </div>
     ${savedSection(base, saved)}
-    <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Discover Great Brands</h2></div><div class="wm-carousel wm-carousel-brands">${['Great Value', 'Mainstays', 'Onn', 'Play Day', 'Rockstar Games'].map(b => `<a class="wm-brand-tile" href="${base}/search?q=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div></section>
+    <section class="wm-carousel-sec"><div class="wm-section-head"><h2>Discover Great Brands</h2></div><div class="wm-carousel wm-carousel-brands">${['Great Value', 'Mainstays', 'onn.', 'Play Day', 'Rockstar Games'].map(b => `<a class="wm-brand-tile" href="${base}/search?q=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div></section>
   </div>
   <aside class="wm-summary" id="checkout-section">
     <form method="post" action="${base}/cart/checkout">
@@ -376,12 +394,13 @@ export function accountPage({ base, user, orders }) {
 }
 
 // ---- checkout (/checkout/review-order): one page of cards, one form open at a time ----
+const phoneText = v => { const d = String(v ?? '').replace(/\D/g, ''); return d.length === 10 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : String(v ?? '') }
 function fulfillmentCard({ base, t, c, open, values, errors }) {
   const items = t.lines.map(l => `<div class="wm-co-item">${productArt(l.product,'')}<div><div class="wm-co-item-title">${esc(l.product.title)}</div><div class="wm-fine">Qty ${l.qty}${optionText(l.product)?` · ${esc(optionText(l.product))}`:''} · ${esc(l.product.shippingText)}${l.product.preorder ? ` &nbsp;&middot;&nbsp; Preorder, ${esc(l.product.releaseText)}` : ''}</div></div><div class="wm-co-item-price">${money(l.product.price * l.qty)}</div></div>`).join('')
   const a = c.address
   let addressBlock
   if (open === 'address') addressBlock = addressForm({ base, values, errors, editing: !!a })
-  else if (a) addressBlock = `<div class="wm-co-sub"><div class="wm-co-sub-head"><h3>Delivery address</h3><a href="${base}/checkout/review-order?edit=address" class="wm-link">Change</a></div><address>${esc(a.firstName)} ${esc(a.lastName)}<br>${esc(a.address1)}${a.address2 ? `, ${esc(a.address2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.zip)}<br>${esc(a.phone)}</address></div>`
+  else if (a) addressBlock = `<div class="wm-co-sub"><div class="wm-co-sub-head"><h3>Delivery address</h3><a href="${base}/checkout/review-order?edit=address" class="wm-link">Change</a></div><address>${esc(a.firstName)} ${esc(a.lastName)}<br>${esc(a.address1)}${a.address2 ? `, ${esc(a.address2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.zip)}<br>${esc(phoneText(a.phone))}</address></div>`
   else addressBlock = `<div class="wm-co-sub"><h3>Delivery address</h3><a class="wm-pill wm-pill-white" href="${base}/checkout/review-order?edit=address">Add address</a></div>`
   return `<section class="wm-card" id="shipping">
   <div class="wm-card-head">${ICON.truck}<div><h2>Shipping</h2><p>${esc(arrivalPhrase(arrivalSummary(t.lines)))}</p></div><a href="${base}/cart" class="wm-link">Edit items</a></div>
@@ -437,7 +456,7 @@ function paymentForm({ base, values, errors, editing }) {
     ${field({ name: 'billingAddress2', label: 'Apt(optional)', values, errors, extra: 'autocomplete="billing address-line2"' })}
     <div class="wm-3col">${field({ name: 'billingCity', label: 'City*', values, errors, extra: 'autocomplete="billing address-level2"' })}${stateSelect({ name: 'billingState', label: 'State*', values, errors })}${field({ name: 'billingZip', label: 'Zip Code*', values, errors, extra: 'autocomplete="billing postal-code" inputmode="numeric"' })}</div>
   </div>
-  <p class="wm-fine">This card is used for this checkout. Only its brand and last four digits are retained; a saved wallet is not available.</p>
+  <p class="wm-fine">Securing your personal information is our priority. Your card details are encrypted.</p>
   ${publicNotice('<p class="wm-fine">This is not the real Walmart website: no card is charged and no PayPal payment takes place.</p>')}
   <p class="wm-fine">*Required fields</p>
   <div class="wm-form-actions"><a href="${base}/checkout/review-order" class="wm-link-btn">Cancel</a><button type="submit" class="wm-pill">Save</button></div>
@@ -543,7 +562,7 @@ export function thankyouPage({ base, order, status = 'processing' }) {
     <div>
       <section class="wm-card"><div class="wm-card-head">${ICON.truck}<div><h2>Shipping</h2><p>${status === 'cancelled' ? 'Shipping cancelled' : esc(arrivalPhrase(order.fulfillment.eta))}</p></div></div>
         ${order.items.map((it,i) => `<div class="wm-co-item"><div><div class="wm-co-item-title">${esc(it.title)}</div><div class="wm-fine">Qty ${it.qty}${order.meta.options?.[i] ? ` · ${esc(Object.entries(order.meta.options[i].options).map(([k,v])=>`${k}: ${v}`).join(' · '))} · ${status === 'cancelled' ? 'Shipping cancelled' : esc(arrivalPhrase(order.meta.options[i].eta))}` : ''}</div></div><div class="wm-co-item-price">${money(it.unit_price * it.qty)}</div></div>`).join('')}
-        <div class="wm-co-sub"><h3>Delivery address</h3><address>${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a.line1)}${a.line2 ? `, ${esc(a.line2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.postal_code)}<br>${esc(a.phone)}</address></div>
+        <div class="wm-co-sub"><h3>Delivery address</h3><address>${esc(a.first_name)} ${esc(a.last_name)}<br>${esc(a.line1)}${a.line2 ? `, ${esc(a.line2)}` : ''}<br>${esc(a.city)}, ${esc(a.state)} ${esc(a.postal_code)}<br>${esc(phoneText(a.phone))}</address></div>
       </section>
       <section class="wm-card"><h2>Payment method</h2><p>${pay.method === 'card' ? `${esc(pay.brand)} ending in ${esc(pay.last4)}` : 'PayPal'}</p></section>
       <section class="wm-card"><h2>Contact</h2><p>${esc(order.customer.email)}<br><span class="wm-fine">Phone number ending in ${esc(String(order.customer.phone ?? '').replace(/\D/g, '').slice(-4))}</span></p></section>
