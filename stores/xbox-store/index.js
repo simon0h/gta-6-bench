@@ -447,6 +447,8 @@ router.post('/signup.live.com/signup', (req, res) => {
   renderAuth(req, res, 'Create account', P.signupPage({ base: res.locals.base, values: { ...v, password: '' }, errors }), 400)
 })
 
+router.use(notFound)
+
 export default {
   slug: 'xbox-store',
   name: NAME,

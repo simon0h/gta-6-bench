@@ -158,7 +158,7 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
       try { view = await manager.agentView(previous) } catch (error) { if (error.status !== 404) throw error }
       if (view && view.status !== 'complete') {
         const message = 'This browser is already assigned to another unfinished agent attempt. Open this URL in a separate browser profile or private browsing session.'
-        if (req.method === 'GET') res.status(409).type('html').send(`<!doctype html><title>Use a separate browser session</title><p>${message}</p>`)
+        if (req.method === 'GET') res.status(409).type('html').send(noticePage({ title: 'Use a separate browser session', message }))
         else res.status(409).json({ error: message })
         return false
       }
@@ -191,7 +191,7 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
     if (!token) return req.path === '/' ? res.redirect('/dashboard') : next()
     const operation = queue.then(async () => {
       const target = await manager.getTarget(token)
-      if (!target) return res.status(409).type('html').send(`<!doctype html><title>Return to your task</title><p>This task is not running.</p><a href="/agent/${esc(token)}">Return to your task page</a>`)
+      if (!target) return res.status(409).type('html').send(noticePage({ title: 'Return to your task', message: 'This task is not running.', token }))
       const headers = new Headers()
       for (const [name, value] of Object.entries(req.headers)) {
         if (value && !['host', 'connection', 'content-length', 'transfer-encoding', 'authorization', 'forwarded'].includes(name.toLowerCase())) headers.set(name, Array.isArray(value) ? value.join(', ') : value)
@@ -240,10 +240,17 @@ export function createDashboardRouter({ manager, apiToken, local = false }) {
     queue = operation.catch(() => {})
     operation.catch(error => {
       console.error('[dashboard proxy]', error.message)
-      if (!res.headersSent) res.status(503).type('html').send(`<!doctype html><title>Task unavailable</title><p>This task is temporarily unavailable.</p><a href="/agent/${esc(token)}">Return to your task page</a>`)
+      if (!res.headersSent) res.status(503).type('html').send(noticePage({ title: 'Task unavailable', message: 'This task is temporarily unavailable.', token }))
     })
   })
   return router
+}
+
+// Short messages shown on store URLs outside a running task, in the task page's look.
+function noticePage({ title, message, token }) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>${esc(title)} · GTA6 Bench</title><link rel="stylesheet" href="/dashboard/portal.css"></head>
+  <body><header><${token ? `a href="/agent/${esc(token)}"` : 'span'} class="brand"><span class="brand-mark">VI</span> GTA6 BENCH</${token ? 'a' : 'span'}><span class="eyebrow">AGENT WORKSPACE</span></header>
+  <main><h1>${esc(title)}</h1><p class="intro">${esc(message)}</p>${token ? `<div class="task-actions"><a class="primary" href="/agent/${esc(token)}">Return to your task page</a></div>` : ''}</main></body></html>`
 }
 
 function portalPage(token) {

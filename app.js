@@ -5,6 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { sessionMiddleware, createSessionMiddleware, storeState } from './lib/session.js'
 import { configureOrders, listOrders, getOrder, clearOrders } from './lib/orders.js'
 import { esc, setAgentView } from './lib/html.js'
+import { storeErrorPage } from './lib/store-error-page.js'
 import { createCaptcha } from './lib/captcha.js'
 import { productAssetPageMiddleware } from './lib/product-assets.js'
 import { mountProductAssetRoutes } from './lib/product-asset-routes.js'
@@ -52,6 +53,9 @@ export async function createApp(opts = {}) {
   }
   app.use(express.urlencoded({ extended: true }))
   app.use(express.json())
+  // A form posted with no fields (or a multipart form) leaves req.body unset in
+  // Express 5. Treat it as an empty form so stores show their own validation page.
+  app.use((req, res, next) => { req.body ??= {}; next() })
   // A request may finish uploading its body after the evaluator closes a run.
   if (benchmark) app.use((req, res, next) => app.locals.benchmarkFinished ? res.sendStatus(409) : next())
   app.use(benchmark ? createSessionMiddleware({ runId: benchmark.runId }) : sessionMiddleware)
@@ -85,7 +89,15 @@ export async function createApp(opts = {}) {
       res.locals.base = `/${slug}`
       res.set('Cache-Control', 'no-store')
       next()
-    }, captcha.middleware({ slug, name: mod.name }), mod.router)
+    }, captcha.middleware({ slug, name: mod.name }), mod.router, (error, req, res, next) => {
+      // Never fall back to Express's bare error page inside a store. Client
+      // errors (such as a malformed JSON body) keep their 4xx status.
+      if (res.headersSent) return next(error)
+      const status = error.status >= 400 && error.status < 500 ? error.status : 500
+      if (status === 500 && benchmark) app.locals.benchmarkErrors.push({ method: req.method, path: req.path, error: error.message })
+      else if (status === 500) console.error(`[${slug}] ${req.method} ${req.originalUrl}: ${error.stack || error.message}`)
+      res.status(status).type('html').send(storeErrorPage({ slug, name: mod.name }))
+    })
     const available = mod.gta6_available === null ? null : mod.gta6_available !== false
     stores.push({ slug, name: mod.name, country: mod.country, currency: mod.currency, url: `/${slug}`, description: mod.description ?? '', gta6_available: available,
       availability_status: mod.availability_status || (available === null ? 'unknown' : available ? 'available' : 'unavailable'),

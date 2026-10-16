@@ -423,6 +423,8 @@ router.post('/location', (req, res) => {
 
 installJourneys(router,{render,notFound,selection,addToCart,cartError})
 
+router.use(notFound)
+
 export default {
   slug: 'target',
   name: NAME,

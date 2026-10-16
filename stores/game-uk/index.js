@@ -358,6 +358,8 @@ router.get('/:slug', (req, res) => {
   render(req, res, { title, body: P.productPage({ base, p, modal, qty: clampQty(req.query.qty), wished: !!req.query.wished,error:req.query.choose?'Choose an option, then add it to your wish list.':'',option:typeof req.query.option==='string'?req.query.option:'' }), flyoutOpen: !!req.query.added, closeHref: productPath(base, p) })
 })
 
+router.use(notFound)
+
 export default {
   slug: 'game-uk',
   name: NAME,

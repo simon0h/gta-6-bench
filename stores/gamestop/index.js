@@ -355,6 +355,8 @@ router.get('/order/confirmation', (req, res) => {
 
 router.get('/pro', (req, res) => render(req, res, 'GameStop Pro', proPage(res.locals.base)))
 
+router.use((req, res) => render(req, res, 'Page Not Found', P.simplePage({ title: "Sorry, we can't find that page.", html: `<p>The page you're looking for may have moved or is no longer available.</p><a class="gs-btn" href="${res.locals.base}/">Continue Shopping</a>` }), 404))
+
 export default {
   slug: 'gamestop',
   name: NAME,

@@ -2,6 +2,7 @@
 // checkpointing and grading evidence travel exclusively over parent IPC.
 import { createServer } from 'node:http'
 import { createApp } from '../app.js'
+import { storeErrorPage } from '../lib/store-error-page.js'
 import { exportOrders, prepareOrderImport, finalizeOrders } from '../lib/orders.js'
 import { exportAccounts, prepareAccountImport } from '../lib/accounts.js'
 import { exportSessions, prepareSessionImport, sessionStates } from '../lib/session.js'
@@ -63,7 +64,7 @@ async function handle(message) {
     }
     app.use((error, req, res, next) => {
       app.locals.benchmarkErrors.push({ method: req.method, path: req.path, error: error.message })
-      res.status(500).send('Benchmark environment error')
+      res.status(500).type('html').send(storeErrorPage({ slug: req.path.split('/')[1] }))
     })
     server = createServer((req, res) => {
       requests++
