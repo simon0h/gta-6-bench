@@ -376,6 +376,8 @@ const ratingFor = (key, hot, release) => {
 }
 const genreCopy = { Action: 'action', Adventure: 'adventure', Shooter: 'shooter', 'Driving/Racing': 'racing', 'Role Playing Games': 'role-playing', Sport: 'sports', Fighting: 'fighting', Simulation: 'simulation', Strategy: 'strategy', Horror: 'horror', Family: 'family', Puzzle: 'puzzle', Party: 'party', 'Music/Rhythm': 'rhythm' }
 
+// Names shoppers still search by (the store matches them to the current titles).
+const ALIASES = [[/EA SPORTS FC/, 'fifa soccer football'], [/Madden|College Football/, 'american football nfl'], [/NBA 2K/, 'basketball'], [/MLB/, 'baseball'], [/NHL/, 'hockey'], [/PGA TOUR/, 'golf'], [/Gran Turismo|F1|Forza|Need for Speed|MotoGP|Crew Motorfest/, 'racing cars driving'], [/Spider-Man/, 'spiderman']]
 const items = []
 const byTitle = new Map()
 GAMES.forEach(([title, publisher, release, genres, rating, plat, price, sale, flags, blurb], i) => {
@@ -395,7 +397,7 @@ GAMES.forEach(([title, publisher, release, genres, rating, plat, price, sale, fl
     localPlayers: f.has('local') ? 4 : 1, onlinePlayers: f.has('online') ? (genres === 'Shooter' ? 64 : 8) : 0,
     onlineRequired: price === 0 && !['The Sims™ 4'].includes(title) || ['HELLDIVERS 2', 'Marathon', 'Diablo IV', 'FINAL FANTASY XIV Online', 'Dune: Awakening'].includes(title),
     entitlements: platforms.map(v => `${v} digital license`), available: true, hot: f.has('hot'),
-    keywords: `${genreCopy[genres] || ''} ${publisher} ${platforms.join(' ')} ${price === 0 ? 'free to play f2p' : ''} ${pre ? 'pre-order preorder' : ''} ${plat === 'v' ? 'vr psvr2 ps vr2' : ''}`,
+    keywords: `${genreCopy[genres] || ''} ${publisher} ${platforms.join(' ')} ${price === 0 ? 'free to play f2p' : ''} ${pre ? 'pre-order preorder' : ''} ${plat === 'v' ? 'vr psvr2 ps vr2' : ''} ${ALIASES.find(([re]) => re.test(title))?.[1] || ''}`,
     ...r, bestRank: i + 1, downloadRank: price === 0 ? i - 200 : i,
   }
   if (sale !== null) { p.originalPrice = price; p.price = sale }
@@ -458,7 +460,8 @@ HARDWARE.forEach(([title, department, price, sale, item, art, color, description
     art, color, blurb: description, bullets: [description], specs: { 'Item number': item, ...specs }, stock: 25, shippingLabel: 'Free standard shipping · 3–5 business days',
     plusTag: null, plusAdded: null, features: [], vr: department === 'vr' ? 'PS VR2 required' : 'No VR', localPlayers: 0, onlinePlayers: 0, entitlements: [], available: true,
     keywords: `hardware ${department.replace('-', ' ')} ${kind.toLowerCase()} ${title.includes('DualSense') ? 'controller dualsense ps5 controller gamepad' : ''} ${department === 'consoles' ? 'ps5 console playstation 5 system' : ''} ${department === 'audio' ? 'headset headphones earbuds audio pulse' : ''} ${department === 'vr' ? 'vr psvr2 virtual reality' : ''} ${department === 'remote-play' ? 'portal handheld remote player' : ''}`,
-    ...r, bestRank: 20 + i, downloadRank: 900 + i,
+    // PlayStation Direct product reviews number in the hundreds to low thousands, not store-scale ratings.
+    ...r, ratingCount: Math.max(38, Math.round(r.ratingCount / 90)), bestRank: 20 + i, downloadRank: 900 + i,
   })
 })
 

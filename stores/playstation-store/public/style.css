@@ -443,3 +443,17 @@ body:has(.ps-cover-viewer[open]){overflow:hidden}
  .ps-footer-pdc .ps-pdc-footer-cols{grid-template-columns:repeat(2,minmax(0,1fr))}
  .ps-empty-state{padding:24px 16px}
 }
+/* PlayStation.com page heroes with a product illustration, game rows and the PS Plus plan table */
+.ps-pdc-hero-art>div{display:grid;grid-template-columns:minmax(0,1fr) 320px;align-items:center;gap:48px;padding-top:40px;padding-bottom:40px}
+.ps-pdc-hero-figure svg{display:block;width:100%;height:auto;max-height:320px;filter:drop-shadow(0 18px 30px rgba(0,0,0,.25))}
+.ps-pdc-games h2{margin-bottom:18px}
+.ps-plan-table{width:100%;max-width:820px;border-collapse:collapse;margin:18px 0 22px;font-size:15px}
+.ps-plan-table th,.ps-plan-table td{padding:11px 14px;border-bottom:1px solid var(--ps-line);text-align:center}
+.ps-plan-table th[scope=row]{text-align:left;font-weight:400}
+.ps-plan-table thead th{font-weight:700;font-size:16px;border-bottom:2px solid #1f2024}
+.ps-plan-yes{color:#0070cc;font-weight:700}.ps-plan-no{color:#9a9da2}
+@media(max-width:760px){
+ .ps-pdc-hero-art>div{grid-template-columns:1fr;gap:16px}
+ .ps-pdc-hero-figure{max-width:150px}
+ .ps-plan-table{font-size:13px}.ps-plan-table th,.ps-plan-table td{padding:9px 6px}
+}

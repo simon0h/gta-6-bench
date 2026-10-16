@@ -1,66 +1,11 @@
 // Locally drawn artwork for the assortment (no downloaded images). Digital content gets square
-// key-art tiles (genre motif, title lockup, publisher), PS Plus gets its black-and-gold tier card,
+// key-art tiles (a scene for the game's world and a title lockup, see key-art.js), PS Plus gets its black-and-gold tier card,
 // and PlayStation Direct hardware gets a simple product illustration on a light studio backdrop.
+import { keyArtSvg } from './key-art.js'
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
-const hash = s => { let n = 2166136261; for (const c of String(s)) n = Math.imul(n ^ c.codePointAt(0), 16777619); return n >>> 0 }
 const svg = (body, bg) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img">${bg}${body}</svg>`
 
-const GENRE_HUE = { Action: 8, Adventure: 140, Shooter: 200, 'Driving/Racing': 30, 'Role Playing Games': 270, Sport: 120, Fighting: 350, Simulation: 175, Strategy: 45, Horror: 0, Family: 55, Puzzle: 300, Party: 320, 'Music/Rhythm': 285 }
-
-function motif(genre, h, a, b, scale = 1) {
-  const r = n => (hash(`${h}:${n}`) % 1000) / 1000
-  const g = (body) => `<g transform="translate(300 260) scale(${scale}) translate(-300 -260)">${body}</g>`
-  switch (genre) {
-    case 'Driving/Racing': return g(`<path d="M220 600 L285 250 L315 250 L380 600Z" fill="${b}" opacity=".55"/>${[0, 1, 2, 3].map(i => `<rect x="296" y="${300 + i * 70}" width="8" height="${30 + i * 6}" fill="#fff" opacity=".7"/>`).join('')}<path d="M0 330 Q300 220 600 330 L600 360 Q300 260 0 360Z" fill="${a}" opacity=".5"/>`)
-    case 'Shooter': return g(`<circle cx="${300 + r(1) * 80 - 40}" cy="230" r="120" fill="none" stroke="${b}" stroke-width="10" opacity=".7"/><circle cx="${300 + r(1) * 80 - 40}" cy="230" r="60" fill="none" stroke="${b}" stroke-width="6" opacity=".6"/><path d="M${300 + r(1) * 80 - 40} 70V390M${140 + r(1) * 80} 230H${460 + r(1) * 80 - 40}" stroke="${b}" stroke-width="5" opacity=".6"/>`)
-    case 'Sport': return g(`<rect x="60" y="120" width="480" height="260" fill="none" stroke="#fff" stroke-width="6" opacity=".45"/><path d="M300 120V380" stroke="#fff" stroke-width="6" opacity=".45"/><circle cx="300" cy="250" r="60" fill="none" stroke="#fff" stroke-width="6" opacity=".45"/><circle cx="${200 + r(2) * 200}" cy="${180 + r(3) * 120}" r="26" fill="${b}"/>`)
-    case 'Role Playing Games': return g(`<circle cx="${380 + r(4) * 80}" cy="150" r="70" fill="${b}" opacity=".85"/><path d="M0 420 L120 240 L210 330 L330 170 L470 360 L600 260 L600 600 L0 600Z" fill="${a}" opacity=".75"/><path d="M290 120 L300 90 L310 120 L310 330 L290 330Z" fill="#fff" opacity=".35"/>`)
-    case 'Horror': return g(`<circle cx="${180 + r(5) * 240}" cy="140" r="64" fill="#f2efe6" opacity=".9"/><path d="M0 460 Q150 380 300 430 T600 410 L600 600 L0 600Z" fill="#000" opacity=".6"/>${[0, 1, 2, 3, 4].map(i => `<path d="M${70 + i * 115} 600 L${80 + i * 115} ${330 + r(i + 9) * 60} L${90 + i * 115} 600Z" fill="#000" opacity=".75"/>`).join('')}`)
-    case 'Fighting': return g(`${[0, 1, 2].map(i => `<path d="M${-40 + i * 210} 600 L${190 + i * 210} 60 L${240 + i * 210} 60 L${10 + i * 210} 600Z" fill="${i % 2 ? a : b}" opacity=".55"/>`).join('')}`)
-    case 'Simulation': case 'Strategy': return g(`${Array.from({ length: 6 }, (_, y) => Array.from({ length: 6 }, (_, x) => (hash(`${h}${x}${y}`) % 3) ? `<rect x="${60 + x * 82}" y="${60 + y * 62}" width="70" height="50" rx="6" fill="${(x + y) % 2 ? a : b}" opacity=".45"/>` : '').join('')).join('')}`)
-    case 'Family': case 'Party': case 'Puzzle': return g(`${Array.from({ length: 9 }, (_, i) => `<circle cx="${60 + r(i) * 480}" cy="${60 + r(i + 20) * 330}" r="${20 + r(i + 40) * 50}" fill="${i % 2 ? a : b}" opacity=".7"/>`).join('')}`)
-    case 'Music/Rhythm': return g(`${Array.from({ length: 14 }, (_, i) => `<rect x="${40 + i * 38}" y="${250 - r(i) * 170}" width="24" height="${r(i) * 340 + 20}" rx="12" fill="${i % 2 ? a : b}" opacity=".7"/>`).join('')}`)
-    case 'Adventure': return g(`<circle cx="${150 + r(6) * 300}" cy="130" r="54" fill="${b}" opacity=".9"/><path d="M0 380 L140 200 L230 290 L360 140 L600 380 L600 600 L0 600Z" fill="${a}" opacity=".7"/><path d="M0 450 Q300 360 600 450 L600 600 L0 600Z" fill="#000" opacity=".25"/>`)
-    default: return g(`<path d="M0 420 L${150 + r(7) * 80} 160 L${330 + r(8) * 60} 330 L600 120 L600 600 L0 600Z" fill="${a}" opacity=".6"/><path d="M60 600 L300 240 L540 600Z" fill="${b}" opacity=".35"/>`)
-  }
-}
-
-function wrap(title, max) {
-  const words = title.replace(/[®™]/g, '').split(/\s+/)
-  const lines = []
-  for (const w of words) {
-    const last = lines.at(-1)
-    if (last && (last + ' ' + w).length <= max) lines[lines.length - 1] = last + ' ' + w
-    else lines.push(w)
-  }
-  return lines
-}
-function titleBlock(text, y0 = 470, max = 16) {
-  let lines = wrap(text, max)
-  if (lines.length > 4) lines = [...lines.slice(0, 3), lines.slice(3).join(' ')]
-  const longest = Math.max(...lines.map(l => l.length))
-  const size = Math.max(26, Math.min(68, Math.floor(860 / Math.max(longest, 8))))
-  const top = y0 - (lines.length - 1) * size * 1.08
-  return lines.map((l, i) => `<text x="40" y="${top + i * size * 1.08}" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="${size}" fill="#fff" letter-spacing="-0.5">${esc(l)}</text>`).join('')
-}
-
-function gameArt(p, view) {
-  const h = hash(p.family || p.title)
-  const hue = ((GENRE_HUE[p.genres] ?? 210) + (h % 50) - 25 + 360) % 360
-  const dark = p.genres === 'Horror' ? 8 : 18
-  const c1 = `hsl(${hue} 55% ${dark}%)`, c2 = `hsl(${(hue + 35) % 360} 60% ${dark + 22}%)`
-  const a = `hsl(${(hue + 180) % 360} 55% 55%)`, b = `hsl(${(hue + 40) % 360} 80% 62%)`
-  const id = `g${h % 100000}v${view}`
-  const bg = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${view % 2 ? c2 : c1}"/><stop offset="1" stop-color="${view % 2 ? c1 : c2}"/></linearGradient><linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></linearGradient></defs><rect width="600" height="600" fill="url(#${id})"/>`
-  if (view > 0) return svg(`${motif(p.genres, h + view * 7, a, b, 1 + view * 0.25)}<rect width="600" height="600" fill="url(#${id}s)" opacity=".6"/>`, bg)
-  const isCurrency = p.contentType === 'consumable'
-  // Premium editions and bundles carry the edition name in the cover lockup, above the title.
-  const edition = (p.type === 'PREMIUM EDITION' || p.type === 'GAME BUNDLE') && p.editionName !== 'Standard Edition'
-  const badge = edition ? `<text x="40" y="128" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="${p.editionName.length > 22 ? 22 : 28}" letter-spacing="2" fill="hsl(45 90% 70%)">${esc(p.editionName.toUpperCase())}</text>` : ''
-  const coins = isCurrency ? [0, 1, 2, 3, 4].map(i => `<ellipse cx="${430 - (i % 2) * 20}" cy="${215 - i * 32}" rx="86" ry="26" fill="hsl(45 90% ${55 - i * 3}%)" stroke="hsl(40 80% 35%)" stroke-width="4"/>`).join('') : ''
-  const name = isCurrency ? p.title.split(' - ').at(-1) : p.contentType === 'add-on' ? p.title : p.editionName !== 'Standard Edition' && p.title.endsWith(p.editionName) ? p.title.slice(0, -p.editionName.length).trim() : p.title
-  return svg(`${motif(p.genres, h, a, b)}${coins}<rect width="600" height="600" fill="url(#${id}s)"/>${badge}${titleBlock(name, isCurrency ? 440 : 445, isCurrency ? 14 : 16)}<text x="40" y="490" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#fff" opacity=".8">${esc(p.publisher)}</text>`, bg)
-}
+// Games, add-ons and in-game currency use the per-title key art in key-art.js.
 
 function plusArt(p, view) {
   const tierColor = { Essential: '#f5c400', Extra: '#f5c400', Premium: '#f5c400' }[p.tier]
@@ -122,11 +67,21 @@ function hardwareArt(p, view) {
   return svg(`<g transform="${t}">${draw(p.color)}</g>`, '<rect width="600" height="600" fill="#f5f6f8"/>')
 }
 
+// Hardware drawings for PlayStation.com page heroes (transparent background, sits on the blue band).
+export function heroIllustration(kind, color = 'white') {
+  const body = kind === 'plus'
+    ? `<path d="M265 120 h70 v145 h145 v70 h-145 v145 h-70 v-145 h-145 v-70 h145z" fill="#f5c400"/><path d="M335 120 v145 h145 v70 h-145 v145 h-14 v-145 h-145 v-14 h145 v-145h14z" fill="#c99a00" opacity=".55"/>`
+    : kind === 'giftcard'
+      ? `<g transform="rotate(-8 300 300)"><rect x="90" y="170" width="400" height="250" rx="22" fill="#00439c" stroke="#fff" stroke-opacity=".5" stroke-width="3"/><rect x="90" y="170" width="400" height="250" rx="22" fill="url(#gc)"/><text x="120" y="226" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#fff">PlayStation Store</text><text x="466" y="236" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="300" fill="#fff">$50</text></g><g transform="rotate(6 300 300) translate(90 10)"><rect x="150" y="300" width="320" height="200" rx="18" fill="#1f1f1f" stroke="#fff" stroke-opacity=".4" stroke-width="3"/><text x="176" y="346" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#fff">PlayStation Store</text><text x="444" y="474" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="50" font-weight="300" fill="#fff">$25</text></g><defs><linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f8fe5" stop-opacity=".0"/><stop offset="1" stop-color="#1f8fe5" stop-opacity=".7"/></linearGradient></defs>`
+      : (HW[kind] || HW.controller)(color)
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" aria-hidden="true" focusable="false">${body}</svg>`
+}
+
 export function shelfArtSvg(p, view = 0) {
   const v = Math.max(0, Math.min(3, Number(view) || 0))
   if (p.department === 'hardware') return hardwareArt(p, v)
   if (p.contentType === 'subscription') return plusArt(p, v)
-  return gameArt(p, v)
+  return keyArtSvg(p, v)
 }
 export const shelfArtUrl = (p, view = 0) => `/playstation-store/shelf-art/${encodeURIComponent(p.id)}/${view}.svg`
 export const shelfImg = (p, alt = p.title, view = 0) => `<img class="ps-shelf-img" src="${shelfArtUrl(p, view)}" alt="${esc(alt)}" width="600" height="600" loading="lazy" decoding="async">`
