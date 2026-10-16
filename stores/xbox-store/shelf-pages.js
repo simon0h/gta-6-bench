@@ -47,7 +47,7 @@ export function hardwarePage({ base, p, inCart = false, added = false }) {
         <li><b>Free 60-day returns</b><span>Return eligible physical products within 60 days. <a href="${base}/en-US/returns">Return policy</a></span></li>
         <li><b>Limited warranty</b><span>${p.brand === 'Microsoft' ? '1-year limited hardware warranty from Microsoft.' : `Manufacturer warranty from ${esc(p.brand)}.`}</span></li>
       </ul>
-      <p class="xh-muted">Sold and shipped by Microsoft Store · Physical items do not grant a digital license.</p>
+      <p class="xh-muted">Sold and shipped by Microsoft Store</p>
     </div>
   </div>
   <section class="xh-section" id="overview"><h2>Overview</h2>${p.description.map(t => `<p>${esc(t)}</p>`).join('')}</section>
