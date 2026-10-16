@@ -146,5 +146,5 @@ export const INFO = {
   'best-selling-beauty': ['Bestsellers', 'The most-loved products at Sephora right now.', [['Shop Bestsellers', 'Browse bestselling makeup, skincare, hair and fragrance.']]],
   'supersized-beauty-products': ['Jumbo Size', 'Value and jumbo sizes of beauty favorites.', [['Shop Jumbo Size', 'Larger sizes for better value.']]],
   'clean-beauty': ['Clean at Sephora', 'Products formulated without a list of ingredients Sephora restricts.', [['What Clean Means', 'Clean at Sephora products are made without parabens, sulfates (SLS and SLES), phthalates and more.']]],
-  'ai-beauty-chat': ['AI Beauty Chat', 'Ask Sephora’s AI beauty assistant for product suggestions and routines.', [['Temporarily unavailable', 'AI Beauty Chat is temporarily unavailable. Please try again later, or browse the departments and search in the meantime.']]],
+  'ai-beauty-chat': ['AI Beauty Chat', 'Ask Sephora’s AI beauty assistant for product suggestions and routines.', [['How it works', 'Tell the assistant about your skin, hair or the look you want and get product picks from across Sephora.']]],
 }

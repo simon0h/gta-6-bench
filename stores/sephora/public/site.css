@@ -275,3 +275,47 @@
 .sx-sum-item{align-items:center}.sx-sum-item img{width:56px;height:56px;flex:none;background:#fff;border-radius:4px}.sx-sum-item span{flex:1}
 .sx-basket>.sx-panel{align-self:start}
 .sx-basket>aside.sx-panel>p+h2{margin-top:24px;padding-top:16px;border-top:1px solid #ddd}
+/* round 2: store finder, services, rewards, AI chat, order confirmation, 404 */
+.sx-brand-dir h2{margin:0 0 8px}
+.sx-store-results{margin:20px 0 8px}
+.sx-store-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.sx-store{border:1px solid #ddd;border-radius:8px;padding:16px 18px;font-size:14px}
+.sx-store-head{display:flex;align-items:center;gap:10px}.sx-store-head h3{flex:1;font-size:16px;margin:0}
+.sx-store-n{width:24px;height:24px;border-radius:50%;background:#000;color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;flex:none}
+.sx-store-mi{font-size:13px;color:var(--sx-muted);white-space:nowrap}
+.sx-store p{margin:8px 0}.sx-store-hours{display:grid;grid-template-columns:72px 1fr;gap:2px 8px;margin:8px 0;font-size:13px}.sx-store-hours dt{font-weight:700}.sx-store-hours dd{margin:0}
+.sx-store-feat{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:10px 0}.sx-store-feat li{background:var(--sx-grey);border-radius:12px;padding:3px 10px;font-size:12px}
+.sx-store-links{display:flex;gap:16px;font-weight:700;font-size:13px}
+.sx-svc-group{margin:24px 0}.sx-svc-group h2{font-size:20px}
+.sx-svc-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.sx-svc{display:flex;flex-direction:column;gap:4px;border:1px solid #ddd;border-radius:8px;padding:16px;text-decoration:none}
+.sx-svc span{font-size:13px;color:var(--sx-muted)}.sx-svc em{font-style:normal;font-weight:700;font-size:13px;margin-top:6px}.sx-svc:hover{border-color:#000}
+.sx-reward .sx-card-price{font-weight:700}
+.sx-steps{margin:16px 0 8px}
+.sx-chat{max-width:760px}.sx-chat h1 small{font-size:11px;background:#000;color:#fff;padding:2px 6px;vertical-align:middle;margin-left:6px;letter-spacing:.5px}
+.sx-chat-window{background:var(--sx-grey);border-radius:12px;padding:20px;margin:16px 0}
+.sx-bubble{background:#fff;border-radius:12px 12px 12px 2px;padding:14px 16px;margin:0 0 14px;max-width:560px;font-size:15px;line-height:1.45}
+.sx-chat-starters{display:flex;flex-wrap:wrap;gap:8px}.sx-chat-starters a{border:1px solid #000;border-radius:18px;padding:7px 14px;background:#fff;font-size:13px;text-decoration:none}.sx-chat-starters a:hover{background:#000;color:#fff}
+.sx-chat-form{display:flex;gap:8px}.sx-chat-form input{flex:1;border:1px solid #bbb;border-radius:24px;padding:10px 16px;font-size:15px}
+.sx-confirm{max-width:1100px}.sx-confirm-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
+.sx-confirm-grid .sx-sum-item{padding:10px 0;border-top:1px solid #e3e3e3}.sx-confirm-grid .sx-sum-item img{width:64px;height:64px}.sx-sum-item small{display:block;color:var(--sx-muted);font-size:12px;margin-top:2px}
+.sx-confirm-details{margin-top:12px;padding-top:12px;border-top:1px solid #e3e3e3;grid-template-columns:100px 1fr}
+.sx-confirm-points{font-size:13px;border-top:1px solid #e3e3e3;padding-top:12px}
+.sx-missing{text-align:center;margin:-8px 0 24px}.sx-missing .sx-pills{justify-content:center}
+@media(max-width:760px){
+  .sx-cat-layout.sx-search-page .sx-side{order:0}
+  .sx-confirm-grid{grid-template-columns:1fr}
+  .sx-store-list{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .sx-search-page .sx-side>h3{display:none}
+  .sx-search-page .sx-side .sx-filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .sx-search-page .sx-side .sx-filters details{border:1px solid #ccc;border-radius:18px;padding:6px 14px}
+  .sx-search-page .sx-side .sx-filters details[open]{flex-basis:100%;border-radius:8px}
+  .sx-search-page .sx-side .sx-filters summary{list-style:none}.sx-search-page .sx-side .sx-filters summary::-webkit-details-marker{display:none}
+  .sx-search-page .sx-side-dept{display:inline-block;margin-right:12px}
+}
+.sx-mega{grid-template-columns:1fr 1fr 360px}
+.sx-mega-promo{justify-content:flex-start;gap:4px}
+.sx-mega-art{display:flex;gap:8px;background:#fff;border-radius:6px;padding:8px;margin-bottom:12px}.sx-mega-art img{width:33%;height:auto;aspect-ratio:1;object-fit:contain}
+.sx-mega-promo{align-self:start;min-height:0}.sx-mega-art img{flex:1;width:auto;min-width:0}
