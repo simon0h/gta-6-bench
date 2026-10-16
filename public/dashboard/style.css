@@ -554,6 +554,38 @@ dialog::backdrop { background: var(--scrim); }
    without the white tile the other marks sit on. */
 img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !important; object-fit: cover; }
 
+/* Success rate chart on the run overview: one line per agent, colored by its
+   URL slot (blue, orange, aqua, yellow, magenta; dark steps for dark mode). */
+.rate-chart { --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .rate-chart { --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; } }
+:root[data-theme="dark"] .rate-chart { --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; }
+.rate-chart .s1 { --c: var(--s1); } .rate-chart .s2 { --c: var(--s2); } .rate-chart .s3 { --c: var(--s3); } .rate-chart .s4 { --c: var(--s4); } .rate-chart .s5 { --c: var(--s5); }
+.rate-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 14px; padding: 0; list-style: none; font-size: 13.5px; }
+.rate-legend li { display: flex; align-items: center; gap: 7px; }
+.rate-legend img { width: 20px; height: 20px; padding: 2px; border: 1px solid var(--line); border-radius: 4px; background: #ffffff; object-fit: contain; }
+.rate-legend small { color: var(--muted); font-size: 12px; }
+.rate-legend strong { font-variant-numeric: tabular-nums; }
+.rate-key { display: inline-block; width: 14px; height: 3px; flex: none; border-radius: 2px; background: var(--c); }
+.rate-frame { padding-left: 38px; }
+.rate-plot { position: relative; height: 220px; outline-offset: 6px; cursor: crosshair; touch-action: pan-y; }
+.rate-plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.rate-line { fill: none; stroke: var(--c); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.rate-grid { position: absolute; left: 0; right: 0; height: 0; border-top: 1px solid var(--line); }
+.rate-grid.base { border-top-color: var(--line-strong); }
+.rate-grid span { position: absolute; right: calc(100% + 8px); top: -8px; color: var(--muted); font-size: 11.5px; line-height: 16px; font-variant-numeric: tabular-nums; }
+.rate-dot { position: absolute; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border: 2px solid var(--paper); border-radius: 50%; background: var(--c); }
+.rate-cross { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px solid var(--edge); pointer-events: none; }
+.rate-tip { position: absolute; top: 4px; z-index: 2; min-width: 150px; margin-left: 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); box-shadow: var(--pop); font-size: 12.5px; line-height: 1.6; pointer-events: none; white-space: nowrap; }
+.rate-tip.flip { transform: translateX(calc(-100% - 24px)); }
+.rate-tip strong { display: block; margin-bottom: 2px; font-weight: 600; }
+.rate-tip div { display: flex; align-items: center; gap: 7px; }
+.rate-tip b { min-width: 42px; font-variant-numeric: tabular-nums; }
+.rate-ticks { position: relative; height: 18px; margin-top: 6px; color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.rate-ticks span { position: absolute; transform: translateX(-50%); }
+.rate-ticks span:first-child { transform: none; }
+.rate-ticks span:last-child { transform: translateX(-100%); }
+.rate-axis { margin-top: 2px; color: var(--muted); font-size: 12px; text-align: center; }
+
 /* Live tracker on the run page. */
 .live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 12px; }
 .live-card { display: flex; flex-direction: column; gap: 12px; min-width: 0; padding: 12px 14px 6px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--fill); }

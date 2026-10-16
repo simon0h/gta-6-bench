@@ -457,6 +457,68 @@
     return `<section class="panel" aria-label="Results by store"><div class="panel-head"><h2>Results by store</h2><div class="panel-actions legend"><span><span class="swatch passed"></span>Passed</span><span><span class="swatch failed"></span>Failed</span><span><span class="swatch error"></span>Environment error</span></div></div>
       <div class="panel-body store-bars">${[...stores].sort((a, b) => b[1].total - a[1].total).map(([slug, entry]) => `<div class="store-bar"><span class="store-bar-name">${escape(slug ? storeName(slug) : 'Other')}</span><div class="bar" role="img" aria-label="${entry.passed} passed, ${entry.failed} failed, ${entry.error} environment errors"><span class="passed" style="width:${width(entry.passed, entry.total)}"></span><span class="failed" style="width:${width(entry.failed, entry.total)}"></span><span class="error" style="width:${width(entry.error, entry.total)}"></span></div><span class="store-bar-count">${entry.passed} / ${entry.total} passed</span></div>`).join('')}</div></section>`
   }
+  // Success rate over the run: one line per agent, its pass rate after each
+  // finished task. Colors follow the agent's URL slot, so they never shift.
+  function renderRateChart(run) {
+    const total = taskCount(run)
+    const series = attempts(run).map((attempt, index) => {
+      let passed = 0
+      const points = resultList(attempt).filter(result => resultTone(result) !== 'pending').map((result, n) => {
+        if (resultTone(result) === 'passed') passed++
+        return Math.round(passed / (n + 1) * 1000) / 10
+      })
+      return { name: agentData(attempt.agent).name, icon: agentData(attempt.agent).icon, slot: index + 1, url: `URL ${String(index + 1).padStart(2, '0')}`, points }
+    }).filter(line => line.points.length)
+    if (!series.length) return ''
+    const span = Math.max(total, ...series.map(line => line.points.length), 2) - 1
+    const x = n => (n / span * 100).toFixed(3), y = rate => (100 - rate).toFixed(3)
+    const lines = series.map(line => line.points.length === 1
+      ? ''
+      : `<polyline class="rate-line s${line.slot}" points="${line.points.map((rate, n) => `${x(n)},${y(rate)}`).join(' ')}" vector-effect="non-scaling-stroke"/>`).join('')
+    const ends = series.map(line => { const n = line.points.length - 1; return `<span class="rate-dot s${line.slot}" style="left:${x(n)}%;top:${y(line.points[n])}%"></span>` }).join('')
+    const grid = [100, 75, 50, 25, 0].map(rate => `<span class="rate-grid${rate === 0 ? ' base' : ''}" style="top:${y(rate)}%"><span>${rate}%</span></span>`).join('')
+    const ticks = [...new Set([1, Math.round((span + 1) / 3), Math.round((span + 1) * 2 / 3), span + 1])].filter(n => n >= 1).map(n => `<span style="left:${x(n - 1)}%">${n}</span>`).join('')
+    const legend = series.map(line => `<li><span class="rate-key s${line.slot}"></span><img src="${line.icon}" alt="">${escape(line.name)}<small>${line.url}</small><strong>${line.points.at(-1)}%</strong></li>`).join('')
+    const label = series.map(line => `${line.name}: ${line.points.at(-1)}% after ${line.points.length} task${line.points.length === 1 ? '' : 's'}`).join('; ')
+    const data = escape(JSON.stringify(series.map(({ name, slot, points }) => ({ name, slot, points }))))
+    return `<section class="panel rate-chart" aria-label="Success rate"><div class="panel-head"><h2>Success rate</h2><span class="panel-sub">Share of finished tasks passed, after each task</span></div>
+      <div class="panel-body"><ul class="rate-legend">${legend}</ul>
+        <div class="rate-frame"><div class="rate-plot" tabindex="0" role="img" aria-label="${escape(label)}" data-series="${data}" data-span="${span}">${grid}<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>${ends}<span class="rate-cross" hidden></span><div class="rate-tip" hidden></div></div>
+        <div class="rate-ticks" aria-hidden="true">${ticks}</div><div class="rate-axis">Tasks finished</div></div></div></section>`
+  }
+  // Hovering the chart (or arrow keys on it) shows every agent's rate at that task.
+  function showRate(plot, index) {
+    const series = JSON.parse(plot.dataset.series), span = Number(plot.dataset.span)
+    index = Math.max(0, Math.min(span, index))
+    plot.dataset.index = index
+    const cross = plot.querySelector('.rate-cross'), tip = plot.querySelector('.rate-tip')
+    cross.hidden = false; cross.style.left = `${index / span * 100}%`
+    tip.replaceChildren()
+    const head = document.createElement('strong'); head.textContent = `After task ${index + 1}`; tip.append(head)
+    for (const line of series) {
+      if (index >= line.points.length) continue
+      const row = document.createElement('div'), key = document.createElement('span'), value = document.createElement('b')
+      key.className = `rate-key s${line.slot}`; value.textContent = `${line.points[index]}%`
+      row.append(key, value, document.createTextNode(` ${line.name}`)); tip.append(row)
+    }
+    if (tip.childElementCount === 1) { const none = document.createElement('div'); none.textContent = 'No agent has finished this many tasks yet'; tip.append(none) }
+    tip.hidden = false
+    tip.classList.toggle('flip', index / span > .6)
+    tip.style.left = `${index / span * 100}%`
+  }
+  function hideRate(plot) {
+    plot.querySelector('.rate-cross').hidden = true
+    plot.querySelector('.rate-tip').hidden = true
+    delete plot.dataset.index
+  }
+  document.addEventListener('pointermove', event => {
+    const plot = event.target.closest?.('.rate-plot')
+    if (!plot) { const open = document.querySelector('.rate-plot[data-index]'); if (open) hideRate(open); return }
+    const box = plot.getBoundingClientRect()
+    showRate(plot, Math.round((event.clientX - box.left) / box.width * Number(plot.dataset.span)))
+  })
+  document.addEventListener('pointerleave', event => { if (event.target.matches?.('.rate-plot')) hideRate(event.target) }, true)
+  document.addEventListener('focusout', event => { if (event.target.matches?.('.rate-plot')) hideRate(event.target) })
   function renderAgentTable(run) {
     const entries = attempts(run)
     const head = `<div class="panel-head"><h2>Agents</h2><span class="panel-sub">${entries.length} / 5 URLs</span><div class="panel-actions"><button class="button quiet small" type="button" data-action="run-tab" data-tab="agents">Manage agent URLs</button></div></div>`
@@ -488,7 +550,7 @@
     let body
     if (tab === 'results') body = renderResultsTab(run)
     else if (tab === 'agents') body = renderAgentsTab(run)
-    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
+    else body = `${renderTiles(run, rows)}<div class="overview-column">${renderSummary(run)}<section class="panel live-panel" id="live-panel" aria-label="Live tracker"></section>${renderRateChart(run)}${renderStoreBars(rows)}${renderAgentTable(run)}</div>`
     $('#main').innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/">All runs</a><span aria-hidden="true">/</span><span>${escape(runName(run))}</span></nav>
       <div class="page-heading run-detail-heading"><div><div class="title-row"><h1>${escape(runName(run))}</h1>${runStatus(run)}</div><div class="run-meta"><span>${icon('tasks')}${suiteName(run)}</span><span>${icon('clock')}${escape(date(run.created_at, true))}</span></div></div><div class="page-actions"><button class="icon-button" data-action="refresh" aria-label="Refresh results" title="Refresh results">${icon('refresh')}</button><button class="button primary" data-action="new-run">${icon('plus')}New run</button></div></div>
       <div class="run-tabs" role="tablist" aria-label="Run sections">${tabs}</div>
@@ -681,6 +743,12 @@
     if ((event.key === 'Enter' || event.key === ' ') && event.target.matches?.('.result-row')) { event.preventDefault(); toggleResult(event.target.closest('.result-group')); return }
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k' && state.authenticated) { event.preventDefault(); $('#goto-input').focus(); $('#goto-input').select(); return }
     if (event.target.id === 'goto-input') { gotoKey(event); return }
+    if (event.target.matches?.('.rate-plot') && ['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+      event.preventDefault()
+      const plot = event.target, span = Number(plot.dataset.span), index = plot.dataset.index === undefined ? -1 : Number(plot.dataset.index)
+      showRate(plot, event.key === 'Home' ? 0 : event.key === 'End' ? span : index + (event.key === 'ArrowLeft' ? -1 : 1))
+      return
+    }
     if (event.key === 'Escape' && !$('#settings-menu').hidden) { setSettings(false); $('#settings-toggle').focus(); return }
     if (event.key === 'Escape' && state.chatOpen && event.target.closest?.('.chat-dock')) { setChatOpen(false); $('.chat-launcher')?.focus(); return }
     if (event.key !== 'Enter' || event.shiftKey || event.isComposing || !event.target.matches?.('.chat-form textarea')) return
