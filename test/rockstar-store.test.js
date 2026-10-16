@@ -98,7 +98,7 @@ test('rockstar-store: guest pre-orders the PS5 code-in-box straight from the pro
     const done = await c.post('/rockstar-store/checkout/payment', CARD)
     assert.match(done.url, /\/rockstar-store\/checkout\/status\?transaction_id=\d{10}&token=[0-9a-f]{24}$/)
     assert.match(done.text, /Thank you for your purchase!/)
-    assert.match(done.text, /Your pre-order has been placed\. Your receipt is saved here/)
+    assert.match(done.text, /Your pre-order has been placed\. A receipt has been sent to/)
     assert.match(done.text, /Transaction ID: <b data-order-number>\d{10}<\/b>/)
     assert.match(done.text, /Visa ending in 4242/)
     assert.match(done.text, /3055550123 &middot; alex@example\.com<\/address>/)
