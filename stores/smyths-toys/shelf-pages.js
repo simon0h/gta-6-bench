@@ -38,7 +38,8 @@ export function shelfProductPage(base, p, { values = {}, tools = '', returnTo = 
   const more = related.length < 4 ? shelfProducts.filter(x => x !== p && x.department === p.department && !related.includes(x)).slice(0, 8 - related.length) : []
   const qty = typeof values.qty === 'string' ? values.qty : '1'
   const collect = Object.entries(p.collectionStock).map(([b, n]) => `${b === 'beckton' ? 'Beckton' : 'Salford'}: ${n ? 'In stock' : 'Out of stock'}`).join(' · ')
-  const safety = p.department === 'Baby Room' ? 'Always follow the manufacturer’s instructions and check the stated child height and weight limits before use.'
+  const safety = p.department === 'Gift Cards' ? 'Gift cards cannot be exchanged for cash. Treat your gift card like cash – we cannot replace lost or stolen cards.'
+    : p.department === 'Baby Room' ? 'Always follow the manufacturer’s instructions and check the stated child height and weight limits before use.'
     : p.department === 'Outdoor' ? 'Adult assembly required where indicated. Protective equipment should be worn. Not to be used in traffic.'
       : p.department === 'Gaming & Tech' ? 'Read the enclosed health and safety information before use.'
         : p.minAge >= 3 ? 'Warning: not suitable for children under 3 years. Small parts. Choking hazard.' : 'Read and keep the enclosed instructions for future reference.'

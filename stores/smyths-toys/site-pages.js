@@ -7,7 +7,7 @@ const ul = (...items) => `<ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>`
 const table = (head, rows) => `<div class="st-table-wrap"><table class="st-table"><thead><tr>${head.map(h => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((c, i) => i ? `<td>${c}</td>` : `<th scope="row">${c}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`
 
 // The help sidebar mirrors the link list on the real Terms & Policies page.
-export const HELP_NAV = [['Help Center', '/help'], ['Shipping & Delivery', '/shipping-and-delivery'], ['Returns', '/returns'], ['Click & Collect', '/click-and-collect'], ['Pre-Order', '/pre-order'], ['Stock Availability', '/stock-availability'], ['Gift Cards', '/gift-card-info'], ['Terms & Policies', '/terms-and-policies'], ['About Us', '/about-us'], ['Contact Us', '/contact-us']]
+export const HELP_NAV = [['Help Centre', '/help'], ['Shipping & Delivery', '/shipping-and-delivery'], ['Returns', '/returns'], ['Click & Collect', '/click-and-collect'], ['Pre-Order', '/pre-order'], ['Stock Availability', '/stock-availability'], ['Gift Cards', '/gift-card-info'], ['Terms & Policies', '/terms-and-policies'], ['About Us', '/about-us'], ['Contact Us', '/contact-us']]
 
 // Real Help Centre topic tiles (label, path, short description).
 export const HELP_TOPICS = [
@@ -202,15 +202,15 @@ export const PAGES = {
     ],
   },
   '/in-store-events': {
-    title: 'In-Store Events', h1: 'In-Store Events',
+    title: 'In-Store Events', h1: 'In-Store Events', cards: true,
     intro: p('Giveaways, character visits and community events at Smyths Toys Superstores.'),
     sections: [
-      ['Catalogue Launch Giveaway!', p('Pick up our new catalogue for a chance to win one of five £1,000 gift cards.')],
-      ['FREE LEGO® GIVEAWAY AT ALL SMYTHS TOYS SUPERSTORES!', p('A free LEGO pack giveaway on 24 October, while stocks last.')],
-      ['Crazy Aaron Is Coming To Smyths Toys Thurrock!', p('Meet Crazy Aaron at our Thurrock store.')],
-      ['Get Cooking Play-Doh Tour at Selected Smyths Toys Superstores!', p('Play-Doh cooking fun at selected stores.')],
-      ['MR X Appeal 2026', p('Donate a gift to help children at Christmas.')],
-      ['Autism & Sensory Friendly Shopping Hours', p('Calmer shopping hours with reduced lighting and noise in our stores.')],
+      ['Catalogue Launch Giveaway!', '<p class="st-event-when">Until Sunday 1 November</p>' + p('Pick up our new catalogue in store or request one online for a chance to win one of five £1,000 gift cards.')],
+      ['FREE LEGO® GIVEAWAY AT ALL SMYTHS TOYS SUPERSTORES!', '<p class="st-event-when">Saturday 24 October · from 10am</p>' + p('Pick up a free LEGO® polybag in any Smyths Toys Superstore. One per child, while stocks last.')],
+      ['Crazy Aaron Is Coming To Smyths Toys Thurrock!', '<p class="st-event-when">Saturday 31 October · 11am – 3pm · Thurrock</p>' + p('Meet Crazy Aaron and try out Thinking Putty demos at our Thurrock store.')],
+      ['Get Cooking Play-Doh Tour at Selected Smyths Toys Superstores!', '<p class="st-event-when">Weekends in November · selected stores</p>' + p('Join our free Play-Doh Kitchen Creations sessions. Ask in store for times.')],
+      ['MR X Appeal 2026', '<p class="st-event-when">From Monday 2 November</p>' + p('Donate a new, unwrapped toy at any Smyths Toys Superstore to help local children at Christmas.')],
+      ['Autism & Sensory Friendly Shopping Hours', '<p class="st-event-when">Every Sunday · first hour of trading</p>' + p('Calmer shopping hours with reduced lighting, no music and fewer announcements in all our stores.')],
     ],
   },
   '/charity-partners': {
