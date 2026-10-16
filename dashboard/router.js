@@ -7,6 +7,7 @@ import { readBounded, RESPONSE_LIMIT } from '../deploy/coordinator.js'
 import { dynamicTraversalRequest } from '../benchmark/traversal.js'
 import { SUMMARY_HEADER, finishedCount, summaryInput, summaryKey, summaryView, writeRunSummary } from '../benchmark/ai-summary.js'
 import { CHAT_HEADER, chatFull, chatLookup, chatStream, chatView, validQuestion } from '../benchmark/ai-chat.js'
+import { FEEDBACK_HEADER, applyFeedback, feedbackOperation } from '../benchmark/feedback.js'
 import { Readable } from 'node:stream'
 
 const publicDirectory = fileURLToPath(new URL('../public/dashboard/', import.meta.url))
@@ -178,6 +179,22 @@ export function createDashboardRouter({ manager, apiToken, local = false, anthro
     res.type('application/x-ndjson')
     Readable.fromWeb(stream).pipe(res)
   }))
+  // Feedback pins from the dashboard's viewer, split like the chat: on
+  // Cloudflare the Worker keeps the notes; locally Node keeps them in memory.
+  let feedback = []
+  const feedbackRoute = action(async (req, res) => {
+    const operation = feedbackOperation(req.method, req.params.id, req.body || {})
+    // A browser holding an agent link would send store pages to that agent's task.
+    const agent_browser = Boolean(cookie(req, AGENT_COOKIE))
+    if (manager.traceArchive) { res.set(FEEDBACK_HEADER, '1'); return res.json({ ...operation, agent_browser }) }
+    const result = applyFeedback(feedback, operation)
+    feedback = result.comments
+    res.status(operation.op === 'add' ? 201 : 200).json({ comments: result.comments, agent_browser })
+  })
+  router.get('/dashboard/api/feedback', feedbackRoute)
+  router.post('/dashboard/api/feedback', feedbackRoute)
+  router.patch('/dashboard/api/feedback/:id', feedbackRoute)
+  router.delete('/dashboard/api/feedback/:id', feedbackRoute)
   router.post('/dashboard/api/runs/:id/attempts', action(async (req, res) => res.status(201).json({ attempt: attemptWithUrl(await manager.addAttempt(req.params.id, req.body || {}), req) })))
   router.patch('/dashboard/api/runs/:id/attempts/:attempt', action(async (req, res) => res.json({ attempt: attemptWithUrl(await manager.updateAttempt(req.params.id, req.params.attempt, req.body || {}), req) })))
   router.get('/dashboard/api/runs/:id/attempts/:attempt/traversal', action(async (req, res) => {
@@ -205,7 +222,7 @@ export function createDashboardRouter({ manager, apiToken, local = false, anthro
   router.get('/dashboard/live.js', (req, res) => res.sendFile(`${publicDirectory}/live.js`))
   router.get('/dashboard', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
   router.get('/dashboard/', (req, res) => res.sendFile(`${publicDirectory}/index.html`))
-  for (const file of ['app.js', 'tasks.js', 'style.css', 'portal.js', 'portal.css', 'capture.js', 'traversal.js', 'recorder.js', 'replay.js']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))
+  for (const file of ['app.js', 'tasks.js', 'style.css', 'portal.js', 'portal.css', 'capture.js', 'traversal.js', 'recorder.js', 'replay.js', 'feedback.js']) router.get(`/dashboard/${file}`, (req, res) => res.sendFile(`${publicDirectory}/${file}`))
   for (const [file, source] of Object.entries(vendor)) {
     router.get(`/dashboard/vendor/${file}`, (req, res) => res.set('Cache-Control', 'private, max-age=86400').type(file.endsWith('.css') ? 'css' : 'text/javascript').sendFile(source))
   }
