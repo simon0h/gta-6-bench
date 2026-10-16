@@ -4,7 +4,7 @@
 // shelf codes, so every purchase POST for them falls through to the adapter's 409 guard.
 import { randomInt } from 'node:crypto'
 import { esc, money } from '../../lib/html.js'
-import { renderProductAsset } from '../../lib/product-asset-art.js'
+import { renderProductAsset, classifyProductAsset } from '../../lib/product-asset-art.js'
 import { recordOrder, getOrder } from '../../lib/orders.js'
 import { validateCard } from '../../lib/payment.js'
 import { shelf, shelfByCode, best, brandsOf } from './shelf.js'
@@ -25,14 +25,18 @@ const artTitle = { loafers: 'leather shoes', toothpaste: 'compact powder', brush
 // shopper expects from the title (fruit as fruit, milk in cartons, tissue as rolls, cans,
 // boxed coffee and soups) instead of drawing every food as the same pouch.
 const titleArt = [
-  [/사과/, 'fresh red apples'], [/감귤|귤 /, 'fresh mandarins'], [/대봉감|단감|홍시/, 'fresh oranges'], [/키위/, 'fresh potatoes'], [/토마토/, 'fresh tomatoes'],
+  [/사과/, 'fresh red apples'], [/감귤|귤 /, 'fresh mandarins'], [/대봉감|단감|홍시/, 'fresh persimmons'], [/키위/, 'fresh kiwi'], [/토마토/, 'fresh tomatoes'],
   [/화장지|휴지/, 'toilet paper'], [/핸드타올|키친타올/, 'paper towels'],
   [/^(?!.*분유).*우유/, 'milk'], [/곰탕|미역국|전복죽/, 'soup'], [/스팸|참치/, 'canned meat', 'pantry'],
   [/커피믹스|모카골드|화이트골드|캡슐/, 'coffee tea'], [/햇반/, 'cooked rice cereal'], [/고추장|쌈장/, 'chili sauce jar'],
 ]
+// The shared drawings also read Korean names for these kinds, so the real title wins
+// over the broad hint (a necklace listed under 'jar', diapers under 'storage box').
+const titleKinds = new Set(['jewelry', 'oral-care', 'meat', 'diapers', 'dish-soap', 'battery', 'face-mask'])
 function artHint(p) {
   const hit = ['pantry', 'jar', 'rice', 'towel', 'milk', 'coffee'].includes(p.art) && titleArt.find(([re]) => re.test(p.title))
   if (hit) return { title: hit[1], type: hit[2] }
+  if (titleKinds.has(classifyProductAsset({ title: p.title, raw: { title: p.title } }))) return { title: p.title }
   const hint = artTitle[p.art] || p.art
   return { title: hint, type: p.art === 'pantry' ? p.art : p.art === 'hair dryer' ? 'hair dryer' : undefined, category: p.art === 'hair dryer' ? 'Beauty' : undefined }
 }
