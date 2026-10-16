@@ -40,6 +40,7 @@ function artShape(r, kind) {
   if (/speakers/.test(t)) return 'speaker'
   if (/disc drive/.test(t)) return 'object'
   if (kind !== 'other') return null
+  if (/SM060107/.test(code)) return 'bricks'
   if (/SM060202/.test(code)) return 'seat'
   if (/SM060203/.test(code)) return 'bed'
   if (/SM060301|SM060311/.test(code)) return 'bicycle'
@@ -120,13 +121,21 @@ export const categoryCount = code => { const c = CATEGORY_ROWS.find(x => x.code 
 export const MEDIA_ROOT = '/smyths-toys/uk/en-gb/medias'
 export const MEDIA = (sku, view = 0) => `${MEDIA_ROOT}/${encodeURIComponent(sku)}/${view}.svg`
 export const shelfViews = p => p.catalogType === 'console' || /bundle|set|kit|pack/i.test(p.title) ? 4 : 3
+// A few titles contain words the shared illustrator reads as another kind of product (a LEGO helmet
+// model drawn as a T-shirt, a roller-coaster set as gym kit), so the drawing gets a plainer name.
+const ART_TITLES = {
+  254465: 'LEGO Editions McLaren F1 Model Kit', 254454: 'LEGO Editions Ferrari F1 Model Kit',
+  258989: 'LEGO City Lava Land Theme Park Kit', 141295: 'LEGO Classic Large Creative Bricks Set',
+  238225: 'Hot Wheels City Coaster Rally Car Playset', 262128: 'Tonies Bluey Audio Figure Set',
+  256688: 'Bluey Mega House Playset', 160535: 'LeapFrog Learning Toy Cart',
+}
 function descriptor(p) {
   const type = p.catalogType === 'game' ? 'game' : p.catalogType === 'console' ? 'console' : 'other'
   return {
-    store: 'smyths-toys', id: p.sku, title: p.title, canonicalTitle: p.title, type, category: p.category, brand: p.brand,
+    store: 'smyths-toys', id: p.sku, title: ART_TITLES[p.sku] || p.title, canonicalTitle: ART_TITLES[p.sku] || p.title, type, category: p.category, brand: p.brand,
     platform: p.platform, edition: type === 'game' ? 'standard' : null, format: type === 'game' ? (/switch/.test(p.platform || '') ? 'cartridge' : 'disc') : 'physical',
     specs: {}, assetKey: `smyths-shelf-${p.sku}`, sourceArt: {},
-    raw: { title: p.title, brand: p.brand, type: /SM060107|SM060106|SM060102|SM06010210/.test(p.categoryCode) ? 'board games' : undefined, description: p.description, shape: p.artShape === 'ssd' ? 'ssd' : undefined, artShape: p.artShape, platform: p.platform },
+    raw: { title: ART_TITLES[p.sku] || p.title, brand: p.brand, type: /SM060106/.test(p.categoryCode) || /jigsaw|puzzle|board game/i.test(p.title) ? 'board games' : undefined, description: p.description, shape: p.artShape === 'ssd' ? 'ssd' : undefined, artShape: p.artShape, platform: p.platform },
   }
 }
 const cache = new Map()
