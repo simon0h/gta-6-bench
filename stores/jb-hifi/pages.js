@@ -110,7 +110,7 @@ function addedModal(base, p, closeHref) {
 
 // ---- shared bits ----
 function badges(p) { return p.badges.length ? `<div class="jb-badges">${p.badges.map(b => `<span class="jb-badge-tag is-${b.toLowerCase().replace(/[^a-z]+/g, '-')}">${esc(b)}</span>`).join('')}</div>` : '' }
-function stars(p) { return p.stars ? `<div class="jb-stars" aria-label="Rated ${p.stars} out of 5 from ${p.reviews} reviews">&#9733;&#9733;&#9733;&#9733;&#9733; <span>${p.stars} (${p.reviews})</span></div>` : '' }
+function stars(p) { return p.stars ? `<div class="jb-stars" aria-label="Rated ${p.stars} out of 5 from ${p.reviews} reviews"><span class="jb-stars-meter" aria-hidden="true"><i style="width:${Math.max(0, Math.min(100, Number(p.stars) * 20))}%"></i></span> <span>${p.stars} (${p.reviews})</span></div>` : '' }
 function priceTag(p, big = false) { return `<div class="jb-tag ${big ? 'jb-tag-big' : ''}"><span>${tagPrice(p.price)}</span></div>` }
 export function artwork(p,className='') { return p.shelf ? shelfImage(p,{className}) : productImage('jb-hifi',p,{className}) }
 const optionText = p => p.variantId ? `<div class="jb-fine">${esc(p.variantLabel)}</div>` : ''

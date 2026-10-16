@@ -7,6 +7,7 @@ import { fixtureCatalog } from '../../lib/catalog-policy.js'
 import { productPhoto, photoStyle } from '../../lib/product-photos.js'
 import { PRODUCTS, LISTED, ASSORTMENT, productPath } from './data.js'
 import { DEPARTMENT_DEFS, CAMPAIGNS, slugify } from './catalog.js'
+import { compactPages } from './expansion.js'
 import { DEPARTMENTS, UTILITIES, NEW_MENU, DEALS_MENU, SERVICES_MENU, POPULAR_BRANDS, FOOTER, LEGAL, HELP_TOPICS, HELP_ARTICLES, INFO_PAGES, BLOGS, BLOG_POSTS } from './site-data.js'
 
 const DEPT_PHOTO = Object.fromEntries(DEPARTMENT_DEFS.map(d => [d.slug, d.photo]))
@@ -134,14 +135,20 @@ export function landingPage({ base, dept, sub, query, tile }) {
   const route = `${base}/collections/${(sub || dept).slug}`
   const items = sortItems(applyFilters(sub ? subProducts(sub) : deptProducts(dept), q), q.sort)
   const title = (sub || dept).title
+  const perPage = [12, 24, 36].includes(Number(query.per_page)) ? Number(query.per_page) : 24
+  const pageCount = Math.max(1, Math.ceil(items.length / perPage))
+  const page = Math.max(1, Math.min(pageCount, Math.floor(Number(query.page)) || 1))
+  const shown = items.slice((page - 1) * perPage, page * perPage)
+  const pageHref = n => `${route}?${new URLSearchParams(Object.entries({ ...q, per_page: perPage === 24 ? '' : perPage, page: n === 1 ? '' : n }).filter(([, v]) => v !== '' && v != null))}`.replace(/\?$/, '')
+  const pager = pageCount > 1 ? `<nav class="jb-pagination" aria-label="Pagination">${page > 1 ? `<a rel="prev" href="${pageHref(page - 1)}">Previous</a>` : ''}${compactPages(page, pageCount).map(n => `<a href="${pageHref(n)}" ${page === n ? 'aria-current="page"' : ''}>${n}</a>`).join('')}<span>Page ${page} of ${pageCount}</span>${page < pageCount ? `<a rel="next" href="${pageHref(page + 1)}">Next</a>` : ''}</nav>` : ''
   const siblings = dept.subs.map(s => `<a href="${base}/collections/${s.slug}" ${sub?.slug === s.slug ? 'aria-current="page"' : ''}>${esc(s.title)}</a>`).join('')
   const sortForm = `<form method="get" action="${route}">${['availability', 'price', 'deal'].filter(k => q[k]).map(k => `<input type="hidden" name="${k}" value="${esc(q[k])}">`).join('')}<label for="sort-by">Sort by: <select id="sort-by" name="sort">${[['best', 'Best Match'], ['price-asc', 'Price: Low - High'], ['price-desc', 'Price: High - Low'], ['name-asc', 'Title: A - Z'], ['name-desc', 'Title: Z - A']].map(([v, l]) => `<option value="${v}" ${q.sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><button class="jb-btn jb-btn-small" type="submit">Sort</button></form>`
-  const results = items.length ? `<div class="jb-grid">${items.map(p => tile(base, p, route)).join('')}</div>` : `<div class="jb-empty"><h2>0 results</h2><p>Sorry, there are no products in ${esc(title)} to show right now.</p><p>Try another category, clear your filters or search for a product or brand.</p><p><a class="jb-btn jb-btn-black jb-btn-small" href="${base}/collections/${dept.slug}">Back to ${esc(dept.title)}</a> <a class="jb-btn jb-btn-grey jb-btn-small" href="${base}/collections/all">All products</a></p></div>`
+  const results = items.length ? `<div class="jb-grid">${shown.map(p => tile(base, p, route)).join('')}</div>` : `<div class="jb-empty"><h2>0 results</h2><p>Sorry, there are no products in ${esc(title)} to show right now.</p><p>Try another category, clear your filters or search for a product or brand.</p><p><a class="jb-btn jb-btn-black jb-btn-small" href="${base}/collections/${dept.slug}">Back to ${esc(dept.title)}</a> <a class="jb-btn jb-btn-grey jb-btn-small" href="${base}/collections/all">All products</a></p></div>`
   return `${crumbs(base, sub ? [[dept.title, '/collections/' + dept.slug], [sub.title]] : [[dept.title]])}
 <section class="jb-collection-heading jb-dept-banner"><div><h1>${esc(title)}</h1><p>${esc(sub ? `Shop ${sub.title} at JB Hi-Fi. ${dept.blurb}` : dept.blurb)}</p></div><span class="jb-dept-banner-art">${deptIcon(dept.slug, dept.title)}</span></section>
 <nav class="jb-subcat-tiles" aria-label="${esc(dept.title)} categories">${siblings}</nav>
 <div class="jb-search-head"><h2>${items.length} result${items.length === 1 ? '' : 's'}</h2><div class="jb-toolbar">${sortForm}</div></div>
-<div class="jb-search-body">${filterRail(route, q)}<div>${results}<p class="jb-fine jb-center">Showing ${items.length} of ${items.length} results</p></div></div>
+<div class="jb-search-body">${filterRail(route, q)}<div>${results}<p class="jb-fine jb-center">Showing ${items.length ? `${(page - 1) * perPage + 1}–${(page - 1) * perPage + shown.length}` : 0} of ${items.length} results</p>${pager}</div></div>
 <section class="jb-dept-copy"><h2>${esc(title)} at JB Hi-Fi</h2><p>${esc(dept.blurb)} Every purchase is backed by our everyday low prices and friendly expert advice in store and online. Seen it cheaper? Ask for a JB Deal!</p></section>`
 }
 // Sub-category strip used on the store's existing department listing pages.
