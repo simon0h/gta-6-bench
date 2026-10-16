@@ -23,12 +23,6 @@
     chat: '<path d="M5 18.5V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8.5z"/><path d="M8.5 9h7M8.5 12h4.5"/>',
     down: '<path d="m6 9 6 6 6-6"/>',
     close: '<path d="M6 6l12 12M18 6 6 18"/>',
-    back: '<path d="m15 5-7 7 7 7"/>',
-    desktop: '<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/>',
-    tablet: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M11 18h2"/>',
-    phone: '<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>',
-    pointer: '<path d="m5 3 14 7-6 2-2 6z"/>',
-    pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.2"/>',
   }
   const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.run}</svg>`
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
@@ -70,8 +64,6 @@
   }
   const traversal = window.DashboardTraversal.create({ api, replay: window.DashboardReplay?.create({ api }) })
   const tasks = window.DashboardTasks.create({ api, toast, icon })
-  const feedbackView = window.DashboardFeedback.create({ api, toast, icon, stores: window.DashboardLive.stores, storeName: window.DashboardLive.storeName,
-    onChange: () => { const count = $('#feedback-count'); if (count) count.textContent = feedbackView.count() } })
 
   function toast(message, error = false) {
     clearTimeout(toastTimer)
@@ -141,12 +133,10 @@
     const view = route().view
     $('#run-count').textContent = state.runs.length
     $('#task-count').textContent = tasks.count()
-    $('#feedback-count').textContent = feedbackView.count()
     $('#overview-link').classList.toggle('active', view === 'overview')
     $('#tasks-link').classList.toggle('active', view === 'tasks' || view === 'task')
-    $('#feedback-link').classList.toggle('active', view === 'feedback')
     $('#recent-runs').innerHTML = state.runs.length ? state.runs.slice(0, 12).map(run => `<a class="recent-run${state.selected?.id === run.id ? ' selected' : ''}" href="#/runs/${encodeURIComponent(run.id)}"${state.selected?.id === run.id ? ' aria-current="page"' : ''}>${icon('run')}<span>${escape(runName(run))}</span></a>`).join('') : '<p class="sidebar-empty">No runs yet.</p>'
-    $('#breadcrumb-current').textContent = state.selected ? runName(state.selected) : view === 'tasks' ? 'My tasks' : view === 'task' ? 'Task' : view === 'feedback' ? 'Feedback' : 'Runs'
+    $('#breadcrumb-current').textContent = state.selected ? runName(state.selected) : view === 'tasks' ? 'My tasks' : view === 'task' ? 'Task' : 'Runs'
   }
 
   function renderOverview() {
@@ -517,10 +507,6 @@
       live.stop()
       if (view === 'tasks') tasks.renderList($('#main')); else tasks.renderEditor($('#main'), id)
       renderSidebar()
-    } else if (view === 'feedback') {
-      live.stop()
-      feedbackView.render($('#main'), { local: state.local })
-      renderSidebar()
     } else if (state.selected) renderDetail(); else renderOverview()
   }
   function route() {
@@ -529,7 +515,6 @@
     if (run) return { view: 'run', id: decode(run[1]) }
     const task = location.hash.match(/^#\/tasks\/([^/]+)/)
     if (task) return { view: 'task', id: task[1] === 'new' ? null : decode(task[1]) }
-    if (/^#\/feedback\/?$/.test(location.hash)) return { view: 'feedback', id: null }
     return { view: /^#\/tasks\/?$/.test(location.hash) ? 'tasks' : 'overview', id: null }
   }
   function selectedId() { const { view, id } = route(); return view === 'run' ? id : null }
@@ -540,7 +525,7 @@
     const id = selectedId()
     try {
       const taskView = ['tasks', 'task'].includes(route().view)
-      const [, list, detail, summary, , chat] = await Promise.all([feedbackView.load().catch(() => null), api('/runs'), id ? api(`/runs/${encodeURIComponent(id)}`) : Promise.resolve(null),
+      const [list, detail, summary, , chat] = await Promise.all([api('/runs'), id ? api(`/runs/${encodeURIComponent(id)}`) : Promise.resolve(null),
         id ? api(`/runs/${encodeURIComponent(id)}/summary`).catch(error => ({ error: error.message })) : Promise.resolve(null), tasks.load(taskView),
         id && !state.chatAnswers.has(id) ? api(`/runs/${encodeURIComponent(id)}/chat`).catch(error => ({ error: error.message })) : Promise.resolve(null)])
       if (number !== state.loadNumber || !state.authenticated) return
@@ -790,7 +775,7 @@
   let gotoIndex = 0
   function gotoItems(query) {
     const text = query.trim().toLowerCase()
-    const items = [{ label: 'All runs', kind: 'Page', href: '#/' }, { label: 'My tasks', kind: 'Page', href: '#/tasks' }, { label: 'New task', kind: 'Page', href: '#/tasks/new' }, { label: 'Feedback', kind: 'Page', href: '#/feedback' },
+    const items = [{ label: 'All runs', kind: 'Page', href: '#/' }, { label: 'My tasks', kind: 'Page', href: '#/tasks' }, { label: 'New task', kind: 'Page', href: '#/tasks/new' },
       ...state.runs.map(run => ({ label: runName(run), kind: 'Run', href: `#/runs/${encodeURIComponent(run.id)}` })),
       ...tasks.list().map(task => ({ label: task.name, kind: 'Task', href: `#/tasks/${encodeURIComponent(task.id)}` }))]
     return (text ? items.filter(item => item.label.toLowerCase().includes(text)) : items).slice(0, 8)
