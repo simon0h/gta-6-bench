@@ -64,7 +64,7 @@ async function launchTrial({ trial, task, run, secureCookies }) {
     const target = await request('start', {
       runId: trial.id, task, snapshot: trial.snapshot, secureCookies,
       metadata: { suite_version: SUITE_VERSION, benchmark_date: BENCHMARK_DATE,
-        environment_sha256: run.environment_sha256, selected_tasks_sha256: run.selected_tasks_sha256,
+        environment_sha256: trial.environment_sha256 ?? run.environment_sha256, selected_tasks_sha256: run.selected_tasks_sha256,
         dashboard_run_id: run.id, dashboard_attempt_id: trial.attempt_id },
     })
     return { target: { baseUrl: target.baseUrl, startPath: target.startPath },
@@ -111,10 +111,17 @@ export async function createRunManager({
   const attemptTrials = attempt => trials.filter(trial => trial.attempt_id === attempt.id).sort((a, b) => a.index - b.index)
   const activeTrial = attempt => attemptTrials(attempt).find(trial => trial.status === 'running')
   const selectedTasks = run => run.suite === 'custom' ? run.tasks : catalogs[run.suite]
-  const taskSetHash = run => run.suite === 'custom' ? digest(run.tasks) : hashes[run.suite]
+  // A run keeps working when the site is updated (every merge to main deploys).
+  // Only a new benchmark version stops it. Each task is still checked on its
+  // own (id and version) before it starts, and each trial records the site
+  // fingerprint it ran on, so a run that spans an update can be told apart.
   function compatible(run) {
-    if (run.environment_sha256 !== fingerprint.environment_sha256 || run.selected_tasks_sha256 !== taskSetHash(run)
-      || run.suite_version !== SUITE_VERSION) throw fail('The benchmark environment or task set changed. Generate a new run to avoid mixing versions.', 409)
+    if (run.suite_version !== SUITE_VERSION) throw fail('This run was made for an older version of the benchmark. Start a new run.', 409)
+  }
+  // The task at this position, as the run first listed it.
+  function taskAt(run, index) {
+    const task = selectedTasks(run)[index]
+    return task && task.id === run.task_ids[index] ? task : null
   }
   function attemptDetail(run, attempt) {
     const records = attemptTrials(attempt)
@@ -152,8 +159,8 @@ export async function createRunManager({
     let currentTask = null
     if (current) {
       compatible(run)
-      const task = selectedTasks(run).find(task => task.id === current.task_id)
-      if (!task) throw fail('The task set changed. Ask the operator for a new run.', 409)
+      const task = taskAt(run, current.index)
+      if (!task || task.id !== current.task_id) throw fail('This task changed since the run started. Ask the operator for a new run.', 409)
       const publicFields = publicTask(task)
       currentTask = { index: current.index + 1, id: publicFields.id, store: publicFields.store,
         instruction: publicFields.instruction, request: publicFields.request,
@@ -245,8 +252,8 @@ export async function createRunManager({
   async function ensureWorker(run, attempt, trial) {
     compatible(run)
     if (workers.has(trial.id)) return workers.get(trial.id)
-    const task = selectedTasks(run)[trial.index]
-    if (!task || task.id !== trial.task_id || task.version !== trial.task_version) throw fail('Trial task identity changed', 409)
+    const task = taskAt(run, trial.index)
+    if (!task || task.id !== trial.task_id || task.version !== trial.task_version) throw fail('This task changed since the run started. Start a new run.', 409)
     const worker = await workerFactory({ trial: clone(trial), task: clone(task), run: clone(run), secureCookies })
     workers.set(trial.id, worker)
     return worker
@@ -583,11 +590,13 @@ export async function createRunManager({
       compatible(run)
       let trial = activeTrial(attempt)
       if (!trial) {
-        const index = attemptTrials(attempt).length, task = selectedTasks(run)[index]
-        if (!task) throw fail('All tasks are complete', 409)
+        const index = attemptTrials(attempt).length
+        if (index >= run.task_ids.length) throw fail('All tasks are complete', 409)
+        const task = taskAt(run, index)
+        if (!task) throw fail('This task changed since the run started. Start a new run.', 409)
         const started = now()
         trial = { id: randomUUID(), run_id: run.id, attempt_id: attempt.id, index, task_id: task.id, task_version: task.version,
-          status: 'running', started_at: iso(started), snapshot: null, result: null,
+          status: 'running', started_at: iso(started), environment_sha256: fingerprint.environment_sha256, snapshot: null, result: null,
           traversal: { version: 1, event_count: 0 }, traversal_secret: randomBytes(32).toString('base64url'),
           replay: { version: 1, chunk_count: 0, bytes: 0 } }
         trials.push(trial)

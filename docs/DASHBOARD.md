@@ -125,14 +125,17 @@ opens from the menu button.
 
 ## Comparability and persistence
 
-A run fixes the suite version, selected task definitions and environment hash.
-Each URL gets the same ordered tasks, with a fresh isolated Node worker for each
-task. Browser state, accounts, scenario mutations and order evidence are separate.
-Changing a `?run=` query cannot change the trial's evaluator identity.
+A run fixes the suite version and its ordered task list. Each URL gets the same
+ordered tasks, with a fresh isolated Node worker for each task. Browser state,
+accounts, scenario mutations and order evidence are separate. Changing a `?run=`
+query cannot change the trial's evaluator identity.
 
-Results remain readable after a source update, but an unfinished attempt cannot
-continue against changed benchmark code. Generate a new run after deployment
-changes. Labels and notes remain editable without rewriting recorded task evidence.
+Runs keep working after a deploy: every merge to main deploys, and a dashboard or
+store fix must not end a run in progress. Each trial records the site fingerprint
+(`environment_sha256`) it started on, so a run that spans a deploy can be told
+apart later. A run stops only when the suite version changes, or when the task at
+the next position no longer has the same id and version; then start a new run.
+Labels and notes remain editable without rewriting recorded task evidence.
 
 Local state is atomically stored in `data/dashboard/dashboard-state.json`.
 Cloudflare stores dashboard records and active-task snapshots in Durable Object
