@@ -18,9 +18,15 @@ function lines(text, max) {
   if (cur) out.push(cur)
   return out
 }
+// Keep the first n lines; when text is cut, don't leave a dangling "&", "with" ... at the end.
+function fit(all, n) {
+  const out = all.slice(0, n)
+  if (all.length > n && out.length) out[out.length - 1] = out[out.length - 1].replace(/(\s+(&|and|with|in|of|for|\+|-|–))+$/i, '').replace(/[,;:]$/, '')
+  return out
+}
 const label = (x, y, w, brand, sub, { color = '#fff', size = 15, subColor } = {}) => {
-  const b = lines(brand, Math.max(6, Math.floor(w / (size * 0.58)))).slice(0, 2)
-  const s = lines(sub, Math.max(8, Math.floor(w / 6.4))).slice(0, 2)
+  const b = fit(lines(brand, Math.max(6, Math.floor(w / (size * 0.58)))), 2)
+  const s = fit(lines(sub, Math.max(8, Math.floor(w / 6.4))), 2)
   let out = '', yy = y
   for (const l of b) { out += `<text x="${x}" y="${yy}" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="${size}" fill="${color}">${esc(l)}</text>`; yy += size + 2 }
   yy += 3
@@ -32,7 +38,7 @@ const shadow = (cx, cy, rx) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${
 const DRAW = {
   bag: ({ c, brand, sub, pet }) => `${shadow(150, 268, 88)}<path d="M78 46h144l-8 18 12 196H74l12-196z" fill="${c}"/><path d="M78 46h144l-8 18H86z" fill="${shade(c, -0.25)}"/><rect x="92" y="150" width="116" height="82" rx="8" fill="#fff" opacity=".93"/>${label(150, 92, 120, brand, '', { size: 17 })}${label(150, 172, 104, sub, '', { color: '#222', size: 11 })}${pet ? `<text x="150" y="222" text-anchor="middle" font-family="Arial" font-weight="700" font-size="12" fill="${c}">${esc(pet.toUpperCase())}</text>` : ''}`,
   sack: ({ c, brand, sub }) => `${shadow(150, 270, 95)}<path d="M70 52q80-14 160 0l10 206q-90 16-180 0z" fill="#efe6d2" stroke="#cdbf9f" stroke-width="2"/><rect x="88" y="96" width="124" height="120" rx="6" fill="${c}"/>${label(150, 128, 112, brand, sub, { size: 16 })}`,
-  can: ({ c, brand, sub }) => `${shadow(150, 266, 100)}${[0, 1, 2].map(i => `<g transform="translate(${62 + i * 60} ${i === 1 ? 0 : 18})"><rect x="0" y="78" width="56" height="150" rx="6" fill="${c}"/><ellipse cx="28" cy="78" rx="28" ry="8" fill="#cfd5da"/><ellipse cx="28" cy="78" rx="20" ry="5" fill="#b7bec5"/><rect x="0" y="130" width="56" height="44" fill="#fff" opacity=".9"/></g>`).join('')}${label(150, 60, 220, brand, '', { color: '#222', size: 16 })}<text x="150" y="${178}" text-anchor="middle" font-family="Arial" font-size="9.5" fill="#333">${esc(lines(sub, 14)[0] || '')}</text>`,
+  can: ({ c, brand, sub }) => `${shadow(150, 266, 100)}${[0, 1, 2].map(i => `<g transform="translate(${62 + i * 60} ${i === 1 ? 0 : 18})"><rect x="0" y="78" width="56" height="150" rx="6" fill="${c}"/><ellipse cx="28" cy="78" rx="28" ry="8" fill="#cfd5da"/><ellipse cx="28" cy="78" rx="20" ry="5" fill="#b7bec5"/><rect x="0" y="130" width="56" height="44" fill="#fff" opacity=".9"/></g>`).join('')}${label(150, 60, 220, brand, '', { color: '#222', size: 16 })}<text x="150" y="${178}" text-anchor="middle" font-family="Arial" font-size="9.5" fill="#333">${esc(fit(lines(sub, 14), 1)[0] || '')}</text>`,
   tray: ({ c, brand, sub }) => `${shadow(150, 262, 110)}${[0, 1, 2].map(i => `<g transform="translate(0 ${i * 34})"><path d="M48 150h204l-14 34H62z" fill="${shade(c, i * 0.1)}"/><rect x="44" y="142" width="212" height="10" rx="4" fill="#d9dde1"/></g>`).join('')}${label(150, 92, 220, brand, sub, { color: '#222', size: 18 })}`,
   pouch: ({ c, brand, sub }) => `${shadow(150, 266, 76)}<path d="M88 50h124q6 0 6 6v196q0 8-8 8H90q-8 0-8-8V56q0-6 6-6z" fill="${c}"/><rect x="88" y="54" width="124" height="12" fill="${shade(c, -0.3)}"/><circle cx="150" cy="78" r="5" fill="#fff"/><ellipse cx="150" cy="186" rx="48" ry="40" fill="#fff" opacity=".9"/>${label(150, 112, 116, brand, '', { size: 16 })}${label(150, 180, 86, sub, '', { color: '#222', size: 10 })}`,
   tub: ({ c, brand, sub }) => `${shadow(150, 266, 82)}<path d="M80 92h140l-10 168H90z" fill="${c}"/><rect x="74" y="72" width="152" height="26" rx="6" fill="${shade(c, -0.3)}"/><rect x="92" y="140" width="116" height="80" rx="10" fill="#fff" opacity=".92"/>${label(150, 126, 130, brand, '', { size: 15 })}${label(150, 168, 100, sub, '', { color: '#222', size: 10 })}`,

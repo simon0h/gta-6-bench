@@ -8,6 +8,7 @@ import { Router } from 'express'
 import { esc } from '../../lib/html.js'
 import { authenticate, createAccount, publicAccount } from '../../lib/accounts.js'
 import { chewyReferenceChrome, PHONE, paw } from './reference-layout.js'
+import { tileIcon } from './icons.js'
 import {
   TOP_NAV, DOG_MENU, CAT_MENU, OTHER_ANIMALS_MENU, PHARMACY_MENU, SERVICES_MENU, EDUCATION_MENU, PICKS_MENU,
   GIVE_BACK_MENU, BRANDS, PET_TILES, POPULAR_CATEGORIES, SORTS, CATEGORIES, DEALS, DEAL_TILE_PATH, FOOTER, LEGAL, idOf,
@@ -18,7 +19,7 @@ import { productCard, productRow, listingFilters, listingResults, productPage, c
 const str = v => (typeof v === 'string' ? v.trim() : '')
 const slugify = s => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 const crumbs = (base, list) => `<nav class="cw-crumbs" aria-label="Breadcrumb"><ol><li><a href="${base}/">Chewy</a></li>${list.map(([l, p], i) => i === list.length - 1 && !p ? `<li aria-current="page">${esc(l)}</li>` : `<li><a href="${base}${p}">${esc(l)}</a></li>`).join('')}</ol></nav>`
-const tile = (base, label, path, cls = '') => `<a class="cw-tile ${cls}" href="${base}${path}"><span class="cw-tile-art cw-art-${slugify(label).split('-')[0]}">${paw(46)}</span><span>${esc(label)}</span></a>`
+const tile = (base, label, path, cls = '') => `<a class="cw-tile ${cls}" href="${base}${path}"><span class="cw-tile-art cw-art-${slugify(label).split('-')[0]}">${tileIcon(label, 54)}</span><span>${esc(label)}</span></a>`
 const tiles = (base, list, cls) => `<div class="cw-tiles">${list.map(([l, p]) => tile(base, l, p, cls)).join('')}</div>`
 const faq = list => `<div class="cw-faq">${list.map(([q, a]) => `<details><summary><h3>${esc(q)}</h3></summary><p>${esc(a)}</p></details>`).join('')}</div>`
 const sections = list => list.map(([h, ...ps]) => `<section class="cw-copy-section"><h2>${esc(h)}</h2>${ps.map(p => Array.isArray(p) ? `<ul>${p.map(li => `<li>${li}</li>`).join('')}</ul>` : `<p>${p}</p>`).join('')}</section>`).join('')
@@ -90,7 +91,7 @@ function homePage(base, req) {
 <section class="cw-welcome"><h2>Welcome to Chewy</h2><div class="cw-welcome-grid"><div class="cw-welcome-card"><h3>${user ? `Hey, ${esc(user.first_name || 'friend')}!` : 'Hey, friend!'}</h3><p>${user ? 'Manage Autoship, orders and pet profiles from your account.' : 'Sign in for a personalized experience, Autoship and order tracking.'}</p><a class="cw-btn" href="${base}${user ? '/app/account' : '/app/login'}">${user ? 'Your Account' : 'Sign in'}</a></div><div class="cw-welcome-card cw-offer"><p class="cw-eyebrow">Pharmacy</p><h3>Save 50% on first Pharmacy order</h3><a class="cw-btn cw-btn-outline" href="${base}/deals/50-off-your-first-autoship-order-3448422">Set up a prescription Autoship</a></div><div class="cw-welcome-card cw-offer"><p class="cw-eyebrow">Autoship</p><h3>Save 35% on first order</h3><a class="cw-btn cw-btn-outline" href="${base}/b/autoship-save-15682">Set up an Autoship</a></div></div></section>
 <div class="cw-home-rows" data-reference-state="catalog">${productRow(base, 'Deals for you', SHELF.filter(p => p.list).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/deals/todays-deals-2723')}</div>
 <section class="cw-section"><h2>Shop all pets, friends & more</h2><div class="cw-tiles cw-tiles-round">${PET_TILES.map(t => tile(base, t.label, t.path)).join('')}</div></section>
-<section class="cw-section"><h2>Explore popular categories</h2><div class="cw-cat-cards">${POPULAR_CATEGORIES.map(c => `<a href="${base}${c.path}"><span class="cw-tile-art">${paw(40)}</span>${esc(c.label)}</a>`).join('')}</div></section>
+<section class="cw-section"><h2>Explore popular categories</h2><div class="cw-cat-cards">${POPULAR_CATEGORIES.map(c => `<a href="${base}${c.path}"><span class="cw-tile-art">${tileIcon(c.label, 48)}</span>${esc(c.label)}</a>`).join('')}</div></section>
 ${productRow(base, 'Bestselling dog food', categoryProducts('332').filter(p => !p.rx).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/b/food-332')}
 ${productRow(base, 'Cat food & litter favorites', [...categoryProducts('387'), ...categoryProducts('411')].filter(p => !p.rx).sort((a, b) => b.reviews - a.reviews).slice(0, 14), '/b/food-387')}
 <section class="cw-pharmacy-band"><div><p class="cw-eyebrow">Chewy Pharmacy</p><h2>50% off your first Autoship order of prescription medication</h2><p>Chewy Pharmacy has the pet meds you trust at low prices every day. Our licensed pharmacists work with your vet to get the prescription approved, then ship it fast.</p><a class="cw-btn" href="${base}/deals/50-off-your-first-autoship-order-3448422">Shop now</a></div>${paw(160)}</section>
@@ -302,8 +303,13 @@ export function installChewyReferencePages(inner) {
     const raw = typeof req.query.query === 'string' ? req.query.query : typeof req.query.q === 'string' ? req.query.q : ''
     const found = searchShelf(raw)
     // Queries with no assortment match (for example "gta 6": Chewy sells no
-    // video games) keep the shared reference router's coverage state.
-    if (!found.length) return next()
+    // video games) keep the uncaptured coverage state, shown as Chewy's own
+    // no-results page: search tips and category links, never product cards.
+    if (!found.length) {
+      if (!raw.trim()) return next()
+      const q = raw.trim(), title = `No results for "${q}"`
+      return render(req, res, title, `<section class="empty reference-coverage cw-no-results" data-reference-state="uncaptured"><span class="cw-empty-art">${paw(64)}</span><h1>${esc(title)}</h1><p>We couldn't find any matches for <strong>${esc(q)}</strong>. Check the spelling or try a more general search term.</p><div class="cw-search-tips"><h2>Search tips</h2><ul><li>Double-check the spelling of your search.</li><li>Try a more general term, like “dog food” or “cat litter.”</li><li>Search by brand, like “Purina Pro Plan” or “Blue Buffalo.”</li></ul></div><p><a class="cw-btn" href="${baseOf(res)}/">Continue shopping</a></p></section><section class="cw-section"><h2>Explore popular categories</h2><div class="cw-cat-cards">${POPULAR_CATEGORIES.map(c => `<a href="${baseOf(res)}${c.path}"><span class="cw-tile-art">${tileIcon(c.label, 48)}</span>${esc(c.label)}</a>`).join('')}</div></section><section class="cw-section"><h2>Shop by pet</h2><div class="cw-tiles cw-tiles-round">${PET_TILES.map(t => tile(baseOf(res), t.label, t.path)).join('')}</div></section>`)
+    }
     const base = baseOf(res), path = req.path, query = raw.trim()
     const hidden = { [typeof req.query.query === 'string' ? 'query' : 'q']: query }
     render(req, res, `${query} - Search Results`, `${crumbs(base, [[`Results for “${query}”`]])}<h1 class="cw-page-title">Results for “${esc(query)}”</h1><div class="cw-plp">${listingFilters(base, path, req, ['Autoship', 'Brand', 'Lifestage', 'Breed Size', 'Food Form', 'Price', 'Customer Rating', 'Deals & Savings'], found, null, hidden)}${listingResults(base, path, req, found, `Search: ${query}`, hidden)}</div>`)
