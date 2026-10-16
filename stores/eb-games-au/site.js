@@ -75,7 +75,12 @@ export function mapSearch(url, query) {
   return { title, filters: out, dept: deptEntry ? [deptEntry[0], deptEntry[1]] : null, kids: deptEntry && (exact?.[0] === dept || promo) ? deptEntry[2] : [] }
 }
 
-export const tileRow = (b, tiles, heading = '') => tiles.length ? `${heading ? `<h2 class="eb-row-title">${esc(heading)}</h2>` : ''}<div class="eb-sub-tiles">${tiles.map(([l, h]) => `<a href="${b}${esc(h)}"><span class="eb-sub-mark" aria-hidden="true">${esc(l.replace(/[^A-Za-z0-9]/g, '').slice(0, 2).toUpperCase())}</span><strong>${esc(l)}</strong></a>`).join('')}</div>` : ''
+// Sub-department tiles carry a small product picture, like the real site's category tiles.
+const TILE_ICONS = [[/^trading card home$|^we buy tcg$/i, 'cards'], [/controller/i, 'controller'], [/nintendo|3ds|handheld/i, 'handheld'], [/playstation|xbox|console|retro|arcade|virtual/i, 'console'], [/pc games|video games|new release/i, 'game'], [/lego/i, 'bricks'], [/plush|toys|nerf|beyblade|tamagotchi/i, 'plush'], [/classic games|tabletop|party|dungeons|puzzle|board/i, 'board'], [/drinkware|dining|kitchen/i, 'mug'], [/lighting|candle|smart home/i, 'lamp'], [/stationery|books|manga|poster/i, 'binder'], [/keyboard|desktop|laptop/i, 'keyboard'], [/mice/i, 'mouse'], [/headset|audio|microphone|streaming/i, 'headphones'], [/t-shirt|hoodie|sleepwear|socks|costume/i, 'shirt'], [/hats|beanie/i, 'cap'], [/bags|wallet|cases/i, 'case'], [/pop vinyl|pop mart|figure|statue|replica|black series|limited release/i, 'figure'], [/storage|memory/i, 'ssd'], [/racing/i, 'wheel'], [/charger|cable/i, 'cable']]
+const tileMark = (b, l) => { const icon = TILE_ICONS.find(([re]) => re.test(l))?.[1]; return icon ? `<span class="eb-sub-mark eb-sub-icon" aria-hidden="true"><img src="${b}/static/catalog-${icon}.svg" alt=""></span>` : `<span class="eb-sub-mark eb-mark-${[...l].reduce((n, c) => n + c.charCodeAt(0), 0) % 6}" aria-hidden="true">${esc(monogram(l))}</span>` }
+// Franchise monogram: first letters of the name's main words (Magic: The Gathering -> MG, Yu-Gi-Oh! -> YGO).
+const monogram = l => l.normalize('NFKD').replace(/[^A-Za-z0-9 -]/g, '').split(/[\s-]+/).filter(w => w && !/^(the|and|of|trading|card|cards|game|games|home|all|see)$/i.test(w)).map(w => w[0].toUpperCase()).join('').slice(0, 3) || l.slice(0, 2).toUpperCase()
+export const tileRow = (b, tiles, heading = '') => tiles.length ? `${heading ? `<h2 class="eb-row-title">${esc(heading)}</h2>` : ''}<div class="eb-sub-tiles">${tiles.map(([l, h]) => `<a href="${b}${esc(h)}">${tileMark(b, l)}<strong>${esc(l)}</strong></a>`).join('')}</div>` : ''
 
 export function hubIntro(b, path) {
   const hub = HUB_TILES[path]; if (!hub) return ''

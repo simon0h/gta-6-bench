@@ -27,9 +27,37 @@ function add(sku, title, price, category, type, brand, specs, extra = {}) {
   }
   if (p.rating > 5) p.rating = 5
   p.path = `/product/${slugBase}/${sku}-${slugify(title)}`
-  p.description = extra.description || `${title}. ${Object.entries(specs).map(([k, v]) => `${k}: ${v}`).join('. ')}.`
+  p.description = extra.description || describe(p, h)
   SHELF.push(p)
   return p
+}
+
+// Short shop-floor copy for the product page; the full detail sits in the specifications table.
+const article = w => /^[aeiou]/i.test(w) ? 'an' : 'a'
+const lower = s => String(s).replace(/^[A-Z](?=[a-z])/, c => c.toLowerCase())
+const exclusive = t => /EB ?Games Exclusive|EB World PLUS Exclusive/i.test(t)
+function describe(p, h) {
+  const s = p.specs, t = p.title.replace(/\s*EB ?Games Exclusive$/i, '')
+  const extra = exclusive(p.title) ? (/PLUS/.test(p.title) ? ' Available only to EB World PLUS members at EB Games.' : ' Only available at EB Games.') : ''
+  switch (p.category) {
+    case 'Video Games': {
+      const name = p.title.replace(` - ${s.Platform}`, ''), genre = lower(s.Genre) + (/game$/i.test(s.Genre) ? '' : ' game')
+      const format = s.Format === 'Code in box' || s.Format === 'Digital code in box' ? ' Download code in box; no disc included.' : ''
+      if (p.condition === 'Preowned') return `${name} for ${s.Platform}, ${article(genre)} ${genre} from ${s.Publisher}. Every preowned game is tested and cleaned in store before it goes back on the shelf, and is covered by our Zero Regrets return policy. Classified ${s.Classification}.`
+      if (p.preorder) return `Preorder ${name} for ${s.Platform} and be ready on release day. ${[`${article(genre).replace(/^a/, 'A')} ${genre} from ${s.Publisher}.`, `The next ${genre} from ${s.Publisher}.`][h % 2]} Classified ${s.Classification}.${format}`
+      return `${[`Play ${name} on ${s.Platform}:`, `${name} for ${s.Platform} is`][h % 2]} ${article(genre)} ${genre} from ${s.Publisher}. Classified ${s.Classification}.${format}`
+    }
+    case 'Consoles': return `${t}${t.startsWith(p.brand) ? '' : ` from ${p.brand}`}${s['In the box'] ? `. In the box: ${lower(s['In the box'])}` : ''}.${p.condition === 'Preowned' ? ' Tested and cleaned in store.' : /console/i.test(t) ? ' Trade in your old console to save on your next one.' : ''}`
+    case 'Gaming Accessories': return `${t}${s.Compatibility ? `, compatible with ${s.Compatibility}` : ''}.${s.Features ? ` ${s.Features}.` : ''}`
+    case 'Trading Cards': return `${t}.${s.Contents ? ` Includes ${lower(s.Contents)}.` : ''}${p.preorder ? ' Preorder now to secure your stock on release.' : ' Build your next deck or add to your collection.'}${extra}`
+    case 'Collectibles': return `${t}.${p.type === 'figure' && p.brand === 'Funko' ? ' Comes in a window display box, ready for your shelf.' : ' A must-have for your display shelf.'}${extra}`
+    case 'Clothing': return `${t}.${s.Material ? ` Made from ${lower(s.Material)}${s.Fit ? ` with a ${lower(s.Fit)} fit` : ''}.` : ''}${extra}`
+    case 'Homewares': return `${t}.${s.Capacity ? ` Holds ${s.Capacity}.` : ''}${s.Care ? ` ${s.Care}.` : ''}${extra}`
+    case 'Toys & Games': return `${t}.${s.Players ? ` For ${s.Players} players aged ${s.Age}${s.Duration ? `, about ${s.Duration} a game` : ''}.` : s.Age ? ` Suitable for ages ${s.Age}.` : ''}${extra}`
+    case 'Books & Comics': return `${t}${s.Author ? ` by ${s.Author}` : ''}${s.Format ? `, ${lower(s.Format)}` : ''}.${extra}`
+    case 'Movies & TV': return `${t}. ${s.Genre ? `${s.Genre}, ` : ''}classified ${s.Classification}.`
+    default: return `${t}.${extra}`
+  }
 }
 
 // ---------- Video games ----------
