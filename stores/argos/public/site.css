@@ -198,3 +198,40 @@ body{color:var(--ink);background:#fff}
 .ar-bar{display:block;height:8px;background:#eee;border-radius:4px;overflow:hidden}.ar-bar i{display:block;height:100%;background:#bc9300}
 @media(max-width:1000px){.ar-carousel .products{grid-auto-columns:calc((100% - 44px)/3)}}
 @media(max-width:760px){.ar-carousel .products{grid-auto-columns:46%;gap:12px}.ar-home-promos{grid-template-columns:1fr}}
+/* department and category circles: product pictures instead of initials */
+.ar-tile-art.ar-tile-photo{background:#f5f4f0;overflow:hidden;border:1px solid #ecebe6}
+.ar-tile-art.ar-tile-photo img{width:100%;height:100%;object-fit:cover;transform:scale(1.18);display:block}
+/* filter panel: brand list scrolls inside its own box instead of running under the next heading */
+.ar-results .facets fieldset{max-height:none!important;overflow:visible!important}
+.ar-results .facet-scroll{max-height:196px;overflow-y:auto;padding-right:4px;border-bottom:1px solid #eee}
+.ar-results .facets legend{margin-bottom:6px}
+.ar-results .filter-actions{gap:14px;flex-wrap:wrap}
+.ar-results .filter-actions button{min-width:0;flex:1 1 auto}
+.ar-results .filter-actions a{white-space:nowrap}
+/* product gallery: no caption text under the main picture */
+.pa-gallery-stage+.pa-gallery-controls .pa-gallery-caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pa-gallery-stage+.pa-gallery-controls{gap:14px}
+/* checkout stepper and sections */
+.checkout-steps{list-style:none;display:flex;gap:0;padding:0;margin:8px 0 22px;background:none;counter-reset:none;max-width:760px}
+.checkout-steps li{flex:1;display:flex;align-items:center;gap:10px;font-size:14px;color:#6b6b6b;position:relative;padding-bottom:12px;border-bottom:4px solid #e2e2e2}
+.checkout-steps li span{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;border:2px solid #c8c8c8;font-weight:700;font-size:13px;background:#fff}
+.checkout-steps li.current{color:#222;font-weight:700;border-bottom-color:var(--red)}
+.checkout-steps li.current span{border-color:var(--red);background:var(--red);color:#fff}
+.checkout-steps li.done{color:#222;border-bottom-color:#1d7a3e}
+.checkout-steps li.done span{border-color:#1d7a3e;background:#1d7a3e;color:#fff}
+.checkout-form .checkout-card,form[action$="/checkout/payment"]{border:1px solid #ddd;border-radius:6px;padding:20px 22px;margin:0 0 18px;background:#fff}
+.checkout-form .checkout-card h2,form[action$="/checkout/payment"] h2{margin-top:0;font-size:21px}
+.checkout-form .checkout-card fieldset{max-height:none;overflow:visible;border:0;padding:0;margin:0}
+.checkout-form .checkout-card legend{font-weight:700;font-size:18px;margin-bottom:10px;padding:0}
+.checkout-form .hint{color:#555;font-size:14px;margin:4px 0 14px}
+.method-choice{display:grid!important;grid-template-columns:1fr 1fr;gap:12px}
+.method-choice legend{grid-column:1/-1}
+.method-option{margin:0!important;border:2px solid #d0d0d0;border-radius:6px;padding:14px;align-items:flex-start!important;cursor:pointer;background:#fff}
+.method-option:has(input:checked){border-color:#1d4fa8;background:#f3f7fd}
+.method-option:has(input:disabled){opacity:.6;cursor:not-allowed}
+.method-option span{display:block}.method-option small{display:block;color:#555;font-size:13px;margin-top:4px}
+.checkout-form:has(#method-ship:checked) .collect-only{display:none}
+.checkout-eta p{margin:6px 0}
+.checkout-form>button{width:100%;max-width:360px;padding:15px}
+@media(max-width:760px){.method-choice{grid-template-columns:1fr}.checkout-steps li{font-size:12px;gap:6px}.checkout-form .checkout-card,form[action$="/checkout/payment"]{padding:16px}}
+form[action$="/checkout/payment"]{margin-top:18px}
