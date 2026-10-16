@@ -55,6 +55,7 @@ test('browser traversal captures page lineage and actions without field values; 
   const operator = await browser.newPage({ viewport: { width: 1365, height: 1000 } })
   operator.on('pageerror', error => errors.push(error.message))
   await operator.goto(`${origin}/dashboard#/runs/${run.id}`)
+  await operator.locator('#run-tab-agents').click()
   await operator.getByLabel('Comments').fill('Draft retained while inspecting traversal')
   await operator.locator('.agent-card').getByRole('button', { name: 'View traversal', exact: true }).click()
   await operator.locator('#traversal-dialog').waitFor()

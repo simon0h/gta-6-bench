@@ -38,9 +38,8 @@
     function renderList(main) {
       document.title = 'My tasks · GTA 6 Bench'
       const tasks = state.tasks || []
-      main.innerHTML = `<div class="page-heading"><div><h1>My tasks</h1><p>Write your own shopping tasks, then pick them when you start a run.</p></div><a class="button primary" href="#/tasks/new">${icon('plus')}New task</a></div>
-        <div class="section-heading"><h2>Saved tasks<span class="section-count">${tasks.length}</span></h2></div>
-        ${tasks.length ? `<div class="run-list" role="region" aria-label="Saved tasks" tabindex="0"><table class="run-table task-table"><thead><tr><th scope="col">Task</th><th scope="col">Store</th><th scope="col">Asks for</th><th scope="col">Right answer</th><th scope="col">Updated</th></tr></thead><tbody>${tasks.map(task => `<tr class="run-row"><td class="run-name-cell"><a class="run-name" href="#/tasks/${encodeURIComponent(task.id)}"><span class="run-symbol">${icon('tasks')}</span><span class="run-row-text"><span class="run-title">${escape(task.name)}</span><small class="run-id">${task.version > 1 ? `Edited ${task.version - 1}×` : 'Not edited'}</small></span>${icon('arrow')}</a></td><td class="run-suite-cell">${escape(storeOf(task.store)?.name || task.store)}</td><td class="task-asks">${escape(summary(task))}</td><td>${answerBadge(task.preview?.answer)}</td><td class="run-date-cell">${escape(new Date(task.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}</td></tr>`).join('')}</tbody></table></div>`
+      main.innerHTML = `<div class="page-heading"><div><h1>My tasks</h1><p>Write your own shopping tasks, then pick them when you start a run.</p></div><div class="page-actions"><a class="button primary" href="#/tasks/new">${icon('plus')}New task</a></div></div>
+        ${tasks.length ? `<section class="panel"><div class="panel-head"><h2>Saved tasks</h2><span class="panel-sub">${tasks.length} task${tasks.length === 1 ? '' : 's'}</span></div><div class="run-list" role="region" aria-label="Saved tasks" tabindex="0"><table class="run-table task-table"><thead><tr><th scope="col">Task</th><th scope="col">Store</th><th scope="col">Asks for</th><th scope="col">Right answer</th><th scope="col">Updated</th></tr></thead><tbody>${tasks.map(task => `<tr class="run-row"><td class="run-name-cell"><a class="run-name" href="#/tasks/${encodeURIComponent(task.id)}"><span class="run-symbol">${icon('tasks')}</span><span class="run-row-text"><span class="run-title">${escape(task.name)}</span><small class="run-id">${task.version > 1 ? `Edited ${task.version - 1}×` : 'Not edited'}</small></span>${icon('arrow')}</a></td><td class="run-suite-cell">${escape(storeOf(task.store)?.name || task.store)}</td><td class="task-asks">${escape(summary(task))}</td><td>${answerBadge(task.preview?.answer)}</td><td class="run-date-cell">${escape(new Date(task.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}</td></tr>`).join('')}</tbody></table></div></section>`
         : `<section class="empty-state"><h2>No tasks yet</h2><p class="empty-help">Pick a store, a console, how many copies, a spending limit and where to ship. The dashboard works out whether the agent should buy.</p><a class="button primary" href="#/tasks/new">${icon('plus')}New task</a></section>`}`
     }
 
@@ -56,7 +55,7 @@
     }
     function formFields(task) {
       const store = storeOf(task.store)
-      return `<section class="form-card"><h2>What to buy</h2>
+      return `<section class="form-card"><div class="form-card-label"><h2>What to buy</h2><p>The store, the game and how much the agent may spend.</p></div><div class="form-card-fields">
           <div class="field"><label for="task-name">Task name</label><input id="task-name" name="name" value="${escape(task.name)}" required maxlength="80" placeholder="Two copies to an apartment" autocomplete="off"></div>
           <div class="field-grid">
             <div class="field"><label for="task-store">Store</label><select id="task-store" name="store">${state.stores.map(item => `<option value="${item.store}"${item.store === store.store ? ' selected' : ''}>${escape(item.name)}</option>`).join('')}</select></div>
@@ -65,21 +64,21 @@
             <div class="field"><label for="task-quantity">Copies</label><input id="task-quantity" name="quantity" type="number" inputmode="numeric" min="1" max="${store.max_quantity}" step="1" value="${escape(task.quantity)}" required><p class="field-help">${store.max_quantity === 1 ? `${escape(store.name)} sells one copy per order.` : `${escape(store.name)} sells 1 to ${store.max_quantity} per order.`}</p></div>
           </div>
           <div class="field"><label for="task-max_total">Spending limit (${escape(store.currency)}, including tax and delivery)</label><div class="limit-row"><input id="task-max_total" name="max_total" type="number" inputmode="decimal" min="0.01" step="0.01" value="${escape(task.max_total)}" required placeholder="100.00"><button class="button quiet small" type="button" data-task-action="exact">Exact total</button><button class="button quiet small" type="button" data-task-action="short">1 cent short</button></div><p class="field-help" id="task-cheapest"></p></div>
-        </section>
-        <section class="form-card"><h2>Shopper</h2><div class="field-grid">
+        </div></section>
+        <section class="form-card"><div class="form-card-label"><h2>Shopper</h2><p>Who the order is for.</p></div><div class="form-card-fields"><div class="field-grid">
           ${input('first_name', 'First name', task.customer.first_name, 'required maxlength="60"')}${input('last_name', 'Last name', task.customer.last_name, 'required maxlength="60"')}
           ${input('email', 'Email', task.customer.email, 'type="email" required maxlength="120"')}${input('phone', 'Phone', task.customer.phone, 'type="tel" required maxlength="30"')}
-        </div><p class="field-help">The agent pays with the test card ending 4242.</p></section>
-        <section class="form-card"><h2>Ship to</h2>
+        </div><p class="field-help">The agent pays with the test card ending 4242.</p></div></section>
+        <section class="form-card"><div class="form-card-label"><h2>Ship to</h2><p>Where the order should go.</p></div><div class="form-card-fields">
           ${input('line1', 'Street address', task.shipping_address.line1, 'required maxlength="100"')}
           ${input('line2', 'Apartment, suite or unit <span class="optional">(optional)</span>', task.shipping_address.line2, 'maxlength="60"')}
           <div class="field-grid three">${input('city', store.store === 'game-uk' ? 'Town or city' : 'City', task.shipping_address.city, 'required maxlength="60"')}${stateField(store, task.shipping_address.state)}${input('postal_code', store.postal_label, task.shipping_address.postal_code, 'required maxlength="12"')}</div>
           <p class="field-help">Country: ${escape(store.country)}. ${escape(store.name)} only ships there.</p>
-        </section>
-        <section class="form-card"><h2>Instructions for the agent <span class="optional">(optional)</span></h2>
+        </div></section>
+        <section class="form-card"><div class="form-card-label"><h2>Instructions for the agent <span class="optional">(optional)</span></h2><p>Leave blank to use the standard wording.</p></div><div class="form-card-fields">
           <textarea id="task-instruction" name="instruction" rows="5" maxlength="4000" placeholder="Leave blank to use the standard wording (see “What the agent sees”).">${escape(task.instruction || '')}</textarea>
           <p class="field-help">Grading always follows the fields above, so keep your wording consistent with them.</p>
-        </section>`
+        </div></section>`
     }
 
     function renderEditor(main, id) {
@@ -92,7 +91,7 @@
       state.editing = { id: saved?.id ?? null }
       state.dirty = false
       document.title = `${saved ? 'Edit task' : 'New task'} · GTA 6 Bench`
-      main.innerHTML = `<div class="page-heading"><div><h1>${saved ? escape(saved.name) : 'New task'}</h1><p>${saved ? 'Changes apply to runs you create after saving. Runs already made keep their copy.' : 'The right answer is worked out from the store’s prices as you type.'}</p></div></div>
+      main.innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="#/tasks">My tasks</a><span aria-hidden="true">/</span><span>${saved ? 'Edit task' : 'New task'}</span></nav><div class="page-heading"><div><h1>${saved ? escape(saved.name) : 'New task'}</h1><p>${saved ? 'Changes apply to runs you create after saving. Runs already made keep their copy.' : 'The right answer is worked out from the store’s prices as you type.'}</p></div></div>
         <form id="task-form" class="task-editor" data-store="${escape(task.store)}" novalidate><div class="task-form-column"><div class="task-fields">${formFields(task)}</div>
           <p class="form-error" role="alert"></p>
           <div class="task-form-actions">${saved ? '<button class="button danger" type="button" data-task-action="delete">Delete task</button>' : ''}<a class="button quiet" href="#/tasks">Cancel</a><button class="button primary" type="submit">${icon('check')}${saved ? 'Save changes' : 'Save task'}</button></div>
@@ -232,7 +231,7 @@
       return `<fieldset class="task-picker"><legend>Tasks in this run</legend><div class="task-picker-list">${tasks.map(task => `<label class="task-pick"><input type="checkbox" name="task_ids" value="${escape(task.id)}" checked><span><strong>${escape(task.name)}</strong><small>${escape(storeOf(task.store)?.name || task.store)} · ${escape(summary(task))}</small></span></label>`).join('')}</div></fieldset>`
     }
 
-    return { load, count, renderList, renderEditor, runPicker, get dirty() { return state.dirty }, clearDirty() { state.dirty = false } }
+    return { load, count, list: () => state.tasks || [], renderList, renderEditor, runPicker, get dirty() { return state.dirty }, clearDirty() { state.dirty = false } }
   }
   window.DashboardTasks = { create }
 })()
