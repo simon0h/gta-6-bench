@@ -477,10 +477,10 @@
     const timed = results.map(result => result.elapsed_ms).filter(Number.isFinite), time = timed.reduce((sum, ms) => sum + ms, 0)
     const share = count => results.length ? `${Math.round(count / results.length * 100)}% of finished tasks` : 'No results yet'
     return `<div class="stats-grid run-summary" role="group" aria-label="Run results">
-      <div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${completed}</div><div class="stat-note">of ${total} across ${entries.length} session URL${entries.length === 1 ? '' : 's'}</div></div>
+      <div class="stat"><div class="stat-label">Completed tasks</div><div class="stat-value">${completed}<span class="stat-of">/${total}</span></div></div>
       <div class="stat"><div class="stat-label"><span class="swatch passed"></span>Passed</div><div class="stat-value positive">${counts.passed}</div><div class="stat-note">${share(counts.passed)}</div></div>
       <div class="stat"><div class="stat-label"><span class="swatch failed"></span>Failed</div><div class="stat-value${counts.failed ? ' negative' : ''}">${counts.failed}</div><div class="stat-note">${share(counts.failed)}</div></div>
-      <div class="stat"><div class="stat-label"><span class="swatch error"></span>Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div><div class="stat-note">A store or setup problem, not the agent</div></div>
+      <div class="stat"><div class="stat-label"><span class="swatch error"></span>Environment errors</div><div class="stat-value${counts.environment_error ? ' warning' : ''}">${counts.environment_error}</div></div>
       <div class="stat"><div class="stat-label">Time taken</div><div class="stat-value">${timed.length ? duration(time) : '—'}</div><div class="stat-note">${timed.length ? `${duration(time / timed.length)} per task on average` : 'No results yet'}</div></div></div>`
   }
   // One bar per store or task type: green passed, red failed, amber
@@ -563,7 +563,7 @@
     const { graded, failed, list } = issueData(rows, state.issueAgent)
     if (!graded.length && state.issueAgent === 'all') return ''
     const picker = entries.length > 1 ? `<div class="panel-actions"><select id="issues-agent" aria-label="Agent"><option value="all">All agents</option>${entries.map(attempt => `<option value="${escape(attempt.id)}"${state.issueAgent === attempt.id ? ' selected' : ''}>${escape(agentData(attempt.agent).name)} · URL ${String(attempts(run).indexOf(attempt) + 1).padStart(2, '0')}</option>`).join('')}</select></div>` : ''
-    const head = `<div class="panel-head"><h2>Top issues</h2><span class="panel-sub">What went wrong on failed tasks</span>${picker}</div>`
+    const head = `<div class="panel-head"><h2>Top issues</h2>${picker}</div>`
     if (!list.length) return `<section class="panel issues-panel" id="issues-panel" aria-label="Top issues">${head}<div class="panel-body panel-empty"><p>No issues. Every graded task passed.</p></div></section>`
     const sum = list.reduce((total, issue) => total + issue.rows.length, 0)
     const legend = list.map(issue => `<li><button class="issue-row" type="button" data-action="issue-details" data-issue="${escape(issue.key)}" title="See details"><span class="issue-key ic${issue.color}"></span><span class="issue-name">${escape(issue.label)}${issue.costly ? '<span class="badge red">Money spent</span>' : ''}</span><span class="issue-total">${issue.rows.length}</span><span class="issue-share">${Math.round(issue.rows.length / sum * 100)}%</span><span class="chevron">${icon('arrow')}</span></button></li>`).join('')
@@ -667,7 +667,7 @@
     const legend = series.map(line => `<li><span class="rate-key s${line.slot}"></span><img src="${line.icon}" alt="">${escape(line.name)}<small>${line.url}</small><strong>${line.points.at(-1)}%</strong></li>`).join('')
     const label = series.map(line => `${line.name}: ${line.points.at(-1)}% after ${line.points.length} task${line.points.length === 1 ? '' : 's'}`).join('; ')
     const data = escape(JSON.stringify(series.map(({ name, slot, points }) => ({ name, slot, points }))))
-    return `<section class="panel rate-chart" aria-label="Success rate"><div class="panel-head"><h2>Success rate</h2><span class="panel-sub">Share of finished tasks passed, after each task</span></div>
+    return `<section class="panel rate-chart" aria-label="Success rate"><div class="panel-head"><h2>Success rate</h2></div>
       <div class="panel-body"><ul class="rate-legend">${legend}</ul>
         <div class="rate-frame"><div class="rate-plot" tabindex="0" role="img" aria-label="${escape(label)}" data-series="${data}" data-span="${span}">${grid}<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>${ends}<span class="rate-cross" hidden></span><div class="rate-tip" hidden></div></div>
         <div class="rate-ticks" aria-hidden="true">${ticks}</div><div class="rate-axis">Tasks finished</div></div></div></section>`

@@ -212,7 +212,8 @@ main:focus { outline: none; }
 .stat { min-width: 0; padding: 14px 16px; box-shadow: 1px 0 0 var(--line), 0 1px 0 var(--line); }
 .stat-label { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12.5px; }
 .stat-label svg { width: 14px; height: 14px; }
-.stat-value { margin-top: 2px; font-size: 26px; font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stat-value { margin-top: 2px; font-size: 26px; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stat-of { margin-left: 2px; color: var(--muted); font-weight: 400; }
 .stat-value.positive { color: var(--green); }
 .stat-value.negative { color: var(--red); }
 .stat-value.warning { color: var(--amber); }
