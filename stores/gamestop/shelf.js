@@ -54,6 +54,8 @@ function finish(p) {
 }
 
 // ---------- video games ----------
+const GENRE_WORDS = { RPG: 'role-playing', Platformer: 'platforming', Party: 'party', 'Action Adventure': 'action-adventure' }
+const genreLine = (genre, publisher) => { const g = GENRE_WORDS[genre] || genre.toLowerCase(); return `${/^[aeiou]/i.test(g) ? 'An' : 'A'} ${g} game from ${publisher}.` }
 function game(id, name, plat, price, publisher, esrb, genre, release, o = {}) {
   const [label, path, compat] = PLATFORMS[plat]
   const title = plat === 'retro' ? `${name} - ${o.system}` : `${name} - ${label}`
@@ -68,7 +70,7 @@ function game(id, name, plat, price, publisher, esrb, genre, release, o = {}) {
     catalogType: 'game', catalogPlatform: plat, artType: 'game', badge: o.badge || null,
     condition: plat === 'retro' ? 'Pre-Owned' : 'New', stock: o.stock ?? (plat === 'retro' ? 3 : 12),
     specs: { 'Compatible Platforms': plat === 'retro' ? o.system : compat, Format: format, Genre: genre, Publisher: publisher, ...(o.players ? { 'Number of Players': o.players } : {}), ESRB: esrb },
-    features: o.features || [`${name} for ${plat === 'retro' ? o.system : compat}.`, ...(plat === 'retro' ? ['Pre-owned: tested and cleaned. Original packaging and manual may not be included.'] : []), ...(format === 'Game-Key Card' ? ['Game-Key Card: the cartridge contains a key to download the full game; an internet connection is required for the first download.'] : [])],
+    features: o.features || [`${name} for ${plat === 'retro' ? o.system : compat}.`, ...(genre ? [genreLine(genre, publisher)] : []), ...(format === 'Disc' ? ['Physical disc edition.'] : format === 'Game Card' ? ['Physical game card edition; the full game is on the cartridge.'] : []), ...(plat === 'retro' ? ['Pre-owned: tested and cleaned. Original packaging and manual may not be included.'] : []), ...(format === 'Game-Key Card' ? ['Game-Key Card: the cartridge contains a key to download the full game; an internet connection is required for the first download.'] : [])],
     kw: o.kw,
   }
   if (used && !preorder && plat !== 'retro') {
