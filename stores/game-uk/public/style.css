@@ -201,3 +201,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 @media(max-width:900px){.gu-hero{grid-template-columns:1fr;padding:30px 28px;margin:0 -16px 24px}.gu-hero-covers img{width:120px}.gu-gifts-panel{margin:0 -16px 24px;padding:24px 20px}.gu-sitemap{grid-template-columns:1fr}.gu-blog-grid,.gu-fplus-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.gu-hero h1{font-size:32px}.gu-hero-covers{display:none}.gu-hero{min-height:0}.gu-cat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gu-cat-tile{min-height:110px}.gu-sitemap-cats>.gu-sitemap-list{columns:1}.gu-blog-grid,.gu-fplus-grid{grid-template-columns:1fr}.gu-news-form{flex-wrap:wrap}.gu-news-form input{min-width:0;flex:1}.gu-account-drop{display:none}.gu-delivery-table{font-size:11px}}
 @media(max-width:700px){.gu-facets>.gu-in-section,.gu-facets>.gu-filter-by,.gu-facets>.gu-fine{grid-column:1/-1}.gu-in-section{padding-top:10px}}
+.gu-social-icon{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#000;color:#fff}
+.gu-chips a.is-active{background:#000;color:#fff;border-color:#000}
+@media(min-width:701px){.gu-gift-shop .gu-cat-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
