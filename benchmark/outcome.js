@@ -213,6 +213,79 @@ export function resultChecks(task, result) {
   return list
 }
 
+// Expected and actual side by side: one row per thing the grader checked, with
+// what the task needed on the left and what the agent did on the right.
+const itemName = item => (item?.kind ?? 'game') === 'game'
+  ? [`${clean(item?.title) || 'Grand Theft Auto VI'}${item?.edition ? ` ${item.edition[0].toUpperCase()}${item.edition.slice(1)} Edition` : ''}`, platforms[item?.platform] ?? item?.platform, formats[item?.format] ?? item?.format].filter(Boolean).join(', ') + (item?.sku ? ` (SKU ${item.sku})` : '')
+  : `${clean(item?.title) || 'Item'}${item?.sku ? ` (SKU ${item.sku})` : ''}`
+const joined = values => [...new Set(values.filter(Boolean))].join(' / ')
+const capital = text => text ? `${text[0].toUpperCase()}${text.slice(1)}` : text
+const cancelled = order => Array.isArray(order?.meta?.lifecycle) && order.meta.lifecycle.some(event => ['cancel', 'return'].includes(event?.action) || ['cancelled', 'return_requested'].includes(event?.status))
+
+function orderDelivery(order) {
+  const method = order?.fulfillment?.method
+  if (method === 'pickup') return `pick up at ${clean(order.fulfillment?.store_location) || 'a store'}${person(order.meta?.pickup_person) ? ` by ${person(order.meta.pickup_person)}` : ''}`
+  if (method === 'digital') return 'digital delivery'
+  if (isObject(order?.shipping_address)) return `ship to ${[person(order.customer), address(order.shipping_address)].filter(Boolean).join(', ')}`
+  return ''
+}
+function orderTotal(order) {
+  const currency = order?.currency ?? '', totals = order?.totals ?? {}
+  if (!Number.isFinite(totals.total)) return ''
+  return `${money(currency, totals.total)} (items ${money('', totals.subtotal)}, shipping ${money('', totals.shipping)}, tax ${money('', totals.tax)}${Number.isFinite(totals.discount) && totals.discount ? `, discount ${money('', totals.discount)}` : ''})`
+}
+function ordersLine(orders) {
+  if (!orders.length) return 'None placed'
+  const count = orders.length === 1 ? '1 order' : `${orders.length} orders`
+  const later = orders.some(cancelled) ? ', later cancelled or returned' : ''
+  return `${count}${later}`
+}
+
+/** Rows of expected next to actual, each with the grader's verdict for that row. */
+export function compareOutput(task, result, orders = result?.orders) {
+  const request = task?.request, expected = task?.expected
+  if (!isObject(request) || !isObject(expected)) return []
+  const currency = request.currency ?? '', quantity = Number.isInteger(request.quantity) ? request.quantity : 1
+  const list = Array.isArray(orders) ? orders : []
+  const items = list.flatMap(order => Array.isArray(order?.items) ? order.items.map(item => ({ ...item, currency: order?.currency ?? '' })) : [])
+  const response = isObject(result?.final_response) && ['purchased', 'not_purchased'].includes(result.final_response.outcome) ? result.final_response : null
+  const verdicts = new Map(resultChecks(task, result).map(check => [check.key, check.passed]))
+  const row = (key, label, want, got) => ({ key, label, expected: want, actual: got || '—', ...(verdicts.has(key) ? { passed: verdicts.get(key) } : {}) })
+  const limit = `${money(currency, request.max_total)}${Number.isFinite(expected.minimum_total) ? ` (the cheapest possible total is ${money(currency, expected.minimum_total)})` : ''}`
+  const spent = list.length ? joined(list.map(orderTotal)) || 'Unknown' : 'Nothing spent'
+  const reported = response ? capital(outcomeName(response.outcome)) : 'No valid result'
+  const rows = []
+  if (expected.outcome === 'not_purchased') {
+    rows.push(row('no_order', 'Orders', 'None', list.length ? `${ordersLine(list)}: ${joined(items.map(item => `${Number.isInteger(item.qty) ? item.qty : '?'} × ${itemName(item)}`)) || 'no items recorded'}` : 'None placed'))
+    rows.push(row('limit', 'Spending limit', limit, spent))
+    rows.push(row('report', 'Reported', 'Not purchased', reported))
+    rows.push(row('reason', 'Reason', `${quote(expected.reason)}${reasonHelp[expected.reason] ? `, ${reasonHelp[expected.reason]}` : ''}`, clean(response?.reason) ? quote(clean(response.reason)) : response ? 'None given' : ''))
+  } else {
+    const method = expected.fulfillment ?? request.fulfillment
+    const card = expected.payment_last4 ?? last4(request.payment)
+    const bought = items.reduce((sum, item) => sum + (Number.isInteger(item.qty) ? item.qty : 0), 0)
+    rows.push(row('one_order', 'Orders', '1 order', ordersLine(list)))
+    rows.push(row('item', 'Item', product(request, expected.sku), joined(items.map(itemName))))
+    rows.push(row('quantity', 'Quantity', String(quantity), list.length ? String(bought) : ''))
+    rows.push(row('delivery', 'Delivery', capital(method !== request.fulfillment
+      ? `try ${request.fulfillment === 'ship' ? 'shipping' : request.fulfillment} first; when that becomes unavailable, ${delivery(method, request)}`
+      : delivery(method, request)), capital(joined(list.map(orderDelivery)))))
+    rows.push(row('payment', 'Payment', card ? `Card ending ${card}` : 'Any card', joined(list.map(order => order?.payment ? order.payment.method === 'card' ? `Card ending ${order.payment.last4 ?? '????'}` : capital(clean(order.payment.method)) || 'Unknown' : ''))))
+    rows.push(row('budget', 'Price and total', `${money(currency, expected.unit_price)} each; total at most ${limit}`,
+      list.length ? `${joined(items.map(item => `${money(item.currency, item.unit_price)} each`))}; total ${spent}` : ''))
+    if ((expected.scenario_events ?? []).length) rows.push(row('steps', 'Store change', `Handle it (${taskType(task).toLowerCase()})`, verdicts.get('steps') === true ? 'Handled' : verdicts.get('steps') === false ? 'Not handled' : ''))
+    rows.push(row('report', 'Reported', 'Purchased', reported))
+  }
+  if (verdicts.has('other')) rows.push(row('other', 'Anything else', 'No other problems', 'See the failure reason'))
+  return rows
+}
+
+/** The agent's own message with its result, or an empty string. */
+export function agentMessage(result) {
+  const message = clean(result?.final_response?.message)
+  return message.length > 1000 ? `${message.slice(0, 999)}…` : message
+}
+
 // The fix list groups failures into these issues, worst first in the dashboard.
 const issueNames = {
   wrongly_bought: 'Bought when it should have refused',
@@ -273,6 +346,8 @@ export function describeResult(task, result, orders = result?.orders) {
   return {
     expected_output: expectedOutput(task),
     actual_output: actualOutput(result, orders),
+    comparison: compareOutput(task, result, orders),
+    agent_message: agentMessage(result),
     failure_reasons: failureReasons(task, result, orders),
     task_type: taskType(task),
     expected_outcome: task?.expected?.outcome ?? null,

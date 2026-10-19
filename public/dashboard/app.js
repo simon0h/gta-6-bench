@@ -254,22 +254,11 @@
     group.querySelector('.result-row').setAttribute('aria-expanded', String(open))
   }
 
-  // Expected output, actual output and (for tasks that did not pass) one
-  // bullet per failure reason. The server works these out from the task.
+  // Expected next to actual, the agent's message and any failure reason. The
+  // server works these out from the task; traversal.js draws them.
+  const resultOutputs = result => window.DashboardTraversal.outputs(result)
   function bullets(lines) {
     return Array.isArray(lines) && lines.length ? `<ul>${lines.map(line => `<li>${escape(line)}</li>`).join('')}</ul>` : '<p>—</p>'
-  }
-  function resultOutputs(result) {
-    const status = result.grade?.status
-    const reasons = Array.isArray(result.failure_reasons) && result.failure_reasons.length ? result.failure_reasons : (result.grade?.reasons || []).map(reason => reason.message).filter(Boolean)
-    const actual = Array.isArray(result.actual_output) ? result.actual_output : result.final_response?.message ? [`Agent’s message: “${result.final_response.message}”`] : []
-    const checks = Array.isArray(result.checks) && result.checks.length ? `<ul class="result-checks" aria-label="Checks">${result.checks.map(check => {
-      const tone = check.passed === true ? 'passed' : check.passed === false ? 'failed' : 'skipped'
-      const mark = check.passed === true ? icon('check') : check.passed === false ? icon('close') : '<span class="dash" aria-hidden="true">–</span>'
-      const said = check.passed === true ? 'passed' : check.passed === false ? 'failed' : 'not reached'
-      return `<li class="${tone}" title="${escape(`${check.label}: ${said}`)}">${mark}<span>${escape(check.label)}</span><span class="visually-hidden">: ${said}</span></li>`
-    }).join('')}</ul>` : ''
-    return `${checks}<div class="result-compare"><section><h4>Expected output</h4>${bullets(result.expected_output)}</section><section><h4>Actual output</h4>${bullets(actual)}</section></div>${status && status !== 'passed' ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(reasons)}</section>` : ''}`
   }
 
   function renderAttempt(attempt, index, run) {

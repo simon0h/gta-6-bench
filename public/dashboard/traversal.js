@@ -5,11 +5,32 @@
   // Passed results are green, failed red, environment errors amber.
   const tone = status => status === 'passed' ? 'passed' : status === 'failed' ? 'failed' : status === 'environment_error' ? 'error' : ''
   const bullets = lines => Array.isArray(lines) && lines.length ? `<ul>${lines.map(line => `<li>${escape(line)}</li>`).join('')}</ul>` : '<p>—</p>'
-  // Expected output, actual output and failure reasons for a finished task.
+  const marks = { passed: '<path d="m5 12 4 4L19 6"/>', failed: '<path d="M6 6l12 12M18 6 6 18"/>' }
+  const mark = tone => marks[tone] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${marks[tone]}</svg>` : tone === 'skipped' ? '<span aria-hidden="true">–</span>' : ''
+  // What the task needed next to what the agent did, one row per check, then
+  // the agent's own message and (for tasks that did not pass) why it failed.
+  // Results without the rows fall back to the two lists.
+  function outputs(result) {
+    const status = result.grade?.status
+    const reasons = Array.isArray(result.failure_reasons) && result.failure_reasons.length ? result.failure_reasons : (result.grade?.reasons || []).map(reason => reason.message).filter(Boolean)
+    const failure = status && status !== 'passed' ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(reasons)}</section>` : ''
+    if (!Array.isArray(result.comparison) || !result.comparison.length) {
+      const actual = Array.isArray(result.actual_output) ? result.actual_output : result.final_response?.message ? [`Agent’s message: “${result.final_response.message}”`] : []
+      return `<div class="result-compare"><section><h4>Expected output</h4>${bullets(result.expected_output)}</section><section><h4>Actual output</h4>${bullets(actual)}</section></div>${failure}`
+    }
+    const rows = result.comparison.map(row => {
+      const tone = row.passed === true ? 'passed' : row.passed === false ? 'failed' : row.passed === null ? 'skipped' : 'info'
+      const said = { passed: 'passed', failed: 'failed', skipped: 'not reached' }[tone]
+      return `<div class="compare-row ${tone}" role="row"><div class="compare-label" role="rowheader"><span class="compare-mark">${mark(tone)}</span>${escape(row.label)}${said ? `<span class="visually-hidden">: ${said}</span>` : ''}</div><div class="compare-cell" role="cell" data-label="Expected">${escape(row.expected)}</div><div class="compare-cell actual" role="cell" data-label="Actual">${escape(row.actual)}</div></div>`
+    }).join('')
+    const message = result.agent_message ?? result.final_response?.message
+    return `<div class="compare-grid" role="table" aria-label="Expected and actual output"><div class="compare-row compare-head" role="row"><div role="columnheader"><span class="visually-hidden">Check</span></div><div role="columnheader">Expected</div><div role="columnheader">Actual</div></div>${rows}</div>
+      <section class="result-message"><h4>Agent’s message</h4>${message ? `<p>“${escape(message)}”</p>` : '<p class="muted">No message was submitted.</p>'}</section>${failure}`
+  }
+  // The same, folded into a box above the traversal graph.
   function resultSummary(task, open) {
     if (!Array.isArray(task?.expected_output) || !task.grade) return ''
-    const failed = task.grade.status !== 'passed'
-    return `<details class="traversal-result"${open ? ' open' : ''}><summary>Expected vs actual output · <span class="result-status ${tone(task.grade.status)}">${escape(label(task.grade.status))}</span></summary><div class="result-compare"><section><h4>Expected output</h4>${bullets(task.expected_output)}</section><section><h4>Actual output</h4>${bullets(task.actual_output)}</section></div>${failed ? `<section class="result-failure"><h4>Failure reason</h4>${bullets(task.failure_reasons)}</section>` : ''}</details>`
+    return `<details class="traversal-result"${open ? ' open' : ''}><summary>Expected vs actual output · <span class="result-status ${tone(task.grade.status)}">${escape(label(task.grade.status))}</span></summary><div class="traversal-outputs">${outputs(task)}</div></details>`
   }
   const active = task => !task?.completed_at && !['completed', 'complete', 'finished', 'failed', 'cancelled'].includes(task?.status)
   const navigation = { navigate: 'Navigate', reload: 'Reload', back_forward: 'Back / forward', push: 'History push', replace: 'History replace', hash: 'Fragment navigation' }
@@ -412,5 +433,5 @@
     })
     return { open, close }
   }
-  window.DashboardTraversal = { create }
+  window.DashboardTraversal = { create, outputs }
 })()
