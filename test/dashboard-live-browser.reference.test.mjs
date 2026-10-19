@@ -44,7 +44,7 @@ test('run page numbers, results and config progress update while a run is going,
   assert.equal(await page.inputValue('#results-query'), 'best')
   assert.equal(await page.evaluate(() => document.activeElement?.id), 'results-query')
 
-  // On Config, the progress bar moves; once every agent is done the page stops asking.
+  // On Manage sessions, the progress bar moves; once every agent is done the page stops asking.
   await page.click('#run-tab-agents')
   await manager.startTask(attempt.token)
   await manager.finishTask(attempt.token, decline)
