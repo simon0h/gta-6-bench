@@ -130,3 +130,31 @@ test('tasks written in the dashboard are typed by their answer', async () => {
   assert.equal(type({ max_total: 500, quantity: 3 }), '3 copies')
   assert.equal(type({ max_total: 200, edition: 'ultimate' }), 'Edition not sold')
 })
+
+test('expected and actual line up row by row, with the agent message on its own', () => {
+  const task = getTask('game-uk-quantity-ps5')
+  const single = order(task)
+  single.items[0].qty = 1
+  single.totals = { subtotal: 69.99, shipping: 4.99, tax: 0, total: 74.98 }
+  const { comparison, agent_message } = graded(task, [single], { outcome: 'purchased', message: 'Bought it.' })
+  const byKey = Object.fromEntries(comparison.map(row => [row.key, row]))
+  assert.deepEqual(comparison.map(row => row.key), ['one_order', 'item', 'quantity', 'delivery', 'payment', 'budget', 'report'])
+  assert.deepEqual([byKey.quantity.expected, byKey.quantity.actual, byKey.quantity.passed], ['2', '1', false])
+  assert.equal(byKey.item.expected, byKey.item.actual)
+  assert.equal(byKey.item.passed, true)
+  assert.equal(byKey.payment.actual, 'Card ending 4242')
+  assert.match(byKey.budget.actual, /total GBP 74\.98 \(items 69\.99, shipping 4\.99, tax 0\.00\)/)
+  assert.equal(agent_message, 'Bought it.')
+
+  const refusal = getTask('bestbuy-budget_decline-xbox')
+  const { comparison: rows } = graded(refusal, [], { outcome: 'not_purchased', reason: 'unsupported_variant', message: 'Not sold here.' })
+  assert.deepEqual(rows.map(row => [row.key, row.actual, row.passed]), [
+    ['no_order', 'None placed', true], ['limit', 'Nothing spent', undefined], ['report', 'Not purchased', true], ['reason', '“unsupported_variant”', false],
+  ])
+
+  const { comparison: none, agent_message: silent } = graded(getTask('game-uk-purchase-xbox'), [], null)
+  assert.equal(none.find(row => row.key === 'item').passed, null)
+  assert.equal(none.find(row => row.key === 'item').actual, '—')
+  assert.equal(none.find(row => row.key === 'report').actual, 'No valid result')
+  assert.equal(silent, '')
+})

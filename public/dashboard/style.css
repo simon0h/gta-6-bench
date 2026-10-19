@@ -344,14 +344,23 @@ main:focus { outline: none; }
 .issue-task p { margin: 6px 0 0; color: var(--muted); }
 .issue-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 6px 2px 10px; border-radius: var(--radius); background: var(--red-soft); color: var(--red); font-size: 12.5px; font-weight: 500; }
 .issue-chip svg { width: 14px; height: 14px; }
-/* Per-task checks */
-.result-outputs .result-checks { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; padding: 0; list-style: none; }
-.result-outputs .result-checks li + li { margin-top: 0; }
-.result-checks li { display: inline-flex; align-items: center; gap: 5px; min-height: 24px; padding: 1px 8px 1px 6px; border-radius: 4px; background: var(--fill); color: var(--muted); font-size: 12px; }
-.result-checks li svg { width: 13px; height: 13px; stroke-width: 2.2; }
-.result-checks li .dash { width: 13px; text-align: center; }
-.result-checks li.passed { background: var(--green-soft); color: var(--green); }
-.result-checks li.failed { background: var(--red-soft); color: var(--red); font-weight: 500; }
+/* Expected next to actual, one row per check, with a pass or fail mark. */
+.compare-grid { display: grid; grid-template-columns: minmax(150px, .6fr) minmax(0, 1fr) minmax(0, 1fr); overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); font-size: 13.5px; line-height: 1.45; }
+.compare-row { display: contents; }
+.compare-row > div { min-width: 0; padding: 8px 12px; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+.compare-head > div { padding-block: 7px; border-top: 0; background: var(--fill); color: var(--muted); font-size: 12px; font-weight: 600; }
+.compare-label { display: flex; align-items: flex-start; gap: 8px; font-weight: 500; }
+.compare-mark { display: inline-grid; place-items: center; width: 18px; height: 18px; flex: none; margin-top: 1px; border-radius: 50%; color: var(--muted); font-size: 12px; }
+.compare-mark svg { width: 11px; height: 11px; }
+.compare-row.passed .compare-mark { background: var(--green-soft); color: var(--green); }
+.compare-row.failed .compare-mark { background: var(--red-soft); color: var(--red); }
+.compare-row.skipped .compare-mark { background: var(--fill); }
+.compare-row.failed > div { background: color-mix(in srgb, var(--red-soft) 55%, transparent); }
+.compare-row.failed .actual { color: var(--red); font-weight: 500; }
+.compare-row.skipped .actual { color: var(--muted); }
+.result-message { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); font-size: 13.5px; line-height: 1.5; overflow-wrap: anywhere; }
+.result-message .muted { color: var(--muted); }
+.traversal-outputs { margin-top: 10px; }
 .bar { display: flex; height: 12px; overflow: hidden; border-radius: 3px; background: var(--fill-strong); }
 .bar > span, .progress-track.split > span { display: block; height: 100%; }
 .bar .passed, .progress-track.split .passed { background: var(--green); }
@@ -919,6 +928,14 @@ img[src$="/grokbot.webp"] { padding: 0 !important; background: transparent !impo
   .result-table th:nth-child(4) { width: 112px; }
   .result-table .result-outputs td { padding: 12px; }
   .result-compare { grid-template-columns: minmax(0, 1fr); }
+  .compare-grid { grid-template-columns: minmax(0, 1fr); }
+  .compare-head { display: none; }
+  .compare-row > div { border-top: 0; padding-block: 2px; }
+  .compare-row > .compare-label { padding-top: 9px; border-top: 1px solid var(--line); }
+  .compare-row:nth-child(2) > .compare-label { border-top: 0; }
+  .compare-row > .compare-cell { padding-left: 38px; }
+  .compare-row > .compare-cell.actual { padding-bottom: 9px; }
+  .compare-cell::before { content: attr(data-label) ": "; color: var(--muted); font-size: 12px; font-weight: 400; }
   .live-facts { grid-template-columns: 1fr 1fr; }
   .live-facts div:first-child { grid-column: 1 / -1; }
   .field-grid, .field-grid.three { grid-template-columns: minmax(0, 1fr); }

@@ -55,27 +55,24 @@ order and scenario evidence together with the final answer; selecting Purchased
 does not itself establish a successful purchase. No real payment is made.
 
 Each result on the run page (and in **View traversal** and its JSON download)
-shows three things side by side:
+shows what the task needed next to what the agent did:
 
-- **Expected output**: what the task required, such as buy 2 copies of the
-  Standard Edition for PS5 shipped to a given address under a spending limit, or
-  buy nothing and report `budget_exceeded`.
-- **Actual output**: what the agent reported and every order it placed, with
-  items, totals, delivery and the card used.
+- **Expected and Actual, side by side**: one row per thing the grader checked
+  (orders, item and edition, quantity, delivery, card, price and total, what the
+  agent reported and, for tasks that needed a refusal, the reason and the spending
+  limit). Each row has a mark: green when it was right, red when it was wrong, and
+  grey when the agent never got that far (no order was placed).
+- **Agent's message**: what the agent wrote when it submitted its result.
 - **Failure reason**: for tasks that did not pass, one bullet per problem the
   grader found, such as the wrong quantity or the wrong refusal reason.
 
 These are worked out from the task when the page loads (`benchmark/outcome.js`),
-so results saved earlier show them too. They are never shown to the agent.
+so results saved earlier show them too. They are never shown to the agent. The
+plain Expected output and Actual output lists are still saved with each result
+(the local report and the AI summary use them).
 
 Passed results are marked green, failed results red and environment errors
 amber, on the run page, in the live tracker and in **View traversal**.
-
-Above those boxes, each graded result also shows a row of **checks**: one tag per
-thing the grader looked at, such as right item and edition, right quantity, right
-address, right card, within budget, reported the right outcome and, for tasks that
-needed a refusal, gave the right reason. A check is green, red, or grey when the
-agent never got that far (no order was placed).
 
 ## Turning results into a fix list
 
@@ -110,8 +107,8 @@ The run page has three tabs, and the chosen tab stays put when the page refreshe
   of agents.
 - **Results**: every task result in one table. **All**, **Failed** (failed
   tasks and environment errors) and **Passed** filter it, with counts; a text box
-  and an agent picker narrow it further. Click a row to see Expected output,
-  Actual output and Failure reason.
+  and an agent picker narrow it further. Click a row to see Expected next to
+  Actual, the agent's message and Failure reason.
 - **Config**: one row per session URL; open a row with its arrow to see its link,
   prompt, tags and comments and to change its agent.
 
@@ -160,8 +157,8 @@ edge cases. The form only accepts what the store's checkout accepts: a valid sta
 ZIP or UK postcode, the store's phone format, and up to 3 copies at Best Buy, 5 at GAME
 and 1 at Rockstar (its code-in-box pre-order sells one copy per order).
 
-Custom tasks are graded exactly like built-in ones, so the run page shows Expected
-output, Actual output and Failure reason for them too. A run keeps its own copy of
+Custom tasks are graded exactly like built-in ones, so the run page shows Expected next
+to Actual and Failure reason for them too. A run keeps its own copy of
 each task, so editing or deleting a saved task only affects runs created afterwards.
 Saved tasks live with the run records (`dashboard_tasks` in the local state file and
 in the Cloudflare checkpoint), so they survive restarts and deploys. Up to 200 tasks
