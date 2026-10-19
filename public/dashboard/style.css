@@ -393,7 +393,7 @@ main:focus { outline: none; }
 /* The original app artwork includes its own inset. */
 .agent-logo[src$=".webp"], .agent-stack img[src$=".webp"] { padding: 1px; }
 
-/* Config tab: one panel per session URL. */
+/* Manage sessions tab: one panel per session URL. */
 .agent-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
 .agent-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper); box-shadow: var(--shadow); }
 .agent-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); }

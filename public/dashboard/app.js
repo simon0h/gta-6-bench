@@ -30,7 +30,7 @@
   const state = { runs: [], selected: null, loading: true, authenticated: false, local: false, drafts: new Map(), saving: new Set(), loadNumber: 0, runTab: 'overview', resultsView: { filter: 'all', agent: 'all', query: '', issue: null }, issueAgent: 'all', openResults: new Set(), openConfigs: new Set(), summaries: new Map(), writingSummary: new Set(), summaryErrors: new Map(), chats: new Map(), chatDrafts: new Map(), chatAnswers: new Map(), chatErrors: new Map() }
   let toastTimer
   // The run page is split into tabs, as on Cloudflare's dashboard. The open tab is remembered on this device.
-  const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Config']]
+  const runTabs = [['overview', 'Overview'], ['results', 'Results'], ['agents', 'Manage sessions']]
   try { const saved = localStorage.getItem('dashboard-run-tab'); if (runTabs.some(([key]) => key === saved)) state.runTab = saved } catch { /* storage blocked */ }
   function setRunTab(tab) {
     state.runTab = tab
@@ -233,7 +233,7 @@
     panel.querySelector('.result-empty').hidden = shown > 0
     $('#results-total').textContent = `${shown} task${shown === 1 ? '' : 's'}${time ? ` · ${duration(time)} total` : ''}`
   }
-  // Config cards show only their top row until opened; the agent can only be
+  // Manage sessions cards show only their top row until opened; the agent can only be
   // changed while a card is open.
   function toggleConfig(card) {
     const open = !card.classList.contains('open'), button = card.querySelector('.card-toggle')

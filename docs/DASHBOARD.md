@@ -9,7 +9,7 @@ For public HTTPS access, use the [Cloudflare deployment](CLOUDFLARE.md).
 1. Click **New run**, choose a name, and select **Original 30 tasks**
    (the default), **All 240 tasks** or **My tasks** (tick the saved tasks to include;
    see [My tasks](#my-tasks)).
-2. On the **Config** tab, click **Generate new session URL**. Select Grokbot, Dots or Muse and add optional tags and
+2. On the **Manage sessions** tab, click **Generate new session URL**. Select Grokbot, Dots or Muse and add optional tags and
    comments. You can generate up to five URLs per run, including repeated agents.
 3. Use **Copy prompt** or **Copy URL** and give the link to that agent.
 4. Watch progress and each submitted task's private grade on the run page; it updates by itself while the run is going.
@@ -109,7 +109,7 @@ The run page has three tabs, and the chosen tab stays put when the page refreshe
   tasks and environment errors) and **Passed** filter it, with counts; a text box
   and an agent picker narrow it further. Click a row to see Expected next to
   Actual, the agent's message and Failure reason.
-- **Config**: one row per session URL; open a row with its arrow to see its link,
+- **Manage sessions**: one row per session URL; open a row with its arrow to see its link,
   prompt, tags and comments and to change its agent.
 
 The chat about this run is a small window in the bottom right corner, opened and
@@ -179,7 +179,7 @@ The same check keeps the rest of the run page current on every tab. When an agen
 starts or submits a task, the page fetches the run again and redraws only the parts
 that show results: the status badge, the number tiles, Top issues, the success-rate
 chart, results by type and store, the Agents table, the Results tab (open rows,
-filters and the filter text stay as they were) and the progress bars on Config.
+filters and the filter text stay as they were) and the progress bars on Manage sessions.
 Nothing extra is fetched between tasks. Once every agent has submitted every task,
 the page stops checking; generating a new session URL starts it again. The AI
 summary is only written when **Write summary** is pressed; between tasks it just
